@@ -26,11 +26,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.account.constants.UserConstants;
-<<<<<<< HEAD
-=======
 import net.oschina.app.improve.app.AppOperator;
-import net.oschina.app.improve.base.activities.BaseActivity;
->>>>>>> a7a9a61ba3c2add989efb9022fad793183819957
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
@@ -74,6 +70,8 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
     TextView mTvRetrieveLabel;
     private boolean mMachPhoneNum;
 
+    private CountDownTimer mTimer;
+
     private int mRequestType;
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
 
@@ -97,27 +95,17 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
-            if (mRequestType == 2) {
-                PhoneToken phoneToken = new PhoneToken();
-                phoneToken.setPhone("15111225406");
-                phoneToken.setToken("abc");
-                phoneToken.setExpireDate("30");
-                ResetPwdActivity.show(RetrieveActivity.this, phoneToken);
-            }
-
+            requestFailureHint(throwable);
         }
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
+            Log.e(TAG, "onSuccess: ------>");
             try {
                 switch (mRequestType) {
                     //第一步请求发送验证码
                     case 1:
-
-                        Log.e(TAG, "onSuccess: ------>收到手机验证码");
-
                         Type type = new TypeToken<ResultBean>() {
                         }.getType();
                         ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
@@ -126,6 +114,8 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                             case 1:
                                 //发送验证码成功,请求进入下一步
                                 //mRequestType = 2;
+                                mEtRetrieveCodeInput.setText(null);
+                                Log.e(TAG, "onSuccess: ------>收到手机验证码");
                                 break;
                             case 218:
                                 //手机号已被注册,提示重新输入
@@ -143,7 +133,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                         }
                         AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                         break;
-                    //第二步请求进行注册
+                    //第二步请求进行重置密码
                     case 2:
 
                         Type phoneType = new TypeToken<ResultBean<PhoneToken>>() {
@@ -161,7 +151,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                             mTimer.onFinish();
                                             mTimer.cancel();
                                         }
-                                        RegisterStepTwoActivity.show(RetrieveActivity.this, phoneToken);
+                                        ResetPwdActivity.show(RetrieveActivity.this, phoneToken);
                                     }
                                 } else {
                                     AppContext.showToast(phoneTokenResultBean.getMessage());
@@ -186,8 +176,6 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
         }
     };
-    private CountDownTimer mTimer;
-
 
     /**
      * show the retrieve activity
@@ -278,7 +266,6 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
             }
         });
-        mBtRetrieveSubmit.setAlpha(0.6f);
         mEtRetrieveCodeInput.setOnFocusChangeListener(this);
         mEtRetrieveCodeInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -302,6 +289,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                     mBtRetrieveSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
                     mBtRetrieveSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
                 }
+                mLlRetrieveCode.setBackgroundResource(R.drawable.bg_login_input_ok);
             }
         });
     }
@@ -325,65 +313,12 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 break;
             case R.id.retrieve_sms_call:
 
-                if (!mMachPhoneNum) {
-                    AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
-                    return;
-                }
-
-                if (!TDevice.hasInternet()) {
-                    AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-
-                if (mTvRetrieveSmsCall.getTag() == null) {
-                    mRequestType = 1;
-                    mTvRetrieveSmsCall.setAlpha(0.6f);
-                    mTvRetrieveSmsCall.setTag(true);
-                    mTimer = new CountDownTimer(60 * 1000, 1000) {
-
-                        @SuppressLint("DefaultLocale")
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            mTvRetrieveSmsCall.setText(String.format("%s%s%d%s",
-                                    getResources().getString(R.string.register_sms_hint), "(", millisUntilFinished / 1000, ")"));
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            mTvRetrieveSmsCall.setTag(null);
-                            mTvRetrieveSmsCall.setText(getResources().getString(R.string.register_sms_hint));
-                            mTvRetrieveSmsCall.setAlpha(1.0f);
-                        }
-                    }.start();
-                    String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-                    String appToken = "123";//Verifier.getPrivateToken(getApplication());
-                    OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.REGISTER_INTENT, mHandler);
-                } else {
-                    AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
-                }
+                requestSmsCode();
 
                 break;
             case R.id.bt_retrieve_submit:
 
-                if (!mMachPhoneNum) {
-                    AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
-                    return;
-                }
-
-                String smsCode = mEtRetrieveCodeInput.getText().toString().trim();
-                if (TextUtils.isEmpty(smsCode)) {
-                    AppContext.showToast(getString(R.string.retrieve_pwd_sms_coe_error));
-                    return;
-                }
-
-                if (!TDevice.hasInternet()) {
-                    AppContext.showToast(getString(R.string.tip_network_error));
-                    return;
-                }
-                mRequestType = 2;
-                String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-                String appToken = "123";//Verifier.getPrivateToken(getApplication());
-                OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, appToken, mHandler);
+                requestRetrievePwd();
 
                 break;
             case R.id.tv_retrieve_label:
@@ -401,6 +336,67 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 break;
         }
 
+    }
+
+    private void requestRetrievePwd() {
+        if (!mMachPhoneNum) {
+            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+            return;
+        }
+
+        String smsCode = mEtRetrieveCodeInput.getText().toString().trim();
+        if (TextUtils.isEmpty(smsCode)) {
+            AppContext.showToast(getString(R.string.retrieve_pwd_sms_coe_error));
+            return;
+        }
+
+        if (!TDevice.hasInternet()) {
+            AppContext.showToast(getString(R.string.tip_network_error));
+            return;
+        }
+        mRequestType = 2;
+        String phoneNumber = mEtRetrieveTel.getText().toString().trim();
+        String appToken = "123";//Verifier.getPrivateToken(getApplication());
+        OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, appToken, mHandler);
+    }
+
+    private void requestSmsCode() {
+        if (!mMachPhoneNum) {
+            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+            return;
+        }
+
+        if (!TDevice.hasInternet()) {
+            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+            return;
+        }
+
+        if (mTvRetrieveSmsCall.getTag() == null) {
+            mRequestType = 1;
+            mTvRetrieveSmsCall.setAlpha(0.6f);
+            mTvRetrieveSmsCall.setTag(true);
+            mTimer = new CountDownTimer(60 * 1000, 1000) {
+
+                @SuppressLint("DefaultLocale")
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    mTvRetrieveSmsCall.setText(String.format("%s%s%d%s",
+                            getResources().getString(R.string.register_sms_hint), "(", millisUntilFinished / 1000, ")"));
+                }
+
+                @Override
+                public void onFinish() {
+                    mTvRetrieveSmsCall.setTag(null);
+                    mTvRetrieveSmsCall.setText(getResources().getString(R.string.register_sms_hint));
+                    mTvRetrieveSmsCall.setAlpha(1.0f);
+                }
+            }.start();
+            String phoneNumber = mEtRetrieveTel.getText().toString().trim();
+            String appToken = "123";//Verifier.getPrivateToken(getApplication());
+            OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.REGISTER_INTENT, mHandler);
+        } else {
+            AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
+        }
     }
 
     @Override

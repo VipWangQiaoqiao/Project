@@ -40,11 +40,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.constants.UserConstants;
-<<<<<<< HEAD
-=======
 import net.oschina.app.improve.app.AppOperator;
-import net.oschina.app.improve.base.activities.BaseActivity;
->>>>>>> a7a9a61ba3c2add989efb9022fad793183819957
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.share.constant.OpenConstant;
@@ -77,7 +73,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
     private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
-    private static final String HOLD_PWD_STATUS_KEY = "holdPwdStatusKey";
+    private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
 
     @Bind(R.id.ll_login_username)
     LinearLayout mLlLoginUsername;
@@ -119,7 +115,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     ImageView mImLoginQq;
 
     private int openType;
-    private String mInputPwd;
+    private int mHoldPwd;
     private SsoHandler mSsoHandler;
 
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
@@ -127,11 +123,12 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         @Override
         public void onStart() {
             super.onStart();
-            showWaitDialog();
+            showFocusWaitDialog();
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            requestFailureHint(throwable);
         }
 
         @Override
@@ -166,6 +163,34 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     };
 
     /**
+     * hold account information
+     */
+    private void holdAccount() {
+        String username = mEtLoginUsername.getText().toString().trim();
+        String inputPwd = mEtLoginPwd.getText().toString().trim();
+
+        SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        if (!TextUtils.isEmpty(username)) {
+            editor.putString(HOLD_USERNAME_KEY, username);
+        }
+
+        if (mHoldPwd == 1) {
+            if (!TextUtils.isEmpty(inputPwd)) {
+                editor.putString(HOLD_PWD_KEY, toBase64(inputPwd));
+                editor.putInt(HOLD_PWD_STATUS_KEY, 1);
+            } else {
+                editor.putString(HOLD_PWD_KEY, inputPwd);
+                editor.putInt(HOLD_PWD_STATUS_KEY, 2);
+            }
+        } else {
+            editor.putString(HOLD_PWD_KEY, inputPwd);
+            editor.putInt(HOLD_PWD_STATUS_KEY, 2);
+        }
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+    }
+
+    /**
      * show the login activity
      *
      * @param context context
@@ -184,9 +209,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     protected void initWidget() {
         super.initWidget();
         mLlLoginLayer.setVisibility(View.GONE);
-//        mIvLoginUsernameDel.setVisibility(View.INVISIBLE);
-//        mIvLoginPwdDel.setVisibility(View.INVISIBLE);
-        mIvHoldPwd.setTag(true);
         mEtLoginUsername.setOnFocusChangeListener(this);
         mEtLoginUsername.addTextChangedListener(new TextWatcher() {
             @Override
@@ -216,6 +238,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
             }
         });
+
         mEtLoginPwd.setOnFocusChangeListener(this);
         mEtLoginPwd.addTextChangedListener(new TextWatcher() {
             @Override
@@ -249,7 +272,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
         String holdUsername = sp.getString(HOLD_USERNAME_KEY, null);
         String holdPwd = sp.getString(HOLD_PWD_KEY, null);
-        boolean holdStatus = sp.getBoolean(HOLD_PWD_STATUS_KEY, false);
+        int holdStatus = sp.getInt(HOLD_PWD_STATUS_KEY, 0);//0第一次默认/1用户设置保存/2用户设置未保存
 
         mEtLoginUsername.setText(holdUsername);
 
@@ -265,53 +288,19 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         } else {
             mEtLoginPwd.setText(null);
         }
-
         updateHoldPwd(holdStatus);
+        mHoldPwd = holdStatus;
 
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //initData();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        String username = mEtLoginUsername.getText().toString().trim();
-        this.mInputPwd = mEtLoginPwd.getText().toString().trim();
-
-        SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        if (!TextUtils.isEmpty(username))
-            editor.putString(HOLD_USERNAME_KEY, username);
-
-        if (mIvHoldPwd.getTag() != null) {
-            if (!TextUtils.isEmpty(mInputPwd))
-                editor.putString(HOLD_PWD_KEY, toBase64(mInputPwd));
-            editor.putBoolean(HOLD_PWD_STATUS_KEY, true);
+    private void updateHoldPwd(int holdStatus) {
+        ImageView ivHoldPwd = this.mIvHoldPwd;
+        if (holdStatus == 1 || holdStatus == 0) {
+            ivHoldPwd.setImageResource(R.mipmap.checkbox_checked);
         } else {
-            editor.putString(HOLD_PWD_KEY, "");
-            editor.putBoolean(HOLD_PWD_STATUS_KEY, false);
-        }
-
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
-
-    }
-
-    private void updateHoldPwd(boolean holdStatus) {
-        if (holdStatus) {
-            mIvHoldPwd.setImageResource(R.mipmap.checkbox_checked);
-            mIvHoldPwd.setTag(true);
-        } else {
-            mIvHoldPwd.setImageResource(R.mipmap.checkbox_normal);
-            mIvHoldPwd.setTag(null);
+            ivHoldPwd.setImageResource(R.mipmap.checkbox_normal);
         }
     }
-
 
     @OnClick({R.id.tv_login_forget_pwd, R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register,
             R.id.ll_login_pull, R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq, R.id.ll_login_layer,
@@ -321,107 +310,34 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         int id = v.getId();
         switch (id) {
             case R.id.tv_login_forget_pwd:
+                //忘记密码
                 RetrieveActivity.show(LoginActivity.this);
                 break;
             case R.id.bt_login_submit:
-
-                String tempUsername = mEtLoginUsername.getText().toString().trim();
-                String tempPwd = mEtLoginPwd.getText().toString().trim();
-
-
-                if (!TextUtils.isEmpty(tempUsername) && !TextUtils.isEmpty(tempPwd)) {
-
-                    boolean machPhoneNum = AssimilateUtils.MachPhoneNum(tempUsername);
-                    boolean machEmail = AssimilateUtils.machEmail(tempUsername);
-
-                    if (machPhoneNum || machEmail) {
-                        //登录成功,请求数据进入用户个人中心页面
-
-                        String appToken = "123";//"765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
-
-                        if (TDevice.hasInternet()) {
-                            OSChinaApi.login(tempUsername, Sha1toHex(tempPwd), appToken, new TextHttpResponseHandler() {
-
-                                @Override
-                                public void onStart() {
-                                    super.onStart();
-                                    showWaitDialog();
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                }
-
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                                    try {
-                                        Type type = new TypeToken<ResultBean<User>>() {
-                                        }.getType();
-
-                                        ResultBean<User> resultBean = AppOperator.createGson().fromJson(responseString, type);
-                                        if (resultBean.isSuccess()) {
-                                            User user = resultBean.getResult();
-                                            AccountHelper.login(user, headers);
-                                            finish();
-                                        } else {
-                                            int code = resultBean.getCode();
-                                            if (code == 211) {
-                                                mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
-                                            } else if (code == 212) {
-                                                mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_error);
-                                            }
-                                            AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
-                                            //更新失败因该是不进行任何的本地操作
-                                        }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        onFailure(statusCode, headers, responseString, e);
-                                    }
-                                }
-
-                                @Override
-                                public void onFinish() {
-                                    super.onFinish();
-                                    hideWaitDialog();
-                                }
-
-                                @Override
-                                public void onCancel() {
-                                    super.onCancel();
-                                    hideWaitDialog();
-                                }
-                            });
-
-                        } else {
-                            AppContext.showToast(getResources().getString(R.string.footer_type_net_error), Toast.LENGTH_SHORT);
-                        }
-
-                    } else {
-                        AppContext.showToast(getString(R.string.login_input_username_hint_error), Toast.LENGTH_SHORT);
-                    }
-                } else {
-                    AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
-                }
-
+                //用户登录
+                loginRequest();
                 break;
             case R.id.iv_login_hold_pwd:
                 //记住密码
                 String inputPwd = mEtLoginPwd.getText().toString().trim();
 
-                if (!TextUtils.isEmpty(inputPwd)) {
-                    mInputPwd = toBase64(inputPwd);
+                if (TextUtils.isEmpty(inputPwd)) {
+                    AppContext.showToast(getResources().getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
+                    return;
                 }
-
-                boolean holdPwd;
-                holdPwd = mIvHoldPwd.getTag() != null;
-                updateHoldPwd(holdPwd);
+                if (mHoldPwd == 2) {
+                    mHoldPwd = 1;
+                } else {
+                    mHoldPwd = 2;
+                }
+                updateHoldPwd(mHoldPwd);
                 break;
             case R.id.bt_login_register:
                 RegisterStepOneActivity.show(LoginActivity.this);
                 break;
             case R.id.ll_login_layer:
             case R.id.ll_login_pull:
+
                 mLlLoginPull.animate().cancel();
                 mLlLoginLayer.animate().cancel();
 
@@ -432,104 +348,22 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
                 if (mLlLoginPull.getTag() != null) {
                     mLlLoginPull.setTag(null);
-                    startAnimator(height, progress, time);
+                    glide(height, progress, time);
                 } else {
                     mLlLoginPull.setTag(true);
-                    mLlLoginPull.animate()
-                            .translationYBy(height * progress)
-                            .translationY(0)
-                            .setDuration(time)
-                            .start();
-                    mLlLoginLayer.animate()
-                            .alphaBy(1 - progress)
-                            .alpha(1)
-                            .setDuration(time)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-                                    mLlLoginLayer.setVisibility(View.VISIBLE);
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    if (animation instanceof ValueAnimator) {
-                                        mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
-                                    }
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    if (animation instanceof ValueAnimator) {
-                                        mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
-                                    }
-                                }
-                            })
-                            .start();
+                    upGlide(height, progress, time);
                 }
                 break;
             case R.id.ib_login_weibo:
-                openType = OpenConstants.SINA;
-                //新浪微博登录
-                AuthInfo authInfo = new AuthInfo(this, OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, null);
-                mSsoHandler = new SsoHandler(this, authInfo);
-                mSsoHandler.authorize(new WeiboAuthListener() {
-                    @Override
-                    public void onComplete(Bundle bundle) {
-
-                        Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
-
-                        if (oauth2AccessToken.isSessionValid()) {
-                            try {
-                                JSONObject jsonObject = new JSONObject();
-                                jsonObject.put("openid", oauth2AccessToken.getUid());
-                                jsonObject.put("expires_in", oauth2AccessToken.getExpiresTime());
-                                jsonObject.put("refresh_token", oauth2AccessToken.getRefreshToken());
-                                jsonObject.put("access_token", oauth2AccessToken.getToken());
-                                OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), mHandler);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onWeiboException(WeiboException e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
+                sinaLogin();
                 break;
             case R.id.ib_login_wx:
                 //微信登录
-                openType = OpenConstants.WECHAT;
-
-                OpenLogin<IWXAPI> iwxapiOpenLogin = new OpenLogin<>();
-                try {
-                    iwxapiOpenLogin.addAppId(OpenConstant.WECHAT_APP_ID)
-                            .toLogin(getApplicationContext(), LoginActivity.this, OpenConstants.WECHAT);
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-                finish();
+                wechartLogin();
                 break;
             case R.id.ib_login_qq:
-
-                openType = OpenConstants.TENCENT;
-
-                OpenLogin<Tencent> tencentOpenLogin = new OpenLogin<>();
-                try {
-                    tencentOpenLogin.addAppId(OpenConstant.QQ_APP_ID)
-                            .addIUiListener(this)
-                            .toLogin(getApplicationContext(), LoginActivity.this, OpenConstants.TENCENT);
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-
+                //QQ登录
+                tencentLogin();
                 break;
             case R.id.iv_login_username_del:
                 mEtLoginUsername.setText(null);
@@ -543,7 +377,119 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
     }
 
-    private void startAnimator(int height, float progress, int time) {
+    private void tencentLogin() {
+        openType = OpenConstants.TENCENT;
+
+        OpenLogin<Tencent> tencentOpenLogin = new OpenLogin<>();
+        try {
+            tencentOpenLogin.addAppId(OpenConstant.QQ_APP_ID)
+                    .addIUiListener(this)
+                    .toLogin(getApplicationContext(), LoginActivity.this, OpenConstants.TENCENT);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void wechartLogin() {
+        openType = OpenConstants.WECHAT;
+
+        OpenLogin<IWXAPI> iwxapiOpenLogin = new OpenLogin<>();
+        try {
+            iwxapiOpenLogin.addAppId(OpenConstant.WECHAT_APP_ID)
+                    .toLogin(getApplicationContext(), LoginActivity.this, OpenConstants.WECHAT);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        finish();
+    }
+
+    private void sinaLogin() {
+        openType = OpenConstants.SINA;
+        //新浪微博登录
+        AuthInfo authInfo = new AuthInfo(this, OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, null);
+        mSsoHandler = new SsoHandler(this, authInfo);
+        mSsoHandler.authorize(new WeiboAuthListener() {
+            @Override
+            public void onComplete(Bundle bundle) {
+
+                Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
+
+                if (oauth2AccessToken.isSessionValid()) {
+                    try {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("openid", oauth2AccessToken.getUid());
+                        jsonObject.put("expires_in", oauth2AccessToken.getExpiresTime());
+                        jsonObject.put("refresh_token", oauth2AccessToken.getRefreshToken());
+                        jsonObject.put("access_token", oauth2AccessToken.getToken());
+                        OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), mHandler);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onWeiboException(WeiboException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
+
+    /**
+     * menu up glide
+     *
+     * @param height   height
+     * @param progress progress
+     * @param time     time
+     */
+    private void upGlide(int height, float progress, int time) {
+        mLlLoginPull.animate()
+                .translationYBy(height * progress)
+                .translationY(0)
+                .setDuration(time)
+                .start();
+        mLlLoginLayer.animate()
+                .alphaBy(1 - progress)
+                .alpha(1)
+                .setDuration(time)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        mLlLoginLayer.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        if (animation instanceof ValueAnimator) {
+                            mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (animation instanceof ValueAnimator) {
+                            mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
+                        }
+                    }
+                })
+                .start();
+    }
+
+    /**
+     * menu glide
+     *
+     * @param height   height
+     * @param progress progress
+     * @param time     time
+     */
+    private void glide(int height, float progress, int time) {
         mLlLoginPull.animate()
                 .translationYBy(height - height * progress)
                 .translationY(height)
@@ -555,6 +501,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 .alpha(0)
                 .setDuration(time)
                 .setListener(new AnimatorListenerAdapter() {
+
                     @Override
                     public void onAnimationCancel(Animator animation) {
                         if (animation instanceof ValueAnimator) {
@@ -571,6 +518,93 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     }
                 })
                 .start();
+    }
+
+    private void loginRequest() {
+        String tempUsername = mEtLoginUsername.getText().toString().trim();
+        String tempPwd = mEtLoginPwd.getText().toString().trim();
+
+
+        if (!TextUtils.isEmpty(tempUsername) && !TextUtils.isEmpty(tempPwd)) {
+
+            boolean machPhoneNum = AssimilateUtils.MachPhoneNum(tempUsername);
+            boolean machEmail = AssimilateUtils.machEmail(tempUsername);
+
+            if (machPhoneNum || machEmail) {
+                //登录成功,请求数据进入用户个人中心页面
+
+                String appToken = "123";//"765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+
+                if (TDevice.hasInternet()) {
+                    requestLogin(tempUsername, tempPwd, appToken);
+
+                } else {
+                    AppContext.showToast(getResources().getString(R.string.footer_type_net_error), Toast.LENGTH_SHORT);
+                }
+
+            } else {
+                AppContext.showToast(getString(R.string.login_input_username_hint_error), Toast.LENGTH_SHORT);
+            }
+        } else {
+            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
+        }
+    }
+
+    private void requestLogin(String tempUsername, String tempPwd, String appToken) {
+        OSChinaApi.login(tempUsername, Sha1toHex(tempPwd), appToken, new TextHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                showFocusWaitDialog();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                requestFailureHint(throwable);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                try {
+                    Type type = new TypeToken<ResultBean<User>>() {
+                    }.getType();
+
+                    ResultBean<User> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                    if (resultBean.isSuccess()) {
+                        User user = resultBean.getResult();
+                        AccountHelper.login(user, headers);
+                        holdAccount();
+                        finish();
+                    } else {
+                        int code = resultBean.getCode();
+                        if (code == 211) {
+                            mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
+                        } else if (code == 212) {
+                            mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_error);
+                        }
+                        AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                        //更新失败因该是不进行任何的本地操作
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                hideWaitDialog();
+            }
+
+            @Override
+            public void onCancel() {
+                super.onCancel();
+                hideWaitDialog();
+            }
+        });
     }
 
     @NonNull
@@ -611,10 +645,28 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         return tempPwd;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        tencentOnActivityResult(data);
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        sinaOnActivityResult(requestCode, resultCode, data);
+
+    }
+
+    private void sinaOnActivityResult(int requestCode, int resultCode, Intent data) {
+        if (openType == OpenConstants.SINA) {
+            // SSO 授权回调
+            // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
+            if (mSsoHandler != null)
+                mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void tencentOnActivityResult(Intent data) {
         if (openType == OpenConstants.TENCENT) {
             // 对于tencent
             // 注：在某些低端机上调用登录后，由于内存紧张导致APP被系统回收，登录成功后无法成功回传数据。
@@ -628,16 +680,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 e.printStackTrace();
             }
         }
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (openType == OpenConstants.SINA) {
-            // SSO 授权回调
-            // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
-            if (mSsoHandler != null)
-                mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
-        }
-
     }
 
     @Override

@@ -22,14 +22,9 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
-<<<<<<< HEAD
-=======
 import net.oschina.app.improve.app.AppOperator;
-import net.oschina.app.improve.base.activities.BaseActivity;
->>>>>>> a7a9a61ba3c2add989efb9022fad793183819957
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.util.TDevice;
-import net.oschina.common.verify.Verifier;
 
 import java.lang.reflect.Type;
 
@@ -81,7 +76,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+            requestFailureHint(throwable);
         }
 
         @Override
@@ -108,7 +103,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
      */
     public static void show(Context context, PhoneToken phoneToken) {
         Intent intent = new Intent(context, ResetPwdActivity.class);
-        intent.putExtra(RegisterStepTwoActivity.PHONETOKEN_KEY, phoneToken);
+        intent.putExtra(RegisterStepTwoActivity.PHONE_TOKEN_KEY, phoneToken);
         context.startActivity(intent);
     }
 
@@ -134,16 +129,25 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
 
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
                 int length = s.length();
-                if (length > 6) {
+                if (length >= 6) {
                     mIvResetPwdDel.setVisibility(View.VISIBLE);
                     mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_ok);
-                    mBtResetSubmit.setAlpha(1.0f);
+                    mBtResetSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+                    mBtResetSubmit.setTextColor(getResources().getColor(R.color.white));
                 } else {
-                    mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_error);
-                    mBtResetSubmit.setAlpha(0.6f);
+                    if (length <= 0) {
+                        mIvResetPwdDel.setVisibility(View.GONE);
+                        mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_ok);
+                    } else {
+                        mIvResetPwdDel.setVisibility(View.VISIBLE);
+                        mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_error);
+                    }
+                    mBtResetSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                    mBtResetSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
                 }
 
             }
@@ -154,7 +158,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     protected void initData() {
         super.initData();
         Intent intent = getIntent();
-        mPhoneToken = (PhoneToken) intent.getSerializableExtra(RegisterStepTwoActivity.PHONETOKEN_KEY);
+        mPhoneToken = (PhoneToken) intent.getSerializableExtra(RegisterStepTwoActivity.PHONE_TOKEN_KEY);
         Log.e(TAG, "initData: ------------>" + mPhoneToken.toString());
     }
 
@@ -163,34 +167,35 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.ib_navigation_back:
+                finish();
+                break;
             case R.id.iv_reset_pwd_del:
                 mEtResetPwd.setText(null);
                 break;
             case R.id.bt_reset_submit:
 
-                String tempPwd = mEtResetPwd.getText().toString().trim();
-                if (TextUtils.isEmpty(tempPwd)) {
-                    AppContext.showToast(getString(R.string.reset_pwd_hint), Toast.LENGTH_SHORT);
-                    return;
-                }
-                if (tempPwd.length() > 6) {
-                    AppContext.showToast(getString(R.string.reset_pwd_hint), Toast.LENGTH_SHORT);
-                    return;
-                }
-                if (!TDevice.hasInternet()) {
-                    AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-
-
-                String appToken = Verifier.getPrivateToken(getApplication());
-                OSChinaApi.resetPwd(tempPwd, mPhoneToken.getToken(), appToken, mHandler);
+                requestResetPwd();
 
                 break;
             default:
                 break;
         }
 
+    }
+
+    private void requestResetPwd() {
+        String tempPwd = mEtResetPwd.getText().toString().trim();
+        if (TextUtils.isEmpty(tempPwd) || tempPwd.length() < 6) {
+            AppContext.showToast(getString(R.string.reset_pwd_hint), Toast.LENGTH_SHORT);
+            return;
+        }
+        if (!TDevice.hasInternet()) {
+            AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+            return;
+        }
+        String appToken = "123";// Verifier.getPrivateToken(getApplication());
+        OSChinaApi.resetPwd(tempPwd, mPhoneToken.getToken(), appToken, mHandler);
     }
 
     @Override

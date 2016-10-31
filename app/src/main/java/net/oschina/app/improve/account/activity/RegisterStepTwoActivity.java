@@ -24,11 +24,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
-<<<<<<< HEAD
-=======
 import net.oschina.app.improve.app.AppOperator;
-import net.oschina.app.improve.base.activities.BaseActivity;
->>>>>>> a7a9a61ba3c2add989efb9022fad793183819957
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
@@ -50,7 +46,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
     private static final String TAG = "RegisterStepTwoActivity";
 
-    public static final String PHONETOKEN_KEY = "phoneToken";
+    public static final String PHONE_TOKEN_KEY = "phoneToken";
 
     @Bind(R.id.ly_register_bar)
     LinearLayout mLlRegisterBar;
@@ -91,7 +87,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+            requestFailureHint(throwable);
         }
 
         @Override
@@ -141,7 +137,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
      */
     public static void show(Context context, PhoneToken phoneToken) {
         Intent intent = new Intent(context, RegisterStepTwoActivity.class);
-        intent.putExtra(PHONETOKEN_KEY, phoneToken);
+        intent.putExtra(PHONE_TOKEN_KEY, phoneToken);
         context.startActivity(intent);
     }
 
@@ -238,7 +234,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
         super.initData();
 
         Intent intent = getIntent();
-        mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONETOKEN_KEY);
+        mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONE_TOKEN_KEY);
         Log.e(TAG, "initData: ------------>" + mPhoneToken.toString());
 
     }
@@ -285,47 +281,47 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                     mTvRegisterMan.setCompoundDrawablesWithIntrinsicBounds(men, null, null, null);
                     mTvRegisterMan.setTag(null);
                 }
-
-
                 break;
             case R.id.bt_register_submit:
 
-                if (TDevice.hasInternet()) {
-
-                    String username = mEtRegisterUsername.getText().toString().trim();
-                    String pwd = mEtRegisterPwd.getText().toString().trim();
-
-                    if (TextUtils.isEmpty(username) && TextUtils.isEmpty(pwd)) {
-                        AppContext.showToast(getString(R.string.hint_pwd_null));
-                        return;
-                    } else {
-
-                        int gender = 0;
-
-                        Object isMan = mTvRegisterMan.getTag();
-                        if (isMan != null) {
-                            gender = 1;
-                        }
-
-                        Object isFemale = mTvRegisterFemale.getTag();
-                        if (isFemale != null) {
-                            gender = 2;
-                        }
-
-                        String appToken = "123";//Verifier.getPrivateToken(getApplication());
-
-                        OSChinaApi.register(username, pwd, gender, mPhoneToken.getToken(), appToken, mHandler);
-                    }
-                } else {
-                    AppContext.showToast(getResources().getString(R.string.tip_network_error));
-                }
-
+                requestRegisterUserInfo();
 
                 break;
             default:
                 break;
         }
 
+    }
+
+    private void requestRegisterUserInfo() {
+        if (TDevice.hasInternet()) {
+
+            String username = mEtRegisterUsername.getText().toString().trim();
+            String pwd = mEtRegisterPwd.getText().toString().trim();
+
+            if (TextUtils.isEmpty(username) && TextUtils.isEmpty(pwd)) {
+                AppContext.showToast(getString(R.string.hint_pwd_null));
+            } else {
+
+                int gender = 0;
+
+                Object isMan = mTvRegisterMan.getTag();
+                if (isMan != null) {
+                    gender = 1;
+                }
+
+                Object isFemale = mTvRegisterFemale.getTag();
+                if (isFemale != null) {
+                    gender = 2;
+                }
+
+                String appToken = "123";//Verifier.getPrivateToken(getApplication());
+
+                OSChinaApi.register(username, pwd, gender, mPhoneToken.getToken(), appToken, mHandler);
+            }
+        } else {
+            AppContext.showToast(getResources().getString(R.string.tip_network_error));
+        }
     }
 
 

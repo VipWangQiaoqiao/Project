@@ -2,6 +2,7 @@ package net.oschina.app.improve.account.base;
 
 import android.app.ProgressDialog;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.util.DialogHelp;
@@ -33,6 +34,23 @@ public class AccountBaseActivity extends BaseActivity {
             mDialog = DialogHelp.getWaitDialog(this, message);
         }
         mDialog.setMessage(message);
+        mDialog.show();
+
+        return mDialog;
+    }
+
+    /**
+     * show FocusWaitDialog
+     *
+     * @return progressDialog
+     */
+    protected ProgressDialog showFocusWaitDialog() {
+
+        String message = getResources().getString(R.string.progress_submit);
+        if (mDialog == null) {
+            mDialog = DialogHelp.getWaitDialog(this, message);
+        }
+        mDialog.setMessage(message);
         mDialog.setCancelable(false);
         mDialog.setCanceledOnTouchOutside(false);
         mDialog.show();
@@ -54,6 +72,18 @@ public class AccountBaseActivity extends BaseActivity {
                 ex.printStackTrace();
             }
         }
+    }
+
+    /**
+     * request network error
+     *
+     * @param throwable throwable
+     */
+    protected void requestFailureHint(Throwable throwable) {
+        if (throwable != null) {
+            throwable.printStackTrace();
+        }
+        AppContext.showToast(getResources().getString(R.string.request_error_hint));
     }
 
 }
