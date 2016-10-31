@@ -38,8 +38,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.constants.UserConstants;
-import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.share.constant.OpenConstant;
@@ -66,7 +66,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener, IUiListener, View.OnFocusChangeListener {
+public class LoginActivity extends AccountBaseActivity implements View.OnClickListener, IUiListener, View.OnFocusChangeListener {
 
     private static final String TAG = "LoginActivity";
 
@@ -113,14 +113,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Bind(R.id.ib_login_qq)
     ImageView mImLoginQq;
 
+    private int openType;
+    private boolean mHoldStatus;
+    private String mInputPwd;
+    private SsoHandler mSsoHandler;
+
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            showWaitDialog();
+        }
+
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
         }
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
             Type type = new TypeToken<ResultBean<User>>() {
             }.getType();
 
@@ -135,13 +147,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }
 
         }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            hideWaitDialog();
+        }
+
+        @Override
+        public void onCancel() {
+            super.onCancel();
+            hideWaitDialog();
+        }
     };
-
-    private int openType;
-    private boolean mHoldStatus;
-    private String mInputPwd;
-    private SsoHandler mSsoHandler;
-
 
     /**
      * show the login activity
@@ -316,9 +334,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                         if (TDevice.hasInternet()) {
                             OSChinaApi.login(tempUsername, Sha1toHex(tempPwd), appToken, new TextHttpResponseHandler() {
+
+                                @Override
+                                public void onStart() {
+                                    super.onStart();
+                                    showWaitDialog();
+                                }
+
                                 @Override
                                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
                                 }
 
                                 @Override
@@ -347,6 +371,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                         e.printStackTrace();
                                         onFailure(statusCode, headers, responseString, e);
                                     }
+                                }
+
+                                @Override
+                                public void onFinish() {
+                                    super.onFinish();
+                                    hideWaitDialog();
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    super.onCancel();
+                                    hideWaitDialog();
                                 }
                             });
 

@@ -22,12 +22,11 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
-import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.common.verify.Verifier;
 
 import java.lang.reflect.Type;
 
@@ -41,7 +40,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RegisterStepOneActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
+public class RegisterStepOneActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = "RegisterStepOneActivity";
 
@@ -64,10 +63,31 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
 
     private boolean mMachPhoneNum;
 
+    private CountDownTimer mTimer;
+
     private int mRequestType = 1;//1. 请求发送验证码  2.请求phoneToken
 
 
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            showWaitDialog();
+        }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            hideWaitDialog();
+        }
+
+        @Override
+        public void onCancel() {
+            super.onCancel();
+            hideWaitDialog();
+        }
+
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
             throwable.printStackTrace();
@@ -160,7 +180,6 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
 
         }
     };
-    private CountDownTimer mTimer;
 
     /**
      * show the register activity
@@ -324,7 +343,7 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                         }
                     }.start();
                     String phoneNumber = mEtRegisterUsername.getText().toString().trim();
-                    String appToken = Verifier.getPrivateToken(getApplication());
+                    String appToken = "123";//Verifier.getPrivateToken(getApplication());
                     OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.REGISTER_INTENT, mHandler);
                 } else {
                     AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
@@ -352,7 +371,7 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
 
                 mRequestType = 2;
                 String phoneNumber = mEtRegisterUsername.getText().toString().trim();
-                String appToken = Verifier.getPrivateToken(getApplication());
+                String appToken = "123";//Verifier.getPrivateToken(getApplication());
                 OSChinaApi.validateRegisterInfo(phoneNumber, SmsCode, appToken, mHandler);
 
                 break;

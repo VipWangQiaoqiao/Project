@@ -22,8 +22,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
-import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
@@ -41,7 +41,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RegisterStepTwoActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
+public class RegisterStepTwoActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = "RegisterStepTwoActivity";
 
@@ -66,8 +66,24 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
     TextView mTvRegisterFemale;
     @Bind(R.id.bt_register_submit)
     Button mBtRegisterSubmit;
+
     private PhoneToken mPhoneToken;
+
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
+
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            showWaitDialog();
+        }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            hideWaitDialog();
+        }
+
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 

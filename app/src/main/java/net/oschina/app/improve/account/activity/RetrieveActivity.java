@@ -23,9 +23,9 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.account.constants.UserConstants;
-import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
@@ -42,7 +42,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RetrieveActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
+public class RetrieveActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = "RetrieveActivity";
 
@@ -71,6 +71,25 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
 
     private int mRequestType;
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            showWaitDialog();
+        }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            hideWaitDialog();
+        }
+
+        @Override
+        public void onCancel() {
+            super.onCancel();
+            hideWaitDialog();
+        }
+
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 

@@ -20,8 +20,8 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
-import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.util.TDevice;
 import net.oschina.common.verify.Verifier;
@@ -38,7 +38,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class ResetPwdActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
+public class ResetPwdActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = "ResetPwdActivity";
 
@@ -55,6 +55,25 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
     Button mBtResetSubmit;
     private PhoneToken mPhoneToken;
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            showWaitDialog();
+        }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            hideWaitDialog();
+        }
+
+        @Override
+        public void onCancel() {
+            super.onCancel();
+            hideWaitDialog();
+        }
+
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 
