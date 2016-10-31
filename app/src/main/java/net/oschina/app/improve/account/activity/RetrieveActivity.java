@@ -152,6 +152,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                             mTimer.cancel();
                                         }
                                         ResetPwdActivity.show(RetrieveActivity.this, phoneToken);
+                                        finish();
                                     }
                                 } else {
                                     AppContext.showToast(phoneTokenResultBean.getMessage());
