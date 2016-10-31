@@ -92,13 +92,11 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
             throwable.printStackTrace();
             Log.e(TAG, "onFailure: -------------->");
-
-            if (mRequestType == 2) {
-                PhoneToken phoneToken = new PhoneToken();
-                phoneToken.setPhone("15111225406");
-                phoneToken.setToken("abc");
-                phoneToken.setExpireDate("30");
-                RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
+            if (mRequestType == 1) {
+                if (mTimer != null) {
+                    mTimer.onFinish();
+                    mTimer.cancel();
+                }
             }
         }
 

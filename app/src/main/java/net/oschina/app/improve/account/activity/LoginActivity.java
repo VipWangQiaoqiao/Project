@@ -114,7 +114,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     ImageView mImLoginQq;
 
     private int openType;
-    private boolean mHoldStatus;
     private String mInputPwd;
     private SsoHandler mSsoHandler;
 
@@ -182,6 +181,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         mLlLoginLayer.setVisibility(View.GONE);
 //        mIvLoginUsernameDel.setVisibility(View.INVISIBLE);
 //        mIvLoginPwdDel.setVisibility(View.INVISIBLE);
+        mIvHoldPwd.setTag(true);
         mEtLoginUsername.setOnFocusChangeListener(this);
         mEtLoginUsername.addTextChangedListener(new TextWatcher() {
             @Override
@@ -262,7 +262,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         }
 
         updateHoldPwd(holdStatus);
-        this.mHoldStatus = holdStatus;
 
     }
 
@@ -285,14 +284,15 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         if (!TextUtils.isEmpty(username))
             editor.putString(HOLD_USERNAME_KEY, username);
 
-        if (mHoldStatus) {
+        if (mIvHoldPwd.getTag() != null) {
             if (!TextUtils.isEmpty(mInputPwd))
                 editor.putString(HOLD_PWD_KEY, toBase64(mInputPwd));
+            editor.putBoolean(HOLD_PWD_STATUS_KEY, true);
         } else {
             editor.putString(HOLD_PWD_KEY, "");
+            editor.putBoolean(HOLD_PWD_STATUS_KEY, false);
         }
 
-        editor.putBoolean(HOLD_PWD_STATUS_KEY, mHoldStatus);
         SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
 
     }
@@ -300,8 +300,10 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     private void updateHoldPwd(boolean holdStatus) {
         if (holdStatus) {
             mIvHoldPwd.setImageResource(R.mipmap.checkbox_checked);
+            mIvHoldPwd.setTag(true);
         } else {
             mIvHoldPwd.setImageResource(R.mipmap.checkbox_normal);
+            mIvHoldPwd.setTag(null);
         }
     }
 
@@ -405,8 +407,10 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 if (!TextUtils.isEmpty(inputPwd)) {
                     mInputPwd = toBase64(inputPwd);
                 }
-                mHoldStatus = !mHoldStatus;
-                updateHoldPwd(mHoldStatus);
+
+                boolean holdPwd;
+                holdPwd = mIvHoldPwd.getTag() != null;
+                updateHoldPwd(holdPwd);
                 break;
             case R.id.bt_login_register:
                 RegisterStepOneActivity.show(LoginActivity.this);

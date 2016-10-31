@@ -155,7 +155,7 @@
                 android:adjustViewBounds="false"
                 android:contentDescription="@null"
                 android:padding="8dp"
-                app:srcCompat="@mipmap/checkbox_normal"
+                app:srcCompat="@mipmap/checkbox_checked"
                 tools:ignore="RtlHardcoded"/>
 
             <TextView
