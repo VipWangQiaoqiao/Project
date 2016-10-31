@@ -11,7 +11,7 @@ import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogDetail;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.FavoriteList;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.ThemeSwitchUtils;
@@ -114,7 +114,7 @@ public class BlogDetailFragment extends CommonDetailFragment<Blog> {
             AppContext.showToastShort(R.string.tip_network_error);
             return;
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
@@ -123,7 +123,7 @@ public class BlogDetailFragment extends CommonDetailFragment<Blog> {
             return;
         }
         showWaitDialog(R.string.progress_submit);
-        OSChinaApi.publicBlogComment(mId, (int) UserCacheManager.initUserManager().loginId(getContext()), str.toString(), mCommentHandler);
+        OSChinaApi.publicBlogComment(mId, (int) AccountHelper.getUserId(), str.toString(), mCommentHandler);
     }
 
     @Override

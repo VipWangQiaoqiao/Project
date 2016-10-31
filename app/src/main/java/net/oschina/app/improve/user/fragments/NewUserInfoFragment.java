@@ -27,7 +27,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -462,7 +462,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     }
                     break;
                 case R.id.ly_tweet:
-                    UserTweetActivity.show(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
+                    UserTweetActivity.show(getActivity(), AccountHelper.getUserId());
                     break;
                 case R.id.ly_favorite:
 //                    UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
@@ -470,16 +470,16 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     UserCollectionActivity.show(getActivity());
                     break;
                 case R.id.ly_following:
-                    UserFollowsActivity.show(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
+                    UserFollowsActivity.show(getActivity(), AccountHelper.getUserId());
                     break;
                 case R.id.ly_follower:
-                    UserFansActivity.show(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
+                    UserFansActivity.show(getActivity(), AccountHelper.getUserId());
                     break;
                 case R.id.rl_message:
                     UserMessageActivity.show(getActivity());
                     break;
                 case R.id.rl_blog:
-                    UIHelper.showUserBlog(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
+                    UIHelper.showUserBlog(getActivity(), AccountHelper.getUserId());
                     break;
                 case R.id.rl_info_avtivities:
                     Bundle bundle = new Bundle();
@@ -501,7 +501,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      * @return true/false
      */
     private boolean isLogin() {
-        return UserCacheManager.initUserManager().isLogin(getContext().getApplicationContext());
+        return AccountHelper.isLogin();
     }
 
     private void showClickAvatar() {

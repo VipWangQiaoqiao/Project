@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
@@ -40,7 +40,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
 
     public UserSendMessageAdapter(Callback callback) {
         super(callback, NEITHER);
-        authorId = UserCacheManager.initUserManager().loginId(mContext);
+        authorId = AccountHelper.getUserId();
     }
 
     @Override

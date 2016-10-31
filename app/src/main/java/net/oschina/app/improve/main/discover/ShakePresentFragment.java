@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.shake.ShakePresent;
 import net.oschina.app.util.TDevice;
@@ -84,14 +84,14 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
             mLoading = false;
             return;
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             Toast.makeText(mContext, "摇礼品需要登陆", Toast.LENGTH_LONG).show();
             return;
         }
         mCanAgain = false;
         String appToken = Verifier.getPrivateToken(getActivity().getApplication());
         long time = System.currentTimeMillis();
-        String sign = Verifier.signStringArray(String.valueOf(time), String.valueOf(UserCacheManager.initUserManager().loginId(getContext())),
+        String sign = Verifier.signStringArray(String.valueOf(time), String.valueOf(AccountHelper.getUserId()),
                 appToken);
         OSChinaApi.getShakePresent(time, appToken, sign, mHandler);
     }

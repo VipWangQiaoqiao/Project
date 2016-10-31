@@ -30,7 +30,7 @@ import net.oschina.app.bean.NotebookDataList;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.db.NoteDatabase;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.adapter.NotebookAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.KJAnimations;
@@ -269,7 +269,7 @@ public class NoteBookFragment extends BaseFragment implements
      * 未登陆用户不能下拉同步，只能使用本地存储
      */
     private void setListCanPull() {
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             mSwipeRefreshLayout.setEnabled(false);
         } else {
             mSwipeRefreshLayout.setEnabled(true);

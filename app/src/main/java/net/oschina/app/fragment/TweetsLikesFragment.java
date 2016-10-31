@@ -19,7 +19,7 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetLike;
 import net.oschina.app.bean.TweetLikeList;
 import net.oschina.app.bean.TweetsList;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
@@ -105,7 +105,7 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
     }
 
     private void setupContent() {
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (AccountHelper.isLogin()) {
             mIsWatingLogin = false;
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             requestData(true);
@@ -119,8 +119,8 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
 
     @Override
     protected void requestData(boolean refresh) {
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
-            mCatalog = (int) UserCacheManager.initUserManager().loginId(getContext());
+        if (AccountHelper.isLogin()) {
+            mCatalog = (int) AccountHelper.getUserId();
             mIsWatingLogin = false;
             super.requestData(refresh);
         } else {
@@ -137,7 +137,7 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
 
             @Override
             public void onClick(View v) {
-                if (UserCacheManager.initUserManager().isLogin(getContext())) {
+                if (AccountHelper.isLogin()) {
                     mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     requestData(true);
                 } else {
@@ -160,8 +160,8 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
         // TODO Auto-generated method stub
 
         super.onRefreshNetworkSuccess();
-        if (UserCacheManager.initUserManager().isLogin(getContext())
-                && mCatalog == UserCacheManager.initUserManager().loginId(getContext())
+        if (AccountHelper.isLogin()
+                && mCatalog == AccountHelper.getUserId()
                 && 4 == NoticeViewPagerFragment.sCurrentPage) {
             NoticeUtils.clearNotice(Notice.TYPE_NEWLIKE,getContext());
             UIHelper.sendBroadcastForNotice(getActivity());

@@ -52,7 +52,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -258,7 +258,7 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     private void showConfirmLogin(final String url) {
-        if (!UserCacheManager.initUserManager().isLogin(this)) {
+        if (!AccountHelper.isLogin()) {
             showLogin();
             return;
         }
@@ -341,7 +341,7 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     private void handleSignIn(BarCode barCode) {
-        if (barCode.isRequireLogin() && !UserCacheManager.initUserManager().isLogin(this)) {
+        if (barCode.isRequireLogin() && !AccountHelper.isLogin()) {
             showLogin();
             return;
         }

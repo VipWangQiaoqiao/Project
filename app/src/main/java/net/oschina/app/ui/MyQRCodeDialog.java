@@ -19,7 +19,7 @@ import com.google.zxing.WriterException;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.QrCodeUtils;
 
 import org.kymjs.kjframe.utils.FileUtils;
@@ -42,7 +42,7 @@ public class MyQRCodeDialog extends Dialog {
         mIvCode = (ImageView) contentView.findViewById(R.id.iv_qr_code);
         try {
             bitmap = QrCodeUtils.Create2DCode(String.format(
-                    "http://my.oschina.net/u/%s", UserCacheManager.initUserManager().loginId(getContext())));
+                    "http://my.oschina.net/u/%s", AccountHelper.getUserId()));
             mIvCode.setImageBitmap(bitmap);
         } catch (WriterException e) {
             e.printStackTrace();

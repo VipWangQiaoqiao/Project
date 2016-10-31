@@ -7,7 +7,7 @@ import android.widget.AdapterView;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.adapter.TeamIssueCatalogAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssueCatalog;
@@ -66,7 +66,7 @@ public class TeamIssueCatalogFragment extends
 
     @Override
     protected void sendRequestData() {
-	int uid = (int) UserCacheManager.initUserManager().loginId(getContext());
+	int uid = (int) AccountHelper.getUserId();
 	int teamId= mTeam.getId();
 	int projectId = mTeamProject.getGit().getId();
 	String source = mTeamProject.getSource();

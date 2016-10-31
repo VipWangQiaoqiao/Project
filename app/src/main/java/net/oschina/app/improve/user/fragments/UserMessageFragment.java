@@ -3,7 +3,7 @@ package net.oschina.app.improve.user.fragments;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Message;
@@ -26,7 +26,7 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     @Override
     public void initData() {
         super.initData();
-        authorId = UserCacheManager.initUserManager().loginId(getContext());
+        authorId = AccountHelper.getUserId();
     }
 
     @Override
