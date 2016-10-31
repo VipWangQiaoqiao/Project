@@ -312,12 +312,12 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 mEtRetrieveTel.setText(null);
                 break;
             case R.id.retrieve_sms_call:
-
+                //获取验证码
                 requestSmsCode();
 
                 break;
             case R.id.bt_retrieve_submit:
-
+                //根据验证码获取phoneToken
                 requestRetrievePwd();
 
                 break;
@@ -339,6 +339,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
     }
 
     private void requestRetrievePwd() {
+
         if (!mMachPhoneNum) {
             AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
             return;
@@ -393,7 +394,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
             }.start();
             String phoneNumber = mEtRetrieveTel.getText().toString().trim();
             String appToken = "123";//Verifier.getPrivateToken(getApplication());
-            OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.REGISTER_INTENT, mHandler);
+            OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.RESET_PWD_INTENT, mHandler);
         } else {
             AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
         }

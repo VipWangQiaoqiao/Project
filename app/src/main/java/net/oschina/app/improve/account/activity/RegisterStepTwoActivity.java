@@ -111,11 +111,13 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 switch (code) {
                     case 216:
                         //phoneToken 已经失效
+                        finish();
                         break;
                     case 217:
                         mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_error);
                         break;
                     case 218:
+                        finish();
                         break;
                     case 219:
                         mLlRegisterTwoPwd.setBackgroundResource(R.drawable.bg_login_input_error);
@@ -299,7 +301,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
             String username = mEtRegisterUsername.getText().toString().trim();
             String pwd = mEtRegisterPwd.getText().toString().trim();
 
-            if (TextUtils.isEmpty(username) && TextUtils.isEmpty(pwd)) {
+            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(pwd)) {
                 AppContext.showToast(getString(R.string.hint_pwd_null));
             } else {
 

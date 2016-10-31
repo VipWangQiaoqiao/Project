@@ -85,13 +85,23 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             Type type = new TypeToken<ResultBean>() {
             }.getType();
             ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
-            if (resultBean.isSuccess()) {
-                LoginActivity.show(ResetPwdActivity.this);
-                finish();
-            } else {
-                AppContext.showToast(resultBean.getMessage());
-            }
+            int code = resultBean.getCode();
 
+            switch (code) {
+                case 1:
+                    LoginActivity.show(ResetPwdActivity.this);
+                    finish();
+                    break;
+                case 216:
+                    finish();
+                    break;
+                case 219:
+                    mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_error);
+                    break;
+                default:
+                    break;
+            }
+            AppContext.showToast(resultBean.getMessage());
         }
     };
 
