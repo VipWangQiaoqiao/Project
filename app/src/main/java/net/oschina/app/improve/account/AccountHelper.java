@@ -46,6 +46,8 @@ public final class AccountHelper {
     public synchronized static User getUser() {
         if (instances.user == null)
             instances.user = SharedPreferencesHelper.load(instances.application, User.class);
+        if (instances.user == null)
+            instances.user = new User();
         return instances.user;
     }
 

@@ -27,7 +27,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
@@ -320,11 +320,11 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
             AppContext.showToastShort(R.string.tip_no_internet);
             return;
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        int uid = (int) UserCacheManager.initUserManager().loginId(getContext());
+        int uid = (int) AccountHelper.getUserId();
         final boolean isFavorited = getFavoriteState() == 1 ? true : false;
         AsyncHttpResponseHandler mFavoriteHandler = new AsyncHttpResponseHandler() {
 
@@ -386,7 +386,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         if (mId == 0 || mDetail == null) {
             AppContext.showToast("正在加载，请稍等...");
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
@@ -508,7 +508,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
             AppContext.showToastShort(R.string.tip_network_error);
             return;
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
@@ -518,7 +518,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         }
         showWaitDialog(R.string.progress_submit);
 
-        OSChinaApi.publicComment(getCommentType(), mId, (int) UserCacheManager.initUserManager().loginId(getContext()), str.toString(), 0,
+        OSChinaApi.publicComment(getCommentType(), mId, (int) AccountHelper.getUserId(), str.toString(), 0,
                 mCommentHandler);
     }
 

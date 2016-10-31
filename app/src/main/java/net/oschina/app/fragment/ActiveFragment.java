@@ -18,7 +18,7 @@ import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
@@ -103,7 +103,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
 
     @Override
     protected String getCacheKeyPrefix() {
-        return CACHE_KEY_PREFIX + mCatalog + UserCacheManager.initUserManager().loginId(getContext());
+        return CACHE_KEY_PREFIX + mCatalog + AccountHelper.getUserId();
     }
 
     @Override
@@ -127,7 +127,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (UserCacheManager.initUserManager().isLogin(getContext())) {
+                if (AccountHelper.isLogin()) {
                     mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     requestData(false);
                 } else {
@@ -135,14 +135,14 @@ public class ActiveFragment extends BaseListFragment<Active> implements
                 }
             }
         });
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (AccountHelper.isLogin()) {
             UIHelper.sendBroadcastForNotice(getActivity());
         }
     }
 
     @Override
     protected void requestData(boolean refresh) {
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (AccountHelper.isLogin()) {
             mIsWatingLogin = false;
             super.requestData(refresh);
         } else {
@@ -154,13 +154,13 @@ public class ActiveFragment extends BaseListFragment<Active> implements
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getActiveList((int) UserCacheManager.initUserManager().loginId(getContext()),
+        OSChinaApi.getActiveList((int) AccountHelper.getUserId(),
                 mCatalog, mCurrentPage, mHandler);
     }
 
     @Override
     protected void onRefreshNetworkSuccess() {
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (AccountHelper.isLogin()) {
             if (0 == NoticeViewPagerFragment.sCurrentPage) {
                 NoticeUtils.clearNotice(Notice.TYPE_ATME,getContext());
             } else if (1 == NoticeViewPagerFragment.sCurrentPage

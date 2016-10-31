@@ -22,7 +22,7 @@ import net.oschina.app.bean.PostDetail;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.ui.EventApplyDialog;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.ThemeSwitchUtils;
@@ -270,7 +270,7 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
             return;
         }
 
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
@@ -289,7 +289,7 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
                             EventApplyData data = null;
                             if ((data = mEventApplyDialog.getApplyData()) != null) {
                                 data.setEvent(mId);
-                                data.setUser((int) UserCacheManager.initUserManager().loginId(getContext()));
+                                data.setUser((int) AccountHelper.getUserId());
                                 showWaitDialog(R.string.progress_submit);
                                 OSChinaApi.eventApply(data, mApplyHandler);
                             }

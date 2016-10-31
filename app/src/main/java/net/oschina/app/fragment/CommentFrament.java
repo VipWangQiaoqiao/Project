@@ -29,7 +29,7 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
@@ -196,14 +196,14 @@ public class CommentFrament extends BaseListFragment<Comment> implements
     }
 
     private void handleDeleteComment(Comment comment) {
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
         AppContext.showToastShort(R.string.deleting);
         if (mIsBlogComment) {
             OSChinaApi.deleteBlogComment(
-                    (int) UserCacheManager.initUserManager().loginId(getContext()), mId,
+                    (int) AccountHelper.getUserId(), mId,
                     comment.getId(), comment.getAuthorId(), mOwnerId,
                     new DeleteOperationResponseHandler(comment));
         } else {
@@ -248,7 +248,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         final Comment item = mAdapter.getItem(position);
         if (item == null)
             return false;
-        int itemsLen = item.getAuthorId() == UserCacheManager.initUserManager().loginId(getContext()) ? 2 : 1;
+        int itemsLen = item.getAuthorId() == AccountHelper.getUserId() ? 2 : 1;
         String[] items = new String[itemsLen];
         items[0] = getResources().getString(R.string.copy);
         if (itemsLen == 2) {
@@ -278,7 +278,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
             AppContext.showToastShort(R.string.tip_comment_content_empty);
             return;
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
@@ -293,24 +293,24 @@ public class CommentFrament extends BaseListFragment<Comment> implements
     private void sendReply(String text) {
         showWaitDialog(R.string.progress_submit);
         if (mIsBlogComment) {
-            OSChinaApi.publicBlogComment(mId, (int) UserCacheManager.initUserManager().loginId(getContext()), text, mCommentHandler);
+            OSChinaApi.publicBlogComment(mId, (int) AccountHelper.getUserId(), text, mCommentHandler);
         } else {
-            OSChinaApi.publicComment(mCatalog, mId, (int) UserCacheManager.initUserManager().loginId(getContext()), text, 1, mCommentHandler);
+            OSChinaApi.publicComment(mCatalog, mId, (int) AccountHelper.getUserId(), text, 1, mCommentHandler);
         }
     }
 
     private void handleReplyComment(Comment comment, String text) {
         showWaitDialog(R.string.progress_submit);
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
         if (mIsBlogComment) {
-            OSChinaApi.replyBlogComment(mId, UserCacheManager.initUserManager().loginId(getContext()), text, comment.getId(), comment
+            OSChinaApi.replyBlogComment(mId, AccountHelper.getUserId(), text, comment.getId(), comment
                     .getAuthorId(), mCommentHandler);
         } else {
             OSChinaApi.replyComment(mId, mCatalog, comment.getId(), comment
-                            .getAuthorId(), (int) UserCacheManager.initUserManager().loginId(getContext()),
+                            .getAuthorId(), (int) AccountHelper.getUserId(),
                     text, mCommentHandler);
         }
     }

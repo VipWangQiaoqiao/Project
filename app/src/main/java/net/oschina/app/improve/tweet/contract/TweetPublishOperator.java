@@ -9,7 +9,7 @@ import android.text.TextUtils;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.CollectionUtil;
@@ -44,7 +44,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
             AppContext.showToastShort(R.string.tip_network_error);
             return;
         }
-        if (!UserCacheManager.initUserManager().isLogin(context)) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(context);
             return;
         }

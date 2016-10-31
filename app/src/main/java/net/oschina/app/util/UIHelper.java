@@ -51,7 +51,7 @@ import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.improve.account.activity.LoginActivity;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
@@ -717,7 +717,7 @@ public class UIHelper {
      * @param notice
      */
     public static void sendBroadCast(Context context, Notice notice) {
-        if (!UserCacheManager.initUserManager().isLogin(context)
+        if (!AccountHelper.isLogin()
                 || notice == null)
             return;
         Intent intent = new Intent(Constants.INTENT_ACTION_NOTICE);

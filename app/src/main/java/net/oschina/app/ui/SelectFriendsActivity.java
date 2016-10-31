@@ -39,7 +39,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.FriendsList;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -787,7 +787,7 @@ public class SelectFriendsActivity extends BaseActivity {
      * 获取列表数据
      */
     private void requestData(boolean refresh) {
-        int uid = (int) UserCacheManager.initUserManager().loginId(this);
+        int uid = (int) AccountHelper.getUserId();
         String key = getCacheKey(uid);
         if (refresh) {
             // 读取新的数据

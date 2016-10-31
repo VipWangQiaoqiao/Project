@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.EventApplyData;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.detail.contract.EventDetailContract;
@@ -135,7 +135,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
             case R.id.ll_sign:
                 final EventDetail mDetail = mOperator.getData();
                 if (mDetail.getApplyStatus() == EventDetail.APPLY_STATUS_UN_SIGN && mDetail.getStatus() == Event.STATUS_ING) {
-                    if (UserCacheManager.initUserManager().isLogin(getContext())) {
+                    if (AccountHelper.isLogin()) {
                         if (mEventApplyDialog == null) {
                             mEventApplyDialog = new EventDetailApplyDialog(getActivity(), mDetail);
                             mEventApplyDialog.setCanceledOnTouchOutside(true);
@@ -150,7 +150,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                                             EventApplyData data;
                                             if ((data = mEventApplyDialog.getApplyData()) != null) {
                                                 data.setEvent(Integer.parseInt(String.valueOf(mDetail.getId())));
-                                                data.setUser((int) UserCacheManager.initUserManager().loginId(getContext()));
+                                                data.setUser((int) AccountHelper.getUserId());
                                                 mOperator.toSignUp(data);
                                             }
 

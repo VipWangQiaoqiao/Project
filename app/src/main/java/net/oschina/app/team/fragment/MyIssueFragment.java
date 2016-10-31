@@ -7,7 +7,8 @@ import android.widget.AdapterView;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
@@ -62,7 +63,7 @@ public class MyIssueFragment extends BaseListFragment<TeamIssue> {
      */
     @Override
     protected String getCacheKeyPrefix() {
-        return CACHE_KEY_PREFIX + UserCacheManager.initUserManager().loginId(getContext()) + "_"
+        return CACHE_KEY_PREFIX + AccountHelper.getUserId() + "_"
                 + mTeam.getId() + mCurrentPage + type;
     }
 
@@ -79,7 +80,7 @@ public class MyIssueFragment extends BaseListFragment<TeamIssue> {
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getMyIssue(mTeam.getId() + "", UserCacheManager.initUserManager().loginId(getContext()) + "", mCurrentPage, type, mHandler);
+        OSChinaApi.getMyIssue(mTeam.getId() + "", AccountHelper.getUserId() + "", mCurrentPage, type, mHandler);
     }
 
     @Override

@@ -18,7 +18,7 @@ import net.oschina.app.base.BeseHaveHeaderListFragment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.adapter.TeamReplyAdapter;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamDiscussDetail;
@@ -206,11 +206,11 @@ public class TeamDiscussDetailFragment extends
             AppContext.showToast("请先输入评论内容...");
             return;
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        int uid = (int) UserCacheManager.initUserManager().loginId(getContext());
+        int uid = (int) AccountHelper.getUserId();
         OSChinaTeamApi.pubTeamDiscussReply(uid, mTeamId, mDiscussId,
                 str.toString(), mReplyHandler);
     }

@@ -17,7 +17,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
@@ -109,12 +109,12 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
             AppContext.showToastShort(R.string.tip_no_internet);
             return 0;
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(this);
             return 0;
         }
         // 返回当前登录用户ID
-        return UserCacheManager.initUserManager().loginId(this);
+        return AccountHelper.getUserId();
     }
 
 
@@ -222,7 +222,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
                 final long sourceId = tweet.getId();
 
                 long id = tweet.getAuthor().getId();
-                long loginUid = UserCacheManager.initUserManager().loginId(SoftwareTweetActivity.this);
+                long loginUid = AccountHelper.getUserId();
                 if (id == loginUid) {
 
                     DialogHelp.getConfirmDialog(SoftwareTweetActivity.this, "删除该动弹?", new DialogInterface.OnClickListener() {

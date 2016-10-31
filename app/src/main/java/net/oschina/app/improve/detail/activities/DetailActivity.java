@@ -21,7 +21,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
@@ -386,12 +386,12 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
             AppContext.showToastShort(R.string.tip_no_internet);
             return 0;
         }
-        if (!UserCacheManager.initUserManager().isLogin(this)) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(this);
             return 0;
         }
         // 返回当前登录用户ID
-        return UserCacheManager.initUserManager().loginId(this);
+        return AccountHelper.getUserId();
     }
 
 

@@ -24,7 +24,7 @@ import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamGit;
 import net.oschina.app.team.bean.TeamIssue;
@@ -187,7 +187,7 @@ public class TeamNewIssueActivity extends BaseActivity {
 
         RequestParams params = new RequestParams();
         params.put("teamid", mTeam.getId());
-        params.put("uid", UserCacheManager.initUserManager().loginId(this));
+        params.put("uid", AccountHelper.getUserId());
         params.put("title", title);
         if (mTeamProject.getGit().getId() > 0) {
 
@@ -475,7 +475,7 @@ public class TeamNewIssueActivity extends BaseActivity {
     }
 
     private void tryToShowCatalogDialog() {
-        OSChinaTeamApi.getTeamCatalogIssueList((int) UserCacheManager.initUserManager().loginId(this), mTeam.getId(), mTeamProject.getGit().getId(),
+        OSChinaTeamApi.getTeamCatalogIssueList((int) AccountHelper.getUserId(), mTeam.getId(), mTeamProject.getGit().getId(),
                 mTeamProject.getSource(), new MySomeInfoHandler(
                         show_issue_catalog));
 

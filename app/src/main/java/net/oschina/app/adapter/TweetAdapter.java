@@ -24,7 +24,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.User;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.DialogHelp;
@@ -171,7 +171,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.ivLikeState.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (UserCacheManager.initUserManager().isLogin(mContext)) {
+                if (AccountHelper.isLogin()) {
                     updateLikeState(vh, tweet);
                 } else {
                     AppContext.showToast("先登陆再赞~");
