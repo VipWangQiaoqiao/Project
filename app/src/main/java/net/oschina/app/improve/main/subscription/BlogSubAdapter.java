@@ -12,12 +12,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
-import net.oschina.app.improve.general.fragments.BlogFragment;
-import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.util.StringUtils;
 
 /**
@@ -29,8 +26,6 @@ import net.oschina.app.util.StringUtils;
 public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> {
 
     private String mSystemTime;
-    private boolean isUserBlog;
-    private int actionPosition = 0;
 
     public BlogSubAdapter(Context context) {
         super(context, ONLY_FOOTER);
@@ -94,19 +89,14 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> {
             }
         }
 
-        String cacheName = verifyFileName();
 
-        if (isUserBlog) {
-            cacheName = UserBlogFragment.HISTORY_BLOG;
-        }
-
-        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
-            title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-            content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-        } else {
-            title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
-            content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
-        }
+//        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
+//            title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
+//            content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
+//        } else {
+//            title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
+//            content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
+//        }
 
         String author = item.getAuthor().getName();
         if (!TextUtils.isEmpty(author)) {
@@ -117,19 +107,6 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> {
 
         see.setText(String.valueOf(item.getStatistics().getView()));
         answer.setText(String.valueOf(item.getStatistics().getComment()));
-    }
-
-    private String verifyFileName() {
-        switch (actionPosition) {
-            case 0:
-                return BlogFragment.BLOG_RECOMMEND;
-            case 1:
-                return BlogFragment.BLOG_HEAT;
-            case 2:
-                return BlogFragment.BLOG_NORMAL;
-            default:
-                return BlogFragment.BLOG_RECOMMEND;
-        }
     }
 
     private static class BlogViewHolder extends RecyclerView.ViewHolder {
