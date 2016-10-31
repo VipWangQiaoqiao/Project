@@ -155,6 +155,7 @@ public class DynamicTabFragment extends BaseTitleFragment {
                     for (SubTab tab : activeTabs){
                         mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
                     }
+                    isMoveIndex = false;
                 }
             }
         });
