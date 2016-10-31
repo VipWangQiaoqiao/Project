@@ -8,12 +8,11 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubTab;
@@ -21,7 +20,8 @@ import net.oschina.app.improve.general.fragments.BlogFragment;
 import net.oschina.app.improve.general.fragments.EventFragment;
 import net.oschina.app.improve.general.fragments.NewsFragment;
 import net.oschina.app.improve.general.fragments.QuestionFragment;
-import net.oschina.app.improve.main.subscription.SubFragment;
+import net.oschina.app.improve.main.MainActivity;
+import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.widget.TabPickerView;
 
 import java.io.File;
@@ -47,6 +47,17 @@ public class DynamicTabFragment extends BaseTitleFragment {
     @Bind(R.id.view_pager) ViewPager mViewPager;
 
     List<Pair<SubTab, Fragment>> fragments;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((MainActivity) context).addOnTurnBackListener(new MainActivity.TurnBackListener() {
+            @Override
+            public boolean onTurnBack() {
+                return mViewTabPicker.onTurnBack();
+            }
+        });
+    }
 
     @Override
     protected void initWidget(View root) {
@@ -212,6 +223,21 @@ public class DynamicTabFragment extends BaseTitleFragment {
 
     @OnClick(R.id.iv_arrow_down) void onClickArrow(){
         mViewTabPicker.show(mLayoutTab.getSelectedTabPosition());
+    }
+
+    @Override
+    protected int getIconRes() {
+        return R.mipmap.btn_search_normal;
+    }
+
+    @Override
+    protected View.OnClickListener getIconClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchActivity.show(getContext());
+            }
+        };
     }
 
 
