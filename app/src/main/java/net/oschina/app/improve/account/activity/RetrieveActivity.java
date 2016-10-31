@@ -25,6 +25,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.account.constants.UserConstants;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -96,7 +97,7 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
 
                         Type type = new TypeToken<ResultBean>() {
                         }.getType();
-                        ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                        ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                         int code = resultBean.getCode();
                         switch (code) {
                             case 1:
@@ -125,7 +126,7 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
                         Type phoneType = new TypeToken<ResultBean<PhoneToken>>() {
                         }.getType();
 
-                        ResultBean<PhoneToken> phoneTokenResultBean = AppContext.createGson().fromJson(responseString, phoneType);
+                        ResultBean<PhoneToken> phoneTokenResultBean = AppOperator.createGson().fromJson(responseString, phoneType);
 
                         int smsCode = phoneTokenResultBean.getCode();
                         switch (smsCode) {

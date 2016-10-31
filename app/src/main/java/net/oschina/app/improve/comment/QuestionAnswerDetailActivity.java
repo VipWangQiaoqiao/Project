@@ -25,6 +25,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.CommentEX;
@@ -256,7 +257,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                ResultBean<CommentEX.Reply> result = AppContext.createGson().fromJson(
+                ResultBean<CommentEX.Reply> result = AppOperator.createGson().fromJson(
                         responseString,
                         new TypeToken<ResultBean<CommentEX.Reply>>() {
                         }.getType()
@@ -289,7 +290,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String respStr) {
-                ResultBean<CommentEX> result = AppContext.createGson().fromJson(respStr,
+                ResultBean<CommentEX> result = AppOperator.createGson().fromJson(respStr,
                         new TypeToken<ResultBean<CommentEX>>() {
                         }.getType());
                 if (result.isSuccess()) {
@@ -355,7 +356,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            ResultBean<CommentEX> result = AppContext.createGson().fromJson(
+                            ResultBean<CommentEX> result = AppOperator.createGson().fromJson(
                                     responseString, new TypeToken<ResultBean<CommentEX>>() {
                                     }.getType());
                             if (result.isSuccess()) {

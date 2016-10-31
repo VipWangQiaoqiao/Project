@@ -10,6 +10,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Version;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.util.DialogHelp;
@@ -56,7 +57,7 @@ public class CheckUpdateManager {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    ResultBean<List<Version>> bean = AppContext.createGson()
+                    ResultBean<List<Version>> bean = AppOperator.createGson()
                             .fromJson(responseString, new TypeToken<ResultBean<List<Version>>>() {
                             }.getType());
                     if (bean != null && bean.isSuccess()) {

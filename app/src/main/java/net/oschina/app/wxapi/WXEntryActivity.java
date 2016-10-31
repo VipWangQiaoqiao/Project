@@ -16,6 +16,7 @@ import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 
@@ -101,7 +102,7 @@ public class WXEntryActivity extends Activity {
                             Type type = new TypeToken<ResultBean<User>>() {
                             }.getType();
 
-                            ResultBean<User> resulBean = AppContext.createGson().fromJson(responseString, type);
+                            ResultBean<User> resulBean = AppOperator.createGson().fromJson(responseString, type);
                             if (resulBean.isSuccess()) {
                                 User user = resulBean.getResult();
                                 AccountHelper.login(user, headers);

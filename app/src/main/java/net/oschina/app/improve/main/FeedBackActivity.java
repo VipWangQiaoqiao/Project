@@ -131,7 +131,7 @@ public class FeedBackActivity extends BaseBackActivity implements View.OnClickLi
                 Type type = new TypeToken<ResultBean<Message>>() {
                 }.getType();
                 try {
-                    ResultBean<Message> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<Message> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
                         Toast.makeText(FeedBackActivity.this, "谢谢您的反馈", Toast.LENGTH_SHORT).show();
                         finish();

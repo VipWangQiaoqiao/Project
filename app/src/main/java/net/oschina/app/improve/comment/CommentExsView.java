@@ -18,6 +18,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.CommentEX;
@@ -94,7 +95,7 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
                     Type type = new TypeToken<ResultBean<PageBean<CommentEX>>>() {
                     }.getType();
 
-                    ResultBean<PageBean<CommentEX>> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<PageBean<CommentEX>> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         addComment(resultBean.getResult().getItems(), commentTotal, imageLoader, onCommentClickListener);
                         return;

@@ -10,6 +10,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
@@ -78,7 +79,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 Log.e("res",responseString);
                 try {
-                    ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
+                    ResultBean<PageBean<T>> resultBean = AppOperator.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
                         onLoadingSuccess();
                         setListData(resultBean);

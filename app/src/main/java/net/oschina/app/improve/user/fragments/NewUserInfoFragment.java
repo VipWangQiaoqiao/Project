@@ -28,6 +28,7 @@ import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -167,7 +168,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 Type type = new TypeToken<ResultBean<User>>() {
                 }.getType();
 
-                ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
                     User userInfo = (User) resultBean.getResult();
                     updateView(userInfo);
