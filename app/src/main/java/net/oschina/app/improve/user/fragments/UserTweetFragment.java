@@ -11,7 +11,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Tweet;
@@ -100,7 +100,7 @@ public class UserTweetFragment extends BaseRecyclerViewFragment<Tweet> implement
 
     private void handleLongClick(final Tweet tweet, final int position) {
         String[] items;
-        if (UserCacheManager.initUserManager().loginId(getContext()) == tweet.getAuthor().getId()) {
+        if (AccountHelper.getUserId() == tweet.getAuthor().getId()) {
             items = new String[]{getString(R.string.copy),
                     getString(R.string.delete)};
         } else {

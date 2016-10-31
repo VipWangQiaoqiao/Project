@@ -15,7 +15,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.main.FeedBackActivity;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;
@@ -117,7 +117,7 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        boolean login = UserCacheManager.initUserManager().isLogin(getContext().getApplicationContext());//AppContext.getInstance().isLogin();
+        boolean login = AccountHelper.isLogin();
         if (!login) {
             rlCancle.setVisibility(View.INVISIBLE);
             mSettingLineTop.setVisibility(View.INVISIBLE);

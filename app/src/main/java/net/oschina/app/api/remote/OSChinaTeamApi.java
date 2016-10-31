@@ -8,7 +8,7 @@ import com.loopj.android.http.RequestParams;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamProject;
 
@@ -68,7 +68,7 @@ public class OSChinaTeamApi {
                                                 TeamProject teamProject, AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamId);
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         params.put("projectid", teamProject.getGit().getId());
         String source = teamProject.getSource();
         if (source != null && !TextUtils.isEmpty(source)) {
@@ -170,7 +170,7 @@ public class OSChinaTeamApi {
         if (issue == null)
             return;
         RequestParams params = new RequestParams();
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         params.put("teamid", teamId);
         params.put("target", target);
         params.put("issueid", issue.getId());
@@ -261,7 +261,7 @@ public class OSChinaTeamApi {
     public static void pubTeamTweetReply(int teamId, int type, long tweetId,
                                          String content, AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         params.put("type", type);
         params.put("teamid", teamId);
         params.put("tweetid", tweetId);
@@ -341,7 +341,7 @@ public class OSChinaTeamApi {
                                         AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamId);
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         params.put("msg", content);
         params.put("appid", 3);
         if (img != null) {
@@ -368,7 +368,7 @@ public class OSChinaTeamApi {
     public static void updateChildIssue(int teamId, String target,
                                         TeamIssue childIssue, AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         params.put("teamid", teamId);
         params.put("childissueid", childIssue.getId());
         params.put("target", target);
@@ -394,7 +394,7 @@ public class OSChinaTeamApi {
     public static void pubTeamIssueReply(int teamId, int issueId,
                                          String content, AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         params.put("teamid", teamId);
         params.put("content", content);
         params.put("issueid", issueId);

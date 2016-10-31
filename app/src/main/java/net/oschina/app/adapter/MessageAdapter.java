@@ -9,7 +9,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Messages;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
@@ -41,7 +41,7 @@ public class MessageAdapter extends ListBaseAdapter<Messages> {
 
         final Messages item = (Messages) mDatas.get(position);
 
-        if (UserCacheManager.initUserManager().loginId(mContext) == item.getSenderId()) {
+        if (AccountHelper.getUserId() == item.getSenderId()) {
             vh.sender.setVisibility(View.VISIBLE);
         } else {
             vh.sender.setVisibility(View.GONE);

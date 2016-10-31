@@ -18,7 +18,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
@@ -75,7 +75,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
         mDialog = new ProgressDialog(this);
         mReceiver = (User) getIntent().getSerializableExtra("receiver");
         setTitle(mReceiver.getName());
-        authorId = UserCacheManager.initUserManager().loginId(getContext());
+        authorId = AccountHelper.getUserId();
         init();
     }
 

@@ -17,7 +17,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.UIHelper;
 
 import java.util.ArrayList;
@@ -278,7 +278,7 @@ public class Tweet extends Entity implements Parcelable {
         if (getIsLike() == 1) {
 
             for (int i = 0; i < getLikeUser().size(); i++) {
-                if (getLikeUser().get(i).getId() == UserCacheManager.initUserManager().loginId(context)) {
+                if (getLikeUser().get(i).getId() == AccountHelper.getUserId()) {
                     getLikeUser().remove(i);
                 }
             }
