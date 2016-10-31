@@ -325,7 +325,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         if (mResult != null && !mResult.OK()) {
             AppContext.showToast(mResult.getErrorMessage());
             // 注销登陆，密码已经修改，cookie，失效了
-            AppContext.getInstance().Logout();
+            //AppContext.getInstance().Logout();
         }
 
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);

@@ -2,6 +2,7 @@ package net.oschina.app.improve.app;
 
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.google.gson.Gson;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
@@ -48,4 +49,12 @@ public final class AppOperator {
             return new GlideUrl(url);
         }
     }
+
+    public static Gson createGson() {
+        com.google.gson.GsonBuilder gsonBuilder = new com.google.gson.GsonBuilder();
+        //gsonBuilder.setExclusionStrategies(new SpecificClassExclusionStrategy(null, Model.class));
+        gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        return gsonBuilder.create();
+    }
+
 }

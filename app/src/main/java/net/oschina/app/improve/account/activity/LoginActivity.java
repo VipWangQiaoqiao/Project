@@ -39,6 +39,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.constants.UserConstants;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -328,7 +329,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                         Type type = new TypeToken<ResultBean<User>>() {
                                         }.getType();
 
-                                        ResultBean<User> resultBean = AppContext.createGson().fromJson(responseString, type);
+                                        ResultBean<User> resultBean = AppOperator.createGson().fromJson(responseString, type);
                                         if (resultBean.isSuccess()) {
                                             User user = resultBean.getResult();
                                             AccountHelper.login(user, headers);
