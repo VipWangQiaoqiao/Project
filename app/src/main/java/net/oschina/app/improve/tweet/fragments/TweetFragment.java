@@ -25,7 +25,7 @@ import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.activity.LoginActivity;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.bean.Tweet;
@@ -80,7 +80,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         super.initBundle(bundle);
         requestCategory = bundle.getInt("requestCategory", CATEGORY_TYPE);
         tweetType = bundle.getInt("tweetType", TWEET_TYPE_NEW);
-        authorId = bundle.getLong("authorId", UserCacheManager.initUserManager().loginId(getContext()));
+        authorId = bundle.getLong("authorId", AccountHelper.getUserId());
     }
 
     /**
@@ -93,7 +93,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         super.onRestartInstance(bundle);
         requestCategory = bundle.getInt("requestCategory", 1);
         tweetType = bundle.getInt("tweetType", 1);
-        authorId = bundle.getLong("authorId", UserCacheManager.initUserManager().loginId(getContext()));
+        authorId = bundle.getLong("authorId", AccountHelper.getUserId());
     }
 
     @Override
@@ -144,8 +144,8 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
     private LoginReceiver mReceiver;
 
     private void setupContent() {
-        if (UserCacheManager.initUserManager().isLogin(getContext().getApplicationContext())) {
-            authorId = UserCacheManager.initUserManager().loginId(getContext());
+        if (AccountHelper.isLogin()) {
+            authorId = AccountHelper.getUserId();
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             onRefreshing();
         } else {
@@ -195,7 +195,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
 
     @Override
     public void onClick(View v) {
-        if (requestCategory == CATEGORY_USER && !UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (requestCategory == CATEGORY_USER && !AccountHelper.isLogin()) {
             //UIHelper.showLoginActivity(getActivity());
             LoginActivity.show(getContext());
         } else {
@@ -205,7 +205,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
 
     private void handleLongClick(final Tweet tweet, final int position) {
         String[] items;
-        if (UserCacheManager.initUserManager().loginId(getContext()) == (int) tweet.getAuthor().getId()) {
+        if (AccountHelper.getUserId() == (int) tweet.getAuthor().getId()) {
             items = new String[]{getString(R.string.copy),
                     getString(R.string.delete)};
         } else {

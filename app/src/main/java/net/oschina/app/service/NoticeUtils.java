@@ -9,7 +9,7 @@ import android.util.Log;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.TLog;
 
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public class NoticeUtils {
     public static void clearNotice(int type, Context context) {
         if (sService != null) {
             try {
-                sService.clearNotice((int) UserCacheManager.initUserManager().loginId(context),
+                sService.clearNotice((int) AccountHelper.getUserId(),
                         type);
             } catch (RemoteException e) {
                 e.printStackTrace();

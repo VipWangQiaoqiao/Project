@@ -29,7 +29,7 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.adapter.TeamReplyAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActiveDetail;
@@ -140,7 +140,7 @@ public class TeamTweetDetailFragment extends
      */
     private void handleComment(String text) {
         showWaitDialog(R.string.progress_submit);
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
@@ -196,7 +196,7 @@ public class TeamTweetDetailFragment extends
 
     @Override
     protected void requestDetailData(boolean isRefresh) {
-        OSChinaApi.getDynamicDetail(active.getId(), teamId, (int) UserCacheManager.initUserManager().loginId(getContext()), mDetailHandler);
+        OSChinaApi.getDynamicDetail(active.getId(), teamId, (int) AccountHelper.getUserId(), mDetailHandler);
     }
 
     @Override
@@ -257,7 +257,7 @@ public class TeamTweetDetailFragment extends
         final TeamReply item = mAdapter.getItem(position - 1);
         if (item == null)
             return false;
-        int itemsLen = item.getAuthor().getId() == UserCacheManager.initUserManager().loginId(getContext()) ? 2 : 1;
+        int itemsLen = item.getAuthor().getId() == AccountHelper.getUserId() ? 2 : 1;
         String[] items = new String[itemsLen];
         items[0] = getResources().getString(R.string.copy);
         if (itemsLen == 2) {
@@ -279,7 +279,7 @@ public class TeamTweetDetailFragment extends
     }
 
     private void handleDeleteComment(TeamReply comment) {
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
@@ -379,7 +379,7 @@ public class TeamTweetDetailFragment extends
             AppContext.showToastShort(R.string.tip_network_error);
             return;
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }

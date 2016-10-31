@@ -8,7 +8,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.db.NoteDatabase;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 
 import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.SystemTool;
@@ -72,7 +72,7 @@ public class SynchronizeController {
             // sPreviousRefreshTime = currentTime;
         }
 
-        int uid = (int) UserCacheManager.initUserManager().loginId(null);
+        int uid = (int) AccountHelper.getUserId();
         StringBuilder jsonData = new StringBuilder();
         int size = localDatas.size();
         jsonData.append("{\"uid\":").append(uid).append(",\"stickys\":[");

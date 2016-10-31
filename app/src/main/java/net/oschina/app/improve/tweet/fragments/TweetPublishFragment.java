@@ -20,7 +20,7 @@ import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
@@ -306,7 +306,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         Context context = getContext();
         if (context == null)
             return;
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(context);
             return;
         }

@@ -147,9 +147,21 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
 
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
                 int length = s.length();
+
+                String smsCode = mEtRegisterPwd.getText().toString().trim();
+
+                if (!TextUtils.isEmpty(smsCode)) {
+                    mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+                    mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                    mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
+                }
+
                 if (length > 0) {
                     mIvRegisterUsernameDel.setVisibility(View.VISIBLE);
                 } else {
@@ -162,6 +174,7 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
                 } else {
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
                 }
+
 
             }
         });
@@ -178,6 +191,7 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
 
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
                 int length = s.length();
@@ -186,7 +200,14 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
                 } else {
                     mLlRegisterTwoPwd.setBackgroundResource(R.drawable.bg_login_input_ok);
                 }
-
+                String username = mEtRegisterUsername.getText().toString().trim();
+                if (!TextUtils.isEmpty(username)) {
+                    mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+                    mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                    mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
+                }
             }
         });
     }

@@ -15,7 +15,7 @@
     },
     {
         "token": "222222222222",
-        "name": "推荐博客",
+        "name": "博客",
         "fixed": false,
         "needLogin": false,
         "type": 3,
@@ -24,74 +24,14 @@
         "href": "https://www.oschina.net/action/apiv2/blog?catalog=1"
     },
     {
-        "token": "333333333333",
-        "name": "热门博客",
-        "fixed": false,
-        "needLogin": false,
-        "type": 3,
-        "subtype": 2,
-        "order": 3,
-        "href": "https://www.oschina.net/action/apiv2/blog?catalog=2"
-    },
-    {
-        "token": "44444444444444",
-        "name": "最新博客",
-        "fixed": false,
-        "needLogin": false,
-        "type": 3,
-        "subtype": 3,
-        "order": 4,
-        "href": "https://www.oschina.net/action/apiv2/blog?catalog=3"
-    },
-    {
         "token": "5555555555",
-        "name": "技术问答",
+        "name": "问答",
         "fixed": false,
         "needLogin": false,
         "type": 2,
         "subtype": 1,
         "order": 5,
         "href": "https://www.oschina.net/action/apiv2/question?catalog=1"
-    },
-    {
-        "token": "6666666666666",
-        "name": "技术分享",
-        "fixed": false,
-        "needLogin": false,
-        "type": 2,
-        "subtype": 2,
-        "order": 6,
-        "href": "https://www.oschina.net/action/apiv2/question?catalog=2"
-    },
-    {
-        "token": "7777777777777",
-        "name": "IT杂烩",
-        "fixed": false,
-        "needLogin": false,
-        "type": 2,
-        "subtype": 3,
-        "order": 7,
-        "href": "https://www.oschina.net/action/apiv2/question?catalog=3"
-    },
-    {
-        "token": "8888888888888",
-        "name": "职业生涯",
-        "fixed": false,
-        "needLogin": false,
-        "type": 2,
-        "subtype": 4,
-        "order": 8,
-        "href": "https://www.oschina.net/action/apiv2/question?catalog=4"
-    },
-    {
-        "token": "99999999999999",
-        "name": "站务/建议",
-        "fixed": false,
-        "needLogin": false,
-        "type": 2,
-        "subtype": 5,
-        "order": 9,
-        "href": "https://www.oschina.net/action/apiv2/question?catalog=5"
     },
     {
         "token": "10101010101010",

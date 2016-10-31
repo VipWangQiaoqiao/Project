@@ -22,7 +22,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -188,7 +188,7 @@ public class TweetRecordFragment extends BaseFragment {
             AppContext.showToastShort(R.string.tip_network_error);
             return;
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
@@ -207,7 +207,7 @@ public class TweetRecordFragment extends BaseFragment {
             strSpeech = body;
         }
         Tweet tweet = new Tweet();
-        tweet.setAuthorid((int) UserCacheManager.initUserManager().loginId(getContext()));
+        tweet.setAuthorid((int) AccountHelper.getUserId());
         tweet.setAudioPath(audioPath);
         tweet.setBody(strSpeech);
         ServerTaskUtils.pubTweet(getActivity(), tweet);

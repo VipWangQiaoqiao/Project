@@ -13,7 +13,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.Result;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -146,7 +146,7 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
     }
 
     private boolean isLogin() {
-        if (!UserCacheManager.initUserManager().isLogin(this)) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(this);
             return false;
         }

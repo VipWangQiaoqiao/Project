@@ -78,11 +78,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     LinearLayout mLlLoginUsername;
     @Bind(R.id.et_login_username)
     EditText mEtLoginUsername;
+    @Bind(R.id.iv_login_username_del)
+    ImageView mIvLoginUsernameDel;
 
     @Bind(R.id.ll_login_pwd)
     LinearLayout mLlLoginPwd;
     @Bind(R.id.et_login_pwd)
     EditText mEtLoginPwd;
+    @Bind(R.id.iv_login_pwd_del)
+    ImageView mIvLoginPwdDel;
 
     @Bind(R.id.iv_login_hold_pwd)
     ImageView mIvHoldPwd;
@@ -158,6 +162,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     protected void initWidget() {
         super.initWidget();
         mLlLoginLayer.setVisibility(View.GONE);
+//        mIvLoginUsernameDel.setVisibility(View.INVISIBLE);
+//        mIvLoginPwdDel.setVisibility(View.INVISIBLE);
         mEtLoginUsername.setOnFocusChangeListener(this);
         mEtLoginUsername.addTextChangedListener(new TextWatcher() {
             @Override
@@ -179,8 +185,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     } else {
                         mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
                     }
+                    mIvLoginUsernameDel.setVisibility(View.VISIBLE);
                 } else {
                     mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
+                    mIvLoginUsernameDel.setVisibility(View.INVISIBLE);
                 }
 
             }
@@ -202,6 +210,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 int length = s.length();
                 if (length > 0) {
                     mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_ok);
+                    mIvLoginPwdDel.setVisibility(View.VISIBLE);
+                } else {
+                    mIvLoginPwdDel.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -278,7 +289,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 
     @OnClick({R.id.tv_login_forget_pwd, R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register,
-            R.id.ll_login_pull, R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq, R.id.ll_login_layer})
+            R.id.ll_login_pull, R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq, R.id.ll_login_layer,
+            R.id.iv_login_username_del, R.id.iv_login_pwd_del})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -473,6 +485,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     e.printStackTrace();
                 }
 
+                break;
+            case R.id.iv_login_username_del:
+                mEtLoginUsername.setText(null);
+                break;
+            case R.id.iv_login_pwd_del:
+                mEtLoginPwd.setText(null);
                 break;
             default:
                 break;

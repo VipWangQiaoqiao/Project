@@ -69,6 +69,16 @@
                 android:textColorHint="@color/login_line_color"
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/font_16"/>
+
+            <ImageView
+                android:id="@+id/iv_login_username_del"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:contentDescription="@null"
+                android:visibility="invisible"
+                app:srcCompat="@mipmap/ic_clear"/>
         </LinearLayout>
 
         <LinearLayout
@@ -114,6 +124,16 @@
                 android:textColorHint="@color/login_line_color"
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/font_16"/>
+
+            <ImageView
+                android:id="@+id/iv_login_pwd_del"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:contentDescription="@null"
+                android:visibility="invisible"
+                app:srcCompat="@mipmap/ic_clear"/>
 
         </LinearLayout>
 

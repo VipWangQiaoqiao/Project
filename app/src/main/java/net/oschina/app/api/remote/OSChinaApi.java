@@ -17,7 +17,7 @@ import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 
@@ -133,7 +133,7 @@ public class OSChinaApi {
 
         RequestParams params = new RequestParams();
         params.put("tweetid", tweetId);
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         params.put("ownerOfTweet", authorId);
         ApiHttpClient.post("action/api/tweet_like", params, handler);
     }
@@ -142,7 +142,7 @@ public class OSChinaApi {
                                       AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
         params.put("tweetid", tweetId);
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         params.put("ownerOfTweet", authorId);
         ApiHttpClient.post("action/api/tweet_unlike", params, handler);
     }
@@ -611,7 +611,7 @@ public class OSChinaApi {
 
     public static void getNotices(AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         ApiHttpClient.get("action/api/user_notice", params, handler);
     }
 
@@ -814,7 +814,7 @@ public class OSChinaApi {
      */
     public static void teamList(AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         ApiHttpClient.get("action/api/team_list", params, handler);
     }
 
@@ -1071,7 +1071,7 @@ public class OSChinaApi {
                 params.put("file", file);
             } catch (FileNotFoundException e) {
             }
-        params.put("uid", UserCacheManager.initUserManager().loginId(context));
+        params.put("uid", AccountHelper.getUserId());
         params.put("receiver", "2609904");
         params.put("content", content);
         ApiHttpClient.post("action/api/message_pub", params, handler);

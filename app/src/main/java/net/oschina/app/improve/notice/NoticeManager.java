@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public final class NoticeManager {
 
     public static void init(Context context) {
         // 未登陆时不启动服务
-        if (!UserCacheManager.initUserManager().isLogin(context)) {
+        if (!AccountHelper.isLogin()) {
             return;
         }
 

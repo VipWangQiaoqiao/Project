@@ -2,7 +2,6 @@ package net.oschina.app.improve.user.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -11,10 +10,9 @@ import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
-import net.oschina.app.improve.bean.simple.Author;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.widget.TweetTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -35,7 +33,7 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
         mListener = new OnUserFaceClickListener() {
             @Override
             public void onClick(View v, int position) {
-                Author author = getItem(position).getSender();
+                User author = getItem(position).getSender();
                 if (author != null)
                     OtherUserHomeActivity.show(mCallBack.getContext(), author.getId());
             }
@@ -52,7 +50,7 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Message item, int position) {
         MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
-        Author author = item.getSender();
+        User author = item.getSender();
         if (author != null) {
             mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().placeholder(R.mipmap.widget_dface).into(messageViewHolder.iv_user_avatar);
             messageViewHolder.tv_user_name.setText(author.getName());

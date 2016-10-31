@@ -21,7 +21,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -179,7 +179,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     };
 
     private void setupContent() {
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (AccountHelper.isLogin()) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             requestData(true);
         } else {
@@ -192,8 +192,8 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     @Override
     protected void requestData(boolean refresh) {
         if (mCatalog > 0) {
-            if (UserCacheManager.initUserManager().isLogin(getContext())) {
-                mCatalog = (int) UserCacheManager.initUserManager().loginId(getContext());
+            if (AccountHelper.isLogin()) {
+                mCatalog = (int) AccountHelper.getUserId();
                 super.requestData(refresh);
             } else {
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
@@ -213,7 +213,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
             @Override
             public void onClick(View v) {
                 if (mCatalog > 0) {
-                    if (UserCacheManager.initUserManager().isLogin(getContext())) {
+                    if (AccountHelper.isLogin()) {
                         mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                         requestData(true);
                     } else {
@@ -240,7 +240,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 
     private void handleLongClick(final Tweet tweet) {
         String[] items;
-        if (UserCacheManager.initUserManager().loginId(getContext()) == tweet.getAuthorid()) {
+        if (AccountHelper.getUserId() == tweet.getAuthorid()) {
             items = new String[]{getString(R.string.copy),
                     getString(R.string.delete)};
         } else {

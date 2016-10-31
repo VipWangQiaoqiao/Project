@@ -8,7 +8,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Favorite;
 import net.oschina.app.bean.FavoriteList;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -43,7 +43,7 @@ public class UserFavoriteFragment extends BaseListFragment<Favorite> {
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getFavoriteList((int) UserCacheManager.initUserManager().loginId(getContext()),
+        OSChinaApi.getFavoriteList((int) AccountHelper.getUserId(),
                 mCatalog, mCurrentPage, mHandler);
     }
 

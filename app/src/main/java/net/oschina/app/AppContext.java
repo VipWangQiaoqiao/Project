@@ -11,7 +11,7 @@ import net.oschina.app.base.BaseApplication;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
@@ -258,16 +258,16 @@ public class AppContext extends BaseApplication {
 //    }
 
     public static void setTweetDraft(String draft) {
-        set(KEY_TWEET_DRAFT + UserCacheManager.initUserManager().loginId(context()), draft);
+        set(KEY_TWEET_DRAFT + AccountHelper.getUserId(), draft);
     }
 
     public static String getNoteDraft() {
         return getPreferences().getString(
-                AppConfig.KEY_NOTE_DRAFT + UserCacheManager.initUserManager().loginId(context()), "");
+                AppConfig.KEY_NOTE_DRAFT + AccountHelper.getUserId(), "");
     }
 
     public static void setNoteDraft(String draft) {
-        set(AppConfig.KEY_NOTE_DRAFT + UserCacheManager.initUserManager().loginId(context()), draft);
+        set(AppConfig.KEY_NOTE_DRAFT + AccountHelper.getUserId(), draft);
     }
 
     public static boolean isFristStart() {

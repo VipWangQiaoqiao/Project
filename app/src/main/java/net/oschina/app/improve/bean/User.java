@@ -1,13 +1,11 @@
 package net.oschina.app.improve.bean;
 
-import net.oschina.app.improve.bean.simple.Author;
-
 import java.io.Serializable;
 
 /**
  * 用户信息类
  */
-public class User extends Author {
+public class User implements Serializable {
     public static final int RELATION_TYPE_BOTH = 0x01;// 双方互为粉丝
     public static final int RELATION_TYPE_ONLY_FANS_HIM = 0x02;// 你单方面关注他
     public static final int RELATION_TYPE_ONLY_FANS_ME = 0x03;// 只有他关注我
@@ -17,6 +15,11 @@ public class User extends Author {
     public static final int GENDER_MALE = 1;
     public static final int GENDER_FEMALE = 2;
 
+    // Base
+    private long id;
+    private String name;
+    private String portrait;
+    // More
     private int gender;
     private String desc;
     private int relation;
@@ -24,6 +27,35 @@ public class User extends Author {
     private String suffix;
     private More more;
     private Statistics statistics;
+
+    public User() {
+        more = new More();
+        statistics = new Statistics();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
+    }
 
     public String getSuffix() {
         return suffix;

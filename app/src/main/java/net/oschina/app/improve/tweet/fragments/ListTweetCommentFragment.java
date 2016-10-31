@@ -13,7 +13,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.base.PageBean;
@@ -131,7 +131,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
     public void onLongClick(int position, long itemId) {
         final TweetComment comment = mAdapter.getItem(position);
         if (comment == null) return;
-        int itemsLen = comment.getAuthor().getId() == UserCacheManager.initUserManager().loginId(getContext()) ? 2 : 1;
+        int itemsLen = comment.getAuthor().getId() == AccountHelper.getUserId() ? 2 : 1;
         String[] items = new String[itemsLen];
         items[0] = getResources().getString(R.string.copy);
         if (itemsLen == 2) {
@@ -151,7 +151,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
     }
 
     private void handleDeleteComment(TweetComment comment) {
-        if (!UserCacheManager.initUserManager().isLogin(getContext().getApplicationContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
