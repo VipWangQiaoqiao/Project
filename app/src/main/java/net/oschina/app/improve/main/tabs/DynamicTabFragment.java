@@ -1,13 +1,18 @@
 package net.oschina.app.improve.main.tabs;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.util.Pair;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.DecelerateInterpolator;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -42,11 +47,14 @@ import butterknife.OnClick;
 
 public class DynamicTabFragment extends BaseTitleFragment {
 
-    @Bind(R.id.layout_tab) TabLayout mLayoutTab;
-    @Bind(R.id.view_tab_picker) TabPickerView mViewTabPicker;
-    @Bind(R.id.view_pager) ViewPager mViewPager;
+    @Bind(R.id.layout_tab)
+    TabLayout mLayoutTab;
+    @Bind(R.id.view_tab_picker)
+    TabPickerView mViewTabPicker;
+    @Bind(R.id.view_pager)
+    ViewPager mViewPager;
 
-    List<Pair<SubTab, Fragment>> fragments;
+    List<SubTab> tabs;
 
     @Override
     public void onAttach(Context context) {
@@ -72,21 +80,22 @@ public class DynamicTabFragment extends BaseTitleFragment {
                     int length;
 
                     File file = getContext().getFileStreamPath("sub_tab_active.json");
-                    if (file.exists()){
+                    if (file.exists()) {
                         FileInputStream fis = getContext().openFileInput("sub_tab_active.json");
-                        while ((length = fis.read(bytes)) != -1){
+                        while ((length = fis.read(bytes)) != -1) {
                             buffer.append(new String(bytes, 0, length));
                         }
                     }
 
-                    if (TextUtils.isEmpty(buffer.toString()) || buffer.toString().trim().equals("")){
+                    if (TextUtils.isEmpty(buffer.toString()) || buffer.toString().trim().equals("")) {
                         InputStream is = getResources().getAssets().open("sub_tab_active.json");
-                        while ((length = is.read(bytes)) != -1){
+                        while ((length = is.read(bytes)) != -1) {
                             buffer.append(new String(bytes, 0, length));
                         }
                     }
                     return new Gson().<ArrayList<SubTab>>fromJson(buffer.toString(),
-                            new TypeToken<ArrayList<SubTab>>(){}.getType());
+                            new TypeToken<ArrayList<SubTab>>() {
+                            }.getType());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -100,11 +109,12 @@ public class DynamicTabFragment extends BaseTitleFragment {
                     StringBuilder buffer = new StringBuilder();
                     byte[] bytes = new byte[1024];
                     int length;
-                    while ((length = is.read(bytes)) != -1){
+                    while ((length = is.read(bytes)) != -1) {
                         buffer.append(new String(bytes, 0, length));
                     }
                     return new Gson().<ArrayList<SubTab>>fromJson(buffer.toString(),
-                            new TypeToken<ArrayList<SubTab>>(){}.getType());
+                            new TypeToken<ArrayList<SubTab>>() {
+                            }.getType());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -127,7 +137,7 @@ public class DynamicTabFragment extends BaseTitleFragment {
             public void onRemove(int position, SubTab tab) {
                 isChangeIndex = true;
                 mLayoutTab.removeTabAt(position);
-                fragments.remove(position);
+                tabs.remove(position);
                 mViewPager.getAdapter().notifyDataSetChanged();
             }
 
@@ -135,20 +145,20 @@ public class DynamicTabFragment extends BaseTitleFragment {
             public void onInsert(SubTab tab) {
                 isChangeIndex = true;
                 mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
-                fragments.add(Pair.<SubTab, Fragment>create(tab, instanceFragment(tab.getType())));
+                tabs.add(tab);
                 mViewPager.getAdapter().notifyDataSetChanged();
             }
 
             @Override
             public void onMove(int op, SubTab mover, int np, SubTab swapper) {
                 isChangeIndex = isMoveIndex = true;
-                Collections.swap(fragments, op, np);
+                Collections.swap(tabs, op, np);
                 mViewPager.getAdapter().notifyDataSetChanged();
             }
 
             @Override
             public void onRestore(List<SubTab> activeTabs) {
-                if (isChangeIndex){
+                if (isChangeIndex) {
                     String json = new Gson().toJson(activeTabs);
                     try {
                         FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
@@ -161,9 +171,9 @@ public class DynamicTabFragment extends BaseTitleFragment {
                     }
                     isChangeIndex = false;
                 }
-                if (isMoveIndex){
+                if (isMoveIndex) {
                     mLayoutTab.removeAllTabs();
-                    for (SubTab tab : activeTabs){
+                    for (SubTab tab : activeTabs) {
                         mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
                     }
                     isMoveIndex = false;
@@ -171,34 +181,80 @@ public class DynamicTabFragment extends BaseTitleFragment {
             }
         });
 
-        List<SubTab> tabs = mViewTabPicker.getTabPickerManager().getActiveDataSet();
-        fragments = new ArrayList<>();
-        for (SubTab tab : tabs){
+        mViewTabPicker.setOnShowAnimation(new TabPickerView.Action1<ViewPropertyAnimator>() {
+            @Override
+            public void call(ViewPropertyAnimator animator) {
+                mViewTabPicker.setVisibility(View.VISIBLE);
+                mViewTabPicker.setTranslationY(-mViewTabPicker.getHeight() * 0.2f);
+                mViewTabPicker.setAlpha(0);
+                animator.translationY(0)
+                        .alpha(1)
+                        .setDuration(380)
+                        .setInterpolator(new DecelerateInterpolator())
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                mViewTabPicker.setVisibility(View.VISIBLE);
+                                mViewTabPicker.setTranslationY(0);
+                                mViewTabPicker.setAlpha(1);
+                            }
+                        });
+            }
+        });
+
+        mViewTabPicker.setOnHideAnimator(new TabPickerView.Action1<ViewPropertyAnimator>() {
+            @Override
+            public void call(ViewPropertyAnimator animator) {
+                animator.translationY(-mViewTabPicker.getHeight() * 0.2f)
+                        .setDuration(380)
+                        .alpha(0)
+                        .setInterpolator(new DecelerateInterpolator())
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                mViewTabPicker.setVisibility(View.GONE);
+                            }
+                        });
+            }
+        });
+
+        tabs = new ArrayList<>();
+        tabs.addAll(mViewTabPicker.getTabPickerManager().getActiveDataSet());
+        for (SubTab tab : tabs) {
             mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
-            fragments.add(Pair.<SubTab, Fragment>create(tab, instanceFragment(tab.getType())));
         }
 
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
+        mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return fragments.get(position).second;
+                return instanceFragment(tabs.get(position).getType());
             }
 
             @Override
             public int getCount() {
-                return fragments.size();
+                return tabs.size();
             }
 
             @Override
             public CharSequence getPageTitle(int position) {
-                return fragments.get(position).first.getName();
+                return tabs.get(position).getName();
             }
+
+            //this is called when notifyDataSetChanged() is called
+            @Override
+            public int getItemPosition(Object object) {
+                return PagerAdapter.POSITION_NONE;
+            }
+
         });
+        mViewPager.setOffscreenPageLimit(1);
         mLayoutTab.setupWithViewPager(mViewPager);
     }
 
-    public Fragment instanceFragment(int type){
-        switch (type){
+    public Fragment instanceFragment(int type) {
+        switch (type) {
             case News.TYPE_NEWS:
                 return new NewsFragment();
             case News.TYPE_EVENT:
@@ -221,7 +277,8 @@ public class DynamicTabFragment extends BaseTitleFragment {
         return R.string.main_tab_name_news;
     }
 
-    @OnClick(R.id.iv_arrow_down) void onClickArrow(){
+    @OnClick(R.id.iv_arrow_down)
+    void onClickArrow() {
         mViewTabPicker.show(mLayoutTab.getSelectedTabPosition());
     }
 
