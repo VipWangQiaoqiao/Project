@@ -61,8 +61,6 @@ public final class AccountHelper {
     public static void clearUserCache() {
         instances.user = new User();
         SharedPreferencesHelper.remove(instances.application, User.class);
-        SharedPreferencesHelper.remove(instances.application, User.Statistics.class);
-        SharedPreferencesHelper.remove(instances.application, User.More.class);
     }
 
     public static void login(User user, Header[] headers) {

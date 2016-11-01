@@ -116,11 +116,13 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                 //发送验证码成功,请求进入下一步
                                 //意味着我们可以进行第二次请求了,获取phoneToken
                                 //mRequestType = 2;
+                                AppContext.showToast(R.string.send_sms_code_success_hint);
                                 mEtRegisterAuthCode.setText(null);
                                 break;
                             case 218:
                                 //手机号已被注册,提示重新输入
                                 mLlRegisterPhone.setBackgroundResource(R.drawable.bg_login_input_error);
+                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                                 break;
                             case 0:
                                 //异常错误，发送验证码失败,回收timer,需重新请求发送验证码
@@ -128,11 +130,12 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                     mTimer.onFinish();
                                     mTimer.cancel();
                                 }
+                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                                 break;
                             default:
                                 break;
                         }
-                        AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+
                         break;
                     //第二步请求进行注册
                     case 2:
@@ -159,11 +162,12 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                 break;
                             case 215://注册失败,手机验证码错误
                                 mLlRegisterSmsCode.setBackgroundResource(R.drawable.bg_login_input_error);
+                                AppContext.showToast(phoneTokenResultBean.getMessage());
                                 break;
                             default:
                                 break;
                         }
-                        AppContext.showToast(phoneTokenResultBean.getMessage());
+
                         break;
                     default:
                         break;
@@ -333,7 +337,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
 
         mRequestType = 2;
         String phoneNumber = mEtRegisterUsername.getText().toString().trim();
-        String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+        String appToken = getAppToken();
         OSChinaApi.validateRegisterInfo(phoneNumber, SmsCode, appToken, mHandler);
     }
 
@@ -368,7 +372,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                 }
             }.start();
             String phoneNumber = mEtRegisterUsername.getText().toString().trim();
-            String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+            String appToken = getAppToken();
             OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.REGISTER_INTENT, mHandler);
         } else {
             AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);

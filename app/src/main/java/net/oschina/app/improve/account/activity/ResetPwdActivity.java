@@ -2,7 +2,6 @@ package net.oschina.app.improve.account.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -26,10 +25,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.util.TDevice;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -92,19 +88,21 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
 
             switch (code) {
                 case 1:
-                    LoginActivity.show(ResetPwdActivity.this);
+                    AppContext.showToast(getResources().getString(R.string.reset_success_hint), Toast.LENGTH_SHORT);
+                    finishClearTopActivity(ResetPwdActivity.this, LoginActivity.class);
                     finish();
                     break;
                 case 216:
+                    AppContext.showToast(resultBean.getMessage());
                     finish();
                     break;
                 case 219:
                     mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_error);
+                    AppContext.showToast(resultBean.getMessage());
                     break;
                 default:
                     break;
             }
-            AppContext.showToast(resultBean.getMessage());
         }
     };
 
@@ -206,34 +204,11 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
             return;
         }
-        String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";// Verifier.getPrivateToken(getApplication());
+        String appToken = getAppToken();
 
         OSChinaApi.resetPwd(Sha1toHex(tempPwd), mPhoneToken.getToken(), appToken, mHandler);
     }
 
-    @NonNull
-    private String Sha1toHex(String tempPwd) {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-            messageDigest.update(tempPwd.getBytes("utf-8"));
-            byte[] bytes = messageDigest.digest();
-
-            StringBuilder tempHex = new StringBuilder();
-            // 字节数组转换为 十六进制数
-            for (byte aByte : bytes) {
-                String shaHex = Integer.toHexString(aByte & 0xff);
-                if (shaHex.length() < 2) {
-                    tempHex.append(0);
-                }
-                tempHex.append(shaHex);
-            }
-            return tempHex.toString();
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return tempPwd;
-    }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {

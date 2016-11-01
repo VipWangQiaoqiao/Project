@@ -113,10 +113,12 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                 //发送验证码成功,请求进入下一步
                                 //mRequestType = 2;
                                 mEtRetrieveCodeInput.setText(null);
+                                AppContext.showToast(R.string.send_sms_code_success_hint, Toast.LENGTH_SHORT);
                                 break;
                             case 218:
                                 //手机号已被注册,提示重新输入
                                 mLlRetrieveTel.setBackgroundResource(R.drawable.bg_login_input_error);
+                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                                 break;
                             case 0:
                                 //异常错误，发送验证码失败,回收timer,需重新请求发送验证码
@@ -124,11 +126,12 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                     mTimer.onFinish();
                                     mTimer.cancel();
                                 }
+                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                                 break;
                             default:
                                 break;
                         }
-                        AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+
                         break;
                     //第二步请求进行重置密码
                     case 2:
@@ -157,11 +160,11 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                 break;
                             case 215:
                                 mLlRetrieveCode.setBackgroundResource(R.drawable.bg_login_input_error);
+                                AppContext.showToast(phoneTokenResultBean.getMessage());
                                 break;
                             default:
                                 break;
                         }
-                        AppContext.showToast(phoneTokenResultBean.getMessage());
                         break;
                     default:
                         break;
@@ -355,7 +358,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         }
         mRequestType = 2;
         String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-        String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+        String appToken = getAppToken();
         OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, appToken, mHandler);
     }
 
@@ -391,7 +394,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 }
             }.start();
             String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-            String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+            String appToken = getAppToken();
             OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.RESET_PWD_INTENT, mHandler);
         } else {
             AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);

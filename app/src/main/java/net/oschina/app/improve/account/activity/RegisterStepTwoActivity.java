@@ -100,10 +100,8 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
             if (resultBean.isSuccess()) {
                 User user = resultBean.getResult();
                 AccountHelper.login(user, headers);
-                // Kill and skip
-                Intent intent = new Intent(RegisterStepTwoActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                AppContext.showToast(getResources().getString(R.string.register_success_hint), Toast.LENGTH_SHORT);
+                finishClearTopActivity(RegisterStepTwoActivity.this, MainActivity.class);
                 finish();
             } else {
                 int code = resultBean.getCode();
@@ -124,12 +122,12 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                     default:
                         break;
                 }
-
                 AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
             }
 
         }
     };
+
 
     /**
      * show register step two activity
@@ -293,36 +291,42 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
     }
 
     private void requestRegisterUserInfo() {
-        if (TDevice.hasInternet()) {
 
-            String username = mEtRegisterUsername.getText().toString().trim();
-            String pwd = mEtRegisterPwd.getText().toString().trim();
+        String username = mEtRegisterUsername.getText().toString().trim();
 
-            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(pwd)) {
-                AppContext.showToast(getString(R.string.hint_pwd_null));
-            } else {
-
-                int gender = 0;
-
-                Object isMan = mTvRegisterMan.getTag();
-                if (isMan != null) {
-                    gender = 1;
-                }
-
-                Object isFemale = mTvRegisterFemale.getTag();
-                if (isFemale != null) {
-                    gender = 2;
-                }
-
-                String appToken =  "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
-
-                OSChinaApi.register(username, pwd, gender, mPhoneToken.getToken(), appToken, mHandler);
-            }
-        } else {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error));
+        if (TextUtils.isEmpty(username)) {
+            AppContext.showToast(getString(R.string.hint_pwd_null));
+            return;
         }
-    }
 
+        String pwd = mEtRegisterPwd.getText().toString().trim();
+
+        if (TextUtils.isEmpty(pwd)) {
+            AppContext.showToast(getString(R.string.hint_pwd_null));
+            return;
+        }
+
+        if (!TDevice.hasInternet()) {
+            AppContext.showToast(getResources().getString(R.string.tip_network_error));
+            return;
+        }
+
+        int gender = 0;
+
+        Object isMan = mTvRegisterMan.getTag();
+        if (isMan != null) {
+            gender = 1;
+        }
+
+        Object isFemale = mTvRegisterFemale.getTag();
+        if (isFemale != null) {
+            gender = 2;
+        }
+
+        String appToken =getAppToken();
+
+        OSChinaApi.register(username, Sha1toHex(pwd), gender, mPhoneToken.getToken(), appToken, mHandler);
+    }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {

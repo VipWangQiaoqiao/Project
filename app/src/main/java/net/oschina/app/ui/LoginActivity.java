@@ -171,7 +171,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
         this.sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
         TDevice.hideSoftKeyboard(getWindow().getDecorView());
 
-        OSChinaApi.getUserInfo(0,new TextHttpResponseHandler() {
+        OSChinaApi.getUserInfo(new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString,
                                   Throwable throwable) {

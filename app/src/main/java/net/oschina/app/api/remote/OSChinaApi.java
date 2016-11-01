@@ -1773,7 +1773,7 @@ public class OSChinaApi {
     /**
      * 获取个人信息
      */
-    public static void getUserInfo(long uid, TextHttpResponseHandler handler) {
+    public static void getUserInfo(TextHttpResponseHandler handler) {
         // RequestParams params = new RequestParams();
         // params.put("id", uid);
         ApiHttpClient.get("action/apiv2/user_info", handler);

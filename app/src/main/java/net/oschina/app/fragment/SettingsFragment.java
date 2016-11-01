@@ -1,6 +1,7 @@
 package net.oschina.app.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -45,11 +46,9 @@ import pub.devrel.easypermissions.EasyPermissions;
  *
  * @author kymjs
  */
-public class SettingsFragment extends BaseFragment implements
-        EasyPermissions.PermissionCallbacks,
-        CheckUpdateManager.RequestPermissions {
+public class SettingsFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks, CheckUpdateManager.RequestPermissions {
 
-    private final int RC_EXTERNAL_STORAGE = 0x04;//存储权限
+    private static final int RC_EXTERNAL_STORAGE = 0x04;//存储权限
 
     @Bind(R.id.tb_loading_img)
     ToggleButton mTbLoadImg;
@@ -65,7 +64,7 @@ public class SettingsFragment extends BaseFragment implements
     View mSettingLineTop;
     @Bind(R.id.setting_line_bottom)
     View mSettingLineBottom;
-    private RelativeLayout rlCancle;
+    private RelativeLayout mCancel;
 
     private Version mVersion;
 
@@ -104,8 +103,8 @@ public class SettingsFragment extends BaseFragment implements
         view.findViewById(R.id.rl_check_version).setOnClickListener(this);
         // view.findViewById(R.id.rl_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
-        rlCancle = (RelativeLayout) view.findViewById(R.id.rl_cancle);
-        rlCancle.setOnClickListener(this);
+        mCancel = (RelativeLayout) view.findViewById(R.id.rl_cancle);
+        mCancel.setOnClickListener(this);
 
         //  if (!AppContext.getInstance().isLogin()) {
         //  mTvExit.setText("退出");
@@ -125,7 +124,7 @@ public class SettingsFragment extends BaseFragment implements
         } else {
             mTbDoubleClickExit.setToggleOff();
         }
-        caculateCacheSize();
+        calculateCacheSize();
     }
 
     @Override
@@ -133,11 +132,11 @@ public class SettingsFragment extends BaseFragment implements
         super.onResume();
         boolean login = AccountHelper.isLogin();
         if (!login) {
-            rlCancle.setVisibility(View.INVISIBLE);
+            mCancel.setVisibility(View.INVISIBLE);
             mSettingLineTop.setVisibility(View.INVISIBLE);
             mSettingLineBottom.setVisibility(View.INVISIBLE);
         } else {
-            rlCancle.setVisibility(View.VISIBLE);
+            mCancel.setVisibility(View.VISIBLE);
             mSettingLineTop.setVisibility(View.VISIBLE);
             mSettingLineBottom.setVisibility(View.VISIBLE);
         }
@@ -146,7 +145,7 @@ public class SettingsFragment extends BaseFragment implements
     /**
      * 计算缓存的大小
      */
-    private void caculateCacheSize() {
+    private void calculateCacheSize() {
         long fileSize = 0;
         String cacheSize = "0KB";
         File filesDir = getActivity().getFilesDir();
@@ -202,9 +201,19 @@ public class SettingsFragment extends BaseFragment implements
                 UIHelper.clearAppCache(false);
                 // 注销操作
                 AccountHelper.logout();
+                // 等待成功清理完成
+                mCancel.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCancel.removeCallbacks(this);
+                        if (!AccountHelper.isLogin()) {
+                            getActivity().finish();
+                        } else {
+                            mCancel.postDelayed(this, 200);
+                        }
+                    }
+                }, 200);
 
-                AppContext.showToastShort(R.string.tip_logout_success);
-                getActivity().finish();
                 break;
             default:
                 break;
@@ -246,6 +255,7 @@ public class SettingsFragment extends BaseFragment implements
         requestExternalStorage();
     }
 
+    @SuppressLint("InlinedApi")
     @AfterPermissionGranted(RC_EXTERNAL_STORAGE)
     public void requestExternalStorage() {
         if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
