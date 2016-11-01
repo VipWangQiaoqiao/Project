@@ -25,7 +25,7 @@ import java.lang.reflect.Type;
  * desc:
  */
 
-public class NewUserFavoriteFragment extends BaseRecyclerViewFragment<UserFavorites> {
+public class UserFavoriteFragment extends BaseRecyclerViewFragment<UserFavorites> {
 
     public static final String CATALOG_TYPE = "catalog_type";
     private int catalog;
