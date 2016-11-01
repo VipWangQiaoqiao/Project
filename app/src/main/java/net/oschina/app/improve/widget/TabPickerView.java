@@ -175,22 +175,6 @@ public class TabPickerView extends FrameLayout {
         }else {
             setVisibility(VISIBLE);
         }
-
-        /*setVisibility(VISIBLE);
-        setTranslationY(-getHeight() * 0.2f);
-        setAlpha(0);
-        animate()
-                .translationY(0)
-                .alpha(1)
-                .setDuration(380)
-                .setInterpolator(new DecelerateInterpolator())
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        setTranslationY(0);
-                    }
-                }).start();*/
     }
 
     public void hide() {
@@ -203,18 +187,6 @@ public class TabPickerView extends FrameLayout {
         }else {
             setVisibility(GONE);
         }
-        /*animate()
-                .translationY(-getHeight() * 0.2f)
-                .setDuration(380)
-                .alpha(0)
-                .setInterpolator(new DecelerateInterpolator())
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        setVisibility(GONE);
-                    }
-                }).start();*/
     }
 
     private void initRecyclerView() {
@@ -385,7 +357,7 @@ public class TabPickerView extends FrameLayout {
         params2.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         params2.setMargins(0, 0, 0, 0);
         delView.setLayoutParams(params2);
-        delView.setImageResource(R.mipmap.ic_cancel);
+        delView.setImageResource(R.mipmap.ic_unsubscribe);
         delView.setTag("mViewDel");
         delView.setVisibility(GONE);
 

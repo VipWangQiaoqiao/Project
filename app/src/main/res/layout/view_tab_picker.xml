@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F8F8"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
@@ -31,7 +30,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="-8dp"
             android:padding="10dp"
-            android:src="@mipmap/ic_arrow_top"
+            android:rotation="45"
+            android:src="@mipmap/ic_subscribe"
             android:tint="#BEBEBE" />
 
         <TextView
@@ -52,7 +52,8 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="#F8F8F8">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,7 +66,6 @@
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"
                 android:orientation="vertical">
-
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/view_recycler_active"
