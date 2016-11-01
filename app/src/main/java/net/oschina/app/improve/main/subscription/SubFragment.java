@@ -134,7 +134,7 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
             return new EventSubAdapter(this);
         else if (mTab.getType() == News.TYPE_QUESTION)
             return new QuestionSubAdapter(this);
-        return new NewsSubBeanAdapter(getActivity());
+        return new NewsSubAdapter(getActivity());
     }
 
     @Override

@@ -117,4 +117,5 @@
 -keep public class com.umeng.socialize.* {*;}
 -keep class com.umeng.scrshot.**
 -keep class com.umeng.socialize.sensor.**
+-keep class pub.devrel.easypermissions.**
 # 友盟End

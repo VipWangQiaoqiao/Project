@@ -15,7 +15,6 @@ import net.oschina.app.improve.bean.Version;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.UIHelper;
 
 import java.util.List;
 
@@ -27,9 +26,12 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class CheckUpdateManager {
+
+
     private ProgressDialog mWaitDialog;
     private Context mContext;
     private boolean mIsShowDialog;
+    private RequestPermissions mCaller;
 
     public CheckUpdateManager(Context context, boolean showWaitingDialog) {
         this.mContext = context;
@@ -41,6 +43,7 @@ public class CheckUpdateManager {
             mWaitDialog.setCanceledOnTouchOutside(false);
         }
     }
+
 
     public void checkUpdate() {
         if (mIsShowDialog) {
@@ -70,7 +73,7 @@ public class CheckUpdateManager {
                                 AlertDialog.Builder dialog = DialogHelp.getConfirmDialog(mContext, version.getMessage(), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        UIHelper.openDownLoadService(mContext, version.getDownloadUrl(), version.getName());
+                                        mCaller.call(version);
                                     }
                                 });
                                 dialog.setTitle("发现新版本");
@@ -95,5 +98,13 @@ public class CheckUpdateManager {
                 }
             }
         });
+    }
+
+    public void setCaller(RequestPermissions caller) {
+        this.mCaller = caller;
+    }
+
+    public interface RequestPermissions {
+        void call(Version version);
     }
 }
