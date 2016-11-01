@@ -206,7 +206,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         }
         String appToken = getAppToken();
 
-        OSChinaApi.resetPwd(Sha1toHex(tempPwd), mPhoneToken.getToken(), appToken, mHandler);
+        OSChinaApi.resetPwd(getSha1(tempPwd), mPhoneToken.getToken(), appToken, mHandler);
     }
 
 
