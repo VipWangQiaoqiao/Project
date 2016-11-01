@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        DialogHelp.getConfirmDialog(this, "没有权限, 你需要去设置中开启读取手机存储权限.", "去设置", "取消", new DialogInterface.OnClickListener() {
+        DialogHelp.getConfirmDialog(this, "温馨提示","需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
