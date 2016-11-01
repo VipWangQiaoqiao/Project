@@ -23,12 +23,10 @@ import android.widget.Toast;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
-import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -47,7 +45,7 @@ import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.open.constants.OpenConstants;
-import net.oschina.open.factory.OpenLogin;
+import net.oschina.open.factory.OpenBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,7 +64,10 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class LoginActivity extends AccountBaseActivity implements View.OnClickListener, IUiListener, View.OnFocusChangeListener {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 624617224eb9d849a89c46852806e45fdfcea7cc
     private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
     private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
@@ -116,6 +117,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     private int openType;
     private int mHoldPwd;
     private SsoHandler mSsoHandler;
+    private Tencent mTencent;
 
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
 
@@ -369,7 +371,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 break;
             case R.id.ib_login_wx:
                 //微信登录
-                wechartLogin();
+                wechatLogin();
                 break;
             case R.id.ib_login_qq:
                 //QQ登录
@@ -389,7 +391,12 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
     private void tencentLogin() {
         openType = OpenConstants.TENCENT;
+        mTencent = OpenBuilder.with(this)
+                .useTencent(OpenConstant.QQ_APP_ID)
+                .login(this);
 
+
+        /*
         OpenLogin<Tencent> tencentOpenLogin = new OpenLogin<>();
         try {
             tencentOpenLogin.addAppId(OpenConstant.QQ_APP_ID)
@@ -398,11 +405,22 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+        */
     }
 
-    private void wechartLogin() {
+    private void wechatLogin() {
         openType = OpenConstants.WECHAT;
+        OpenBuilder.with(this)
+                .useWechat(OpenConstant.WECHAT_APP_ID)
+                .login(new Runnable() {
+                    @Override
+                    public void run() {
 
+                    }
+                });
+
+
+        /*
         OpenLogin<IWXAPI> iwxapiOpenLogin = new OpenLogin<>();
         try {
             iwxapiOpenLogin.addAppId(OpenConstant.WECHAT_APP_ID)
@@ -410,11 +428,45 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+        */
         finish();
     }
 
     private void sinaLogin() {
         openType = OpenConstants.SINA;
+        mSsoHandler = OpenBuilder.with(this)
+                .useWeibo(OpenConstant.WB_APP_KEY)
+                .login(new WeiboAuthListener() {
+                    @Override
+                    public void onComplete(Bundle bundle) {
+
+                        Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
+
+                        if (oauth2AccessToken.isSessionValid()) {
+                            try {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("openid", oauth2AccessToken.getUid());
+                                jsonObject.put("expires_in", oauth2AccessToken.getExpiresTime());
+                                jsonObject.put("refresh_token", oauth2AccessToken.getRefreshToken());
+                                jsonObject.put("access_token", oauth2AccessToken.getToken());
+                                OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), mHandler);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onWeiboException(WeiboException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+        /*
         //新浪微博登录
         AuthInfo authInfo = new AuthInfo(this, OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, null);
         mSsoHandler = new SsoHandler(this, authInfo);
@@ -449,6 +501,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
             }
         });
+        */
     }
 
 
@@ -644,6 +697,12 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         if (openType == OpenConstants.TENCENT) {
             // 对于tencent
             // 注：在某些低端机上调用登录后，由于内存紧张导致APP被系统回收，登录成功后无法成功回传数据。
+
+            if (mTencent != null) {
+                mTencent.handleLoginData(data, this);
+            }
+
+            /*
             OpenLogin<Tencent> tencentOpenLogin = new OpenLogin<>();
             tencentOpenLogin.addAppId(OpenConstant.QQ_APP_ID)
                     .addAppKey(OpenConstant.QQ_APP_KEY);
@@ -653,6 +712,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            */
         }
     }
 
