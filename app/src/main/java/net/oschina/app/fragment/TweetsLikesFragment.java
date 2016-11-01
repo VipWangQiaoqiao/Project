@@ -14,17 +14,14 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetLike;
 import net.oschina.app.bean.TweetLikeList;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -153,19 +150,6 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
             return 3 * 60;
         }
         return super.getAutoRefreshTime();
-    }
-
-    @Override
-    protected void onRefreshNetworkSuccess() {
-        // TODO Auto-generated method stub
-
-        super.onRefreshNetworkSuccess();
-        if (AccountHelper.isLogin()
-                && mCatalog == AccountHelper.getUserId()
-                && 4 == NoticeViewPagerFragment.sCurrentPage) {
-            NoticeUtils.clearNotice(Notice.TYPE_NEWLIKE,getContext());
-            UIHelper.sendBroadcastForNotice(getActivity());
-        }
     }
 
     protected boolean compareTo(List<? extends Entity> data, Entity enity) {

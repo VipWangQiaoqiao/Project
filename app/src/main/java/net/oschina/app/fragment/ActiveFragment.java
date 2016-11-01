@@ -17,16 +17,13 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.Notice;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -156,21 +153,6 @@ public class ActiveFragment extends BaseListFragment<Active> implements
     protected void sendRequestData() {
         OSChinaApi.getActiveList((int) AccountHelper.getUserId(),
                 mCatalog, mCurrentPage, mHandler);
-    }
-
-    @Override
-    protected void onRefreshNetworkSuccess() {
-        if (AccountHelper.isLogin()) {
-            if (0 == NoticeViewPagerFragment.sCurrentPage) {
-                NoticeUtils.clearNotice(Notice.TYPE_ATME,getContext());
-            } else if (1 == NoticeViewPagerFragment.sCurrentPage
-                    || NoticeViewPagerFragment.sShowCount[1] > 0) { // 如果当前显示的是评论页，则发送评论页已被查看的Http请求
-                NoticeUtils.clearNotice(Notice.TYPE_COMMENT,getContext());
-            } else {
-                NoticeUtils.clearNotice(Notice.TYPE_ATME,getContext());
-            }
-            UIHelper.sendBroadcastForNotice(getActivity());
-        }
     }
 
     @Override
