@@ -2,6 +2,7 @@ package net.oschina.app.improve.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.v4.view.MotionEventCompat;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -31,7 +33,18 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by thanatosx on 16/10/27.
+ * 动态栏目View 请通过{@link #setTabPickerManager(TabPickerDataManager)}来设置活动数据和原始数据，数据
+ * 对象根据需要实现{@link Object#hashCode()}和{@link Object#equals(Object)}方法，因为非活动数据是通过使用
+ * {@link List#contains(Object)}方法从原始数据剔除活动数据实现的。
+ *
+ * <p>活动动态栏目的添加、删除、移动、选择通过{@link OnTabPickingListener}来实现的，你可以通过方法
+ * {@link #setOnTabPickingListener(OnTabPickingListener)}来监听。
+ *
+ * <p>通过{@link #show(int)}和{@link #hide()}方法来显示隐藏动态栏目界面。
+ *
+ * <p>通过{@link #onTurnBack()}响应回退事件。
+ *
+ * <p>Created by thanatosx on 16/10/27.
  */
 
 public class TabPickerView extends FrameLayout {
@@ -42,11 +55,15 @@ public class TabPickerView extends FrameLayout {
     private RecyclerView mRecyclerActive;
     private RecyclerView mRecyclerInactive;
     private ItemTouchHelper mItemTouchHelper;
+
     private TabAdapter<TabAdapter.ViewHolder> mActiveAdapter;
     private TabAdapter<TabAdapter.ViewHolder> mInactiveAdapter;
 
     private TabPickerDataManager mTabManager;
     private OnTabPickingListener mTabPickingListener;
+
+    private Action1<ViewPropertyAnimator> mOnShowAnimator;
+    private Action1<ViewPropertyAnimator> mOnHideAnimator;
 
     private int mSelectedIndex = 0;
 
@@ -61,7 +78,6 @@ public class TabPickerView extends FrameLayout {
     public TabPickerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initWidgets();
-        initData();
     }
 
     /**
@@ -133,20 +149,34 @@ public class TabPickerView extends FrameLayout {
         mViewArrow.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO turn back
                 hide();
             }
         });
 
     }
 
+    public void setOnShowAnimation(Action1<ViewPropertyAnimator> l){
+        this.mOnShowAnimator = l;
+    }
+
+    public void setOnHideAnimator(Action1<ViewPropertyAnimator> l){
+        this.mOnHideAnimator = l;
+    }
+
     public void show(int selectedIndex) {
-        int tempIndex = mSelectedIndex;
+        final int tempIndex = mSelectedIndex;
         mSelectedIndex = selectedIndex;
         mActiveAdapter.notifyItemChanged(tempIndex);
         mActiveAdapter.notifyItemChanged(mSelectedIndex);
 
-        setVisibility(VISIBLE);
+        if (mOnShowAnimator != null){
+            mOnShowAnimator.call(animate());
+            animate().start();
+        }else {
+            setVisibility(VISIBLE);
+        }
+
+        /*setVisibility(VISIBLE);
         setTranslationY(-getHeight() * 0.2f);
         setAlpha(0);
         animate()
@@ -160,16 +190,22 @@ public class TabPickerView extends FrameLayout {
                         super.onAnimationEnd(animation);
                         setTranslationY(0);
                     }
-                }).start();
+                }).start();*/
     }
 
     public void hide() {
         if (mTabPickingListener != null) {
             mTabPickingListener.onRestore(mTabManager.mActiveDataSet);
         }
-        animate()
-                .translationY(-getHeight())
-                .setDuration(500)
+        if (mOnHideAnimator != null){
+            mOnHideAnimator.call(animate());
+            animate().start();
+        }else {
+            setVisibility(GONE);
+        }
+        /*animate()
+                .translationY(-getHeight() * 0.2f)
+                .setDuration(380)
                 .alpha(0)
                 .setInterpolator(new DecelerateInterpolator())
                 .setListener(new AnimatorListenerAdapter() {
@@ -178,12 +214,7 @@ public class TabPickerView extends FrameLayout {
                         super.onAnimationEnd(animation);
                         setVisibility(GONE);
                     }
-                }).start();
-    }
-
-
-    private void initData() {
-
+                }).start();*/
     }
 
     private void initRecyclerView() {
@@ -193,13 +224,11 @@ public class TabPickerView extends FrameLayout {
         mActiveAdapter = new TabAdapter<TabAdapter.ViewHolder>(mTabManager.mActiveDataSet) {
             @Override
             public TabAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                Log.d("oschina", "onCreateViewHolder");
                 return new TabAdapter.ViewHolder(createItemView());
             }
 
             @Override
             public void onBindViewHolder(TabAdapter.ViewHolder holder, int position) {
-                Log.d("oschina", "onBindViewHolder");
                 SubTab item = items.get(position);
                 holder.mViewTab.setText(item.getName());
                 if (item.isFixed()) {
@@ -249,6 +278,7 @@ public class TabPickerView extends FrameLayout {
         mActiveAdapter.setOnDeleteItemListener(new Action1<Integer>() {
             @Override
             public void call(Integer position) {
+                Log.d("oschina", "position: " + position);
                 SubTab tab = mActiveAdapter.getItem(position);
                 if (tab.isFixed()) return;
                 int oldCount = mActiveAdapter.getItemCount();
@@ -275,6 +305,7 @@ public class TabPickerView extends FrameLayout {
                 }
                 if (mTabPickingListener != null) {
                     mTabPickingListener.onRemove(position, tab);
+                    mTabPickingListener.onSelected(mSelectedIndex);
                 }
             }
         });
