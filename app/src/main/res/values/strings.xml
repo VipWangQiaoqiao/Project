@@ -350,7 +350,7 @@
     <string name="request_error_hint">网络请求失败&#8230;</string>
     <string name="login_success_hint">登录成功</string>
     <string name="send_sms_code_success_hint">已成功发送验证码</string>
-    <string name="register_success_hint">注册成功</string>
     <string name="reset_success_hint">密码重置成功</string>
+    <string name="register_success_hint">注册成功</string>
 
 </resources>
