@@ -64,10 +64,6 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class LoginActivity extends AccountBaseActivity implements View.OnClickListener, IUiListener, View.OnFocusChangeListener {
-<<<<<<< HEAD
-
-=======
->>>>>>> 624617224eb9d849a89c46852806e45fdfcea7cc
     private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
     private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
