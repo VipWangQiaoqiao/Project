@@ -2,10 +2,10 @@ package net.oschina.app.improve.account.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +26,10 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.util.TDevice;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -169,7 +172,6 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         super.initData();
         Intent intent = getIntent();
         mPhoneToken = (PhoneToken) intent.getSerializableExtra(RegisterStepTwoActivity.PHONE_TOKEN_KEY);
-        Log.e(TAG, "initData: ------------>" + mPhoneToken.toString());
     }
 
     @OnClick({R.id.ib_navigation_back, R.id.iv_reset_pwd_del, R.id.bt_reset_submit})
@@ -204,8 +206,33 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
             return;
         }
-        String appToken = "123";// Verifier.getPrivateToken(getApplication());
-        OSChinaApi.resetPwd(tempPwd, mPhoneToken.getToken(), appToken, mHandler);
+        String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";// Verifier.getPrivateToken(getApplication());
+
+        OSChinaApi.resetPwd(Sha1toHex(tempPwd), mPhoneToken.getToken(), appToken, mHandler);
+    }
+
+    @NonNull
+    private String Sha1toHex(String tempPwd) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+            messageDigest.update(tempPwd.getBytes("utf-8"));
+            byte[] bytes = messageDigest.digest();
+
+            StringBuilder tempHex = new StringBuilder();
+            // 字节数组转换为 十六进制数
+            for (byte aByte : bytes) {
+                String shaHex = Integer.toHexString(aByte & 0xff);
+                if (shaHex.length() < 2) {
+                    tempHex.append(0);
+                }
+                tempHex.append(shaHex);
+            }
+            return tempHex.toString();
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return tempPwd;
     }
 
     @Override

@@ -152,6 +152,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                             mTimer.cancel();
                                         }
                                         ResetPwdActivity.show(RetrieveActivity.this, phoneToken);
+                                        finish();
                                     }
                                 } else {
                                     AppContext.showToast(phoneTokenResultBean.getMessage());
@@ -357,7 +358,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         }
         mRequestType = 2;
         String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-        String appToken = "123";//Verifier.getPrivateToken(getApplication());
+        String appToken =  "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
         OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, appToken, mHandler);
     }
 
@@ -393,7 +394,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 }
             }.start();
             String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-            String appToken = "123";//Verifier.getPrivateToken(getApplication());
+            String appToken =  "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
             OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.RESET_PWD_INTENT, mHandler);
         } else {
             AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);

@@ -7,7 +7,6 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,7 +101,6 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            Log.e(TAG, "onSuccess: ------>");
 
             try {
                 switch (mRequestType) {
@@ -119,7 +117,6 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                 //意味着我们可以进行第二次请求了,获取phoneToken
                                 //mRequestType = 2;
                                 mEtRegisterAuthCode.setText(null);
-                                Log.e(TAG, "onSuccess: ----------->验证码发送成功...");
                                 break;
                             case 218:
                                 //手机号已被注册,提示重新输入
@@ -336,7 +333,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
 
         mRequestType = 2;
         String phoneNumber = mEtRegisterUsername.getText().toString().trim();
-        String appToken = "123";//Verifier.getPrivateToken(getApplication());
+        String appToken =  "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
         OSChinaApi.validateRegisterInfo(phoneNumber, SmsCode, appToken, mHandler);
     }
 
