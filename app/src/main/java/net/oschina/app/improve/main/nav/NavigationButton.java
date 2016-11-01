@@ -8,7 +8,6 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,7 +23,7 @@ public class NavigationButton extends FrameLayout {
     private Class<?> mClx;
     private ImageView mIconView;
     private TextView mTitleView;
-    private View mDot;
+    private TextView mDot;
     private String mTag;
 
     public NavigationButton(Context context) {
@@ -54,7 +53,7 @@ public class NavigationButton extends FrameLayout {
 
         mIconView = (ImageView) findViewById(R.id.nav_iv_icon);
         mTitleView = (TextView) findViewById(R.id.nav_tv_title);
-        mDot = findViewById(R.id.nav_tv_dot);
+        mDot = (TextView) findViewById(R.id.nav_tv_dot);
     }
 
     public void setSelected(boolean selected) {
@@ -63,8 +62,9 @@ public class NavigationButton extends FrameLayout {
         mTitleView.setSelected(selected);
     }
 
-    public void showRedDot(boolean show) {
-        mDot.setVisibility(show ? VISIBLE : GONE);
+    public void showRedDot(int count) {
+        mDot.setVisibility(count > 0 ? VISIBLE : GONE);
+        mDot.setText(String.valueOf(count));
     }
 
     public void init(@DrawableRes int resId, @StringRes int strId, Class<?> clx) {

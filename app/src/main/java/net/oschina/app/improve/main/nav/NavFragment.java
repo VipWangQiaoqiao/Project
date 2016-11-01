@@ -16,12 +16,11 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.main.tabs.DynamicTabFragment;
 import net.oschina.app.improve.main.tabs.ExploreFragment;
-import net.oschina.app.improve.main.tabs.GeneralViewPagerFragment;
 import net.oschina.app.improve.main.tabs.TweetViewPagerFragment;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
-import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
+import net.oschina.app.improve.user.fragments.UserInfoFragment;
 import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 
 import java.util.List;
@@ -85,7 +84,7 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
 
         mNavMe.init(R.drawable.tab_icon_me,
                 R.string.main_tab_name_my,
-                NewUserInfoFragment.class);
+                UserInfoFragment.class);
 
     }
 
@@ -180,7 +179,7 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
 
     @Override
     public void onNoticeArrived(NoticeBean bean) {
-        mNavMe.showRedDot(bean.getAllCount() > 0);
+        mNavMe.showRedDot(bean.getAllCount());
     }
 
     public interface OnNavigationReselectListener {
