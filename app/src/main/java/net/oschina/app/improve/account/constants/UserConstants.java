@@ -35,6 +35,6 @@ public interface UserConstants {
     String ANSWER = "answer";
     String DISCUSS = "discuss";
 
-    String RETRIEVE_PWD_URL = "https://www.oschina.net/";
+    String RETRIEVE_PWD_URL = "https://www.oschina.net/home/reset-pwd";
 
 }

@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -237,8 +236,6 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
         Intent intent = getIntent();
         mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONE_TOKEN_KEY);
-        Log.e(TAG, "initData: ------------>" + mPhoneToken.toString());
-
     }
 
     @SuppressWarnings("deprecation")
@@ -317,7 +314,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                     gender = 2;
                 }
 
-                String appToken = "123";//Verifier.getPrivateToken(getApplication());
+                String appToken =  "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
 
                 OSChinaApi.register(username, pwd, gender, mPhoneToken.getToken(), appToken, mHandler);
             }

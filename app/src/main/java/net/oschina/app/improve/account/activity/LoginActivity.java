@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -175,9 +176,11 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             editor.putString(HOLD_USERNAME_KEY, username);
         }
 
-        if (mHoldPwd == 1) {
+        if (mHoldPwd != 2) {
             if (!TextUtils.isEmpty(inputPwd)) {
-                editor.putString(HOLD_PWD_KEY, toBase64(inputPwd));
+                byte[] bytes = inputPwd.getBytes();
+                String tempPwd = Base64.encodeToString(bytes, 0, bytes.length, Base64.DEFAULT);
+                editor.putString(HOLD_PWD_KEY, tempPwd);
                 editor.putInt(HOLD_PWD_STATUS_KEY, 1);
             } else {
                 editor.putString(HOLD_PWD_KEY, inputPwd);
@@ -277,7 +280,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         mEtLoginUsername.setText(holdUsername);
 
         if (!TextUtils.isEmpty(holdPwd)) {
-            byte[] decode = Base64.decode(holdPwd, Base64.DEFAULT);
+            byte[] bytes = holdPwd.getBytes();
+            byte[] decode = Base64.decode(bytes, 0, bytes.length, Base64.DEFAULT);
             try {
                 String tempPwd = new String(decode, 0, decode.length, "utf-8");
 
@@ -533,7 +537,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             if (machPhoneNum || machEmail) {
                 //登录成功,请求数据进入用户个人中心页面
 
-                String appToken = "123";//"765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+                String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
 
                 if (TDevice.hasInternet()) {
                     requestLogin(tempUsername, tempPwd, appToken);
@@ -605,20 +609,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 hideWaitDialog();
             }
         });
-    }
-
-    @NonNull
-    private String toBase64(String inputPwd) {
-        if (!TextUtils.isEmpty(inputPwd)) {
-            try {
-                byte[] bytes = inputPwd.getBytes("utf-8");
-                byte[] encode = Base64.encode(bytes, Base64.DEFAULT);
-                inputPwd = new String(encode, 0, encode.length, "utf-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        return inputPwd;
     }
 
     @NonNull

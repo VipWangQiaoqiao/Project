@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -173,7 +172,6 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         super.initData();
         Intent intent = getIntent();
         mPhoneToken = (PhoneToken) intent.getSerializableExtra(RegisterStepTwoActivity.PHONE_TOKEN_KEY);
-        Log.e(TAG, "initData: ------------>" + mPhoneToken.toString());
     }
 
     @OnClick({R.id.ib_navigation_back, R.id.iv_reset_pwd_del, R.id.bt_reset_submit})
@@ -208,7 +206,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
             return;
         }
-        String appToken = "123";// Verifier.getPrivateToken(getApplication());
+        String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";// Verifier.getPrivateToken(getApplication());
 
         OSChinaApi.resetPwd(Sha1toHex(tempPwd), mPhoneToken.getToken(), appToken, mHandler);
     }
