@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -28,15 +29,51 @@ import java.net.URL;
  * Created by haibin
  * on 2016/10/19.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings("all")
 public class DownloadService extends Service {
     public static boolean isDownload = false;
-    private Handler mHandler;
+
     private String mUrl;
-    private String mTitle = "正在下载%s";
+    private String mTitle = "正在下载";
     private String saveFileName = AppConfig.DEFAULT_SAVE_FILE_PATH;
+    ;
     private NotificationManager mNotificationManager;
     private Notification mNotification;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    mNotificationManager.cancel(0);
+                    installApk();
+                    break;
+                case 1:
+                    int rate = msg.arg1;
+                    if (rate < 100) {
+                        RemoteViews views = mNotification.contentView;
+                        views.setTextViewText(R.id.tv_download_progress, mTitle + "(" + rate
+                                + "%" + ")");
+                        views.setProgressBar(R.id.pb_progress, 100, rate,
+                                false);
+                    } else {
+                        // 下载完毕后变换通知形式
+                        mNotification.flags = Notification.FLAG_AUTO_CANCEL;
+                        mNotification.contentView = null;
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                        intent.putExtra("completed", "yes");
+
+                        PendingIntent contentIntent = PendingIntent.getActivity(
+                                getApplicationContext(), 0, intent,
+                                PendingIntent.FLAG_UPDATE_CURRENT);
+                    }
+                    mNotificationManager.notify(0, mNotification);
+                    break;
+            }
+
+        }
+    };
 
     public static void startService(Context context, String downloadUrl) {
         Intent intent = new Intent(context, DownloadService.class);
@@ -48,23 +85,23 @@ public class DownloadService extends Service {
     public void onCreate() {
         super.onCreate();
         isDownload = true;
-        mNotificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mUrl = intent.getStringExtra("url");
-        File file = new File(AppConfig.DEFAULT_SAVE_FILE_PATH);
+        File file = new File(saveFileName);
         if (!file.exists()) {
             file.mkdirs();
         }
-        String apkFile = saveFileName;
-        final File saveFile = new File(apkFile);
+        final File apkFile = new File(saveFileName + "osc.apk");
+        setUpNotification();
         new Thread() {
             @Override
             public void run() {
                 try {
-                    downloadUpdateFile(mUrl, saveFile);
+                    downloadUpdateFile(mUrl, apkFile);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -73,7 +110,7 @@ public class DownloadService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public long downloadUpdateFile(String downloadUrl, File saveFile) throws Exception {
+    private long downloadUpdateFile(String downloadUrl, File saveFile) throws Exception {
         int downloadCount = 0;
         int currentSize = 0;
         long totalSize = 0;
@@ -86,12 +123,6 @@ public class DownloadService extends Service {
         try {
             URL url = new URL(downloadUrl);
             httpConnection = (HttpURLConnection) url.openConnection();
-            httpConnection
-                    .setRequestProperty("User-Agent", "PacificHttpClient");
-            if (currentSize > 0) {
-                httpConnection.setRequestProperty("RANGE", "bytes="
-                        + currentSize + "-");
-            }
             httpConnection.setConnectTimeout(10000);
             httpConnection.setReadTimeout(20000);
             updateTotalSize = httpConnection.getContentLength();
@@ -100,7 +131,7 @@ public class DownloadService extends Service {
             }
             is = httpConnection.getInputStream();
             fos = new FileOutputStream(saveFile, false);
-            byte buffer[] = new byte[1024];
+            byte buffer[] = new byte[2048];
             int readSize = 0;
             while ((readSize = is.read(buffer)) > 0) {
 
@@ -124,22 +155,33 @@ public class DownloadService extends Service {
                 httpConnection.disconnect();
             }
             StreamUtils.close(is, fos);
-            stopService();
+            stopSelf();
         }
         return totalSize;
     }
 
+    private void installApk() {
+        File file = new File(saveFileName + "osc.apk");
+        if (!file.exists())
+            return;
+        Intent intent = new Intent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        startActivity(intent);
+    }
+
     private void setUpNotification() {
-        int icon = R.mipmap.ic_notification;
-        CharSequence tickerText = "准备下载";
+        int icon = R.mipmap.ic_launcher;
+        CharSequence tickerText = "开始下载";
         long when = System.currentTimeMillis();
         mNotification = new Notification(icon, tickerText, when);
 
         mNotification.flags = Notification.FLAG_ONGOING_EVENT;
 
         RemoteViews contentView = new RemoteViews(getPackageName(),
-                R.layout.download_notification_show);
-        contentView.setTextViewText(R.id.tv_download_state, mTitle);
+                R.layout.layout_notification_view);
+        contentView.setTextViewText(R.id.tv_download_progress, mTitle);
         mNotification.contentView = contentView;
 
         Intent intent = new Intent(this, MainActivity.class);
@@ -154,11 +196,6 @@ public class DownloadService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    private void stopService() {
-        Intent intent = new Intent(getApplicationContext(), DownloadService.class);
-        stopService(intent);
     }
 
     @Override

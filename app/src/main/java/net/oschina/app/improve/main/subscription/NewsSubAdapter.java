@@ -24,11 +24,11 @@ import net.oschina.app.util.StringUtils;
  * on 2016/10/26.
  */
 
-public class NewsSubBeanAdapter extends BaseRecyclerAdapter<SubBean> {
+public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> {
 
     private String mSystemTime;
 
-    public NewsSubBeanAdapter(Context context) {
+    public NewsSubAdapter(Context context) {
         super(context, ONLY_FOOTER);
     }
 

@@ -1,8 +1,12 @@
 package net.oschina.app.improve.main;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,17 +19,31 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseApplication;
 import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.improve.bean.Version;
 import net.oschina.app.improve.main.nav.NavFragment;
 import net.oschina.app.improve.main.nav.NavigationButton;
-import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
+import net.oschina.app.improve.main.update.DownloadService;
+import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.util.DialogHelp;
+
+import java.util.List;
 
 import butterknife.Bind;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends BaseActivity implements NavFragment.OnNavigationReselectListener {
+public class MainActivity extends BaseActivity implements
+        NavFragment.OnNavigationReselectListener,
+        EasyPermissions.PermissionCallbacks,
+        CheckUpdateManager.RequestPermissions {
+
+    private final int RC_EXTERNAL_STORAGE = 0x04;//存储权限
     public static final String ACTION_NOTICE = "ACTION_NOTICE";
     private long mBackPressedTime;
+
+    private Version mVersion;
 
     @Bind(R.id.activity_main_ui)
     FrameLayout mMainUi;
@@ -89,6 +107,42 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     }
 
     @Override
+    public void call(Version version) {
+        this.mVersion = version;
+        requestExternalStorage();
+    }
+
+    @AfterPermissionGranted(RC_EXTERNAL_STORAGE)
+    public void requestExternalStorage() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            DownloadService.startService(this, mVersion.getDownloadUrl());
+        } else {
+            EasyPermissions.requestPermissions(this, "", RC_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+    }
+
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        DialogHelp.getConfirmDialog(this, "没有权限, 你需要去设置中开启读取手机存储权限.", "去设置", "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+            }
+        }, null).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         NoticeManager.stopListen(this);
@@ -114,6 +168,8 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         if (!AppContext.get(AppConfig.KEY_CHECK_UPDATE, true)) {
             return;
         }
-        new CheckUpdateManager(this, false).checkUpdate();
+        CheckUpdateManager manager = new CheckUpdateManager(this, false);
+        manager.setCaller(this);
+        manager.checkUpdate();
     }
 }

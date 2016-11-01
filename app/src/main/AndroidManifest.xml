@@ -481,6 +481,10 @@
             android:name=".improve.notice.NoticeServer"
             android:exported="false"
             android:process="net.oschina.app.notice.NoticeServer"/>
+
+        <service
+            android:exported="false"
+            android:name=".improve.main.update.DownloadService"/>
     </application>
 
 </manifest>
