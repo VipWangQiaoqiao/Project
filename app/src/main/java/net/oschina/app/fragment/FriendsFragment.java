@@ -12,12 +12,9 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.FriendsList;
-import net.oschina.app.bean.Notice;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -56,7 +53,7 @@ public class FriendsFragment extends BaseListFragment<Friend> {
     @Override
     public void onResume() {
         if (mCatalog == FriendsList.TYPE_FANS
-                && mUid ==  AccountHelper.getUserId()) {
+                && mUid == AccountHelper.getUserId()) {
             refreshNotice();
         }
         super.onResume();
@@ -108,15 +105,6 @@ public class FriendsFragment extends BaseListFragment<Friend> {
         OSChinaApi.getFriendList(mUid, mCatalog, mCurrentPage, mHandler);
     }
 
-    @Override
-    protected void onRefreshNetworkSuccess() {
-        if ((NoticeViewPagerFragment.sCurrentPage == 3 || NoticeViewPagerFragment.sShowCount[3] > 0)
-                && mCatalog == FriendsList.TYPE_FANS
-                && mUid ==  AccountHelper.getUserId()) {
-            NoticeUtils.clearNotice(Notice.TYPE_NEWFAN,getContext());
-            UIHelper.sendBroadcastForNotice(getActivity());
-        }
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,

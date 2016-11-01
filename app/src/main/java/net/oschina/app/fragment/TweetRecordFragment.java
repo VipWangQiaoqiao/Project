@@ -23,7 +23,6 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -210,7 +209,6 @@ public class TweetRecordFragment extends BaseFragment {
         tweet.setAuthorid((int) AccountHelper.getUserId());
         tweet.setAudioPath(audioPath);
         tweet.setBody(strSpeech);
-        ServerTaskUtils.pubTweet(getActivity(), tweet);
         getActivity().finish();
     }
 }

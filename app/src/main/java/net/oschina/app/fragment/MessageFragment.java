@@ -19,18 +19,15 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.MessageList;
 import net.oschina.app.bean.Messages;
-import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -145,15 +142,6 @@ public class MessageFragment extends BaseListFragment<Messages> implements
     protected void sendRequestData() {
         OSChinaApi.getMessageList((int) AccountHelper.getUserId(),
                 mCurrentPage, mHandler);
-    }
-
-    @Override
-    protected void onRefreshNetworkSuccess() {
-        if (2 == NoticeViewPagerFragment.sCurrentPage
-                || NoticeViewPagerFragment.sShowCount[2] > 0) { // 在page中第三个位置
-            NoticeUtils.clearNotice(Notice.TYPE_MESSAGE,getContext());
-            UIHelper.sendBroadcastForNotice(getActivity());
-        }
     }
 
     @Override
