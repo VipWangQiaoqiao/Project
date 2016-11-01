@@ -536,7 +536,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             if (machPhoneNum || machEmail) {
                 //登录成功,请求数据进入用户个人中心页面
 
-                String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+                String appToken =getAppToken();
 
                 if (TDevice.hasInternet()) {
                     requestLogin(tempUsername, tempPwd, appToken);

@@ -323,7 +323,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
             gender = 2;
         }
 
-        String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+        String appToken =getAppToken();
 
         OSChinaApi.register(username, Sha1toHex(pwd), gender, mPhoneToken.getToken(), appToken, mHandler);
     }

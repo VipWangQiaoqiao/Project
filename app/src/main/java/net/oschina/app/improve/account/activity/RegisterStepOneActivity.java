@@ -337,7 +337,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
 
         mRequestType = 2;
         String phoneNumber = mEtRegisterUsername.getText().toString().trim();
-        String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+        String appToken = getAppToken();
         OSChinaApi.validateRegisterInfo(phoneNumber, SmsCode, appToken, mHandler);
     }
 
@@ -372,7 +372,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                 }
             }.start();
             String phoneNumber = mEtRegisterUsername.getText().toString().trim();
-            String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+            String appToken = getAppToken();
             OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.REGISTER_INTENT, mHandler);
         } else {
             AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);

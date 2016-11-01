@@ -204,7 +204,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
             return;
         }
-        String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";// Verifier.getPrivateToken(getApplication());
+        String appToken = getAppToken();
 
         OSChinaApi.resetPwd(Sha1toHex(tempPwd), mPhoneToken.getToken(), appToken, mHandler);
     }
