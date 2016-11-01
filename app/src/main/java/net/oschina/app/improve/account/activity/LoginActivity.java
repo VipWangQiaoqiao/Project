@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -43,6 +42,7 @@ import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
@@ -54,8 +54,6 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -142,6 +140,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             if (resultBean.isSuccess()) {
                 User user = resultBean.getResult();
                 AccountHelper.login(user, headers);
+                AppContext.showToast(R.string.login_success_hint);
+                finishClearTopActivity(LoginActivity.this, MainActivity.class);
                 finish();
             } else {
                 AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
@@ -579,6 +579,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         User user = resultBean.getResult();
                         AccountHelper.login(user, headers);
                         holdAccount();
+                        AppContext.showToast(R.string.login_success_hint);
+                        finishClearTopActivity(LoginActivity.this, MainActivity.class);
                         finish();
                     } else {
                         int code = resultBean.getCode();
@@ -608,30 +610,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 hideWaitDialog();
             }
         });
-    }
-
-    @NonNull
-    private String Sha1toHex(String tempPwd) {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-            messageDigest.update(tempPwd.getBytes("utf-8"));
-            byte[] bytes = messageDigest.digest();
-
-            StringBuilder tempHex = new StringBuilder();
-            // 字节数组转换为 十六进制数
-            for (byte aByte : bytes) {
-                String shaHex = Integer.toHexString(aByte & 0xff);
-                if (shaHex.length() < 2) {
-                    tempHex.append(0);
-                }
-                tempHex.append(shaHex);
-            }
-            return tempHex.toString();
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return tempPwd;
     }
 
     @Override

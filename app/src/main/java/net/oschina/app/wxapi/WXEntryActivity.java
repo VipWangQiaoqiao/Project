@@ -2,6 +2,7 @@ package net.oschina.app.wxapi;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,6 +20,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.util.DialogHelp;
 
 import java.lang.reflect.Type;
@@ -145,6 +147,7 @@ public class WXEntryActivity extends Activity {
                             if (resultBean.isSuccess()) {
                                 User user = resultBean.getResult();
                                 AccountHelper.login(user, headers);
+                                finishClearTopActivity(WXEntryActivity.this, MainActivity.class);
                                 finish();
                             }
                         }
@@ -164,6 +167,19 @@ public class WXEntryActivity extends Activity {
                 hideWaitDialog();
             }
         });
+    }
+
+    /**
+     * finish clearTop activity
+     *
+     * @param context       context
+     * @param activityClass activityClass
+     */
+    private void finishClearTopActivity(Context context, Class activityClass) {
+        // Kill and skip
+        Intent intent = new Intent(context, activityClass);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
 }
