@@ -15,6 +15,7 @@
         android:paddingRight="8dp">
 
         <TextView
+            android:id="@+id/tv_operator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -32,6 +33,21 @@
             android:padding="10dp"
             android:src="@mipmap/ic_arrow_top"
             android:tint="#BEBEBE" />
+
+        <TextView
+            android:id="@+id/tv_done"
+            android:text="完成"
+            android:textColor="#FF0000"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:background="#FAFAFA"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="-8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible"/>
     </RelativeLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -64,7 +80,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="8dp"
                     android:layout_marginRight="8dp"
-                    android:text="长安排序,双击删除"
+                    android:text="长按排序或删除"
                     android:textColor="#D6D6D6"
                     android:textSize="12sp" />
 

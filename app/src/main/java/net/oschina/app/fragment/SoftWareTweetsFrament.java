@@ -14,8 +14,6 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
-import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -100,13 +98,6 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
             return;
         }
         UIHelper.showTweetDetail(parent.getContext(), tweet, tweet.getId());
-    }
-
-    private void handleComment(String text) {
-        Tweet tweet = new Tweet();
-        tweet.setAuthorid((int) AccountHelper.getUserId());
-        tweet.setBody(text);
-        ServerTaskUtils.pubSoftWareTweet(getActivity(), tweet, mId);
     }
 
     @Override

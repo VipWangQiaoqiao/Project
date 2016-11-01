@@ -58,12 +58,13 @@
 
         <ImageView
             android:id="@+id/iv_retrieve_tel_del"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:contentDescription="@null"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:srcCompat="@mipmap/ic_clear"/>
     </LinearLayout>
 

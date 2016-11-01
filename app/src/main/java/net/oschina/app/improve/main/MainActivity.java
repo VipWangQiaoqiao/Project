@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -28,6 +29,9 @@ import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.util.DialogHelp;
 
+import java.util.List;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -49,6 +53,11 @@ public class MainActivity extends BaseActivity implements
     FrameLayout mMainUi;
 
     private NavFragment mNavBar;
+    private List<TurnBackListener> mTurnBackListeners = new ArrayList<>();
+
+    public interface TurnBackListener{
+        boolean onTurnBack();
+    }
 
     @Override
     protected int getContentView() {
@@ -148,8 +157,15 @@ public class MainActivity extends BaseActivity implements
         NoticeManager.stopListen(this);
     }
 
+    public void addOnTurnBackListener(TurnBackListener l){
+        this.mTurnBackListeners.add(l);
+    }
+
     @Override
     public void onBackPressed() {
+        for (TurnBackListener l : mTurnBackListeners){
+            if (l.onTurnBack()) return;
+        }
         boolean isDoubleClick = BaseApplication.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true);
         if (isDoubleClick) {
             long curTime = SystemClock.uptimeMillis();

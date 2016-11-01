@@ -3,9 +3,10 @@ package net.oschina.app.improve.bean;
 import java.io.Serializable;
 
 /**
- * Created by thanatosx on 16/10/26.
+ * 分栏Model
+ * Created by thanatosx
+ * on 16/10/26.
  */
-
 public class SubTab implements Serializable {
 
     public static final String TAG_NEW = "new";
@@ -45,6 +46,14 @@ public class SubTab implements Serializable {
         public void setHref(String href) {
             this.href = href;
         }
+
+        @Override
+        public String toString() {
+            return "Banner{" +
+                    "catalog=" + catalog +
+                    ", href='" + href + '\'' +
+                    '}';
+        }
     }
 
     @Override
@@ -54,7 +63,7 @@ public class SubTab implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof SubTab){
+        if (obj != null && obj instanceof SubTab) {
             SubTab tab = (SubTab) obj;
             if (tab.getToken() == null) return false;
             if (this.token == null) return false;
@@ -141,5 +150,21 @@ public class SubTab implements Serializable {
 
     public void setBanner(Banner banner) {
         this.banner = banner;
+    }
+
+    @Override
+    public String toString() {
+        return "SubTab{" +
+                "token='" + token + '\'' +
+                ", name='" + name + '\'' +
+                ", fixed=" + fixed +
+                ", needLogin=" + needLogin +
+                ", tag='" + tag + '\'' +
+                ", type=" + type +
+                ", subtype=" + subtype +
+                ", order=" + order +
+                ", href='" + href + '\'' +
+                ", banner=" + banner +
+                '}';
     }
 }
