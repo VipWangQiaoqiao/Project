@@ -188,7 +188,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
                     ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
                         User userInfo = (User) resultBean.getResult();
-                       // CacheManager.saveObject(LoginActivity.this, userInfo, NewUserInfoFragment.CACHE_NAME);
+                       // CacheManager.saveObject(LoginActivity.this, userInfo, UserInfoFragment.CACHE_NAME);
                         finish();
                     }
                 } catch (Exception e) {

@@ -69,7 +69,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * desc: user mUserInfo module
  */
 
-public class NewUserInfoFragment extends BaseFragment implements View.OnClickListener,
+public class UserInfoFragment extends BaseFragment implements View.OnClickListener,
         EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
 
     public static final int ACTION_TYPE_ALBUM = 0;
@@ -119,10 +119,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     TextView mTvFollowerCount;
 
     @Bind(R.id.user_info_notice_message)
-    View mMesView;
+    TextView mMesView;
 
     @Bind(R.id.user_info_notice_fans)
-    View mFansView;
+    TextView mFansView;
 
     private boolean mIsUploadIcon;
     private ProgressDialog mDialog;
@@ -743,26 +743,16 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onNoticeArrived(NoticeBean bean) {
-
-        int allCount = bean.getReview() + bean.getLetter() + bean.getMention();
-        if (allCount > 0) {
-            if (mMesView != null)
-                mMesView.setVisibility(View.VISIBLE);
-        } else {
-            if (mMesView != null)
-                mMesView.setVisibility(View.INVISIBLE);
+        if(mMesView!=null){
+            int allCount = bean.getReview() + bean.getLetter() + bean.getMention();
+            mMesView.setVisibility(allCount>0?View.VISIBLE:View.GONE);
+            mMesView.setText(String.valueOf(allCount));
         }
-
-        int fans = bean.getFans();
-        if (fans > 0) {
-            if (mFansView != null)
-                mFansView.setVisibility(View.VISIBLE);
-        } else {
-            if (mFansView != null) {
-                mFansView.setVisibility(View.INVISIBLE);
-            }
+        if(mFansView!=null){
+            int fans = bean.getFans();
+            mFansView.setVisibility(fans>0?View.VISIBLE:View.GONE);
+            mFansView.setText(String.valueOf(fans));
         }
-
     }
 
 

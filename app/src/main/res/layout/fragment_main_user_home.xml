@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/main_green"
-              android:fitsSystemWindows="false"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_green"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:contentDescription="@null"
             android:scaleType="centerCrop"
             app:layout_collapseMode="parallax"
-            app:layout_collapseParallaxMultiplier="0.7"/>
+            app:layout_collapseParallaxMultiplier="0.7" />
 
         <LinearLayout
             android:id="@+id/rl_show_my_info"
@@ -48,7 +48,7 @@
                     android:contentDescription="@null"
                     android:padding="12dp"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/btn_my_setting"/>
+                    android:src="@mipmap/btn_my_setting" />
 
                 <ImageView
                     android:id="@+id/iv_logo_zxing"
@@ -60,7 +60,7 @@
                     android:contentDescription="@null"
                     android:padding="12dp"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/btn_qrcode"/>
+                    android:src="@mipmap/btn_qrcode" />
 
             </FrameLayout>
 
@@ -76,7 +76,7 @@
                     android:layout_height="72dp"
                     android:src="@mipmap/widget_dface"
                     app:civ_border_color="@color/white"
-                    app:civ_border_width="2dip"/>
+                    app:civ_border_width="2dip" />
 
                 <ImageView
                     android:id="@+id/iv_gender"
@@ -86,7 +86,7 @@
                     android:layout_marginBottom="4dp"
                     android:layout_marginRight="4dp"
                     android:contentDescription="@null"
-                    android:src="@mipmap/ic_male"/>
+                    android:src="@mipmap/ic_male" />
             </FrameLayout>
 
             <TextView
@@ -97,7 +97,7 @@
                 android:maxLines="1"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                tools:text="thanatosx"/>
+                tools:text="thanatosx" />
 
             <TextView
                 android:id="@+id/tv_summary"
@@ -110,7 +110,7 @@
                 android:maxLines="2"
                 android:text="这个人很懒,什么都没有写..."
                 android:textColor="@color/white"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_score"
@@ -121,7 +121,7 @@
                 android:gravity="bottom"
                 android:text="积分 0"
                 android:textColor="@color/white"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -149,15 +149,18 @@
                 <TextView
                     android:id="@+id/tv_tweet"
                     style="@style/user_formation_text"
+                    android:ellipsize="none"
+                    android:lines="1"
                     android:padding="0dp"
+                    android:singleLine="true"
                     android:text="0"
-                    android:textSize="@dimen/font_24"/>
+                    android:textSize="@dimen/font_24" />
 
                 <TextView
                     style="@style/user_formation_info"
                     android:layout_marginBottom="6dp"
                     android:padding="0dp"
-                    android:text="@string/main_tab_name_tweet"/>
+                    android:text="@string/main_tab_name_tweet" />
             </LinearLayout>
 
             <LinearLayout
@@ -167,15 +170,18 @@
                 <TextView
                     android:id="@+id/tv_favorite"
                     style="@style/user_formation_text"
+                    android:ellipsize="none"
+                    android:lines="1"
                     android:padding="0dp"
+                    android:singleLine="true"
                     android:text="0"
-                    android:textSize="@dimen/font_24"/>
+                    android:textSize="@dimen/font_24" />
 
                 <TextView
                     style="@style/user_formation_info"
                     android:layout_marginBottom="6dp"
                     android:padding="0dp"
-                    android:text="@string/favorite"/>
+                    android:text="@string/favorite" />
             </LinearLayout>
 
             <LinearLayout
@@ -185,15 +191,18 @@
                 <TextView
                     android:id="@+id/tv_following"
                     style="@style/user_formation_text"
+                    android:ellipsize="none"
+                    android:lines="1"
                     android:padding="0dp"
+                    android:singleLine="true"
                     android:text="0"
-                    android:textSize="@dimen/font_24"/>
+                    android:textSize="@dimen/font_24" />
 
                 <TextView
                     style="@style/user_formation_info"
                     android:layout_marginBottom="6dp"
                     android:padding="0dp"
-                    android:text="@string/following"/>
+                    android:text="@string/following" />
             </LinearLayout>
 
             <LinearLayout
@@ -212,21 +221,36 @@
                         android:id="@+id/tv_follower"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_gravity="center"
                         android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:ellipsize="none"
+                        android:lines="1"
                         android:padding="0dp"
+                        android:singleLine="true"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/font_24"/>
+                        android:textSize="@dimen/font_24" />
 
-                    <View
+                    <TextView
                         android:id="@+id/user_info_notice_fans"
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="14dp"
                         android:layout_gravity="right|top"
-                        android:layout_marginLeft="14dp"
                         android:layout_marginTop="2dp"
-                        android:background="@drawable/ic_red_dot"/>
+                        android:background="@drawable/ic_red_dot"
+                        android:ellipsize="none"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:minWidth="14dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_10"
+                        android:visibility="gone"
+                        tools:text="1"
+                        tools:visibility="visible" />
                 </FrameLayout>
 
                 <TextView
@@ -238,7 +262,7 @@
                     android:padding="0dp"
                     android:text="@string/follower"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/font_12"/>
+                    android:textSize="@dimen/font_12" />
 
             </LinearLayout>
         </LinearLayout>
@@ -263,38 +287,49 @@
                 <ImageView
                     style="@style/option_item_img"
                     android:contentDescription="@null"
-                    android:src="@mipmap/ic_my_messege"/>
+                    android:src="@mipmap/ic_my_messege" />
 
                 <TextView
                     style="@style/option_item_text"
-                    android:text="@string/message"/>
+                    android:text="@string/message" />
 
-                <View
+                <TextView
                     android:id="@+id/user_info_notice_message"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="14dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
                     android:background="@drawable/ic_red_dot"
-                    android:visibility="invisible"/>
+                    android:ellipsize="none"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:minWidth="14dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_10"
+                    android:visibility="gone"
+                    tools:text="1"
+                    tools:visibility="visible" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:contentDescription="@null"
-                    android:src="@mipmap/ic_arrow_right"/>
+                    android:src="@mipmap/ic_arrow_right" />
             </LinearLayout>
 
             <View
                 style="@style/h_line"
                 android:layout_height="1px"
                 android:layout_marginLeft="46dp"
-                android:background="@color/list_divider_color"/>
+                android:background="@color/list_divider_color" />
         </LinearLayout>
 
         <LinearLayout
@@ -310,26 +345,26 @@
                 <ImageView
                     style="@style/option_item_img"
                     android:contentDescription="@null"
-                    android:src="@mipmap/ic_my_blog"/>
+                    android:src="@mipmap/ic_my_blog" />
 
                 <TextView
                     style="@style/option_item_text"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:text="@string/blog"/>
+                    android:text="@string/blog" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:contentDescription="@null"
-                    android:src="@mipmap/ic_arrow_right"/>
+                    android:src="@mipmap/ic_arrow_right" />
             </LinearLayout>
 
             <View
                 style="@style/h_line"
                 android:layout_height="1px"
                 android:layout_marginLeft="46dp"
-                android:background="@color/list_divider_color"/>
+                android:background="@color/list_divider_color" />
         </LinearLayout>
 
         <LinearLayout
@@ -345,26 +380,26 @@
                 <ImageView
                     style="@style/option_item_img"
                     android:contentDescription="@null"
-                    android:src="@mipmap/ic_my_event"/>
+                    android:src="@mipmap/ic_my_event" />
 
                 <TextView
                     style="@style/option_item_text"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:text="@string/actionbar_title_event"/>
+                    android:text="@string/actionbar_title_event" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:contentDescription="@null"
-                    android:src="@mipmap/ic_arrow_right"/>
+                    android:src="@mipmap/ic_arrow_right" />
             </LinearLayout>
 
             <View
                 style="@style/h_line"
                 android:layout_height="1px"
                 android:layout_marginLeft="46dp"
-                android:background="@color/list_divider_color"/>
+                android:background="@color/list_divider_color" />
 
         </LinearLayout>
 
@@ -381,19 +416,19 @@
                 <ImageView
                     style="@style/option_item_img"
                     android:contentDescription="@null"
-                    android:src="@mipmap/ic_my_team"/>
+                    android:src="@mipmap/ic_my_team" />
 
                 <TextView
                     style="@style/option_item_text"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:text="@string/team"/>
+                    android:text="@string/team" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:contentDescription="@null"
-                    android:src="@mipmap/ic_arrow_right"/>
+                    android:src="@mipmap/ic_arrow_right" />
             </LinearLayout>
 
             <!--<View-->

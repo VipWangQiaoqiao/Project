@@ -8,7 +8,7 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.improve.user.fragments.NewUserFavoriteFragment;
+import net.oschina.app.improve.user.fragments.UserFavoriteFragment;
 
 /**
  * 用户收藏页
@@ -26,19 +26,19 @@ public class UserFavoriteViewPagerFragment extends BaseViewPagerFragment {
         generalActionBar.setVisibility(View.GONE);
 
         String[] title = getResources().getStringArray(R.array.userfavorite);
-        adapter.addTab(title[0], "favorite_all", NewUserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_ALL));
-        adapter.addTab(title[1], "favorite_software", NewUserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_SOFTWARE));
-        adapter.addTab(title[2], "favorite_question", NewUserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_QUESTION));
-        adapter.addTab(title[3], "favorite_blogs", NewUserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_BLOG));
-        adapter.addTab(title[4], "favorite_translation", NewUserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_TRANSALITON));
-        //adapter.addTab(title[5], "favotite_event", NewUserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_EVENT));
-        adapter.addTab(title[6], "favorite_news", NewUserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_NEWS));
+        adapter.addTab(title[0], "favorite_all", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_ALL));
+        adapter.addTab(title[1], "favorite_software", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_SOFTWARE));
+        adapter.addTab(title[2], "favorite_question", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_QUESTION));
+        adapter.addTab(title[3], "favorite_blogs", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_BLOG));
+        adapter.addTab(title[4], "favorite_translation", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_TRANSALITON));
+        //adapter.addTab(title[5], "favotite_event", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_EVENT));
+        adapter.addTab(title[6], "favorite_news", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_NEWS));
 
     }
 
     private Bundle getBundle(int favoriteType) {
         Bundle bundle = new Bundle();
-        bundle.putInt(NewUserFavoriteFragment.CATALOG_TYPE, favoriteType);
+        bundle.putInt(UserFavoriteFragment.CATALOG_TYPE, favoriteType);
         return bundle;
     }
 
