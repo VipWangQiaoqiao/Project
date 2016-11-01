@@ -13,7 +13,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -187,7 +186,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 editor.putInt(HOLD_PWD_STATUS_KEY, 2);
             }
         } else {
-            editor.putString(HOLD_PWD_KEY, inputPwd);
+            editor.putString(HOLD_PWD_KEY, null);
             editor.putInt(HOLD_PWD_STATUS_KEY, 2);
         }
         SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
