@@ -8,7 +8,6 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -101,7 +100,6 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
-            Log.e(TAG, "onSuccess: ------>");
             try {
                 switch (mRequestType) {
                     //第一步请求发送验证码
@@ -115,7 +113,6 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                 //发送验证码成功,请求进入下一步
                                 //mRequestType = 2;
                                 mEtRetrieveCodeInput.setText(null);
-                                Log.e(TAG, "onSuccess: ------>收到手机验证码");
                                 break;
                             case 218:
                                 //手机号已被注册,提示重新输入
@@ -358,7 +355,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         }
         mRequestType = 2;
         String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-        String appToken =  "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+        String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
         OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, appToken, mHandler);
     }
 
@@ -394,7 +391,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 }
             }.start();
             String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-            String appToken =  "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
+            String appToken = "765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
             OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.RESET_PWD_INTENT, mHandler);
         } else {
             AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
