@@ -2,16 +2,17 @@ package net.oschina.app.wxapi;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -20,8 +21,8 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
 
@@ -109,6 +110,9 @@ public class WXEntryActivity extends Activity {
         //   final ProgressDialog waitDialog = DialogHelp.getWaitDialog(this, "加载中...");
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&grant_type=authorization_code&code=%s";
         String tokenUrl = String.format(url, Constants.WEICHAT_APPID, Constants.WEICHAT_SECRET, code);
+
+        if (!HasInternet()) return;
+
         ApiHttpClient.getDirect(tokenUrl, new TextHttpResponseHandler() {
 
             @Override
@@ -119,23 +123,40 @@ public class WXEntryActivity extends Activity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                requestFailureHint(throwable);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                //这里是老板微信登录,新版完善了就可以删除掉
-                // Intent intent = new Intent(OpenIdCatalog.WECHAT);
-                //intent.putExtra(LoginBindActivityChooseActivity.BUNDLE_KEY_OPENIDINFO, openInfo);
-                //  sendBroadcast(intent);
+
+                if (!HasInternet()) return;
 
                 //新版微信登录
                 if (!TextUtils.isEmpty(responseString)) {
 
                     OSChinaApi.openLogin(OSChinaApi.LOGIN_WECHART, responseString, new TextHttpResponseHandler() {
+
+                        @Override
+                        public void onStart() {
+                            super.onStart();
+                            // showWaitDialog();
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                            //hideWaitDialog();
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            super.onCancel();
+                            //hideWaitDialog();
+                        }
+
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            throwable.printStackTrace();
+                            requestFailureHint(throwable);
                         }
 
                         @Override
@@ -147,7 +168,6 @@ public class WXEntryActivity extends Activity {
                             if (resultBean.isSuccess()) {
                                 User user = resultBean.getResult();
                                 AccountHelper.login(user, headers);
-                                finishClearTopActivity(WXEntryActivity.this, MainActivity.class);
                                 finish();
                             }
                         }
@@ -169,17 +189,31 @@ public class WXEntryActivity extends Activity {
         });
     }
 
-    /**
-     * finish clearTop activity
-     *
-     * @param context       context
-     * @param activityClass activityClass
-     */
-    private void finishClearTopActivity(Context context, Class activityClass) {
-        // Kill and skip
-        Intent intent = new Intent(context, activityClass);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+    private boolean HasInternet() {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToast(R.string.tip_network_error, Toast.LENGTH_SHORT);
+            return false;
+        }
+        return true;
     }
 
+
+    /**
+     * request network error
+     *
+     * @param throwable throwable
+     */
+    private void requestFailureHint(Throwable throwable) {
+        if (throwable != null) {
+            throwable.printStackTrace();
+        }
+        AppContext.showToast(getResources().getString(R.string.request_error_hint));
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

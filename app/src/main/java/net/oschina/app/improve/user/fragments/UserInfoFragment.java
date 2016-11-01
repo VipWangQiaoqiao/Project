@@ -27,7 +27,6 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
-import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.User;
@@ -220,44 +219,37 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     @Override
     protected void initData() {
         super.initData();
-        User user = AccountHelper.getUser();
-        this.mUserInfo = user;
-        if (isLogin()) {
-            updateView(user);
-            if (TDevice.hasInternet()) {
-                sendRequestData();
-            }
-        } else {
-            if (TDevice.hasInternet()) {
-                sendRequestData();
-            } else {
-                hideView();
-            }
-        }
+        requestUserCache();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mIsUploadIcon = false;
+        requestUserCache();
+        NoticeManager.bindNotify(this);
+    }
 
-        boolean login = isLogin();
-        if (!login) {
-            hideView();
-        } else {
+    /**
+     * if user isLogin,request user cache,
+     * And then request user info and update user info
+     */
+    private void requestUserCache() {
+        if (isLogin()) {
+            User user = AccountHelper.getUser();
+            updateView(user);
             if (TDevice.hasInternet()) {
                 sendRequestData();
             }
+        } else {
+            hideView();
         }
-
-        NoticeManager.bindNotify(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        boolean login = isLogin();
-        if (!login) {
+        if (!isLogin()) {
             hideView();
         }
         NoticeManager.unBindNotify(this);
@@ -341,7 +333,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      */
     private void sendRequestData() {
         if (isLogin())
-            OSChinaApi.getUserInfo(0, textHandler);
+            OSChinaApi.getUserInfo(textHandler);
     }
 
     /**
@@ -743,14 +735,14 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onNoticeArrived(NoticeBean bean) {
-        if(mMesView!=null){
+        if (mMesView != null) {
             int allCount = bean.getReview() + bean.getLetter() + bean.getMention();
-            mMesView.setVisibility(allCount>0?View.VISIBLE:View.GONE);
+            mMesView.setVisibility(allCount > 0 ? View.VISIBLE : View.GONE);
             mMesView.setText(String.valueOf(allCount));
         }
-        if(mFansView!=null){
+        if (mFansView != null) {
             int fans = bean.getFans();
-            mFansView.setVisibility(fans>0?View.VISIBLE:View.GONE);
+            mFansView.setVisibility(fans > 0 ? View.VISIBLE : View.GONE);
             mFansView.setText(String.valueOf(fans));
         }
     }
