@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -17,7 +18,9 @@ import android.view.animation.DecelerateInterpolator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubTab;
@@ -226,7 +229,7 @@ public class DynamicTabFragment extends BaseTitleFragment {
             mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
         }
 
-        mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
+        mViewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return instanceFragment(tabs.get(position).getType());

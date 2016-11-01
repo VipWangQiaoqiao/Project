@@ -33,7 +33,7 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:src="@drawable/selector_arrow"
+                android:src="@mipmap/ic_subscribe"
                 android:tint="#BEBEBE" />
         </LinearLayout>
 
