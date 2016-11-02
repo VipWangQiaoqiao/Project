@@ -28,9 +28,9 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.share.widget.ShareDialogBuilder;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.open.bean.Share;
@@ -45,7 +45,7 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public abstract class DetailActivity<Data, DataView extends DetailContract.View> extends
-                                                                                 BaseBackActivity
+        BaseBackActivity
         implements DetailContract.Operator<Data, DataView> {
 
     long mDataId;
@@ -102,7 +102,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     public ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
+            mDialog = DialogHelper.getProgressDialog(this);
         }
 
         mDialog.setMessage(message);
@@ -288,7 +288,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     }
 
 
-
     protected void toShare(String title, String content, String url) {
 
 
@@ -359,19 +358,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
                 });
         dialog.show();
     }
-
-
-//    protected void hideShareDialog() {
-//        ShareDialog dialog = mShareDialog;
-//        if (dialog != null) {
-//            mShareDialog = null;
-//            try {
-//                dialog.dismiss();
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//    }
 
     /**
      * 检查当前数据,并检查网络状况

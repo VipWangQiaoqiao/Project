@@ -13,7 +13,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Version;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.TDevice;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class CheckUpdateManager {
         this.mContext = context;
         mIsShowDialog = showWaitingDialog;
         if (mIsShowDialog) {
-            mWaitDialog = new ProgressDialog(mContext);
+            mWaitDialog = DialogHelper.getProgressDialog(mContext);
             mWaitDialog.setMessage("正在检查中...");
             mWaitDialog.setCancelable(false);
             mWaitDialog.setCanceledOnTouchOutside(false);
@@ -53,7 +53,7 @@ public class CheckUpdateManager {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 if (mIsShowDialog) {
-                    DialogHelp.getMessageDialog(mContext, "网络异常，无法获取新版本信息").show();
+                    DialogHelper.getMessageDialog(mContext, "网络异常，无法获取新版本信息").show();
                 }
             }
 
@@ -70,7 +70,7 @@ public class CheckUpdateManager {
                             int curVersionCode = TDevice.getVersionCode(AppContext
                                     .getInstance().getPackageName());
                             if (curVersionCode < Integer.parseInt(version.getCode())) {
-                                AlertDialog.Builder dialog = DialogHelp.getConfirmDialog(mContext, version.getMessage(), new DialogInterface.OnClickListener() {
+                                AlertDialog.Builder dialog = DialogHelper.getConfirmDialog(mContext, version.getMessage(), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         mCaller.call(version);
@@ -80,7 +80,7 @@ public class CheckUpdateManager {
                                 dialog.show();
                             } else {
                                 if (mIsShowDialog) {
-                                    DialogHelp.getMessageDialog(mContext, "已经是新版本了").show();
+                                    DialogHelper.getMessageDialog(mContext, "已经是新版本了").show();
                                 }
                             }
                         }

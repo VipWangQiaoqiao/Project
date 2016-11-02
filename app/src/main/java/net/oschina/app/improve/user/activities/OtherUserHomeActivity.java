@@ -42,8 +42,8 @@ import net.oschina.app.improve.user.fragments.UserActiveFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.improve.user.fragments.UserTweetFragment;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SolarSystemView;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.UIHelper;
 
 import java.util.ArrayList;
@@ -466,7 +466,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                     default:
                         return false;
                 }
-                DialogHelp.getConfirmDialog(this, mDialogTitle, new DialogInterface.OnClickListener() {
+                DialogHelper.getConfirmDialog(this, mDialogTitle, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         OSChinaApi.addUserRelationReverse(user.getId(), new TextHttpResponseHandler() {

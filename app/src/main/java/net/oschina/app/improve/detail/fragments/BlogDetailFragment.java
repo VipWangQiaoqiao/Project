@@ -32,8 +32,8 @@ import net.oschina.app.improve.pay.bean.Order;
 import net.oschina.app.improve.pay.dialog.RewardDialog;
 import net.oschina.app.improve.pay.util.RewardUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.DetailAboutView;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -279,7 +279,7 @@ public class BlogDetailFragment
                 String sign = RewardUtil.sign(pairs);
                 pairs.put("sign", sign);
 
-                mWaitDialog = DialogHelp.getWaitDialog(getContext(), "正在提交数据");
+                mWaitDialog = DialogHelper.getProgressDialog(getContext(), "正在提交数据",false);
                 mWaitDialog.setCancelable(false);
 
                 OSChinaApi.reward(pairs, new TextHttpResponseHandler() {

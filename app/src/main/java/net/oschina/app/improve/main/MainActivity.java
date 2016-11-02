@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -26,10 +25,8 @@ import net.oschina.app.improve.main.nav.NavigationButton;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.notice.NoticeManager;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.util.DialogHelp;
-
-import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +52,7 @@ public class MainActivity extends BaseActivity implements
     private NavFragment mNavBar;
     private List<TurnBackListener> mTurnBackListeners = new ArrayList<>();
 
-    public interface TurnBackListener{
+    public interface TurnBackListener {
         boolean onTurnBack();
     }
 
@@ -138,12 +135,12 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        DialogHelp.getConfirmDialog(this, "温馨提示","需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", new DialogInterface.OnClickListener() {
+        DialogHelper.getConfirmDialog(this, "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
             }
-        }, null).show();
+        }).show();
     }
 
     @Override
@@ -157,13 +154,13 @@ public class MainActivity extends BaseActivity implements
         NoticeManager.stopListen(this);
     }
 
-    public void addOnTurnBackListener(TurnBackListener l){
+    public void addOnTurnBackListener(TurnBackListener l) {
         this.mTurnBackListeners.add(l);
     }
 
     @Override
     public void onBackPressed() {
-        for (TurnBackListener l : mTurnBackListeners){
+        for (TurnBackListener l : mTurnBackListeners) {
             if (l.onTurnBack()) return;
         }
         boolean isDoubleClick = BaseApplication.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true);

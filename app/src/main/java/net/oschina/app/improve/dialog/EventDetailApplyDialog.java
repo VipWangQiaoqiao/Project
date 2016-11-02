@@ -12,8 +12,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.improve.bean.EventDetail;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.util.DialogHelp;
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,7 +101,7 @@ public class EventDetailApplyDialog extends CommonDialog implements
         for (int i = 0; i < stringList.size(); i++) {
             remarkSelects[i] = stringList.get(i);
         }
-        DialogHelp.getSelectDialog(getContext(), remarkSelects, new OnClickListener() {
+        DialogHelper.getSelectDialog(getContext(), remarkSelects, "取消", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mTvRemarksSelected.setText(remarkSelects[i]);

@@ -32,8 +32,8 @@ import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.OWebView;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -173,7 +173,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     return;
                 }
 
-                mWaitingDialog = DialogHelp.getWaitDialog(QuestionAnswerDetailActivity.this, "正在发表评论...");
+                mWaitingDialog = DialogHelper.getProgressDialog(QuestionAnswerDetailActivity.this, "正在发表评论...",false);
                 mWaitingDialog.show();
 
                 OSChinaApi.publishComment(sid, -1, comment.getId(), comment.getAuthorId(), 2, content, onSendCommentHandler);
@@ -420,7 +420,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
     @OnClick(R.id.layout_vote)
     void onClickVote() {
-        mVoteDialog = DialogHelp.getDialog(this)
+        mVoteDialog = DialogHelper.getDialog(this)
                 .setView(getVoteDialogView())
                 .create();
         mVoteDialog.show();

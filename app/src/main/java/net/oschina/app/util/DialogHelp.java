@@ -14,6 +14,7 @@ import net.oschina.app.R;
  * 对话框辅助类
  * Created by 火蚁 on 15/6/19.
  */
+@Deprecated
 public class DialogHelp {
 
     /***

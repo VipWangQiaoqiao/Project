@@ -25,7 +25,7 @@ import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.tweet.adapter.SoftwareTweetAdapter;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
@@ -184,7 +184,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     private ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
+            mDialog = DialogHelper.getProgressDialog(this, message);
         }
 
         mDialog.setMessage(message);
@@ -226,7 +226,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
                 long loginUid = AccountHelper.getUserId();
                 if (id == loginUid) {
 
-                    DialogHelp.getConfirmDialog(SoftwareTweetActivity.this, "删除该动弹?", new DialogInterface.OnClickListener() {
+                    DialogHelper.getConfirmDialog(SoftwareTweetActivity.this, "删除该动弹?", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             OSChinaApi.delSoftwareTweet(sourceId, new TextHttpResponseHandler() {
@@ -255,7 +255,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
                             });
 
                         }
-                    }, null).create().show();
+                    }).create().show();
 
                 }
 
