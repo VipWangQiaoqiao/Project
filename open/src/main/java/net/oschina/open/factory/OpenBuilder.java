@@ -92,7 +92,7 @@ public class OpenBuilder {
         }
 
         public void share(Share share, Callback callback) {
-            IWeiboShareAPI weiBoShareSDK = WeiboShareSDK.createWeiboAPI(activity, appKey, true);
+            IWeiboShareAPI weiBoShareSDK = WeiboShareSDK.createWeiboAPI(activity, appKey, false);
             if (!(weiBoShareSDK.isWeiboAppInstalled()
                     && weiBoShareSDK.isWeiboAppSupportAPI()
                     && weiBoShareSDK.registerApp())) {
