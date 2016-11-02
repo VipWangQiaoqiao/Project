@@ -1,8 +1,5 @@
 package net.oschina.app.improve.widget;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.v4.view.MotionEventCompat;
@@ -11,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,9 +15,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,6 +50,7 @@ public class TabPickerView extends FrameLayout {
     private TextView mViewOperator;
     private RecyclerView mRecyclerActive;
     private RecyclerView mRecyclerInactive;
+    private LinearLayout mLayoutWrapper;
     private ItemTouchHelper mItemTouchHelper;
 
     private TabAdapter<TabAdapter.ViewHolder> mActiveAdapter;
@@ -137,6 +134,7 @@ public class TabPickerView extends FrameLayout {
         mRecyclerInactive = (RecyclerView) view.findViewById(R.id.view_recycler_inactive);
         mViewDone = (TextView) view.findViewById(R.id.tv_done);
         mViewOperator = (TextView) view.findViewById(R.id.tv_operator);
+        mLayoutWrapper = (LinearLayout) view.findViewById(R.id.layout_wrapper);
         mViewDone.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,7 +151,7 @@ public class TabPickerView extends FrameLayout {
         mViewArrow.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                hide();
+                onTurnBack();
             }
         });
 
@@ -183,6 +181,7 @@ public class TabPickerView extends FrameLayout {
 
     public void hide() {
         if (mTabPickingListener != null) {
+            mTabPickingListener.onSelected(mSelectedIndex);
             mTabPickingListener.onRestore(mTabManager.mActiveDataSet);
         }
         if (mOnHideAnimator != null){
@@ -244,10 +243,11 @@ public class TabPickerView extends FrameLayout {
             @Override
             public void call(Integer position) {
                 // 先调用隐藏, 因为隐藏有保存,更新tab的动作
+                int tempIndex = mSelectedIndex;
+                mSelectedIndex = position;
+                mActiveAdapter.notifyItemChanged(tempIndex);
+                mActiveAdapter.notifyItemChanged(mSelectedIndex);
                 hide();
-                if (mTabPickingListener != null) {
-                    mTabPickingListener.onSelected(position);
-                }
             }
         });
 
@@ -277,10 +277,13 @@ public class TabPickerView extends FrameLayout {
                 if (mSelectedIndex == position) {
                     mSelectedIndex = position == oldCount - 1 ? mSelectedIndex - 1 : mSelectedIndex;
                     mActiveAdapter.notifyItemChanged(mSelectedIndex);
+                }else if (mSelectedIndex > position){
+                    --mSelectedIndex;
+                    mActiveAdapter.notifyItemChanged(mSelectedIndex);
                 }
                 if (mTabPickingListener != null) {
                     mTabPickingListener.onRemove(position, tab);
-                    mTabPickingListener.onSelected(mSelectedIndex);
+//                    mTabPickingListener.onSelected(mSelectedIndex);
                 }
             }
         });
@@ -358,7 +361,7 @@ public class TabPickerView extends FrameLayout {
         );
         params2.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         params2.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        delView.setPadding(0, 0, 10, 10);
+        delView.setPadding(10, 10, 16, 16);
         delView.setLayoutParams(params2);
         delView.setImageResource(R.mipmap.ic_unsubscribe);
         delView.setTag("mViewDel");
@@ -467,6 +470,13 @@ public class TabPickerView extends FrameLayout {
         void startEditMode(){
             mViewOperator.setText("拖动排序");
             mViewDone.setText("完成");
+            mLayoutWrapper.setVisibility(GONE);
+            mRecyclerActive.getHeight();
+            float nh = mRecyclerActive.getHeight() + TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mRecyclerActive.getLayoutParams();
+            params.height = (int) nh;
+            mRecyclerActive.setLayoutParams(params);
             isEditMode = true;
             notifyDataSetChanged();
         }
@@ -474,6 +484,10 @@ public class TabPickerView extends FrameLayout {
         void cancelEditMode(){
             mViewOperator.setText("切换栏目");
             mViewDone.setText("排序删除");
+            mLayoutWrapper.setVisibility(VISIBLE);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mRecyclerActive.getLayoutParams();
+            params.height = LayoutParams.WRAP_CONTENT;
+            mRecyclerActive.setLayoutParams(params);
             isEditMode = false;
             notifyDataSetChanged();
         }
@@ -612,6 +626,8 @@ public class TabPickerView extends FrameLayout {
                 }
                 if (mSelectedIndex == fromTargetIndex){
                     mSelectedIndex = toTargetIndex;
+                }else if (mSelectedIndex == toTargetIndex){
+                    mSelectedIndex = fromTargetIndex;
                 }
                 notifyItemMoved(fromTargetIndex, toTargetIndex);
                 if (mTabPickingListener != null) {
@@ -630,6 +646,7 @@ public class TabPickerView extends FrameLayout {
             public void onSelectedChanged(final RecyclerView.ViewHolder viewHolder, int actionState) {
                 super.onSelectedChanged(viewHolder, actionState);
                 if (viewHolder == null) return;
+                ((ViewHolder) viewHolder).mViewTab.setSelected(true);
                 if (isEditMode()) return;
                 final int position = viewHolder.getAdapterPosition();
 
@@ -650,13 +667,12 @@ public class TabPickerView extends FrameLayout {
                     }
                 });
                 startEditMode();
-                ((ViewHolder) viewHolder).mViewTab.setSelected(true);
             }
 
             @Override
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 super.clearView(recyclerView, viewHolder);
-                viewHolder.itemView.setSelected(false);
+                if (mSelectedIndex == viewHolder.getAdapterPosition()) return;
                 ((ViewHolder) viewHolder).mViewTab.setSelected(false);
             }
         }
