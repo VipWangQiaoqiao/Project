@@ -1,9 +1,6 @@
 package net.oschina.app.improve.general.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +22,7 @@ import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.general.adapter.QuesActionAdapter;
 import net.oschina.app.improve.general.adapter.QuestionAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -53,14 +51,6 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
     private int catalog = 1;
     private QuesActionAdapter quesActionAdapter;
     private int[] positions = {1, 0, 0, 0, 0};
-    private ConnectivityManager connectivityManager;
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-    }
 
     @Override
     protected void initBundle(Bundle bundle) {
@@ -129,17 +119,10 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
      * According to the distribution network is events
      */
     private void requestEventDispatcher() {
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isAvailable()) {
-            boolean connected = networkInfo.isConnected();
-            NetworkInfo.State state = networkInfo.getState();
-            if (connected && state == NetworkInfo.State.CONNECTED) {
-                mRefreshLayout.setRefreshing(true);
-                onRefreshing();
-                //requestData();
-            } else {
-                requestLocalCache();
-            }
+        if (TDevice.hasInternet()) {
+            mRefreshLayout.setRefreshing(true);
+            onRefreshing();
+            //requestData();
         } else {
             requestLocalCache();
         }
@@ -249,7 +232,7 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // super.onItemClick(parent, view, position, id);
+         super.onItemClick(parent, view, position, id);
         Question question = mAdapter.getItem(position - 1);
         if (question != null) {
             // UIUtil.showPostDetail(getActivity(), (int) question.getId(), question.getCommentCount());
