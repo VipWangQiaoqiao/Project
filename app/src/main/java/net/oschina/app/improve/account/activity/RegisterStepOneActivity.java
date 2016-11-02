@@ -106,7 +106,6 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                 switch (mRequestType) {
                     //第一步请求发送验证码
                     case 1:
-
                         Type type = new TypeToken<ResultBean>() {
                         }.getType();
                         ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
@@ -300,6 +299,12 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         });
     }
 
+
+    @Override
+    protected void initData() {
+        super.initData();//必须要调用,用来注册本地广播
+    }
+
     @OnClick({R.id.ib_navigation_back, R.id.iv_register_username_del, R.id.tv_register_sms_call,
             R.id.bt_register_submit})
     @Override
@@ -405,11 +410,5 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 }

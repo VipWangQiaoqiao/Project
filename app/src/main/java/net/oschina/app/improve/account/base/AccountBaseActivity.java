@@ -1,9 +1,12 @@
 package net.oschina.app.improve.account.base;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -24,12 +27,66 @@ import java.security.NoSuchAlgorithmException;
 public class AccountBaseActivity extends BaseActivity {
 
     private ProgressDialog mDialog;
+    private static final String ACTION_ACCOUNT_FINISH_ALL = "app.oschina.net.action.finish.all";
+    protected LocalBroadcastManager mManager;
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected int getContentView() {
         return 0;
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        registerLocalReceiver();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mManager != null) {
+            if (mReceiver != null)
+                mManager.unregisterReceiver(mReceiver);
+        }
+    }
+
+    protected boolean sendLocalReceiver() {
+        if (mManager != null) {
+            Intent intent = new Intent();
+            intent.setAction(ACTION_ACCOUNT_FINISH_ALL);
+            mManager.sendBroadcast(intent);
+        }
+
+        return false;
+    }
+
+    /**
+     * register localReceiver
+     */
+    private void registerLocalReceiver() {
+        if (mManager == null)
+            mManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_ACCOUNT_FINISH_ALL);
+        if (mReceiver == null)
+            mReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String action = intent.getAction();
+                    if (ACTION_ACCOUNT_FINISH_ALL.equals(action)) {
+                        finish();
+                    }
+                }
+            };
+        mManager.registerReceiver(mReceiver, filter);
+    }
 
     /**
      * show WaitDialog

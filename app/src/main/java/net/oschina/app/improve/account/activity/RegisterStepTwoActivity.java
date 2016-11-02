@@ -26,7 +26,6 @@ import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
@@ -101,7 +100,8 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 User user = resultBean.getResult();
                 AccountHelper.login(user, headers);
                 AppContext.showToast(getResources().getString(R.string.register_success_hint), Toast.LENGTH_SHORT);
-                finishClearTopActivity(RegisterStepTwoActivity.this, MainActivity.class);
+                //finishClearTopActivity(RegisterStepTwoActivity.this, MainActivity.class);
+                sendLocalReceiver();
                 finish();
             } else {
                 int code = resultBean.getCode();
@@ -230,7 +230,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
     @Override
     protected void initData() {
-        super.initData();
+        super.initData();//必须要调用,用来注册本地广播
 
         Intent intent = getIntent();
         mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONE_TOKEN_KEY);
@@ -280,9 +280,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 }
                 break;
             case R.id.bt_register_submit:
-
                 requestRegisterUserInfo();
-
                 break;
             default:
                 break;
@@ -323,7 +321,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
             gender = 2;
         }
 
-        String appToken =getAppToken();
+        String appToken = getAppToken();
 
         OSChinaApi.register(username, getSha1(pwd), gender, mPhoneToken.getToken(), appToken, mHandler);
     }
@@ -349,11 +347,5 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 break;
         }
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 }

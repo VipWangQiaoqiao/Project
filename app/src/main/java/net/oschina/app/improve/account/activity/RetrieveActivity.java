@@ -44,8 +44,6 @@ import cz.msebera.android.httpclient.Header;
 
 public class RetrieveActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
-    private static final String TAG = "RetrieveActivity";
-
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLlRetrieveBar;
 
@@ -94,6 +92,13 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            //请求失败,比如服务器连接超时,回收timer,需重新请求发送验证码
+            if (mRequestType == 1) {
+                if (mTimer != null) {
+                    mTimer.onFinish();
+                    mTimer.cancel();
+                }
+            }
             requestFailureHint(throwable);
         }
 
@@ -152,7 +157,6 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                             mTimer.cancel();
                                         }
                                         ResetPwdActivity.show(RetrieveActivity.this, phoneToken);
-                                        finish();
                                     }
                                 } else {
                                     AppContext.showToast(phoneTokenResultBean.getMessage());
@@ -297,7 +301,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
     @Override
     protected void initData() {
-        super.initData();
+        super.initData();//必须要调用,用来注册本地广播
     }
 
     @OnClick({R.id.ib_navigation_back, R.id.iv_retrieve_tel_del, R.id.retrieve_sms_call,
@@ -420,11 +424,5 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 }
