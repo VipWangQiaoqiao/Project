@@ -11,7 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseActivity;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.common.verify.Verifier;
 
 import java.io.UnsupportedEncodingException;
@@ -96,9 +96,8 @@ public class AccountBaseActivity extends BaseActivity {
     protected ProgressDialog showWaitDialog() {
         String message = getResources().getString(R.string.progress_submit);
         if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
+            mDialog = DialogHelper.getProgressDialog(this, message, true); //DialogHelp.getWaitDialog(this, message);
         }
-        mDialog.setMessage(message);
         mDialog.show();
 
         return mDialog;
@@ -113,11 +112,8 @@ public class AccountBaseActivity extends BaseActivity {
 
         String message = getResources().getString(R.string.progress_submit);
         if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
+            mDialog = DialogHelper.getProgressDialog(this, message, false);//DialogHelp.getWaitDialog(this, message);
         }
-        mDialog.setMessage(message);
-        mDialog.setCancelable(false);
-        mDialog.setCanceledOnTouchOutside(false);
         mDialog.show();
 
         return mDialog;
