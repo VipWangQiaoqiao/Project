@@ -18,8 +18,8 @@ public class Message implements Serializable{
     private String pubDate;
     private int type;
     private String resource;
-    private Author sender;
-    private Author receiver;
+    private User sender;
+    private User receiver;
 
     public long getId() {
         return id;
@@ -61,19 +61,19 @@ public class Message implements Serializable{
         this.resource = resource;
     }
 
-    public Author getSender() {
+    public User getSender() {
         return sender;
     }
 
-    public void setSender(Author sender) {
+    public void setSender(User sender) {
         this.sender = sender;
     }
 
-    public Author getReceiver() {
+    public User getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(Author receiver) {
+    public void setReceiver(User receiver) {
         this.receiver = receiver;
     }
 }

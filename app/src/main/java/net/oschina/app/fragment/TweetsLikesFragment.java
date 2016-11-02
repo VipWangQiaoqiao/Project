@@ -14,17 +14,14 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetLike;
 import net.oschina.app.bean.TweetLikeList;
 import net.oschina.app.bean.TweetsList;
-import net.oschina.app.improve.account.manager.UserCacheManager;
-import net.oschina.app.service.NoticeUtils;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -105,7 +102,7 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
     }
 
     private void setupContent() {
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (AccountHelper.isLogin()) {
             mIsWatingLogin = false;
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             requestData(true);
@@ -119,8 +116,8 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
 
     @Override
     protected void requestData(boolean refresh) {
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
-            mCatalog = (int) UserCacheManager.initUserManager().loginId(getContext());
+        if (AccountHelper.isLogin()) {
+            mCatalog = (int) AccountHelper.getUserId();
             mIsWatingLogin = false;
             super.requestData(refresh);
         } else {
@@ -137,7 +134,7 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
 
             @Override
             public void onClick(View v) {
-                if (UserCacheManager.initUserManager().isLogin(getContext())) {
+                if (AccountHelper.isLogin()) {
                     mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     requestData(true);
                 } else {
@@ -153,19 +150,6 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
             return 3 * 60;
         }
         return super.getAutoRefreshTime();
-    }
-
-    @Override
-    protected void onRefreshNetworkSuccess() {
-        // TODO Auto-generated method stub
-
-        super.onRefreshNetworkSuccess();
-        if (UserCacheManager.initUserManager().isLogin(getContext())
-                && mCatalog == UserCacheManager.initUserManager().loginId(getContext())
-                && 4 == NoticeViewPagerFragment.sCurrentPage) {
-            NoticeUtils.clearNotice(Notice.TYPE_NEWLIKE,getContext());
-            UIHelper.sendBroadcastForNotice(getActivity());
-        }
     }
 
     protected boolean compareTo(List<? extends Entity> data, Entity enity) {

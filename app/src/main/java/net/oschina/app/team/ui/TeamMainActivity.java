@@ -19,7 +19,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
@@ -80,7 +80,7 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
     @Override
     public void initView() {
 
-        TEAM_LIST_KEY = "team_list_key" + UserCacheManager.initUserManager().loginId(this);
+        TEAM_LIST_KEY = "team_list_key" + AccountHelper.getUserId();
         ButterKnife.bind(this);
         // 隐藏actionbar的标题
         mActionBar.setDisplayShowTitleEnabled(false);

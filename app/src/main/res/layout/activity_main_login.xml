@@ -69,6 +69,17 @@
                 android:textColorHint="@color/login_line_color"
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/font_16"/>
+
+            <ImageView
+                android:id="@+id/iv_login_username_del"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
+                app:srcCompat="@mipmap/ic_clear"/>
         </LinearLayout>
 
         <LinearLayout
@@ -115,6 +126,17 @@
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/font_16"/>
 
+            <ImageView
+                android:id="@+id/iv_login_pwd_del"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
+                app:srcCompat="@mipmap/ic_clear"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -135,7 +157,7 @@
                 android:adjustViewBounds="false"
                 android:contentDescription="@null"
                 android:padding="8dp"
-                app:srcCompat="@mipmap/checkbox_normal"
+                app:srcCompat="@mipmap/checkbox_checked"
                 tools:ignore="RtlHardcoded"/>
 
             <TextView

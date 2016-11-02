@@ -19,18 +19,15 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.MessageList;
 import net.oschina.app.bean.Messages;
-import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
-import net.oschina.app.improve.account.manager.UserCacheManager;
-import net.oschina.app.service.NoticeUtils;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -116,7 +113,7 @@ public class MessageFragment extends BaseListFragment<Messages> implements
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (UserCacheManager.initUserManager().isLogin(getContext())) {
+                if (AccountHelper.isLogin()) {
                     mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     requestData(false);
                 } else {
@@ -124,14 +121,14 @@ public class MessageFragment extends BaseListFragment<Messages> implements
                 }
             }
         });
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (AccountHelper.isLogin()) {
             UIHelper.sendBroadcastForNotice(getActivity());
         }
     }
 
     @Override
     protected void requestData(boolean refresh) {
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (AccountHelper.isLogin()) {
             mIsWatingLogin = false;
             super.requestData(refresh);
         } else {
@@ -143,17 +140,8 @@ public class MessageFragment extends BaseListFragment<Messages> implements
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getMessageList((int) UserCacheManager.initUserManager().loginId(getContext()),
+        OSChinaApi.getMessageList((int) AccountHelper.getUserId(),
                 mCurrentPage, mHandler);
-    }
-
-    @Override
-    protected void onRefreshNetworkSuccess() {
-        if (2 == NoticeViewPagerFragment.sCurrentPage
-                || NoticeViewPagerFragment.sShowCount[2] > 0) { // 在page中第三个位置
-            NoticeUtils.clearNotice(Notice.TYPE_MESSAGE,getContext());
-            UIHelper.sendBroadcastForNotice(getActivity());
-        }
     }
 
     @Override
@@ -195,7 +183,7 @@ public class MessageFragment extends BaseListFragment<Messages> implements
             public void onClick(DialogInterface dialogInterface, int i) {
                 showWaitDialog(R.string.progress_submit);
 
-                OSChinaApi.deleteMessage((int) UserCacheManager.initUserManager().loginId(getContext()), message.getFriendId(),
+                OSChinaApi.deleteMessage((int) AccountHelper.getUserId(), message.getFriendId(),
                         new DeleteMessageOperationHandler(message));
             }
         }).show();

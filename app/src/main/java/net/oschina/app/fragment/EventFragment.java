@@ -15,7 +15,7 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Event;
 import net.oschina.app.bean.EventList;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -93,7 +93,7 @@ public class EventFragment extends BaseListFragment<Event> {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             requestData(true);
         } else {
-            if (UserCacheManager.initUserManager().isLogin(getContext())) {
+            if (AccountHelper.isLogin()) {
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                 requestData(true);
             } else {
@@ -110,8 +110,8 @@ public class EventFragment extends BaseListFragment<Event> {
             super.requestData(refresh);
             return;
         }
-        if (UserCacheManager.initUserManager().isLogin(getContext())) {
-            mCatalog = (int) UserCacheManager.initUserManager().loginId(getContext());
+        if (AccountHelper.isLogin()) {
+            mCatalog = (int) AccountHelper.getUserId();
             super.requestData(refresh);
         } else {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);

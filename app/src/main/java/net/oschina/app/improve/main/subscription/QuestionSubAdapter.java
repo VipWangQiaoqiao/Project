@@ -5,13 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
-import net.oschina.app.improve.general.fragments.QuestionFragment;
-import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.CircleImageView;
 
@@ -22,8 +19,6 @@ import net.oschina.app.widget.CircleImageView;
  */
 
 public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
-    private int actionPosition = 0;
-    private boolean isUserQuestion;
 
     public QuestionSubAdapter(Callback callback) {
         super(callback, ONLY_FOOTER);
@@ -45,43 +40,19 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
         vh.tv_question_title.setText(item.getTitle());
         vh.tv_question_content.setText(item.getBody());
 
-        String cacheName = verifyFileName();
+//        if (AppContext.isOnReadedPostList(cacheName, String.valueOf(item.getId()))) {
+//            vh.tv_question_title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
+//            vh.tv_question_content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
+//        } else {
+//            vh.tv_question_title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
+//            vh.tv_question_content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
+//        }
 
-        if (isUserQuestion) {
-            cacheName = UserQuestionFragment.HISTORY_MY_QUESTION;
-        }
-
-        if (AppContext.isOnReadedPostList(cacheName, String.valueOf(item.getId()))) {
-            vh.tv_question_title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-            vh.tv_question_content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-        } else {
-            vh.tv_question_title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
-            vh.tv_question_content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
-        }
-
-        TextView history = vh.tv_time;
         if (author != null) {
-            history.setText((author.getName().length() > 9 ? author.getName().substring(0, 9) : author.getName().trim()) + "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
+            vh.tv_time.setText((author.getName().length() > 9 ? author.getName().substring(0, 9) : author.getName().trim()) + "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
         }
         vh.tv_view.setText(String.valueOf(item.getStatistics().getView()));
         vh.tv_view.setText(String.valueOf(item.getStatistics().getComment()));
-    }
-
-    private String verifyFileName() {
-        switch (actionPosition) {
-            case 1:
-                return QuestionFragment.QUES_ASK;
-            case 2:
-                return QuestionFragment.QUES_SHARE;
-            case 3:
-                return QuestionFragment.QUES_COMPOSITE;
-            case 4:
-                return QuestionFragment.QUES_PROFESSION;
-            case 5:
-                return QuestionFragment.QUES_WEBSITE;
-            default:
-                return QuestionFragment.QUES_ASK;
-        }
     }
 
     private static class QuestionViewHolder extends RecyclerView.ViewHolder {

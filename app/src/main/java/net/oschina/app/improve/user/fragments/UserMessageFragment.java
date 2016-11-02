@@ -3,13 +3,13 @@ package net.oschina.app.improve.user.fragments;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Message;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
 import net.oschina.app.improve.user.adapter.UserMessageAdapter;
 
@@ -26,7 +26,7 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     @Override
     public void initData() {
         super.initData();
-        authorId = UserCacheManager.initUserManager().loginId(getContext());
+        authorId = AccountHelper.getUserId();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     @Override
     public void onItemClick(int position, long itemId) {
         Message message = mAdapter.getItem(position);
-        Author sender = message.getSender();
+        User sender = message.getSender();
         if (sender != null)
             UserSendMessageActivity.show(getContext(), message.getSender());
     }

@@ -58,12 +58,13 @@
 
         <ImageView
             android:id="@+id/iv_register_username_del"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:contentDescription="@null"
-            android:visibility="invisible"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
             app:srcCompat="@mipmap/ic_clear"/>
     </LinearLayout>
 
@@ -110,6 +111,17 @@
             android:textColorHint="@color/login_line_color"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/font_16"/>
+
+        <ImageView
+            android:id="@+id/iv_register_pwd_del"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:srcCompat="@mipmap/ic_clear"/>
 
     </LinearLayout>
 
@@ -164,11 +176,11 @@
         android:layout_height="48dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:background="@drawable/bg_login_submit"
+        android:background="@drawable/bg_login_submit_lock"
         android:elevation="0dp"
         android:outlineProvider="none"
         android:text="@string/register_done_hint"
-        android:textColor="@color/white"
+        android:textColor="@color/account_lock_font_color"
         android:textSize="@dimen/font_18"
         android:translationZ="0dp"
         tools:targetApi="lollipop"/>

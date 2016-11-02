@@ -94,8 +94,8 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
             if (mTimeHandler == null)
                 mTimeHandler = new Handler();
             mLoadingView.setVisibility(View.GONE);
-            mTxtTime.setVisibility(View.VISIBLE);
-            mTxtTime.setText(String.format("%d秒后可再摇一次", mDelayTime));
+            //mTxtTime.setVisibility(View.VISIBLE);
+            //mTxtTime.setText(String.format("%d秒后可再摇一次", mDelayTime));
             mTimeHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -105,7 +105,7 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
                     --mDelayTime;
                     if (mTxtTime == null)
                         return;
-                    mTxtTime.setText(String.format("%d秒后可再摇一次", mDelayTime));
+                    //mTxtTime.setText(String.format("%d秒后可再摇一次", mDelayTime));
                     if (mDelayTime > 0)
                         mTimeHandler.postDelayed(this, 1000);
                     else {

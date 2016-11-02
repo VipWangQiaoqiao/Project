@@ -23,7 +23,8 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
@@ -84,7 +85,7 @@ public class CommentsActivity extends BaseBackActivity {
                 Type type = new TypeToken<ResultBean<Comment>>() {
                 }.getType();
 
-                ResultBean<Comment> resultBean = AppContext.createGson().fromJson(responseString, type);
+                ResultBean<Comment> resultBean = AppOperator.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
                     Comment respComment = resultBean.getResult();
                     if (respComment != null) {
@@ -169,12 +170,12 @@ public class CommentsActivity extends BaseBackActivity {
             AppContext.showToastShort(R.string.tip_no_internet);
             return 0;
         }
-        if (!UserCacheManager.initUserManager().isLogin(this)) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(this);
             return 0;
         }
         // 返回当前登录用户ID
-        return UserCacheManager.initUserManager().loginId(this);
+        return AccountHelper.getUserId();
     }
 
     /**
@@ -307,7 +308,7 @@ public class CommentsActivity extends BaseBackActivity {
                     Type type = new TypeToken<ResultBean<PageBean<Comment>>>() {
                     }.getType();
 
-                    ResultBean<PageBean<Comment>> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         if (resultBean.getResult() != null
                                 && resultBean.getResult().getItems() != null

@@ -14,7 +14,7 @@ import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.MessageDetail;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.ChatImageDisplayer;
 import net.oschina.app.util.StringUtils;
@@ -73,7 +73,7 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
         final MessageDetail item = mDatas.get(mDatas.size() - position - 1);
 
         int itemType = 0;
-        if (item.getAuthorId() == UserCacheManager.initUserManager().loginId(mContext)) {
+        if (item.getAuthorId() == AccountHelper.getUserId()) {
             itemType = 1;
         }
         boolean needCreateView = false;

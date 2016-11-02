@@ -1,9 +1,11 @@
 package net.oschina.app.wxapi;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -16,22 +18,24 @@ import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
+
 /**
- * 微信回调的activity
- * Created by zhangdeyi on 15/7/27.
+ * created by fei
+ * desc:
  */
 public class WXEntryActivity extends Activity {
-    public static final String EXTRA_LOGIN_WX = "extra_login_wx";
-    public static final String ACTION_LOGIN_WX = "net.oschina.app.wx.action.wx_login";
 
-    private static final String TAG = "WXEntryActivity";
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,38 @@ public class WXEntryActivity extends Activity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
+    }
+
+    /**
+     * show WaitDialog
+     *
+     * @return progressDialog
+     */
+    protected ProgressDialog showWaitDialog() {
+        String message = getResources().getString(R.string.progress_submit);
+        if (mDialog == null) {
+            mDialog = DialogHelp.getWaitDialog(this, message);
+        }
+        mDialog.setMessage(message);
+        mDialog.show();
+
+        return mDialog;
+    }
+
+    /**
+     * hide waitDialog
+     */
+    protected void hideWaitDialog() {
+        ProgressDialog dialog = mDialog;
+        if (dialog != null) {
+            mDialog = null;
+            try {
+                dialog.cancel();
+                // dialog.dismiss();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     private void handleIntent(Intent intent) {
@@ -74,26 +110,53 @@ public class WXEntryActivity extends Activity {
         //   final ProgressDialog waitDialog = DialogHelp.getWaitDialog(this, "加载中...");
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&grant_type=authorization_code&code=%s";
         String tokenUrl = String.format(url, Constants.WEICHAT_APPID, Constants.WEICHAT_SECRET, code);
+
+        if (!HasInternet()) return;
+
         ApiHttpClient.getDirect(tokenUrl, new TextHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                showWaitDialog();
+            }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                requestFailureHint(throwable);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                //这里是老板微信登录,新版完善了就可以删除掉
-                // Intent intent = new Intent(OpenIdCatalog.WECHAT);
-                //intent.putExtra(LoginBindActivityChooseActivity.BUNDLE_KEY_OPENIDINFO, openInfo);
-                //  sendBroadcast(intent);
+
+                if (!HasInternet()) return;
 
                 //新版微信登录
                 if (!TextUtils.isEmpty(responseString)) {
 
                     OSChinaApi.openLogin(OSChinaApi.LOGIN_WECHART, responseString, new TextHttpResponseHandler() {
+
+                        @Override
+                        public void onStart() {
+                            super.onStart();
+                            // showWaitDialog();
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                            //hideWaitDialog();
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            super.onCancel();
+                            //hideWaitDialog();
+                        }
+
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            throwable.printStackTrace();
+                            requestFailureHint(throwable);
                         }
 
                         @Override
@@ -101,9 +164,9 @@ public class WXEntryActivity extends Activity {
                             Type type = new TypeToken<ResultBean<User>>() {
                             }.getType();
 
-                            ResultBean<User> resulBean = AppContext.createGson().fromJson(responseString, type);
-                            if (resulBean.isSuccess()) {
-                                User user = resulBean.getResult();
+                            ResultBean<User> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                            if (resultBean.isSuccess()) {
+                                User user = resultBean.getResult();
                                 AccountHelper.login(user, headers);
                                 finish();
                             }
@@ -111,7 +174,46 @@ public class WXEntryActivity extends Activity {
                     });
                 }
             }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                hideWaitDialog();
+            }
+
+            @Override
+            public void onCancel() {
+                super.onCancel();
+                hideWaitDialog();
+            }
         });
     }
 
+    private boolean HasInternet() {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToast(R.string.tip_network_error, Toast.LENGTH_SHORT);
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * request network error
+     *
+     * @param throwable throwable
+     */
+    private void requestFailureHint(Throwable throwable) {
+        if (throwable != null) {
+            throwable.printStackTrace();
+        }
+        AppContext.showToast(getResources().getString(R.string.request_error_hint));
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

@@ -36,6 +36,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.bean.OpenIdCatalog;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.share.constant.OpenConstant;
@@ -170,7 +171,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
         this.sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
         TDevice.hideSoftKeyboard(getWindow().getDecorView());
 
-        OSChinaApi.getUserInfo(0,new TextHttpResponseHandler() {
+        OSChinaApi.getUserInfo(new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString,
                                   Throwable throwable) {
@@ -184,10 +185,10 @@ public class LoginActivity extends BaseActivity implements IUiListener {
                     Type type = new TypeToken<ResultBean<User>>() {
                     }.getType();
 
-                    ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
                         User userInfo = (User) resultBean.getResult();
-                       // CacheManager.saveObject(LoginActivity.this, userInfo, NewUserInfoFragment.CACHE_NAME);
+                       // CacheManager.saveObject(LoginActivity.this, userInfo, UserInfoFragment.CACHE_NAME);
                         finish();
                     }
                 } catch (Exception e) {
@@ -547,7 +548,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
             loginUserBean.getUser().setAccount(mUserName);
             loginUserBean.getUser().setPwd(mPassword);
             loginUserBean.getUser().setRememberMe(true);
-            AppContext.getInstance().saveUserInfo(loginUserBean.getUser());
+            //AppContext.getInstance().saveUserInfo(loginUserBean.getUser());
 
             // 成功回调
             hideWaitDialog();

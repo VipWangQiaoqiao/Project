@@ -30,7 +30,6 @@ import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.UpdateManager;
 import net.oschina.app.widget.BadgeView;
@@ -190,11 +189,10 @@ public class MainActivity extends AppCompatActivity implements
         IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
         filter.addAction(Constants.INTENT_ACTION_LOGOUT);
         registerReceiver(mReceiver, filter);
-        NoticeUtils.bindToService(this);
 
-        if (AppContext.isFristStart()) {
+        if (AppContext.isFirstStart()) {
             DataCleanManager.cleanInternalCache(AppContext.getInstance());
-            AppContext.setFristStart(false);
+            AppContext.setFirstStart(false);
         }
 
         checkUpdate();
@@ -217,10 +215,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        NoticeUtils.unbindFromService(this);
         unregisterReceiver(mReceiver);
         mReceiver = null;
-        NoticeUtils.tryToShutDown(this);
     }
 
     @Override

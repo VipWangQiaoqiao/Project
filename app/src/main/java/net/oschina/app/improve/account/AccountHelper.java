@@ -5,8 +5,6 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v4.content.SharedPreferencesCompat;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
@@ -31,7 +29,6 @@ public final class AccountHelper {
 
     private AccountHelper(Application application) {
         this.application = application;
-        this.user = SharedPreferencesHelper.load(application, User.class);
     }
 
     public static void init(Application application) {
@@ -46,7 +43,11 @@ public final class AccountHelper {
         return getUser().getId();
     }
 
-    public static User getUser() {
+    public synchronized static User getUser() {
+        if (instances.user == null)
+            instances.user = SharedPreferencesHelper.load(instances.application, User.class);
+        if (instances.user == null)
+            instances.user = new User();
         return instances.user;
     }
 
@@ -59,11 +60,7 @@ public final class AccountHelper {
 
     public static void clearUserCache() {
         instances.user = new User();
-        SharedPreferences sp = SharedPreferencesHelper.getSharedPreferences(instances.application,
-                User.class);
-        SharedPreferences.Editor edit = sp.edit();
-        edit.clear();
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(edit);
+        SharedPreferencesHelper.remove(instances.application, User.class);
     }
 
     public static void login(User user, Header[] headers) {

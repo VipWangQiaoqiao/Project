@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,8 +21,9 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
-import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
@@ -41,11 +41,11 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RegisterStepTwoActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
+public class RegisterStepTwoActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = "RegisterStepTwoActivity";
 
-    public static final String PHONETOKEN_KEY = "phoneToken";
+    public static final String PHONE_TOKEN_KEY = "phoneToken";
 
     @Bind(R.id.ly_register_bar)
     LinearLayout mLlRegisterBar;
@@ -66,11 +66,27 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
     TextView mTvRegisterFemale;
     @Bind(R.id.bt_register_submit)
     Button mBtRegisterSubmit;
+
     private PhoneToken mPhoneToken;
+
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
+
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            showWaitDialog();
+        }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            hideWaitDialog();
+        }
+
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+            requestFailureHint(throwable);
         }
 
         @Override
@@ -79,26 +95,26 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
 
             Type type = new TypeToken<ResultBean<User>>() {
             }.getType();
-            ResultBean<User> resultBean = AppContext.createGson().fromJson(responseString, type);
+            ResultBean<User> resultBean = AppOperator.createGson().fromJson(responseString, type);
 
             if (resultBean.isSuccess()) {
                 User user = resultBean.getResult();
                 AccountHelper.login(user, headers);
-                // Kill and skip
-                Intent intent = new Intent(RegisterStepTwoActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                AppContext.showToast(getResources().getString(R.string.register_success_hint), Toast.LENGTH_SHORT);
+                finishClearTopActivity(RegisterStepTwoActivity.this, MainActivity.class);
                 finish();
             } else {
                 int code = resultBean.getCode();
                 switch (code) {
                     case 216:
                         //phoneToken 已经失效
+                        finish();
                         break;
                     case 217:
                         mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_error);
                         break;
                     case 218:
+                        finish();
                         break;
                     case 219:
                         mLlRegisterTwoPwd.setBackgroundResource(R.drawable.bg_login_input_error);
@@ -106,12 +122,12 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
                     default:
                         break;
                 }
-
                 AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
             }
 
         }
     };
+
 
     /**
      * show register step two activity
@@ -120,7 +136,7 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
      */
     public static void show(Context context, PhoneToken phoneToken) {
         Intent intent = new Intent(context, RegisterStepTwoActivity.class);
-        intent.putExtra(PHONETOKEN_KEY, phoneToken);
+        intent.putExtra(PHONE_TOKEN_KEY, phoneToken);
         context.startActivity(intent);
     }
 
@@ -147,9 +163,21 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
 
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
                 int length = s.length();
+
+                String smsCode = mEtRegisterPwd.getText().toString().trim();
+
+                if (!TextUtils.isEmpty(smsCode)) {
+                    mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+                    mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                    mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
+                }
+
                 if (length > 0) {
                     mIvRegisterUsernameDel.setVisibility(View.VISIBLE);
                 } else {
@@ -162,6 +190,7 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
                 } else {
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
                 }
+
 
             }
         });
@@ -178,6 +207,7 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
 
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
                 int length = s.length();
@@ -186,7 +216,14 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
                 } else {
                     mLlRegisterTwoPwd.setBackgroundResource(R.drawable.bg_login_input_ok);
                 }
-
+                String username = mEtRegisterUsername.getText().toString().trim();
+                if (!TextUtils.isEmpty(username)) {
+                    mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+                    mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                    mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
+                }
             }
         });
     }
@@ -196,9 +233,7 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
         super.initData();
 
         Intent intent = getIntent();
-        mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONETOKEN_KEY);
-        Log.e(TAG, "initData: ------------>" + mPhoneToken.toString());
-
+        mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONE_TOKEN_KEY);
     }
 
     @SuppressWarnings("deprecation")
@@ -243,41 +278,10 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
                     mTvRegisterMan.setCompoundDrawablesWithIntrinsicBounds(men, null, null, null);
                     mTvRegisterMan.setTag(null);
                 }
-
-
                 break;
             case R.id.bt_register_submit:
 
-                if (TDevice.hasInternet()) {
-
-                    String username = mEtRegisterUsername.getText().toString().trim();
-                    String pwd = mEtRegisterPwd.getText().toString().trim();
-
-                    if (TextUtils.isEmpty(username) && TextUtils.isEmpty(pwd)) {
-                        AppContext.showToast(getString(R.string.hint_pwd_null));
-                        return;
-                    } else {
-
-                        int gender = 0;
-
-                        Object isMan = mTvRegisterMan.getTag();
-                        if (isMan != null) {
-                            gender = 1;
-                        }
-
-                        Object isFemale = mTvRegisterFemale.getTag();
-                        if (isFemale != null) {
-                            gender = 2;
-                        }
-
-                        String appToken = "123";//Verifier.getPrivateToken(getApplication());
-
-                        OSChinaApi.register(username, pwd, gender, mPhoneToken.getToken(), appToken, mHandler);
-                    }
-                } else {
-                    AppContext.showToast(getResources().getString(R.string.tip_network_error));
-                }
-
+                requestRegisterUserInfo();
 
                 break;
             default:
@@ -286,6 +290,43 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
 
     }
 
+    private void requestRegisterUserInfo() {
+
+        String username = mEtRegisterUsername.getText().toString().trim();
+
+        if (TextUtils.isEmpty(username)) {
+            AppContext.showToast(getString(R.string.hint_pwd_null));
+            return;
+        }
+
+        String pwd = mEtRegisterPwd.getText().toString().trim();
+
+        if (TextUtils.isEmpty(pwd)) {
+            AppContext.showToast(getString(R.string.hint_pwd_null));
+            return;
+        }
+
+        if (!TDevice.hasInternet()) {
+            AppContext.showToast(getResources().getString(R.string.tip_network_error));
+            return;
+        }
+
+        int gender = 0;
+
+        Object isMan = mTvRegisterMan.getTag();
+        if (isMan != null) {
+            gender = 1;
+        }
+
+        Object isFemale = mTvRegisterFemale.getTag();
+        if (isFemale != null) {
+            gender = 2;
+        }
+
+        String appToken =getAppToken();
+
+        OSChinaApi.register(username, Sha1toHex(pwd), gender, mPhoneToken.getToken(), appToken, mHandler);
+    }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {

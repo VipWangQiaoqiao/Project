@@ -1,8 +1,13 @@
 package net.oschina.app.fragment;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +20,10 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.bean.Version;
 import net.oschina.app.improve.main.FeedBackActivity;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
+import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton.OnToggleChanged;
 import net.oschina.app.util.DialogHelp;
@@ -28,16 +34,21 @@ import net.oschina.app.util.UIHelper;
 import org.kymjs.kjframe.http.HttpConfig;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * 系统设置界面
  *
  * @author kymjs
  */
-public class SettingsFragment extends BaseFragment {
+public class SettingsFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks, CheckUpdateManager.RequestPermissions {
+
+    private static final int RC_EXTERNAL_STORAGE = 0x04;//存储权限
 
     @Bind(R.id.tb_loading_img)
     ToggleButton mTbLoadImg;
@@ -53,7 +64,9 @@ public class SettingsFragment extends BaseFragment {
     View mSettingLineTop;
     @Bind(R.id.setting_line_bottom)
     View mSettingLineBottom;
-    private RelativeLayout rlCancle;
+    private RelativeLayout mCancel;
+
+    private Version mVersion;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -90,8 +103,8 @@ public class SettingsFragment extends BaseFragment {
         view.findViewById(R.id.rl_check_version).setOnClickListener(this);
         // view.findViewById(R.id.rl_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
-        rlCancle = (RelativeLayout) view.findViewById(R.id.rl_cancle);
-        rlCancle.setOnClickListener(this);
+        mCancel = (RelativeLayout) view.findViewById(R.id.rl_cancle);
+        mCancel.setOnClickListener(this);
 
         //  if (!AppContext.getInstance().isLogin()) {
         //  mTvExit.setText("退出");
@@ -111,19 +124,19 @@ public class SettingsFragment extends BaseFragment {
         } else {
             mTbDoubleClickExit.setToggleOff();
         }
-        caculateCacheSize();
+        calculateCacheSize();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        boolean login = UserCacheManager.initUserManager().isLogin(getContext().getApplicationContext());//AppContext.getInstance().isLogin();
+        boolean login = AccountHelper.isLogin();
         if (!login) {
-            rlCancle.setVisibility(View.INVISIBLE);
+            mCancel.setVisibility(View.INVISIBLE);
             mSettingLineTop.setVisibility(View.INVISIBLE);
             mSettingLineBottom.setVisibility(View.INVISIBLE);
         } else {
-            rlCancle.setVisibility(View.VISIBLE);
+            mCancel.setVisibility(View.VISIBLE);
             mSettingLineTop.setVisibility(View.VISIBLE);
             mSettingLineBottom.setVisibility(View.VISIBLE);
         }
@@ -132,7 +145,7 @@ public class SettingsFragment extends BaseFragment {
     /**
      * 计算缓存的大小
      */
-    private void caculateCacheSize() {
+    private void calculateCacheSize() {
         long fileSize = 0;
         String cacheSize = "0KB";
         File filesDir = getActivity().getFilesDir();
@@ -188,9 +201,19 @@ public class SettingsFragment extends BaseFragment {
                 UIHelper.clearAppCache(false);
                 // 注销操作
                 AccountHelper.logout();
+                // 等待成功清理完成
+                mCancel.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCancel.removeCallbacks(this);
+                        if (!AccountHelper.isLogin()) {
+                            getActivity().finish();
+                        } else {
+                            mCancel.postDelayed(this, 200);
+                        }
+                    }
+                }, 200);
 
-                AppContext.showToastShort(R.string.tip_logout_success);
-                getActivity().finish();
                 break;
             default:
                 break;
@@ -199,7 +222,9 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void onClickUpdate() {
-        new CheckUpdateManager(getActivity(), true).checkUpdate();
+        CheckUpdateManager manager = new CheckUpdateManager(getActivity(), true);
+        manager.setCaller(this);
+        manager.checkUpdate();
     }
 
     private void onClickCleanCache() {
@@ -222,5 +247,43 @@ public class SettingsFragment extends BaseFragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             getActivity().finishAffinity();
         }
+    }
+
+    @Override
+    public void call(Version version) {
+        this.mVersion = version;
+        requestExternalStorage();
+    }
+
+    @SuppressLint("InlinedApi")
+    @AfterPermissionGranted(RC_EXTERNAL_STORAGE)
+    public void requestExternalStorage() {
+        if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            DownloadService.startService(getActivity(), mVersion.getDownloadUrl());
+        } else {
+            EasyPermissions.requestPermissions(this, "", RC_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+    }
+
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        DialogHelp.getConfirmDialog(getActivity(), "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+            }
+        }, null).show();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 }

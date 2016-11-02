@@ -21,7 +21,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
@@ -96,6 +97,30 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
                 }
             }
         });
+    }
+
+    public ProgressDialog showWaitDialog(int messageId) {
+        String message = getResources().getString(messageId);
+        if (mDialog == null) {
+            mDialog = DialogHelp.getWaitDialog(this, message);
+        }
+
+        mDialog.setMessage(message);
+        mDialog.show();
+
+        return mDialog;
+    }
+
+    public void hideWaitDialog() {
+        ProgressDialog dialog = mDialog;
+        if (dialog != null) {
+            mDialog = null;
+            try {
+                dialog.dismiss();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -191,7 +216,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         ResultBean<Data> result;
         try {
             Type type = getDataType();
-            result = AppContext.createGson().fromJson(responseString, type);
+            result = AppOperator.createGson().fromJson(responseString, type);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -262,29 +287,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         return true;
     }
 
-    public ProgressDialog showWaitDialog(int messageId) {
-        String message = getResources().getString(messageId);
-        if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
-        }
 
-        mDialog.setMessage(message);
-        mDialog.show();
-
-        return mDialog;
-    }
-
-    public void hideWaitDialog() {
-        ProgressDialog dialog = mDialog;
-        if (dialog != null) {
-            mDialog = null;
-            try {
-                dialog.dismiss();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
 
     protected void toShare(String title, String content, String url) {
 
@@ -384,12 +387,12 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
             AppContext.showToastShort(R.string.tip_no_internet);
             return 0;
         }
-        if (!UserCacheManager.initUserManager().isLogin(this)) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(this);
             return 0;
         }
         // 返回当前登录用户ID
-        return UserCacheManager.initUserManager().loginId(this);
+        return AccountHelper.getUserId();
     }
 
 

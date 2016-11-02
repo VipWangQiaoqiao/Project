@@ -11,7 +11,7 @@ import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Software;
 import net.oschina.app.bean.SoftwareDetail;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.ThemeSwitchUtils;
@@ -138,7 +138,7 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
             AppContext.showToastShort(R.string.tip_network_error);
             return;
         }
-        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
+        if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
@@ -147,7 +147,7 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
             return;
         }
         Tweet tweet = new Tweet();
-        tweet.setAuthorid((int) UserCacheManager.initUserManager().loginId(getContext()));
+        tweet.setAuthorid((int) AccountHelper.getUserId());
         tweet.setBody(str.toString());
         showWaitDialog(R.string.progress_submit);
         OSChinaApi.pubSoftWareTweet(tweet, mDetail.getId(), mCommentHandler);

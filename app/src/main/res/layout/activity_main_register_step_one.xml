@@ -63,12 +63,13 @@
 
         <ImageView
             android:id="@+id/iv_register_username_del"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:contentDescription="@null"
-            android:visibility="invisible"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
             app:srcCompat="@mipmap/ic_clear"/>
     </LinearLayout>
 
@@ -145,7 +146,7 @@
         android:elevation="0dp"
         android:outlineProvider="none"
         android:text="@string/login_register_hint"
-        android:textColor="@color/account_input_bg_color"
+        android:textColor="@color/account_lock_font_color"
         android:textSize="@dimen/font_18"
         android:translationZ="0dp"
         tools:targetApi="lollipop"/>
