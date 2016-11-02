@@ -1,11 +1,15 @@
-package net.oschina.app.improve.share.constant;
+package net.oschina.open.constants;
 
 /**
- * Created by fei on 2016/10/11.
+ * Created by fei
+ * on 2016/10/17.
  * desc:
  */
 
 public interface OpenConstant {
+    int WECHAT = 0;
+    int TENCENT = 1;
+    int SINA = 2;
 
     String WECHAT_APP_ID = "wxa8213dc827399101";
     String WECHAT_SECRET = "5c716417ce72ff69d8cf0c43572c9284";

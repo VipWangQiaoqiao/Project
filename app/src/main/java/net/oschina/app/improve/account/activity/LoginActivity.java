@@ -40,10 +40,9 @@ import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.open.constants.OpenConstants;
+import net.oschina.open.constants.OpenConstant;
 import net.oschina.open.factory.OpenBuilder;
 
 import org.json.JSONException;
@@ -389,7 +388,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * login tencent
      */
     private void tencentLogin() {
-        openType = OpenConstants.TENCENT;
+        openType = OpenConstant.TENCENT;
         mTencent = OpenBuilder.with(this)
                 .useTencent(OpenConstant.QQ_APP_ID)
                 .login(this);
@@ -399,12 +398,12 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * login wechat
      */
     private void wechatLogin() {
-        openType = OpenConstants.WECHAT;
+        openType = OpenConstant.WECHAT;
         OpenBuilder.with(this)
                 .useWechat(OpenConstant.WECHAT_APP_ID)
-                .login(new Runnable() {
+                .login(new OpenBuilder.Callback() {
                     @Override
-                    public void run() {
+                    public void onFailed() {
                         AppContext.showToast(R.string.share_hint, Toast.LENGTH_SHORT);
                     }
                 });
@@ -415,7 +414,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * login weiBo
      */
     private void weiBoLogin() {
-        openType = OpenConstants.SINA;
+        openType = OpenConstant.SINA;
         mSsoHandler = OpenBuilder.with(this)
                 .useWeibo(OpenConstant.WB_APP_KEY)
                 .login(new WeiboAuthListener() {
@@ -637,7 +636,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * @param data        data
      */
     private void weiBoOnActivityResult(int requestCode, int resultCode, Intent data) {
-        if (openType == OpenConstants.SINA) {
+        if (openType == OpenConstant.SINA) {
             // SSO 授权回调
             // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
             if (mSsoHandler != null)
@@ -652,7 +651,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      */
     @SuppressWarnings("deprecation")
     private void tencentOnActivityResult(Intent data) {
-        if (openType == OpenConstants.TENCENT) {
+        if (openType == OpenConstant.TENCENT) {
             // 对于tencent
             // 注：在某些低端机上调用登录后，由于内存紧张导致APP被系统回收，登录成功后无法成功回传数据。
             if (mTencent != null) {

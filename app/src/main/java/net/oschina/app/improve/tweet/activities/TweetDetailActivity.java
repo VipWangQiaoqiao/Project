@@ -37,7 +37,7 @@ import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.bean.simple.TweetLike;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
-import net.oschina.app.improve.share.widget.ShareDialogBuilder;
+import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
@@ -48,7 +48,6 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.RecordButtonUtil;
-import net.oschina.open.bean.Share;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -319,15 +318,17 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             case R.id.menu_share:
                 if (tweet == null || tweet.getId() <= 0) break;
 
-                Share share = new Share();
-                share.setTitle(tweet.getAuthor().getName() + "的动弹 - 开源中国社区 ");
-                share.setContent(tweet.getContent());
-                share.setUrl(tweet.getHref());
+                String content = tweet.getContent().trim();
+                if (content.length() > 10)
+                    content = content.substring(0, 10);
 
-                ShareDialogBuilder builder = new ShareDialogBuilder(this, R.style.share_dialog);
-                builder.boundActivity(this).addShare(share).setTitle(R.string.share_to)
-                        .setView(R.layout
-                                .dialog_share_main).create().show();
+                ShareDialogBuilder.with(this)
+                        .title(content + " - 开源中国社区 ")
+                        .content(tweet.getContent())
+                        .url(tweet.getHref())
+                        .build()
+                        .create()
+                        .show();
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -59,7 +59,7 @@ public final class AccountHelper {
     }
 
     public static void clearUserCache() {
-        instances.user = new User();
+        instances.user = null;
         SharedPreferencesHelper.remove(instances.application, User.class);
     }
 
