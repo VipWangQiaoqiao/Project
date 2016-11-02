@@ -2,6 +2,7 @@ package net.oschina.app.improve.utils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -56,5 +57,37 @@ public class CollectionUtil {
         ArrayList<T> list = new ArrayList<>();
         Collections.addAll(list, items);
         return list;
+    }
+
+    /**
+     * 移动一个列表中的元素位置
+     * <p>
+     * A B C D 四个元素，移动2坐标移动到0坐标，
+     * 结果： C A B D
+     *
+     * @param collection   列表
+     * @param fromPosition 起始位置
+     * @param toPosition   目标位置
+     * @param <T>          元素
+     * @return 列表
+     */
+    public static <T> Collection<T> move(List<T> collection, int fromPosition, int toPosition) {
+        int maxPosition = collection.size() - 1;
+        if (fromPosition == toPosition || fromPosition > maxPosition || toPosition > maxPosition)
+            return collection;
+
+        if (fromPosition < toPosition) {
+            T fromModel = collection.get(fromPosition);
+            T toModel = collection.get(toPosition);
+
+            collection.remove(fromPosition);
+            collection.add(collection.indexOf(toModel) + 1, fromModel);
+        } else {
+            T fromModel = collection.get(fromPosition);
+            collection.remove(fromPosition);
+            collection.add(toPosition, fromModel);
+        }
+
+        return collection;
     }
 }
