@@ -39,11 +39,11 @@ import net.oschina.app.bean.OpenIdCatalog;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.XmlUtils;
+import net.oschina.open.constants.OpenConstant;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -188,7 +188,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
                     ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
                         User userInfo = (User) resultBean.getResult();
-                       // CacheManager.saveObject(LoginActivity.this, userInfo, UserInfoFragment.CACHE_NAME);
+                        // CacheManager.saveObject(LoginActivity.this, userInfo, UserInfoFragment.CACHE_NAME);
                         finish();
                     }
                 } catch (Exception e) {

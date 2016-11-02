@@ -352,5 +352,6 @@
     <string name="send_sms_code_success_hint">已成功发送验证码</string>
     <string name="reset_success_hint">密码重置成功</string>
     <string name="register_success_hint">注册成功</string>
+    <string name="share_hint">当前版本不支持分享&#8230;</string>
 
 </resources>

@@ -89,7 +89,8 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             switch (code) {
                 case 1:
                     AppContext.showToast(getResources().getString(R.string.reset_success_hint), Toast.LENGTH_SHORT);
-                    finishClearTopActivity(ResetPwdActivity.this, LoginActivity.class);
+                    //finishClearTopActivity(ResetPwdActivity.this, LoginActivity.class);
+                    LoginActivity.show(ResetPwdActivity.this);
                     finish();
                     break;
                 case 216:
@@ -167,7 +168,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
 
     @Override
     protected void initData() {
-        super.initData();
+        super.initData();//必须要调用,用来注册本地广播
         Intent intent = getIntent();
         mPhoneToken = (PhoneToken) intent.getSerializableExtra(RegisterStepTwoActivity.PHONE_TOKEN_KEY);
     }
@@ -215,11 +216,5 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         if (hasFocus) {
             mLlResetPwd.setActivated(true);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 }

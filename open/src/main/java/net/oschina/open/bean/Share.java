@@ -8,20 +8,14 @@ import java.io.Serializable;
  */
 
 public class Share implements Serializable {
-
-    public static final int SHARE_SESSION = 1;
-    public static final int SHARE_TIMELINE = 0;
-
     private String appName;
     private int appShareIcon;
     private String title;
     private String summary;
     private String content;
     private String description;
-    private String defaultText;
     private String url;
     private int bitmapResID;
-    private int shareScene;
 
     public String getAppName() {
         return appName;
@@ -71,14 +65,6 @@ public class Share implements Serializable {
         this.description = description;
     }
 
-    public String getDefaultText() {
-        return defaultText;
-    }
-
-    public void setDefaultText(String defaultText) {
-        this.defaultText = defaultText;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -93,13 +79,5 @@ public class Share implements Serializable {
 
     public void setBitmapResID(int bitmapResID) {
         this.bitmapResID = bitmapResID;
-    }
-
-    public int getShareScene() {
-        return shareScene;
-    }
-
-    public void setShareScene(int shareScene) {
-        this.shareScene = shareScene;
     }
 }

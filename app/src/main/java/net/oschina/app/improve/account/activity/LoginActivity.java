@@ -40,11 +40,9 @@ import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.main.MainActivity;
-import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.open.constants.OpenConstants;
+import net.oschina.open.constants.OpenConstant;
 import net.oschina.open.factory.OpenBuilder;
 
 import org.json.JSONException;
@@ -64,6 +62,7 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class LoginActivity extends AccountBaseActivity implements View.OnClickListener, IUiListener, View.OnFocusChangeListener {
+
     private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
     private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
@@ -140,8 +139,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 User user = resultBean.getResult();
                 AccountHelper.login(user, headers);
                 AppContext.showToast(R.string.login_success_hint);
-                finishClearTopActivity(LoginActivity.this, MainActivity.class);
-                finish();
+                sendLocalReceiver();
             } else {
                 AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
             }
@@ -270,7 +268,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
     @Override
     protected void initData() {
-        super.initData();
+        super.initData();//必须要,用来注册本地广播
 
         //初始化控件状态数据
         SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
@@ -295,8 +293,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         }
         updateHoldPwd(holdStatus);
         mHoldPwd = holdStatus;
-
     }
+
 
     private void updateHoldPwd(int holdStatus) {
         ImageView ivHoldPwd = this.mIvHoldPwd;
@@ -307,9 +305,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         }
     }
 
-    @OnClick({R.id.ib_navigation_back, R.id.tv_login_forget_pwd, R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register,
-            R.id.ll_login_pull, R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq, R.id.ll_login_layer,
-            R.id.iv_login_username_del, R.id.iv_login_pwd_del})
+    @OnClick({R.id.ib_navigation_back, R.id.tv_login_forget_pwd, R.id.iv_login_hold_pwd, R.id.bt_login_submit,
+            R.id.bt_login_register, R.id.ll_login_pull, R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq,
+            R.id.ll_login_layer, R.id.iv_login_username_del, R.id.iv_login_pwd_del})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -363,7 +361,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 }
                 break;
             case R.id.ib_login_weibo:
-                sinaLogin();
+                weiBoLogin();
                 break;
             case R.id.ib_login_wx:
                 //微信登录
@@ -385,51 +383,38 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
     }
 
+
+    /**
+     * login tencent
+     */
     private void tencentLogin() {
-        openType = OpenConstants.TENCENT;
+        openType = OpenConstant.TENCENT;
         mTencent = OpenBuilder.with(this)
                 .useTencent(OpenConstant.QQ_APP_ID)
                 .login(this);
-
-
-        /*
-        OpenLogin<Tencent> tencentOpenLogin = new OpenLogin<>();
-        try {
-            tencentOpenLogin.addAppId(OpenConstant.QQ_APP_ID)
-                    .addIUiListener(this)
-                    .toLogin(getApplicationContext(), LoginActivity.this, OpenConstants.TENCENT);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        */
     }
 
+    /**
+     * login wechat
+     */
     private void wechatLogin() {
-        openType = OpenConstants.WECHAT;
+        openType = OpenConstant.WECHAT;
         OpenBuilder.with(this)
                 .useWechat(OpenConstant.WECHAT_APP_ID)
-                .login(new Runnable() {
+                .login(new OpenBuilder.Callback() {
                     @Override
-                    public void run() {
-
+                    public void onFailed() {
+                        AppContext.showToast(R.string.share_hint, Toast.LENGTH_SHORT);
                     }
                 });
-
-
-        /*
-        OpenLogin<IWXAPI> iwxapiOpenLogin = new OpenLogin<>();
-        try {
-            iwxapiOpenLogin.addAppId(OpenConstant.WECHAT_APP_ID)
-                    .toLogin(getApplicationContext(), LoginActivity.this, OpenConstants.WECHAT);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        */
         finish();
     }
 
-    private void sinaLogin() {
-        openType = OpenConstants.SINA;
+    /**
+     * login weiBo
+     */
+    private void weiBoLogin() {
+        openType = OpenConstant.SINA;
         mSsoHandler = OpenBuilder.with(this)
                 .useWeibo(OpenConstant.WB_APP_KEY)
                 .login(new WeiboAuthListener() {
@@ -462,42 +447,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
                     }
                 });
-        /*
-        //新浪微博登录
-        AuthInfo authInfo = new AuthInfo(this, OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, null);
-        mSsoHandler = new SsoHandler(this, authInfo);
-        mSsoHandler.authorize(new WeiboAuthListener() {
-            @Override
-            public void onComplete(Bundle bundle) {
-
-                Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
-
-                if (oauth2AccessToken.isSessionValid()) {
-                    try {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("openid", oauth2AccessToken.getUid());
-                        jsonObject.put("expires_in", oauth2AccessToken.getExpiresTime());
-                        jsonObject.put("refresh_token", oauth2AccessToken.getRefreshToken());
-                        jsonObject.put("access_token", oauth2AccessToken.getToken());
-                        OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), mHandler);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-
-            @Override
-            public void onWeiboException(WeiboException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-        */
     }
 
 
@@ -583,7 +532,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         String tempUsername = mEtLoginUsername.getText().toString().trim();
         String tempPwd = mEtLoginPwd.getText().toString().trim();
 
-
         if (!TextUtils.isEmpty(tempUsername) && !TextUtils.isEmpty(tempPwd)) {
 
             boolean machPhoneNum = AssimilateUtils.MachPhoneNum(tempUsername);
@@ -636,8 +584,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         AccountHelper.login(user, headers);
                         holdAccount();
                         AppContext.showToast(R.string.login_success_hint);
-                        finishClearTopActivity(LoginActivity.this, MainActivity.class);
-                        finish();
+//                        finishClearTopActivity(LoginActivity.this, MainActivity.class);
+//                        finish();
+                        sendLocalReceiver();
                     } else {
                         int code = resultBean.getCode();
                         if (code == 211) {
@@ -675,12 +624,19 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        sinaOnActivityResult(requestCode, resultCode, data);
+        weiBoOnActivityResult(requestCode, resultCode, data);
 
     }
 
-    private void sinaOnActivityResult(int requestCode, int resultCode, Intent data) {
-        if (openType == OpenConstants.SINA) {
+    /**
+     * weiBo Activity Result
+     *
+     * @param requestCode requestCode
+     * @param resultCode  resultCode
+     * @param data        data
+     */
+    private void weiBoOnActivityResult(int requestCode, int resultCode, Intent data) {
+        if (openType == OpenConstant.SINA) {
             // SSO 授权回调
             // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
             if (mSsoHandler != null)
@@ -688,34 +644,20 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         }
     }
 
+    /**
+     * tencent Activity Result
+     *
+     * @param data data
+     */
     @SuppressWarnings("deprecation")
     private void tencentOnActivityResult(Intent data) {
-        if (openType == OpenConstants.TENCENT) {
+        if (openType == OpenConstant.TENCENT) {
             // 对于tencent
             // 注：在某些低端机上调用登录后，由于内存紧张导致APP被系统回收，登录成功后无法成功回传数据。
-
             if (mTencent != null) {
                 mTencent.handleLoginData(data, this);
             }
-
-            /*
-            OpenLogin<Tencent> tencentOpenLogin = new OpenLogin<>();
-            tencentOpenLogin.addAppId(OpenConstant.QQ_APP_ID)
-                    .addAppKey(OpenConstant.QQ_APP_KEY);
-            try {
-                Tencent tencent = tencentOpenLogin.createOpen(this, OpenConstants.TENCENT);
-                tencent.handleLoginData(data, this);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            */
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 
     /**
