@@ -46,7 +46,7 @@ import java.util.List;
  *
  * <p>Created by thanatosx on 16/10/27.
  */
-
+@SuppressWarnings("all")
 public class TabPickerView extends FrameLayout {
 
     private ImageView mViewArrow;
@@ -140,7 +140,11 @@ public class TabPickerView extends FrameLayout {
         mViewDone.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActiveAdapter.cancelEditMode();
+                if (mViewDone.getText().toString().equals("排序删除")){
+                    mActiveAdapter.startEditMode();
+                }else {
+                    mActiveAdapter.cancelEditMode();
+                }
             }
         });
 
@@ -250,7 +254,6 @@ public class TabPickerView extends FrameLayout {
         mActiveAdapter.setOnDeleteItemListener(new Action1<Integer>() {
             @Override
             public void call(Integer position) {
-                Log.d("oschina", "position: " + position);
                 SubTab tab = mActiveAdapter.getItem(position);
                 if (tab.isFixed()) return;
                 int oldCount = mActiveAdapter.getItemCount();
@@ -355,7 +358,7 @@ public class TabPickerView extends FrameLayout {
         );
         params2.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         params2.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        params2.setMargins(0, 0, 0, 0);
+        delView.setPadding(0, 0, 10, 10);
         delView.setLayoutParams(params2);
         delView.setImageResource(R.mipmap.ic_unsubscribe);
         delView.setTag("mViewDel");
@@ -368,16 +371,15 @@ public class TabPickerView extends FrameLayout {
         RelativeLayout.LayoutParams mTextParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        mTextParams.setMargins(dp8, dp6, dp8, dp6);
+        mTextParams.setMargins(dp6, dp6, dp6, dp6);
         view.setLayoutParams(mTextParams);
         view.setText("软件");
-        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
         view.setTextColor(new ColorStateList(new int[][]{
-                        new int[]{android.R.attr.state_selected},
-                        new int[]{-android.R.attr.state_enabled},
+                        new int[]{-android.R.attr.state_activated},
                         new int[]{}
                 }, new int[]{
-                        0XFFFFFFFF, 0XFF9A9A9A, 0XFF4E4E4E})
+                        0XFF24CF5F, 0XFF6A6A6A})
         );
         view.setGravity(Gravity.CENTER);
         int dp4 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6,
@@ -464,14 +466,14 @@ public class TabPickerView extends FrameLayout {
 
         void startEditMode(){
             mViewOperator.setText("拖动排序");
-            mViewDone.setVisibility(VISIBLE);
+            mViewDone.setText("完成");
             isEditMode = true;
             notifyDataSetChanged();
         }
 
         void cancelEditMode(){
             mViewOperator.setText("切换栏目");
-            mViewDone.setVisibility(GONE);
+            mViewDone.setText("排序删除");
             isEditMode = false;
             notifyDataSetChanged();
         }
@@ -648,6 +650,14 @@ public class TabPickerView extends FrameLayout {
                     }
                 });
                 startEditMode();
+                ((ViewHolder) viewHolder).mViewTab.setSelected(true);
+            }
+
+            @Override
+            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                super.clearView(recyclerView, viewHolder);
+                viewHolder.itemView.setSelected(false);
+                ((ViewHolder) viewHolder).mViewTab.setSelected(false);
             }
         }
 
