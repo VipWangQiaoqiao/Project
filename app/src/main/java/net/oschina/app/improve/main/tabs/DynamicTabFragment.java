@@ -5,12 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
@@ -18,9 +16,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubTab;
@@ -50,12 +46,9 @@ import butterknife.OnClick;
 
 public class DynamicTabFragment extends BaseTitleFragment {
 
-    @Bind(R.id.layout_tab)
-    TabLayout mLayoutTab;
-    @Bind(R.id.view_tab_picker)
-    TabPickerView mViewTabPicker;
-    @Bind(R.id.view_pager)
-    ViewPager mViewPager;
+    @Bind(R.id.layout_tab) TabLayout mLayoutTab;
+    @Bind(R.id.view_tab_picker) TabPickerView mViewTabPicker;
+    @Bind(R.id.view_pager) ViewPager mViewPager;
 
     List<SubTab> tabs;
 
