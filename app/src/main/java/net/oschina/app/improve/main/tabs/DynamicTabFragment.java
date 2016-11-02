@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -49,16 +50,19 @@ public class DynamicTabFragment extends BaseTitleFragment {
     @Bind(R.id.layout_tab) TabLayout mLayoutTab;
     @Bind(R.id.view_tab_picker) TabPickerView mViewTabPicker;
     @Bind(R.id.view_pager) ViewPager mViewPager;
+    @Bind(R.id.iv_arrow_down) ImageView mViewArrowDown;
 
+    private MainActivity activity;
     List<SubTab> tabs;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        ((MainActivity) context).addOnTurnBackListener(new MainActivity.TurnBackListener() {
+        activity = (MainActivity) context;
+        activity.addOnTurnBackListener(new MainActivity.TurnBackListener() {
             @Override
             public boolean onTurnBack() {
-                return mViewTabPicker.onTurnBack();
+                return mViewTabPicker != null && mViewTabPicker.onTurnBack();
             }
         });
     }
@@ -180,9 +184,12 @@ public class DynamicTabFragment extends BaseTitleFragment {
         mViewTabPicker.setOnShowAnimation(new TabPickerView.Action1<ViewPropertyAnimator>() {
             @Override
             public void call(ViewPropertyAnimator animator) {
+                mViewArrowDown.setEnabled(false);
+
                 mViewTabPicker.setVisibility(View.VISIBLE);
-                mViewTabPicker.setTranslationY(-mViewTabPicker.getHeight() * 0.2f);
+                mViewTabPicker.setTranslationY(mViewTabPicker.getHeight() * 0.2f);
                 mViewTabPicker.setAlpha(0);
+                activity.toggleNavTabView(false);
                 animator.translationY(0)
                         .alpha(1)
                         .setDuration(380)
@@ -202,7 +209,8 @@ public class DynamicTabFragment extends BaseTitleFragment {
         mViewTabPicker.setOnHideAnimator(new TabPickerView.Action1<ViewPropertyAnimator>() {
             @Override
             public void call(ViewPropertyAnimator animator) {
-                animator.translationY(-mViewTabPicker.getHeight() * 0.2f)
+                activity.toggleNavTabView(true);
+                animator.translationY(mViewTabPicker.getHeight() * 0.2f)
                         .setDuration(380)
                         .alpha(0)
                         .setInterpolator(new DecelerateInterpolator())
@@ -211,6 +219,7 @@ public class DynamicTabFragment extends BaseTitleFragment {
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 mViewTabPicker.setVisibility(View.GONE);
+                                mViewArrowDown.setEnabled(true);
                             }
                         });
             }

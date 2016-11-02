@@ -1,6 +1,8 @@
 package net.oschina.app.improve.main;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +14,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import net.oschina.app.AppConfig;
@@ -50,7 +54,7 @@ public class MainActivity extends BaseActivity implements
     private Version mVersion;
 
     @Bind(R.id.activity_main_ui)
-    FrameLayout mMainUi;
+    LinearLayout mMainUi;
 
     private NavFragment mNavBar;
     private List<TurnBackListener> mTurnBackListeners = new ArrayList<>();
@@ -159,6 +163,39 @@ public class MainActivity extends BaseActivity implements
 
     public void addOnTurnBackListener(TurnBackListener l){
         this.mTurnBackListeners.add(l);
+    }
+
+    public void toggleNavTabView(boolean isShowOrHide){
+        final View view = mNavBar.getView();
+        if (view == null) return;
+        // hide
+        if (!isShowOrHide){
+            view.animate()
+                    .translationY(view.getHeight())
+                    .setDuration(180)
+                    .setInterpolator(new LinearInterpolator())
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            view.setTranslationY(view.getHeight());
+                            view.setVisibility(View.GONE);
+                        }
+                    });
+        }else {
+            view.setVisibility(View.VISIBLE);
+            view.animate()
+                    .translationY(0)
+                    .setDuration(180)
+                    .setInterpolator(new LinearInterpolator())
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            view.setTranslationY(0);
+                        }
+                    });
+        }
     }
 
     @Override
