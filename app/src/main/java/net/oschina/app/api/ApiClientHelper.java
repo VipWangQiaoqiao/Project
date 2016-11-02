@@ -20,11 +20,14 @@ class ApiClientHelper {
      */
     static String getUserAgent(AppContext appContext) {
         PackageInfo packageInfo = getPackageInfo(appContext);
-        return "OSChina.NET" + '/' + packageInfo.versionName + '_' + packageInfo.versionCode +// app版本信息
+        String ua = "OSChina.NET" + '/' + packageInfo.versionName +
+                '_' + packageInfo.versionCode +// app版本信息
                 "/Android" +// 手机系统平台
                 "/" + android.os.Build.VERSION.RELEASE +// 手机系统版本
                 "/" + android.os.Build.MODEL + // 手机型号
                 "/" + getAppId(appContext);
+        ApiHttpClient.log("getUserAgent:" + ua);
+        return ua;
     }
 
     private static String getAppId(AppContext context) {
