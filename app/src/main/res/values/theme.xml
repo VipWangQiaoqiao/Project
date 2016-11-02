@@ -115,11 +115,10 @@
     </style>
 
     <!--新账户中心-->
-    <style name="Account_Base.App.Theme.NoTitle" parent="Base.App.Theme.NoTitle">
+    <style name="Account_Base.App.Theme.NoTitle" parent="App.Theme.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:fitsSystemWindows">true</item>
     </style>
 
     <style name="App.Theme.Tweet.Publish" parent="Base.App.Theme.NoTitle">
@@ -229,4 +228,5 @@
     <style name="App.Theme.Dialog.Alert" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <item name="android:textColorPrimary">@color/black_alpha_240</item>
     </style>
+
 </resources>
