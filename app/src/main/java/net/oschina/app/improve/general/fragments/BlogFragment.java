@@ -2,9 +2,7 @@ package net.oschina.app.improve.general.fragments;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,6 +23,7 @@ import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.general.adapter.BlogActionAdapter;
 import net.oschina.app.improve.general.adapter.BlogAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -40,15 +39,42 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     public static final String BLOG_HEAT = "blog_heat";            //本周热门
     public static final String BLOG_RECOMMEND = "blog_recommend";  //最新推荐
 
+    public static final String BLOG_TYPE_KEY = "blog_type_key";
+    public static final int BLOG_HEAT_TYPE = 2;//2:热门博客
+    public static final int BLOG_NEW_TYPE = 3;//3:最新博客
+    public static final int BLOG_RECOMMEND_TYPE = 4;//4:推荐博客
+
     private int[] positions = {1, 0, 0};
-    private ConnectivityManager connectivityManager;
     private BlogActionAdapter actionAdapter;
     private int catalog = 3;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    protected void initBundle(Bundle bundle) {
+        super.initBundle(bundle);
+
+        if (bundle == null) return;
+
+        int blogType = bundle.getInt(BLOG_TYPE_KEY, BLOG_NEW_TYPE);
+        switch (blogType) {
+            case BLOG_HEAT_TYPE:
+                catalog = OSChinaApi.CATALOG_BLOG_HEAT;
+                break;
+            case BLOG_NEW_TYPE:
+                catalog = OSChinaApi.CATALOG_BLOG_NORMAL;
+                break;
+            case BLOG_RECOMMEND_TYPE:
+                catalog = OSChinaApi.CATALOG_BLOG_RECOMMEND;
+                break;
+            default:
+                catalog = OSChinaApi.CATALOG_BLOG_NORMAL;
+                break;
+        }
+        if (!mIsRefresh) {
+            mIsRefresh = true;
+            mBean.setPrevPageToken(null);
+            mBean.setNextPageToken(null);
+        }
+        requestEventDispatcher();
     }
 
     @Override
@@ -57,8 +83,9 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
 
         @SuppressLint("InflateParams")
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_blog_header, null, false);
-
+        headView.setVisibility(View.GONE);
         GridView quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
+        quesGridView.setVisibility(View.GONE);
         actionAdapter = new BlogActionAdapter(getActivity(), positions);
         quesGridView.setAdapter(actionAdapter);
         quesGridView.setItemChecked(0, true);
@@ -87,17 +114,10 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
      * According to the distribution network is events
      */
     private void requestEventDispatcher() {
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isAvailable()) {
-            boolean connected = networkInfo.isConnected();
-            NetworkInfo.State state = networkInfo.getState();
-            if (connected && state == NetworkInfo.State.CONNECTED) {
-                mRefreshLayout.setRefreshing(true);
-                onRefreshing();
-                // requestData();
-            } else {
-                requestLocalCache();
-            }
+        if (TDevice.hasInternet()) {
+            mRefreshLayout.setRefreshing(true);
+            onRefreshing();
+            // requestData();
         } else {
             requestLocalCache();
         }
@@ -211,7 +231,7 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        super.onItemClick(parent, view, position, id);
         Blog blog = mAdapter.getItem(position - 1);
         if (blog != null) {
             BlogDetailActivity.show(getActivity(), blog.getId());

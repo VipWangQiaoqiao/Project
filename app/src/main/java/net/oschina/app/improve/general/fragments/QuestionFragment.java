@@ -1,9 +1,7 @@
 package net.oschina.app.improve.general.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +22,7 @@ import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.general.adapter.QuesActionAdapter;
 import net.oschina.app.improve.general.adapter.QuestionAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,16 +40,49 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
     public static final String QUES_PROFESSION = "ques_profession";
     public static final String QUES_WEBSITE = "ques_website";
 
+
+    public static final String QUES_TYPE_KEY = "blog_type_key";
+    public static final int QUES_ASK_TYPE = 3;//3:技术问答
+    public static final int QUES_SHARE_TYPE = 4;  // 4:技术分享
+    public static final int QUES_COMPOSITE_TYPE = 5;   // 5:行业杂烩
+    public static final int QUES_PROFESSION_TYPE = 6;   // 6:职业生涯
+    public static final int QUES_WEBSITE_TYPE = 7;// 7:站务建议
+
     private int catalog = 1;
     private QuesActionAdapter quesActionAdapter;
     private int[] positions = {1, 0, 0, 0, 0};
-    private ConnectivityManager connectivityManager;
-
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+    protected void initBundle(Bundle bundle) {
+        super.initBundle(bundle);
+        if (bundle == null) return;
+        int blogType = bundle.getInt(QUES_TYPE_KEY, 0);
+        switch (blogType) {
+            case QUES_ASK_TYPE:
+                catalog = 1;
+                break;
+            case QUES_SHARE_TYPE:
+                catalog = 2;
+                break;
+            case QUES_COMPOSITE_TYPE:
+                catalog = 3;
+                break;
+            case QUES_PROFESSION_TYPE:
+                catalog = 4;
+                break;
+            case QUES_WEBSITE_TYPE:
+                catalog = 5;
+                break;
+            default:
+                catalog = 1;
+                break;
+        }
+        if (!mIsRefresh) {
+            mIsRefresh = true;
+            mBean.setPrevPageToken(null);
+            mBean.setNextPageToken(null);
+        }
+        requestEventDispatcher();
     }
 
     @Override
@@ -59,8 +91,9 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
 
         @SuppressLint("InflateParams")
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
-
+        headView.setVisibility(View.GONE);
         GridView quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
+        quesGridView.setVisibility(View.GONE);
         quesActionAdapter = new QuesActionAdapter(getActivity(), positions);
         quesGridView.setAdapter(quesActionAdapter);
         quesGridView.setItemChecked(0, true);
@@ -86,17 +119,10 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
      * According to the distribution network is events
      */
     private void requestEventDispatcher() {
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isAvailable()) {
-            boolean connected = networkInfo.isConnected();
-            NetworkInfo.State state = networkInfo.getState();
-            if (connected && state == NetworkInfo.State.CONNECTED) {
-                mRefreshLayout.setRefreshing(true);
-                onRefreshing();
-                //requestData();
-            } else {
-                requestLocalCache();
-            }
+        if (TDevice.hasInternet()) {
+            mRefreshLayout.setRefreshing(true);
+            onRefreshing();
+            //requestData();
         } else {
             requestLocalCache();
         }
@@ -206,7 +232,7 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // super.onItemClick(parent, view, position, id);
+         super.onItemClick(parent, view, position, id);
         Question question = mAdapter.getItem(position - 1);
         if (question != null) {
             // UIUtil.showPostDetail(getActivity(), (int) question.getId(), question.getCommentCount());
