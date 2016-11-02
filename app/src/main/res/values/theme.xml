@@ -115,7 +115,7 @@
     </style>
 
     <!--新账户中心-->
-    <style name="Account_Base.App.Theme.NoTitle" parent="App.Theme.Light">
+    <style name="Account_Base.App.Theme.NoTitle" parent="Base.App.Theme.NoTitle">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
