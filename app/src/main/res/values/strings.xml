@@ -25,10 +25,6 @@
     <string name="event_is_fav">已收藏</string>
     <string name="event_un_fav">收藏</string>
 
-    <string name="app_error">应用程序错误</string>
-    <string name="app_error_message">很抱歉，小屁孩耍脾气啦。<br/>我们会帮你教训一下这个小屁孩！</string>
-    <string name="submit_report">打报告去</string>
-
     <!-- slide menu -->
     <string name="menu_opensoft">开源软件</string>
     <string name="menu_blog">博客区</string>
@@ -60,7 +56,6 @@
     <string name="unlogin_tip">您还未登录\r\n或网络延迟</string>
 
     <string name="login">登录</string>
-    <string name="progress_login">正在登录…</string>
     <string name="tip_no_internet">当前没有可用的网络链接</string>
 
     <string name="actionbar_title_news">资讯详情</string>
@@ -95,9 +90,7 @@
     <string name="tip_comment_content_empty">评论内容不能为空</string>
 
     <!-- notification messages -->
-    <string name="comment_blog">发布评论</string>
     <string name="comment_pub">发表评论</string>
-    <string name="comment_publishing">正在发布你的评论…</string>
     <string name="comment_publish_success">评论成功</string>
     <string name="comment_publish_faile">评论失败</string>
 
@@ -116,7 +109,6 @@
     <string name="tweet_image_publishing" formatted="false">发布图片中…%s</string>
     <string name="tweet_image_publish_failed" formatted="false">发布图片失败-[%s/%s]</string>
 
-    <string name="tweet_publish_faile">发布动弹失败</string>
     <string name="tweet_detail_data_null">啊噢, 没有找到该动弹~ 可能被主人删除了呢!</string>
     <string name="record_sound_notfound">找不到录音</string>
     <string name="record_sound_short">时间太短了</string>
@@ -195,7 +187,6 @@
     <string name="footer_type_net_error">网络错误</string>
     <string name="footer_type_not_more">没有更多数据</string>
 
-    <string name="you_have_news_messages">你有%s条最新消息</string>
     <string name="you_have_unread_messages">你有%s条未读消息</string>
     <string name="mention_count">\@我[%s] </string>
     <string name="letter_count">私信[%s] </string>
@@ -231,8 +222,6 @@
     <string name="notice_voice">声音</string>
     <string name="notice_vibration">震动</string>
     <string name="notice_app_exit">退出后不提醒</string>
-
-    <string name="tip_logout_success">注销成功</string>
 
     <string name="oscsite">官网</string>
     <string name="knowmore">了解更多</string>
@@ -283,8 +272,6 @@
     <string name="str_feedback_error">程序错误</string>
     <string name="str_feedback_function">功能建议</string>
     <string name="str_request_camera_message">请求获取相机权限</string>
-    <string name="str_action_submit">确定</string>
-    <string name="str_action_cancel">取消</string>
     <string name="permissions_camera_error">相机无法完成初始化,请正确授权。</string>
 
     <string name="state_network_error">网络错误</string>
@@ -294,7 +281,6 @@
     <string name="state_refreshing">正在刷新</string>
 
     <string name="label_about_title">相关文章</string>
-    <string name="label_software">相关软件</string>
 
     <string name="vote_up">顶</string>
     <string name="vote_down">踩</string>
@@ -308,14 +294,11 @@
     <!-- 个人信息-->
     <string name="action_select">选择操作</string>
     <string name="action_select_picture">选择图片</string>
-    <string name="title_error_photo">无法保存照片，请检查SD卡是否挂载</string>
     <string name="title_icon_null">图像不存在，上传失败</string>
     <string name="title_update_success_status">个人信息更新成功&#8230;</string>
     <string name="title_update_fail_status">个人信息更新失败&#8230;</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--新版登录专用-->
     <string name="login_input_username_hint">手机号或邮箱</string>
@@ -342,7 +325,6 @@
     <string name="hint_pwd_null">当前用户名或密码为空&#8230;</string>
     <string name="hint_username_ok">请输入正确的手机号码</string>
     <string name="user_hint_login">点击头像登录</string>
-    <string name="login_error">登录失败,请重试&#8230;</string>
     <string name="reset_pwd_label">重置密码</string>
     <string name="retrieve_pwd_label">找回密码</string>
     <string name="retrieve_pwd_sms_coe_error">请输入正确的验证码</string>

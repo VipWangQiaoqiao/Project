@@ -49,6 +49,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
 
     private ShareDialogBuilder(@NonNull Activity context, @StyleRes int themeResId) {
         super(context, themeResId);
+        mActivity = context;
         setTitle(R.string.share_to);
         setView(R.layout.dialog_share_main);
     }
