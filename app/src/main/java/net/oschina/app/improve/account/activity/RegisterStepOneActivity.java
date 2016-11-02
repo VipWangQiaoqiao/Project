@@ -42,8 +42,8 @@ import cz.msebera.android.httpclient.Header;
 
 public class RegisterStepOneActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
-    private static final String TAG = "RegisterStepOneActivity";
-
+    @Bind(R.id.ly_retrieve_bar)
+    LinearLayout mLayBackBar;
 
     @Bind(R.id.ll_register_phone)
     LinearLayout mLlRegisterPhone;
@@ -199,6 +199,10 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
     @Override
     protected void initWidget() {
         super.initWidget();
+
+        TextView label = (TextView) mLayBackBar.findViewById(R.id.tv_navigation_label);
+        label.setVisibility(View.INVISIBLE);
+
         mEtRegisterUsername.addTextChangedListener(
                 new TextWatcher() {
                     @Override
@@ -296,12 +300,15 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         });
     }
 
-    @OnClick({R.id.iv_register_username_del, R.id.tv_register_sms_call,
+    @OnClick({R.id.ib_navigation_back, R.id.iv_register_username_del, R.id.tv_register_sms_call,
             R.id.bt_register_submit})
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.ib_navigation_back:
+                finish();
+                break;
             case R.id.iv_register_username_del:
                 mEtRegisterUsername.setText(null);
                 break;

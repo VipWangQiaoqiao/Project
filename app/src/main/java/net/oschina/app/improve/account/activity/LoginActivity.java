@@ -68,6 +68,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
     private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
 
+    @Bind(R.id.ly_retrieve_bar)
+    LinearLayout mLayBackBar;
+
     @Bind(R.id.ll_login_username)
     LinearLayout mLlLoginUsername;
     @Bind(R.id.et_login_username)
@@ -260,6 +263,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 }
             }
         });
+
+        TextView label = (TextView) mLayBackBar.findViewById(R.id.tv_navigation_label);
+        label.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -301,13 +307,16 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         }
     }
 
-    @OnClick({R.id.tv_login_forget_pwd, R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register,
+    @OnClick({R.id.ib_navigation_back, R.id.tv_login_forget_pwd, R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register,
             R.id.ll_login_pull, R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq, R.id.ll_login_layer,
             R.id.iv_login_username_del, R.id.iv_login_pwd_del})
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.ib_navigation_back:
+                finish();
+                break;
             case R.id.tv_login_forget_pwd:
                 //忘记密码
                 RetrieveActivity.show(LoginActivity.this);
@@ -601,7 +610,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     }
 
     private void requestLogin(String tempUsername, String tempPwd, String appToken) {
-        OSChinaApi.login(tempUsername, Sha1toHex(tempPwd), appToken, new TextHttpResponseHandler() {
+        OSChinaApi.login(tempUsername, getSha1(tempPwd), appToken, new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {

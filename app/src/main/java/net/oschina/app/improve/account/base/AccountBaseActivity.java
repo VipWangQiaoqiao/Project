@@ -115,7 +115,7 @@ public class AccountBaseActivity extends BaseActivity {
      * @return sha-1 pwd
      */
     @NonNull
-    protected String Sha1toHex(String tempPwd) {
+    protected String getSha1(String tempPwd) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
             messageDigest.update(tempPwd.getBytes("utf-8"));
