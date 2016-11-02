@@ -13,6 +13,7 @@ import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewerItemTouchCallback;
+import net.oschina.app.improve.utils.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,17 +145,8 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
         if (fromPosition == toPosition)
             return false;
 
-        if (fromPosition < toPosition) {
-            Model fromModel = mModels.get(fromPosition);
-            Model toModel = mModels.get(toPosition);
-
-            mModels.remove(fromPosition);
-            mModels.add(mModels.indexOf(toModel) + 1, fromModel);
-        } else {
-            Model fromModel = mModels.get(fromPosition);
-            mModels.remove(fromPosition);
-            mModels.add(toPosition, fromModel);
-        }
+        // Move fromPosition to toPosition
+        CollectionUtil.move(mModels, fromPosition, toPosition);
 
         notifyItemMoved(fromPosition, toPosition);
         return true;
