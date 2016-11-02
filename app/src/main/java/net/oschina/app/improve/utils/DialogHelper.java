@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 
+import net.oschina.app.R;
+
 /**
  * 通用的对话框
  * Created by haibin
@@ -14,7 +16,7 @@ import android.support.v7.widget.AppCompatEditText;
 @SuppressWarnings("all")
 public final class DialogHelper {
     public static AlertDialog.Builder getDialog(Context context) {
-        return new AlertDialog.Builder(context);
+        return new AlertDialog.Builder(context, R.style.App_Theme_Dialog_Alert);
     }
 
     /**
@@ -33,6 +35,13 @@ public final class DialogHelper {
      */
     public static AlertDialog.Builder getMessageDialog(Context context, String title, String message) {
         return getMessageDialog(context, title, message, false);
+    }
+
+    /**
+     * 获取一个普通的消息对话框，没有取消按钮
+     */
+    public static AlertDialog.Builder getMessageDialog(Context context, String message) {
+        return getMessageDialog(context, "", message, false);
     }
 
     /**
@@ -60,6 +69,24 @@ public final class DialogHelper {
                 .setPositiveButton(positiveText, positiveListener)
                 .setNegativeButton(negativeText, negativeListener);
     }
+
+    /**
+     * 获取一个验证对话框，没有点击事件
+     */
+    public static AlertDialog.Builder getConfirmDialog(Context context, String title, String message, String positiveText, String negativeText,
+                                                       boolean cancelable,
+                                                       DialogInterface.OnClickListener positiveListener) {
+        return getConfirmDialog(context, title, message, positiveText, negativeText, cancelable, positiveListener, null);
+    }
+
+    /**
+     * 获取一个验证对话框，没有点击事件
+     */
+    public static AlertDialog.Builder getConfirmDialog(Context context, String title, String message, String positiveText, String negativeText,
+                                                       DialogInterface.OnClickListener positiveListener) {
+        return getConfirmDialog(context, title, message, positiveText, negativeText, false, positiveListener, null);
+    }
+
 
     /**
      * 获取一个验证对话框，没有点击事件
@@ -93,7 +120,7 @@ public final class DialogHelper {
      * 获取一个验证对话框，没有点击事件，取消、确定
      */
     public static AlertDialog.Builder getConfirmDialog(Context context, String message, DialogInterface.OnClickListener positiveListener) {
-        return getConfirmDialog(context, "", message, "确定", "取消", false, positiveListener, null);
+        return getConfirmDialog(context, "", message, "确定", "取消", positiveListener);
     }
 
     /**
@@ -170,6 +197,15 @@ public final class DialogHelper {
     public static ProgressDialog getProgressDialog(Context context, boolean cancelable) {
         ProgressDialog dialog = getProgressDialog(context);
         dialog.setCancelable(cancelable);
+        return dialog;
+    }
+
+    /**
+     * 获取一个等待对话框
+     */
+    public static ProgressDialog getProgressDialog(Context context, String message) {
+        ProgressDialog dialog = getProgressDialog(context);
+        dialog.setMessage(message);
         return dialog;
     }
 

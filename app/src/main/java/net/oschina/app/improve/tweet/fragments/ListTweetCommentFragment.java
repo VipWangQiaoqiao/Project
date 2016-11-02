@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
@@ -22,7 +21,7 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -139,7 +138,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
             items[1] = getResources().getString(R.string.delete);
         }
         mDeleteIndex = position;
-        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
+        DialogHelper.getSelectDialog(getActivity(), items, "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
@@ -156,7 +155,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        mDeleteDialog = DialogHelp.getWaitDialog(getContext(), "正在删除...");
+        mDeleteDialog = DialogHelper.getProgressDialog(getContext(), "正在删除...", false);
         OSChinaApi.deleteTweetComment(mOperator.getTweetDetail().getId(), comment.getId(), new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

@@ -19,7 +19,7 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 
@@ -107,7 +107,7 @@ public class UserTweetFragment extends BaseRecyclerViewFragment<Tweet> implement
             items = new String[]{getString(R.string.copy)};
         }
 
-        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
+        DialogHelper.getSelectDialog(getActivity(), items, "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -117,7 +117,7 @@ public class UserTweetFragment extends BaseRecyclerViewFragment<Tweet> implement
                         break;
                     case 1:
                         // TODO: 2016/7/21 删除动弹
-                        DialogHelp.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
+                        DialogHelper.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
                                 .OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

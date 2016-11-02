@@ -38,13 +38,13 @@ import net.oschina.app.improve.user.activities.UserFansActivity;
 import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserTweetActivity;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.utils.StreamUtils;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQRCodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -502,7 +502,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             //UIHelper.showLoginActivity(getActivity());
             LoginActivity.show(getActivity());
         } else {
-            DialogHelp.getSelectDialog(getActivity(), getString(R.string.action_select), getResources().getStringArray(R.array.avatar_option), new DialogInterface.OnClickListener() {
+            DialogHelper.getSelectDialog(getActivity(), getString(R.string.action_select), getResources().getStringArray(R.array.avatar_option), "取消",new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (i == 0) {
@@ -524,8 +524,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             //UIHelper.showLoginActivity(getActivity());
             LoginActivity.show(getActivity());
         } else {
-            DialogHelp.getSelectDialog(getActivity(), getResources().getString(R.string.action_select_picture),
-                    getResources().getStringArray(R.array.choose_picture),
+            DialogHelper.getSelectDialog(getActivity(), getResources().getString(R.string.action_select_picture),
+                    getResources().getStringArray(R.array.choose_picture),"取消",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -615,7 +615,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     public ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(getActivity(), message);
+            mDialog = DialogHelper.getProgressDialog(getActivity(), message);
         }
 
         mDialog.setMessage(message);

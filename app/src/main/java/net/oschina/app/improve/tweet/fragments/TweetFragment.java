@@ -221,7 +221,6 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                         TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getContent()));
                         break;
                     case 1:
-                        // TODO: 2016/7/21 删除动弹
                         DialogHelper.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
                                 .OnClickListener() {
                             @Override

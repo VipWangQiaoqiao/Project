@@ -21,7 +21,7 @@ import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.user.adapter.CollectionAdapter;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
@@ -75,7 +75,7 @@ public class UserCollectionActivity extends BaseRecyclerViewActivity<Collection>
     @Override
     public void onLongClick(int position, long itemId) {
         final Collection collection = mAdapter.getItem(position);
-        DialogHelp.getConfirmDialog(this, "删除收藏", "是否确认删除该内容吗？", "确认", "取消", new DialogInterface.OnClickListener() {
+        DialogHelper.getConfirmDialog(this, "删除收藏", "是否确认删除该内容吗？", "确认", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -93,7 +93,7 @@ public class UserCollectionActivity extends BaseRecyclerViewActivity<Collection>
                     }
                 });
             }
-        }, null).show();
+        }).show();
     }
 
     @Override

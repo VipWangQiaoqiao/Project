@@ -25,9 +25,9 @@ import net.oschina.app.improve.bean.Version;
 import net.oschina.app.improve.main.FeedBackActivity;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.main.update.DownloadService;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton.OnToggleChanged;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.UIHelper;
@@ -231,7 +231,7 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
     }
 
     private void onClickCleanCache() {
-        DialogHelp.getConfirmDialog(getActivity(), "是否清空缓存?", new DialogInterface.OnClickListener
+        DialogHelper.getConfirmDialog(getActivity(), "是否清空缓存?", new DialogInterface.OnClickListener
                 () {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -276,12 +276,12 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        DialogHelp.getConfirmDialog(getActivity(), "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", new DialogInterface.OnClickListener() {
+        DialogHelper.getConfirmDialog(getActivity(), "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
             }
-        }, null).show();
+        }).show();
     }
 
 
