@@ -24,8 +24,8 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.bean.Tweet;
@@ -33,8 +33,8 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.adapter.TweetAdapter;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 
@@ -212,7 +212,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
             items = new String[]{getString(R.string.copy)};
         }
 
-        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
+        DialogHelper.getSelectDialog(getActivity(), items, "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -222,7 +222,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                         break;
                     case 1:
                         // TODO: 2016/7/21 删除动弹
-                        DialogHelp.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
+                        DialogHelper.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
                                 .OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
