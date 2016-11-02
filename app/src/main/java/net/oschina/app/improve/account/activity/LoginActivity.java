@@ -584,8 +584,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         AccountHelper.login(user, headers);
                         holdAccount();
                         AppContext.showToast(R.string.login_success_hint);
-//                        finishClearTopActivity(LoginActivity.this, MainActivity.class);
-//                        finish();
                         sendLocalReceiver();
                     } else {
                         int code = resultBean.getCode();

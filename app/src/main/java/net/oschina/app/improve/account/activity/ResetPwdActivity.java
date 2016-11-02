@@ -89,7 +89,6 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             switch (code) {
                 case 1:
                     AppContext.showToast(getResources().getString(R.string.reset_success_hint), Toast.LENGTH_SHORT);
-                    //finishClearTopActivity(ResetPwdActivity.this, LoginActivity.class);
                     LoginActivity.show(ResetPwdActivity.this);
                     finish();
                     break;

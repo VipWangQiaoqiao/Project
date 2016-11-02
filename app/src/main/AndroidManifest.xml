@@ -110,19 +110,6 @@
             android:name=".ui.FindUserActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.LoginActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="登录"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".ui.LoginBindActivityChooseActivity"
-            android:label="登录"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".ui.LoginAccountBindOpenIdActivity"
-            android:label="账号绑定"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".ui.DetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
