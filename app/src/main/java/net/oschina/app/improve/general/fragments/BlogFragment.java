@@ -2,7 +2,9 @@ package net.oschina.app.improve.general.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +22,7 @@ import net.oschina.app.improve.bean.Blog;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.fragments.BlogDetailFragment;
 import net.oschina.app.improve.general.adapter.BlogActionAdapter;
 import net.oschina.app.improve.general.adapter.BlogAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -48,6 +51,14 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     private BlogActionAdapter actionAdapter;
     private int catalog = 3;
 
+    public static Fragment instantiate(Context context, int subtype){
+        Fragment fragment = new BlogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(BLOG_TYPE_KEY, subtype);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
@@ -69,12 +80,7 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
                 catalog = OSChinaApi.CATALOG_BLOG_NORMAL;
                 break;
         }
-        if (!mIsRefresh) {
-            mIsRefresh = true;
-            mBean.setPrevPageToken(null);
-            mBean.setNextPageToken(null);
-        }
-        requestEventDispatcher();
+
     }
 
     @Override
@@ -183,6 +189,12 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     protected void initData() {
         CACHE_NAME = BLOG_NORMAL;
         super.initData();
+        if (!mIsRefresh) {
+            mIsRefresh = true;
+//            mBean.setPrevPageToken(null);
+//            mBean.setNextPageToken(null);
+        }
+        requestEventDispatcher();
     }
 
     @Override

@@ -3,14 +3,12 @@ package net.oschina.app.improve.main.tabs;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
@@ -50,10 +48,14 @@ import butterknife.OnClick;
 
 public class DynamicTabFragment extends BaseTitleFragment {
 
-    @Bind(R.id.layout_tab) TabLayout mLayoutTab;
-    @Bind(R.id.view_tab_picker) TabPickerView mViewTabPicker;
-    @Bind(R.id.view_pager) ViewPager mViewPager;
-    @Bind(R.id.iv_arrow_down) ImageView mViewArrowDown;
+    @Bind(R.id.layout_tab)
+    TabLayout mLayoutTab;
+    @Bind(R.id.view_tab_picker)
+    TabPickerView mViewTabPicker;
+    @Bind(R.id.view_pager)
+    ViewPager mViewPager;
+    @Bind(R.id.iv_arrow_down)
+    ImageView mViewArrowDown;
 
     private MainActivity activity;
     List<SubTab> tabs;
@@ -128,7 +130,6 @@ public class DynamicTabFragment extends BaseTitleFragment {
         mViewTabPicker.setOnTabPickingListener(new TabPickerView.OnTabPickingListener() {
 
             private boolean isChangeIndex = false;
-            private boolean isMoveIndex = false;
 
             @Override
             @SuppressWarnings("all")
@@ -139,9 +140,9 @@ public class DynamicTabFragment extends BaseTitleFragment {
             @Override
             public void onRemove(int position, SubTab tab) {
                 isChangeIndex = true;
-                mLayoutTab.removeTabAt(position);
                 tabs.remove(position);
                 mViewPager.getAdapter().notifyDataSetChanged();
+//                mLayoutTab.removeTabAt(position);
             }
 
             @Override
@@ -154,8 +155,16 @@ public class DynamicTabFragment extends BaseTitleFragment {
 
             @Override
             public void onMove(int op, SubTab mover, int np, SubTab swapper) {
-                isChangeIndex = isMoveIndex = true;
-                Collections.swap(tabs, op, np);
+                isChangeIndex = true;
+                if (op < np) {
+                    for (int i = op; i < np; i++) {
+                        Collections.swap(tabs, i, i + 1);
+                    }
+                } else {
+                    for (int i = op; i > np; i--) {
+                        Collections.swap(tabs, i, i - 1);
+                    }
+                }
                 mViewPager.getAdapter().notifyDataSetChanged();
             }
 
@@ -173,13 +182,6 @@ public class DynamicTabFragment extends BaseTitleFragment {
                         e.printStackTrace();
                     }
                     isChangeIndex = false;
-                }
-                if (isMoveIndex) {
-                    mLayoutTab.removeAllTabs();
-                    for (SubTab tab : activeTabs) {
-                        mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
-                    }
-                    isMoveIndex = false;
                 }
             }
         });
@@ -237,7 +239,8 @@ public class DynamicTabFragment extends BaseTitleFragment {
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return instanceFragment(tabs.get(position).getType());
+                SubTab tab = tabs.get(position);
+                return instanceFragment(tab.getType(), tab.getSubtype());
             }
 
             @Override
@@ -261,16 +264,16 @@ public class DynamicTabFragment extends BaseTitleFragment {
         mLayoutTab.setupWithViewPager(mViewPager);
     }
 
-    public Fragment instanceFragment(int type) {
+    public Fragment instanceFragment(int type, int subtype) {
         switch (type) {
             case News.TYPE_NEWS:
                 return new NewsFragment();
             case News.TYPE_EVENT:
                 return new EventFragment();
             case News.TYPE_QUESTION:
-                return new QuestionFragment();
+                return QuestionFragment.instantiate(getContext(), subtype);
             case News.TYPE_BLOG:
-                return new BlogFragment();
+                return BlogFragment.instantiate(getContext(), subtype);
         }
         throw new RuntimeException("Fuck you!!!!!");
     }

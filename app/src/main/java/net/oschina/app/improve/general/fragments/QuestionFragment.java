@@ -1,7 +1,9 @@
 package net.oschina.app.improve.general.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -52,6 +54,14 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
     private QuesActionAdapter quesActionAdapter;
     private int[] positions = {1, 0, 0, 0, 0};
 
+    public static Fragment instantiate(Context context, int subtype){
+        Fragment fragment = new QuestionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(QUES_TYPE_KEY, subtype);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
@@ -77,12 +87,8 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
                 catalog = 1;
                 break;
         }
-        if (!mIsRefresh) {
-            mIsRefresh = true;
-            mBean.setPrevPageToken(null);
-            mBean.setNextPageToken(null);
-        }
-        requestEventDispatcher();
+
+
     }
 
     @Override
@@ -170,6 +176,12 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
     protected void initData() {
         CACHE_NAME = QUES_ASK;
         super.initData();
+        if (!mIsRefresh) {
+            mIsRefresh = true;
+//            mBean.setPrevPageToken(null);
+//            mBean.setNextPageToken(null);
+        }
+        requestEventDispatcher();
     }
 
     @Override
