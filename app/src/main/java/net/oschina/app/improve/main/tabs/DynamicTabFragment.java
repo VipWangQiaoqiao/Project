@@ -3,12 +3,14 @@ package net.oschina.app.improve.main.tabs;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
@@ -42,6 +44,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
+ * 动态栏目Fragment
  * Created by thanatosx on 16/10/26.
  */
 
@@ -129,8 +132,8 @@ public class DynamicTabFragment extends BaseTitleFragment {
 
             @Override
             @SuppressWarnings("all")
-            public void onSelected(int position) {
-                mLayoutTab.getTabAt(position).select();
+            public void onSelected(final int position) {
+                mViewPager.setCurrentItem(position);
             }
 
             @Override

@@ -1,7 +1,7 @@
 [
     {
-        "token": "111111111111",
-        "name": "资讯",
+        "token": "61616161616161",
+        "name": "推荐资讯",
         "fixed": true,
         "needLogin": false,
         "type": 6,
@@ -14,28 +14,88 @@
         }
     },
     {
-        "token": "222222222222",
-        "name": "博客",
+        "token": "3434343434343434",
+        "name": "推荐博客",
         "fixed": false,
         "needLogin": false,
         "type": 3,
-        "subtype": 1,
+        "subtype": 4,
         "order": 2,
-        "href": "https://www.oschina.net/action/apiv2/blog?catalog=1"
+        "href": "https://www.oschina.net/action/apiv2/blog?catalog=4"
     },
     {
-        "token": "5555555555",
-        "name": "问答",
+        "token": "3333333333333333",
+        "name": "最新博客",
+        "fixed": false,
+        "needLogin": false,
+        "type": 3,
+        "subtype": 3,
+        "order": 3,
+        "href": "https://www.oschina.net/action/apiv2/blog?catalog=3"
+    },
+    {
+        "token": "3232323232323232",
+        "name": "热门博客",
+        "fixed": false,
+        "needLogin": false,
+        "type": 3,
+        "subtype": 2,
+        "order": 4,
+        "href": "https://www.oschina.net/action/apiv2/blog?catalog=2"
+    },
+    {
+        "token": "2323232323232323",
+        "name": "技术问答",
         "fixed": false,
         "needLogin": false,
         "type": 2,
-        "subtype": 1,
+        "subtype": 3,
         "order": 5,
-        "href": "https://www.oschina.net/action/apiv2/question?catalog=1"
+        "href": "https://www.oschina.net/action/apiv2/question?catalog=3"
+    },
+    {
+        "token": "2424242424242424",
+        "name": "技术分享",
+        "fixed": false,
+        "needLogin": false,
+        "type": 2,
+        "subtype": 4,
+        "order": 6,
+        "href": "https://www.oschina.net/action/apiv2/question?catalog=4"
+    },
+    {
+        "token": "2525252525252525",
+        "name": "行业杂烩",
+        "fixed": false,
+        "needLogin": false,
+        "type": 2,
+        "subtype": 5,
+        "order": 7,
+        "href": "https://www.oschina.net/action/apiv2/question?catalog=5"
+    },
+    {
+        "token": "2626262626262626",
+        "name": "职业生涯",
+        "fixed": false,
+        "needLogin": false,
+        "type": 2,
+        "subtype": 6,
+        "order": 8,
+        "href": "https://www.oschina.net/action/apiv2/question?catalog=6"
+    },
+    {
+        "token": "272727272727272727",
+        "name": "站务建议",
+        "fixed": false,
+        "needLogin": false,
+        "type": 2,
+        "subtype": 7,
+        "order": 9,
+        "href": "https://www.oschina.net/action/apiv2/question?catalog=7"
     },
     {
         "token": "10101010101010",
-        "name": "活动",
+        "name": "线下活动",
         "fixed": false,
         "needLogin": false,
         "type": 5,

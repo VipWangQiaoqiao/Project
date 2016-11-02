@@ -1,7 +1,7 @@
 [
     {
-        "token": "111111111111",
-        "name": "资讯",
+        "token": "61616161616161",
+        "name": "推荐资讯",
         "fixed": true,
         "needLogin": false,
         "type": 6,
