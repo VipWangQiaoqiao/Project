@@ -32,14 +32,14 @@ import java.util.List;
  * 动态栏目View 请通过{@link #setTabPickerManager(TabPickerDataManager)}来设置活动数据和原始数据，数据
  * 对象根据需要实现{@link Object#hashCode()}和{@link Object#equals(Object)}方法，因为非活动数据是通过使用
  * {@link List#contains(Object)}方法从原始数据剔除活动数据实现的。
- *
+ * <p>
  * <p>活动动态栏目的添加、删除、移动、选择通过{@link OnTabPickingListener}来实现的，你可以通过方法
  * {@link #setOnTabPickingListener(OnTabPickingListener)}来监听。
- *
+ * <p>
  * <p>通过{@link #show(int)}和{@link #hide()}方法来显示隐藏动态栏目界面。
- *
+ * <p>
  * <p>通过{@link #onTurnBack()}响应回退事件。
- *
+ * <p>
  * <p>Created by thanatosx on 16/10/27.
  */
 @SuppressWarnings("all")
@@ -121,7 +121,7 @@ public class TabPickerView extends FrameLayout {
         void onRestore(List<SubTab> activeTabs);
     }
 
-    public interface Action1<T>{
+    public interface Action1<T> {
         void call(T t);
     }
 
@@ -138,9 +138,9 @@ public class TabPickerView extends FrameLayout {
         mViewDone.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mViewDone.getText().toString().equals("排序删除")){
+                if (mViewDone.getText().toString().equals("排序删除")) {
                     mActiveAdapter.startEditMode();
-                }else {
+                } else {
                     mActiveAdapter.cancelEditMode();
                 }
             }
@@ -157,11 +157,11 @@ public class TabPickerView extends FrameLayout {
 
     }
 
-    public void setOnShowAnimation(Action1<ViewPropertyAnimator> l){
+    public void setOnShowAnimation(Action1<ViewPropertyAnimator> l) {
         this.mOnShowAnimator = l;
     }
 
-    public void setOnHideAnimator(Action1<ViewPropertyAnimator> l){
+    public void setOnHideAnimator(Action1<ViewPropertyAnimator> l) {
         this.mOnHideAnimator = l;
     }
 
@@ -171,10 +171,10 @@ public class TabPickerView extends FrameLayout {
         mActiveAdapter.notifyItemChanged(tempIndex);
         mActiveAdapter.notifyItemChanged(mSelectedIndex);
 
-        if (mOnShowAnimator != null){
+        if (mOnShowAnimator != null) {
             mOnShowAnimator.call(animate());
             animate().start();
-        }else {
+        } else {
             setVisibility(VISIBLE);
         }
     }
@@ -184,10 +184,10 @@ public class TabPickerView extends FrameLayout {
             mTabPickingListener.onSelected(mSelectedIndex);
             mTabPickingListener.onRestore(mTabManager.mActiveDataSet);
         }
-        if (mOnHideAnimator != null){
+        if (mOnHideAnimator != null) {
             mOnHideAnimator.call(animate());
             animate().start();
-        }else {
+        } else {
             setVisibility(GONE);
         }
     }
@@ -227,7 +227,7 @@ public class TabPickerView extends FrameLayout {
                 } else {
                     holder.mViewDel.setVisibility(GONE);
                 }
-                if (mBindViewObserver != null){
+                if (mBindViewObserver != null) {
                     mBindViewObserver.call(holder);
                 }
             }
@@ -277,7 +277,7 @@ public class TabPickerView extends FrameLayout {
                 if (mSelectedIndex == position) {
                     mSelectedIndex = position == oldCount - 1 ? mSelectedIndex - 1 : mSelectedIndex;
                     mActiveAdapter.notifyItemChanged(mSelectedIndex);
-                }else if (mSelectedIndex > position){
+                } else if (mSelectedIndex > position) {
                     --mSelectedIndex;
                     mActiveAdapter.notifyItemChanged(mSelectedIndex);
                 }
@@ -467,7 +467,7 @@ public class TabPickerView extends FrameLayout {
             return items.get(position);
         }
 
-        void startEditMode(){
+        void startEditMode() {
             mViewOperator.setText("拖动排序");
             mViewDone.setText("完成");
             mLayoutWrapper.setVisibility(GONE);
@@ -481,7 +481,7 @@ public class TabPickerView extends FrameLayout {
             notifyDataSetChanged();
         }
 
-        void cancelEditMode(){
+        void cancelEditMode() {
             mViewOperator.setText("切换栏目");
             mViewDone.setText("排序删除");
             mLayoutWrapper.setVisibility(VISIBLE);
@@ -492,15 +492,15 @@ public class TabPickerView extends FrameLayout {
             notifyDataSetChanged();
         }
 
-        boolean isEditMode(){
+        boolean isEditMode() {
             return isEditMode;
         }
 
-        void registerBindViewObserver(Action1<ViewHolder> l){
+        void registerBindViewObserver(Action1<ViewHolder> l) {
             this.mBindViewObserver = l;
         }
 
-        void unRegisterBindViewObserver(){
+        void unRegisterBindViewObserver() {
             this.mBindViewObserver = null;
         }
 
@@ -536,8 +536,8 @@ public class TabPickerView extends FrameLayout {
             return mClickDeleteListener;
         }
 
-        OnTouchListener getTouchTabItemListener(){
-            if (mTouchTabItemListener == null){
+        OnTouchListener getTouchTabItemListener() {
+            if (mTouchTabItemListener == null) {
                 mTouchTabItemListener = new OnTabTouchListener();
             }
             return mTouchTabItemListener;
@@ -614,7 +614,9 @@ public class TabPickerView extends FrameLayout {
                                   RecyclerView.ViewHolder target) {
                 int fromTargetIndex = viewHolder.getAdapterPosition();
                 int toTargetIndex = target.getAdapterPosition();
+                if (fromTargetIndex == toTargetIndex) return true;
                 if (items.get(toTargetIndex).isFixed()) return true;
+
                 if (fromTargetIndex < toTargetIndex) {
                     for (int i = fromTargetIndex; i < toTargetIndex; i++) {
                         Collections.swap(items, i, i + 1);
@@ -624,11 +626,15 @@ public class TabPickerView extends FrameLayout {
                         Collections.swap(items, i, i - 1);
                     }
                 }
-                if (mSelectedIndex == fromTargetIndex){
+
+                if (mSelectedIndex == fromTargetIndex) {
                     mSelectedIndex = toTargetIndex;
-                }else if (mSelectedIndex == toTargetIndex){
+                } else if (mSelectedIndex == toTargetIndex) {
                     mSelectedIndex = fromTargetIndex;
+                } else if (toTargetIndex < mSelectedIndex && mSelectedIndex < fromTargetIndex) {
+                    ++mSelectedIndex;
                 }
+
                 notifyItemMoved(fromTargetIndex, toTargetIndex);
                 if (mTabPickingListener != null) {
                     mTabPickingListener.onMove(fromTargetIndex, items.get(fromTargetIndex),
