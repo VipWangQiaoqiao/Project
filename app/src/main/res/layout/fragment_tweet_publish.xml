@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/lay_44"
-        android:layout_marginTop="81dp"
+        android:layout_marginTop="@dimen/title_bar_warp_height"
         android:background="@color/white">
 
         <android.support.design.widget.AppBarLayout

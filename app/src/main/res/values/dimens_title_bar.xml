@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="title_bar_warp_height">?attr/actionBarSize</dimen>
+    <dimen name="title_bar_item_height">?attr/actionBarSize</dimen>
+</resources>

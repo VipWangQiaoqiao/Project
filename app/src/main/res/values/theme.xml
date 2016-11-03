@@ -31,6 +31,7 @@
         <item name="actionModeBackground">@color/day_colorPrimary</item>
 
         <!--toolbar style-->
+        <item name="actionBarSize">48dp</item>
         <item name="toolbarStyle">@style/App.Widget.Light.Toolbar</item>
 
         <!--button style-->
@@ -86,7 +87,7 @@
     </style>
 
     <!-- 日间模式 -->
-    <style name="App.Theme.Light" parent="Base.App.Theme.Light"/>
+    <style name="App.Theme.Light" parent="Base.App.Theme.Light" />
 
     <!-- 全透明的背景 -->
     <style name="App.Theme.Transparent" parent="@android:style/Theme">
@@ -125,7 +126,7 @@
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
-    <style name="App.Theme.Tweet.Main" parent="Base.App.Theme.NoTitle"/>
+    <style name="App.Theme.Tweet.Main" parent="Base.App.Theme.NoTitle" />
 
     <!--button-->
     <style name="App.Widget.Button" parent="Widget.AppCompat.Button">
@@ -136,6 +137,7 @@
 
     <!--toolbar-->
     <style name="Base.App.Widget.Toolbar" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="android:height">?attr/actionBarSize</item>
         <item name="titleTextAppearance">@style/App.TextAppearance.Widget.Toolbar.Title</item>
         <item name="titleMargin">0dp</item>
         <item name="contentInsetStart">0dp</item>
@@ -185,7 +187,7 @@
     </style>
 
     <!-- 夜间模式 -->
-    <style name="App.Theme.Night" parent="Base.App.Theme.Night"/>
+    <style name="App.Theme.Night" parent="Base.App.Theme.Night" />
 
     <style name="Base.App.Theme.Night" parent="@style/Theme.AppCompat">
         <item name="colorPrimary">@color/night_colorPrimary</item>
