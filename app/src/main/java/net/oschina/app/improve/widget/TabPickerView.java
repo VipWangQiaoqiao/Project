@@ -252,7 +252,7 @@ public class TabPickerView extends FrameLayout {
             @Override
             public void call(Integer position) {
                 SubTab tab = mActiveAdapter.getItem(position);
-                if (tab.isFixed()) return;
+                if (tab == null || tab.isFixed()) return;
                 int oldCount = mActiveAdapter.getItemCount();
                 tab = mActiveAdapter.removeItem(position);
                 // 放到下面需要根据Original DataSet重排序
@@ -391,6 +391,7 @@ public class TabPickerView extends FrameLayout {
         }
 
         SubTab getItem(int position) {
+            if (position < 0 || position >= items.size()) return null;
             return items.get(position);
         }
 
