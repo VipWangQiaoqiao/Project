@@ -19,12 +19,11 @@ import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.app.AppOperator;
-import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.TweetLikeReverse;
@@ -49,12 +48,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by
  * thanatos on 16/8/17.
  */
-public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet> {
+public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
     private Bitmap mRecordBitmap;
     private OnTweetLikeClickListener listener;
 
-    public UserTweetAdapter(Context context, int mode) {
-        super(context, mode);
+    public UserTweetAdapter(Callback callback, int mode) {
+        super(callback, mode);
         initListener();
     }
 
@@ -175,7 +174,7 @@ public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet> {
     private class TweetLikedHandler extends TextHttpResponseHandler {
         private int position;
 
-        public TweetLikedHandler(int position) {
+        TweetLikedHandler(int position) {
             this.position = position;
         }
 
