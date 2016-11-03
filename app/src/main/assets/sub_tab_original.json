@@ -15,7 +15,7 @@
     },
     {
         "token": "3434343434343434",
-        "name": "推荐博客吧",
+        "name": "推荐博客",
         "fixed": false,
         "needLogin": false,
         "type": 3,
@@ -25,7 +25,7 @@
     },
     {
         "token": "3333333333333333",
-        "name": "最新博客博客",
+        "name": "最新博客",
         "fixed": false,
         "needLogin": false,
         "type": 3,
@@ -35,7 +35,7 @@
     },
     {
         "token": "3232323232323232",
-        "name": "热门博客博客博客",
+        "name": "热门博客",
         "fixed": false,
         "needLogin": false,
         "type": 3,

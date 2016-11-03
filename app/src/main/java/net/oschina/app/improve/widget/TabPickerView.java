@@ -8,9 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +16,6 @@ import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -199,7 +195,8 @@ public class TabPickerView extends FrameLayout {
         mActiveAdapter = new TabAdapter<TabAdapter.ViewHolder>(mTabManager.mActiveDataSet) {
             @Override
             public TabAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                return new TabAdapter.ViewHolder(createItemView());
+                return new TabAdapter.ViewHolder(LayoutInflater.from(
+                        parent.getContext()).inflate(R.layout.view_tab_item, parent, false));
             }
 
             @Override
@@ -298,7 +295,8 @@ public class TabPickerView extends FrameLayout {
         mInactiveAdapter = new TabAdapter<TabAdapter.ViewHolder>(mTabManager.mInactiveDataSet) {
             @Override
             public TabAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                return new ViewHolder(createItemView());
+                return new TabAdapter.ViewHolder(LayoutInflater.from(
+                        parent.getContext()).inflate(R.layout.view_tab_item, parent, false));
             }
 
             @Override
@@ -326,80 +324,6 @@ public class TabPickerView extends FrameLayout {
         mRecyclerInactive.setAdapter(mInactiveAdapter);
     }
 
-    private View createItemView() {
-        final int dp8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
-                getContext().getResources().getDisplayMetrics());
-        final int dp6 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6,
-                getContext().getResources().getDisplayMetrics());
-
-        /*layout*/
-        RelativeLayout layout = new RelativeLayout(getContext());
-        layout.setLayoutParams(new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
-
-        /*bubble view*/
-        TextView bubble = new TextView(getContext());
-        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        params1.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        params1.setMargins(0, 0, dp8 / 8, 0);
-        bubble.setLayoutParams(params1);
-
-        bubble.setTextColor(0XFFFFFFFF);
-        bubble.setPadding(dp6 / 2, 0, dp6 / 2, 0);
-        bubble.setVisibility(GONE);
-        bubble.setTag("mViewBubble");
-        bubble.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.shape_bubble));
-        bubble.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
-        bubble.setGravity(Gravity.CENTER);
-
-        /*delete image view*/
-        ImageView delView = new ImageView(getContext());
-        RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        params2.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        params2.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        delView.setPadding(10, 10, 16, 16);
-        delView.setLayoutParams(params2);
-        delView.setImageResource(R.mipmap.ic_unsubscribe);
-        delView.setTag("mViewDel");
-        delView.setVisibility(GONE);
-
-        /*content text view*/
-        AutoSizeTextView view = new AutoSizeTextView(getContext());
-        view.setLines(1);
-        view.setTag("mViewTab");
-        view.setActivated(true);
-        view.setPadding(dp8 / 2, 0, dp8 / 2, 0);
-        float dp28 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 28, getResources().getDisplayMetrics());
-        RelativeLayout.LayoutParams mTextParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, (int) dp28
-        );
-        mTextParams.setMargins(dp6, dp6, dp6, dp6);
-        view.setLayoutParams(mTextParams);
-        view.setText("软件");
-        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
-        view.setTextColor(new ColorStateList(new int[][]{
-                        new int[]{-android.R.attr.state_activated},
-                        new int[]{}
-                }, new int[]{0XFF24CF5F, 0XFF6A6A6A})
-        );
-        view.setGravity(Gravity.CENTER);
-        int dp4 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6,
-                getContext().getResources().getDisplayMetrics());
-        view.setClickable(true);
-        view.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.selector_dynamic_tab));
-
-        layout.addView(view);
-        layout.addView(bubble);
-        layout.addView(delView);
-
-        return layout;
-    }
 
     public void setTabPickerManager(TabPickerDataManager manager) {
         if (manager == null) return;
@@ -560,9 +484,17 @@ public class TabPickerView extends FrameLayout {
 
             ViewHolder(View view) {
                 super(view);
-                mViewTab = (TextView) view.findViewWithTag("mViewTab");
-                mViewBubble = (TextView) view.findViewWithTag("mViewBubble");
-                mViewDel = (ImageView) view.findViewWithTag("mViewDel");
+                mViewTab = (TextView) view.findViewById(R.id.tv_content);
+                mViewBubble = (TextView) view.findViewById(R.id.tv_bubble);
+                mViewDel = (ImageView) view.findViewById(R.id.iv_delete);
+
+                mViewTab.setTextColor(new ColorStateList(new int[][]{
+                                new int[]{-android.R.attr.state_activated},
+                                new int[]{}
+                        }, new int[]{0XFF24CF5F, 0XFF6A6A6A})
+                );
+                mViewTab.setActivated(true);
+
                 mViewTab.setTag(this);
                 mViewDel.setTag(this);
                 mViewDel.setOnClickListener(getDeleteItemListener());
@@ -618,10 +550,10 @@ public class TabPickerView extends FrameLayout {
                 if (mSelectedIndex == fromTargetIndex) {
                     mSelectedIndex = toTargetIndex;
                 } else if (mSelectedIndex == toTargetIndex) {
-                    mSelectedIndex = fromTargetIndex > toTargetIndex ? mSelectedIndex + 1: mSelectedIndex - 1;
+                    mSelectedIndex = fromTargetIndex > toTargetIndex ? mSelectedIndex + 1 : mSelectedIndex - 1;
                 } else if (toTargetIndex <= mSelectedIndex && mSelectedIndex < fromTargetIndex) {
                     ++mSelectedIndex;
-                } else if (fromTargetIndex < mSelectedIndex && mSelectedIndex < toTargetIndex){
+                } else if (fromTargetIndex < mSelectedIndex && mSelectedIndex < toTargetIndex) {
                     --mSelectedIndex;
                 }
 
