@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="81dp"
+    android:layout_height="@dimen/title_bar_warp_height"
     android:background="@color/tweet_publish_title_bg">
 
     <net.qiujuer.genius.ui.widget.ImageView
         android:id="@+id/icon_back"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="@dimen/title_bar_item_height"
+        android:layout_height="@dimen/title_bar_item_height"
         android:layout_gravity="left"
         android:layout_marginLeft="-4dp"
         android:layout_marginTop="17dp"
@@ -31,8 +31,8 @@
 
     <net.qiujuer.genius.ui.widget.Button
         android:id="@+id/icon_send"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="@dimen/title_bar_item_height"
+        android:layout_height="@dimen/title_bar_item_height"
         android:layout_gravity="right"
         android:layout_marginRight="-4dp"
         android:layout_marginTop="17dp"

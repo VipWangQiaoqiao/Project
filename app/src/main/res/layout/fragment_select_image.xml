@@ -9,16 +9,14 @@
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/actionbar_background"
         android:paddingTop="1dp">
 
         <net.qiujuer.genius.ui.widget.ImageView
             android:id="@+id/icon_back"
-            android:layout_width="63dp"
-            android:layout_height="63dp"
-            android:layout_marginBottom="-8dp"
-            android:layout_marginLeft="-4dp"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
             android:clickable="true"
             android:scaleType="centerInside"
             android:src="@mipmap/btn_back_normal"
@@ -30,7 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:paddingTop="8dp">
+            android:paddingBottom="@dimen/lay_4"
+            android:paddingTop="@dimen/lay_4">
 
             <ImageView
                 android:id="@+id/iv_title_select"
@@ -51,10 +50,10 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:maxWidth="@dimen/size_128"
-                android:paddingBottom="@dimen/lay_4"
+                android:paddingBottom="@dimen/lay_2"
                 android:paddingLeft="@dimen/lay_4"
                 android:paddingRight="@dimen/size_20"
-                android:paddingTop="@dimen/lay_4"
+                android:paddingTop="@dimen/lay_2"
                 android:text="选择图片"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_18"

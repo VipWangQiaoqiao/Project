@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="title_bar_warp_height">73dp</dimen>
+    <dimen name="title_bar_item_height">64dp</dimen>
+</resources>
