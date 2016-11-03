@@ -169,10 +169,10 @@ public class WXEntryActivity extends Activity {
                             if (resultBean.isSuccess()) {
                                 User user = resultBean.getResult();
                                 AccountHelper.login(user, headers);
+                                finish();
                                 Intent intent = new Intent();
                                 intent.setAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
                                 LocalBroadcastManager.getInstance(WXEntryActivity.this).sendBroadcast(intent);
-                                finish();
                             }
                         }
                     });
