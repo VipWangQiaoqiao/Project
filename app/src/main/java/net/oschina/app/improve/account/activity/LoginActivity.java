@@ -3,10 +3,12 @@ package net.oschina.app.improve.account.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -139,6 +141,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 User user = resultBean.getResult();
                 AccountHelper.login(user, headers);
                 AppContext.showToast(R.string.login_success_hint);
+                setResult(RESULT_OK);
                 sendLocalReceiver();
             } else {
                 AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
@@ -197,6 +200,26 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     public static void show(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
+    }
+
+    /**
+     * show the login activity
+     *
+     * @param context context
+     */
+    public static void show(Activity context, int requestCode) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivityForResult(intent, requestCode);
+    }
+
+    /**
+     * show the login activity
+     *
+     * @param fragment fragment
+     */
+    public static void show(Fragment fragment, int requestCode) {
+        Intent intent = new Intent(fragment.getActivity(), LoginActivity.class);
+        fragment.startActivityForResult(intent, requestCode);
     }
 
     @Override
@@ -584,6 +607,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         AccountHelper.login(user, headers);
                         holdAccount();
                         AppContext.showToast(R.string.login_success_hint);
+                        setResult(RESULT_OK);
                         sendLocalReceiver();
                     } else {
                         int code = resultBean.getCode();

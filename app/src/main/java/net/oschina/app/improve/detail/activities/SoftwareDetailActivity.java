@@ -33,8 +33,7 @@ import cz.msebera.android.httpclient.Header;
 public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View>
         implements SoftDetailContract.Operator {
 
-    private static final String TAG = "SoftwareDetailActivity";
-    private String ident;
+    private String mIdent;
 
     @Override
     int getOptionsMenuId() {
@@ -72,11 +71,8 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
 
     @Override
     protected boolean initBundle(Bundle bundle) {
-        ident = bundle.getString("ident", null);
-        if (!TextUtils.isEmpty(ident)) {
-            return true;
-        }
-        return super.initBundle(bundle);
+        mIdent = bundle.getString("ident", null);
+        return !TextUtils.isEmpty(mIdent) || super.initBundle(bundle);
     }
 
     @Override
@@ -86,10 +82,10 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
 
     @Override
     void requestData() {
-        if (TextUtils.isEmpty(ident)) {
+        if (TextUtils.isEmpty(mIdent)) {
             OSChinaApi.getNewsDetail(getDataId(), OSChinaApi.CATALOG_SOFTWARE_DETAIL, getRequestHandler());
         } else {
-            OSChinaApi.getSoftwareDetail(ident, OSChinaApi.CATALOG_SOFTWARE_DETAIL, getRequestHandler());
+            OSChinaApi.getSoftwareDetail(mIdent, OSChinaApi.CATALOG_SOFTWARE_DETAIL, getRequestHandler());
         }
 
     }
@@ -163,12 +159,12 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
             String title = softwareDetail.getName();
 
             if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
-                AppContext.showToast("内容加载失败...");
+                AppContext.showToast(getResources().getString(R.string.software_loading_error));
                 return;
             }
             toShare(title, content, url);
         } else {
-            AppContext.showToast("内容加载失败...");
+            AppContext.showToast(getResources().getString(R.string.software_loading_error));
         }
     }
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -44,7 +45,7 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public abstract class DetailActivity<Data, DataView extends DetailContract.View> extends
-                                                                                 BaseBackActivity
+        BaseBackActivity
         implements DetailContract.Operator<Data, DataView> {
 
     long mDataId;
@@ -54,8 +55,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     TextView mCommentCountView;
 
     private ProgressDialog mDialog;
-    private ShareDialogBuilder builder;
-    //  private ShareDialog mShareDialog;
 
     public long getDataId() {
         return mDataId;
@@ -98,6 +97,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         });
     }
 
+    @SuppressWarnings("deprecation")
     public ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
@@ -287,7 +287,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     }
 
 
-
     protected void toShare(String title, String content, String url) {
         ShareDialogBuilder.with(this)
                 .title(title)
@@ -296,25 +295,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
                 .build()
                 .create()
                 .show();
-
-        /*
-        Share share = new Share();
-        share.setTitle(title);
-        share.setContent(content);
-        share.setUrl(url);
-        share.setBitmapResID(R.mipmap.ic_share);
-        share.setAppShareIcon(R.mipmap.ic_share);
-
-        if (builder == null)
-            builder = new ShareDialogBuilder(this);
-
-        builder.boundActivity(DetailActivity.this)
-                .addShare(share)
-                .setTitle(R.string.share_to)
-                .setView(R.layout.dialog_share_main)
-                .create()
-                .show();
-        */
     }
 
 
@@ -357,7 +337,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 
                     @Override
                     public void onClick(DialogInterface d, int which) {
-                        Report report = null;
+                        Report report;
                         if ((report = dialog.getReport()) != null) {
                             OSChinaApi.report(report, handler);
                         }
@@ -367,19 +347,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         dialog.show();
     }
 
-
-//    protected void hideShareDialog() {
-//        ShareDialog dialog = mShareDialog;
-//        if (dialog != null) {
-//            mShareDialog = null;
-//            try {
-//                dialog.dismiss();
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//    }
-
     /**
      * 检查当前数据,并检查网络状况
      *
@@ -387,7 +354,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
      */
     public long requestCheck() {
         if (mDataId == 0 || mData == null) {
-            AppContext.showToast("数据加载中...");
+            AppContext.showToast(getResources().getString(R.string.state_loading_error), Toast.LENGTH_SHORT);
             return 0;
         }
         if (!TDevice.hasInternet()) {

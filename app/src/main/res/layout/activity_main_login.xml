@@ -153,6 +153,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:visibility="invisible"
                 android:id="@+id/iv_login_hold_pwd"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
@@ -165,6 +166,7 @@
                 tools:ignore="RtlHardcoded"/>
 
             <TextView
+                android:visibility="invisible"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

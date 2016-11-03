@@ -15,11 +15,12 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.bean.Tweet;
@@ -49,6 +50,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
     private Bitmap recordBitmap;
     private OnTweetLikeClickListener listener;
 
+
     public TweetAdapter(Callback callback) {
         super(callback);
         initListener();
@@ -58,6 +60,10 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         listener = new OnTweetLikeClickListener() {
             @Override
             public void onClick(View v, int position) {
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(mCallback.getContext());
+                    return;
+                }
                 OSChinaApi.reverseTweetLike(getItem(position).getId(), new TweetLikedHandler(position));
             }
         };

@@ -20,6 +20,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.Version;
 import net.oschina.app.improve.main.FeedBackActivity;
@@ -187,6 +188,10 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
                 break;
             case R.id.rl_feedback:
                 //UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(getContext());
+                    return;
+                }
                 FeedBackActivity.show(getActivity());
                 break;
             case R.id.rl_about:
