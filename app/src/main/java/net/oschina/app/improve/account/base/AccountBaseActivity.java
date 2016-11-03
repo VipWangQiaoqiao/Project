@@ -27,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
 public class AccountBaseActivity extends BaseActivity {
 
     private ProgressDialog mDialog;
-    private static final String ACTION_ACCOUNT_FINISH_ALL = "app.oschina.net.action.finish.all";
+    public static final String ACTION_ACCOUNT_FINISH_ALL = "app.oschina.net.action.finish.all";
     protected LocalBroadcastManager mManager;
     private BroadcastReceiver mReceiver;
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -18,10 +19,11 @@ import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
@@ -58,9 +60,8 @@ public class WXEntryActivity extends Activity {
     protected ProgressDialog showWaitDialog() {
         String message = getResources().getString(R.string.progress_submit);
         if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
+            mDialog = DialogHelper.getProgressDialog(this, message);
         }
-        mDialog.setMessage(message);
         mDialog.show();
 
         return mDialog;
@@ -169,6 +170,9 @@ public class WXEntryActivity extends Activity {
                                 User user = resultBean.getResult();
                                 AccountHelper.login(user, headers);
                                 finish();
+                                Intent intent = new Intent();
+                                intent.setAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
+                                LocalBroadcastManager.getInstance(WXEntryActivity.this).sendBroadcast(intent);
                             }
                         }
                     });
