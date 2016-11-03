@@ -368,7 +368,8 @@ public class TabPickerView extends FrameLayout {
         delView.setVisibility(GONE);
 
         /*content text view*/
-        TextView view = new TextView(getContext());
+        AutoSizeTextView view = new AutoSizeTextView(getContext());
+        view.setLines(1);
         view.setTag("mViewTab");
         view.setActivated(true);
         RelativeLayout.LayoutParams mTextParams = new RelativeLayout.LayoutParams(
