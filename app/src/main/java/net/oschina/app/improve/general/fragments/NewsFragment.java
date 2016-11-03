@@ -53,7 +53,6 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
     protected void onRestartInstance(Bundle bundle) {
         super.onRestartInstance(bundle);
         mIsRefresh = false;
-        mSystemTime = bundle.getString("system_time", "");
     }
 
     @Override
@@ -69,6 +68,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            if (getActivity() == null) return;
                             ((NewsAdapter) mAdapter).setSystemTime(AppContext.get(NEWS_SYSTEM_TIME, null));
                             mHeaderView.initData(getImgLoader(), pageBean.getItems());
                         }

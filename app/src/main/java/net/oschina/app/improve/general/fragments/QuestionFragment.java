@@ -120,7 +120,6 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
         mListView.addHeaderView(headView);
 
     }
-
     /**
      * According to the distribution network is events
      */
