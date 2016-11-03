@@ -102,7 +102,7 @@ public class TitleBar extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         float d = getResources().getDisplayMetrics().density;
-        int minH = (int) (d * 56 + getExtPaddingTop(getResources()));
+        int minH = (int) (d * 36 + getExtPaddingTop(getResources()));
 
         heightMeasureSpec = MeasureSpec.makeMeasureSpec(minH, MeasureSpec.EXACTLY);
 
