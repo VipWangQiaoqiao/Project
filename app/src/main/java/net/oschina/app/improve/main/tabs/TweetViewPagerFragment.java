@@ -7,6 +7,7 @@ import android.view.View;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
+import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.base.fragments.BaseViewPagerFragment;
 import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
@@ -39,8 +40,11 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
         if (mBaseViewPager != null) {
             BaseViewPagerAdapter pagerAdapter = (BaseViewPagerAdapter) mBaseViewPager.getAdapter();
             Fragment fragment = pagerAdapter.getCurFragment();
-            if (fragment != null && fragment instanceof BaseGeneralListFragment) {
-                ((BaseGeneralListFragment) fragment).onTabReselect();
+            if (fragment != null) {
+                if (fragment instanceof BaseGeneralListFragment)
+                    ((BaseGeneralListFragment) fragment).onTabReselect();
+                else if (fragment instanceof BaseGeneralRecyclerFragment)
+                    ((BaseGeneralRecyclerFragment) fragment).onTabReselect();
             }
         }
     }

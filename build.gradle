@@ -19,9 +19,9 @@ ext {
     compileSdkVersion = 24
     buildToolsVersion = "24.0.3"
     applicationId = "net.oschina.app"
-    minSdkVersion = 15
+    minSdkVersion = 19
     targetSdkVersion = 24
-    versionCode = 267
-    versionName = "v2.6.7(1610181630)"
+    versionCode = 268
+    versionName = "v2.6.8(1611031640)"
     supportVersion = '25.0.0'
 }
