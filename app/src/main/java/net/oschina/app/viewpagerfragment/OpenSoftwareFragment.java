@@ -12,7 +12,7 @@ import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.fragment.SoftwareCatalogListFragment;
 import net.oschina.app.fragment.SoftwareListFragment;
 
-public class OpenSourceSoftwareFragment extends BaseViewPagerFragment {
+public class OpenSoftwareFragment extends BaseViewPagerFragment {
 
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
