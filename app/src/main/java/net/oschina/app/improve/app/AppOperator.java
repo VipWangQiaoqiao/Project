@@ -24,9 +24,7 @@ public final class AppOperator {
         if (EXECUTORS_INSTANCE == null) {
             synchronized (AppOperator.class) {
                 if (EXECUTORS_INSTANCE == null) {
-                    EXECUTORS_INSTANCE = Executors.newFixedThreadPool(
-                            Runtime.getRuntime().availableProcessors() > 0 ?
-                                    Runtime.getRuntime().availableProcessors() : 2);
+                    EXECUTORS_INSTANCE = Executors.newFixedThreadPool(6);
                 }
             }
         }
