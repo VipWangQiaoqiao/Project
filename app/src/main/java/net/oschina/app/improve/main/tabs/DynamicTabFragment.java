@@ -3,16 +3,14 @@ package net.oschina.app.improve.main.tabs;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
@@ -31,11 +29,10 @@ import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.widget.TabPickerView;
+import net.oschina.app.interf.OnTabReselectListener;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +47,7 @@ import butterknife.OnClick;
  * Created by thanatosx on 16/10/26.
  */
 
-public class DynamicTabFragment extends BaseTitleFragment {
+public class DynamicTabFragment extends BaseTitleFragment implements OnTabReselectListener {
 
     @Bind(R.id.layout_tab)
     TabLayout mLayoutTab;
@@ -62,6 +59,7 @@ public class DynamicTabFragment extends BaseTitleFragment {
     ImageView mViewArrowDown;
 
     private MainActivity activity;
+    private Fragment mCurFragment;
     List<SubTab> tabs;
 
     @Override
@@ -100,7 +98,8 @@ public class DynamicTabFragment extends BaseTitleFragment {
                         baos.write(bytes, 0, length);
                     }
                     return new Gson().<ArrayList<SubTab>>fromJson(new String(baos.toByteArray(), "UTF-8"),
-                            new TypeToken<ArrayList<SubTab>>() {}.getType());
+                            new TypeToken<ArrayList<SubTab>>() {
+                            }.getType());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -118,7 +117,8 @@ public class DynamicTabFragment extends BaseTitleFragment {
                         baos.write(bytes, 0, length);
                     }
                     return new Gson().<ArrayList<SubTab>>fromJson(new String(baos.toByteArray(), "UTF-8"),
-                            new TypeToken<ArrayList<SubTab>>() {}.getType());
+                            new TypeToken<ArrayList<SubTab>>() {
+                            }.getType());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -241,6 +241,14 @@ public class DynamicTabFragment extends BaseTitleFragment {
                 return tabs.get(position).getName();
             }
 
+            @Override
+            public void setPrimaryItem(ViewGroup container, int position, Object object) {
+                super.setPrimaryItem(container, position, object);
+                if (object instanceof Fragment) {
+                    mCurFragment = (Fragment) object;
+                }
+            }
+
             //this is called when notifyDataSetChanged() is called
             @Override
             public int getItemPosition(Object object) {
@@ -297,4 +305,10 @@ public class DynamicTabFragment extends BaseTitleFragment {
     }
 
 
+    @Override
+    public void onTabReselect() {
+        if (mCurFragment != null && mCurFragment instanceof OnTabReselectListener) {
+            ((OnTabReselectListener) mCurFragment).onTabReselect();
+        }
+    }
 }

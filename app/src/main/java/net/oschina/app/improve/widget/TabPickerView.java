@@ -314,6 +314,8 @@ public class TabPickerView extends FrameLayout {
         mInactiveAdapter.setOnClickItemListener(new Action1<Integer>() {
             @Override
             public void call(Integer position) {
+                // fix double click会out of array
+                if (position < 0 || position >= mInactiveAdapter.getItemCount()) return;
                 SubTab tab = mInactiveAdapter.removeItem(position);
                 mActiveAdapter.addItem(tab);
                 if (mTabPickingListener != null) {
@@ -372,8 +374,10 @@ public class TabPickerView extends FrameLayout {
         view.setLines(1);
         view.setTag("mViewTab");
         view.setActivated(true);
+        view.setPadding(dp8 / 2, 0, dp8 / 2, 0);
+        float dp28 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 28, getResources().getDisplayMetrics());
         RelativeLayout.LayoutParams mTextParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT, (int) dp28
         );
         mTextParams.setMargins(dp6, dp6, dp6, dp6);
         view.setLayoutParams(mTextParams);
@@ -387,7 +391,6 @@ public class TabPickerView extends FrameLayout {
         view.setGravity(Gravity.CENTER);
         int dp4 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6,
                 getContext().getResources().getDisplayMetrics());
-        view.setPadding(0, dp4, 0, dp4);
         view.setClickable(true);
         view.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.selector_dynamic_tab));
 
@@ -470,13 +473,7 @@ public class TabPickerView extends FrameLayout {
         void startEditMode() {
             mViewOperator.setText("拖动排序");
             mViewDone.setText("完成");
-            mLayoutWrapper.setVisibility(GONE);
-            mRecyclerActive.getHeight();
-            float nh = mRecyclerActive.getHeight() + TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mRecyclerActive.getLayoutParams();
-            params.height = (int) nh;
-            mRecyclerActive.setLayoutParams(params);
+//            mLayoutWrapper.setVisibility(GONE);
             isEditMode = true;
             notifyDataSetChanged();
         }
@@ -484,10 +481,7 @@ public class TabPickerView extends FrameLayout {
         void cancelEditMode() {
             mViewOperator.setText("切换栏目");
             mViewDone.setText("排序删除");
-            mLayoutWrapper.setVisibility(VISIBLE);
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mRecyclerActive.getLayoutParams();
-            params.height = LayoutParams.WRAP_CONTENT;
-            mRecyclerActive.setLayoutParams(params);
+//            mLayoutWrapper.setVisibility(VISIBLE);
             isEditMode = false;
             notifyDataSetChanged();
         }
