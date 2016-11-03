@@ -60,7 +60,7 @@ public class UserTweetFragment extends BaseRecyclerViewFragment<Tweet> implement
 
     @Override
     protected BaseRecyclerAdapter<Tweet> getRecyclerAdapter() {
-        UserTweetAdapter userTweetAdapter = new UserTweetAdapter(getContext(), BaseRecyclerAdapter.ONLY_FOOTER);
+        UserTweetAdapter userTweetAdapter = new UserTweetAdapter(this, BaseRecyclerAdapter.ONLY_FOOTER);
         userTweetAdapter.setOnItemLongClickListener(this);
         return userTweetAdapter;
     }

@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,18 +20,20 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
-import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
+import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
-import net.oschina.app.improve.base.adapter.BaseListAdapter;
-import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
+import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
-import net.oschina.app.improve.tweet.adapter.TweetAdapter;
+import net.oschina.app.improve.user.adapter.UserTweetAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -51,7 +52,7 @@ import static net.oschina.app.improve.tweet.activities.TweetDetailActivity.BUNDL
  * Created by huanghaibin_dev
  * on 2016/7/18.
  */
-public class TweetFragment extends BaseGeneralListFragment<Tweet> {
+public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     public static final int CATEGORY_TYPE = 1; //请求最新或者最热
     public static final int CATEGORY_USER = 2; //请求用户
 
@@ -97,7 +98,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         super.initData();
         switch (requestCategory) {
             case CATEGORY_TYPE:
@@ -115,14 +116,13 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 break;
         }
 
-        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        mAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onLongClick(int position, long itemId) {
                 Tweet tweet = mAdapter.getItem(position);
                 if (tweet != null) {
                     handleLongClick(tweet, position);
                 }
-                return true;
             }
         });
 
@@ -171,17 +171,13 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        TweetDetailActivity.show(getContext(), mAdapter.getItem(position));
-
-        ViewHolder holder = (ViewHolder) view.getTag();
-        // footer view or header view haven't ViewHolder
+    public void onItemClick(int position, long itemId) {
+        UserTweetAdapter.ViewHolder holder = (UserTweetAdapter.ViewHolder) mRecyclerView.findViewHolderForAdapterPosition(position);
         if (holder == null) return;
 
-        ImageView mp = holder.getView(R.id.iv_tweet_face);
-        TextView mn = holder.getView(R.id.tv_tweet_name);
+        ImageView mp = (ImageView) holder.itemView.findViewById(R.id.iv_tweet_face);
+        TextView mn = (TextView) holder.itemView.findViewById(R.id.tv_tweet_name);
 
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
                 Pair.<View, String>create(mp, ViewCompat.getTransitionName(mp)),
@@ -200,6 +196,39 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
             LoginActivity.show(getContext());
         } else {
             super.onClick(v);
+        }
+    }
+
+    @Override
+    protected void setListData(ResultBean<PageBean<Tweet>> resultBean) {
+        mBean.setNextPageToken((resultBean == null ? null : resultBean.getResult().getNextPageToken()));
+        if (mIsRefresh) {
+            //cache the time
+            mBean.setItems(resultBean.getResult().getItems());
+            mAdapter.clear();
+            ((BaseGeneralRecyclerAdapter) mAdapter).addItems(mBean.getItems());
+            mBean.setPrevPageToken((resultBean == null ? null : resultBean.getResult().getPrevPageToken()));
+            mRefreshLayout.setCanLoadMore(true);
+            if (isNeedCache()) {
+                AppOperator.runOnThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);
+                    }
+                });
+            }
+        } else {
+            ((BaseGeneralRecyclerAdapter) mAdapter).addItems(resultBean.getResult().getItems());
+        }
+
+        mAdapter.setState(resultBean.getResult().getItems() == null || resultBean.getResult().getItems().size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOADING, true);
+
+        if (mAdapter.getItems().size() > 0) {
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            mRefreshLayout.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            mErrorLayout.setErrorType(isNeedEmptyView() ? EmptyLayout.NODATA : EmptyLayout.HIDE_LAYOUT);
         }
     }
 
@@ -236,8 +265,8 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
 
 
     @Override
-    protected BaseListAdapter getListAdapter() {
-        return new TweetAdapter(this);
+    protected BaseRecyclerAdapter<Tweet> getRecyclerAdapter() {
+        return new UserTweetAdapter(this, BaseRecyclerAdapter.ONLY_FOOTER);
     }
 
     @Override
@@ -265,10 +294,10 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         super.onDestroy();
     }
 
-    private class DeleteHandler extends TextHttpResponseHandler {
+    class DeleteHandler extends TextHttpResponseHandler {
         private int position;
 
-        public DeleteHandler(int position) {
+        DeleteHandler(int position) {
             this.position = position;
         }
 
@@ -283,13 +312,12 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.optInt("code") == 1) {
                     mAdapter.removeItem(position);
-                    mAdapter.notifyDataSetChanged();
                     Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), jsonObject.optString("message"), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
     }

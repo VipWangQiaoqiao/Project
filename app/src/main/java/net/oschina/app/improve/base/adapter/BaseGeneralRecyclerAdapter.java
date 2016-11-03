@@ -11,7 +11,9 @@ import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.widget.TweetTextView;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by huanghaibin_dev
@@ -20,6 +22,7 @@ import java.util.Date;
 
 public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<T> {
     protected Callback mCallBack;
+    private List<T> mPreItems;
 
     public BaseGeneralRecyclerAdapter(Callback callback, int mode) {
         super(callback.getContext(), mode);
@@ -34,13 +37,30 @@ public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<
         Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mCallBack.getContext(), content);
         spannable = AssimilateUtils.assimilateOnlyTag(mCallBack.getContext(), spannable);
         spannable = AssimilateUtils.assimilateOnlyLink(mCallBack.getContext(), spannable);
-        spannable = AssimilateUtils.assimilateOnlyTeamTask(mCallBack.getContext(),spannable);
+        spannable = AssimilateUtils.assimilateOnlyTeamTask(mCallBack.getContext(), spannable);
         spannable = InputHelper.displayEmoji(mCallBack.getContext().getResources(), spannable);
         textView.setText(spannable);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         textView.setFocusable(false);
         textView.setDispatchToParent(true);
         textView.setLongClickable(false);
+    }
+
+    public void addItems(List<T> items) {
+        if (items != null) {
+            List<T> date = new ArrayList<>();
+            if (mPreItems != null) {
+                for (T d : items) {
+                    if (!mPreItems.contains(d)) {
+                        date.add(d);
+                    }
+                }
+            } else {
+                date = items;
+            }
+            mPreItems = items;
+            mItems.addAll(date);
+        }
     }
 
     public interface Callback {
