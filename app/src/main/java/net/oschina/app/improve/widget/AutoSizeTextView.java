@@ -16,7 +16,7 @@ import net.oschina.app.R;
  */
 public class AutoSizeTextView extends TextView {
     private int mContentWidth;
-    private float mDefSize;
+    private float mDefaultSize;
     private float mMinSize;
 
     public AutoSizeTextView(Context context) {
@@ -39,10 +39,8 @@ public class AutoSizeTextView extends TextView {
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.AutoSizeTextView, defStyle, 0);
 
-        mDefSize = getTextSize();
-        mMinSize = a.getDimension(
-                R.styleable.AutoSizeTextView_textMinSize,
-                mDefSize);
+        mDefaultSize = getTextSize();
+        mMinSize = a.getDimension(R.styleable.AutoSizeTextView_textMinSize, 1);
         mContentWidth = getWidth() - getPaddingLeft() - getPaddingRight();
 
         a.recycle();
@@ -69,11 +67,11 @@ public class AutoSizeTextView extends TextView {
             }
 
             // resize to high
-            while ((textSize < mDefSize) && (measureWidth < mContentWidth)) {
+            while ((textSize < mDefaultSize) && (measureWidth < mContentWidth)) {
                 float backSize = paint.getTextSize();
                 textSize = backSize + 1;
-                if (textSize > mDefSize) {
-                    textSize = mDefSize;
+                if (textSize > mDefaultSize) {
+                    textSize = mDefaultSize;
                 }
 
                 paint.setTextSize(textSize);

@@ -11,6 +11,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
@@ -138,20 +139,16 @@ public class DynamicTabFragment extends BaseTitleFragment {
             @Override
             public void onRemove(int position, SubTab tab) {
                 isChangeIndex = true;
-//                tabs.remove(position);
             }
 
             @Override
             public void onInsert(SubTab tab) {
                 isChangeIndex = true;
-//                tabs.add(tab);
             }
 
             @Override
             public void onMove(int op, int np) {
                 isChangeIndex = true;
-//                SubTab tab = tabs.remove(op);
-//                tabs.add(np, tab);
             }
 
             @Override
@@ -175,13 +172,15 @@ public class DynamicTabFragment extends BaseTitleFragment {
             }
         });
 
+        final float dp32 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics());
+
         mViewTabPicker.setOnShowAnimation(new TabPickerView.Action1<ViewPropertyAnimator>() {
             @Override
             public void call(ViewPropertyAnimator animator) {
                 mViewArrowDown.setEnabled(false);
 
                 mViewTabPicker.setVisibility(View.VISIBLE);
-                mViewTabPicker.setTranslationY(mViewTabPicker.getHeight() * 0.2f);
+                mViewTabPicker.setTranslationY(dp32);
                 mViewTabPicker.setAlpha(0);
                 activity.toggleNavTabView(false);
                 animator.translationY(0)
@@ -204,7 +203,7 @@ public class DynamicTabFragment extends BaseTitleFragment {
             @Override
             public void call(ViewPropertyAnimator animator) {
                 activity.toggleNavTabView(true);
-                animator.translationY(mViewTabPicker.getHeight() * 0.2f)
+                animator.translationY(dp32)
                         .setDuration(380)
                         .alpha(0)
                         .setInterpolator(new DecelerateInterpolator())

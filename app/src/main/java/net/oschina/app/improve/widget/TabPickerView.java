@@ -368,7 +368,8 @@ public class TabPickerView extends FrameLayout {
         delView.setVisibility(GONE);
 
         /*content text view*/
-        TextView view = new TextView(getContext());
+        AutoSizeTextView view = new AutoSizeTextView(getContext());
+        view.setLines(1);
         view.setTag("mViewTab");
         view.setActivated(true);
         RelativeLayout.LayoutParams mTextParams = new RelativeLayout.LayoutParams(
@@ -623,8 +624,8 @@ public class TabPickerView extends FrameLayout {
                 if (mSelectedIndex == fromTargetIndex) {
                     mSelectedIndex = toTargetIndex;
                 } else if (mSelectedIndex == toTargetIndex) {
-                    ++mSelectedIndex;
-                } else if (toTargetIndex < mSelectedIndex && mSelectedIndex < fromTargetIndex) {
+                    mSelectedIndex = fromTargetIndex > toTargetIndex ? mSelectedIndex + 1: mSelectedIndex - 1;
+                } else if (toTargetIndex <= mSelectedIndex && mSelectedIndex < fromTargetIndex) {
                     ++mSelectedIndex;
                 } else if (fromTargetIndex < mSelectedIndex && mSelectedIndex < toTargetIndex){
                     --mSelectedIndex;

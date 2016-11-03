@@ -141,7 +141,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         mPagerItems.add(new Pair<>("问答", SearchArticleFragment.instantiate(this, News.TYPE_QUESTION)));
         mPagerItems.add(new Pair<>("博客", SearchArticleFragment.instantiate(this, News.TYPE_BLOG)));
         mPagerItems.add(new Pair<>("新闻", SearchArticleFragment.instantiate(this, News.TYPE_NEWS)));
-        mPagerItems.add(new Pair<>("人", SearchUserFragment.instantiate(this)));
+        mPagerItems.add(new Pair<>("找人", SearchUserFragment.instantiate(this)));
     }
 
     @Override

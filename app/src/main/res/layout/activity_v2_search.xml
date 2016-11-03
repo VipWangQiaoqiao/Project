@@ -19,7 +19,7 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="48dp"
             android:padding="8dp">
 
             <android.support.v7.widget.SearchView
@@ -29,7 +29,7 @@
                 android:background="@drawable/shape_search_view"
                 android:layout_height="wrap_content"
                 app:queryBackground="@color/transparent"
-                app:queryHint="搜索博客、软件、资讯、问答、人"
+                app:queryHint="搜索博客、软件、资讯、问答、找人"
                 app:iconifiedByDefault="false"/>
 
             <TextView
@@ -46,7 +46,7 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/layout_tab"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
             android:visibility="gone"
             app:tabSelectedTextColor="@color/day_colorPrimary"
             app:tabIndicatorHeight="0dp"
