@@ -13,7 +13,6 @@ import android.support.v4.content.SharedPreferencesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,7 +49,6 @@ import net.oschina.open.factory.OpenBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 
 import butterknife.Bind;
@@ -112,7 +110,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     ImageView mImLoginQq;
 
     private int openType;
-    private int mHoldPwd;
+    //private int mHoldPwd;
     private SsoHandler mSsoHandler;
     private Tencent mTencent;
 
@@ -167,7 +165,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      */
     private void holdAccount() {
         String username = mEtLoginUsername.getText().toString().trim();
-        String inputPwd = mEtLoginPwd.getText().toString().trim();
+        //String inputPwd = mEtLoginPwd.getText().toString().trim();
 
         SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -175,20 +173,20 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             editor.putString(HOLD_USERNAME_KEY, username);
         }
 
-        if (mHoldPwd != 2) {
-            if (!TextUtils.isEmpty(inputPwd)) {
-                byte[] bytes = inputPwd.getBytes();
-                String tempPwd = Base64.encodeToString(bytes, 0, bytes.length, Base64.DEFAULT);
-                editor.putString(HOLD_PWD_KEY, tempPwd);
-                editor.putInt(HOLD_PWD_STATUS_KEY, 1);
-            } else {
-                editor.putString(HOLD_PWD_KEY, inputPwd);
-                editor.putInt(HOLD_PWD_STATUS_KEY, 2);
-            }
-        } else {
-            editor.putString(HOLD_PWD_KEY, null);
-            editor.putInt(HOLD_PWD_STATUS_KEY, 2);
-        }
+//        if (mHoldPwd != 2) {
+//            if (!TextUtils.isEmpty(inputPwd)) {
+//                byte[] bytes = inputPwd.getBytes();
+//                String tempPwd = Base64.encodeToString(bytes, 0, bytes.length, Base64.DEFAULT);
+//                editor.putString(HOLD_PWD_KEY, tempPwd);
+//                editor.putInt(HOLD_PWD_STATUS_KEY, 1);
+//            } else {
+//                editor.putString(HOLD_PWD_KEY, inputPwd);
+//                editor.putInt(HOLD_PWD_STATUS_KEY, 2);
+//            }
+//        } else {
+//            editor.putString(HOLD_PWD_KEY, null);
+//            editor.putInt(HOLD_PWD_STATUS_KEY, 2);
+//        }
         SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
     }
 
@@ -296,26 +294,26 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         //初始化控件状态数据
         SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
         String holdUsername = sp.getString(HOLD_USERNAME_KEY, null);
-        String holdPwd = sp.getString(HOLD_PWD_KEY, null);
-        int holdStatus = sp.getInt(HOLD_PWD_STATUS_KEY, 0);//0第一次默认/1用户设置保存/2用户设置未保存
+        //String holdPwd = sp.getString(HOLD_PWD_KEY, null);
+        //int holdStatus = sp.getInt(HOLD_PWD_STATUS_KEY, 0);//0第一次默认/1用户设置保存/2用户设置未保存
 
         mEtLoginUsername.setText(holdUsername);
 
-        if (!TextUtils.isEmpty(holdPwd)) {
-            byte[] bytes = holdPwd.getBytes();
-            byte[] decode = Base64.decode(bytes, 0, bytes.length, Base64.DEFAULT);
-            try {
-                String tempPwd = new String(decode, 0, decode.length, "utf-8");
-
-                mEtLoginPwd.setText(tempPwd);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        } else {
-            mEtLoginPwd.setText(null);
-        }
-        updateHoldPwd(holdStatus);
-        mHoldPwd = holdStatus;
+//        if (!TextUtils.isEmpty(holdPwd)) {
+//            byte[] bytes = holdPwd.getBytes();
+//            byte[] decode = Base64.decode(bytes, 0, bytes.length, Base64.DEFAULT);
+//            try {
+//                String tempPwd = new String(decode, 0, decode.length, "utf-8");
+//
+//                mEtLoginPwd.setText(tempPwd);
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            mEtLoginPwd.setText(null);
+//        }
+       // updateHoldPwd(holdStatus);
+       // mHoldPwd = holdStatus;
     }
 
 
@@ -348,18 +346,18 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 break;
             case R.id.iv_login_hold_pwd:
                 //记住密码
-                String inputPwd = mEtLoginPwd.getText().toString().trim();
-
-                if (TextUtils.isEmpty(inputPwd)) {
-                    AppContext.showToast(getResources().getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
-                    return;
-                }
-                if (mHoldPwd == 2) {
-                    mHoldPwd = 1;
-                } else {
-                    mHoldPwd = 2;
-                }
-                updateHoldPwd(mHoldPwd);
+//                String inputPwd = mEtLoginPwd.getText().toString().trim();
+//
+//                if (TextUtils.isEmpty(inputPwd)) {
+//                    AppContext.showToast(getResources().getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
+//                    return;
+//                }
+//                if (mHoldPwd == 2) {
+//                    mHoldPwd = 1;
+//                } else {
+//                    mHoldPwd = 2;
+//                }
+//                updateHoldPwd(mHoldPwd);
                 break;
             case R.id.bt_login_register:
                 RegisterStepOneActivity.show(LoginActivity.this);
@@ -427,10 +425,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 .login(new OpenBuilder.Callback() {
                     @Override
                     public void onFailed() {
-                        AppContext.showToast(R.string.share_hint, Toast.LENGTH_SHORT);
+                        AppContext.showToast(R.string.login_hint, Toast.LENGTH_SHORT);
                     }
                 });
-        finish();
     }
 
     /**
@@ -611,13 +608,15 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         sendLocalReceiver();
                     } else {
                         int code = resultBean.getCode();
+                        String message = resultBean.getMessage();
                         if (code == 211) {
                             mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
                         } else if (code == 212) {
+                            message += "," + getResources().getString(R.string.message_pwd_error);
                             mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_error);
                         }
-                        AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
-                        //更新失败因该是不进行任何的本地操作
+                        AppContext.showToast(message, Toast.LENGTH_SHORT);
+                        //更新失败应该是不进行任何的本地操作
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

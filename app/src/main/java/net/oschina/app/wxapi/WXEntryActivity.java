@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -168,6 +170,9 @@ public class WXEntryActivity extends Activity {
                             if (resultBean.isSuccess()) {
                                 User user = resultBean.getResult();
                                 AccountHelper.login(user, headers);
+                                Intent intent = new Intent();
+                                intent.setAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
+                                LocalBroadcastManager.getInstance(WXEntryActivity.this).sendBroadcast(intent);
                                 finish();
                             }
                         }

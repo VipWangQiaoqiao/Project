@@ -336,6 +336,8 @@
     <string name="send_sms_code_success_hint">已成功发送验证码</string>
     <string name="reset_success_hint">密码重置成功</string>
     <string name="register_success_hint">注册成功</string>
-    <string name="share_hint">未安装第三方客户端&#8230;</string>
+    <string name="share_hint">抱歉,您未安装该应用,不能分享&#8230;</string>
+    <string name="login_hint">抱歉,您未安装该应用,不能登录&#8230;</string>
+    <string name="message_pwd_error">密码错误</string>
 
 </resources>
