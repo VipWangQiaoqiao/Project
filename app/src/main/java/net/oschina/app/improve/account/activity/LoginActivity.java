@@ -312,8 +312,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 //        } else {
 //            mEtLoginPwd.setText(null);
 //        }
-       // updateHoldPwd(holdStatus);
-       // mHoldPwd = holdStatus;
+        // updateHoldPwd(holdStatus);
+        // mHoldPwd = holdStatus;
     }
 
 
@@ -428,6 +428,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         AppContext.showToast(R.string.login_hint, Toast.LENGTH_SHORT);
                     }
                 });
+        //finish();
     }
 
     /**

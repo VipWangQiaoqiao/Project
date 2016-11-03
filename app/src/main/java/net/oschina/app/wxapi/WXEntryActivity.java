@@ -23,7 +23,7 @@ import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
@@ -60,9 +60,8 @@ public class WXEntryActivity extends Activity {
     protected ProgressDialog showWaitDialog() {
         String message = getResources().getString(R.string.progress_submit);
         if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
+            mDialog = DialogHelper.getProgressDialog(this, message);
         }
-        mDialog.setMessage(message);
         mDialog.show();
 
         return mDialog;
