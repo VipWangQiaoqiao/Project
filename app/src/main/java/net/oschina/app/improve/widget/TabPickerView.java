@@ -623,8 +623,8 @@ public class TabPickerView extends FrameLayout {
                 if (mSelectedIndex == fromTargetIndex) {
                     mSelectedIndex = toTargetIndex;
                 } else if (mSelectedIndex == toTargetIndex) {
-                    ++mSelectedIndex;
-                } else if (toTargetIndex < mSelectedIndex && mSelectedIndex < fromTargetIndex) {
+                    mSelectedIndex = fromTargetIndex > toTargetIndex ? mSelectedIndex + 1: mSelectedIndex - 1;
+                } else if (toTargetIndex <= mSelectedIndex && mSelectedIndex < fromTargetIndex) {
                     ++mSelectedIndex;
                 } else if (fromTargetIndex < mSelectedIndex && mSelectedIndex < toTargetIndex){
                     --mSelectedIndex;
