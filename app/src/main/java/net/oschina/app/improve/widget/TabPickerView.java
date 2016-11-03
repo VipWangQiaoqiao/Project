@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,7 +26,6 @@ import net.oschina.app.R;
 import net.oschina.app.improve.bean.SubTab;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -111,7 +111,7 @@ public class TabPickerView extends FrameLayout {
          * @param np      the swapper's position
          * @param swapper the swapped tab
          */
-        void onMove(int op, SubTab mover, int np, SubTab swapper);
+        void onMove(int op, int np);
 
         /**
          * 重新持久化活动的tabs
@@ -181,8 +181,8 @@ public class TabPickerView extends FrameLayout {
 
     public void hide() {
         if (mTabPickingListener != null) {
-            mTabPickingListener.onSelected(mSelectedIndex);
             mTabPickingListener.onRestore(mTabManager.mActiveDataSet);
+            mTabPickingListener.onSelected(mSelectedIndex);
         }
         if (mOnHideAnimator != null) {
             mOnHideAnimator.call(animate());
@@ -381,8 +381,7 @@ public class TabPickerView extends FrameLayout {
         view.setTextColor(new ColorStateList(new int[][]{
                         new int[]{-android.R.attr.state_activated},
                         new int[]{}
-                }, new int[]{
-                        0XFF24CF5F, 0XFF6A6A6A})
+                }, new int[]{0XFF24CF5F, 0XFF6A6A6A})
         );
         view.setGravity(Gravity.CENTER);
         int dp4 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6,
@@ -614,31 +613,26 @@ public class TabPickerView extends FrameLayout {
                                   RecyclerView.ViewHolder target) {
                 int fromTargetIndex = viewHolder.getAdapterPosition();
                 int toTargetIndex = target.getAdapterPosition();
+
                 if (fromTargetIndex == toTargetIndex) return true;
                 if (items.get(toTargetIndex).isFixed()) return true;
 
-                if (fromTargetIndex < toTargetIndex) {
-                    for (int i = fromTargetIndex; i < toTargetIndex; i++) {
-                        Collections.swap(items, i, i + 1);
-                    }
-                } else {
-                    for (int i = fromTargetIndex; i > toTargetIndex; i--) {
-                        Collections.swap(items, i, i - 1);
-                    }
-                }
+                SubTab tab = items.remove(fromTargetIndex);
+                items.add(toTargetIndex, tab);
 
                 if (mSelectedIndex == fromTargetIndex) {
                     mSelectedIndex = toTargetIndex;
                 } else if (mSelectedIndex == toTargetIndex) {
-                    mSelectedIndex = fromTargetIndex;
+                    ++mSelectedIndex;
                 } else if (toTargetIndex < mSelectedIndex && mSelectedIndex < fromTargetIndex) {
                     ++mSelectedIndex;
+                } else if (fromTargetIndex < mSelectedIndex && mSelectedIndex < toTargetIndex){
+                    --mSelectedIndex;
                 }
 
                 notifyItemMoved(fromTargetIndex, toTargetIndex);
                 if (mTabPickingListener != null) {
-                    mTabPickingListener.onMove(fromTargetIndex, items.get(fromTargetIndex),
-                            toTargetIndex, items.get(toTargetIndex));
+                    mTabPickingListener.onMove(fromTargetIndex, toTargetIndex);
                 }
                 return true;
             }

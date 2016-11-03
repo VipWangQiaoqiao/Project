@@ -52,6 +52,7 @@ public class EventFragment extends BaseGeneralListFragment<Event> {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            if (getActivity() == null) return;
                             mHeaderView.initData(getImgLoader(), pageBean.getItems());
                         }
                     });

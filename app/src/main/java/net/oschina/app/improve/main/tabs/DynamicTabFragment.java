@@ -3,12 +3,14 @@ package net.oschina.app.improve.main.tabs;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
@@ -29,13 +31,14 @@ import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.widget.TabPickerView;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -80,27 +83,23 @@ public class DynamicTabFragment extends BaseTitleFragment {
             @Override
             public List<SubTab> setupActiveDataSet() {
                 try {
-                    StringBuilder buffer = new StringBuilder();
                     byte[] bytes = new byte[1024];
                     int length;
 
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    InputStream is = null;
+
                     File file = getContext().getFileStreamPath("sub_tab_active.json");
                     if (file.exists()) {
-                        FileInputStream fis = getContext().openFileInput("sub_tab_active.json");
-                        while ((length = fis.read(bytes)) != -1) {
-                            buffer.append(new String(bytes, 0, length));
-                        }
+                        is = getContext().openFileInput("sub_tab_active.json");
+                    } else {
+                        is = getResources().getAssets().open("sub_tab_active.json");
                     }
-
-                    if (TextUtils.isEmpty(buffer.toString()) || buffer.toString().trim().equals("")) {
-                        InputStream is = getResources().getAssets().open("sub_tab_active.json");
-                        while ((length = is.read(bytes)) != -1) {
-                            buffer.append(new String(bytes, 0, length));
-                        }
+                    while ((length = is.read(bytes)) != -1) {
+                        baos.write(bytes, 0, length);
                     }
-                    return new Gson().<ArrayList<SubTab>>fromJson(buffer.toString(),
-                            new TypeToken<ArrayList<SubTab>>() {
-                            }.getType());
+                    return new Gson().<ArrayList<SubTab>>fromJson(new String(baos.toByteArray(), "UTF-8"),
+                            new TypeToken<ArrayList<SubTab>>() {}.getType());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -111,15 +110,14 @@ public class DynamicTabFragment extends BaseTitleFragment {
             public List<SubTab> setupOriginalDataSet() {
                 try {
                     InputStream is = getResources().getAssets().open("sub_tab_original.json");
-                    StringBuilder buffer = new StringBuilder();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     byte[] bytes = new byte[1024];
                     int length;
                     while ((length = is.read(bytes)) != -1) {
-                        buffer.append(new String(bytes, 0, length));
+                        baos.write(bytes, 0, length);
                     }
-                    return new Gson().<ArrayList<SubTab>>fromJson(buffer.toString(),
-                            new TypeToken<ArrayList<SubTab>>() {
-                            }.getType());
+                    return new Gson().<ArrayList<SubTab>>fromJson(new String(baos.toByteArray(), "UTF-8"),
+                            new TypeToken<ArrayList<SubTab>>() {}.getType());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -140,49 +138,40 @@ public class DynamicTabFragment extends BaseTitleFragment {
             @Override
             public void onRemove(int position, SubTab tab) {
                 isChangeIndex = true;
-                tabs.remove(position);
-                mViewPager.getAdapter().notifyDataSetChanged();
-//                mLayoutTab.removeTabAt(position);
+//                tabs.remove(position);
             }
 
             @Override
             public void onInsert(SubTab tab) {
                 isChangeIndex = true;
-                mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
-                tabs.add(tab);
-                mViewPager.getAdapter().notifyDataSetChanged();
+//                tabs.add(tab);
             }
 
             @Override
-            public void onMove(int op, SubTab mover, int np, SubTab swapper) {
+            public void onMove(int op, int np) {
                 isChangeIndex = true;
-                if (op < np) {
-                    for (int i = op; i < np; i++) {
-                        Collections.swap(tabs, i, i + 1);
-                    }
-                } else {
-                    for (int i = op; i > np; i--) {
-                        Collections.swap(tabs, i, i - 1);
-                    }
-                }
-                mViewPager.getAdapter().notifyDataSetChanged();
+//                SubTab tab = tabs.remove(op);
+//                tabs.add(np, tab);
             }
 
             @Override
             public void onRestore(List<SubTab> activeTabs) {
-                if (isChangeIndex) {
-                    String json = new Gson().toJson(activeTabs);
-                    try {
-                        FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
-                                Context.MODE_PRIVATE);
-                        fos.write(json.getBytes("UTF-8"));
-                        fos.flush();
-                        fos.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    isChangeIndex = false;
+                if (!isChangeIndex) return;
+                String json = new Gson().toJson(activeTabs);
+                try {
+                    FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
+                            Context.MODE_PRIVATE);
+                    fos.write(json.getBytes("UTF-8"));
+                    fos.flush();
+                    fos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+                isChangeIndex = false;
+                tabs.clear();
+                tabs.addAll(activeTabs);
+                mViewPager.getAdapter().notifyDataSetChanged();
+
             }
         });
 
