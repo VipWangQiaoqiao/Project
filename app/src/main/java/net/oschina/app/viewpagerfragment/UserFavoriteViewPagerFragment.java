@@ -31,7 +31,6 @@ public class UserFavoriteViewPagerFragment extends BaseViewPagerFragment {
         adapter.addTab(title[2], "favorite_question", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_QUESTION));
         adapter.addTab(title[3], "favorite_blogs", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_BLOG));
         adapter.addTab(title[4], "favorite_translation", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_TRANSALITON));
-        //adapter.addTab(title[5], "favotite_event", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_EVENT));
         adapter.addTab(title[6], "favorite_news", UserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_NEWS));
 
     }
