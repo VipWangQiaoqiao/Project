@@ -1,7 +1,9 @@
 package net.oschina.app.improve.tweet.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -41,13 +43,17 @@ import static net.oschina.app.improve.base.adapter.BaseRecyclerAdapter.ONLY_FOOT
  */
 
 public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
-
     public static final String BUNDLE_KEY_NAME = "bundle_key_name";
-    //private static final String TAG = "SoftwareTweetActivity";
     private String softwareName;
     private EditText mETInput;
     private ProgressDialog mDialog;
     private boolean mInputDoubleEmpty = false;
+
+    public static void show(Context context, String tag) {
+        Intent intent = new Intent(context, SoftwareTweetActivity.class);
+        intent.putExtra(SoftwareTweetActivity.BUNDLE_KEY_NAME, tag);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getContentView() {

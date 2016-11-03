@@ -28,6 +28,7 @@ public class SoftwareDetail extends Software {
     private int viewCount;//浏览量
     private boolean favorite;//是否收藏
     private boolean recommend;//是否推荐
+    private String identification; //唯一标示
     private List<About> abouts;  //相关推荐
 
     public String getExtName() {
@@ -181,5 +182,13 @@ public class SoftwareDetail extends Software {
 
     public void setAbouts(List<About> abouts) {
         this.abouts = abouts;
+    }
+
+    public String getIdentification() {
+        return identification;
+    }
+
+    public void setIdentification(String identification) {
+        this.identification = identification;
     }
 }

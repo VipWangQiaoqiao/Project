@@ -1,6 +1,5 @@
 package net.oschina.app.improve.detail.fragments;
 
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -78,10 +77,9 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
                 break;
             case R.id.lay_option_comment:
                 // 评论列表
-                Intent intent = new Intent(getActivity(), SoftwareTweetActivity.class);
-                intent.putExtra(SoftwareTweetActivity.BUNDLE_KEY_NAME, mOperator.getData().getName());
-                startActivity(intent);
-                //UIUtil.showSoftwareTweets(getActivity(), (int) mId, mOperator.getData().getName());
+                SoftwareDetail detail = mOperator.getData();
+                SoftwareTweetActivity.show(getContext(), TextUtils.isEmpty(detail.getIdentification()) ?
+                        detail.getName() : detail.getIdentification());
                 break;
             default:
                 break;

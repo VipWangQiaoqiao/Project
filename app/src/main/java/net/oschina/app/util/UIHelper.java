@@ -3,17 +3,14 @@ package net.oschina.app.util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -50,8 +47,8 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
-import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
@@ -62,10 +59,7 @@ import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
-import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
-import net.oschina.app.service.DownloadService;
-import net.oschina.app.service.DownloadService.DownloadBinder;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamActive;
@@ -904,31 +898,6 @@ public class UIHelper {
 
     public static void openDownLoadService(Context context, String downurl,
                                            String tilte) {
-        final ICallbackResult callback = new ICallbackResult() {
-
-            @Override
-            public void OnBackResult(Object s) {
-            }
-        };
-        ServiceConnection conn = new ServiceConnection() {
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-            }
-
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                DownloadBinder binder = (DownloadBinder) service;
-                binder.addCallback(callback);
-                binder.start();
-
-            }
-        };
-        Intent intent = new Intent(context, DownloadService.class);
-        intent.putExtra(DownloadService.BUNDLE_KEY_DOWNLOAD_URL, downurl);
-        intent.putExtra(DownloadService.BUNDLE_KEY_TITLE, tilte);
-        context.startService(intent);
-        context.bindService(intent, conn, Context.BIND_AUTO_CREATE);
     }
 
     /**
