@@ -1,6 +1,8 @@
 package net.oschina.app.improve.main.discover;
 
+import android.content.Intent;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,6 +35,14 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
     public static ShakePresentFragment newInstance() {
         ShakePresentFragment fragment = new ShakePresentFragment();
         return fragment;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == AppCompatActivity.RESULT_OK && requestCode == 1) {
+            mLoading = false;
+        }
     }
 
     @Override
@@ -86,7 +96,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
             return;
         }
         if (!AccountHelper.isLogin()) {
-            LoginActivity.show(getContext());
+            LoginActivity.show(ShakePresentFragment.this, 1);
             Toast.makeText(mContext, "摇礼品需要登陆", Toast.LENGTH_LONG).show();
             return;
         }
