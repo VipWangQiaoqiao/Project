@@ -49,17 +49,17 @@ public class SchemeUrlActivity extends BaseBackActivity {
                     }
 
                     switch (type) {
-                        case -1:
-                            startActivity(new Intent(this, MainActivity.class));
-                            break;
-                        case 20:
+                        case 20://打开个人中心
                             OtherUserHomeActivity.show(this, id);
                             break;
-                        case 100:
+                        case 100://打开动弹详情
                             TweetDetailActivity.show(this, id);
                             break;
                         default:
-                            UIHelper.showDetail(this, type, id, "");
+                            if (id == 0)//默认启动首页
+                                startActivity(new Intent(this, MainActivity.class));
+                            else//否则启动各个类型详情
+                                UIHelper.showDetail(this, type, id, "");
                             break;
                     }
                 }
