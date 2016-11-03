@@ -66,6 +66,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
     private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
+    private static final String TAG = "LoginActivity";
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
@@ -326,15 +327,26 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         }
     }
 
-    @OnClick({R.id.ib_navigation_back, R.id.tv_login_forget_pwd, R.id.iv_login_hold_pwd, R.id.bt_login_submit,
-            R.id.bt_login_register, R.id.ll_login_pull, R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq,
-            R.id.ll_login_layer, R.id.iv_login_username_del, R.id.iv_login_pwd_del})
+    @OnClick({R.id.ib_navigation_back, R.id.et_login_username, R.id.et_login_pwd, R.id.tv_login_forget_pwd,
+            R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register, R.id.ll_login_pull,
+            R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq, R.id.ll_login_layer,
+            R.id.iv_login_username_del, R.id.iv_login_pwd_del})
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
             case R.id.ib_navigation_back:
                 finish();
+                break;
+            case R.id.et_login_username:
+                mEtLoginPwd.clearFocus();
+                mEtLoginUsername.setFocusableInTouchMode(true);
+                mEtLoginUsername.requestFocus();
+                break;
+            case R.id.et_login_pwd:
+                mEtLoginUsername.clearFocus();
+                mEtLoginPwd.setFocusableInTouchMode(true);
+                mEtLoginPwd.requestFocus();
                 break;
             case R.id.tv_login_forget_pwd:
                 //忘记密码
@@ -611,8 +623,16 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         int code = resultBean.getCode();
                         String message = resultBean.getMessage();
                         if (code == 211) {
+                            mEtLoginPwd.setFocusableInTouchMode(false);
+                            mEtLoginPwd.clearFocus();
+                            mEtLoginUsername.requestFocus();
+                            mEtLoginUsername.setFocusableInTouchMode(true);
                             mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
                         } else if (code == 212) {
+                            mEtLoginUsername.setFocusableInTouchMode(false);
+                            mEtLoginUsername.clearFocus();
+                            mEtLoginPwd.requestFocus();
+                            mEtLoginPwd.setFocusableInTouchMode(true);
                             message += "," + getResources().getString(R.string.message_pwd_error);
                             mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_error);
                         }
