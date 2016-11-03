@@ -72,7 +72,6 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
         mNavNews.init(R.drawable.tab_icon_new,
                 R.string.main_tab_name_news,
                 DynamicTabFragment.class);
-//                GeneralViewPagerFragment.class);
 
         mNavTweet.init(R.drawable.tab_icon_tweet,
                 R.string.main_tab_name_tweet,
