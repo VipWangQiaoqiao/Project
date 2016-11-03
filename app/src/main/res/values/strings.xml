@@ -186,6 +186,7 @@
     <string name="footer_type_error">加载失败</string>
     <string name="footer_type_net_error">网络错误</string>
     <string name="footer_type_not_more">没有更多数据</string>
+    <string name="software_loading_error">内容加载失败&#8230;</string>
 
     <string name="you_have_unread_messages">你有%s条未读消息</string>
     <string name="mention_count">\@我[%s] </string>
@@ -279,6 +280,7 @@
     <string name="state_not_more">没有更多数据</string>
     <string name="state_load_error">加载失败</string>
     <string name="state_refreshing">正在刷新</string>
+    <string name="state_loading_error">数据加载中&#8230;</string>
 
     <string name="label_about_title">相关文章</string>
 
@@ -334,6 +336,6 @@
     <string name="send_sms_code_success_hint">已成功发送验证码</string>
     <string name="reset_success_hint">密码重置成功</string>
     <string name="register_success_hint">注册成功</string>
-    <string name="share_hint">当前版本不支持分享&#8230;</string>
+    <string name="share_hint">未安装第三方客户端&#8230;</string>
 
 </resources>

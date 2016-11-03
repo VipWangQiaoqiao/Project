@@ -29,6 +29,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.Tweet;
@@ -406,6 +407,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     @Override
     public void toReply(TweetComment comment) {
+        if (checkLogin()) return;
         mDelegation.notifyWrapper();
         if (replies.size() >= 3) return;
         for (TweetComment cmm : replies) {
@@ -427,6 +429,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     @OnClick(R.id.iv_thumbup)
     void onClickThumbUp() {
+        if (checkLogin()) return;
         this.dialog = DialogHelp.getWaitDialog(this, "正在提交请求...");
         this.dialog.show();
         OSChinaApi.reverseTweetLike(tweet.getId(), publishAdmireHandler);
@@ -434,8 +437,17 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     @OnClick(R.id.iv_comment)
     void onClickComment() {
+        if (checkLogin()) return;
         mDelegation.notifyWrapper();
         TDevice.showSoftKeyboard(mViewInput);
+    }
+
+    private boolean checkLogin() {
+        if (!AccountHelper.isLogin()) {
+            LoginActivity.show(this);
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.shake.ShakePresent;
 import net.oschina.app.util.TDevice;
@@ -85,6 +86,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
             return;
         }
         if (!AccountHelper.isLogin()) {
+            LoginActivity.show(getContext());
             Toast.makeText(mContext, "摇礼品需要登陆", Toast.LENGTH_LONG).show();
             return;
         }
