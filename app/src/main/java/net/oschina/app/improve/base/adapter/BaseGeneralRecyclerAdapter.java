@@ -59,8 +59,12 @@ public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<
                 date = items;
             }
             mPreItems = items;
-            mItems.addAll(date);
+            addAll(date);
         }
+    }
+
+    public void clearPreItems() {
+        mPreItems = null;
     }
 
     public interface Callback {

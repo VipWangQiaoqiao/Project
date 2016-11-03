@@ -206,7 +206,10 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
             //cache the time
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
+
+            ((BaseGeneralRecyclerAdapter) mAdapter).clearPreItems();
             ((BaseGeneralRecyclerAdapter) mAdapter).addItems(mBean.getItems());
+
             mBean.setPrevPageToken((resultBean == null ? null : resultBean.getResult().getPrevPageToken()));
             mRefreshLayout.setCanLoadMore(true);
             if (isNeedCache()) {
