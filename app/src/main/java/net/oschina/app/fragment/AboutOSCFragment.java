@@ -11,15 +11,11 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.UpdateManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class AboutOSCFragment extends BaseFragment {
-
-    @Bind(R.id.tv_version)
-    TextView mTvVersionStatus;
 
     @Bind(R.id.tv_version_name)
     TextView mTvVersionName;
@@ -36,7 +32,6 @@ public class AboutOSCFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        view.findViewById(R.id.rl_check_update).setOnClickListener(this);
         view.findViewById(R.id.rl_grade).setOnClickListener(this);
         view.findViewById(R.id.rl_gitapp).setOnClickListener(this);
         view.findViewById(R.id.tv_oscsite).setOnClickListener(this);
@@ -52,9 +47,6 @@ public class AboutOSCFragment extends BaseFragment {
     public void onClick(View v) {
         final int id = v.getId();
         switch (id) {
-            case R.id.rl_check_update:
-                onClickUpdate();
-                break;
             case R.id.rl_grade:
                 TDevice.openAppInMarket(getActivity());
                 break;
@@ -81,9 +73,5 @@ public class AboutOSCFragment extends BaseFragment {
             default:
                 break;
         }
-    }
-
-    private void onClickUpdate() {
-        new UpdateManager(getActivity(), true).checkUpdate();
     }
 }

@@ -99,7 +99,6 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
         });
 
         view.findViewById(R.id.rl_loading_img).setOnClickListener(this);
-        view.findViewById(R.id.rl_notification_settings).setOnClickListener(this);
         view.findViewById(R.id.rl_clean_cache).setOnClickListener(this);
         view.findViewById(R.id.rl_double_click_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_about).setOnClickListener(this);
@@ -176,9 +175,6 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
         switch (id) {
             case R.id.rl_loading_img:
                 mTbLoadImg.toggle();
-                break;
-            case R.id.rl_notification_settings:
-                UIHelper.showSettingNotification(getActivity());
                 break;
             case R.id.rl_clean_cache:
                 onClickCleanCache();

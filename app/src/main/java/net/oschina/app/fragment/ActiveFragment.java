@@ -73,24 +73,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
             mState = STATE_REFRESH;
             requestData(false);
         }
-        refreshNotice();
         super.onResume();
-    }
-
-    /**
-     * 开始刷新请求
-     */
-    private void refreshNotice() {
-//        Notice notice = MainActivity.mNotice;
-//        if (notice == null) {
-//            return;
-//        }
-//        if (notice.getAtmeCount() > 0 && mCatalog == ActiveList.CATALOG_ATME) {
-//            onRefresh();
-//        } else if (notice.getReviewCount() > 0
-//                && mCatalog == ActiveList.CATALOG_COMMENT) {
-//            onRefresh();
-//        }
     }
 
     @Override

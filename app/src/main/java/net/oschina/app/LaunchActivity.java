@@ -21,7 +21,7 @@ public class LaunchActivity extends BaseActivity {
         super.initWindow();
         /*
         // 防止第三方跳转时出现双实例
-        Activity aty = get MainActivity.class;
+        Activity aty = get ;
         if (aty != null && !aty.isFinishing()) {
             finish();
         }

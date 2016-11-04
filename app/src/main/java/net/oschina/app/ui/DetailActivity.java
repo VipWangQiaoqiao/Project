@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
 
-
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
@@ -17,13 +16,7 @@ import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.emoji.ToolbarFragment;
 import net.oschina.app.emoji.ToolbarFragment.OnActionClickListener;
 import net.oschina.app.emoji.ToolbarFragment.ToolAction;
-import net.oschina.app.fragment.BlogDetailFragment;
 import net.oschina.app.fragment.CommentFrament;
-import net.oschina.app.fragment.EventDetailFragment;
-import net.oschina.app.fragment.NewsDetailFragment;
-import net.oschina.app.fragment.PostDetailFragment;
-import net.oschina.app.fragment.SoftwareDetailFragment;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.team.fragment.TeamDiaryDetailFragment;
 import net.oschina.app.team.fragment.TeamDiscussDetailFragment;
 import net.oschina.app.team.fragment.TeamIssueDetailFragment;
@@ -36,13 +29,7 @@ import net.oschina.app.team.fragment.TeamTweetDetailFragment;
  * @created 2014年10月11日 上午11:18:41
  */
 public class DetailActivity extends BaseActivity implements OnSendClickListener {
-
-    public static final int DISPLAY_NEWS = 0;
-    public static final int DISPLAY_BLOG = 1;
-    public static final int DISPLAY_SOFTWARE = 2;
-    public static final int DISPLAY_POST = 3;
     public static final int DISPLAY_TWEET = 4;
-    public static final int DISPLAY_EVENT = 5;
     public static final int DISPLAY_TEAM_ISSUE_DETAIL = 6;
     public static final int DISPLAY_TEAM_DISCUSS_DETAIL = 7;
     public static final int DISPLAY_TEAM_TWEET_DETAIL = 8;
@@ -73,36 +60,13 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        int displayType = getIntent().getIntExtra(BUNDLE_KEY_DISPLAY_TYPE,
-                DISPLAY_NEWS);
+        int displayType = getIntent().getIntExtra(BUNDLE_KEY_DISPLAY_TYPE, 0);
         BaseFragment fragment = null;
         int actionBarTitle = 0;
         switch (displayType) {
-            case DISPLAY_NEWS:
-                actionBarTitle = R.string.actionbar_title_news;
-                fragment = new NewsDetailFragment();
-                break;
-            case DISPLAY_BLOG:
-                actionBarTitle = R.string.actionbar_title_blog;
-                fragment = new BlogDetailFragment();
-                BlogDetailActivity.show(this, getIntent().getIntExtra("id", 0));
-                finish();
-                break;
-            case DISPLAY_SOFTWARE:
-                actionBarTitle = R.string.actionbar_title_software;
-                fragment = new SoftwareDetailFragment();
-                break;
-            case DISPLAY_POST:
-                actionBarTitle = R.string.actionbar_title_question;
-                fragment = new PostDetailFragment();
-                break;
             case DISPLAY_TWEET:
                 finish();
                 return;
-            case DISPLAY_EVENT:
-                actionBarTitle = R.string.actionbar_title_event_detail;
-                fragment = new EventDetailFragment();
-                break;
             case DISPLAY_TEAM_ISSUE_DETAIL:
                 actionBarTitle = R.string.team_issue_detail;
                 fragment = new TeamIssueDetailFragment();
@@ -123,6 +87,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 actionBarTitle = R.string.actionbar_title_comment;
                 fragment = new CommentFrament();
             default:
+                finish();
                 break;
         }
         setActionBarTitle(actionBarTitle);
@@ -239,9 +204,9 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
         super.onActivityResult(requestCode, resultCode, data);
         if (currentFragment instanceof CommonDetailFragment) {
             //UMSsoHandler ssoHandler = ((CommonDetailFragment) currentFragment).getDialog().getController().getConfig().getSsoHandler(requestCode);
-          //  if (ssoHandler != null) {
+            //  if (ssoHandler != null) {
             //    ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-          //  }
+            //  }
         }
     }
 }

@@ -9,7 +9,6 @@
 
     <!-- OSChina APP -->
     <!-- old setting!!! please ignore it!! will remove it in future!! -->
-    <dimen name="text_size_30">30.0dip</dimen>
     <dimen name="text_size_18">18.0dip</dimen>
     <dimen name="text_size_16">16.0dip</dimen>
     <dimen name="text_size_15">15.0dip</dimen>
@@ -22,7 +21,6 @@
     <dimen name="space_49">49dip</dimen>
     <dimen name="space_35">35.0dip</dimen>
     <dimen name="space_28">28.0dip</dimen>
-    <dimen name="space_20">20.0dip</dimen>
     <dimen name="space_18">18.0dip</dimen>
     <dimen name="space_16">16.0dip</dimen>
     <dimen name="space_15">15.0dip</dimen>
@@ -57,7 +55,6 @@
     <dimen name="timeline_small_card_padding_right">5.0dip</dimen>
 
     <!-- 意见反馈 -->
-    <dimen name="text_size_account_info">18.0sp</dimen>
 
     <!-- 时间选择dialog -->
     <dimen name="done_label_size">14sp</dimen>
