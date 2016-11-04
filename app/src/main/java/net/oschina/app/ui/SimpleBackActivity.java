@@ -17,7 +17,6 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.util.TDevice;
@@ -122,12 +121,7 @@ public class SimpleBackActivity extends BaseActivity implements
                 }
                 break;
             case R.id.chat_friend_home:
-                if (mFragment.get() instanceof MessageDetailFragment) {
-                    ((MessageDetailFragment) mFragment.get()).showFriendUserCenter();
-                } else {
-                    return super.onOptionsItemSelected(item);
-                }
-                break;
+                return super.onOptionsItemSelected(item);
             default:
                 break;
         }
@@ -138,8 +132,6 @@ public class SimpleBackActivity extends BaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mFragment.get() instanceof TweetsFragment) {
             getMenuInflater().inflate(R.menu.pub_topic_menu, menu);
-        } else if (mFragment.get() instanceof MessageDetailFragment) {
-            getMenuInflater().inflate(R.menu.chat_menu, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -185,10 +177,7 @@ public class SimpleBackActivity extends BaseActivity implements
 
     @Override
     public void onClickSendButton(Editable str) {
-        if (mFragment.get() instanceof MessageDetailFragment) {
-            ((OnSendClickListener) mFragment.get()).onClickSendButton(str);
-            ((MessageDetailFragment) mFragment.get()).emojiFragment.clean();
-        }
+
     }
 
     @Override

@@ -23,8 +23,6 @@ public interface TranslateDetailContract {
     interface View extends DetailContract.View {
         void toFavoriteOk(TranslationDetail translationDetail);
 
-        //void toFollowOk(NewsDetail newsDetail);
-
         void toSendCommentOk(Comment comment);
     }
 }

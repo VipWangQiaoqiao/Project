@@ -335,10 +335,7 @@ public class Tweet extends Entity implements Parcelable {
 
                 @Override
                 public void onClick(View widget) {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, getId());
-                    UIHelper.showSimpleBack(context,
-                            SimpleBackPage.TWEET_LIKE_USER_LIST, bundle);
+
                 }
 
                 @Override

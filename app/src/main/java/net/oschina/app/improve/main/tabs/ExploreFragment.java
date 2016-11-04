@@ -65,9 +65,6 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
             case R.id.rl_shake:
                 showShake();
                 break;
-            case R.id.iv_explore_discover:
-                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SEARCH);
-                break;
             default:
                 break;
         }

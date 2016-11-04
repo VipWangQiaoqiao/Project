@@ -33,46 +33,6 @@
             android:layout_marginTop="10dp" />
 
         <RelativeLayout
-            android:id="@+id/rl_check_update"
-            style="@style/option_item_rl"
-            android:visibility="gone">
-
-            <TextView
-                style="@style/option_item_text_parent"
-                android:text="@string/update"
-                android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:orientation="horizontal">
-
-                <ProgressBar
-                    android:id="@+id/pb_loading"
-                    style="@style/loading"
-                    android:layout_width="18dip"
-                    android:layout_height="18dip"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/tv_version"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="false"
-                    android:textColor="?attr/textColor"
-                    android:textSize="@dimen/text_size_14"
-                    android:visibility="gone" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <View
-            style="@style/h_line"
-            android:visibility="gone" />
-
-        <RelativeLayout
             android:id="@+id/rl_grade"
             style="@style/option_item_rl">
 

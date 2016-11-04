@@ -2,9 +2,7 @@ package net.oschina.app.util;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -31,25 +29,21 @@ import com.dtr.zxing.activity.CaptureActivity;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
-import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.Notice;
-import net.oschina.app.bean.ShakeObject;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.fragment.BrowserFragment;
 import net.oschina.app.fragment.CommentFrament;
-import net.oschina.app.fragment.FriendsFragment;
-import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
-import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
@@ -58,6 +52,7 @@ import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.user.activities.UserSendMessageActivity;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
@@ -74,10 +69,7 @@ import net.oschina.app.team.ui.TeamNewIssueActivity;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
-
-import org.kymjs.kjframe.utils.DensityUtils;
 
 /**
  * 界面帮助类
@@ -133,23 +125,6 @@ public class UIHelper {
     }
 
     /**
-     * 获取一个环形进度条等待窗口
-     */
-    public static ProgressDialog getprogress(Activity aty, String msg) {
-        // 实例化一个ProgressBarDialog
-        ProgressDialog progressDialog = new ProgressDialog(aty);
-        progressDialog.setMessage(msg);
-        progressDialog.getWindow().setLayout(
-                DensityUtils.getScreenW(aty),
-                DensityUtils.getScreenH(aty));
-        progressDialog.setCancelable(true);
-        // 设置ProgressBarDialog的显示样式
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
-        return progressDialog;
-    }
-
-    /**
      * 显示新闻详情
      *
      * @param context
@@ -157,14 +132,6 @@ public class UIHelper {
      */
     public static void showNewsDetail(Context context, long newsId,
                                       int commentCount) {
-        /*
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("id", newsId);
-        intent.putExtra("comment_count", commentCount);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_NEWS);
-        context.startActivity(intent);
-        */
         NewsDetailActivity.show(context, newsId);
     }
 
@@ -186,14 +153,6 @@ public class UIHelper {
      * @param postId
      */
     public static void showPostDetail(Context context, long postId, int count) {
-        /*
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("id", postId);
-        intent.putExtra("comment_count", count);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_POST);
-        context.startActivity(intent);
-        */
         QuestionDetailActivity.show(context, postId);
     }
 
@@ -217,10 +176,6 @@ public class UIHelper {
         Bundle args = new Bundle();
         args.putString(QuestionTagFragment.BUNDLE_KEY_TAG, tag);
         showSimpleBack(context, SimpleBackPage.QUESTION_TAG, args);
-    }
-
-    public static void showTweetDetail(Context context, long tweetId) {
-        TweetDetailActivity.show(context, tweetId);
     }
 
     /**
@@ -249,22 +204,10 @@ public class UIHelper {
      * @param ident
      */
     public static void showSoftwareDetail(Context context, String ident) {
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("ident", ident);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_SOFTWARE);
-        context.startActivity(intent);
+        SoftwareDetailActivity.show(context, ident);
     }
 
     public static void showSoftwareDetailById(Context context, int id) {
-        /*
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("id", id);
-        intent.putExtra("ident", "");
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_SOFTWARE);
-        context.startActivity(intent);
-        */
         SoftwareDetailActivity.show(context, id);
     }
 
@@ -474,25 +417,6 @@ public class UIHelper {
         return body;
     }
 
-    /**
-     * 摇一摇点击跳转
-     *
-     * @param obj
-     */
-    public static void showUrlShake(Context context, ShakeObject obj) {
-        if (StringUtils.isEmpty(obj.getUrl())) {
-            if (ShakeObject.RANDOMTYPE_NEWS.equals(obj.getRandomtype())) {
-                UIHelper.showNewsDetail(context,
-                        StringUtils.toInt(obj.getId()),
-                        StringUtils.toInt(obj.getCommentCount()));
-            }
-        } else {
-            if (!StringUtils.isEmpty(obj.getUrl())) {
-                UIHelper.showUrlRedirect(context, obj.getUrl());
-            }
-        }
-    }
-
     private static void showUrlRedirect(Context context, long id, String url) {
         if (url == null && id > 0) {
             NewsDetailActivity.show(context, id);
@@ -588,11 +512,6 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
-    public static void showSoftWareTweets(Context context, int id) {
-        Bundle args = new Bundle();
-        args.putInt(SoftWareTweetsFrament.BUNDLE_KEY_ID, id);
-        showSimpleBack(context, SimpleBackPage.SOFTWARE_TWEETS, args);
-    }
 
     public static void showBlogComment(Context context, int id, int ownerId) {
         Intent intent = new Intent(context, DetailActivity.class);
@@ -682,22 +601,6 @@ public class UIHelper {
     }
 
     /**
-     * 发送App异常崩溃报告
-     *
-     * @param context
-     */
-    public static void sendAppCrashReport(final Context context) {
-
-        DialogHelp.getConfirmDialog(context, "程序发生异常", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // 退出
-                //   System.exit(-1);
-            }
-        }).show();
-    }
-
-    /**
      * 发送通知广播
      *
      * @param context
@@ -780,34 +683,6 @@ public class UIHelper {
     }
 
     /**
-     * 显示用户收藏界面
-     *
-     * @param context
-     */
-    public static void showUserFavorite(Context context, int uid) {
-
-        Bundle args = new Bundle();
-        args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, uid);
-        showSimpleBack(context, SimpleBackPage.USER_FAVORITE);
-    }
-
-    /*
-     * 显示用户的关注/粉丝列表
-     * 
-     * @param context
-     */
-    public static void showFriends(Context context, int uid, int tabIdx) {
-        Bundle args = new Bundle();
-        args.putInt(FriendsViewPagerFragment.BUNDLE_KEY_TABIDX, tabIdx);
-        args.putInt(FriendsFragment.BUNDLE_KEY_UID, uid);
-        if (tabIdx == 0) {
-            showSimpleBack(context, SimpleBackPage.MY_FOLLOWING, args);
-        } else {
-            showSimpleBack(context, SimpleBackPage.MY_FOLLOWER, args);
-        }
-    }
-
-    /**
      * 显示留言对话页面
      *
      * @param context
@@ -816,10 +691,10 @@ public class UIHelper {
      */
     public static void showMessageDetail(Context context, int friendid,
                                          String friendname) {
-        Bundle args = new Bundle();
-        args.putInt(MessageDetailFragment.BUNDLE_KEY_FID, friendid);
-        args.putString(MessageDetailFragment.BUNDLE_KEY_FNAME, friendname);
-        showSimpleBack(context, SimpleBackPage.MESSAGE_DETAIL, args);
+        User user = new User();
+        user.setId(friendid);
+        user.setName(friendname);
+        UserSendMessageActivity.show(context, user);
     }
 
     /**
@@ -829,15 +704,6 @@ public class UIHelper {
      */
     public static void showSetting(Context context) {
         showSimpleBack(context, SimpleBackPage.SETTING);
-    }
-
-    /**
-     * 显示通知设置界面
-     *
-     * @param context
-     */
-    public static void showSettingNotification(Context context) {
-        showSimpleBack(context, SimpleBackPage.SETTING_NOTIFICATION);
     }
 
     /**
