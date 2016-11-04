@@ -120,8 +120,6 @@ public class SimpleBackActivity extends BaseActivity implements
                     return super.onOptionsItemSelected(item);
                 }
                 break;
-            case R.id.chat_friend_home:
-                return super.onOptionsItemSelected(item);
             default:
                 break;
         }
