@@ -121,6 +121,7 @@ public class StringUtils {
 
 
     public static String formatYearMonthDay(String st) {
+        if (TextUtils.isEmpty(st)) return "";
         Matcher matcher = UniversalDatePattern.matcher(st);
         if (!matcher.find()) return st;
         return String.format("%s年%s月%s日",
@@ -130,6 +131,7 @@ public class StringUtils {
     }
 
     public static String formatYearMonthDayNew(String st) {
+        if (TextUtils.isEmpty(st)) return "";
         Matcher matcher = UniversalDatePattern.matcher(st);
         if (!matcher.find()) return st;
         return String.format("%s/%s/%s",
