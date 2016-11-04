@@ -527,11 +527,13 @@ public class TabPickerView extends FrameLayout {
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 int dragFlag = 0;
                 int position = viewHolder.getAdapterPosition();
-                if (!items.get(position).isFixed()) {
-                    dragFlag = ItemTouchHelper.UP
-                            | ItemTouchHelper.DOWN
-                            | ItemTouchHelper.LEFT
-                            | ItemTouchHelper.RIGHT;
+                if (position > 0 && position < items.size()) {
+                    if (!items.get(position).isFixed()) {
+                        dragFlag = ItemTouchHelper.UP
+                                | ItemTouchHelper.DOWN
+                                | ItemTouchHelper.LEFT
+                                | ItemTouchHelper.RIGHT;
+                    }
                 }
                 return makeMovementFlags(dragFlag, 0);
             }
