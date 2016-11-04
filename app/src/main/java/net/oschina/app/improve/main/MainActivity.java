@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -32,8 +31,6 @@ import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.util.DialogHelp;
-
-import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +56,7 @@ public class MainActivity extends BaseActivity implements
     private NavFragment mNavBar;
     private List<TurnBackListener> mTurnBackListeners = new ArrayList<>();
 
-    public interface TurnBackListener{
+    public interface TurnBackListener {
         boolean onTurnBack();
     }
 
@@ -142,7 +139,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        DialogHelp.getConfirmDialog(this, "温馨提示","需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", new DialogInterface.OnClickListener() {
+        DialogHelp.getConfirmDialog(this, "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
@@ -161,15 +158,15 @@ public class MainActivity extends BaseActivity implements
         NoticeManager.stopListen(this);
     }
 
-    public void addOnTurnBackListener(TurnBackListener l){
+    public void addOnTurnBackListener(TurnBackListener l) {
         this.mTurnBackListeners.add(l);
     }
 
-    public void toggleNavTabView(boolean isShowOrHide){
+    public void toggleNavTabView(boolean isShowOrHide) {
         final View view = mNavBar.getView();
         if (view == null) return;
         // hide
-        if (!isShowOrHide){
+        if (!isShowOrHide) {
             view.animate()
                     .translationY(view.getHeight())
                     .setDuration(180)
@@ -182,7 +179,7 @@ public class MainActivity extends BaseActivity implements
                             view.setVisibility(View.GONE);
                         }
                     });
-        }else {
+        } else {
             view.setVisibility(View.VISIBLE);
             view.animate()
                     .translationY(0)
@@ -200,7 +197,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onBackPressed() {
-        for (TurnBackListener l : mTurnBackListeners){
+        for (TurnBackListener l : mTurnBackListeners) {
             if (l.onTurnBack()) return;
         }
         boolean isDoubleClick = BaseApplication.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true);
