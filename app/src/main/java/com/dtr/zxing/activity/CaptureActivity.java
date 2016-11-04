@@ -53,7 +53,7 @@ import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -243,7 +243,7 @@ public final class CaptureActivity extends BaseActivity implements
             finish();
             return;
         }
-        DialogHelp.getConfirmDialog(this, "可能存在风险，是否打开链接?\n" + url, new DialogInterface.OnClickListener() {
+        DialogHelper.getConfirmDialog(this, "可能存在风险，是否打开链接?\n" + url, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 UIHelper.showUrlRedirect(CaptureActivity.this, url);
@@ -262,7 +262,7 @@ public final class CaptureActivity extends BaseActivity implements
             showLogin();
             return;
         }
-        DialogHelp.getConfirmDialog(this, "扫描成功，是否进行网页登陆", new DialogInterface.OnClickListener() {
+        DialogHelper.getConfirmDialog(this, "扫描成功，是否进行网页登陆", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 handleScanLogin(url);
@@ -352,9 +352,9 @@ public final class CaptureActivity extends BaseActivity implements
                 try {
                     SingInResult res = SingInResult.parse(new String(arg2));
                     if (res.isOk()) {
-                        DialogHelp.getMessageDialog(CaptureActivity.this, res.getMessage()).show();
+                        DialogHelper.getMessageDialog(CaptureActivity.this, res.getMessage()).show();
                     } else {
-                        DialogHelp.getMessageDialog(CaptureActivity.this, res.getErrorMes()).show();
+                        DialogHelper.getMessageDialog(CaptureActivity.this, res.getErrorMes()).show();
                     }
                 } catch (AppException e) {
                     e.printStackTrace();
@@ -366,7 +366,7 @@ public final class CaptureActivity extends BaseActivity implements
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                                   Throwable arg3) {
                 hideWaitDialog();
-                DialogHelp.getMessageDialog(CaptureActivity.this, arg3.getMessage()).show();
+                DialogHelper.getMessageDialog(CaptureActivity.this, arg3.getMessage()).show();
             }
 
             @Override
@@ -379,7 +379,7 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     private void showLogin() {
-        DialogHelp.getConfirmDialog(this, "请先登录，再进行", new DialogInterface.OnClickListener() {
+        DialogHelper.getConfirmDialog(this, "请先登录，再进行", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 UIHelper.showLoginActivity(CaptureActivity.this);
@@ -388,7 +388,7 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     private void showCopyTextOption(final String text) {
-        DialogHelp.getConfirmDialog(this, text, new DialogInterface.OnClickListener() {
+        DialogHelper.getConfirmDialog(this, text, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 ClipboardManager cbm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);

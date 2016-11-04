@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <SurfaceView
         android:id="@+id/capture_preview"
@@ -13,7 +13,7 @@
     <RelativeLayout
         android:id="@+id/capture_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/capture_mask_top"
@@ -28,7 +28,7 @@
             android:layout_height="200dp"
             android:layout_below="@id/capture_mask_top"
             android:layout_centerHorizontal="true"
-            android:background="@mipmap/qr_capture" >
+            android:background="@mipmap/qr_capture">
 
             <ImageView
                 android:id="@+id/capture_scan_line"
@@ -50,7 +50,7 @@
             android:layout_alignParentBottom="true"
             android:layout_below="@id/capture_crop_view"
             android:background="@mipmap/qr_scan_mask" />
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white40"
         android:gravity="center"
-        android:padding="10dip" >
+        android:padding="10dip">
 
         <ImageView
             android:id="@+id/capture_flash"

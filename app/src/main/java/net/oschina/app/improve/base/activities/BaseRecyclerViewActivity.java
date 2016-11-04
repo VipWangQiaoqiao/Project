@@ -3,12 +3,10 @@ package net.oschina.app.improve.base.activities;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.bumptech.glide.RequestManager;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
@@ -27,7 +25,6 @@ import cz.msebera.android.httpclient.Header;
  * Created by huanghaibin_dev
  * on 16-6-23.
  */
-@SuppressWarnings("All")
 public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity implements
         BaseRecyclerAdapter.OnItemClickListener,
         RecyclerRefreshLayout.SuperRefreshLayoutListener,
@@ -77,13 +74,12 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.e("res",responseString);
                 try {
                     ResultBean<PageBean<T>> resultBean = AppOperator.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
                         onLoadingSuccess();
                         setListData(resultBean);
-                    }else {
+                    } else {
                         onLoadingFailure();
                     }
                 } catch (Exception e) {
@@ -169,7 +165,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
     protected void onLoadingFailure() {
         if (mAdapter.getItems().size() == 0) {
             mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
-        }else {
+        } else {
             mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
         }
     }
