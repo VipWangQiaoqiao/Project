@@ -135,17 +135,6 @@ public class TeamMemberInformationFragment extends BaseListFragment<TeamActive> 
                         if (obj instanceof TeamActive) {
                             data = (TeamActive) obj;
                         }
-                        Intent intent = new Intent(aty, DetailActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(
-                                TeamActiveFragment.DYNAMIC_FRAGMENT_KEY, data);
-                        bundle.putInt(
-                                TeamActiveFragment.DYNAMIC_FRAGMENT_TEAM_KEY,
-                                teamId);
-                        bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                                DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
-                        intent.putExtras(bundle);
-                        aty.startActivity(intent);
                     }
                 }
             }

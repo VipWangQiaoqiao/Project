@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
 
-
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
@@ -19,7 +18,6 @@ import net.oschina.app.emoji.ToolbarFragment.OnActionClickListener;
 import net.oschina.app.emoji.ToolbarFragment.ToolAction;
 import net.oschina.app.fragment.BlogDetailFragment;
 import net.oschina.app.fragment.CommentFrament;
-import net.oschina.app.fragment.EventDetailFragment;
 import net.oschina.app.fragment.NewsDetailFragment;
 import net.oschina.app.fragment.PostDetailFragment;
 import net.oschina.app.fragment.SoftwareDetailFragment;
@@ -99,10 +97,6 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
             case DISPLAY_TWEET:
                 finish();
                 return;
-            case DISPLAY_EVENT:
-                actionBarTitle = R.string.actionbar_title_event_detail;
-                fragment = new EventDetailFragment();
-                break;
             case DISPLAY_TEAM_ISSUE_DETAIL:
                 actionBarTitle = R.string.team_issue_detail;
                 fragment = new TeamIssueDetailFragment();
@@ -239,9 +233,9 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
         super.onActivityResult(requestCode, resultCode, data);
         if (currentFragment instanceof CommonDetailFragment) {
             //UMSsoHandler ssoHandler = ((CommonDetailFragment) currentFragment).getDialog().getController().getConfig().getSsoHandler(requestCode);
-          //  if (ssoHandler != null) {
+            //  if (ssoHandler != null) {
             //    ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-          //  }
+            //  }
         }
     }
 }

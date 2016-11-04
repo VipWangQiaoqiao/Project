@@ -204,13 +204,6 @@ public class UIHelper {
      * @param eventId
      */
     public static void showEventDetail(Context context, long eventId) {
-        /*
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("id", eventId);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_EVENT);
-        context.startActivity(intent);
-        */
         EventDetailActivity.show(context, eventId);
     }
 
@@ -784,15 +777,6 @@ public class UIHelper {
     public static void showScanActivity(Context context) {
         Intent intent = new Intent(context, CaptureActivity.class);
         context.startActivity(intent);
-    }
-
-    /**
-     * 显示用户的消息中心
-     *
-     * @param context
-     */
-    public static void showMyMes(Context context) {
-        showSimpleBack(context, SimpleBackPage.MY_MES);
     }
 
     /**

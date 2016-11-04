@@ -51,22 +51,6 @@ public class FriendsFragment extends BaseListFragment<Friend> {
     }
 
     @Override
-    public void onResume() {
-        if (mCatalog == FriendsList.TYPE_FANS
-                && mUid == AccountHelper.getUserId()) {
-            refreshNotice();
-        }
-        super.onResume();
-    }
-
-    private void refreshNotice() {
-//        Notice notice = MainActivity.mNotice;
-//        if (notice != null && notice.getNewFansCount() > 0) {
-//            onRefresh();
-//        }
-    }
-
-    @Override
     protected FriendAdapter getListAdapter() {
         return new FriendAdapter();
     }

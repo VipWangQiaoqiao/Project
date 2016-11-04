@@ -35,7 +35,6 @@ import net.oschina.app.team.viewpagefragment.TeamProjectViewPagerFragment;
 import net.oschina.app.viewpagerfragment.BlogViewPagerFragment;
 import net.oschina.app.viewpagerfragment.EventViewPagerFragment;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
-import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
 import net.oschina.app.viewpagerfragment.OpenSoftwareFragment;
 import net.oschina.app.viewpagerfragment.QuestViewPagerFragment;
 import net.oschina.app.viewpagerfragment.SearchViewPageFragment;
@@ -57,10 +56,7 @@ public enum SimpleBackPage {
 
     USER_BLOG(6, R.string.actionbar_title_user_blog, UserBlogFragment.class),
 
-
     MY_ACTIVE(8, R.string.actionbar_title_active, ActiveFragment.class),
-
-    MY_MES(9, R.string.actionbar_title_mes, NoticeViewPagerFragment.class),
 
     OPENSOURCE_SOFTWARE(10, R.string.actionbar_title_softwarelist,
             OpenSoftwareFragment.class),

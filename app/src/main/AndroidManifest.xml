@@ -60,9 +60,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.FindUserActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".ui.DetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"

@@ -100,7 +100,6 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 User user = resultBean.getResult();
                 AccountHelper.login(user, headers);
                 AppContext.showToast(getResources().getString(R.string.register_success_hint), Toast.LENGTH_SHORT);
-                //finishClearTopActivity(RegisterStepTwoActivity.this, MainActivity.class);
                 sendLocalReceiver();
                 finish();
             } else {

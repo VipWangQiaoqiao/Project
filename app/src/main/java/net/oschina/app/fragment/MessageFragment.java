@@ -73,15 +73,7 @@ public class MessageFragment extends BaseListFragment<Messages> implements
             mState = STATE_REFRESH;
             requestData(false);
         }
-        refreshNotice();
         super.onResume();
-    }
-
-    private void refreshNotice() {
-//        Notice notice = MainActivity.mNotice;
-//        if (notice != null && notice.getMsgCount() > 0) {
-//            onRefresh();
-//        }
     }
 
     @Override
