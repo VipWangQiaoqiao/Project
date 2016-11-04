@@ -175,6 +175,8 @@ public class WXEntryActivity extends Activity {
                                 Intent intent = new Intent();
                                 intent.setAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
                                 LocalBroadcastManager.getInstance(WXEntryActivity.this).sendBroadcast(intent);
+                            } else {
+                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                             }
                         }
                     });
