@@ -73,7 +73,7 @@ public class MyQRCodeDialog extends Dialog {
     }
 
     public MyQRCodeDialog(Context context) {
-        this(context, R.style.quick_option_dialog);
+        this(context, R.style.App_Theme_Tweet_Main);// R.style.quick_option_dialog
     }
 
 

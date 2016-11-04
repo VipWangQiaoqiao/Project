@@ -1940,18 +1940,20 @@ public class OSChinaApi {
 
     public static final String LOGIN_WEIBO = "weibo";
     public static final String LOGIN_QQ = "qq";
-    public static final String LOGIN_WECHART = "wechat";
+    public static final String LOGIN_WECHAT = "wechat";
 
     /**
      * @param catalog  open catalog
      * @param openInfo openInfo
+     * @param appToken appToken
      * @param handler  handler
      */
-    public static void openLogin(String catalog, String openInfo, TextHttpResponseHandler handler) {
+    public static void openLogin(String catalog, String openInfo, String appToken, TextHttpResponseHandler handler) {
         if (TextUtils.isEmpty(openInfo)) return;
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("info", openInfo);
+        params.put("appToken", appToken);
 
         ApiHttpClient.post("action/apiv2/account_open_login", params, handler);
     }

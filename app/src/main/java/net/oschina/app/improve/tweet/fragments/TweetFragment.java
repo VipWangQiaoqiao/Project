@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -171,6 +172,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onItemClick(int position, long itemId) {
         UserTweetAdapter.ViewHolder holder = (UserTweetAdapter.ViewHolder) mRecyclerView.findViewHolderForAdapterPosition(position);
@@ -193,12 +195,13 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     public void onClick(View v) {
         if (requestCategory == CATEGORY_USER && !AccountHelper.isLogin()) {
             //UIHelper.showLoginActivity(getActivity());
-            LoginActivity.show(getContext());
+            LoginActivity.show(this, 1);
         } else {
             super.onClick(v);
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void setListData(ResultBean<PageBean<Tweet>> resultBean) {
         mBean.setNextPageToken((resultBean == null ? null : resultBean.getResult().getNextPageToken()));
@@ -295,6 +298,16 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
             getActivity().unregisterReceiver(mReceiver);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == AppCompatActivity.RESULT_OK && requestCode == 1) {
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+            authorId = AccountHelper.getUserId();
+            onRefreshing();
+        }
     }
 
     class DeleteHandler extends TextHttpResponseHandler {

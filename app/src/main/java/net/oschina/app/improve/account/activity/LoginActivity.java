@@ -66,7 +66,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
     private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
-    private static final String TAG = "LoginActivity";
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
@@ -317,7 +316,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         // mHoldPwd = holdStatus;
     }
 
-
     private void updateHoldPwd(int holdStatus) {
         ImageView ivHoldPwd = this.mIvHoldPwd;
         if (holdStatus == 1 || holdStatus == 0) {
@@ -463,7 +461,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                                 jsonObject.put("expires_in", oauth2AccessToken.getExpiresTime());
                                 jsonObject.put("refresh_token", oauth2AccessToken.getRefreshToken());
                                 jsonObject.put("access_token", oauth2AccessToken.getToken());
-                                OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), mHandler);
+
+                                OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), getAppToken(), mHandler);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -710,7 +709,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     @Override
     public void onComplete(Object o) {
         JSONObject jsonObject = (JSONObject) o;
-        OSChinaApi.openLogin(OSChinaApi.LOGIN_QQ, jsonObject.toString(), mHandler);
+        OSChinaApi.openLogin(OSChinaApi.LOGIN_QQ, jsonObject.toString(), getAppToken(), mHandler);
     }
 
     /**
