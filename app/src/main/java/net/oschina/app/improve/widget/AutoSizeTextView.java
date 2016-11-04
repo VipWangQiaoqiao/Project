@@ -11,22 +11,20 @@ import android.widget.TextView;
 import net.oschina.app.R;
 
 /**
- * 自适应字体大小TextView
- * qiujuer@live.cn
+ * 自适应字体大小的TextView
+ * @author thanatosx
  */
 public class AutoSizeTextView extends TextView {
     private int mContentWidth;
-    private float mDefaultSize;
+    private float mDefaultTextSize;
     private float mMinSize;
 
     public AutoSizeTextView(Context context) {
-        super(context);
-        init(null, 0);
+        this(context, null);
     }
 
     public AutoSizeTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(attrs, 0);
+        this(context, attrs, 0);
     }
 
     public AutoSizeTextView(Context context, AttributeSet attrs, int defStyle) {
@@ -36,71 +34,33 @@ public class AutoSizeTextView extends TextView {
 
     private void init(AttributeSet attrs, int defStyle) {
         // Load attributes
-        final TypedArray a = getContext().obtainStyledAttributes(
-                attrs, R.styleable.AutoSizeTextView, defStyle, 0);
-
-        mDefaultSize = getTextSize();
-        mMinSize = a.getDimension(R.styleable.AutoSizeTextView_textMinSize, 1);
+        mDefaultTextSize = getTextSize();
+        // TODO 可配置的mMinSize
+        mMinSize = 1;
         mContentWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-
-        a.recycle();
     }
 
     private void resize(CharSequence charSequence) {
+        // TODO 支持多行
         String text = charSequence.toString();
-        if (!TextUtils.isEmpty(text) && mContentWidth > 0) {
-            TextPaint paint = getPaint();
-            final float fixedSize = paint.getTextSize();
-            float textSize = paint.getTextSize();
-            float measureWidth = paint.measureText(text);
+        if (TextUtils.isEmpty(text) || mContentWidth <= 0) return;
 
-            // resize to low
-            while ((textSize > mMinSize) && (measureWidth >= mContentWidth)) {
-                float backSize = paint.getTextSize();
-                textSize = backSize - 1;
-                if (textSize < mMinSize) {
-                    textSize = mMinSize;
-                }
+        TextPaint paint = new TextPaint(getPaint());
+        paint.setTextSize(mDefaultTextSize);
 
-                paint.setTextSize(textSize);
-                measureWidth = paint.measureText(text);
-            }
-
-            // resize to high
-            while ((textSize < mDefaultSize) && (measureWidth < mContentWidth)) {
-                float backSize = paint.getTextSize();
-                textSize = backSize + 1;
-                if (textSize > mDefaultSize) {
-                    textSize = mDefaultSize;
-                }
-
-                paint.setTextSize(textSize);
-                measureWidth = paint.measureText(text);
-                if (measureWidth >= mContentWidth) {
-                    textSize = backSize;
-                    break;
-                }
-            }
-
-            if (fixedSize != textSize) {
-                paint.setTextSize(fixedSize);
-                // refresh
-                if (!isInEditMode()) {
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-                }
-            }
+        float ts = mDefaultTextSize;
+        for (float mw = paint.measureText(text); ts > mMinSize && mw > mContentWidth; ) {
+            paint.setTextSize(--ts);
+            mw = paint.measureText(text);
         }
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
     }
-
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        // Resize on view size change
-        if (w != oldw) {
-            mContentWidth = w - getPaddingLeft() - getPaddingRight();
-            resize(getText());
-        }
+        mContentWidth = w - getPaddingLeft() - getPaddingRight();
+        resize(getText());
     }
 
     @Override
