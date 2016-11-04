@@ -123,7 +123,7 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'org.kymjs.kjframe:kjframe:2.6'
-    compile 'com.google.zxing:core:3.2.0'
+    compile 'com.google.zxing:core:3.3.0'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile 'com.makeramen:roundedimageview:2.1.1'
     compile 'pub.devrel:easypermissions:0.1.7'

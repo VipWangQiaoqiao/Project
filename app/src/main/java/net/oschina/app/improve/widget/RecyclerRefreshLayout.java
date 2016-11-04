@@ -17,7 +17,6 @@ import net.oschina.app.R;
  * 下拉刷新上拉加载控件，目前适用于RecyclerView
  * Created by huanghaibin on 16-5-3.
  */
-@SuppressWarnings("unused")
 public class RecyclerRefreshLayout extends SwipeRefreshLayout implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView mRecycleView;
 
@@ -90,11 +89,6 @@ public class RecyclerRefreshLayout extends SwipeRefreshLayout implements SwipeRe
                 });
             }
         }
-    }
-
-
-    public void setNoMoreData() {
-        this.mHasMore = false;
     }
 
     @Override
@@ -181,24 +175,6 @@ public class RecyclerRefreshLayout extends SwipeRefreshLayout implements SwipeRe
     }
 
     /**
-     * 是否有更多数据
-     *
-     * @return 是否有更多数据
-     */
-    public boolean isHasMore() {
-        return mHasMore;
-    }
-
-    /**
-     * 是否有更多数据
-     *
-     * @param mHasMore 是否有更多数据
-     */
-    public void setHasMore(boolean mHasMore) {
-        this.mHasMore = mHasMore;
-    }
-
-    /**
      * 获取RecyclerView可见的最后一项
      *
      * @return 可见的最后一项position
@@ -226,7 +202,6 @@ public class RecyclerRefreshLayout extends SwipeRefreshLayout implements SwipeRe
      * @return 获得最大的位置
      */
     private int getMaxPosition(int[] positions) {
-        int size = positions.length;
         int maxPosition = Integer.MIN_VALUE;
         for (int position : positions) {
             maxPosition = Math.max(maxPosition, position);
@@ -243,12 +218,9 @@ public class RecyclerRefreshLayout extends SwipeRefreshLayout implements SwipeRe
         this.listener = listener;
     }
 
-
     public interface SuperRefreshLayoutListener {
         void onRefreshing();
 
         void onLoadMore();
     }
-
-
 }

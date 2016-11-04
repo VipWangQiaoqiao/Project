@@ -71,6 +71,18 @@ public final class DialogHelper {
     }
 
     /**
+     * 获取一个验证对话框
+     */
+    public static AlertDialog.Builder getConfirmDialog(Context context, String message,
+                                                       DialogInterface.OnClickListener positiveListener,
+                                                       DialogInterface.OnClickListener negativeListener) {
+        return getDialog(context)
+                .setMessage(message)
+                .setPositiveButton("确定", positiveListener)
+                .setNegativeButton("取消", negativeListener);
+    }
+
+    /**
      * 获取一个验证对话框，没有点击事件
      */
     public static AlertDialog.Builder getConfirmDialog(Context context, String title, String message, String positiveText, String negativeText,

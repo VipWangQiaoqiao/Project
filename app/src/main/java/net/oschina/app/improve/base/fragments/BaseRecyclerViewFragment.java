@@ -29,7 +29,6 @@ import cz.msebera.android.httpclient.Header;
  * Created by huanghaibin_dev
  * on 2016/4/12.
  */
-@SuppressWarnings("unused")
 public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implements
         RecyclerRefreshLayout.SuperRefreshLayoutListener,
         BaseRecyclerAdapter.OnItemClickListener,
@@ -85,7 +84,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         mHandler = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                onRequestError(statusCode);
+                onRequestError();
             }
 
             @Override
@@ -93,7 +92,6 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
                 try {
                     ResultBean<PageBean<T>> resultBean = AppOperator.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
-                        int size = resultBean.getResult().getItems().size();
                         setListData(resultBean);
                         onRequestSuccess(resultBean.getCode());
                     } else {
@@ -179,10 +177,6 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
     protected void requestData() {
     }
 
-    protected void onRequestStart() {
-
-    }
-
     protected void onRequestSuccess(int code) {
 
     }
@@ -191,7 +185,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         onComplete();
     }
 
-    protected void onRequestError(int code) {
+    protected void onRequestError() {
         if (mAdapter.getItems().size() == 0) {
             if (isNeedEmptyView()) mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
@@ -204,10 +198,8 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
     }
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
-        //is refresh
         mBean.setNextPageToken((resultBean == null ? null : resultBean.getResult().getNextPageToken()));
         if (mIsRefresh) {
-            //cache the time
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
             mAdapter.addAll(mBean.getItems());
