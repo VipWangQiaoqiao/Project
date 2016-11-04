@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.app.AppOperator;
@@ -16,6 +15,7 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -67,6 +67,16 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         mRefreshLayout.setSuperRefreshLayoutListener(this);
         mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
         mRecyclerView.setLayoutManager(getLayoutManager());
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (RecyclerView.SCROLL_STATE_DRAGGING == newState && getActivity() != null
+                        && getActivity().getCurrentFocus() != null) {
+                    TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
+                }
+            }
+        });
         mRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
