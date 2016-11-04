@@ -65,7 +65,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by fei on 2016/8/15.
- * desc: user mUserInfo module
+ * desc: UserInfo module
  */
 
 public class UserInfoFragment extends BaseFragment implements View.OnClickListener,
@@ -502,7 +502,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             //UIHelper.showLoginActivity(getActivity());
             LoginActivity.show(getActivity());
         } else {
-            DialogHelper.getSelectDialog(getActivity(), getString(R.string.action_select), getResources().getStringArray(R.array.avatar_option), "取消",new DialogInterface.OnClickListener() {
+            DialogHelper.getSelectDialog(getActivity(), getString(R.string.action_select), getResources().getStringArray(R.array.avatar_option), "取消", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (i == 0) {
@@ -525,7 +525,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             LoginActivity.show(getActivity());
         } else {
             DialogHelper.getSelectDialog(getActivity(), getResources().getString(R.string.action_select_picture),
-                    getResources().getStringArray(R.array.choose_picture),"取消",
+                    getResources().getStringArray(R.array.choose_picture), "取消",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
