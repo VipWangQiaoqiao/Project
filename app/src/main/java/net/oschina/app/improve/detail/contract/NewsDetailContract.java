@@ -23,8 +23,6 @@ public interface NewsDetailContract {
     interface View extends DetailContract.View {
         void toFavoriteOk(NewsDetail newsDetail);
 
-        //void toFollowOk(NewsDetail newsDetail);
-
         void toSendCommentOk(Comment comment);
     }
 }

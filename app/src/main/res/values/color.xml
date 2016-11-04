@@ -51,7 +51,6 @@
     <color name="user_info_option_pressed">#1EB050</color>
 
     <!-- 反馈 -->
-    <color name="text_color_account_info">#ff5e5546</color>
     <color name="edittext_hint_color">#ffa9a9a9</color>
 
     <!-- 日历dialog -->
