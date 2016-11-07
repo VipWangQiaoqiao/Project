@@ -69,6 +69,7 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
 
     @Override
     public void initData() {
+        CACHE_NAME = mTab.getToken();
         super.initData();
         if (mTab.getBanner() != null) {
             mHeaderView = mTab.getBanner().getCatalog() == SubTab.BANNER_CATEGORY_NEWS ?
