@@ -42,6 +42,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.widget.AccountEditText;
 import net.oschina.app.util.TDevice;
 import net.oschina.open.constants.OpenConstant;
 import net.oschina.open.factory.OpenBuilder;
@@ -70,6 +71,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
 
+
+    @Bind(R.id.et_account)
+    AccountEditText mEtAccount;
     @Bind(R.id.ll_login_username)
     LinearLayout mLlLoginUsername;
     @Bind(R.id.et_login_username)
@@ -229,6 +233,12 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     protected void initWidget() {
         super.initWidget();
         mLlLoginLayer.setVisibility(View.GONE);
+        mEtAccount.setOnDelTextCallback(new AccountEditText.OnDelTextCallback() {
+            @Override
+            public void delText() {
+                mEtAccount.setText(null);
+            }
+        });
         mEtLoginUsername.setOnFocusChangeListener(this);
         mEtLoginUsername.addTextChangedListener(new TextWatcher() {
             @Override
