@@ -35,6 +35,7 @@ public class ViewNewsBanner extends RelativeLayout implements View.OnClickListen
 
     public void initData(RequestManager manager, Banner banner) {
         this.banner = banner;
+        this.banner.setImg("http://img4.imgtn.bdimg.com/it/u=2209853732,86005058&fm=21&gp=0.jpg");
         //tv_title.setText(banner.getName());
         manager.load(banner.getImg()).into(iv_banner);
     }

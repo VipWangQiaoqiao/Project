@@ -2,6 +2,7 @@ package net.oschina.app.improve.main.subscription;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -33,11 +34,6 @@ import java.lang.reflect.Type;
 
 public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
 
-//    @Bind(R.id.appBar)
-//    AppBarLayout mAppBar;
-//    @Bind(R.id.coordinatorLayout)
-//    CoordinatorLayout mCoordinatorLayout;
-
     private SubTab mTab;
     private HeaderView mHeaderView;
 
@@ -57,13 +53,21 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
     }
 
     @Override
-    public void initData() {
+    protected void initWidget(View root) {
+        super.initWidget(root);
         CACHE_NAME = mTab.getToken();
-        super.initData();
+
         if (mTab.getBanner() != null) {
             mHeaderView = mTab.getBanner().getCatalog() == SubTab.BANNER_CATEGORY_NEWS ?
-                    new NewsHeaderView(mContext, getImgLoader(), mTab.getHref()) :
-                    new EventHeaderView(mContext, getImgLoader(), mTab.getHref());
+                    new NewsHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref()) :
+                    new EventHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref());
+        }
+    }
+
+    @Override
+    public void initData() {
+        super.initData();
+        if (mHeaderView != null) {
             mAdapter.setHeaderView(mHeaderView);
         }
     }
