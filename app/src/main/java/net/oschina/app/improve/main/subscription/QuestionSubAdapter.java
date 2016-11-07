@@ -20,8 +20,8 @@ import net.oschina.app.widget.CircleImageView;
 
 public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
 
-    public QuestionSubAdapter(Callback callback) {
-        super(callback, ONLY_FOOTER);
+    public QuestionSubAdapter(Callback callback,int mode) {
+        super(callback, mode);
     }
 
     @Override

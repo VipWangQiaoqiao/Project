@@ -28,8 +28,8 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> {
 
     private String mSystemTime;
 
-    public NewsSubAdapter(Context context) {
-        super(context, ONLY_FOOTER);
+    public NewsSubAdapter(Context context, int mode) {
+        super(context, mode);
     }
 
     public void setSystemTime(String systemTime) {
