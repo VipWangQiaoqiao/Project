@@ -24,4 +24,5 @@ ext {
     versionCode = 268
     versionName = "v2.6.8(1611041550)"
     supportVersion = '25.0.0'
+    debugCompile = project.hasProperty('DEBUG_COMPILE')
 }
