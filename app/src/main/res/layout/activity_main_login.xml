@@ -26,6 +26,31 @@
             android:contentDescription="@null"
             app:srcCompat="@mipmap/logo_osc"/>
 
+        <net.oschina.app.improve.widget.AccountEditText
+            android:id="@+id/et_account"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="32dp"
+            android:ems="15"
+            android:hint="@string/login_input_username_hint"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLines="1"
+            android:minLines="1"
+            android:paddingLeft="48dp"
+            android:paddingRight="48dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/login_line_color"
+            android:textCursorDrawable="@null"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:delDrawable="@mipmap/ic_clear"
+            app:labelDrawable="@mipmap/ic_singup_mobile"
+            app:matchType="0x03"
+            tools:ignore="RtlHardcoded"/>
+
         <LinearLayout
             android:id="@+id/ll_login_username"
             android:layout_width="match_parent"
@@ -153,7 +178,6 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:visibility="invisible"
                 android:id="@+id/iv_login_hold_pwd"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
@@ -162,17 +186,18 @@
                 android:adjustViewBounds="false"
                 android:contentDescription="@null"
                 android:padding="8dp"
+                android:visibility="invisible"
                 app:srcCompat="@mipmap/checkbox_checked"
                 tools:ignore="RtlHardcoded"/>
 
             <TextView
-                android:visibility="invisible"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/login_hold_hint"
                 android:textColor="@color/white"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:visibility="invisible"/>
 
             <TextView
                 android:id="@+id/tv_login_forget_pwd"

@@ -85,14 +85,11 @@
             android:text="未指派" />
     </RelativeLayout>
 
-    <View
-        style="@style/h_line" />
-
     <RelativeLayout
         android:id="@+id/rl_issue_time"
         style="@style/team_new_issue_layout" >
-        
-        <TextView 
+
+        <TextView
             android:id="@+id/tv_fa_time"
             style="@style/team_new_issue_fa"
             android:text="@string/fa_clock_o" />
@@ -106,6 +103,9 @@
             android:id="@+id/tv_issue_time"
             style="@style/team_new_issue_info" />
     </RelativeLayout>
+
+    <View
+        style="@style/h_line" />
 
     <View
         style="@style/h_line" />

@@ -13,7 +13,6 @@ import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
@@ -21,6 +20,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.widget.indicator.CirclePagerIndicator;
+import net.oschina.app.widget.SmoothScroller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +58,9 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         mIndicator = (CirclePagerIndicator) findViewById(R.id.indicator);
         mAdapter = new BannerAdapter();
         mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(this);
+        mIndicator.bindViewPager(mViewPager);
+        new SmoothScroller(context).bingViewPager(mViewPager);
         mCallBack = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -67,11 +70,11 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    ResultBean<List<Banner>> result = AppOperator.createGson().fromJson(responseString,
-                            new TypeToken<List<PageBean<Banner>>>() {
+                    ResultBean<PageBean<Banner>> result = AppOperator.createGson().fromJson(responseString,
+                            new TypeToken<ResultBean<PageBean<Banner>>>() {
                             }.getType());
                     if (result != null && result.isSuccess()) {
-                        setBanners(result.getResult());
+                        setBanners(result.getResult().getItems());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -92,7 +95,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         OSChinaApi.getBanner(mUrl, mCallBack);
     }
 
-    private void setBanners(List<Banner> banners) {
+    void setBanners(List<Banner> banners) {
         if (banners != null) {
             mHandler.removeCallbacks(this);
             mBanners.clear();
@@ -101,6 +104,8 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
             if (mBanners.size() > 1) {
                 mHandler.postDelayed(this, 5000);
             }
+            mAdapter.notifyDataSetChanged();
+            mIndicator.notifyDataSetChanged();
         }
     }
 
