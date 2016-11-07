@@ -2,13 +2,10 @@ package net.oschina.app.improve.main.subscription;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 
-import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
@@ -30,19 +27,12 @@ import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
-import butterknife.Bind;
-
 /**
  * Created by haibin
  * on 2016/10/26.
  */
 
 public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
-
-    @Bind(R.id.appBar)
-    AppBarLayout mAppBar;
-    @Bind(R.id.coordinatorLayout)
-    CoordinatorLayout mCoordinatorLayout;
 
     private SubTab mTab;
     private HeaderView mHeaderView;
@@ -57,25 +47,28 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
     }
 
     @Override
-    public int getLayoutId() {
-        return R.layout.fragment_sub;
-    }
-
-    @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
         mTab = (SubTab) bundle.getSerializable("sub_tab");
     }
 
     @Override
-    public void initData() {
+    protected void initWidget(View root) {
+        super.initWidget(root);
         CACHE_NAME = mTab.getToken();
-        super.initData();
+
         if (mTab.getBanner() != null) {
             mHeaderView = mTab.getBanner().getCatalog() == SubTab.BANNER_CATEGORY_NEWS ?
-                    new NewsHeaderView(mContext, getImgLoader(), mTab.getHref()) :
-                    new EventHeaderView(mContext, getImgLoader(), mTab.getHref());
-            mAppBar.addView(mHeaderView);
+                    new NewsHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref()) :
+                    new EventHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref());
+        }
+    }
+
+    @Override
+    public void initData() {
+        super.initData();
+        if (mHeaderView != null) {
+            mAdapter.setHeaderView(mHeaderView);
         }
     }
 
@@ -120,22 +113,15 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
     }
 
     @Override
-    protected void setListData(ResultBean<PageBean<SubBean>> resultBean) {
-        super.setListData(resultBean);
-        if (mAdapter.getItems().size() > 0) {
-            mCoordinatorLayout.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
     protected BaseRecyclerAdapter<SubBean> getRecyclerAdapter() {
+        int mode = mHeaderView != null ? BaseRecyclerAdapter.BOTH_HEADER_FOOTER : BaseRecyclerAdapter.ONLY_FOOTER;
         if (mTab.getType() == News.TYPE_BLOG)
-            return new BlogSubAdapter(getActivity());
+            return new BlogSubAdapter(getActivity(), mode);
         else if (mTab.getType() == News.TYPE_EVENT)
-            return new EventSubAdapter(this);
+            return new EventSubAdapter(this, mode);
         else if (mTab.getType() == News.TYPE_QUESTION)
-            return new QuestionSubAdapter(this);
-        return new NewsSubAdapter(getActivity());
+            return new QuestionSubAdapter(this, mode);
+        return new NewsSubAdapter(getActivity(), mode);
     }
 
     @Override

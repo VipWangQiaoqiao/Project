@@ -23,16 +23,27 @@ import net.oschina.app.util.StringUtils;
  * on 2016/10/26.
  */
 
-public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> {
+public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
 
     private String mSystemTime;
 
-    public BlogSubAdapter(Context context) {
-        super(context, ONLY_FOOTER);
+    public BlogSubAdapter(Context context, int mode) {
+        super(context, mode);
+        setOnLoadingHeaderCallBack(this);
     }
 
     public void setSystemTime(String systemTime) {
         this.mSystemTime = systemTime;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderHolder(ViewGroup parent) {
+        return new HeaderViewHolder(mHeaderView);
+    }
+
+    @Override
+    public void onBindHeaderHolder(RecyclerView.ViewHolder holder, int position) {
+
     }
 
     @Override

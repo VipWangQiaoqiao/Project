@@ -7,7 +7,10 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.Banner;
 import net.oschina.app.improve.widget.ViewNewsBanner;
+
+import java.util.List;
 
 /**
  * Created by haibin
@@ -33,6 +36,14 @@ public class NewsHeaderView extends HeaderView {
     }
 
     @Override
+    void setBanners(List<Banner> banners) {
+        super.setBanners(banners);
+        if(banners.size()>0){
+            mTitleTextView.setText(banners.get(0).getName());
+        }
+    }
+
+    @Override
     public void onPageSelected(int position) {
         mTitleTextView.setText(mBanners.get(position).getName());
     }
@@ -41,6 +52,7 @@ public class NewsHeaderView extends HeaderView {
     protected Object instantiateItem(ViewGroup container, int position) {
         ViewNewsBanner view = new ViewNewsBanner(getContext());
         view.initData(mImageLoader, mBanners.get(position));
+        container.addView(view);
         return view;
     }
 
