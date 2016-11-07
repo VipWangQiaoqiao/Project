@@ -54,7 +54,9 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> {
 
         vh.tv_description.setText(item.getBody());
         vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
-        vh.tv_comment_count.setText(String.valueOf(item.getStatistics().getComment()));
+        vh.tv_comment_count.setText(item.getStatistics() == null
+                ? "0"
+                : String.valueOf(item.getStatistics().getComment()));
 
         if (StringUtils.isSameDay(mSystemTime, item.getPubDate())) {
 
