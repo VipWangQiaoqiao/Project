@@ -24,13 +24,12 @@ import net.oschina.app.util.StringUtils;
  * on 2016/10/26.
  */
 
-public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
+public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> {
 
     private String mSystemTime;
 
     public NewsSubAdapter(Context context, int mode) {
         super(context, mode);
-        setOnLoadingHeaderCallBack(this);
     }
 
     public void setSystemTime(String systemTime) {
@@ -40,16 +39,6 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
     @Override
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
         return new NewsViewHolder(mInflater.inflate(R.layout.item_list_sub_news, parent, false));
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateHeaderHolder(ViewGroup parent) {
-        return new HeaderViewHolder(mHeaderView);
-    }
-
-    @Override
-    public void onBindHeaderHolder(RecyclerView.ViewHolder holder, int position) {
-
     }
 
     @Override
@@ -65,9 +54,7 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
 
         vh.tv_description.setText(item.getBody());
         vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
-        vh.tv_comment_count.setText(item.getStatistics() == null
-                ? "0"
-                : String.valueOf(item.getStatistics().getComment()));
+        vh.tv_comment_count.setText(String.valueOf(item.getStatistics().getComment()));
 
         if (StringUtils.isSameDay(mSystemTime, item.getPubDate())) {
 

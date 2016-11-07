@@ -12,9 +12,9 @@ import android.view.View;
 
 /**
  * 我的任务状态列表
- *
+ * 
  * @author kymjs (https://github.com/kymjs)
- *
+ * 
  */
 public class MyIssuePagerfragment extends BaseViewPagerFragment {
     public static final String MY_ISSUEDETAIL_KEY = "MyIssuePagerfragment_key";
@@ -56,7 +56,7 @@ public class MyIssuePagerfragment extends BaseViewPagerFragment {
 
         adapter.addTab("已验收", TeamIssue.TEAM_ISSUE_STATE_ACCEPTED, MyIssueFragment.class, getBundle(TeamIssue.TEAM_ISSUE_STATE_ACCEPTED));
     }
-
+    
     private Bundle getBundle(String state) {
 	Bundle bundle = new Bundle();
 	bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, getArguments().getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM));

@@ -19,7 +19,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubTab;
@@ -28,7 +27,6 @@ import net.oschina.app.improve.general.fragments.EventFragment;
 import net.oschina.app.improve.general.fragments.NewsFragment;
 import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.improve.main.MainActivity;
-import net.oschina.app.improve.main.subscription.SubFragment;
 import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.widget.TabPickerView;
 import net.oschina.app.interf.OnTabReselectListener;
@@ -154,23 +152,18 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             }
 
             @Override
-            public void onRestore(final List<SubTab> activeTabs) {
+            public void onRestore(List<SubTab> activeTabs) {
                 if (!isChangeIndex) return;
-                AppOperator.getExecutor().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        String json = new Gson().toJson(activeTabs);
-                        try {
-                            FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
-                                    Context.MODE_PRIVATE);
-                            fos.write(json.getBytes("UTF-8"));
-                            fos.flush();
-                            fos.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                String json = new Gson().toJson(activeTabs);
+                try {
+                    FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
+                            Context.MODE_PRIVATE);
+                    fos.write(json.getBytes("UTF-8"));
+                    fos.flush();
+                    fos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 isChangeIndex = false;
                 tabs.clear();
                 tabs.addAll(activeTabs);
@@ -235,7 +228,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             @Override
             public Fragment getItem(int position) {
                 SubTab tab = tabs.get(position);
-                return SubFragment.newInstance(getContext(), tab);
+                return instanceFragment(tab.getType(), tab.getSubtype());
             }
 
             @Override
