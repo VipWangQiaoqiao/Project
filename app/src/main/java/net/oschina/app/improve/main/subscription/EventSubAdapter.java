@@ -21,8 +21,8 @@ import net.oschina.app.util.StringUtils;
  */
 
 public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
-    public EventSubAdapter(Callback callback) {
-        super(callback, ONLY_FOOTER);
+    public EventSubAdapter(Callback callback,int mode) {
+        super(callback, mode);
     }
 
     @Override

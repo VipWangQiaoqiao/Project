@@ -27,8 +27,8 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> {
 
     private String mSystemTime;
 
-    public BlogSubAdapter(Context context) {
-        super(context, ONLY_FOOTER);
+    public BlogSubAdapter(Context context,int mode) {
+        super(context, mode);
     }
 
     public void setSystemTime(String systemTime) {
