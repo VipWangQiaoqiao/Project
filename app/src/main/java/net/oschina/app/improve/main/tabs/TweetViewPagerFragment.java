@@ -10,6 +10,7 @@ import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.base.fragments.BaseViewPagerFragment;
 import net.oschina.app.improve.search.activities.SearchActivity;
+import net.oschina.app.improve.tweet.fragments.TopicTweetFragment;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 
@@ -53,14 +54,16 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
     protected PagerInfo[] getPagers() {
 
         String[] titles = getResources().getStringArray(R.array.tweets_viewpage_arrays);
-        PagerInfo[] infoList = new PagerInfo[3];
+        PagerInfo[] infoList = new PagerInfo[4];
 
         infoList[0] = new PagerInfo(titles[0], TweetFragment.class,
-                getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_NEW));
-        infoList[1] = new PagerInfo(titles[1], TweetFragment.class,
-                getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_HOT));
-        infoList[2] = new PagerInfo(titles[2], TweetFragment.class,
                 getBundle(TweetFragment.CATEGORY_USER, (int) AccountHelper.getUserId()));
+        infoList[1] = new PagerInfo(titles[1], TopicTweetFragment.class, null);
+        infoList[2] = new PagerInfo(titles[2], TweetFragment.class,
+                getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_HOT));
+        infoList[3] = new PagerInfo(titles[3], TweetFragment.class,
+                getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_NEW));
+
 
         return infoList;
     }
