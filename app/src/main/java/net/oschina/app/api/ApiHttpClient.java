@@ -1,6 +1,7 @@
 package net.oschina.app.api;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -12,6 +13,7 @@ import com.loopj.android.http.RequestParams;
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.util.TLog;
+import net.oschina.common.verify.Verifier;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -60,7 +62,7 @@ public class ApiHttpClient {
         AsyncHttpClient client = new AsyncHttpClient();
         //client.setCookieStore(new PersistentCookieStore(context));
         // Set
-        ApiHttpClient.setHttpClient(client);
+        ApiHttpClient.setHttpClient(client, context);
         // Set Cookie
         setCookieHeader(getCookieString(context));
     }
@@ -136,12 +138,16 @@ public class ApiHttpClient {
                 params);
     }
 
-    public static void setHttpClient(AsyncHttpClient c) {
+    public static void setHttpClient(AsyncHttpClient c, Application application) {
         c.addHeader("Accept-Language", Locale.getDefault().toString());
         c.addHeader("Host", HOST);
         c.addHeader("Connection", "Keep-Alive");
         c.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
+        // Set AppToken
+        String appToken = Verifier.getPrivateToken(application);
+        log("AppToken is:" + appToken);
+        c.addHeader("AppToken", appToken);
         // setUserAgent
         c.setUserAgent(ApiClientHelper.getUserAgent(AppContext.getInstance()));
         CLIENT = c;
