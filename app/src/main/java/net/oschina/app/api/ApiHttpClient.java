@@ -44,7 +44,7 @@ public class ApiHttpClient {
 
     public final static String HOST = "www.oschina.net";
     private static String API_URL = "https://www.oschina.net/%s";
-    //private static String API_URL = "http://192.168.1.10/%s";
+//    private static String API_URL = "http://192.168.1.10/%s";
 
     private static AsyncHttpClient CLIENT;
 
@@ -141,6 +141,7 @@ public class ApiHttpClient {
     public static void setHttpClient(AsyncHttpClient c, Application application) {
         c.addHeader("Accept-Language", Locale.getDefault().toString());
         c.addHeader("Host", HOST);
+        c.addHeader("AppToken", "123");
         c.addHeader("Connection", "Keep-Alive");
         c.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);

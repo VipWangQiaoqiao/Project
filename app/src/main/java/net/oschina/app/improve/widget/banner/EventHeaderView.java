@@ -27,7 +27,6 @@ public class EventHeaderView extends HeaderView {
     protected Object instantiateItem(ViewGroup container, int position) {
         ViewEventBanner view = new ViewEventBanner(getContext());
         view.initData(mImageLoader, mBanners.get(position));
-        container.addView(view);
         return view;
     }
 

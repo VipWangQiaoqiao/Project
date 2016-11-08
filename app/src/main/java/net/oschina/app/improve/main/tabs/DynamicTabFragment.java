@@ -20,7 +20,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubTab;
@@ -155,23 +154,18 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             }
 
             @Override
-            public void onRestore(final List<SubTab> activeTabs) {
+            public void onRestore(List<SubTab> activeTabs) {
                 if (!isChangeIndex) return;
-                AppOperator.getExecutor().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        String json = new Gson().toJson(activeTabs);
-                        try {
-                            FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
-                                    Context.MODE_PRIVATE);
-                            fos.write(json.getBytes("UTF-8"));
-                            fos.flush();
-                            fos.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                String json = new Gson().toJson(activeTabs);
+                try {
+                    FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
+                            Context.MODE_PRIVATE);
+                    fos.write(json.getBytes("UTF-8"));
+                    fos.flush();
+                    fos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 isChangeIndex = false;
                 tabs.clear();
                 tabs.addAll(activeTabs);
