@@ -1,6 +1,7 @@
 package net.oschina.app.improve.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -55,13 +56,18 @@ public final class CacheManager {
     }
 
     public static <T> ArrayList<T> readFromJson(Context context, String fileName, Class<T> cls) {
-        ArrayList<T> mList = new ArrayList<>();
-        Gson gson = new Gson();
-        JsonArray array = new JsonParser().parse(readJson(context, fileName)).getAsJsonArray();
-        for (final JsonElement elem : array) {
-            mList.add(gson.fromJson(elem, cls));
+        try {
+            ArrayList<T> mList = new ArrayList<>();
+            Gson gson = new Gson();
+            JsonArray array = new JsonParser().parse(readJson(context, fileName)).getAsJsonArray();
+            for (final JsonElement elem : array) {
+                mList.add(gson.fromJson(elem, cls));
+            }
+            return mList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return mList;
     }
 
     public static <T> T fromJson(Context context, String fileName, Class<T> cla) {
@@ -75,6 +81,7 @@ public final class CacheManager {
 
     private static String readJson(Context context, String fileName) {
         String path = context.getCacheDir() + "/" + fileName;
+        Log.e("path",path);
         File file = new File(path);
         if (!file.exists())
             return null;

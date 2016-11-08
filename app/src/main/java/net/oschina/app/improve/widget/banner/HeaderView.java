@@ -92,7 +92,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         OSChinaApi.getBanner(mUrl, mCallBack);
     }
 
-    private void setBanners(List<Banner> banners) {
+    void setBanners(List<Banner> banners) {
         if (banners != null) {
             mHandler.removeCallbacks(this);
             mBanners.clear();
