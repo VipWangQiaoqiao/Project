@@ -42,7 +42,6 @@ public class ViewEventBanner extends RelativeLayout implements View.OnClickListe
 
     public void initData(RequestManager manager, Banner banner) {
         this.banner = banner;
-        this.banner.setImg("http://img2.imgtn.bdimg.com/it/u=2916312469,2431162535&fm=21&gp=0.jpg");
         tv_event_banner_title.setText(banner.getName());
         tv_event_banner_body.setText(banner.getDetail());
         manager.load(banner.getImg()).into(iv_event_banner_img);

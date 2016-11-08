@@ -9,13 +9,10 @@ import android.widget.TextView;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
-import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.general.fragments.EventFragment;
 import net.oschina.app.util.StringUtils;
-
-import java.util.Map;
 
 /**
  * 新版活动栏目
@@ -23,10 +20,9 @@ import java.util.Map;
  * on 2016/10/27.
  */
 
-public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
-    public EventSubAdapter(Callback callback, int mode) {
+public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
+    public EventSubAdapter(Callback callback,int mode) {
         super(callback, mode);
-        setOnLoadingHeaderCallBack(this);
     }
 
     @Override
@@ -35,34 +31,16 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateHeaderHolder(ViewGroup parent) {
-        return new HeaderViewHolder(mHeaderView);
-    }
-
-    @Override
-    public void onBindHeaderHolder(RecyclerView.ViewHolder holder, int position) {
-
-    }
-
-    @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, SubBean item, int position) {
         EventViewHolder vh = (EventViewHolder) holder;
         vh.tv_event_title.setText(item.getTitle());
-        SubBean.Image image = item.getImage();
-        if (image != null)
-            mCallBack.getImgLoader().load(image.getHref()).into(vh.iv_event);
-
-
+        mCallBack.getImgLoader().load(item.getImage().getHref()).into(vh.iv_event);
+        vh.tv_event_pub_date.setText(StringUtils.getDateString(item.getExtra().get("eventStartDate").toString()));
+        vh.tv_event_member.setText(item.getExtra().get("eventApplyCount") + "人参与");
         vh.tv_event_title.setTextColor(
                 AppContext.isOnReadedPostList(EventFragment.HISTORY_EVENT, item.getId() + "") ?
                         (mContext.getResources().getColor(R.color.count_text_color_light)) : (mContext.getResources().getColor(R.color.day_textColor)));
-
-        Map<String, Object> extra = item.getExtra();
-        if (extra != null) {
-            vh.tv_event_pub_date.setText(StringUtils.getDateString(extra.get("eventStartDate").toString()));
-            vh.tv_event_member.setText(extra.get("eventApplyCount") + "人参与");
-        }
-        switch (extra != null ? (int) extra.get("eventStatus") : 0) {//不要问我为什么这么干
+        switch ((int) item.getExtra().get("eventStatus")) {
             case Event.STATUS_END:
                 setText(vh.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);
                 setTextColor(vh.tv_event_title, mContext.getResources().getColor(R.color.light_gray));
@@ -76,7 +54,7 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
                 break;
         }
         int typeStr = R.string.oscsite;
-        switch (extra != null ? (int) extra.get("eventType") : 0) {
+        switch ((int) item.getExtra().get("eventType")) {
             case Event.EVENT_TYPE_OSC:
                 typeStr = R.string.event_type_osc;
                 break;
