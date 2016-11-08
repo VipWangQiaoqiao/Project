@@ -33,14 +33,8 @@ import java.lang.reflect.Type;
 
 public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
 
-//    @Bind(R.id.appBar)
-//    AppBarLayout mAppBar;
-//    @Bind(R.id.coordinatorLayout)
-//    CoordinatorLayout mCoordinatorLayout;
-
     private SubTab mTab;
     private HeaderView mHeaderView;
-
 
     public static SubFragment newInstance(Context context, SubTab subTab) {
         SubFragment fragment = new SubFragment();
