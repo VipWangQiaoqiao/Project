@@ -4,7 +4,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
-import android.webkit.WebSettings;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
@@ -21,15 +20,21 @@ class ApiClientHelper {
      * @return
      */
     static String getUserAgent(AppContext appContext) {
-        String ua = WebSettings.getDefaultUserAgent(appContext) + " ";
+        // WebSettings.getDefaultUserAgent(appContext)
 
-        PackageInfo packageInfo = getPackageInfo(appContext);
-        ua += String.format("OSChina.NET/%s (Android; %s; %s)", packageInfo.versionCode,
-                packageInfo.versionName, getAppId(appContext));
-        ApiHttpClient.log("getUserAgent:" + ua);
+        int vCode = getPackageInfo(appContext).versionCode;
+        String version = Build.VERSION.RELEASE; // "1.0" or "3.4b5"
+        String osVer = version.length() > 0 ? version : "1.0";
 
-        // Mozilla/5.0 (Linux; Android 6.0; PRO 6 Build/MRA58K; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/44.0.2403.130 Mobile Safari/537.36 OSChina.NET/268 (v2.6.8(1611041550); 49d2acbb-80a6-4aa2-b4e1-b2f4765a5426)
+        String model = Build.MODEL;
+        String id = Build.ID; // "MASTER" or "M4-rc20"
+        if (id.length() > 0) {
+            model += " Build/" + id;
+        }
 
+        String format = "OSChina.NET/1.0 (oscapp; %s; Android %s; %s; %s)";
+        String ua = String.format(format, vCode, osVer, model, getAppId(appContext));
+        ApiHttpClient.log("========getUserAgent:" + ua);
         return ua;
     }
 
