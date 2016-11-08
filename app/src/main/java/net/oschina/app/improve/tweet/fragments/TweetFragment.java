@@ -23,7 +23,6 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
@@ -36,6 +35,7 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
+import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -113,7 +113,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
 
     @Override
     public void initData() {
-        super.initData();
+
         switch (requestCategory) {
             case CATEGORY_TYPE:
                 CACHE_NAME = tweetType == TWEET_TYPE_NEW ? CACHE_NEW_TWEET : CACHE_HOT_TWEET;
@@ -129,6 +129,9 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
                 }
                 break;
         }
+
+        super.initData();
+
 
         mAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
             @Override
@@ -232,7 +235,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
                 AppOperator.runOnThread(new Runnable() {
                     @Override
                     public void run() {
-                        CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);
+                        CacheManager.saveToJson(getActivity(), CACHE_NAME, mBean.getItems());
                     }
                 });
             }
@@ -292,6 +295,11 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     protected Type getType() {
         return new TypeToken<ResultBean<PageBean<Tweet>>>() {
         }.getType();
+    }
+
+    @Override
+    protected Class<Tweet> getCacheClass() {
+        return Tweet.class;
     }
 
     @Override

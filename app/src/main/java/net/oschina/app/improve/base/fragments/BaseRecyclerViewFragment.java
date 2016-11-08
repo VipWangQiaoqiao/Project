@@ -7,12 +7,12 @@ import android.view.View;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
-import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
@@ -20,6 +20,7 @@ import net.oschina.app.util.TDevice;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -114,30 +115,26 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         if (isNeedEmptyView) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             mRefreshLayout.setVisibility(View.GONE);
-            AppOperator.runOnThread(new Runnable() {
-                @SuppressWarnings("unchecked")
-                @Override
-                public void run() {
-                    mBean = isNeedCache() ? (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME) : null;
-                    //if is the first loading
-                    if (mBean == null) {
-                        mBean = new PageBean<>();
-                        mBean.setItems(new ArrayList<T>());
+            mBean = new PageBean<>();
+            List<T> items = isNeedCache() ? (List<T>) CacheManager.readFromJson(getActivity(), CACHE_NAME, getCacheClass()) : null;
+            mBean.setItems(items);
+            //if is the first loading
+            if (items == null) {
+                mBean = new PageBean<>();
+                mBean.setItems(new ArrayList<T>());
+                onRefreshing();
+            } else {
+                mAdapter.addAll(mBean.getItems());
+                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                mRefreshLayout.setVisibility(View.VISIBLE);
+                mRoot.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(true);
                         onRefreshing();
-                    } else {
-                        mRoot.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mAdapter.addAll(mBean.getItems());
-                                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-                                mRefreshLayout.setVisibility(View.VISIBLE);
-                                mRefreshLayout.setRefreshing(true);
-                                onRefreshing();
-                            }
-                        });
                     }
-                }
-            });
+                });
+            }
         } else {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
@@ -171,6 +168,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
 
     @Override
     public void onLoadMore() {
+        mAdapter.setState(BaseRecyclerAdapter.STATE_LOADING, true);
         requestData();
     }
 
@@ -206,12 +204,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mBean.setPrevPageToken((resultBean == null ? null : resultBean.getResult().getPrevPageToken()));
             mRefreshLayout.setCanLoadMore(true);
             if (isNeedCache()) {
-                AppOperator.runOnThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);
-                    }
-                });
+                CacheManager.saveToJson(getActivity(), CACHE_NAME, mBean.getItems());
             }
         } else {
             mAdapter.addAll(resultBean.getResult().getItems());
@@ -235,6 +228,13 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
     protected abstract BaseRecyclerAdapter<T> getRecyclerAdapter();
 
     protected abstract Type getType();
+
+    /**
+     * 获取缓存bean的class
+     */
+    protected Class<T> getCacheClass() {
+        return null;
+    }
 
     @Override
     public Date getSystemTime() {
