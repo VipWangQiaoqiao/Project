@@ -2,6 +2,7 @@ package net.oschina.app.improve.tweet.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.tweet.activities.TopicTweetActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,7 +22,7 @@ import butterknife.ButterKnife;
  * Created by thanatosx on 2016/11/7.
  */
 
-public class TopicTweetAdapter extends BaseRecyclerAdapter {
+public class TopicTweetAdapter extends BaseRecyclerAdapter implements View.OnClickListener {
 
     private static final int[] images = {
             R.mipmap.bg_topic_1, R.mipmap.bg_topic_2, R.mipmap.bg_topic_3,
@@ -49,7 +51,13 @@ public class TopicTweetAdapter extends BaseRecyclerAdapter {
         holder.mLayoutItem3.setVisibility(View.VISIBLE);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    @Override
+    public void onClick(View v) {
+        Log.d("oschina", "------onClick-----");
+        TopicTweetActivity.show(v.getContext());
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         @Bind(R.id.iv_wallpaper) ImageView mViewWallpaper;
         @Bind(R.id.layout_item_1) LinearLayout mLayoutItem1;
@@ -58,9 +66,12 @@ public class TopicTweetAdapter extends BaseRecyclerAdapter {
         @Bind(R.id.layout_bottom) RelativeLayout mLayoutBottom;
         @Bind(R.id.tv_count) TextView mViewCount;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        @Bind(R.id.layout_wrapper) LinearLayout mLayoutWrapper;
+
+        public ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+            mLayoutWrapper.setOnClickListener(TopicTweetAdapter.this);
         }
     }
 }
