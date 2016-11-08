@@ -318,6 +318,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme"/>
 
+        <activity
+            android:name=".improve.tweet.activities.TopicTweetActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="话题动弹"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.App.Theme"/>
+
 
         <!-- 新账户中心模块-->
         <activity

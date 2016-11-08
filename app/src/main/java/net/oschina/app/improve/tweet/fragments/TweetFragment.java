@@ -33,6 +33,7 @@ import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
@@ -56,6 +57,9 @@ import static net.oschina.app.improve.tweet.activities.TweetDetailActivity.BUNDL
 public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     public static final int CATEGORY_TYPE = 1; //请求最新或者最热
     public static final int CATEGORY_USER = 2; //请求用户
+    public static final int CATEGORY_FRIEND = 3;
+    public static final int CATEGORY_TOPIC_NEW = 4;
+    public static final int CATEGORY_TOPIC_HOT = 5;
 
     public static final int TWEET_TYPE_NEW = 1;
     public static final int TWEET_TYPE_HOT = 2;
@@ -72,6 +76,15 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
         Bundle bundle = new Bundle();
         bundle.putLong("authorId", aid);
         bundle.putInt("requestCategory", CATEGORY_USER);
+        Fragment fragment = new TweetFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static Fragment instantiate(int category, int type){
+        Bundle bundle = new Bundle();
+        bundle.putInt("requestCategory", category);
+        bundle.putInt("tweetType", type);
         Fragment fragment = new TweetFragment();
         fragment.setArguments(bundle);
         return fragment;
