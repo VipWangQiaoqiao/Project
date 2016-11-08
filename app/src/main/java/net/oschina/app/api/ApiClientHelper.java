@@ -34,7 +34,7 @@ class ApiClientHelper {
 
         String format = "OSChina.NET/1.0 (oscapp; %s; Android %s; %s; %s)";
         String ua = String.format(format, vCode, osVer, model, getAppId(appContext));
-        ApiHttpClient.log("========getUserAgent:" + ua);
+        ApiHttpClient.log("getUserAgent:" + ua);
         return ua;
     }
 
