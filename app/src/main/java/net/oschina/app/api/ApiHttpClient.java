@@ -141,7 +141,6 @@ public class ApiHttpClient {
     public static void setHttpClient(AsyncHttpClient c, Application application) {
         c.addHeader("Accept-Language", Locale.getDefault().toString());
         c.addHeader("Host", HOST);
-        c.addHeader("AppToken", "123");
         c.addHeader("Connection", "Keep-Alive");
         c.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
