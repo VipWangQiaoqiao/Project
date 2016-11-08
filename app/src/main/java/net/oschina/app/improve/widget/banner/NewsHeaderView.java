@@ -41,6 +41,7 @@ public class NewsHeaderView extends HeaderView {
     protected Object instantiateItem(ViewGroup container, int position) {
         ViewNewsBanner view = new ViewNewsBanner(getContext());
         view.initData(mImageLoader, mBanners.get(position));
+        container.addView(view);
         return view;
     }
 
