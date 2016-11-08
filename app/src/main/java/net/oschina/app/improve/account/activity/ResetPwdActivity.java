@@ -1,11 +1,15 @@
 package net.oschina.app.improve.account.activity;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,9 +41,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class ResetPwdActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
-
-    private static final String TAG = "ResetPwdActivity";
+public class ResetPwdActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     @Bind(R.id.ly_reset_bar)
     LinearLayout mLlResetBar;
@@ -105,6 +107,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             }
         }
     };
+    private int mTopMargin;
 
 
     /**
@@ -172,6 +175,19 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         mPhoneToken = (PhoneToken) intent.getSerializableExtra(RegisterStepTwoActivity.PHONE_TOKEN_KEY);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLlResetBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLlResetBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    }
+
+
     @OnClick({R.id.ib_navigation_back, R.id.iv_reset_pwd_del, R.id.bt_reset_submit})
     @Override
     public void onClick(View v) {
@@ -184,9 +200,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
                 mEtResetPwd.setText(null);
                 break;
             case R.id.bt_reset_submit:
-
                 requestResetPwd();
-
                 break;
             default:
                 break;
@@ -214,6 +228,59 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
             mLlResetPwd.setActivated(true);
+        }
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        Rect r = new Rect();
+        mLlResetBar.getWindowVisibleDisplayFrame(r);
+
+        int screenHeight = mLlResetBar.getRootView().getHeight();
+
+        int keypadHeight = screenHeight - r.bottom;
+
+        if (keypadHeight > 0 && mLlResetPwd.getTag() == null) {
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlResetPwd.getLayoutParams();
+            final int topMargin = layoutParams.topMargin;
+            this.mTopMargin = topMargin;
+            mLlResetPwd.setTag(true);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    layoutParams.topMargin = (int) (topMargin * animatedValue);
+                    mLlResetPwd.setLayoutParams(layoutParams);
+                }
+            });
+
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+
+        } else if (keypadHeight == 0 && mLlResetPwd.getTag() != null) {
+            final int topMargin = mTopMargin;
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlResetPwd.getLayoutParams();
+            mLlResetPwd.setTag(null);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    layoutParams.topMargin = (int) (topMargin * animatedValue);
+                    mLlResetPwd.setLayoutParams(layoutParams);
+                }
+            });
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
         }
     }
 }

@@ -2,6 +2,7 @@ package net.oschina.app.api;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.text.TextUtils;
 
 import net.oschina.app.AppConfig;
@@ -19,15 +20,48 @@ class ApiClientHelper {
      * @return
      */
     static String getUserAgent(AppContext appContext) {
-        PackageInfo packageInfo = getPackageInfo(appContext);
-        String ua = "OSChina.NET" + '/' + packageInfo.versionName +
-                '_' + packageInfo.versionCode +// app版本信息
-                "/Android" +// 手机系统平台
-                "/" + android.os.Build.VERSION.RELEASE +// 手机系统版本
-                "/" + android.os.Build.MODEL + // 手机型号
-                "/" + getAppId(appContext);
+        // WebSettings.getDefaultUserAgent(appContext)
+
+        int vCode = getPackageInfo(appContext).versionCode;
+        String version = Build.VERSION.RELEASE; // "1.0" or "3.4b5"
+        String osVer = version.length() > 0 ? version : "1.0";
+
+        String model = Build.MODEL;
+        String id = Build.ID; // "MASTER" or "M4-rc20"
+        if (id.length() > 0) {
+            model += " Build/" + id;
+        }
+
+        String format = "OSChina.NET/1.0 (oscapp; %s; Android %s; %s; %s)";
+        String ua = String.format(format, vCode, osVer, model, getAppId(appContext));
         ApiHttpClient.log("getUserAgent:" + ua);
         return ua;
+    }
+
+    public static String getDefaultUserAgent() {
+        StringBuilder result = new StringBuilder(64);
+        result.append("Dalvik/");
+        result.append(System.getProperty("java.vm.version")); // such as 1.1.0
+        result.append(" (Linux; U; Android ");
+
+        String version = Build.VERSION.RELEASE; // "1.0" or "3.4b5"
+        result.append(version.length() > 0 ? version : "1.0");
+
+        // add the model for the release build
+        if ("REL".equals(Build.VERSION.CODENAME)) {
+            String model = Build.MODEL;
+            if (model.length() > 0) {
+                result.append("; ");
+                result.append(model);
+            }
+        }
+        String id = Build.ID; // "MASTER" or "M4-rc20"
+        if (id.length() > 0) {
+            result.append(" Build/");
+            result.append(id);
+        }
+        result.append(")");
+        return result.toString();
     }
 
     private static String getAppId(AppContext context) {

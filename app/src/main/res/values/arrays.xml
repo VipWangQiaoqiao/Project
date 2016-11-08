@@ -9,9 +9,10 @@
     </string-array>
 
     <string-array name="tweets_viewpage_arrays">
-        <item>最新动弹</item>
+        <item>好友动弹</item>
+        <item>推荐话题</item>
         <item>热门动弹</item>
-        <item>我的动弹</item>
+        <item>最新动弹</item>
     </string-array>
 
     <string-array name="choose_picture">

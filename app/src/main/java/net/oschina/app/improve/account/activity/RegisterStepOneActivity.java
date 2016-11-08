@@ -1,13 +1,18 @@
 package net.oschina.app.improve.account.activity;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,10 +45,13 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RegisterStepOneActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
+public class RegisterStepOneActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
+
+    @Bind(R.id.iv_login_logo)
+    ImageView mIvLogo;
 
     @Bind(R.id.ll_register_phone)
     LinearLayout mLlRegisterPhone;
@@ -179,6 +187,8 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
 
         }
     };
+    private int mLogoHeight;
+    private int mLogoWidth;
 
     /**
      * show the register activity
@@ -305,6 +315,18 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         super.initData();//必须要调用,用来注册本地广播
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLayBackBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    }
+
     @OnClick({R.id.ib_navigation_back, R.id.iv_register_username_del, R.id.tv_register_sms_call,
             R.id.bt_register_submit})
     @Override
@@ -322,6 +344,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                 break;
             case R.id.bt_register_submit:
                 requestRegister();
+                // RegisterStepTwoActivity.show(this,null);
                 break;
             default:
                 break;
@@ -410,5 +433,66 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onGlobalLayout() {
+
+        Rect r = new Rect();
+        mLayBackBar.getWindowVisibleDisplayFrame(r);
+
+        int screenHeight = mLayBackBar.getRootView().getHeight();
+
+        int keypadHeight = screenHeight - r.bottom;
+
+        if (keypadHeight > 0 && mIvLogo.getTag() == null) {
+            final int height = mIvLogo.getHeight();
+            final int width = mIvLogo.getWidth();
+            this.mLogoHeight = height;
+            this.mLogoWidth = width;
+            mIvLogo.setTag(true);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    ViewGroup.LayoutParams params = mIvLogo.getLayoutParams();
+                    params.height = (int) (height * animatedValue);
+                    params.width = (int) (width * animatedValue);
+                    mIvLogo.setLayoutParams(params);
+                }
+            });
+
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+
+        } else if (keypadHeight == 0 && mIvLogo.getTag() != null) {
+            final int height = mLogoHeight;
+            final int width = mLogoWidth;
+            mIvLogo.setTag(null);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    ViewGroup.LayoutParams params = mIvLogo.getLayoutParams();
+                    params.height = (int) (height * animatedValue);
+                    params.width = (int) (width * animatedValue);
+                    mIvLogo.setLayoutParams(params);
+                }
+            });
+
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+        }
+
     }
 }

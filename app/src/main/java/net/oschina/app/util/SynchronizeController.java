@@ -131,6 +131,5 @@ public class SynchronizeController {
                     }
 
                 });
-        ApiHttpClient.setHttpClient(client);
     }
 }

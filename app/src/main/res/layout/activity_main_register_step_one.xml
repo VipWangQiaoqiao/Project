@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="48dp"
+        android:paddingTop="48dp"
         android:contentDescription="@null"
         app:srcCompat="@mipmap/logo_osc"/>
 

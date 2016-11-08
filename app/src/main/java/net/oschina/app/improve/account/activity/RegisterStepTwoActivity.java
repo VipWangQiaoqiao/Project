@@ -1,12 +1,16 @@
 package net.oschina.app.improve.account.activity;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,9 +44,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RegisterStepTwoActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
-
-    private static final String TAG = "RegisterStepTwoActivity";
+public class RegisterStepTwoActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     public static final String PHONE_TOKEN_KEY = "phoneToken";
 
@@ -126,7 +128,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
         }
     };
-
+    private int mTopMargin;
 
     /**
      * show register step two activity
@@ -230,9 +232,20 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
     @Override
     protected void initData() {
         super.initData();//必须要调用,用来注册本地广播
-
         Intent intent = getIntent();
         mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONE_TOKEN_KEY);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLlRegisterBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLlRegisterBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 
     @SuppressWarnings("deprecation")
@@ -346,5 +359,57 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 break;
         }
 
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        Rect r = new Rect();
+        mLlRegisterBar.getWindowVisibleDisplayFrame(r);
+
+        int screenHeight = mLlRegisterBar.getRootView().getHeight();
+        int keypadHeight = screenHeight - r.bottom;
+
+        if (keypadHeight > 0 && mLlRegisterTwoUsername.getTag() == null) {
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRegisterTwoUsername.getLayoutParams();
+            final int topMargin = layoutParams.topMargin;
+            this.mTopMargin = topMargin;
+            mLlRegisterTwoUsername.setTag(true);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    layoutParams.topMargin = (int) (topMargin * animatedValue);
+                    mLlRegisterTwoUsername.setLayoutParams(layoutParams);
+                }
+            });
+
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+
+        } else if (keypadHeight == 0 && mLlRegisterTwoUsername.getTag() != null) {
+            final int topMargin = mTopMargin;
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRegisterTwoUsername.getLayoutParams();
+            mLlRegisterTwoUsername.setTag(null);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    layoutParams.topMargin = (int) (topMargin * animatedValue);
+                    mLlRegisterTwoUsername.setLayoutParams(layoutParams);
+                }
+            });
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+        }
     }
 }
