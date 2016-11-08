@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -234,8 +235,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                SubTab tab = tabs.get(position);
-                return SubFragment.newInstance(getContext(), tab);
+                return instanceFragment(tabs.get(position));
             }
 
             @Override
@@ -267,16 +267,19 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
         mLayoutTab.setupWithViewPager(mViewPager);
     }
 
-    public Fragment instanceFragment(int type, int subtype) {
-        switch (type) {
+    public Fragment instanceFragment(SubTab tab) {
+        if (!TextUtils.isEmpty(tab.getHref())){
+            return SubFragment.newInstance(getContext(), tab);
+        }
+        switch (tab.getType()) {
             case News.TYPE_NEWS:
                 return new NewsFragment();
             case News.TYPE_EVENT:
                 return new EventFragment();
             case News.TYPE_QUESTION:
-                return QuestionFragment.instantiate(getContext(), subtype);
+                return QuestionFragment.instantiate(getContext(), tab.getSubtype());
             case News.TYPE_BLOG:
-                return BlogFragment.instantiate(getContext(), subtype);
+                return BlogFragment.instantiate(getContext(), tab.getSubtype());
         }
         throw new RuntimeException("Fuck you!!!!!");
     }
