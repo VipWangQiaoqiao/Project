@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout_coordinator"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
@@ -39,8 +40,7 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
                 android:gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:paddingBottom="24dp">
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/tv_title"
@@ -66,6 +66,7 @@
                     android:textSize="14sp"
                     android:textColor="#FFF"
                     android:layout_marginTop="12dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="你对开源中国客户端有什么看法呢？或者有什么好的idea想与大家分享？不要吝啬你的手指，赶快来忘记我吧！"/>
