@@ -54,6 +54,7 @@ import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
+import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.Team;
@@ -656,6 +657,18 @@ public class UIHelper {
         Bundle args = new Bundle();
         args.putLong(UserBlogFragment.BUNDLE_KEY_USER_ID, uid);
         showSimpleBack(context, SimpleBackPage.USER_BLOG, args);
+    }
+
+    /**
+     * 显示用户的问答列表
+     *
+     * @param context context
+     * @param uid     authorId
+     */
+    public static void showUserQuestion(Context context, long uid) {
+        Bundle args = new Bundle();
+        args.putLong(UserQuestionFragment.BUNDLE_KEY_AUTHOR_ID, uid);
+        showSimpleBack(context, SimpleBackPage.MY_QUESTION, args);
     }
 
     /**
