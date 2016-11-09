@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
@@ -26,6 +24,8 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
+import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.tweet.adapter.SoftwareTweetAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.TDevice;
@@ -45,9 +45,10 @@ import static net.oschina.app.improve.base.adapter.BaseRecyclerAdapter.ONLY_FOOT
 public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     public static final String BUNDLE_KEY_NAME = "bundle_key_name";
     private String softwareName;
-    private EditText mETInput;
     private ProgressDialog mDialog;
     private boolean mInputDoubleEmpty = false;
+
+    private KeyboardInputDelegation mDelegation;
 
     public static void show(Context context, String tag) {
         Intent intent = new Intent(context, SoftwareTweetActivity.class);
@@ -70,23 +71,16 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     protected void initWidget() {
         super.initWidget();
 
-        mETInput = (EditText) findViewById(R.id.et_input);
+        mDelegation = KeyboardInputDelegation.delegation(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout), null);
+        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
 
-        mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mDelegation.setSendListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-
-                    String input = mETInput.getText().toString().trim();
-                    handleSendComment(input);
-
-                    return true;
-                }
-                return false;
+            public void onClick(View v) {
+                handleSendComment(mDelegation.getInputText());
             }
         });
-
-        mETInput.setOnKeyListener(new View.OnKeyListener() {
+        mDelegation.getInputView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -160,8 +154,8 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
                     if (resultBean.isSuccess()) {
                         onRefreshing();
-                        TDevice.hideSoftKeyboard(mETInput);
-                        mETInput.setText(null);
+                        TDevice.hideSoftKeyboard(mDelegation.getInputView());
+                        mDelegation.getInputView().setText(null);
                     }
                     hideWaitDialog();
                 } catch (Exception e) {
@@ -175,9 +169,9 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
     private void handleKeyDel() {
 
-        if (TextUtils.isEmpty(mETInput.getText())) {
+        if (TextUtils.isEmpty(mDelegation.getInputText())) {
             if (mInputDoubleEmpty) {
-                mETInput.setHint("发表评论");
+                mDelegation.getInputView().setHint("发表评论");
             } else {
                 mInputDoubleEmpty = true;
             }

@@ -6,8 +6,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +14,8 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
+import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
@@ -38,19 +38,16 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
     private TextView mTVTitle;
-    private EditText mETInput;
 
     private long mCommentId;
     private long mCommentAuthorId;
     private CommentExsView mComments;
     private CoordinatorLayout mLayCoordinator;
     private NestedScrollView mLayContent;
-    private View mLayBottom;
-    private TextView mTvTagOne;
 
-    private ImageView mIVFav;
     private FlowLayout mFlowLayout;
 
+    private KeyboardInputDelegation mDelegation;
 
     @Override
     protected int getLayoutId() {
@@ -66,11 +63,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mTVTitle = (TextView) root.findViewById(R.id.tv_ques_detail_title);
 
         mFlowLayout = (FlowLayout) root.findViewById(R.id.ques_detail_flow);
-        mTvTagOne = (TextView) root.findViewById(R.id.tv_ques_detail_tag);
-
-
-        mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
-        mIVFav.setOnClickListener(this);
 
         mComments = (CommentExsView) root.findViewById(R.id.lay_detail_comment);
         mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
@@ -78,12 +70,39 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         registerScroller(mLayContent, mComments);
 
-        mLayBottom = root.findViewById(R.id.lay_option);
+        mDelegation = KeyboardInputDelegation.delegation(getActivity(), mLayCoordinator, null);
 
-        mETInput = (EditText) root.findViewById(R.id.et_input);
+        mDelegation.getInputView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                    handleKeyDel();
+                }
+                return false;
+            }
+        });
 
-        root.findViewById(R.id.iv_share).setOnClickListener(this);
-        mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
+        mDelegation.showFavor(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleFavorite();
+            }
+        });
+        mDelegation.showShare(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleShare();
+            }
+        });
+        mDelegation.setSendListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleSendComment();
+            }
+        });
+        mDelegation.getInputView().setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
@@ -93,7 +112,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 return false;
             }
         });
-        mETInput.setOnKeyListener(new View.OnKeyListener() {
+        mDelegation.getInputView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -107,14 +126,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            // 收藏
-            case R.id.iv_fav:
-                handleFavorite();
-                break;
-            // 分享
-            case R.id.iv_share:
-                handleShare();
-                break;
             // 评论列表
             case R.id.tv_see_more_comment:
                 UIHelper.showBlogComment(getActivity(), (int) mId,
@@ -175,11 +186,11 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
-            if (TextUtils.isEmpty(mETInput.getText().toString().trim())) {
+            if (TextUtils.isEmpty(mDelegation.getInputText())) {
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mETInput.setHint("我要回答");
+                    mDelegation.getInputView().setHint("我要回答");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -199,7 +210,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     }
 
     private void handleSendComment() {
-        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getInputText());
     }
 
 
@@ -207,18 +218,18 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     @Override
     public void toFavoriteOk(QuestionDetail questionDetail) {
         if (questionDetail.isFavorite())
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved));
+            mDelegation.setFavorDrawable(R.drawable.ic_faved);
         else
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav));
+            mDelegation.setFavorDrawable(R.drawable.ic_fav);
     }
 
 
     @Override
     public void toSendCommentOk(CommentEX commentEX) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mETInput.setText("");
+        mDelegation.getInputView().setText("");
         mComments.addComment(commentEX, getImgLoader(), null);
-        TDevice.hideSoftKeyboard(mETInput);
+        TDevice.hideSoftKeyboard(mDelegation.getInputView());
     }
 
     @Override
