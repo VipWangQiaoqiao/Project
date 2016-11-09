@@ -232,10 +232,22 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         mDelegation = KeyboardInputDelegation.delegation(this, mCoordinatorLayout, mFrameLayout);
         mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
         mDelegation.showEmoji(getSupportFragmentManager());
-        mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
+
+        mDelegation.getInputView().setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onSubmit(TextView v, String content) {
-                content = content.replaceAll("[\\s\\n]+", " ");
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                    handleKeyDel();
+                }
+                return false;
+            }
+        });
+
+
+        mDelegation.setSendListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String content = mDelegation.getInputText().replaceAll("[\\s\\n]+", " ");
                 if (TextUtils.isEmpty(content)) {
                     Toast.makeText(TweetDetailActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                     return;
@@ -250,22 +262,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 dialog.show();
                 OSChinaApi.pubTweetComment(tweet.getId(), content, 0, publishCommentHandler);
             }
-
-            @Override
-            public void onFinalBackSpace(View v) {
-                if (replies == null || replies.size() == 0) return;
-                replies.remove(replies.size() - 1);
-                if (replies.size() == 0) {
-                    mViewInput.setHint("发表评论");
-                    return;
-                }
-                mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
-                if (replies.size() == 2) {
-                    mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor()
-                            .getName());
-                }
-            }
         });
+
         mViewInput = mDelegation.getInputView();
 
         // TODO to select friends when input @ character
@@ -458,5 +456,19 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 break;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void handleKeyDel() {
+        if (replies == null || replies.size() == 0) return;
+        replies.remove(replies.size() - 1);
+        if (replies.size() == 0) {
+            mViewInput.setHint("发表评论");
+            return;
+        }
+        mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
+        if (replies.size() == 2) {
+            mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor()
+                    .getName());
+        }
     }
 }
