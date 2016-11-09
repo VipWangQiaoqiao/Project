@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -30,6 +29,7 @@ import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.main.subscription.SubFragment;
 import net.oschina.app.improve.search.activities.SearchActivity;
+import net.oschina.app.improve.widget.FragmentPagerAdapter;
 import net.oschina.app.improve.widget.TabPickerView;
 import net.oschina.app.interf.OnTabReselectListener;
 
@@ -226,10 +226,10 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
         }
 
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
+        mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return instanceFragment(tabs.get(position));
+                return instantiateFragment(tabs.get(position));
             }
 
             @Override
@@ -257,11 +257,10 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             }
 
         });
-        mViewPager.setOffscreenPageLimit(1);
         mLayoutTab.setupWithViewPager(mViewPager);
     }
 
-    public Fragment instanceFragment(SubTab tab) {
+    public Fragment instantiateFragment(SubTab tab) {
         if (!TextUtils.isEmpty(tab.getHref())){
             return SubFragment.newInstance(getContext(), tab);
         }
