@@ -73,7 +73,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         //setGone(R.id.tv_info_view);
         setGone(R.id.iv_info_comment);
 
-
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
         mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
         mAbhoutSoftwareTitle = (TextView) root.findViewById(R.id.tv_about_software_title);
@@ -213,9 +212,9 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     @Override
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        //mETInput.setText("");
+        mDelegation.getInputView().setText("");
         mComments.addComment(comment, getImgLoader(), this);
-        //TDevice.hideSoftKeyboard(mETInput);
+        TDevice.hideSoftKeyboard(mDelegation.getInputView());
     }
 
     @Override
