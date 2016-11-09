@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.content.LocalBroadcastManager;
 
 import net.oschina.app.AppContext;
@@ -46,6 +47,12 @@ public class AccountBaseActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        hideWaitDialog();
     }
 
     @Override
@@ -93,10 +100,14 @@ public class AccountBaseActivity extends BaseActivity {
      *
      * @return progressDialog
      */
-    protected ProgressDialog showWaitDialog() {
-        String message = getResources().getString(R.string.progress_submit);
+    protected ProgressDialog showWaitDialog(@StringRes int messageId) {
         if (mDialog == null) {
-            mDialog = DialogHelper.getProgressDialog(this, message, true); //DialogHelp.getWaitDialog(this, message);
+            if (messageId <= 0) {
+                mDialog = DialogHelper.getProgressDialog(this, true);
+            } else {
+                String message = getResources().getString(messageId);
+                mDialog = DialogHelper.getProgressDialog(this, message, true);
+            }
         }
         mDialog.show();
 

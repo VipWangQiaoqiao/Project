@@ -81,7 +81,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         @Override
         public void onStart() {
             super.onStart();
-            showWaitDialog();
+            showWaitDialog(R.string.progress_submit);
         }
 
         @Override

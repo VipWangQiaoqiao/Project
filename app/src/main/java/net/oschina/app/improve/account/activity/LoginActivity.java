@@ -14,7 +14,6 @@ import android.support.v4.content.SharedPreferencesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -444,6 +443,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * login tencent
      */
     private void tencentLogin() {
+        showWaitDialog(R.string.login_tencent_hint);
         openType = OpenConstant.TENCENT;
         mTencent = OpenBuilder.with(this)
                 .useTencent(OpenConstant.QQ_APP_ID)
@@ -454,13 +454,20 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * login wechat
      */
     private void wechatLogin() {
+        showWaitDialog(R.string.login_wechat_hint);
         openType = OpenConstant.WECHAT;
         OpenBuilder.with(this)
                 .useWechat(OpenConstant.WECHAT_APP_ID)
                 .login(new OpenBuilder.Callback() {
                     @Override
                     public void onFailed() {
+                        hideWaitDialog();
                         AppContext.showToast(R.string.login_hint, Toast.LENGTH_SHORT);
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        hideWaitDialog();
                     }
                 });
         //finish();
@@ -470,13 +477,14 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * login weiBo
      */
     private void weiBoLogin() {
+        showWaitDialog(R.string.login_webo_hint);
         openType = OpenConstant.SINA;
         mSsoHandler = OpenBuilder.with(this)
                 .useWeibo(OpenConstant.WB_APP_KEY)
                 .login(new WeiboAuthListener() {
                     @Override
                     public void onComplete(Bundle bundle) {
-
+                        hideWaitDialog();
                         Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
 
                         if (oauth2AccessToken.isSessionValid()) {
@@ -497,11 +505,12 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     @Override
                     public void onWeiboException(WeiboException e) {
                         e.printStackTrace();
+                        hideWaitDialog();
                     }
 
                     @Override
                     public void onCancel() {
-
+                        hideWaitDialog();
                     }
                 });
     }
@@ -735,6 +744,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     public void onComplete(Object o) {
         JSONObject jsonObject = (JSONObject) o;
         OSChinaApi.openLogin(OSChinaApi.LOGIN_QQ, jsonObject.toString(), getAppToken(), mHandler);
+        hideWaitDialog();
     }
 
     /**
@@ -744,7 +754,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      */
     @Override
     public void onError(UiError uiError) {
-
+        hideWaitDialog();
     }
 
 
@@ -753,7 +763,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      */
     @Override
     public void onCancel() {
-
+        hideWaitDialog();
     }
 
     @Override
