@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +49,9 @@ public class KeyboardInputDelegation {
     private LinearLayout mBottomLayout;
 
     private KeyboardActionDelegation mActionDelegation;
+
+    private int mInputHeight;
+    private int mCurrentInputHeight;
 
     private KeyboardInputDelegation(Context context) {
         this.context = context;
@@ -160,6 +164,14 @@ public class KeyboardInputDelegation {
     private void setWrapperView(View view) {
         this.mWrapperView = view;
         mViewInput = (EditText) this.mWrapperView.findViewById(R.id.et_input);
+        mViewInput.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (mInputHeight == 0) {
+                    mInputHeight = mViewInput.getMeasuredHeight();
+                }
+            }
+        });
         mBtnSend = (Button) mWrapperView.findViewById(R.id.btn_send);
     }
 
@@ -216,7 +228,7 @@ public class KeyboardInputDelegation {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s.toString().replace("[\\s\\n]+", ""))) {
+                if (!TextUtils.isEmpty(s.toString().replace("\n", "").replace(" ", ""))) {
                     showSendButton();
                 } else {
                     hideSendButton();
@@ -225,6 +237,24 @@ public class KeyboardInputDelegation {
 
             @Override
             public void afterTextChanged(Editable s) {
+                mCurrentInputHeight = mViewInput.getMeasuredHeight();
+            }
+        });
+        mViewInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (TextUtils.isEmpty(getInputText())) {
+                        mViewInput.setText("");
+                    }
+                    mViewInput.getLayoutParams().height = mInputHeight;
+                    mViewInput.requestLayout();
+                } else {
+                    if (mCurrentInputHeight >= mInputHeight) {
+                        mViewInput.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                        mViewInput.requestLayout();
+                    }
+                }
             }
         });
     }
@@ -234,7 +264,7 @@ public class KeyboardInputDelegation {
     }
 
     public String getInputText() {
-        return mViewInput.getText().toString();
+        return mViewInput.getText().toString().trim();
     }
 
     public void notifyWrapper() {
