@@ -7,13 +7,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -61,7 +66,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class LoginActivity extends AccountBaseActivity implements View.OnClickListener, IUiListener, View.OnFocusChangeListener {
+public class LoginActivity extends AccountBaseActivity implements View.OnClickListener, IUiListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
@@ -69,6 +74,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
+
+    @Bind(R.id.iv_login_logo)
+    ImageView mIvLoginLogo;
 
     @Bind(R.id.ll_login_username)
     LinearLayout mLlLoginUsername;
@@ -159,6 +167,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             hideWaitDialog();
         }
     };
+    private int mLogoHeight;
+    private int mLogoWidth;
 
     /**
      * hold account information
@@ -285,6 +295,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
         TextView label = (TextView) mLayBackBar.findViewById(R.id.tv_navigation_label);
         label.setVisibility(View.INVISIBLE);
+
     }
 
     @Override
@@ -298,6 +309,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         //int holdStatus = sp.getInt(HOLD_PWD_STATUS_KEY, 0);//0第一次默认/1用户设置保存/2用户设置未保存
 
         mEtLoginUsername.setText(holdUsername);
+        mLogoHeight = mIvLoginLogo.getHeight();
+        mLogoWidth = mIvLoginLogo.getWidth();
 
 //        if (!TextUtils.isEmpty(holdPwd)) {
 //            byte[] bytes = holdPwd.getBytes();
@@ -314,6 +327,18 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 //        }
         // updateHoldPwd(holdStatus);
         // mHoldPwd = holdStatus;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLayBackBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 
     private void updateHoldPwd(int holdStatus) {
@@ -747,5 +772,67 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 mLlLoginUsername.setActivated(false);
             }
         }
+    }
+
+
+    @Override
+    public void onGlobalLayout() {
+
+        Rect r = new Rect();
+        mLayBackBar.getWindowVisibleDisplayFrame(r);
+
+        int screenHeight = mLayBackBar.getRootView().getHeight();
+
+        int keypadHeight = screenHeight - r.bottom;
+
+        if (keypadHeight > 0 && mIvLoginLogo.getTag() == null) {
+            final int height = mIvLoginLogo.getHeight();
+            final int width = mIvLoginLogo.getWidth();
+            this.mLogoHeight = height;
+            this.mLogoWidth = width;
+            mIvLoginLogo.setTag(true);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    ViewGroup.LayoutParams params = mIvLoginLogo.getLayoutParams();
+                    params.height = (int) (height * animatedValue);
+                    params.width = (int) (width * animatedValue);
+                    mIvLoginLogo.setLayoutParams(params);
+                }
+            });
+
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+
+        } else if (keypadHeight == 0 && mIvLoginLogo.getTag() != null) {
+            final int height = mLogoHeight;
+            final int width = mLogoWidth;
+            mIvLoginLogo.setTag(null);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    ViewGroup.LayoutParams params = mIvLoginLogo.getLayoutParams();
+                    params.height = (int) (height * animatedValue);
+                    params.width = (int) (width * animatedValue);
+                    mIvLoginLogo.setLayoutParams(params);
+                }
+            });
+
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+        }
+
     }
 }

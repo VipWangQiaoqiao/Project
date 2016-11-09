@@ -1,14 +1,18 @@
 package net.oschina.app.improve.account.activity;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,7 +46,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RetrieveActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
+public class RetrieveActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLlRetrieveBar;
@@ -181,6 +185,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
         }
     };
+    private int mTopMargin;
 
     /**
      * show the retrieve activity
@@ -304,6 +309,18 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         super.initData();//必须要调用,用来注册本地广播
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLlRetrieveBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLlRetrieveBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    }
+
     @OnClick({R.id.ib_navigation_back, R.id.iv_retrieve_tel_del, R.id.retrieve_sms_call,
             R.id.bt_retrieve_submit, R.id.tv_retrieve_label})
     @Override
@@ -324,7 +341,6 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
             case R.id.bt_retrieve_submit:
                 //根据验证码获取phoneToken
                 requestRetrievePwd();
-
                 break;
             case R.id.tv_retrieve_label:
 
@@ -423,6 +439,59 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        Rect r = new Rect();
+        mLlRetrieveBar.getWindowVisibleDisplayFrame(r);
+
+        int screenHeight = mLlRetrieveBar.getRootView().getHeight();
+
+        int keypadHeight = screenHeight - r.bottom;
+
+        if (keypadHeight > 0 && mLlRetrieveTel.getTag() == null) {
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRetrieveTel.getLayoutParams();
+            final int topMargin = layoutParams.topMargin;
+            this.mTopMargin = topMargin;
+            mLlRetrieveTel.setTag(true);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    layoutParams.topMargin = (int) (topMargin * animatedValue);
+                    mLlRetrieveTel.setLayoutParams(layoutParams);
+                }
+            });
+
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+
+        } else if (keypadHeight == 0 && mLlRetrieveTel.getTag() != null) {
+            final int topMargin = mTopMargin;
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRetrieveTel.getLayoutParams();
+            mLlRetrieveTel.setTag(null);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    layoutParams.topMargin = (int) (topMargin * animatedValue);
+                    mLlRetrieveTel.setLayoutParams(layoutParams);
+                }
+            });
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
         }
     }
 }
