@@ -1,10 +1,12 @@
 package net.oschina.app.improve.dialog;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -26,6 +28,7 @@ import com.tencent.tauth.UiError;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.TDevice;
 import net.oschina.open.bean.Share;
 import net.oschina.open.constants.OpenConstant;
@@ -46,6 +49,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
     private Share mShare;
     private Activity mActivity;
     private AlertDialog mAlertDialog;
+    private ProgressDialog mDialog;
 
     private ShareDialogBuilder(@NonNull Activity context, @StyleRes int themeResId) {
         super(context, themeResId);
@@ -140,6 +144,8 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
             shareRecycle.setItemAnimator(new DefaultItemAnimator());
             shareRecycle.setLayoutManager(new GridLayoutManager(getContext(), 3));
             builder.setView(contentView);
+            builder.setOnCancelListener(this);
+            builder.setOnDismissListener(this);
         }
         return builder;
     }
@@ -156,12 +162,12 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
 
     @Override
     public void onCancel(DialogInterface dialog) {
-
+        hideWaitDialog();
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-
+        hideWaitDialog();
     }
 
     public void onItemClick(int position, long itemId) {
@@ -169,41 +175,47 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
         switch (position) {
             //朋友圈
             case 0:
+                showWaitDialog(R.string.login_wechat_hint);
                 OpenBuilder.with(mActivity)
                         .useWechat(OpenConstant.WECHAT_APP_ID)
                         .shareTimeLine(share, this);
                 break;
             //微信会话
             case 1:
+                showWaitDialog(R.string.login_wechat_hint);
                 OpenBuilder.with(mActivity)
                         .useWechat(OpenConstant.WECHAT_APP_ID)
                         .shareSession(share, this);
                 break;
             //新浪微博
             case 2:
+                showWaitDialog(R.string.login_webo_hint);
                 OpenBuilder.with(mActivity)
                         .useWeibo(OpenConstant.WB_APP_KEY)
                         .share(share, this);
                 break;
             //QQ
             case 3:
+                showWaitDialog(R.string.login_tencent_hint);
                 OpenBuilder.with(mActivity)
                         .useTencent(OpenConstant.QQ_APP_ID)
                         .share(share, new IUiListener() {
                             @Override
                             public void onComplete(Object o) {
+                                hideWaitDialog();
                             }
 
                             @Override
                             public void onError(UiError uiError) {
+                                hideWaitDialog();
                                 AppContext.showToast(R.string.share_hint, Toast.LENGTH_SHORT);
                             }
 
                             @Override
                             public void onCancel() {
-
+                                hideWaitDialog();
                             }
-                        });
+                        },this);
                 break;
             //复制链接
             case 4:
@@ -215,9 +227,40 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                 break;
         }
 
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
-            mAlertDialog.cancel();
+    }
+
+    /**
+     * show WaitDialog
+     *
+     * @return progressDialog
+     */
+    protected ProgressDialog showWaitDialog(@StringRes int messageId) {
+        if (mDialog == null) {
+            if (messageId <= 0) {
+                mDialog = DialogHelper.getProgressDialog(mActivity, true);
+            } else {
+                String message = mActivity.getResources().getString(messageId);
+                mDialog = DialogHelper.getProgressDialog(mActivity, message, true);
+            }
+        }
+        mDialog.show();
+
+        return mDialog;
+    }
+
+    /**
+     * hide waitDialog
+     */
+    protected void hideWaitDialog() {
+        ProgressDialog dialog = mDialog;
+        if (dialog != null) {
+            mDialog = null;
+            try {
+                dialog.cancel();
+                // dialog.dismiss();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -241,7 +284,17 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
 
     @Override
     public void onFailed() {
+        hideWaitDialog();
         AppContext.showToast(R.string.share_hint, Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public void onSuccess() {
+        //调起第三方客户端
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            mAlertDialog.cancel();
+            //mAlertDialog.dismiss();
+        }
     }
 
     private ShareBuilder createBuilder() {

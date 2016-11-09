@@ -160,6 +160,7 @@
     <string name="message">我的消息</string>
     <string name="team">我的团队</string>
     <string name="user_score">积分</string>
+    <string name="question">我的问答</string>
 
     <string name="scan">扫一扫</string>
     <string name="shake">摇一摇</string>
@@ -278,6 +279,11 @@
     <string name="register_success_hint">注册成功</string>
     <string name="share_hint">抱歉,您未安装该应用,不能分享&#8230;</string>
     <string name="login_hint">抱歉,您未安装该应用,不能登录&#8230;</string>
+    <string name="login_wechat_hint">正在启动微信中&#8230;</string>
+    <string name="login_tencent_hint">正在启动QQ中&#8230;</string>
+    <string name="login_webo_hint">正在启动微博中&#8230;</string>
     <string name="message_pwd_error">密码错误</string>
+    <string name="tv_my_score">积分 0</string>
+    <string name="zero">0</string>
 
 </resources>

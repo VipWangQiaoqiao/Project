@@ -79,7 +79,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         @Override
         public void onStart() {
             super.onStart();
-            showWaitDialog();
+            showWaitDialog(R.string.progress_submit);
         }
 
         @Override

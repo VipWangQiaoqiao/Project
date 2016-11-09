@@ -65,7 +65,7 @@ public class OpenBuilder {
             return tencent;
         }
 
-        public void share(Share share, IUiListener listener) {
+        public void share(Share share, IUiListener listener, Callback callback) {
             Bundle params = new Bundle();
             params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
             params.putString(QQShare.SHARE_TO_QQ_TITLE, share.getTitle());
@@ -73,7 +73,14 @@ public class OpenBuilder {
             params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, share.getUrl());
             params.putInt(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, share.getAppShareIcon());
             params.putString(QQShare.SHARE_TO_QQ_APP_NAME, share.getAppName());
-            tencent.shareToQQ(activity, params, listener);
+            if (callback != null) {
+                if (tencent != null) {
+                    tencent.shareToQQ(activity, params, listener);
+                    callback.onSuccess();
+                } else {
+                    callback.onFailed();
+                }
+            }
         }
     }
 
@@ -99,6 +106,9 @@ public class OpenBuilder {
                 if (callback != null)
                     callback.onFailed();
                 return;
+            } else {
+                if (callback != null)
+                    callback.onSuccess();
             }
 
             // 1. 初始化微博的分享消息
@@ -143,6 +153,9 @@ public class OpenBuilder {
                 if (callback != null)
                     callback.onFailed();
                 return;
+            } else {
+                if (callback != null)
+                    callback.onSuccess();
             }
             // 唤起微信登录授权
             SendAuth.Req req = new SendAuth.Req();
@@ -175,6 +188,9 @@ public class OpenBuilder {
                 if (callback != null)
                     callback.onFailed();
                 return;
+            } else {
+                if (callback != null)
+                    callback.onSuccess();
             }
 
             //1.初始化一个WXTextObject对象,填写分享的文本内容
@@ -207,5 +223,7 @@ public class OpenBuilder {
 
     public interface Callback {
         void onFailed();
+
+        void onSuccess();
     }
 }
