@@ -7,9 +7,9 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
+        android:clickable="true"
         android:orientation="vertical">
 
         <View style="@style/h_line" />
@@ -22,6 +22,7 @@
             android:layout_marginLeft="@dimen/lay_16"
             android:layout_marginRight="@dimen/lay_16"
             android:layout_marginTop="@dimen/lay_12"
+            android:focusable="true"
             android:background="@drawable/bg_comment"
             android:gravity="top"
             android:hint="请输入评论"
@@ -39,23 +40,25 @@
             android:paddingLeft="@dimen/lay_16"
             android:paddingRight="@dimen/lay_16">
 
-            <ImageButton
-                android:id="@+id/ib_face"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:background="@drawable/ic_material"
-                android:scaleType="centerInside"
-                android:src="@mipmap/ic_tweet_expression_normal" />
 
             <ImageButton
                 android:id="@+id/ib_mention"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:layout_marginLeft="@dimen/lay_16"
                 android:layout_marginRight="@dimen/lay_16"
                 android:background="@drawable/ic_material"
                 android:scaleType="centerInside"
                 android:src="@mipmap/ic_tweet_mention_normal" />
+
+            <ImageButton
+                android:id="@+id/ib_face"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginRight="@dimen/lay_16"
+                android:background="@drawable/ic_material"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_tweet_expression_normal" />
+
 
             <CheckBox
                 android:id="@+id/cb_sync"
@@ -77,7 +80,7 @@
                 android:id="@+id/btn_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:background="@drawable/selector_event_sign"
+                android:background="@drawable/selector_comment"
                 android:text="发送" />
         </LinearLayout>
 

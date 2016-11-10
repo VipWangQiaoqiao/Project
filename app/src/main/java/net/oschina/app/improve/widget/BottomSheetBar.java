@@ -3,6 +3,11 @@ package net.oschina.app.improve.widget;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,6 +90,22 @@ public class BottomSheetBar {
             }
         });
 
+        mEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mBtnCommit.setEnabled(s.length() > 0);
+            }
+        });
     }
 
     public void showEmoji() {
@@ -122,8 +143,14 @@ public class BottomSheetBar {
         });
     }
 
-    public void show() {
+    public void show(String hint) {
         mDialog.show();
+        if (!"添加评论".equals(hint)) {
+            mEditText.setHint(hint + " ");
+            if (!TextUtils.isEmpty(getCommentText())) {
+                Selection.setSelection(mEditText.getText(), mEditText.length());
+            }
+        }
         mRootView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -154,11 +181,26 @@ public class BottomSheetBar {
         mBtnCommit.setOnClickListener(listener);
     }
 
+    public void handleSelectFriendsResult(Intent data) {
+        String names[] = data.getStringArrayExtra("names");
+        if (names != null && names.length > 0) {
+            String text = "";
+            for (String n : names) {
+                text += "@" + n + " ";
+            }
+            mEditText.getText().insert(mEditText.getSelectionEnd(), text);
+        }
+    }
+
     public EditText getEditText() {
         return mEditText;
     }
 
     public String getCommentText() {
         return mEditText.getText().toString().trim();
+    }
+
+    public Button getBtnCommit() {
+        return mBtnCommit;
     }
 }

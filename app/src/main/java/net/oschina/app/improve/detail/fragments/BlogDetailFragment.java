@@ -1,9 +1,11 @@
 package net.oschina.app.improve.detail.fragments;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,6 +21,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.simple.Comment;
@@ -32,6 +35,7 @@ import net.oschina.app.improve.pay.util.RewardUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.DetailAboutView;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
@@ -139,6 +143,16 @@ public class BlogDetailFragment
                 handleShare();
             }
         });
+
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(BlogDetailFragment.this);
+                else
+                    LoginActivity.show(getActivity());
+            }
+        });
     }
 
     @OnClick({R.id.btn_relation, R.id.iv_avatar, R.id.btn_reward})
@@ -218,7 +232,8 @@ public class BlogDetailFragment
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.setCommentHint("添加评论");
+                    mDelegation.setCommentHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -331,5 +346,13 @@ public class BlogDetailFragment
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthorId();
         mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+        }
     }
 }
