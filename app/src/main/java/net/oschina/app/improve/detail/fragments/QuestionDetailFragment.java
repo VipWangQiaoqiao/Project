@@ -1,7 +1,9 @@
 package net.oschina.app.improve.detail.fragments;
 
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
@@ -18,6 +22,7 @@ import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.widget.FlowLayout;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
@@ -107,6 +112,16 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 return false;
             }
         });
+
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(QuestionDetailFragment.this);
+                else
+                    LoginActivity.show(getActivity());
+            }
+        });
     }
 
     @Override
@@ -176,7 +191,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.setCommentHint("添加评论");
+                    mDelegation.setCommentHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -221,4 +237,13 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     public void onClick(View view, Comment comment) {
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+        }
+    }
+
 }

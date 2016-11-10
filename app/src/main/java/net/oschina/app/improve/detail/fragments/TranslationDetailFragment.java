@@ -1,7 +1,9 @@
 package net.oschina.app.improve.detail.fragments;
 
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,6 +14,8 @@ import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.TranslationDetail;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
@@ -20,6 +24,7 @@ import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.TranslateDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 
 /**
@@ -101,6 +106,15 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
             }
         });
 
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(TranslationDetailFragment.this);
+                else
+                    LoginActivity.show(getActivity());
+            }
+        });
 
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
         mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
@@ -157,6 +171,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
                     mCommentId = mId;
                     mCommentAuthorId = 0;
                     mDelegation.setCommentHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -202,5 +217,13 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthorId();
         mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+        }
     }
 }

@@ -48,7 +48,7 @@ public class CommentBar {
         mCommentText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDelegation.show();
+                mDelegation.show(mCommentText.getHint().toString());
             }
         });
     }
@@ -75,6 +75,10 @@ public class CommentBar {
 
     public BottomSheetBar getBottomSheet() {
         return mDelegation;
+    }
+
+    public void setCommitButtonEnable(boolean enable) {
+        mDelegation.getBtnCommit().setEnabled(enable);
     }
 
     public TextView getCommentText() {

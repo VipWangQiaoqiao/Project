@@ -18,16 +18,17 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.tweet.adapter.SoftwareTweetAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
@@ -48,7 +49,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     private ProgressDialog mDialog;
     private boolean mInputDoubleEmpty = false;
 
-    private KeyboardInputDelegation mDelegation;
+    private CommentBar mDelegation;
 
     public static void show(Context context, String tag) {
         Intent intent = new Intent(context, SoftwareTweetActivity.class);
@@ -71,22 +72,31 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     protected void initWidget() {
         super.initWidget();
 
-        mDelegation = KeyboardInputDelegation.delegation(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout), null);
-        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
+        mDelegation = CommentBar.delegation(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
 
-        mDelegation.setSendListener(new View.OnClickListener() {
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleSendComment(mDelegation.getInputText());
+                handleSendComment(mDelegation.getBottomSheet().getCommentText());
             }
         });
-        mDelegation.getInputView().setOnKeyListener(new View.OnKeyListener() {
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
                     handleKeyDel();
                 }
                 return false;
+            }
+        });
+
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(SoftwareTweetActivity.this);
+                else
+                    LoginActivity.show(SoftwareTweetActivity.this);
             }
         });
     }
@@ -154,8 +164,8 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
                     if (resultBean.isSuccess()) {
                         onRefreshing();
-                        TDevice.hideSoftKeyboard(mDelegation.getInputView());
-                        mDelegation.getInputView().setText(null);
+                        mDelegation.getBottomSheet().dismiss();
+                        mDelegation.getBottomSheet().getEditText().setText("");
                     }
                     hideWaitDialog();
                 } catch (Exception e) {
@@ -169,9 +179,10 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
     private void handleKeyDel() {
 
-        if (TextUtils.isEmpty(mDelegation.getInputText())) {
+        if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
             if (mInputDoubleEmpty) {
-                mDelegation.getInputView().setHint("发表评论");
+                mDelegation.getCommentText().setHint("发表评论");
+                mDelegation.getBottomSheet().getEditText().setHint("发表评论");
             } else {
                 mInputDoubleEmpty = true;
             }
@@ -270,5 +281,11 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
         TweetDetailActivity.show(this, item);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+        }
+    }
 }

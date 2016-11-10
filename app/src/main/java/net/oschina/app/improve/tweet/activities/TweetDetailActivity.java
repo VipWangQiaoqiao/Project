@@ -41,6 +41,7 @@ import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -261,6 +262,16 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             }
         });
 
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(TweetDetailActivity.this);
+                else
+                    LoginActivity.show(TweetDetailActivity.this);
+            }
+        });
+
         mViewInput = mDelegation.getBottomSheet().getEditText();
 
         // TODO to select friends when input @ character
@@ -466,6 +477,14 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         if (replies.size() == 2) {
             mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor()
                     .getName());
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
         }
     }
 }
