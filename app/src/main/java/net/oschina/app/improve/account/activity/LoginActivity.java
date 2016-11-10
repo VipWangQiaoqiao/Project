@@ -704,10 +704,10 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         tencentOnActivityResult(data);
-
+        weiBoOnActivityResult(requestCode, resultCode, data);
+        
         super.onActivityResult(requestCode, resultCode, data);
 
-        weiBoOnActivityResult(requestCode, resultCode, data);
 
     }
 
