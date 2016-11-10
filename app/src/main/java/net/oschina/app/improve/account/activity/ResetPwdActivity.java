@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -95,12 +96,12 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
                     finish();
                     break;
                 case 216:
-                    AppContext.showToast(resultBean.getMessage());
+                    AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                     finish();
                     break;
                 case 219:
                     mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_error);
-                    AppContext.showToast(resultBean.getMessage());
+                    AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                     break;
                 default:
                     break;
@@ -211,11 +212,11 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     private void requestResetPwd() {
         String tempPwd = mEtResetPwd.getText().toString().trim();
         if (TextUtils.isEmpty(tempPwd) || tempPwd.length() < 6) {
-            AppContext.showToast(getString(R.string.reset_pwd_hint), Toast.LENGTH_SHORT);
+            AppContext.showToast(getString(R.string.reset_pwd_hint), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+            AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
         String appToken = getAppToken();

@@ -14,6 +14,7 @@ import android.support.v4.content.SharedPreferencesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -70,6 +71,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
     private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
+    private static final String TAG = "LoginActivity";
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
@@ -121,6 +123,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     private SsoHandler mSsoHandler;
     private Tencent mTencent;
 
+
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
 
         @Override
@@ -149,7 +152,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 setResult(RESULT_OK);
                 sendLocalReceiver();
             } else {
-                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             }
 
         }
@@ -368,10 +371,11 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @OnClick({R.id.ib_navigation_back, R.id.et_login_username, R.id.et_login_pwd, R.id.tv_login_forget_pwd,
             R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register, R.id.ll_login_pull,
             R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq, R.id.ll_login_layer,
-            R.id.iv_login_username_del, R.id.iv_login_pwd_del})
+            R.id.iv_login_username_del, R.id.iv_login_pwd_del, R.id.lay_login_container})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -451,6 +455,13 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             case R.id.iv_login_pwd_del:
                 mEtLoginPwd.setText(null);
                 break;
+            case R.id.lay_login_container:
+                if (mInputMethodManager == null) return;
+                boolean active = mInputMethodManager.isActive();
+                if (active) {
+                    mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                break;
             default:
                 break;
         }
@@ -491,7 +502,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     @Override
                     public void onFailed() {
                         hideWaitDialog();
-                        AppContext.showToast(R.string.login_hint, Toast.LENGTH_SHORT);
+                        AppContext.showToast(R.string.login_hint);
                     }
 
                     @Override
@@ -623,6 +634,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 .start();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void loginRequest() {
         String tempUsername = mEtLoginUsername.getText().toString().trim();
         String tempPwd = mEtLoginPwd.getText().toString().trim();
@@ -639,16 +651,15 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
                 if (TDevice.hasInternet()) {
                     requestLogin(tempUsername, tempPwd, appToken);
-
                 } else {
-                    AppContext.showToast(getResources().getString(R.string.footer_type_net_error), Toast.LENGTH_SHORT);
+                    AppContext.showToast(getResources().getString(R.string.footer_type_net_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                 }
 
             } else {
-                AppContext.showToast(getString(R.string.login_input_username_hint_error), Toast.LENGTH_SHORT);
+                AppContext.showToast(getString(R.string.login_input_username_hint_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             }
         } else {
-            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
+            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
         }
     }
 
@@ -698,7 +709,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                             message += "," + getResources().getString(R.string.message_pwd_error);
                             mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_error);
                         }
-                        AppContext.showToast(message, Toast.LENGTH_SHORT);
+                        AppContext.showToast(message, Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                         //更新失败应该是不进行任何的本地操作
                     }
                 } catch (Exception e) {

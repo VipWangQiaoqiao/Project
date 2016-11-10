@@ -9,6 +9,7 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -128,7 +129,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                             case 218:
                                 //手机号已被注册,提示重新输入
                                 mLlRegisterPhone.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                                 break;
                             case 0:
                                 //异常错误，发送验证码失败,回收timer,需重新请求发送验证码
@@ -136,7 +137,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                     mTimer.onFinish();
                                     mTimer.cancel();
                                 }
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                                 break;
                             default:
                                 break;
@@ -163,12 +164,12 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                         RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
                                     }
                                 } else {
-                                    AppContext.showToast(phoneTokenResultBean.getMessage());
+                                    AppContext.showToast(phoneTokenResultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                                 }
                                 break;
                             case 215://注册失败,手机验证码错误
                                 mLlRegisterSmsCode.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(phoneTokenResultBean.getMessage());
+                                AppContext.showToast(phoneTokenResultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                                 break;
                             default:
                                 break;

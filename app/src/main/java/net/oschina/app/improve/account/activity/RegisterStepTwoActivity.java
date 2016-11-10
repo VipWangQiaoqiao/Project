@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -123,7 +124,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                     default:
                         break;
                 }
-                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             }
 
         }
@@ -186,7 +187,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 }
 
                 if (length > 12) {
-                    AppContext.showToast(getResources().getString(R.string.register_username_error), Toast.LENGTH_SHORT);
+                    AppContext.showToast(getResources().getString(R.string.register_username_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_error);
                 } else {
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
@@ -305,19 +306,19 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
         String username = mEtRegisterUsername.getText().toString().trim();
 
         if (TextUtils.isEmpty(username)) {
-            AppContext.showToast(getString(R.string.hint_pwd_null));
+            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
 
         String pwd = mEtRegisterPwd.getText().toString().trim();
 
         if (TextUtils.isEmpty(pwd)) {
-            AppContext.showToast(getString(R.string.hint_pwd_null));
+            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
 
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error));
+            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
 
