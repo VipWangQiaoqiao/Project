@@ -108,8 +108,6 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         }
     };
     private int mTopMargin;
-    private Rect mKeypadRect;
-    private LinearLayout.LayoutParams mLlResetPwdParams;
 
 
     /**
@@ -187,8 +185,6 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     protected void onDestroy() {
         super.onDestroy();
         mLlResetBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-        if (mKeypadRect != null)
-            mKeypadRect = null;
     }
 
 
@@ -238,20 +234,20 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     @Override
     public void onGlobalLayout() {
 
-        if (mKeypadRect == null) {
-            mKeypadRect = new Rect();
-        }
-        mLlResetBar.getWindowVisibleDisplayFrame(mKeypadRect);
+        final LinearLayout kayResetPwd = this.mLlResetPwd;
+        Rect keypadRect = new Rect();
+
+        mLlResetBar.getWindowVisibleDisplayFrame(keypadRect);
 
         int screenHeight = mLlResetBar.getRootView().getHeight();
 
-        int keypadHeight = screenHeight - mKeypadRect.bottom;
+        int keypadHeight = screenHeight - keypadRect.bottom;
 
-        if (keypadHeight > 0 && mLlResetPwd.getTag() == null) {
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlResetPwd.getLayoutParams();
+        if (keypadHeight > 0 && kayResetPwd.getTag() == null) {
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) kayResetPwd.getLayoutParams();
             final int topMargin = layoutParams.topMargin;
             this.mTopMargin = topMargin;
-            mLlResetPwd.setTag(true);
+            kayResetPwd.setTag(true);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -259,7 +255,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
                     layoutParams.topMargin = (int) (topMargin * animatedValue);
-                    mLlResetPwd.setLayoutParams(layoutParams);
+                    kayResetPwd.requestLayout();
                 }
             });
 
@@ -269,10 +265,10 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             valueAnimator.start();
 
 
-        } else if (keypadHeight == 0 && mLlResetPwd.getTag() != null) {
+        } else if (keypadHeight == 0 && kayResetPwd.getTag() != null) {
             final int topMargin = mTopMargin;
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlResetPwd.getLayoutParams();
-            mLlResetPwd.setTag(null);
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) kayResetPwd.getLayoutParams();
+            kayResetPwd.setTag(null);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -280,7 +276,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
                     layoutParams.topMargin = (int) (topMargin * animatedValue);
-                    mLlResetPwd.setLayoutParams(layoutParams);
+                    kayResetPwd.requestLayout();
                 }
             });
             if (valueAnimator.isRunning()) {

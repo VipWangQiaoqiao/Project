@@ -188,7 +188,6 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
     };
     private int mLogoHeight;
     private int mLogoWidth;
-    private Rect mKeypadRect;
 
     /**
      * show the register activity
@@ -325,8 +324,6 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
     protected void onDestroy() {
         super.onDestroy();
         mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-        if (mKeypadRect != null)
-            mKeypadRect = null;
     }
 
     @OnClick({R.id.ib_navigation_back, R.id.iv_register_username_del, R.id.tv_register_sms_call,
@@ -440,32 +437,33 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
     @Override
     public void onGlobalLayout() {
 
-        if (mKeypadRect == null) {
-            mKeypadRect = new Rect();
-        }
-        mLayBackBar.getWindowVisibleDisplayFrame(mKeypadRect);
+        final ImageView ivLogo = this.mIvLogo;
+
+        Rect keypadRect = new Rect();
+
+        mLayBackBar.getWindowVisibleDisplayFrame(keypadRect);
 
         int screenHeight = mLayBackBar.getRootView().getHeight();
 
-        int keypadHeight = screenHeight - mKeypadRect.bottom;
+        int keypadHeight = screenHeight - keypadRect.bottom;
 
-        if (keypadHeight > 0 && mIvLogo.getTag() == null) {
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mIvLogo.getLayoutParams();
-            final int height = mIvLogo.getHeight();
-            final int width = mIvLogo.getWidth();
+        if (keypadHeight > 0 && ivLogo.getTag() == null) {
+            final int height = ivLogo.getHeight();
+            final int width = ivLogo.getWidth();
             this.mLogoHeight = height;
             this.mLogoWidth = width;
-            mIvLogo.setTag(true);
+            ivLogo.setTag(true);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) ivLogo.getLayoutParams();
 
                     layoutParams.height = (int) (height * animatedValue);
                     layoutParams.width = (int) (width * animatedValue);
-                    mIvLogo.setLayoutParams(layoutParams);
+                    ivLogo.requestLayout();
                 }
             });
 
@@ -475,21 +473,20 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
             valueAnimator.start();
 
 
-        } else if (keypadHeight == 0 && mIvLogo.getTag() != null) {
+        } else if (keypadHeight == 0 && ivLogo.getTag() != null) {
             final int height = mLogoHeight;
             final int width = mLogoWidth;
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mIvLogo.getLayoutParams();
-            mIvLogo.setTag(null);
+            ivLogo.setTag(null);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
-
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) ivLogo.getLayoutParams();
                     layoutParams.height = (int) (height * animatedValue);
                     layoutParams.width = (int) (width * animatedValue);
-                    mIvLogo.setLayoutParams(layoutParams);
+                    ivLogo.requestLayout();
                 }
             });
 

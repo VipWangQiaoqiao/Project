@@ -186,7 +186,6 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         }
     };
     private int mTopMargin;
-    private Rect mKeypadRect;
 
     /**
      * show the retrieve activity
@@ -320,8 +319,6 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
     protected void onDestroy() {
         super.onDestroy();
         mLlRetrieveBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-        if (mKeypadRect != null)
-            mKeypadRect = null;
     }
 
     @OnClick({R.id.ib_navigation_back, R.id.iv_retrieve_tel_del, R.id.retrieve_sms_call,
@@ -448,20 +445,20 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
     @Override
     public void onGlobalLayout() {
 
-        if (mKeypadRect == null) {
-            mKeypadRect = new Rect();
-        }
-        mLlRetrieveBar.getWindowVisibleDisplayFrame(mKeypadRect);
+        final LinearLayout layRetrieveTel = this.mLlRetrieveTel;
+        Rect KeypadRect = new Rect();
+
+        mLlRetrieveBar.getWindowVisibleDisplayFrame(KeypadRect);
 
         int screenHeight = mLlRetrieveBar.getRootView().getHeight();
 
-        int keypadHeight = screenHeight - mKeypadRect.bottom;
+        int keypadHeight = screenHeight - KeypadRect.bottom;
 
-        if (keypadHeight > 0 && mLlRetrieveTel.getTag() == null) {
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRetrieveTel.getLayoutParams();
+        if (keypadHeight > 0 && layRetrieveTel.getTag() == null) {
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layRetrieveTel.getLayoutParams();
             final int topMargin = layoutParams.topMargin;
             this.mTopMargin = topMargin;
-            mLlRetrieveTel.setTag(true);
+            layRetrieveTel.setTag(true);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -469,7 +466,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
                     layoutParams.topMargin = (int) (topMargin * animatedValue);
-                    mLlRetrieveTel.setLayoutParams(layoutParams);
+                    layRetrieveTel.requestLayout();
                 }
             });
 
@@ -479,10 +476,10 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
             valueAnimator.start();
 
 
-        } else if (keypadHeight == 0 && mLlRetrieveTel.getTag() != null) {
+        } else if (keypadHeight == 0 && layRetrieveTel.getTag() != null) {
             final int topMargin = mTopMargin;
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRetrieveTel.getLayoutParams();
-            mLlRetrieveTel.setTag(null);
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layRetrieveTel.getLayoutParams();
+            layRetrieveTel.setTag(null);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -490,14 +487,13 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
                     layoutParams.topMargin = (int) (topMargin * animatedValue);
-                    mLlRetrieveTel.setLayoutParams(layoutParams);
+                    layRetrieveTel.requestLayout();
                 }
             });
             if (valueAnimator.isRunning()) {
                 valueAnimator.cancel();
             }
             valueAnimator.start();
-
         }
     }
 }
