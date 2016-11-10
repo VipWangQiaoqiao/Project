@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -226,7 +227,8 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
         }
 
-        mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
+        final FragmentPagerAdapter mAdapter;
+        mViewPager.setAdapter(mAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return instantiateFragment(tabs.get(position));
@@ -245,9 +247,10 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             @Override
             public void setPrimaryItem(ViewGroup container, int position, Object object) {
                 super.setPrimaryItem(container, position, object);
-                if (object instanceof Fragment) {
-                    mCurFragment = (Fragment) object;
+                if (mCurFragment == null){
+                    commitUpdate();
                 }
+                mCurFragment = (Fragment) object;
             }
 
             //this is called when notifyDataSetChanged() is called
@@ -256,6 +259,12 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
                 return PagerAdapter.POSITION_NONE;
             }
 
+        });
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                mAdapter.commitUpdate();
+            }
         });
         mLayoutTab.setupWithViewPager(mViewPager);
     }
