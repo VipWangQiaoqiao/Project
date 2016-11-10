@@ -14,8 +14,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.Software;
 import net.oschina.app.improve.bean.simple.Comment;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
@@ -23,7 +22,6 @@ import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 
 /**
  * Created by qiujuer
@@ -50,7 +48,9 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     private LinearLayout mAboutSoftware;
     private TextView mTVName;
 
-    private KeyboardInputDelegation mDelegation;
+    //private KeyboardInputDelegation mDelegation;
+
+    private CommentBar mDelegation;
 
     @Override
     protected int getLayoutId() {
@@ -83,9 +83,9 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         registerScroller(mLayContent, mComments);
 
-        mDelegation = KeyboardInputDelegation.delegation(getActivity(), mLayCoordinator, null);
+        mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
 
-        mDelegation.getInputView().setOnKeyListener(new View.OnKeyListener() {
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -95,21 +95,19 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             }
         });
 
-
-        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
-        mDelegation.showFavor(new View.OnClickListener() {
+        mDelegation.setFavListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleFavorite();
             }
         });
-        mDelegation.showShare(new View.OnClickListener() {
+        mDelegation.setShareListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleShare();
             }
         });
-        mDelegation.setSendListener(new View.OnClickListener() {
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleSendComment();
@@ -143,8 +141,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         setCommentCount(newsDetail.getCommentCount());
         setBodyContent(newsDetail.getBody());
 
-        //mTVAuthorName.setText(newsDetail.getAuthor());
-        // getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
         mTVName.setText(String.format("%s%s%s%s", "@", newsDetail.getAuthor(), "  ", "发布于 "));
 
         mTVPubDate.setText(StringUtils.formatSomeAgo(newsDetail.getPubDate()));
@@ -153,7 +149,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         toFavoriteOk(newsDetail);
 
-        // setText(R.id.tv_info_view, String.valueOf(newsDetail.getViewCount()));
         setText(R.id.tv_info_comment, StringUtils.formatYearMonthDay(newsDetail.getPubDate()));
 
         Software software = newsDetail.getSoftware();
@@ -172,12 +167,10 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
-            if (TextUtils.isEmpty(mDelegation.getInputText())) {
+            if (TextUtils.isEmpty(mDelegation.getCommentText().getHint())) {
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.getInputView().setHint("发表评论");
-                    mDelegation.hideSendButton();
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -197,33 +190,30 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     }
 
     private void handleSendComment() {
-        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getInputText());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void toFavoriteOk(NewsDetail newsDetail) {
         if (newsDetail.isFavorite())
-            mDelegation.setFavorDrawable(R.drawable.ic_faved);
+            mDelegation.setFavDrawable(R.drawable.ic_faved);
         else
-            mDelegation.setFavorDrawable(R.drawable.ic_fav);
+            mDelegation.setFavDrawable(R.drawable.ic_fav);
     }
 
     @Override
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mDelegation.getInputView().setText("");
+        mDelegation.getCommentText().setHint("添加评论");
         mComments.addComment(comment, getImgLoader(), this);
-        TDevice.hideSoftKeyboard(mDelegation.getInputView());
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override
     public void onClick(View view, Comment comment) {
-        //FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
-
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthorId();
-        mDelegation.getInputView().setHint(String.format("回复: %s", comment.getAuthor()));
-        TDevice.showSoftKeyboard(mDelegation.getInputView());
+        mDelegation.getCommentText().setHint(String.format("回复: %s", comment.getAuthor()));
     }
 }

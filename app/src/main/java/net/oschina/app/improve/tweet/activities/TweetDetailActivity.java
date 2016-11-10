@@ -37,8 +37,7 @@ import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.bean.simple.TweetLike;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -110,7 +109,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     private TweetDetailContract.IThumbupView mThumbupViewImp;
     private TweetDetailContract.IAgencyView mAgencyViewImp;
 
-    private KeyboardInputDelegation mDelegation;
+    private CommentBar mDelegation;
     private View.OnClickListener onPortraitClickListener;
     private ShareDialogBuilder mShareDialogBuilder;
     private AlertDialog alertDialog;
@@ -187,8 +186,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 replies.clear(); // 清除
                 mViewInput.setHint("发表评论");
                 mViewInput.setText(null);
+                mDelegation.getBottomSheet().dismiss();
                 dismissDialog();
-                TDevice.hideSoftKeyboard(mDelegation.getInputView());
             }
         };
 
@@ -232,11 +231,9 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             }
         });
 
-        mDelegation = KeyboardInputDelegation.delegation(this, mCoordinatorLayout, mFrameLayout);
-        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
-        mDelegation.showEmoji(getSupportFragmentManager());
+        mDelegation = CommentBar.delegation(this, mCoordinatorLayout);
 
-        mDelegation.getInputView().setOnKeyListener(new View.OnKeyListener() {
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -246,11 +243,11 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             }
         });
 
-
-        mDelegation.setSendListener(new View.OnClickListener() {
+        mDelegation.getBottomSheet().showEmoji();
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content = mDelegation.getInputText().replaceAll("[\\s\\n]+", " ");
+                String content = mDelegation.getBottomSheet().getCommentText().replaceAll("[\\s\\n]+", " ");
                 if (TextUtils.isEmpty(content)) {
                     Toast.makeText(TweetDetailActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                     return;
@@ -267,7 +264,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             }
         });
 
-        mViewInput = mDelegation.getInputView();
+        mViewInput = mDelegation.getBottomSheet().getEditText();
 
         // TODO to select friends when input @ character
         resolveVoice();
@@ -412,7 +409,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     @Override
     public void toReply(TweetComment comment) {
         if (checkLogin()) return;
-        mDelegation.notifyWrapper();
+        mDelegation.getBottomSheet().dismiss();
         if (replies.size() >= 3) return;
         for (TweetComment cmm : replies) {
             if (cmm.getAuthor().getId() == comment.getAuthor().getId()) return;
@@ -428,7 +425,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     @Override
     public void onScroll() {
-        if (mDelegation != null) mDelegation.onTurnBack();
+        if (mDelegation != null) mDelegation.getBottomSheet().dismiss();
     }
 
     @OnClick(R.id.iv_thumbup)
@@ -442,7 +439,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     @OnClick(R.id.iv_comment)
     void onClickComment() {
         if (checkLogin()) return;
-        mDelegation.notifyWrapper();
+        mDelegation.getBottomSheet().dismiss();
         TDevice.showSoftKeyboard(mViewInput);
     }
 
@@ -458,7 +455,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (!mDelegation.onTurnBack()) return true;
+//                if (!mDelegation.onTurnBack()) return true;
                 break;
         }
         return super.onKeyDown(keyCode, event);

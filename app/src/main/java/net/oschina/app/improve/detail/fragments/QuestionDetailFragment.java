@@ -5,7 +5,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,14 +13,12 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.util.List;
@@ -47,7 +44,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private FlowLayout mFlowLayout;
 
-    private KeyboardInputDelegation mDelegation;
+    private CommentBar mDelegation;
 
     @Override
     protected int getLayoutId() {
@@ -70,9 +67,9 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         registerScroller(mLayContent, mComments);
 
-        mDelegation = KeyboardInputDelegation.delegation(getActivity(), mLayCoordinator, null);
+        mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
 
-        mDelegation.getInputView().setOnKeyListener(new View.OnKeyListener() {
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -82,37 +79,26 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
             }
         });
 
-
-        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
-        mDelegation.showFavor(new View.OnClickListener() {
+        mDelegation.setFavListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleFavorite();
             }
         });
-        mDelegation.showShare(new View.OnClickListener() {
+        mDelegation.setShareListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleShare();
             }
         });
-        mDelegation.setSendListener(new View.OnClickListener() {
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleSendComment();
             }
         });
-        mDelegation.getInputView().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    handleSendComment();
-                    return true;
-                }
-                return false;
-            }
-        });
-        mDelegation.getInputView().setOnKeyListener(new View.OnKeyListener() {
+
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -186,11 +172,11 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
-            if (TextUtils.isEmpty(mDelegation.getInputText())) {
+            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.getInputView().setHint("我要回答");
+                    mDelegation.setCommentHint("添加评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -210,7 +196,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     }
 
     private void handleSendComment() {
-        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getInputText());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
     }
 
 
@@ -218,18 +204,17 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     @Override
     public void toFavoriteOk(QuestionDetail questionDetail) {
         if (questionDetail.isFavorite())
-            mDelegation.setFavorDrawable(R.drawable.ic_faved);
+            mDelegation.setFavDrawable(R.drawable.ic_faved);
         else
-            mDelegation.setFavorDrawable(R.drawable.ic_fav);
+            mDelegation.setFavDrawable(R.drawable.ic_fav);
     }
 
 
     @Override
     public void toSendCommentOk(CommentEX commentEX) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mDelegation.getInputView().setText("");
+        mDelegation.setCommentHint("添加评论");
         mComments.addComment(commentEX, getImgLoader(), null);
-        TDevice.hideSoftKeyboard(mDelegation.getInputView());
     }
 
     @Override
