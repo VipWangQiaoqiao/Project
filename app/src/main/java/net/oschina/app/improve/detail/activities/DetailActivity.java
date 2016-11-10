@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,6 +49,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         BaseBackActivity
         implements DetailContract.Operator<Data, DataView> {
 
+    private static final String TAG = "DetailActivity";
     long mDataId;
     Data mData;
     DataView mView;
@@ -55,6 +57,8 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     TextView mCommentCountView;
 
     private ProgressDialog mDialog;
+    private ShareDialogBuilder mShareDialogBuilder;
+    private AlertDialog alertDialog;
 
     public long getDataId() {
         return mDataId;
@@ -288,13 +292,16 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 
 
     protected void toShare(String title, String content, String url) {
-        ShareDialogBuilder.with(this)
-                .title(title)
-                .content(content)
-                .url(url)
-                .build()
-                .create()
-                .show();
+        if (mShareDialogBuilder == null) {
+            mShareDialogBuilder = ShareDialogBuilder.with(this)
+                    .title(title)
+                    .content(content)
+                    .url(url)
+                    .build();
+        }
+        if (alertDialog == null)
+            alertDialog = mShareDialogBuilder.create();
+        alertDialog.show();
     }
 
 
@@ -369,6 +376,13 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         return AccountHelper.getUserId();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mShareDialogBuilder != null) {
+            mShareDialogBuilder.cancelLoading();
+        }
+    }
 
     @Override
     protected void onDestroy() {

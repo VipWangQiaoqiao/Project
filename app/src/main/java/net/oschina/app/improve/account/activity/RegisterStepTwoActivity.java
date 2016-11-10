@@ -363,17 +363,21 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
     @Override
     public void onGlobalLayout() {
-        Rect r = new Rect();
-        mLlRegisterBar.getWindowVisibleDisplayFrame(r);
+
+
+        final LinearLayout layRegisterTwoUsername = this.mLlRegisterTwoUsername;
+        Rect keypadRect = new Rect();
+
+        mLlRegisterBar.getWindowVisibleDisplayFrame(keypadRect);
 
         int screenHeight = mLlRegisterBar.getRootView().getHeight();
-        int keypadHeight = screenHeight - r.bottom;
+        int keypadHeight = screenHeight - keypadRect.bottom;
 
-        if (keypadHeight > 0 && mLlRegisterTwoUsername.getTag() == null) {
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRegisterTwoUsername.getLayoutParams();
+        if (keypadHeight > 0 && layRegisterTwoUsername.getTag() == null) {
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layRegisterTwoUsername.getLayoutParams();
             final int topMargin = layoutParams.topMargin;
             this.mTopMargin = topMargin;
-            mLlRegisterTwoUsername.setTag(true);
+            layRegisterTwoUsername.setTag(true);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -381,7 +385,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
                     layoutParams.topMargin = (int) (topMargin * animatedValue);
-                    mLlRegisterTwoUsername.setLayoutParams(layoutParams);
+                    layRegisterTwoUsername.requestLayout();
                 }
             });
 
@@ -391,10 +395,10 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
             valueAnimator.start();
 
 
-        } else if (keypadHeight == 0 && mLlRegisterTwoUsername.getTag() != null) {
+        } else if (keypadHeight == 0 && layRegisterTwoUsername.getTag() != null) {
             final int topMargin = mTopMargin;
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRegisterTwoUsername.getLayoutParams();
-            mLlRegisterTwoUsername.setTag(null);
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layRegisterTwoUsername.getLayoutParams();
+            layRegisterTwoUsername.setTag(null);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -402,7 +406,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
                     layoutParams.topMargin = (int) (topMargin * animatedValue);
-                    mLlRegisterTwoUsername.setLayoutParams(layoutParams);
+                    layRegisterTwoUsername.requestLayout();
                 }
             });
             if (valueAnimator.isRunning()) {

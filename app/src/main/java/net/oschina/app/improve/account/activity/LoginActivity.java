@@ -308,8 +308,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         //int holdStatus = sp.getInt(HOLD_PWD_STATUS_KEY, 0);//0第一次默认/1用户设置保存/2用户设置未保存
 
         mEtLoginUsername.setText(holdUsername);
-        mLogoHeight = mIvLoginLogo.getHeight();
-        mLogoWidth = mIvLoginLogo.getWidth();
 
 //        if (!TextUtils.isEmpty(holdPwd)) {
 //            byte[] bytes = holdPwd.getBytes();
@@ -447,7 +445,17 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         openType = OpenConstant.TENCENT;
         mTencent = OpenBuilder.with(this)
                 .useTencent(OpenConstant.QQ_APP_ID)
-                .login(this);
+                .login(this, new OpenBuilder.Callback() {
+                    @Override
+                    public void onFailed() {
+                        hideWaitDialog();
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        //hideWaitDialog();
+                    }
+                });
     }
 
     /**
@@ -467,7 +475,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
                     @Override
                     public void onSuccess() {
-                        hideWaitDialog();
+                        //hideWaitDialog();
                     }
                 });
         //finish();
@@ -696,10 +704,10 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         tencentOnActivityResult(data);
-
+        weiBoOnActivityResult(requestCode, resultCode, data);
+        
         super.onActivityResult(requestCode, resultCode, data);
 
-        weiBoOnActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -788,29 +796,31 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     @Override
     public void onGlobalLayout() {
 
-        Rect r = new Rect();
-        mLayBackBar.getWindowVisibleDisplayFrame(r);
+        final ImageView ivLogo = this.mIvLoginLogo;
+        Rect KeypadRect = new Rect();
+
+        mLayBackBar.getWindowVisibleDisplayFrame(KeypadRect);
 
         int screenHeight = mLayBackBar.getRootView().getHeight();
 
-        int keypadHeight = screenHeight - r.bottom;
+        int keypadHeight = screenHeight - KeypadRect.bottom;
 
-        if (keypadHeight > 0 && mIvLoginLogo.getTag() == null) {
-            final int height = mIvLoginLogo.getHeight();
-            final int width = mIvLoginLogo.getWidth();
+        if (keypadHeight > 0 && ivLogo.getTag() == null) {
+            final int height = ivLogo.getHeight();
+            final int width = ivLogo.getWidth();
             this.mLogoHeight = height;
             this.mLogoWidth = width;
-            mIvLoginLogo.setTag(true);
+            ivLogo.setTag(true);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
-                    ViewGroup.LayoutParams params = mIvLoginLogo.getLayoutParams();
-                    params.height = (int) (height * animatedValue);
-                    params.width = (int) (width * animatedValue);
-                    mIvLoginLogo.setLayoutParams(params);
+                    ViewGroup.LayoutParams layoutParams = ivLogo.getLayoutParams();
+                    layoutParams.height = (int) (height * animatedValue);
+                    layoutParams.width = (int) (width * animatedValue);
+                    ivLogo.requestLayout();
                 }
             });
 
@@ -820,20 +830,20 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             valueAnimator.start();
 
 
-        } else if (keypadHeight == 0 && mIvLoginLogo.getTag() != null) {
+        } else if (keypadHeight == 0 && ivLogo.getTag() != null) {
             final int height = mLogoHeight;
             final int width = mLogoWidth;
-            mIvLoginLogo.setTag(null);
+            ivLogo.setTag(null);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
-                    ViewGroup.LayoutParams params = mIvLoginLogo.getLayoutParams();
-                    params.height = (int) (height * animatedValue);
-                    params.width = (int) (width * animatedValue);
-                    mIvLoginLogo.setLayoutParams(params);
+                    ViewGroup.LayoutParams layoutParams = ivLogo.getLayoutParams();
+                    layoutParams.height = (int) (height * animatedValue);
+                    layoutParams.width = (int) (width * animatedValue);
+                    ivLogo.requestLayout();
                 }
             });
 

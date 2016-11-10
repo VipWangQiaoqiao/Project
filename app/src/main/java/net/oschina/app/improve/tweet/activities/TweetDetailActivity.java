@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.TextUtils;
@@ -111,6 +112,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     private KeyboardInputDelegation mDelegation;
     private View.OnClickListener onPortraitClickListener;
+    private ShareDialogBuilder mShareDialogBuilder;
+    private AlertDialog alertDialog;
 
     public static void show(Context context, Tweet tweet) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
@@ -321,13 +324,16 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 if (content.length() > 10)
                     content = content.substring(0, 10);
 
-                ShareDialogBuilder.with(this)
-                        .title(content + " - 开源中国社区 ")
-                        .content(tweet.getContent())
-                        .url(tweet.getHref())
-                        .build()
-                        .create()
-                        .show();
+                if (mShareDialogBuilder == null)
+                    mShareDialogBuilder = ShareDialogBuilder.with(this)
+                            .title(content + " - 开源中国社区 ")
+                            .content(tweet.getContent())
+                            .url(tweet.getHref())
+                            .build();
+                if (alertDialog == null)
+                    alertDialog = mShareDialogBuilder.create();
+                alertDialog.show();
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -469,6 +475,14 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         if (replies.size() == 2) {
             mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor()
                     .getName());
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mShareDialogBuilder != null) {
+            mShareDialogBuilder.cancelLoading();
         }
     }
 }
