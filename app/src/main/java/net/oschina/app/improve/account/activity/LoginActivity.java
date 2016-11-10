@@ -168,6 +168,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     };
     private int mLogoHeight;
     private int mLogoWidth;
+    private Rect mKeypadRect;
 
     /**
      * hold account information
@@ -308,8 +309,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         //int holdStatus = sp.getInt(HOLD_PWD_STATUS_KEY, 0);//0第一次默认/1用户设置保存/2用户设置未保存
 
         mEtLoginUsername.setText(holdUsername);
-        mLogoHeight = mIvLoginLogo.getHeight();
-        mLogoWidth = mIvLoginLogo.getWidth();
 
 //        if (!TextUtils.isEmpty(holdPwd)) {
 //            byte[] bytes = holdPwd.getBytes();
@@ -338,6 +337,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     protected void onDestroy() {
         super.onDestroy();
         mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        if (mKeypadRect != null)
+            mKeypadRect = null;
     }
 
     private void updateHoldPwd(int holdStatus) {
@@ -798,14 +799,17 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     @Override
     public void onGlobalLayout() {
 
-        Rect r = new Rect();
-        mLayBackBar.getWindowVisibleDisplayFrame(r);
+        if (mKeypadRect == null) {
+            mKeypadRect = new Rect();
+        }
+        mLayBackBar.getWindowVisibleDisplayFrame(mKeypadRect);
 
         int screenHeight = mLayBackBar.getRootView().getHeight();
 
-        int keypadHeight = screenHeight - r.bottom;
+        int keypadHeight = screenHeight - mKeypadRect.bottom;
 
         if (keypadHeight > 0 && mIvLoginLogo.getTag() == null) {
+            final ViewGroup.LayoutParams layoutParams = mIvLoginLogo.getLayoutParams();
             final int height = mIvLoginLogo.getHeight();
             final int width = mIvLoginLogo.getWidth();
             this.mLogoHeight = height;
@@ -817,10 +821,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
-                    ViewGroup.LayoutParams params = mIvLoginLogo.getLayoutParams();
-                    params.height = (int) (height * animatedValue);
-                    params.width = (int) (width * animatedValue);
-                    mIvLoginLogo.setLayoutParams(params);
+                    layoutParams.height = (int) (height * animatedValue);
+                    layoutParams.width = (int) (width * animatedValue);
+                    mIvLoginLogo.setLayoutParams(layoutParams);
                 }
             });
 
@@ -833,6 +836,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         } else if (keypadHeight == 0 && mIvLoginLogo.getTag() != null) {
             final int height = mLogoHeight;
             final int width = mLogoWidth;
+            final ViewGroup.LayoutParams layoutParams = mIvLoginLogo.getLayoutParams();
             mIvLoginLogo.setTag(null);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
@@ -840,10 +844,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
-                    ViewGroup.LayoutParams params = mIvLoginLogo.getLayoutParams();
-                    params.height = (int) (height * animatedValue);
-                    params.width = (int) (width * animatedValue);
-                    mIvLoginLogo.setLayoutParams(params);
+                    layoutParams.height = (int) (height * animatedValue);
+                    layoutParams.width = (int) (width * animatedValue);
+                    mIvLoginLogo.setLayoutParams(layoutParams);
                 }
             });
 

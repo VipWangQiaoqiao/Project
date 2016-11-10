@@ -108,6 +108,8 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         }
     };
     private int mTopMargin;
+    private Rect mKeypadRect;
+    private LinearLayout.LayoutParams mLlResetPwdParams;
 
 
     /**
@@ -185,6 +187,8 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     protected void onDestroy() {
         super.onDestroy();
         mLlResetBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        if (mKeypadRect != null)
+            mKeypadRect = null;
     }
 
 
@@ -233,12 +237,15 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
 
     @Override
     public void onGlobalLayout() {
-        Rect r = new Rect();
-        mLlResetBar.getWindowVisibleDisplayFrame(r);
+
+        if (mKeypadRect == null) {
+            mKeypadRect = new Rect();
+        }
+        mLlResetBar.getWindowVisibleDisplayFrame(mKeypadRect);
 
         int screenHeight = mLlResetBar.getRootView().getHeight();
 
-        int keypadHeight = screenHeight - r.bottom;
+        int keypadHeight = screenHeight - mKeypadRect.bottom;
 
         if (keypadHeight > 0 && mLlResetPwd.getTag() == null) {
             final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlResetPwd.getLayoutParams();

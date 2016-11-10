@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
@@ -189,6 +188,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
     };
     private int mLogoHeight;
     private int mLogoWidth;
+    private Rect mKeypadRect;
 
     /**
      * show the register activity
@@ -325,6 +325,8 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
     protected void onDestroy() {
         super.onDestroy();
         mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        if (mKeypadRect != null)
+            mKeypadRect = null;
     }
 
     @OnClick({R.id.ib_navigation_back, R.id.iv_register_username_del, R.id.tv_register_sms_call,
@@ -438,14 +440,17 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
     @Override
     public void onGlobalLayout() {
 
-        Rect r = new Rect();
-        mLayBackBar.getWindowVisibleDisplayFrame(r);
+        if (mKeypadRect == null) {
+            mKeypadRect = new Rect();
+        }
+        mLayBackBar.getWindowVisibleDisplayFrame(mKeypadRect);
 
         int screenHeight = mLayBackBar.getRootView().getHeight();
 
-        int keypadHeight = screenHeight - r.bottom;
+        int keypadHeight = screenHeight - mKeypadRect.bottom;
 
         if (keypadHeight > 0 && mIvLogo.getTag() == null) {
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mIvLogo.getLayoutParams();
             final int height = mIvLogo.getHeight();
             final int width = mIvLogo.getWidth();
             this.mLogoHeight = height;
@@ -457,10 +462,10 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
-                    ViewGroup.LayoutParams params = mIvLogo.getLayoutParams();
-                    params.height = (int) (height * animatedValue);
-                    params.width = (int) (width * animatedValue);
-                    mIvLogo.setLayoutParams(params);
+
+                    layoutParams.height = (int) (height * animatedValue);
+                    layoutParams.width = (int) (width * animatedValue);
+                    mIvLogo.setLayoutParams(layoutParams);
                 }
             });
 
@@ -473,6 +478,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         } else if (keypadHeight == 0 && mIvLogo.getTag() != null) {
             final int height = mLogoHeight;
             final int width = mLogoWidth;
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mIvLogo.getLayoutParams();
             mIvLogo.setTag(null);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
@@ -480,10 +486,10 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
-                    ViewGroup.LayoutParams params = mIvLogo.getLayoutParams();
-                    params.height = (int) (height * animatedValue);
-                    params.width = (int) (width * animatedValue);
-                    mIvLogo.setLayoutParams(params);
+
+                    layoutParams.height = (int) (height * animatedValue);
+                    layoutParams.width = (int) (width * animatedValue);
+                    mIvLogo.setLayoutParams(layoutParams);
                 }
             });
 

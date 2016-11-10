@@ -186,6 +186,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         }
     };
     private int mTopMargin;
+    private Rect mKeypadRect;
 
     /**
      * show the retrieve activity
@@ -319,6 +320,8 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
     protected void onDestroy() {
         super.onDestroy();
         mLlRetrieveBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        if (mKeypadRect != null)
+            mKeypadRect = null;
     }
 
     @OnClick({R.id.ib_navigation_back, R.id.iv_retrieve_tel_del, R.id.retrieve_sms_call,
@@ -444,12 +447,15 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
     @Override
     public void onGlobalLayout() {
-        Rect r = new Rect();
-        mLlRetrieveBar.getWindowVisibleDisplayFrame(r);
+
+        if (mKeypadRect == null) {
+            mKeypadRect = new Rect();
+        }
+        mLlRetrieveBar.getWindowVisibleDisplayFrame(mKeypadRect);
 
         int screenHeight = mLlRetrieveBar.getRootView().getHeight();
 
-        int keypadHeight = screenHeight - r.bottom;
+        int keypadHeight = screenHeight - mKeypadRect.bottom;
 
         if (keypadHeight > 0 && mLlRetrieveTel.getTag() == null) {
             final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRetrieveTel.getLayoutParams();

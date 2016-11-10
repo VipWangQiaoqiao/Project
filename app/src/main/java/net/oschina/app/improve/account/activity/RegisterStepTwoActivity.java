@@ -129,6 +129,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
         }
     };
     private int mTopMargin;
+    private Rect mKeypadRect;
 
     /**
      * show register step two activity
@@ -246,6 +247,8 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
     protected void onDestroy() {
         super.onDestroy();
         mLlRegisterBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        if (mKeypadRect != null)
+            mKeypadRect = null;
     }
 
     @SuppressWarnings("deprecation")
@@ -363,11 +366,14 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
     @Override
     public void onGlobalLayout() {
-        Rect r = new Rect();
-        mLlRegisterBar.getWindowVisibleDisplayFrame(r);
+
+        if (mKeypadRect == null) {
+            mKeypadRect = new Rect();
+        }
+        mLlRegisterBar.getWindowVisibleDisplayFrame(mKeypadRect);
 
         int screenHeight = mLlRegisterBar.getRootView().getHeight();
-        int keypadHeight = screenHeight - r.bottom;
+        int keypadHeight = screenHeight - mKeypadRect.bottom;
 
         if (keypadHeight > 0 && mLlRegisterTwoUsername.getTag() == null) {
             final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRegisterTwoUsername.getLayoutParams();
