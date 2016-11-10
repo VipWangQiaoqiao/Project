@@ -707,8 +707,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         weiBoOnActivityResult(requestCode, resultCode, data);
         
         super.onActivityResult(requestCode, resultCode, data);
-
-
     }
 
     /**
