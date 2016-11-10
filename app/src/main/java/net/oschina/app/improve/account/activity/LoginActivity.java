@@ -447,7 +447,17 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         openType = OpenConstant.TENCENT;
         mTencent = OpenBuilder.with(this)
                 .useTencent(OpenConstant.QQ_APP_ID)
-                .login(this);
+                .login(this, new OpenBuilder.Callback() {
+                    @Override
+                    public void onFailed() {
+                        hideWaitDialog();
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        //hideWaitDialog();
+                    }
+                });
     }
 
     /**
@@ -467,7 +477,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
                     @Override
                     public void onSuccess() {
-                        hideWaitDialog();
+                        //hideWaitDialog();
                     }
                 });
         //finish();

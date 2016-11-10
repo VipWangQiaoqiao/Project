@@ -60,8 +60,8 @@ public class OpenBuilder {
             this.tencent = tencent;
         }
 
-        public Tencent login(IUiListener listener) {
-            tencent.login(activity, "all", listener);
+        public Tencent login(IUiListener listener, Callback callback) {
+            int login = tencent.login(activity, "all", listener);
             return tencent;
         }
 
@@ -75,8 +75,12 @@ public class OpenBuilder {
             params.putString(QQShare.SHARE_TO_QQ_APP_NAME, share.getAppName());
             if (callback != null) {
                 if (tencent != null) {
-                    tencent.shareToQQ(activity, params, listener);
-                    callback.onSuccess();
+                    try {
+                        tencent.shareToQQ(activity, params, listener);
+                        callback.onSuccess();
+                    } catch (Exception e) {
+                        callback.onFailed();
+                    }
                 } else {
                     callback.onFailed();
                 }
@@ -106,9 +110,6 @@ public class OpenBuilder {
                 if (callback != null)
                     callback.onFailed();
                 return;
-            } else {
-                if (callback != null)
-                    callback.onSuccess();
             }
 
             // 1. 初始化微博的分享消息
@@ -135,8 +136,12 @@ public class OpenBuilder {
             request.multiMessage = weiboMessage;
 
             // 3. 发送请求消息到微博，唤起微博分享界面
-            if ((!weiBoShareSDK.sendRequest(activity, request)) && callback != null)
+            if ((!weiBoShareSDK.sendRequest(activity, request)) && callback != null) {
                 callback.onFailed();
+            } else {
+                if (callback != null)
+                    callback.onSuccess();
+            }
         }
     }
 
@@ -153,17 +158,18 @@ public class OpenBuilder {
                 if (callback != null)
                     callback.onFailed();
                 return;
-            } else {
-                if (callback != null)
-                    callback.onSuccess();
             }
             // 唤起微信登录授权
             SendAuth.Req req = new SendAuth.Req();
             req.scope = "snsapi_userinfo";
             req.state = "wechat_login";
             // 失败回调
-            if (!iwxapi.sendReq(req) && callback != null)
+            if (!iwxapi.sendReq(req) && callback != null) {
                 callback.onFailed();
+            } else {
+                if (callback != null)
+                    callback.onSuccess();
+            }
         }
 
         public void shareSession(Share share, Callback callback) {
@@ -188,9 +194,6 @@ public class OpenBuilder {
                 if (callback != null)
                     callback.onFailed();
                 return;
-            } else {
-                if (callback != null)
-                    callback.onSuccess();
             }
 
             //1.初始化一个WXTextObject对象,填写分享的文本内容
@@ -216,8 +219,12 @@ public class OpenBuilder {
             //4.发送这次分享
             boolean sendReq = iwxapi.sendReq(req);
             //发送请求失败,回调
-            if (!sendReq && callback != null)
+            if (!sendReq && callback != null) {
                 callback.onFailed();
+            } else {
+                if (callback != null)
+                    callback.onSuccess();
+            }
         }
     }
 

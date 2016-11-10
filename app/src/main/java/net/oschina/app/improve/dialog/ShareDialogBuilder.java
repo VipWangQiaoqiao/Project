@@ -196,7 +196,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                 break;
             //QQ
             case 3:
-                showWaitDialog(R.string.login_tencent_hint);
+                // showWaitDialog(R.string.login_tencent_hint);
                 OpenBuilder.with(mActivity)
                         .useTencent(OpenConstant.QQ_APP_ID)
                         .share(share, new IUiListener() {
@@ -215,7 +215,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                             public void onCancel() {
                                 hideWaitDialog();
                             }
-                        },this);
+                        }, this);
                 break;
             //复制链接
             case 4:
@@ -234,7 +234,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
      *
      * @return progressDialog
      */
-    protected ProgressDialog showWaitDialog(@StringRes int messageId) {
+    private ProgressDialog showWaitDialog(@StringRes int messageId) {
         if (mDialog == null) {
             if (messageId <= 0) {
                 mDialog = DialogHelper.getProgressDialog(mActivity, true);
@@ -251,7 +251,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
     /**
      * hide waitDialog
      */
-    protected void hideWaitDialog() {
+    private void hideWaitDialog() {
         ProgressDialog dialog = mDialog;
         if (dialog != null) {
             mDialog = null;
@@ -291,6 +291,16 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
     @Override
     public void onSuccess() {
         //调起第三方客户端
+//        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+//            mAlertDialog.cancel();
+//            //mAlertDialog.dismiss();
+//        }
+    }
+
+    /**
+     * cancelLoading
+     */
+    public void cancelLoading() {
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.cancel();
             //mAlertDialog.dismiss();
