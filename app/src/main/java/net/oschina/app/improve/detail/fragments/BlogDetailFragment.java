@@ -22,8 +22,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.simple.Comment;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
@@ -34,7 +33,6 @@ import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.net.URLEncoder;
@@ -92,7 +90,7 @@ public class BlogDetailFragment
 
     private Dialog mWaitDialog;
 
-    private KeyboardInputDelegation mDelegation;
+    private CommentBar mDelegation;
 
     @Override
     protected int getLayoutId() {
@@ -110,16 +108,16 @@ public class BlogDetailFragment
             mBtnRelation.setElevation(0);
         }
 
-        mDelegation = KeyboardInputDelegation.delegation(getActivity(), mLayCoordinator, null);
+        mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
 
-        mDelegation.setSendListener(new View.OnClickListener() {
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleSendComment();
             }
         });
-        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
-        mDelegation.getInputView().setOnKeyListener(new View.OnKeyListener() {
+
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -129,13 +127,13 @@ public class BlogDetailFragment
             }
         });
 
-        mDelegation.showFavor(new View.OnClickListener() {
+        mDelegation.setFavListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleFavorite();
             }
         });
-        mDelegation.showShare(new View.OnClickListener() {
+        mDelegation.setShareListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleShare();
@@ -216,11 +214,11 @@ public class BlogDetailFragment
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
-            if (TextUtils.isEmpty(mDelegation.getInputText())) {
+            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.getInputView().setHint("发表评论");
+                    mDelegation.setCommentHint("添加评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -243,7 +241,7 @@ public class BlogDetailFragment
     }
 
     private void handleSendComment() {
-        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getInputText());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
     }
 
     private void handleReward() {
@@ -307,9 +305,9 @@ public class BlogDetailFragment
     @Override
     public void toFavoriteOk(BlogDetail blogDetail) {
         if (blogDetail.isFavorite())
-            mDelegation.setFavorDrawable(R.drawable.ic_faved);
+            mDelegation.setFavDrawable(R.drawable.ic_faved);
         else
-            mDelegation.setFavorDrawable(R.drawable.ic_fav);
+            mDelegation.setFavDrawable(R.drawable.ic_fav);
     }
 
     @Override
@@ -324,17 +322,14 @@ public class BlogDetailFragment
     @Override
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mDelegation.getInputView().setText("");
+        mDelegation.setCommentHint("添加评论");
         mComments.addComment(comment, getImgLoader(), this);
-        TDevice.hideSoftKeyboard(mDelegation.getInputView());
     }
 
     @Override
     public void onClick(View view, Comment comment) {
-        //FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthorId();
-        mDelegation.getInputView().setHint(String.format("回复: %s", comment.getAuthor()));
-        TDevice.showSoftKeyboard(mDelegation.getInputView());
+        mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
     }
 }
