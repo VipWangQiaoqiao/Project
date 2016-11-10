@@ -14,7 +14,7 @@ import android.support.v4.content.SharedPreferencesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -71,6 +71,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
     private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
+    private static final String TAG = "LoginActivity";
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
@@ -98,9 +99,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     TextView mTvLoginForgetPwd;
 
     @Bind(R.id.bt_login_submit)
-    Button mTvLoginSubmit;
+    Button mBtLoginSubmit;
     @Bind(R.id.bt_login_register)
-    Button mTvLoginRegister;
+    Button mBtLoginRegister;
 
     @Bind(R.id.ll_login_layer)
     View mLlLoginLayer;
@@ -121,6 +122,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     //private int mHoldPwd;
     private SsoHandler mSsoHandler;
     private Tencent mTencent;
+
 
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
 
@@ -150,7 +152,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 setResult(RESULT_OK);
                 sendLocalReceiver();
             } else {
-                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             }
 
         }
@@ -251,9 +253,10 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
-                String username = s.toString();
+                String username = s.toString().trim();
                 if (username.length() > 0) {
                     if (AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) {
                         mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
@@ -264,6 +267,15 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 } else {
                     mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
                     mIvLoginUsernameDel.setVisibility(View.INVISIBLE);
+                }
+
+                String pwd = mEtLoginPwd.getText().toString().trim();
+                if ((AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
+                    mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+                    mBtLoginSubmit.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                    mBtLoginSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
                 }
 
             }
@@ -281,6 +293,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
                 int length = s.length();
@@ -289,6 +302,16 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     mIvLoginPwdDel.setVisibility(View.VISIBLE);
                 } else {
                     mIvLoginPwdDel.setVisibility(View.INVISIBLE);
+                }
+
+                String username = mEtLoginUsername.getText().toString().trim();
+                String pwd = mEtLoginPwd.getText().toString().trim();
+                if ((AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
+                    mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+                    mBtLoginSubmit.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                    mBtLoginSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
                 }
             }
         });
@@ -309,8 +332,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         //int holdStatus = sp.getInt(HOLD_PWD_STATUS_KEY, 0);//0第一次默认/1用户设置保存/2用户设置未保存
 
         mEtLoginUsername.setText(holdUsername);
-        mLogoHeight = mIvLoginLogo.getHeight();
-        mLogoWidth = mIvLoginLogo.getWidth();
 
 //        if (!TextUtils.isEmpty(holdPwd)) {
 //            byte[] bytes = holdPwd.getBytes();
@@ -350,10 +371,11 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @OnClick({R.id.ib_navigation_back, R.id.et_login_username, R.id.et_login_pwd, R.id.tv_login_forget_pwd,
             R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register, R.id.ll_login_pull,
             R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq, R.id.ll_login_layer,
-            R.id.iv_login_username_del, R.id.iv_login_pwd_del})
+            R.id.iv_login_username_del, R.id.iv_login_pwd_del, R.id.lay_login_container})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -433,6 +455,13 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             case R.id.iv_login_pwd_del:
                 mEtLoginPwd.setText(null);
                 break;
+            case R.id.lay_login_container:
+                if (mInputMethodManager == null) return;
+                boolean active = mInputMethodManager.isActive();
+                if (active) {
+                    mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                break;
             default:
                 break;
         }
@@ -444,23 +473,41 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * login tencent
      */
     private void tencentLogin() {
+        showWaitDialog(R.string.login_tencent_hint);
         openType = OpenConstant.TENCENT;
         mTencent = OpenBuilder.with(this)
                 .useTencent(OpenConstant.QQ_APP_ID)
-                .login(this);
+                .login(this, new OpenBuilder.Callback() {
+                    @Override
+                    public void onFailed() {
+                        hideWaitDialog();
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        //hideWaitDialog();
+                    }
+                });
     }
 
     /**
      * login wechat
      */
     private void wechatLogin() {
+        showWaitDialog(R.string.login_wechat_hint);
         openType = OpenConstant.WECHAT;
         OpenBuilder.with(this)
                 .useWechat(OpenConstant.WECHAT_APP_ID)
                 .login(new OpenBuilder.Callback() {
                     @Override
                     public void onFailed() {
-                        AppContext.showToast(R.string.login_hint, Toast.LENGTH_SHORT);
+                        hideWaitDialog();
+                        AppContext.showToast(R.string.login_hint);
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        //hideWaitDialog();
                     }
                 });
         //finish();
@@ -470,13 +517,14 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * login weiBo
      */
     private void weiBoLogin() {
+        showWaitDialog(R.string.login_webo_hint);
         openType = OpenConstant.SINA;
         mSsoHandler = OpenBuilder.with(this)
                 .useWeibo(OpenConstant.WB_APP_KEY)
                 .login(new WeiboAuthListener() {
                     @Override
                     public void onComplete(Bundle bundle) {
-
+                        hideWaitDialog();
                         Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
 
                         if (oauth2AccessToken.isSessionValid()) {
@@ -497,11 +545,12 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     @Override
                     public void onWeiboException(WeiboException e) {
                         e.printStackTrace();
+                        hideWaitDialog();
                     }
 
                     @Override
                     public void onCancel() {
-
+                        hideWaitDialog();
                     }
                 });
     }
@@ -585,6 +634,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 .start();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void loginRequest() {
         String tempUsername = mEtLoginUsername.getText().toString().trim();
         String tempPwd = mEtLoginPwd.getText().toString().trim();
@@ -601,16 +651,15 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
                 if (TDevice.hasInternet()) {
                     requestLogin(tempUsername, tempPwd, appToken);
-
                 } else {
-                    AppContext.showToast(getResources().getString(R.string.footer_type_net_error), Toast.LENGTH_SHORT);
+                    AppContext.showToast(getResources().getString(R.string.footer_type_net_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                 }
 
             } else {
-                AppContext.showToast(getString(R.string.login_input_username_hint_error), Toast.LENGTH_SHORT);
+                AppContext.showToast(getString(R.string.login_input_username_hint_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             }
         } else {
-            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
+            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
         }
     }
 
@@ -660,7 +709,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                             message += "," + getResources().getString(R.string.message_pwd_error);
                             mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_error);
                         }
-                        AppContext.showToast(message, Toast.LENGTH_SHORT);
+                        AppContext.showToast(message, Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                         //更新失败应该是不进行任何的本地操作
                     }
                 } catch (Exception e) {
@@ -687,11 +736,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         tencentOnActivityResult(data);
-
-        super.onActivityResult(requestCode, resultCode, data);
-
         weiBoOnActivityResult(requestCode, resultCode, data);
 
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -735,6 +782,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     public void onComplete(Object o) {
         JSONObject jsonObject = (JSONObject) o;
         OSChinaApi.openLogin(OSChinaApi.LOGIN_QQ, jsonObject.toString(), getAppToken(), mHandler);
+        hideWaitDialog();
     }
 
     /**
@@ -744,7 +792,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      */
     @Override
     public void onError(UiError uiError) {
-
+        hideWaitDialog();
     }
 
 
@@ -753,7 +801,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      */
     @Override
     public void onCancel() {
-
+        hideWaitDialog();
     }
 
     @Override
@@ -778,29 +826,31 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     @Override
     public void onGlobalLayout() {
 
-        Rect r = new Rect();
-        mLayBackBar.getWindowVisibleDisplayFrame(r);
+        final ImageView ivLogo = this.mIvLoginLogo;
+        Rect KeypadRect = new Rect();
+
+        mLayBackBar.getWindowVisibleDisplayFrame(KeypadRect);
 
         int screenHeight = mLayBackBar.getRootView().getHeight();
 
-        int keypadHeight = screenHeight - r.bottom;
+        int keypadHeight = screenHeight - KeypadRect.bottom;
 
-        if (keypadHeight > 0 && mIvLoginLogo.getTag() == null) {
-            final int height = mIvLoginLogo.getHeight();
-            final int width = mIvLoginLogo.getWidth();
+        if (keypadHeight > 0 && ivLogo.getTag() == null) {
+            final int height = ivLogo.getHeight();
+            final int width = ivLogo.getWidth();
             this.mLogoHeight = height;
             this.mLogoWidth = width;
-            mIvLoginLogo.setTag(true);
+            ivLogo.setTag(true);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
-                    ViewGroup.LayoutParams params = mIvLoginLogo.getLayoutParams();
-                    params.height = (int) (height * animatedValue);
-                    params.width = (int) (width * animatedValue);
-                    mIvLoginLogo.setLayoutParams(params);
+                    ViewGroup.LayoutParams layoutParams = ivLogo.getLayoutParams();
+                    layoutParams.height = (int) (height * animatedValue);
+                    layoutParams.width = (int) (width * animatedValue);
+                    ivLogo.requestLayout();
                 }
             });
 
@@ -810,20 +860,20 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             valueAnimator.start();
 
 
-        } else if (keypadHeight == 0 && mIvLoginLogo.getTag() != null) {
+        } else if (keypadHeight == 0 && ivLogo.getTag() != null) {
             final int height = mLogoHeight;
             final int width = mLogoWidth;
-            mIvLoginLogo.setTag(null);
+            ivLogo.setTag(null);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
-                    ViewGroup.LayoutParams params = mIvLoginLogo.getLayoutParams();
-                    params.height = (int) (height * animatedValue);
-                    params.width = (int) (width * animatedValue);
-                    mIvLoginLogo.setLayoutParams(params);
+                    ViewGroup.LayoutParams layoutParams = ivLogo.getLayoutParams();
+                    layoutParams.height = (int) (height * animatedValue);
+                    layoutParams.width = (int) (width * animatedValue);
+                    ivLogo.requestLayout();
                 }
             });
 

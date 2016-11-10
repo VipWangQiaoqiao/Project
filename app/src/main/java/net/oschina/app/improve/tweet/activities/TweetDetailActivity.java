@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.TextUtils;
@@ -41,7 +42,6 @@ import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
-import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -111,6 +111,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     private CommentBar mDelegation;
     private View.OnClickListener onPortraitClickListener;
+    private ShareDialogBuilder mShareDialogBuilder;
+    private AlertDialog alertDialog;
 
     public static void show(Context context, Tweet tweet) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
@@ -262,16 +264,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             }
         });
 
-        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (AccountHelper.isLogin())
-                    SelectFriendsActivity.show(TweetDetailActivity.this);
-                else
-                    LoginActivity.show(TweetDetailActivity.this);
-            }
-        });
-
         mViewInput = mDelegation.getBottomSheet().getEditText();
 
         // TODO to select friends when input @ character
@@ -329,13 +321,16 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 if (content.length() > 10)
                     content = content.substring(0, 10);
 
-                ShareDialogBuilder.with(this)
-                        .title(content + " - 开源中国社区 ")
-                        .content(tweet.getContent())
-                        .url(tweet.getHref())
-                        .build()
-                        .create()
-                        .show();
+                if (mShareDialogBuilder == null)
+                    mShareDialogBuilder = ShareDialogBuilder.with(this)
+                            .title(content + " - 开源中国社区 ")
+                            .content(tweet.getContent())
+                            .url(tweet.getHref())
+                            .build();
+                if (alertDialog == null)
+                    alertDialog = mShareDialogBuilder.create();
+                alertDialog.show();
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -481,10 +476,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+    protected void onStop() {
+        super.onStop();
+        if (mShareDialogBuilder != null) {
+            mShareDialogBuilder.cancelLoading();
         }
     }
 }

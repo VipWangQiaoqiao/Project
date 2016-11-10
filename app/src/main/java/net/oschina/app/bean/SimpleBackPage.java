@@ -12,6 +12,7 @@ import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SettingsFragment;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
+import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.team.fragment.TeamActiveFragment;
@@ -36,7 +37,7 @@ public enum SimpleBackPage {
 
     MY_ACTIVE(8, R.string.actionbar_title_active, ActiveFragment.class),
 
-    OPENSOURCE_SOFTWARE(10, R.string.actionbar_title_softwarelist,
+    OPEN_SOURCE_SOFTWARE(10, R.string.actionbar_title_softwarelist,
             OpenSoftwareFragment.class),
 
     QUESTION_TAG(12, R.string.actionbar_title_question,
@@ -87,7 +88,9 @@ public enum SimpleBackPage {
 
     TWEET_TOPIC_LIST(42, 0, TweetsFragment.class),
 
-    MY_EVENT(43, R.string.actionbar_title_my_event, EventViewPagerFragment.class);
+    MY_EVENT(43, R.string.actionbar_title_my_event, EventViewPagerFragment.class),
+
+    MY_QUESTION(44, R.string.question, UserQuestionFragment.class);
 
     private int title;
     private Class<?> clz;

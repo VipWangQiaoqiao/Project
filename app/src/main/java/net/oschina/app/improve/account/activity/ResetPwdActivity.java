@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -60,7 +61,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         @Override
         public void onStart() {
             super.onStart();
-            showWaitDialog();
+            showWaitDialog(R.string.progress_submit);
         }
 
         @Override
@@ -95,12 +96,12 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
                     finish();
                     break;
                 case 216:
-                    AppContext.showToast(resultBean.getMessage());
+                    AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                     finish();
                     break;
                 case 219:
                     mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_error);
-                    AppContext.showToast(resultBean.getMessage());
+                    AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                     break;
                 default:
                     break;
@@ -211,11 +212,11 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     private void requestResetPwd() {
         String tempPwd = mEtResetPwd.getText().toString().trim();
         if (TextUtils.isEmpty(tempPwd) || tempPwd.length() < 6) {
-            AppContext.showToast(getString(R.string.reset_pwd_hint), Toast.LENGTH_SHORT);
+            AppContext.showToast(getString(R.string.reset_pwd_hint), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+            AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
         String appToken = getAppToken();
@@ -233,18 +234,21 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
 
     @Override
     public void onGlobalLayout() {
-        Rect r = new Rect();
-        mLlResetBar.getWindowVisibleDisplayFrame(r);
+
+        final LinearLayout kayResetPwd = this.mLlResetPwd;
+        Rect keypadRect = new Rect();
+
+        mLlResetBar.getWindowVisibleDisplayFrame(keypadRect);
 
         int screenHeight = mLlResetBar.getRootView().getHeight();
 
-        int keypadHeight = screenHeight - r.bottom;
+        int keypadHeight = screenHeight - keypadRect.bottom;
 
-        if (keypadHeight > 0 && mLlResetPwd.getTag() == null) {
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlResetPwd.getLayoutParams();
+        if (keypadHeight > 0 && kayResetPwd.getTag() == null) {
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) kayResetPwd.getLayoutParams();
             final int topMargin = layoutParams.topMargin;
             this.mTopMargin = topMargin;
-            mLlResetPwd.setTag(true);
+            kayResetPwd.setTag(true);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -252,7 +256,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
                     layoutParams.topMargin = (int) (topMargin * animatedValue);
-                    mLlResetPwd.setLayoutParams(layoutParams);
+                    kayResetPwd.requestLayout();
                 }
             });
 
@@ -262,10 +266,10 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             valueAnimator.start();
 
 
-        } else if (keypadHeight == 0 && mLlResetPwd.getTag() != null) {
+        } else if (keypadHeight == 0 && kayResetPwd.getTag() != null) {
             final int topMargin = mTopMargin;
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlResetPwd.getLayoutParams();
-            mLlResetPwd.setTag(null);
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) kayResetPwd.getLayoutParams();
+            kayResetPwd.setTag(null);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -273,7 +277,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
                     layoutParams.topMargin = (int) (topMargin * animatedValue);
-                    mLlResetPwd.setLayoutParams(layoutParams);
+                    kayResetPwd.requestLayout();
                 }
             });
             if (valueAnimator.isRunning()) {

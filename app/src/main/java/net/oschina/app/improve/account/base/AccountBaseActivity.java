@@ -6,7 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Gravity;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -30,6 +34,8 @@ public class AccountBaseActivity extends BaseActivity {
     public static final String ACTION_ACCOUNT_FINISH_ALL = "app.oschina.net.action.finish.all";
     protected LocalBroadcastManager mManager;
     private BroadcastReceiver mReceiver;
+    protected InputMethodManager mInputMethodManager;
+    protected Toast mToast;
 
     @Override
     protected int getContentView() {
@@ -40,12 +46,20 @@ public class AccountBaseActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         registerLocalReceiver();
+        if (mInputMethodManager == null)
+            mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        hideWaitDialog();
     }
 
     @Override
@@ -93,10 +107,14 @@ public class AccountBaseActivity extends BaseActivity {
      *
      * @return progressDialog
      */
-    protected ProgressDialog showWaitDialog() {
-        String message = getResources().getString(R.string.progress_submit);
+    protected ProgressDialog showWaitDialog(@StringRes int messageId) {
         if (mDialog == null) {
-            mDialog = DialogHelper.getProgressDialog(this, message, true); //DialogHelp.getWaitDialog(this, message);
+            if (messageId <= 0) {
+                mDialog = DialogHelper.getProgressDialog(this, true);
+            } else {
+                String message = getResources().getString(messageId);
+                mDialog = DialogHelper.getProgressDialog(this, message, true);
+            }
         }
         mDialog.show();
 
@@ -144,7 +162,7 @@ public class AccountBaseActivity extends BaseActivity {
         if (throwable != null) {
             throwable.printStackTrace();
         }
-        AppContext.showToast(getResources().getString(R.string.request_error_hint));
+        AppContext.showToast(getResources().getString(R.string.request_error_hint), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
     }
 
     /**

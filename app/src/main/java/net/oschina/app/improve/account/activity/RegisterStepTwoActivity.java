@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -76,7 +77,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
         @Override
         public void onStart() {
             super.onStart();
-            showWaitDialog();
+            showWaitDialog(R.string.progress_submit);
         }
 
         @Override
@@ -123,7 +124,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                     default:
                         break;
                 }
-                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             }
 
         }
@@ -186,7 +187,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 }
 
                 if (length > 12) {
-                    AppContext.showToast(getResources().getString(R.string.register_username_error), Toast.LENGTH_SHORT);
+                    AppContext.showToast(getResources().getString(R.string.register_username_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_error);
                 } else {
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
@@ -305,19 +306,19 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
         String username = mEtRegisterUsername.getText().toString().trim();
 
         if (TextUtils.isEmpty(username)) {
-            AppContext.showToast(getString(R.string.hint_pwd_null));
+            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
 
         String pwd = mEtRegisterPwd.getText().toString().trim();
 
         if (TextUtils.isEmpty(pwd)) {
-            AppContext.showToast(getString(R.string.hint_pwd_null));
+            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
 
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error));
+            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
 
@@ -363,17 +364,21 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
     @Override
     public void onGlobalLayout() {
-        Rect r = new Rect();
-        mLlRegisterBar.getWindowVisibleDisplayFrame(r);
+
+
+        final LinearLayout layRegisterTwoUsername = this.mLlRegisterTwoUsername;
+        Rect keypadRect = new Rect();
+
+        mLlRegisterBar.getWindowVisibleDisplayFrame(keypadRect);
 
         int screenHeight = mLlRegisterBar.getRootView().getHeight();
-        int keypadHeight = screenHeight - r.bottom;
+        int keypadHeight = screenHeight - keypadRect.bottom;
 
-        if (keypadHeight > 0 && mLlRegisterTwoUsername.getTag() == null) {
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRegisterTwoUsername.getLayoutParams();
+        if (keypadHeight > 0 && layRegisterTwoUsername.getTag() == null) {
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layRegisterTwoUsername.getLayoutParams();
             final int topMargin = layoutParams.topMargin;
             this.mTopMargin = topMargin;
-            mLlRegisterTwoUsername.setTag(true);
+            layRegisterTwoUsername.setTag(true);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -381,7 +386,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
                     layoutParams.topMargin = (int) (topMargin * animatedValue);
-                    mLlRegisterTwoUsername.setLayoutParams(layoutParams);
+                    layRegisterTwoUsername.requestLayout();
                 }
             });
 
@@ -391,10 +396,10 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
             valueAnimator.start();
 
 
-        } else if (keypadHeight == 0 && mLlRegisterTwoUsername.getTag() != null) {
+        } else if (keypadHeight == 0 && layRegisterTwoUsername.getTag() != null) {
             final int topMargin = mTopMargin;
-            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlRegisterTwoUsername.getLayoutParams();
-            mLlRegisterTwoUsername.setTag(null);
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layRegisterTwoUsername.getLayoutParams();
+            layRegisterTwoUsername.setTag(null);
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
             valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -402,7 +407,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float animatedValue = (float) animation.getAnimatedValue();
                     layoutParams.topMargin = (int) (topMargin * animatedValue);
-                    mLlRegisterTwoUsername.setLayoutParams(layoutParams);
+                    layRegisterTwoUsername.requestLayout();
                 }
             });
             if (valueAnimator.isRunning()) {
