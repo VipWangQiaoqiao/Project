@@ -10,6 +10,7 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -127,7 +128,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                             case 218:
                                 //手机号已被注册,提示重新输入
                                 mLlRetrieveTel.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                                 break;
                             case 0:
                                 //异常错误，发送验证码失败,回收timer,需重新请求发送验证码
@@ -135,7 +136,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                     mTimer.onFinish();
                                     mTimer.cancel();
                                 }
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                                 break;
                             default:
                                 break;
@@ -163,12 +164,12 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                         ResetPwdActivity.show(RetrieveActivity.this, phoneToken);
                                     }
                                 } else {
-                                    AppContext.showToast(phoneTokenResultBean.getMessage());
+                                    AppContext.showToast(phoneTokenResultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                                 }
                                 break;
                             case 215:
                                 mLlRetrieveCode.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(phoneTokenResultBean.getMessage());
+                                AppContext.showToast(phoneTokenResultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                                 break;
                             default:
                                 break;
@@ -263,7 +264,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                         }
                     } else {
                         mLlRetrieveTel.setBackgroundResource(R.drawable.bg_login_input_error);
-                        AppContext.showToast(getResources().getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+                        AppContext.showToast(getResources().getString(R.string.hint_username_ok), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
                         mTvRetrieveSmsCall.setAlpha(0.4f);
                     }
                 } else if (length > 11) {
@@ -362,18 +363,18 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
     private void requestRetrievePwd() {
 
         if (!mMachPhoneNum) {
-            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
 
         String smsCode = mEtRetrieveCodeInput.getText().toString().trim();
         if (TextUtils.isEmpty(smsCode)) {
-            AppContext.showToast(getString(R.string.retrieve_pwd_sms_coe_error));
+            AppContext.showToast(getString(R.string.retrieve_pwd_sms_coe_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
 
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getString(R.string.tip_network_error));
+            AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
         mRequestType = 2;
@@ -384,12 +385,12 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
     private void requestSmsCode() {
         if (!mMachPhoneNum) {
-            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
 
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
             return;
         }
 

@@ -272,7 +272,7 @@
     <string name="retrieve_pwd_label">找回密码</string>
     <string name="retrieve_pwd_sms_coe_error">请输入正确的验证码</string>
     <string name="reset_pwd_submit">确认</string>
-    <string name="request_error_hint">网络请求失败&#8230;</string>
+    <string name="request_error_hint">网络请求失败,请重试&#8230;</string>
     <string name="login_success_hint">登录成功</string>
     <string name="send_sms_code_success_hint">已成功发送验证码</string>
     <string name="reset_success_hint">密码重置成功</string>

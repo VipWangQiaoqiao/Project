@@ -268,6 +268,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
         mTvName.setText(userInfo.getName());
         mTvName.setVisibility(View.VISIBLE);
+        mTvName.setTextSize(20.0f);
 
         switch (userInfo.getGender()) {
             case 0:
@@ -399,6 +400,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     private void hideView() {
         mCirclePortrait.setImageResource(R.mipmap.widget_dface);
         mTvName.setText(R.string.user_hint_login);
+        mTvName.setTextSize(16.0f);
         mIvGander.setVisibility(View.INVISIBLE);
         mTvScore.setVisibility(View.INVISIBLE);
         mLayAboutCount.setVisibility(View.GONE);
