@@ -97,9 +97,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     TextView mTvLoginForgetPwd;
 
     @Bind(R.id.bt_login_submit)
-    Button mTvLoginSubmit;
+    Button mBtLoginSubmit;
     @Bind(R.id.bt_login_register)
-    Button mTvLoginRegister;
+    Button mBtLoginRegister;
 
     @Bind(R.id.ll_login_layer)
     View mLlLoginLayer;
@@ -250,9 +250,10 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
-                String username = s.toString();
+                String username = s.toString().trim();
                 if (username.length() > 0) {
                     if (AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) {
                         mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
@@ -263,6 +264,15 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 } else {
                     mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
                     mIvLoginUsernameDel.setVisibility(View.INVISIBLE);
+                }
+
+                String pwd = mEtLoginPwd.getText().toString().trim();
+                if ((AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
+                    mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+                    mBtLoginSubmit.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                    mBtLoginSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
                 }
 
             }
@@ -280,6 +290,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
                 int length = s.length();
@@ -288,6 +299,16 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     mIvLoginPwdDel.setVisibility(View.VISIBLE);
                 } else {
                     mIvLoginPwdDel.setVisibility(View.INVISIBLE);
+                }
+
+                String username = mEtLoginUsername.getText().toString().trim();
+                String pwd = mEtLoginPwd.getText().toString().trim();
+                if ((AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
+                    mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+                    mBtLoginSubmit.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                    mBtLoginSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
                 }
             }
         });
@@ -705,7 +726,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
         tencentOnActivityResult(data);
         weiBoOnActivityResult(requestCode, resultCode, data);
-        
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
