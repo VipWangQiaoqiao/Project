@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
@@ -31,7 +32,7 @@ import java.lang.reflect.Type;
  * on 2016/10/26.
  */
 
-public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
+public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
 
     private SubTab mTab;
     private HeaderView mHeaderView;
