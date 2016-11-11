@@ -17,16 +17,17 @@
         <EditText
             android:id="@+id/et_comment"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:layout_marginBottom="@dimen/lay_12"
             android:layout_marginLeft="@dimen/lay_16"
             android:layout_marginRight="@dimen/lay_16"
             android:layout_marginTop="@dimen/lay_12"
             android:focusable="true"
+            android:textSize="@dimen/font_16"
             android:background="@drawable/bg_comment"
             android:gravity="top"
             android:hint="请输入评论"
-            android:paddingBottom="8dp"
+            android:paddingBottom="6dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="8dp" />
@@ -36,7 +37,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/lay_12"
+            android:paddingBottom="6dp"
             android:paddingLeft="@dimen/lay_16"
             android:paddingRight="@dimen/lay_16">
 

@@ -64,6 +64,7 @@ public class BottomSheetBar {
         mFaceView.setVisibility(View.GONE);
         mSyncToTweetView = (CheckBox) mRootView.findViewById(R.id.cb_sync);
         mBtnCommit = (Button) mRootView.findViewById(R.id.btn_comment);
+        mBtnCommit.setEnabled(false);
 
         mDialog = new Dialog(mContext, R.style.Comment_Dialog);
         mDialog.setContentView(mRootView);

@@ -35,21 +35,21 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
 
-        if (!mIsScrollToBottom) {
-            float mPreTranslationY = dy + child.getTranslationY();
-            if (mPreTranslationY <= 0) {
-                child.setTranslationY(0);
-                mIsAnimatingOut = true;
-            }
-            if (mPreTranslationY >= child.getHeight()) {
-                child.setTranslationY(child.getHeight());
-                mIsAnimatingOut = false;
-            }
-            if (mPreTranslationY > 0 && mPreTranslationY < child.getHeight()) {
-                child.setTranslationY(mPreTranslationY);
-                mIsAnimatingOut = dy > 0;
-            }
-        }
+//        if (!mIsScrollToBottom) {
+//            float mPreTranslationY = dy + child.getTranslationY();
+//            if (mPreTranslationY <= 0) {
+//                child.setTranslationY(0);
+//                mIsAnimatingOut = true;
+//            }
+//            if (mPreTranslationY >= child.getHeight()) {
+//                child.setTranslationY(child.getHeight());
+//                mIsAnimatingOut = false;
+//            }
+//            if (mPreTranslationY > 0 && mPreTranslationY < child.getHeight()) {
+//                child.setTranslationY(mPreTranslationY);
+//                mIsAnimatingOut = dy > 0;
+//            }
+//        }
     }
 
     @Override
@@ -117,29 +117,29 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     }
 
     private void animateOut(final View button) {
-        button.animate()
-                .translationY(button.getHeight())
-                .setInterpolator(INTERPOLATOR)
-                .setDuration(200)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        button.setTranslationY(button.getHeight());
-                    }
-                });
+//        button.animate()
+//                .translationY(button.getHeight())
+//                .setInterpolator(INTERPOLATOR)
+//                .setDuration(200)
+//                .setListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        button.setTranslationY(button.getHeight());
+//                    }
+//                });
     }
 
     private void animateIn(final View button) {
-        button.animate()
-                .translationY(0)
-                .setInterpolator(INTERPOLATOR)
-                .setDuration(200)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        button.setTranslationY(0);
-                    }
-                });
+//        button.animate()
+//                .translationY(0)
+//                .setInterpolator(INTERPOLATOR)
+//                .setDuration(200)
+//                .setListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        button.setTranslationY(0);
+//                    }
+//                });
     }
 
 
@@ -154,15 +154,15 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
         //coordinatorLayout.onStartNestedScroll(contentView, null, ViewCompat.SCROLL_AXIS_VERTICAL);
         //coordinatorLayout.onNestedPreScroll(bottomView, 0, -1, new int[2]);
         //coordinatorLayout.onStopNestedScroll(null);
-        bottomView.animate()
-                .translationY(0)
-                .setInterpolator(INTERPOLATOR)
-                .setDuration(200)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        bottomView.setTranslationY(0);
-                    }
-                });
+//        bottomView.animate()
+//                .translationY(0)
+//                .setInterpolator(INTERPOLATOR)
+//                .setDuration(200)
+//                .setListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        bottomView.setTranslationY(0);
+//                    }
+//                });
     }
 }
