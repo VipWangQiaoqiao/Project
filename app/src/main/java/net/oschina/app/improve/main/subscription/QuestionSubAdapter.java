@@ -10,7 +10,8 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.widget.CircleImageView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 新版栏目问答
@@ -35,7 +36,10 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
 
         Author author = item.getAuthor();
 
-        mCallBack.getImgLoader().load(author != null ? author.getPortrait() : "").asBitmap().placeholder(R.mipmap.widget_dface).into(vh.iv_question);
+        mCallBack.getImgLoader()
+                .load(author != null ? author.getPortrait() : "")
+                .asBitmap().placeholder(R.mipmap.widget_dface)
+                .into(vh.iv_question);
 
         vh.tv_question_title.setText(item.getTitle());
         vh.tv_question_content.setText(item.getBody());
