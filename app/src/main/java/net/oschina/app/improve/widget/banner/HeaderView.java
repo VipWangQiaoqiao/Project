@@ -58,6 +58,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         mIndicator = (CirclePagerIndicator) findViewById(R.id.indicator);
         mAdapter = new BannerAdapter();
         mViewPager.setAdapter(mAdapter);
+        mIndicator.bindViewPager(mViewPager);
         mCallBack = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -67,11 +68,11 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    ResultBean<List<Banner>> result = AppOperator.createGson().fromJson(responseString,
-                            new TypeToken<List<PageBean<Banner>>>() {
+                    ResultBean<PageBean<Banner>> result = AppOperator.createGson().fromJson(responseString,
+                            new TypeToken<ResultBean<PageBean<Banner>>>() {
                             }.getType());
                     if (result != null && result.isSuccess()) {
-                        setBanners(result.getResult());
+                        setBanners(result.getResult().getItems());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -97,6 +98,8 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
             mHandler.removeCallbacks(this);
             mBanners.clear();
             mBanners.addAll(banners);
+            mViewPager.getAdapter().notifyDataSetChanged();
+            mIndicator.notifyDataSetChanged();
             mCurrentItem = 0;
             if (mBanners.size() > 1) {
                 mHandler.postDelayed(this, 5000);
