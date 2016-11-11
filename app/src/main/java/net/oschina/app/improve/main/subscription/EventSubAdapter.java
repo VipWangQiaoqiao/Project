@@ -9,6 +9,7 @@ import android.widget.TextView;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.general.fragments.EventFragment;
@@ -20,9 +21,20 @@ import net.oschina.app.util.StringUtils;
  * on 2016/10/27.
  */
 
-public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
+public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack{
     public EventSubAdapter(Callback callback,int mode) {
         super(callback, mode);
+        setOnLoadingHeaderCallBack(this);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderHolder(ViewGroup parent) {
+        return new HeaderViewHolder(mHeaderView);
+    }
+
+    @Override
+    public void onBindHeaderHolder(RecyclerView.ViewHolder holder, int position) {
+
     }
 
     @Override

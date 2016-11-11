@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.util.StringUtils;
@@ -18,10 +19,21 @@ import net.oschina.app.widget.CircleImageView;
  * on 2016/10/27.
  */
 
-public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
+public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack{
 
     public QuestionSubAdapter(Callback callback,int mode) {
         super(callback, mode);
+        setOnLoadingHeaderCallBack(this);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderHolder(ViewGroup parent) {
+        return new HeaderViewHolder(mHeaderView);
+    }
+
+    @Override
+    public void onBindHeaderHolder(RecyclerView.ViewHolder holder, int position) {
+
     }
 
     @Override

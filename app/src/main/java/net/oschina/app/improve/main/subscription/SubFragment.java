@@ -52,13 +52,13 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
 
     @Override
     public void initData() {
-        super.initData();
         if (mTab.getBanner() != null) {
             mHeaderView = mTab.getBanner().getCatalog() == SubTab.BANNER_CATEGORY_NEWS ?
                     new NewsHeaderView(mContext, getImgLoader(), mTab.getHref()) :
                     new EventHeaderView(mContext, getImgLoader(), mTab.getHref());
-            mAdapter.setHeaderView(mHeaderView);
         }
+        super.initData();
+        mAdapter.setHeaderView(mHeaderView);
     }
 
     @Override
