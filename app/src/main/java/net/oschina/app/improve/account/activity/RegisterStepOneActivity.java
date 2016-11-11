@@ -9,7 +9,6 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -45,7 +44,8 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RegisterStepOneActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
+public class RegisterStepOneActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener,
+        ViewTreeObserver.OnGlobalLayoutListener {
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
@@ -129,7 +129,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                             case 218:
                                 //手机号已被注册,提示重新输入
                                 mLlRegisterPhone.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                                showToastForKeyBord(resultBean.getMessage());
                                 break;
                             case 0:
                                 //异常错误，发送验证码失败,回收timer,需重新请求发送验证码
@@ -137,7 +137,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                     mTimer.onFinish();
                                     mTimer.cancel();
                                 }
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                                showToastForKeyBord(resultBean.getMessage());
                                 break;
                             default:
                                 break;
@@ -164,12 +164,12 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                         RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
                                     }
                                 } else {
-                                    AppContext.showToast(phoneTokenResultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                                    showToastForKeyBord(phoneTokenResultBean.getMessage());
                                 }
                                 break;
                             case 215://注册失败,手机验证码错误
                                 mLlRegisterSmsCode.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(phoneTokenResultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                                showToastForKeyBord(phoneTokenResultBean.getMessage());
                                 break;
                             default:
                                 break;
@@ -264,7 +264,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                 }
                             } else {
                                 mLlRegisterPhone.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(getResources().getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+                                showToastForKeyBord(R.string.hint_username_ok);
                                 mTvRegisterSmsCall.setAlpha(0.4f);
                             }
                         } else if (length > 11) {
@@ -327,8 +327,9 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @OnClick({R.id.ib_navigation_back, R.id.iv_register_username_del, R.id.tv_register_sms_call,
-            R.id.bt_register_submit})
+            R.id.bt_register_submit, R.id.lay_register_one_container})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -346,6 +347,9 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                 requestRegister();
                 // RegisterStepTwoActivity.show(this,null);
                 break;
+            case R.id.lay_register_one_container:
+                hideKeyBoard(getCurrentFocus().getWindowToken());
+                break;
             default:
                 break;
         }
@@ -354,19 +358,19 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
 
     private void requestRegister() {
         if (!mMachPhoneNum) {
-            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+            showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
 
         String SmsCode = mEtRegisterAuthCode.getText().toString().trim();
 
         if (TextUtils.isEmpty(SmsCode)) {
-            AppContext.showToast(getString(R.string.retrieve_pwd_sms_coe_error), Toast.LENGTH_SHORT);
+            showToastForKeyBord(R.string.retrieve_pwd_sms_coe_error);
             return;
         }
 
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+            showToastForKeyBord(R.string.tip_network_error);
             return;
         }
 
@@ -378,11 +382,11 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
 
     private void requestSmsCode() {
         if (!mMachPhoneNum) {
-            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+            showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+            showToastForKeyBord(R.string.tip_network_error);
             return;
         }
 
@@ -447,6 +451,11 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         int screenHeight = mLayBackBar.getRootView().getHeight();
 
         int keypadHeight = screenHeight - keypadRect.bottom;
+        if (keypadHeight > 0) {
+            updateKeyBoardActiveStatus(true);
+        } else {
+            updateKeyBoardActiveStatus(false);
+        }
 
         if (keypadHeight > 0 && ivLogo.getTag() == null) {
             final int height = ivLogo.getHeight();

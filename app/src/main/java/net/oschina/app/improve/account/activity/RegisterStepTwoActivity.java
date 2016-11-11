@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -124,7 +123,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                     default:
                         break;
                 }
-                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                showToastForKeyBord(resultBean.getMessage());
             }
 
         }
@@ -187,13 +186,11 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 }
 
                 if (length > 12) {
-                    AppContext.showToast(getResources().getString(R.string.register_username_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                    showToastForKeyBord(R.string.register_username_error);
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_error);
                 } else {
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
                 }
-
-
             }
         });
         mEtRegisterUsername.setOnFocusChangeListener(this);
@@ -249,9 +246,9 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
         mLlRegisterBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "ConstantConditions"})
     @OnClick({R.id.ib_navigation_back, R.id.iv_register_username_del, R.id.tv_register_man,
-            R.id.tv_register_female, R.id.bt_register_submit})
+            R.id.tv_register_female, R.id.bt_register_submit, R.id.lay_register_two_container})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -295,6 +292,9 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
             case R.id.bt_register_submit:
                 requestRegisterUserInfo();
                 break;
+            case R.id.lay_register_two_container:
+                hideKeyBoard(getCurrentFocus().getWindowToken());
+                break;
             default:
                 break;
         }
@@ -306,19 +306,19 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
         String username = mEtRegisterUsername.getText().toString().trim();
 
         if (TextUtils.isEmpty(username)) {
-            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.hint_pwd_null);
             return;
         }
 
         String pwd = mEtRegisterPwd.getText().toString().trim();
 
         if (TextUtils.isEmpty(pwd)) {
-            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.hint_pwd_null);
             return;
         }
 
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.tip_network_error);
             return;
         }
 
@@ -365,7 +365,6 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
     @Override
     public void onGlobalLayout() {
 
-
         final LinearLayout layRegisterTwoUsername = this.mLlRegisterTwoUsername;
         Rect keypadRect = new Rect();
 
@@ -373,6 +372,12 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
         int screenHeight = mLlRegisterBar.getRootView().getHeight();
         int keypadHeight = screenHeight - keypadRect.bottom;
+
+        if (keypadHeight > 0) {
+            updateKeyBoardActiveStatus(true);
+        } else {
+            updateKeyBoardActiveStatus(false);
+        }
 
         if (keypadHeight > 0 && layRegisterTwoUsername.getTag() == null) {
             final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layRegisterTwoUsername.getLayoutParams();
@@ -394,7 +399,6 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 valueAnimator.cancel();
             }
             valueAnimator.start();
-
 
         } else if (keypadHeight == 0 && layRegisterTwoUsername.getTag() != null) {
             final int topMargin = mTopMargin;
