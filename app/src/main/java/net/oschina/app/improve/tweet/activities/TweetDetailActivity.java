@@ -42,6 +42,7 @@ import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -243,6 +244,19 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             }
         });
 
+        mDelegation.hideShare();
+        mDelegation.hideFav();
+
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(TweetDetailActivity.this);
+                else
+                    LoginActivity.show(TweetDetailActivity.this);
+            }
+        });
+
         mDelegation.getBottomSheet().showEmoji();
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
@@ -416,8 +430,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         }
         if (replies.size() == 0) {
             mViewInput.setHint("回复 @" + comment.getAuthor().getName());
+            mDelegation.setCommentHint(mViewInput.getHint().toString());
         } else {
             mViewInput.setHint(mViewInput.getHint() + " @" + comment.getAuthor().getName());
+            mDelegation.setCommentHint(mViewInput.getHint().toString());
         }
         this.replies.add(comment);
         TDevice.showSoftKeyboard(mViewInput);
@@ -466,6 +482,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         replies.remove(replies.size() - 1);
         if (replies.size() == 0) {
             mViewInput.setHint("发表评论");
+            mDelegation.setCommentHint(mViewInput.getHint().toString());
             return;
         }
         mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
@@ -488,6 +505,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
             mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
     }
 }

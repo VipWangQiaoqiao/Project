@@ -353,6 +353,7 @@ public class BlogDetailFragment
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
             mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
     }
 }
