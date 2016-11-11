@@ -1,5 +1,8 @@
 package net.oschina.app.improve.widget;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.v4.view.MotionEventCompat;
@@ -13,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -170,6 +174,19 @@ public class TabPickerView extends FrameLayout {
         if (mOnShowAnimator != null) {
             mOnShowAnimator.call(animate());
             animate().start();
+
+            mViewArrow.setRotation(0);
+            mViewArrow.animate()
+                    .rotation(315)
+                    .setDuration(380)
+                    .setInterpolator(new LinearInterpolator())
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            mViewArrow.setRotation(45);
+                        }
+                    }).start();
         } else {
             setVisibility(VISIBLE);
         }

@@ -3,18 +3,25 @@ package net.oschina.app.improve.tweet.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
+import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
 
 import java.util.ArrayList;
@@ -29,6 +36,7 @@ import butterknife.Bind;
 
 public class TopicTweetActivity extends BaseActivity {
 
+    @Bind(R.id.layout_coordinator) CoordinatorLayout mLayoutCoordinator;
     @Bind(R.id.layout_appbar) AppBarLayout mLayoutAppBar;
     @Bind(R.id.iv_wallpaper) ImageView mViewWallpaper;
     @Bind(R.id.tv_title) TextView mViewTitle;
@@ -41,6 +49,8 @@ public class TopicTweetActivity extends BaseActivity {
 
     private List<Pair<String, Fragment>> fragments;
     private TabLayoutOffsetChangeListener mOffsetChangerListener;
+
+    private KeyboardInputDelegation mDelegation;
 
     public static void show(Context context){
         Intent intent = new Intent(context, TopicTweetActivity.class);
@@ -93,11 +103,52 @@ public class TopicTweetActivity extends BaseActivity {
             }
         });
         mLayoutTab.setupWithViewPager(mViewPager);
+
+        mDelegation = KeyboardInputDelegation.delegation(this, mLayoutCoordinator, mViewPager);
+        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
+        mDelegation.showEmoji(getSupportFragmentManager());
+        mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
+            @Override
+            public void onSubmit(TextView v, String content) {
+                // TODO do on submit
+            }
+
+            @Override
+            public void onFinalBackSpace(View v) {
+                // TODO remove @someone
+            }
+        });
     }
 
     @Override
     protected void initData() {
         super.initData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_share, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_share:
+                // TODO share the topic
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                if (!mDelegation.onTurnBack()) return true;
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private class TabLayoutOffsetChangeListener implements AppBarLayout.OnOffsetChangedListener {

@@ -5,10 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +30,7 @@ import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.main.subscription.SubFragment;
 import net.oschina.app.improve.search.activities.SearchActivity;
+import net.oschina.app.improve.widget.FragmentPagerAdapter;
 import net.oschina.app.improve.widget.TabPickerView;
 import net.oschina.app.interf.OnTabReselectListener;
 
@@ -226,10 +227,11 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
         }
 
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
+        final FragmentPagerAdapter mAdapter;
+        mViewPager.setAdapter(mAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return instanceFragment(tabs.get(position));
+                return SubFragment.newInstance(getContext(), tabs.get(position));
             }
 
             @Override
@@ -245,9 +247,10 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             @Override
             public void setPrimaryItem(ViewGroup container, int position, Object object) {
                 super.setPrimaryItem(container, position, object);
-                if (object instanceof Fragment) {
-                    mCurFragment = (Fragment) object;
+                if (mCurFragment == null){
+                    commitUpdate();
                 }
+                mCurFragment = (Fragment) object;
             }
 
             //this is called when notifyDataSetChanged() is called
@@ -257,11 +260,16 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             }
 
         });
-        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                mAdapter.commitUpdate();
+            }
+        });
         mLayoutTab.setupWithViewPager(mViewPager);
     }
 
-    public Fragment instanceFragment(SubTab tab) {
+    public Fragment instantiateFragment(SubTab tab) {
         if (!TextUtils.isEmpty(tab.getHref())){
             return SubFragment.newInstance(getContext(), tab);
         }
