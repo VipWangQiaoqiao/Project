@@ -148,16 +148,14 @@ public class BottomSheetBar {
         mDialog.show();
         if (!"添加评论".equals(hint)) {
             mEditText.setHint(hint + " ");
-            if (!TextUtils.isEmpty(getCommentText())) {
-                Selection.setSelection(mEditText.getText(), mEditText.length());
-            }
         }
+        Selection.setSelection(mEditText.getText(), mEditText.length());
         mRootView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 TDevice.showSoftKeyboard(mEditText);
             }
-        }, 150);
+        }, 50);
     }
 
     public void dismiss() {
