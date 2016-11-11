@@ -10,7 +10,6 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -47,7 +46,8 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RetrieveActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
+public class RetrieveActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener,
+        ViewTreeObserver.OnGlobalLayoutListener {
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLlRetrieveBar;
@@ -128,7 +128,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                             case 218:
                                 //手机号已被注册,提示重新输入
                                 mLlRetrieveTel.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                                showToastForKeyBord(resultBean.getMessage());
                                 break;
                             case 0:
                                 //异常错误，发送验证码失败,回收timer,需重新请求发送验证码
@@ -136,7 +136,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                     mTimer.onFinish();
                                     mTimer.cancel();
                                 }
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                                showToastForKeyBord(resultBean.getMessage());
                                 break;
                             default:
                                 break;
@@ -164,12 +164,12 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                                         ResetPwdActivity.show(RetrieveActivity.this, phoneToken);
                                     }
                                 } else {
-                                    AppContext.showToast(phoneTokenResultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                                    showToastForKeyBord(phoneTokenResultBean.getMessage());
                                 }
                                 break;
                             case 215:
                                 mLlRetrieveCode.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(phoneTokenResultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                                showToastForKeyBord(phoneTokenResultBean.getMessage());
                                 break;
                             default:
                                 break;
@@ -264,7 +264,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                         }
                     } else {
                         mLlRetrieveTel.setBackgroundResource(R.drawable.bg_login_input_error);
-                        AppContext.showToast(getResources().getString(R.string.hint_username_ok), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                        showToastForKeyBord(R.string.hint_username_ok);
                         mTvRetrieveSmsCall.setAlpha(0.4f);
                     }
                 } else if (length > 11) {
@@ -322,8 +322,9 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         mLlRetrieveBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @OnClick({R.id.ib_navigation_back, R.id.iv_retrieve_tel_del, R.id.retrieve_sms_call,
-            R.id.bt_retrieve_submit, R.id.tv_retrieve_label})
+            R.id.bt_retrieve_submit, R.id.tv_retrieve_label, R.id.lay_retrieve_container})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -354,6 +355,9 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 intent.setData(content_url);
                 startActivity(intent);
                 break;
+            case R.id.lay_retrieve_container:
+                hideKeyBoard(getCurrentFocus().getWindowToken());
+                break;
             default:
                 break;
         }
@@ -363,18 +367,18 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
     private void requestRetrievePwd() {
 
         if (!mMachPhoneNum) {
-            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
 
         String smsCode = mEtRetrieveCodeInput.getText().toString().trim();
         if (TextUtils.isEmpty(smsCode)) {
-            AppContext.showToast(getString(R.string.retrieve_pwd_sms_coe_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.retrieve_pwd_sms_coe_error);
             return;
         }
 
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.tip_network_error);
             return;
         }
         mRequestType = 2;
@@ -385,12 +389,12 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
     private void requestSmsCode() {
         if (!mMachPhoneNum) {
-            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
 
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.tip_network_error);
             return;
         }
 
@@ -454,6 +458,12 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         int screenHeight = mLlRetrieveBar.getRootView().getHeight();
 
         int keypadHeight = screenHeight - KeypadRect.bottom;
+
+        if (keypadHeight > 0) {
+            updateKeyBoardActiveStatus(true);
+        } else {
+            updateKeyBoardActiveStatus(false);
+        }
 
         if (keypadHeight > 0 && layRetrieveTel.getTag() == null) {
             final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layRetrieveTel.getLayoutParams();

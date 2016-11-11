@@ -7,7 +7,6 @@ import android.graphics.Rect;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -42,7 +41,8 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class ResetPwdActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
+public class ResetPwdActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener,
+        ViewTreeObserver.OnGlobalLayoutListener {
 
     @Bind(R.id.ly_reset_bar)
     LinearLayout mLlResetBar;
@@ -96,12 +96,12 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
                     finish();
                     break;
                 case 216:
-                    AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                    showToastForKeyBord(resultBean.getMessage());
                     finish();
                     break;
                 case 219:
                     mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_error);
-                    AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                    showToastForKeyBord(resultBean.getMessage());
                     break;
                 default:
                     break;
@@ -109,7 +109,6 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         }
     };
     private int mTopMargin;
-
 
     /**
      * show the resetPwdActivity
@@ -189,7 +188,8 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     }
 
 
-    @OnClick({R.id.ib_navigation_back, R.id.iv_reset_pwd_del, R.id.bt_reset_submit})
+    @SuppressWarnings("ConstantConditions")
+    @OnClick({R.id.ib_navigation_back, R.id.iv_reset_pwd_del, R.id.bt_reset_submit, R.id.lay_reset_container})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -203,6 +203,9 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             case R.id.bt_reset_submit:
                 requestResetPwd();
                 break;
+            case R.id.lay_reset_container:
+                hideKeyBoard(getCurrentFocus().getWindowToken());
+                break;
             default:
                 break;
         }
@@ -212,11 +215,11 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     private void requestResetPwd() {
         String tempPwd = mEtResetPwd.getText().toString().trim();
         if (TextUtils.isEmpty(tempPwd) || tempPwd.length() < 6) {
-            AppContext.showToast(getString(R.string.reset_pwd_hint), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.reset_pwd_hint);
             return;
         }
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.tip_network_error);
             return;
         }
         String appToken = getAppToken();
@@ -243,6 +246,12 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         int screenHeight = mLlResetBar.getRootView().getHeight();
 
         int keypadHeight = screenHeight - keypadRect.bottom;
+
+        if (keypadHeight > 0) {
+            updateKeyBoardActiveStatus(true);
+        } else {
+            updateKeyBoardActiveStatus(false);
+        }
 
         if (keypadHeight > 0 && kayResetPwd.getTag() == null) {
             final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) kayResetPwd.getLayoutParams();

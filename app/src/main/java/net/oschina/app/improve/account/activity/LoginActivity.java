@@ -14,7 +14,6 @@ import android.support.v4.content.SharedPreferencesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -24,7 +23,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -71,7 +69,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
     private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
-    private static final String TAG = "LoginActivity";
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
@@ -152,7 +149,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 setResult(RESULT_OK);
                 sendLocalReceiver();
             } else {
-                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                showToastForKeyBord(resultBean.getMessage());
             }
 
         }
@@ -456,18 +453,13 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 mEtLoginPwd.setText(null);
                 break;
             case R.id.lay_login_container:
-                if (mInputMethodManager == null) return;
-                boolean active = mInputMethodManager.isActive();
-                if (active) {
-                    mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                }
+                hideKeyBoard(getCurrentFocus().getWindowToken());
                 break;
             default:
                 break;
         }
 
     }
-
 
     /**
      * login tencent
@@ -652,14 +644,14 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 if (TDevice.hasInternet()) {
                     requestLogin(tempUsername, tempPwd, appToken);
                 } else {
-                    AppContext.showToast(getResources().getString(R.string.footer_type_net_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                    showToastForKeyBord(R.string.footer_type_net_error);
                 }
 
             } else {
-                AppContext.showToast(getString(R.string.login_input_username_hint_error), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                showToastForKeyBord(R.string.login_input_username_hint_error);
             }
         } else {
-            AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+            showToastForKeyBord(R.string.hint_pwd_null);
         }
     }
 
@@ -709,7 +701,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                             message += "," + getResources().getString(R.string.message_pwd_error);
                             mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_error);
                         }
-                        AppContext.showToast(message, Toast.LENGTH_SHORT, 0, Gravity.CENTER);
+                        showToastForKeyBord(message);
                         //更新失败应该是不进行任何的本地操作
                     }
                 } catch (Exception e) {
@@ -835,6 +827,11 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
         int keypadHeight = screenHeight - KeypadRect.bottom;
 
+        if (keypadHeight > 0) {
+            updateKeyBoardActiveStatus(true);
+        } else {
+            updateKeyBoardActiveStatus(false);
+        }
         if (keypadHeight > 0 && ivLogo.getTag() == null) {
             final int height = ivLogo.getHeight();
             final int width = ivLogo.getWidth();

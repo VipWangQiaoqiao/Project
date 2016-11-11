@@ -74,4 +74,7 @@
     <dimen name="select_friend_header_height">60dp</dimen>
     <dimen name="select_friend_avatar_size">40dp</dimen>
 
+    <!--toast y offset  官方默认是64dip-->
+    <dimen name="toast_y_offset">35dp</dimen>
+
 </resources>
