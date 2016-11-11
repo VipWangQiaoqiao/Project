@@ -54,8 +54,8 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
     public void initData() {
         if (mTab.getBanner() != null) {
             mHeaderView = mTab.getBanner().getCatalog() == SubTab.BANNER_CATEGORY_NEWS ?
-                    new NewsHeaderView(mContext, getImgLoader(), mTab.getHref()) :
-                    new EventHeaderView(mContext, getImgLoader(), mTab.getHref());
+                    new NewsHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref()) :
+                    new EventHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref());
         }
         super.initData();
         mAdapter.setHeaderView(mHeaderView);
