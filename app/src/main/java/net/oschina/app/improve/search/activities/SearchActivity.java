@@ -149,7 +149,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         super.initWidget();
         setStatusBarDarkMode(true);
         mViewSearchEditor.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         mViewSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -196,13 +195,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         LinearLayout.LayoutParams params1 = (LinearLayout.LayoutParams) mLayoutEditFrame.getLayoutParams();
         params1.setMargins(0, 0, 0, 0);
         mLayoutEditFrame.setLayoutParams(params1);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            startAnimation();
-        } else {
-            mViewSearch.setIconified(false);
-        }
+        mViewSearch.setIconified(false);
     }
 
 
@@ -241,59 +234,11 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
 
     @OnClick(R.id.tv_cancel)
     void onClickCancel() {
-        supportFinish();
-    }
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private void startAnimation() {
-        mViewRoot.post(new Runnable() {
-            @Override
-            public void run() {
-                int w = mViewRoot.getWidth();
-                int h = mViewRoot.getHeight();
-                Animator animator = ViewAnimationUtils.createCircularReveal(
-                        mViewRoot, mViewRoot.getWidth(), 0, 0, (float) Math.pow(w * w + h * h, 1.f / 2));
-                animator.setDuration(300);
-                animator.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mViewSearch.setIconified(false);
-                    }
-                });
-                animator.start();
-            }
-        });
-    }
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private void endAnimation() {
-        int w = mViewRoot.getWidth();
-        int h = mViewRoot.getHeight();
-        Animator animator = ViewAnimationUtils.createCircularReveal(
-                mViewRoot, mViewRoot.getWidth(), 0, (float) Math.pow(w * w + h * h, 1.f / 2), 0);
-        animator.setDuration(300);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mViewRoot.setVisibility(View.INVISIBLE); // avoid splash
-                finish();
-            }
-
-        });
-        animator.start();
+        onBackPressed();
     }
 
     @Override
     public void onBackPressed() {
-        supportFinish();
+        finish();
     }
-
-    private void supportFinish() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            endAnimation();
-        } else {
-            finish();
-        }
-    }
-
 }
