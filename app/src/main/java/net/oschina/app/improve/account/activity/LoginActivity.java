@@ -527,7 +527,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                                 jsonObject.put("refresh_token", oauth2AccessToken.getRefreshToken());
                                 jsonObject.put("access_token", oauth2AccessToken.getToken());
 
-                                OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), getAppToken(), mHandler);
+                                OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), mHandler);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -642,10 +642,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         if (machPhoneNum || machEmail) {
             //登录成功,请求数据进入用户个人中心页面
 
-            String appToken = getAppToken();
-
             if (TDevice.hasInternet()) {
-                requestLogin(tempUsername, tempPwd, appToken);
+                requestLogin(tempUsername, tempPwd);
             } else {
                 showToastForKeyBord(R.string.footer_type_net_error);
             }
@@ -656,8 +654,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
     }
 
-    private void requestLogin(String tempUsername, String tempPwd, String appToken) {
-        OSChinaApi.login(tempUsername, getSha1(tempPwd), appToken, new TextHttpResponseHandler() {
+    private void requestLogin(String tempUsername, String tempPwd) {
+        OSChinaApi.login(tempUsername, getSha1(tempPwd), new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -774,7 +772,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     @Override
     public void onComplete(Object o) {
         JSONObject jsonObject = (JSONObject) o;
-        OSChinaApi.openLogin(OSChinaApi.LOGIN_QQ, jsonObject.toString(), getAppToken(), mHandler);
+        OSChinaApi.openLogin(OSChinaApi.LOGIN_QQ, jsonObject.toString(), mHandler);
         hideWaitDialog();
     }
 

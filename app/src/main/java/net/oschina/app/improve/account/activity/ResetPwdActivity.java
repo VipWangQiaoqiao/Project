@@ -222,9 +222,8 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
             showToastForKeyBord(R.string.tip_network_error);
             return;
         }
-        String appToken = getAppToken();
 
-        OSChinaApi.resetPwd(getSha1(tempPwd), mPhoneToken.getToken(), appToken, mHandler);
+        OSChinaApi.resetPwd(getSha1(tempPwd), mPhoneToken.getToken(), mHandler);
     }
 
 

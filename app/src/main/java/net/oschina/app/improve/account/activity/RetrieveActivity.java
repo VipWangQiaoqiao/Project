@@ -377,8 +377,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         }
         mRequestType = 2;
         String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-        String appToken = getAppToken();
-        OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, appToken, mHandler);
+        OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, mHandler);
     }
 
     private void requestSmsCode() {
@@ -413,8 +412,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 }
             }.start();
             String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-            String appToken = getAppToken();
-            OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.RESET_PWD_INTENT, mHandler);
+            OSChinaApi.sendSmsCode(phoneNumber, OSChinaApi.RESET_PWD_INTENT, mHandler);
         } else {
             AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
         }

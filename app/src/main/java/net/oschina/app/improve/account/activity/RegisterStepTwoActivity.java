@@ -327,9 +327,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
             gender = 2;
         }
 
-        String appToken = getAppToken();
-
-        OSChinaApi.register(username, getSha1(pwd), gender, mPhoneToken.getToken(), appToken, mHandler);
+        OSChinaApi.register(username, getSha1(pwd), gender, mPhoneToken.getToken(), mHandler);
     }
 
     @Override
