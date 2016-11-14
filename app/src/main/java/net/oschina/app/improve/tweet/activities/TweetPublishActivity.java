@@ -67,7 +67,7 @@ public class TweetPublishActivity extends BaseBackActivity {
     @Override
     protected int getContentView() {
         // hide the software
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return R.layout.activity_tweet_publish;
     }
 
