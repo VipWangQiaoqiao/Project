@@ -4,8 +4,8 @@
     android:layout_height="46dp"
     android:layout_gravity="bottom"
     android:background="@color/white"
-    android:gravity="center_vertical"
     android:clickable="true"
+    android:gravity="center_vertical"
     android:orientation="vertical">
 
     <View
@@ -20,19 +20,31 @@
         android:paddingLeft="@dimen/lay_16"
         android:paddingRight="@dimen/lay_16">
 
-        <TextView
-            android:id="@+id/tv_comment"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/ll_comment"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/lay_8"
             android:layout_marginTop="@dimen/lay_8"
             android:layout_weight="1"
             android:background="@drawable/bg_text_comment"
-            android:drawableLeft="@mipmap/ic_comment_40"
-            android:drawablePadding="@dimen/lay_12"
-            android:gravity="center_vertical"
-            android:hint="添加评论"
-            android:paddingLeft="@dimen/lay_16" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:src="@mipmap/ic_comment_40" />
+
+            <TextView
+                android:id="@+id/tv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="添加评论"
+                android:paddingLeft="@dimen/lay_16" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/ib_fav"
