@@ -37,6 +37,7 @@ public class NewsHeaderView extends HeaderView {
 
     @Override
     public void onPageSelected(int position) {
+        super.onPageSelected(position);
         mTitleTextView.setText(mBanners.get(position).getName());
     }
 
