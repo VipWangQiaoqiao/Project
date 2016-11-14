@@ -142,7 +142,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             public void onSelected(final int position) {
                 final int index = mViewPager.getCurrentItem();
                 mViewPager.setCurrentItem(position);
-                if (position == index){
+                if (position == index) {
                     mAdapter.commitUpdate();
                     // notifyDataSetChanged为什么会导致TabLayout位置偏移，而且需要延迟设置才能起效？？？
                     new Handler().postDelayed(new Runnable() {
@@ -265,7 +265,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             @Override
             public void setPrimaryItem(ViewGroup container, int position, Object object) {
                 super.setPrimaryItem(container, position, object);
-                if (mCurFragment == null){
+                if (mCurFragment == null) {
                     commitUpdate();
                 }
                 mCurFragment = (Fragment) object;
@@ -278,7 +278,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             }
 
         });
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 Log.i("oschina", "----------onPageSelected--------");
@@ -289,7 +289,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
     }
 
     public Fragment instantiateFragment(SubTab tab) {
-        if (!TextUtils.isEmpty(tab.getHref())){
+        if (!TextUtils.isEmpty(tab.getHref())) {
             return SubFragment.newInstance(getContext(), tab);
         }
         switch (tab.getType()) {
