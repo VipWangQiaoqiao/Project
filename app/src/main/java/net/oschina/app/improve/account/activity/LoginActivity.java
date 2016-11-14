@@ -628,31 +628,32 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
     @SuppressWarnings("ConstantConditions")
     private void loginRequest() {
+
         String tempUsername = mEtLoginUsername.getText().toString().trim();
         String tempPwd = mEtLoginPwd.getText().toString().trim();
 
-        if (!TextUtils.isEmpty(tempUsername) && !TextUtils.isEmpty(tempPwd)) {
-
-            boolean machPhoneNum = AssimilateUtils.MachPhoneNum(tempUsername);
-            boolean machEmail = AssimilateUtils.machEmail(tempUsername);
-
-            if (machPhoneNum || machEmail) {
-                //登录成功,请求数据进入用户个人中心页面
-
-                String appToken = getAppToken();
-
-                if (TDevice.hasInternet()) {
-                    requestLogin(tempUsername, tempPwd, appToken);
-                } else {
-                    showToastForKeyBord(R.string.footer_type_net_error);
-                }
-
-            } else {
-                showToastForKeyBord(R.string.login_input_username_hint_error);
-            }
-        } else {
-            showToastForKeyBord(R.string.hint_pwd_null);
+        if (TextUtils.isEmpty(tempUsername) || TextUtils.isEmpty(tempPwd)) {
+            return;
         }
+
+        boolean machPhoneNum = AssimilateUtils.MachPhoneNum(tempUsername);
+        boolean machEmail = AssimilateUtils.machEmail(tempUsername);
+
+        if (machPhoneNum || machEmail) {
+            //登录成功,请求数据进入用户个人中心页面
+
+            String appToken = getAppToken();
+
+            if (TDevice.hasInternet()) {
+                requestLogin(tempUsername, tempPwd, appToken);
+            } else {
+                showToastForKeyBord(R.string.footer_type_net_error);
+            }
+
+        } else {
+            showToastForKeyBord(R.string.login_input_username_hint_error);
+        }
+
     }
 
     private void requestLogin(String tempUsername, String tempPwd, String appToken) {
@@ -848,6 +849,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     layoutParams.height = (int) (height * animatedValue);
                     layoutParams.width = (int) (width * animatedValue);
                     ivLogo.requestLayout();
+                    ivLogo.setAlpha(animatedValue);
                 }
             });
 
@@ -871,6 +873,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     layoutParams.height = (int) (height * animatedValue);
                     layoutParams.width = (int) (width * animatedValue);
                     ivLogo.requestLayout();
+                    ivLogo.setAlpha(animatedValue);
                 }
             });
 

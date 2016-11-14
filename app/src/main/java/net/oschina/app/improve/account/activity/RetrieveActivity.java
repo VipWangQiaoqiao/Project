@@ -230,7 +230,6 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
             @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
-
                 int length = s.length();
                 String input = s.toString();
                 mMachPhoneNum = AssimilateUtils.MachPhoneNum(input);
@@ -366,14 +365,9 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
     private void requestRetrievePwd() {
 
-        if (!mMachPhoneNum) {
-            showToastForKeyBord(R.string.hint_username_ok);
-            return;
-        }
-
         String smsCode = mEtRetrieveCodeInput.getText().toString().trim();
-        if (TextUtils.isEmpty(smsCode)) {
-            showToastForKeyBord(R.string.retrieve_pwd_sms_coe_error);
+        if (!mMachPhoneNum || TextUtils.isEmpty(smsCode)) {
+            // showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
 
@@ -389,7 +383,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
     private void requestSmsCode() {
         if (!mMachPhoneNum) {
-            showToastForKeyBord(R.string.hint_username_ok);
+            //showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
 

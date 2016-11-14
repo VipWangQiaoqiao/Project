@@ -357,15 +357,10 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
     }
 
     private void requestRegister() {
-        if (!mMachPhoneNum) {
-            showToastForKeyBord(R.string.hint_username_ok);
-            return;
-        }
 
-        String SmsCode = mEtRegisterAuthCode.getText().toString().trim();
-
-        if (TextUtils.isEmpty(SmsCode)) {
-            showToastForKeyBord(R.string.retrieve_pwd_sms_coe_error);
+        String smsCode = mEtRegisterAuthCode.getText().toString().trim();
+        if (!mMachPhoneNum || TextUtils.isEmpty(smsCode)) {
+            //showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
 
@@ -377,12 +372,12 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         mRequestType = 2;
         String phoneNumber = mEtRegisterUsername.getText().toString().trim();
         String appToken = getAppToken();
-        OSChinaApi.validateRegisterInfo(phoneNumber, SmsCode, appToken, mHandler);
+        OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, appToken, mHandler);
     }
 
     private void requestSmsCode() {
         if (!mMachPhoneNum) {
-            showToastForKeyBord(R.string.hint_username_ok);
+            //showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
         if (!TDevice.hasInternet()) {
@@ -474,6 +469,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                     layoutParams.height = (int) (height * animatedValue);
                     layoutParams.width = (int) (width * animatedValue);
                     ivLogo.requestLayout();
+                    ivLogo.setAlpha(animatedValue);
                 }
             });
 
@@ -497,6 +493,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                     layoutParams.height = (int) (height * animatedValue);
                     layoutParams.width = (int) (width * animatedValue);
                     ivLogo.requestLayout();
+                    ivLogo.setAlpha(animatedValue);
                 }
             });
 

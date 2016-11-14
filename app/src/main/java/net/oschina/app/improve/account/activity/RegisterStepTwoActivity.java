@@ -304,16 +304,9 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
     private void requestRegisterUserInfo() {
 
         String username = mEtRegisterUsername.getText().toString().trim();
-
-        if (TextUtils.isEmpty(username)) {
-            showToastForKeyBord(R.string.hint_pwd_null);
-            return;
-        }
-
         String pwd = mEtRegisterPwd.getText().toString().trim();
 
-        if (TextUtils.isEmpty(pwd)) {
-            showToastForKeyBord(R.string.hint_pwd_null);
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(pwd)) {
             return;
         }
 

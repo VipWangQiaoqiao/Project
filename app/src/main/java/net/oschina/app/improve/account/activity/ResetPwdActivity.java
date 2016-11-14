@@ -215,7 +215,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
     private void requestResetPwd() {
         String tempPwd = mEtResetPwd.getText().toString().trim();
         if (TextUtils.isEmpty(tempPwd) || tempPwd.length() < 6) {
-            showToastForKeyBord(R.string.reset_pwd_hint);
+            //showToastForKeyBord(R.string.reset_pwd_hint);
             return;
         }
         if (!TDevice.hasInternet()) {
