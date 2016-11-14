@@ -1,5 +1,6 @@
 package net.oschina.app.improve.tweet.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
@@ -10,19 +11,28 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.improve.bean.simple.TweetComment;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
+import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.UIHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +57,13 @@ public class TopicTweetActivity extends BaseActivity {
     @Bind(R.id.layout_tab) TabLayout mLayoutTab;
     @Bind(R.id.view_pager) ViewPager mViewPager;
 
-    private List<Pair<String, Fragment>> fragments;
+    EditText mViewInput;
+    private Dialog dialog;
     private TabLayoutOffsetChangeListener mOffsetChangerListener;
+    private CommentBar mDelegation;
 
-    private KeyboardInputDelegation mDelegation;
+    private List<Pair<String, Fragment>> fragments;
+    private List<TweetComment> replies = new ArrayList<>();
 
     public static void show(Context context){
         Intent intent = new Intent(context, TopicTweetActivity.class);
@@ -104,7 +117,40 @@ public class TopicTweetActivity extends BaseActivity {
         });
         mLayoutTab.setupWithViewPager(mViewPager);
 
-        mDelegation = KeyboardInputDelegation.delegation(this, mLayoutCoordinator, mViewPager);
+        mDelegation = CommentBar.delegation(this, mLayoutCoordinator);
+
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                    handleKeyDel();
+                }
+                return false;
+            }
+        });
+
+        mDelegation.getBottomSheet().showEmoji();
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String content = mDelegation.getBottomSheet().getCommentText().replaceAll("[\\s\\n]+", " ");
+                if (TextUtils.isEmpty(content)) {
+                    Toast.makeText(TopicTweetActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!AccountHelper.isLogin()) {
+                    UIHelper.showLoginActivity(TopicTweetActivity.this);
+                    return;
+                }
+                if (replies != null && replies.size() > 0)
+                    content = mViewInput.getHint() + ": " + content;
+                dialog = DialogHelp.getWaitDialog(TopicTweetActivity.this, "正在发表评论...");
+                dialog.show();
+            }
+        });
+
+
+        /*mDelegation = KeyboardInputDelegation.delegation(this, mLayoutCoordinator, mViewPager);
         mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
         mDelegation.showEmoji(getSupportFragmentManager());
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
@@ -117,7 +163,21 @@ public class TopicTweetActivity extends BaseActivity {
             public void onFinalBackSpace(View v) {
                 // TODO remove @someone
             }
-        });
+        });*/
+    }
+
+    private void handleKeyDel() {
+        if (replies == null || replies.size() == 0) return;
+        replies.remove(replies.size() - 1);
+        if (replies.size() == 0) {
+            mViewInput.setHint("发表评论");
+            return;
+        }
+        mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
+        if (replies.size() == 2) {
+            mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor()
+                    .getName());
+        }
     }
 
     @Override
@@ -145,7 +205,7 @@ public class TopicTweetActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (!mDelegation.onTurnBack()) return true;
+//                if (!mDelegation.onTurnBack()) return true;
                 break;
         }
         return super.onKeyDown(keyCode, event);
