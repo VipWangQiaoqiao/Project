@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.widget.BottomSheetBar;
 
 /**
@@ -48,7 +50,11 @@ public class CommentBar {
         mRootView.findViewById(R.id.ll_comment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDelegation.show(mCommentText.getHint().toString());
+                if(AccountHelper.isLogin()){
+                    mDelegation.show(mCommentText.getHint().toString());
+                }else {
+                    LoginActivity.show(mContext);
+                }
             }
         });
     }
