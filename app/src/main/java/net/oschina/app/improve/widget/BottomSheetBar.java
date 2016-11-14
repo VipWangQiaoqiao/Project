@@ -1,12 +1,12 @@
 package net.oschina.app.improve.widget;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.Selection;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -38,7 +36,7 @@ public class BottomSheetBar {
     private EditText mEditText;
     private ImageButton mAtView;
     private ImageButton mFaceView;
-    private CheckBox mSyncToTweetView;
+    private ImageButton mSyncToTweetView;
     private Context mContext;
     private Button mBtnCommit;
     private Dialog mDialog;
@@ -49,9 +47,10 @@ public class BottomSheetBar {
         this.mContext = context;
     }
 
+    @SuppressLint("InflateParams")
     public static BottomSheetBar delegation(Context context) {
         BottomSheetBar bar = new BottomSheetBar(context);
-        bar.mRootView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_sheet_comment_bar, null);
+        bar.mRootView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_sheet_comment_bar, null, false);
         bar.initView();
         return bar;
     }
@@ -61,20 +60,22 @@ public class BottomSheetBar {
         mEditText = (EditText) mRootView.findViewById(R.id.et_comment);
         mAtView = (ImageButton) mRootView.findViewById(R.id.ib_mention);
         mFaceView = (ImageButton) mRootView.findViewById(R.id.ib_face);
-        mFaceView.setVisibility(View.GONE);
-        mSyncToTweetView = (CheckBox) mRootView.findViewById(R.id.cb_sync);
+        mFaceView.setVisibility(View.VISIBLE);
+        mSyncToTweetView = (ImageButton) mRootView.findViewById(R.id.cb_sync);
         mBtnCommit = (Button) mRootView.findViewById(R.id.btn_comment);
         mBtnCommit.setEnabled(false);
 
         mDialog = new Dialog(mContext, R.style.Comment_Dialog);
         mDialog.setContentView(mRootView);
         Window window = mDialog.getWindow();
-        window.setGravity(Gravity.FILL);
+        if (window != null) {
+            window.setGravity(Gravity.FILL);
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+            window.setAttributes(lp);
+        }
 
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-        window.setAttributes(lp);
 
         mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -124,13 +125,14 @@ public class BottomSheetBar {
 
                         @Override
                         public void onEmojiClick(Emojicon v) {
+                            TDevice.showSoftKeyboard(mEditText);
 
                         }
                     });
                     mFrameLayout.addView(mEmojiView);
                 }
 
-                TDevice.closeKeyboard(mEditText);
+                //  TDevice.closeKeyboard(mEditText);
                 mFrameLayout.setVisibility(View.VISIBLE);
 
             }
@@ -170,8 +172,8 @@ public class BottomSheetBar {
         mFaceView.setOnClickListener(listener);
     }
 
-    public void showSyncView(CompoundButton.OnCheckedChangeListener listener) {
-        mSyncToTweetView.setOnCheckedChangeListener(listener);
+    public void showSyncView(View.OnClickListener listener) {
+        mSyncToTweetView.setOnClickListener(listener);
         mSyncToTweetView.setVisibility(View.VISIBLE);
         mRootView.findViewById(R.id.tv_sync).setVisibility(View.VISIBLE);
     }

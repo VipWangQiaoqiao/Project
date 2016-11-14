@@ -23,11 +23,11 @@ import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
-import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 
 /**
  * Created by qiujuer
@@ -111,6 +111,13 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             @Override
             public void onClick(View v) {
                 handleShare();
+            }
+        });
+        mDelegation.getBottomSheet().setFaceListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                TDevice.showSoftKeyboard(mDelegation.getBottomSheet().getEditText());
             }
         });
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {

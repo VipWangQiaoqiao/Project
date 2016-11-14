@@ -285,5 +285,8 @@
     <string name="message_pwd_error">密码错误</string>
     <string name="tv_my_score">积分 0</string>
     <string name="zero">0</string>
+    <string name="send_tweet">转发到动弹</string>
+    <string name="send_hint">发送</string>
+    <string name="comment_hint">请输入评论</string>
 
 </resources>
