@@ -3,6 +3,8 @@ package net.oschina.app.improve.main.tabs;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.database.DataSetObserver;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -20,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubTab;
@@ -63,6 +66,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
 
     private MainActivity activity;
     private Fragment mCurFragment;
+    private FragmentPagerAdapter mAdapter;
     List<SubTab> tabs;
 
     @Override
@@ -136,7 +140,18 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             @Override
             @SuppressWarnings("all")
             public void onSelected(final int position) {
+                final int index = mViewPager.getCurrentItem();
                 mViewPager.setCurrentItem(position);
+                if (position == index){
+                    mAdapter.commitUpdate();
+                    // notifyDataSetChanged为什么会导致TabLayout位置偏移，而且需要延迟设置才能起效？？？
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mLayoutTab.getTabAt(position).select();
+                        }
+                    }, 50);
+                }
             }
 
             @Override
@@ -155,23 +170,27 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             }
 
             @Override
-            public void onRestore(List<SubTab> activeTabs) {
+            public void onRestore(final List<SubTab> activeTabs) {
                 if (!isChangeIndex) return;
-                String json = new Gson().toJson(activeTabs);
-                try {
-                    FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
-                            Context.MODE_PRIVATE);
-                    fos.write(json.getBytes("UTF-8"));
-                    fos.flush();
-                    fos.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                AppOperator.getExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        String json = new Gson().toJson(activeTabs);
+                        try {
+                            FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
+                                    Context.MODE_PRIVATE);
+                            fos.write(json.getBytes("UTF-8"));
+                            fos.flush();
+                            fos.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 isChangeIndex = false;
                 tabs.clear();
                 tabs.addAll(activeTabs);
-                mViewPager.getAdapter().notifyDataSetChanged();
-
+                mAdapter.notifyDataSetChanged();
             }
         });
 
@@ -227,7 +246,6 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
         }
 
-        final FragmentPagerAdapter mAdapter;
         mViewPager.setAdapter(mAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -263,6 +281,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
             public void onPageSelected(int position) {
+                Log.i("oschina", "----------onPageSelected--------");
                 mAdapter.commitUpdate();
             }
         });
