@@ -34,7 +34,7 @@ import net.oschina.app.util.StringUtils;
 
 public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         TranslateDetailContract.View, TranslateDetailContract.Operator>
-        implements View.OnClickListener, TranslateDetailContract.View, OnCommentClickListener {
+        implements TranslateDetailContract.View, OnCommentClickListener {
 
     private long mId;
     private TextView mTVAuthorName;
@@ -73,6 +73,17 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         setGone(R.id.iv_info_comment);
 
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
+
+        mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
+        mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
+        mComments = (CommentsView) root.findViewById(R.id.lay_detail_comment);
+
+        mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
+        mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
+
+        registerScroller(mLayContent, mComments);
+
+        mLayBottom = root.findViewById(R.id.lay_option);
 
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
 
@@ -116,22 +127,6 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
             }
         });
 
-        mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
-        mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
-        mComments = (CommentsView) root.findViewById(R.id.lay_detail_comment);
-
-        mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
-        mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
-
-        registerScroller(mLayContent, mComments);
-
-        mLayBottom = root.findViewById(R.id.lay_option);
-
-        root.findViewById(R.id.iv_share).setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
     }
 
     @Override
