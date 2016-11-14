@@ -255,7 +255,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             public void afterTextChanged(Editable s) {
                 String username = s.toString().trim();
                 if (username.length() > 0) {
-                    if (AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) {
+                    if (AssimilateUtils.machPhoneNum(username) || AssimilateUtils.machEmail(username)) {
                         mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
                     } else {
                         mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
@@ -267,7 +267,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 }
 
                 String pwd = mEtLoginPwd.getText().toString().trim();
-                if ((AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
+                if ((AssimilateUtils.machPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
                     mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit);
                     mBtLoginSubmit.setTextColor(getResources().getColor(R.color.white));
                 } else {
@@ -303,7 +303,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
                 String username = mEtLoginUsername.getText().toString().trim();
                 String pwd = mEtLoginPwd.getText().toString().trim();
-                if ((AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
+                if ((AssimilateUtils.machPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
                     mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit);
                     mBtLoginSubmit.setTextColor(getResources().getColor(R.color.white));
                 } else {
@@ -527,7 +527,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                                 jsonObject.put("refresh_token", oauth2AccessToken.getRefreshToken());
                                 jsonObject.put("access_token", oauth2AccessToken.getToken());
 
-                                OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), getAppToken(), mHandler);
+                                OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), mHandler);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -628,35 +628,34 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
     @SuppressWarnings("ConstantConditions")
     private void loginRequest() {
+
         String tempUsername = mEtLoginUsername.getText().toString().trim();
         String tempPwd = mEtLoginPwd.getText().toString().trim();
 
-        if (!TextUtils.isEmpty(tempUsername) && !TextUtils.isEmpty(tempPwd)) {
-
-            boolean machPhoneNum = AssimilateUtils.MachPhoneNum(tempUsername);
-            boolean machEmail = AssimilateUtils.machEmail(tempUsername);
-
-            if (machPhoneNum || machEmail) {
-                //登录成功,请求数据进入用户个人中心页面
-
-                String appToken = getAppToken();
-
-                if (TDevice.hasInternet()) {
-                    requestLogin(tempUsername, tempPwd, appToken);
-                } else {
-                    showToastForKeyBord(R.string.footer_type_net_error);
-                }
-
-            } else {
-                showToastForKeyBord(R.string.login_input_username_hint_error);
-            }
-        } else {
-            showToastForKeyBord(R.string.hint_pwd_null);
+        if (TextUtils.isEmpty(tempUsername) || TextUtils.isEmpty(tempPwd)) {
+            return;
         }
+
+        boolean machPhoneNum = AssimilateUtils.machPhoneNum(tempUsername);
+        boolean machEmail = AssimilateUtils.machEmail(tempUsername);
+
+        if (machPhoneNum || machEmail) {
+            //登录成功,请求数据进入用户个人中心页面
+
+            if (TDevice.hasInternet()) {
+                requestLogin(tempUsername, tempPwd);
+            } else {
+                showToastForKeyBord(R.string.footer_type_net_error);
+            }
+
+        } else {
+            showToastForKeyBord(R.string.login_input_username_hint_error);
+        }
+
     }
 
-    private void requestLogin(String tempUsername, String tempPwd, String appToken) {
-        OSChinaApi.login(tempUsername, getSha1(tempPwd), appToken, new TextHttpResponseHandler() {
+    private void requestLogin(String tempUsername, String tempPwd) {
+        OSChinaApi.login(tempUsername, getSha1(tempPwd), new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -773,7 +772,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     @Override
     public void onComplete(Object o) {
         JSONObject jsonObject = (JSONObject) o;
-        OSChinaApi.openLogin(OSChinaApi.LOGIN_QQ, jsonObject.toString(), getAppToken(), mHandler);
+        OSChinaApi.openLogin(OSChinaApi.LOGIN_QQ, jsonObject.toString(), mHandler);
         hideWaitDialog();
     }
 
@@ -848,6 +847,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     layoutParams.height = (int) (height * animatedValue);
                     layoutParams.width = (int) (width * animatedValue);
                     ivLogo.requestLayout();
+                    ivLogo.setAlpha(animatedValue);
                 }
             });
 
@@ -871,6 +871,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     layoutParams.height = (int) (height * animatedValue);
                     layoutParams.width = (int) (width * animatedValue);
                     ivLogo.requestLayout();
+                    ivLogo.setAlpha(animatedValue);
                 }
             });
 

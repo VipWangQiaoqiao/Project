@@ -366,7 +366,7 @@ public class AssimilateUtils {
     }
 
 
-    public static boolean MachPhoneNum(CharSequence phoneNumber) {
+    public static boolean machPhoneNum(CharSequence phoneNumber) {
 
         String regex = "^[1][34578][0-9]\\d{8}$";
         // Pattern pattern = Pattern.compile(regex);

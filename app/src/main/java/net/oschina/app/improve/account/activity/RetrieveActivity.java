@@ -230,10 +230,9 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
             @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
-
                 int length = s.length();
                 String input = s.toString();
-                mMachPhoneNum = AssimilateUtils.MachPhoneNum(input);
+                mMachPhoneNum = AssimilateUtils.machPhoneNum(input);
 
                 //对提交控件的状态判定
                 if (mMachPhoneNum) {
@@ -366,14 +365,9 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
     private void requestRetrievePwd() {
 
-        if (!mMachPhoneNum) {
-            showToastForKeyBord(R.string.hint_username_ok);
-            return;
-        }
-
         String smsCode = mEtRetrieveCodeInput.getText().toString().trim();
-        if (TextUtils.isEmpty(smsCode)) {
-            showToastForKeyBord(R.string.retrieve_pwd_sms_coe_error);
+        if (!mMachPhoneNum || TextUtils.isEmpty(smsCode)) {
+            // showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
 
@@ -383,13 +377,12 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         }
         mRequestType = 2;
         String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-        String appToken = getAppToken();
-        OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, appToken, mHandler);
+        OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, mHandler);
     }
 
     private void requestSmsCode() {
         if (!mMachPhoneNum) {
-            showToastForKeyBord(R.string.hint_username_ok);
+            //showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
 
@@ -419,8 +412,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                 }
             }.start();
             String phoneNumber = mEtRetrieveTel.getText().toString().trim();
-            String appToken = getAppToken();
-            OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.RESET_PWD_INTENT, mHandler);
+            OSChinaApi.sendSmsCode(phoneNumber, OSChinaApi.RESET_PWD_INTENT, mHandler);
         } else {
             AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
         }
