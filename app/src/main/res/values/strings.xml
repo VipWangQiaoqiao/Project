@@ -69,7 +69,6 @@
     <string name="tip_comment_content_empty">评论内容不能为空</string>
 
     <!-- notification messages -->
-    <string name="comment_pub">发表评论</string>
     <string name="comment_publish_success">评论成功</string>
     <string name="comment_publish_faile">评论失败</string>
 
