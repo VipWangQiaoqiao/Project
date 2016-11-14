@@ -51,7 +51,7 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
         SubBean.Image image = item.getImage();
         if (image != null){
             mCallBack.getImgLoader()
-                    .load(image.getHref())
+                    .load(image.getHref() != null && image.getHref().length > 0 ? image.getHref()[0] : null)
                     .placeholder(R.drawable.bg_normal)
                     .into(vh.iv_event);
         }else {

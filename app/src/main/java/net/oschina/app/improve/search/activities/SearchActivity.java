@@ -15,7 +15,9 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -195,7 +197,14 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         LinearLayout.LayoutParams params1 = (LinearLayout.LayoutParams) mLayoutEditFrame.getLayoutParams();
         params1.setMargins(0, 0, 0, 0);
         mLayoutEditFrame.setLayoutParams(params1);
-        mViewSearch.setIconified(false);
+
+        mViewSearch.post(new Runnable() {
+            @Override
+            public void run() {
+//                TDevice.showSoftKeyboard(mViewSearch);
+                mViewSearch.setIconified(false);
+            }
+        });
     }
 
 
@@ -239,6 +248,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         finish();
     }
 }
