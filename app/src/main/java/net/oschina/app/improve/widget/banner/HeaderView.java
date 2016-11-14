@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -58,10 +59,28 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         mViewPager = (ViewPager) findViewById(R.id.vp_banner);
         mIndicator = (CirclePagerIndicator) findViewById(R.id.indicator);
         mAdapter = new BannerAdapter();
-        mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(this);
+        mViewPager.setAdapter(mAdapter);
+
         mIndicator.bindViewPager(mViewPager);
         new SmoothScroller(getContext()).bingViewPager(mViewPager);
+        mViewPager.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        isScrolling = false;
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        isScrolling = false;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        isScrolling = true;
+                        break;
+                }
+                return false;
+            }
+        });
         mCallBack = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -90,7 +109,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         if (isScrolling)
             return;
         mCurrentItem = (mCurrentItem + 1) % mBanners.size();
-        mViewPager.setCurrentItem(mCurrentItem);
+        mViewPager.setCurrentItem(mCurrentItem, true);
         mHandler.postDelayed(this, 5000);
     }
 
@@ -106,6 +125,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
             mViewPager.getAdapter().notifyDataSetChanged();
             mIndicator.notifyDataSetChanged();
             mCurrentItem = 0;
+            mViewPager.setCurrentItem(mCurrentItem, true);
             if (mBanners.size() > 1) {
                 mHandler.postDelayed(this, 5000);
             }
@@ -120,7 +140,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        isScrolling = mCurrentItem != position;
     }
 
     @Override
