@@ -13,7 +13,6 @@ import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
@@ -21,6 +20,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.widget.indicator.CirclePagerIndicator;
+import net.oschina.app.widget.SmoothScroller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +42,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     protected RequestManager mImageLoader;
     protected TextHttpResponseHandler mCallBack;
     protected String mUrl;
+    private boolean isScrolling;
 
     public HeaderView(Context context, RequestManager loader, String api) {
         super(context);
@@ -58,7 +59,9 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         mIndicator = (CirclePagerIndicator) findViewById(R.id.indicator);
         mAdapter = new BannerAdapter();
         mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(this);
         mIndicator.bindViewPager(mViewPager);
+        new SmoothScroller(getContext()).bingViewPager(mViewPager);
         mCallBack = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -84,6 +87,8 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
 
     @Override
     public void run() {
+        if (isScrolling)
+            return;
         mCurrentItem = (mCurrentItem + 1) % mBanners.size();
         mViewPager.setCurrentItem(mCurrentItem);
         mHandler.postDelayed(this, 5000);
@@ -120,12 +125,13 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
 
     @Override
     public void onPageSelected(int position) {
-
+        isScrolling = false;
+        mCurrentItem = position;
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
+        isScrolling = state != ViewPager.SCROLL_STATE_IDLE;
     }
 
     private class BannerAdapter extends PagerAdapter {

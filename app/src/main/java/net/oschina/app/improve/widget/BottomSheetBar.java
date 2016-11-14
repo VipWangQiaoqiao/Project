@@ -64,6 +64,7 @@ public class BottomSheetBar {
         mFaceView.setVisibility(View.GONE);
         mSyncToTweetView = (CheckBox) mRootView.findViewById(R.id.cb_sync);
         mBtnCommit = (Button) mRootView.findViewById(R.id.btn_comment);
+        mBtnCommit.setEnabled(false);
 
         mDialog = new Dialog(mContext, R.style.Comment_Dialog);
         mDialog.setContentView(mRootView);
@@ -147,16 +148,14 @@ public class BottomSheetBar {
         mDialog.show();
         if (!"添加评论".equals(hint)) {
             mEditText.setHint(hint + " ");
-            if (!TextUtils.isEmpty(getCommentText())) {
-                Selection.setSelection(mEditText.getText(), mEditText.length());
-            }
         }
+        Selection.setSelection(mEditText.getText(), mEditText.length());
         mRootView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 TDevice.showSoftKeyboard(mEditText);
             }
-        }, 150);
+        }, 50);
     }
 
     public void dismiss() {

@@ -81,6 +81,14 @@ public class CommentBar {
         mDelegation.getBtnCommit().setEnabled(enable);
     }
 
+    public void hideShare(){
+        mShareView.setVisibility(View.GONE);
+    }
+
+    public void hideFav(){
+        mFavView.setVisibility(View.GONE);
+    }
+
     public TextView getCommentText() {
         return mCommentText;
     }
