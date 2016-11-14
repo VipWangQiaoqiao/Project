@@ -234,7 +234,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                     public void afterTextChanged(Editable s) {
                         int length = s.length();
                         String input = s.toString();
-                        mMachPhoneNum = AssimilateUtils.MachPhoneNum(input);
+                        mMachPhoneNum = AssimilateUtils.machPhoneNum(input);
 
                         if (mMachPhoneNum) {
                             String smsCode = mEtRegisterAuthCode.getText().toString().trim();

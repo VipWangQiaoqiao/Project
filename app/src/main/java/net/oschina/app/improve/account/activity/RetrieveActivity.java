@@ -232,7 +232,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
             public void afterTextChanged(Editable s) {
                 int length = s.length();
                 String input = s.toString();
-                mMachPhoneNum = AssimilateUtils.MachPhoneNum(input);
+                mMachPhoneNum = AssimilateUtils.machPhoneNum(input);
 
                 //对提交控件的状态判定
                 if (mMachPhoneNum) {

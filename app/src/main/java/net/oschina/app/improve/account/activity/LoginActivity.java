@@ -255,7 +255,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             public void afterTextChanged(Editable s) {
                 String username = s.toString().trim();
                 if (username.length() > 0) {
-                    if (AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) {
+                    if (AssimilateUtils.machPhoneNum(username) || AssimilateUtils.machEmail(username)) {
                         mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
                     } else {
                         mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
@@ -267,7 +267,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 }
 
                 String pwd = mEtLoginPwd.getText().toString().trim();
-                if ((AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
+                if ((AssimilateUtils.machPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
                     mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit);
                     mBtLoginSubmit.setTextColor(getResources().getColor(R.color.white));
                 } else {
@@ -303,7 +303,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
                 String username = mEtLoginUsername.getText().toString().trim();
                 String pwd = mEtLoginPwd.getText().toString().trim();
-                if ((AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
+                if ((AssimilateUtils.machPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
                     mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit);
                     mBtLoginSubmit.setTextColor(getResources().getColor(R.color.white));
                 } else {
@@ -636,7 +636,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             return;
         }
 
-        boolean machPhoneNum = AssimilateUtils.MachPhoneNum(tempUsername);
+        boolean machPhoneNum = AssimilateUtils.machPhoneNum(tempUsername);
         boolean machEmail = AssimilateUtils.machEmail(tempUsername);
 
         if (machPhoneNum || machEmail) {
