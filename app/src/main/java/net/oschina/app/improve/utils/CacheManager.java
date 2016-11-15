@@ -1,12 +1,13 @@
 package net.oschina.app.improve.utils;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+
+import net.oschina.app.util.TLog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,7 +82,7 @@ public final class CacheManager {
 
     private static String readJson(Context context, String fileName) {
         String path = context.getCacheDir() + "/" + fileName;
-        Log.e("path",path);
+        TLog.e("path", path);
         File file = new File(path);
         if (!file.exists())
             return null;

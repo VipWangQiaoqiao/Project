@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.oschina.app.util.TLog;
+
 /**
  * 我们不希望维持Fragment的状态，因为可能活动的Tab会很多，所以既不能用
  * {@link android.support.v4.app.FragmentPagerAdapter}, 因为它通过{@link FragmentTransaction#add(Fragment, String)},
@@ -51,7 +53,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
         }
         
         Fragment fragment = getItem(position);
-        Log.i("oschina", "Adding fragment item #" + position + ": f=" + fragment);
+        TLog.i("oschina", "Adding fragment item #" + position + ": f=" + fragment);
         fragment.setMenuVisibility(false);
         fragment.setUserVisibleHint(false);
         mCurTransaction.add(container.getId(), fragment,
@@ -66,7 +68,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
         if (mCurTransaction == null){
             mCurTransaction = mFragmentManager.beginTransaction();
         }
-        Log.i("oschina", "Removing fragment #" + position + ": f=" + fragment
+        TLog.i("oschina", "Removing fragment #" + position + ": f=" + fragment
                 + " v=" + fragment.getView());
         mCurTransaction.remove(fragment);
     }

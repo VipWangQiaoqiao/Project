@@ -19,6 +19,7 @@ import net.oschina.app.improve.tweet.service.TweetPublishModel;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.widget.TweetTextView;
 
 import java.text.DateFormat;
@@ -75,7 +76,7 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
     }
 
     public void add(List<TweetPublishModel> models) {
-        Log.e("TAG", models.size() + "");
+        TLog.e("TAG", models.size() + "");
         mModels.addAll(models);
         notifyDataSetChanged();
     }
