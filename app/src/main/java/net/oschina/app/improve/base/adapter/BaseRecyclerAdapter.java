@@ -25,6 +25,8 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     protected Context mContext;
     protected LayoutInflater mInflater;
 
+    protected String mSystemTime;
+
     public static final int STATE_NO_MORE = 1;
     public static final int STATE_LOAD_MORE = 2;
     public static final int STATE_INVALID_NETWORK = 3;
@@ -90,6 +92,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         };
     }
 
+    public void setSystemTime(String systemTime) {
+        this.mSystemTime = systemTime;
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

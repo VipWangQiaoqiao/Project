@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -23,15 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.UIHelper;
 
 import java.util.ArrayList;
@@ -46,16 +42,26 @@ import butterknife.Bind;
 
 public class TopicTweetActivity extends BaseActivity {
 
-    @Bind(R.id.layout_coordinator) CoordinatorLayout mLayoutCoordinator;
-    @Bind(R.id.layout_appbar) AppBarLayout mLayoutAppBar;
-    @Bind(R.id.iv_wallpaper) ImageView mViewWallpaper;
-    @Bind(R.id.tv_title) TextView mViewTitle;
-    @Bind(R.id.tv_mix_title) TextView mViewMixTitle;
-    @Bind(R.id.tv_count) TextView mViewCount;
-    @Bind(R.id.tv_description) TextView mViewDescription;
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.layout_tab) TabLayout mLayoutTab;
-    @Bind(R.id.view_pager) ViewPager mViewPager;
+    @Bind(R.id.layout_coordinator)
+    CoordinatorLayout mLayoutCoordinator;
+    @Bind(R.id.layout_appbar)
+    AppBarLayout mLayoutAppBar;
+    @Bind(R.id.iv_wallpaper)
+    ImageView mViewWallpaper;
+    @Bind(R.id.tv_title)
+    TextView mViewTitle;
+    @Bind(R.id.tv_mix_title)
+    TextView mViewMixTitle;
+    @Bind(R.id.tv_count)
+    TextView mViewCount;
+    @Bind(R.id.tv_description)
+    TextView mViewDescription;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.layout_tab)
+    TabLayout mLayoutTab;
+    @Bind(R.id.view_pager)
+    ViewPager mViewPager;
 
     EditText mViewInput;
     private Dialog dialog;
@@ -65,7 +71,7 @@ public class TopicTweetActivity extends BaseActivity {
     private List<Pair<String, Fragment>> fragments;
     private List<TweetComment> replies = new ArrayList<>();
 
-    public static void show(Context context){
+    public static void show(Context context) {
         Intent intent = new Intent(context, TopicTweetActivity.class);
         context.startActivity(intent);
     }
@@ -144,7 +150,7 @@ public class TopicTweetActivity extends BaseActivity {
                 }
                 if (replies != null && replies.size() > 0)
                     content = mViewInput.getHint() + ": " + content;
-                dialog = DialogHelp.getWaitDialog(TopicTweetActivity.this, "正在发表评论...");
+                dialog = DialogHelper.getProgressDialog(TopicTweetActivity.this, "正在发表评论...");
                 dialog.show();
             }
         });
@@ -193,7 +199,7 @@ public class TopicTweetActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_share:
                 // TODO share the topic
                 break;

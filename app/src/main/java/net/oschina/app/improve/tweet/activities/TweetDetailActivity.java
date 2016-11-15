@@ -41,9 +41,9 @@ import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -275,7 +275,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 }
                 if (replies != null && replies.size() > 0)
                     content = mViewInput.getHint() + ": " + content;
-                dialog = DialogHelp.getWaitDialog(TweetDetailActivity.this, "正在发表评论...");
+                dialog = DialogHelper.getProgressDialog(TweetDetailActivity.this, "正在发表评论...");
                 dialog.show();
                 OSChinaApi.pubTweetComment(tweet.getId(), content, 0, publishCommentHandler);
             }
@@ -450,7 +450,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     @OnClick(R.id.iv_thumbup)
     void onClickThumbUp() {
         if (checkLogin()) return;
-        this.dialog = DialogHelp.getWaitDialog(this, "正在提交请求...");
+        this.dialog = DialogHelper.getProgressDialog(this, "正在提交请求...");
         this.dialog.show();
         OSChinaApi.reverseTweetLike(tweet.getId(), publishAdmireHandler);
     }

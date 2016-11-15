@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.TextUtils;
 
 import net.oschina.app.R;
 
@@ -81,6 +82,17 @@ public final class DialogHelper {
                 .setPositiveButton("确定", positiveListener)
                 .setNegativeButton("取消", negativeListener);
     }
+
+    public static AlertDialog.Builder getSingleChoiceDialog(Context context, String title, String[] arrays, int selectIndex, DialogInterface.OnClickListener onClickListener) {
+        AlertDialog.Builder builder = getDialog(context);
+        builder.setSingleChoiceItems(arrays, selectIndex, onClickListener);
+        if (!TextUtils.isEmpty(title)) {
+            builder.setTitle(title);
+        }
+        builder.setNegativeButton("取消", null);
+        return builder;
+    }
+
 
     /**
      * 获取一个验证对话框，没有点击事件

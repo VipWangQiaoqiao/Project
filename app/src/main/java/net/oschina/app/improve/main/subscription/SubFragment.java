@@ -5,10 +5,10 @@ import android.os.Bundle;
 
 import com.google.gson.reflect.TypeToken;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
-import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.SubTab;
@@ -33,7 +33,6 @@ import java.lang.reflect.Type;
  */
 
 public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
-
     private SubTab mTab;
     private HeaderView mHeaderView;
 
@@ -49,17 +48,22 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
         mTab = (SubTab) bundle.getSerializable("sub_tab");
+        CACHE_NAME = mTab.getToken();
     }
 
     @Override
     public void initData() {
         if (mTab.getBanner() != null) {
             mHeaderView = mTab.getBanner().getCatalog() == SubTab.BANNER_CATEGORY_NEWS ?
-                    new NewsHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref()) :
-                    new EventHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref());
+                    new NewsHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref(), mTab.getToken() + "banner" + mTab.getType()) :
+                    new EventHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref(), mTab.getToken() + "banner" + mTab.getType());
         }
         super.initData();
         mAdapter.setHeaderView(mHeaderView);
+        mAdapter.setSystemTime(AppConfig.getAppConfig(getActivity()).get("system_time"));
+        if (mAdapter instanceof NewsSubAdapter) {
+            ((NewsSubAdapter) mAdapter).setTab(mTab);
+        }
     }
 
     @Override
@@ -103,6 +107,12 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
     }
 
     @Override
+    protected void setListData(ResultBean<PageBean<SubBean>> resultBean) {
+        super.setListData(resultBean);
+        mAdapter.setSystemTime(resultBean.getTime());
+    }
+
+    @Override
     protected BaseRecyclerAdapter<SubBean> getRecyclerAdapter() {
         int mode = mHeaderView != null ? BaseRecyclerAdapter.BOTH_HEADER_FOOTER : BaseRecyclerAdapter.ONLY_FOOTER;
         if (mTab.getType() == News.TYPE_BLOG)
@@ -118,5 +128,10 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
     protected Type getType() {
         return new TypeToken<ResultBean<PageBean<SubBean>>>() {
         }.getType();
+    }
+
+    @Override
+    protected Class<SubBean> getCacheClass() {
+        return SubBean.class;
     }
 }
