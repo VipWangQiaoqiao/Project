@@ -24,9 +24,8 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.User;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.pay.bean.Order;
@@ -82,8 +81,6 @@ public class BlogDetailFragment
 
     @Bind(R.id.lay_detail_about)
     DetailAboutView mAbouts;
-    @Bind(R.id.lay_detail_comment)
-    CommentsView mComments;
     @Bind(R.id.lay_blog_detail_abstract)
     LinearLayout mLayAbstract;
 
@@ -106,7 +103,6 @@ public class BlogDetailFragment
         super.initWidget(root);
 
         mAbouts.setTitle(getString(R.string.label_about_title));
-        registerScroller(mLayContent, mComments);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mBtnRelation.setElevation(0);
@@ -153,6 +149,7 @@ public class BlogDetailFragment
                     LoginActivity.show(getActivity());
             }
         });
+
     }
 
     @OnClick({R.id.btn_relation, R.id.iv_avatar, R.id.btn_reward})
@@ -219,9 +216,6 @@ public class BlogDetailFragment
         setText(R.id.tv_info_comment, String.valueOf(blog.getCommentCount()));
 
         mAbouts.setAbout(blog.getAbouts(), 3);
-
-        mComments.setTitle(String.format("评论 (%s)", blog.getCommentCount()));
-        mComments.init(blog.getId(), OSChinaApi.COMMENT_BLOG, blog.getCommentCount(), getImgLoader(), this);
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -267,6 +261,7 @@ public class BlogDetailFragment
         dialog.setPortrait(detail.getAuthorPortrait());
         dialog.setNick(detail.getAuthor());
         dialog.setOnClickRewardListener(new RewardDialog.OnClickRewardCallback() {
+            @SuppressWarnings("deprecation")
             @Override
             public void reward(float cast) {
                 User user = AccountHelper.getUser();
@@ -302,7 +297,7 @@ public class BlogDetailFragment
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
                         Log.e("oschina", "onFailure");
-                        error.toString();
+                        //error.toString();
                     }
 
                     @Override
@@ -338,14 +333,13 @@ public class BlogDetailFragment
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mDelegation.setCommentHint("添加评论");
-        mComments.addComment(comment, getImgLoader(), this);
         mDelegation.getBottomSheet().dismiss();
     }
 
     @Override
     public void onClick(View view, Comment comment) {
         mCommentId = comment.getId();
-        mCommentAuthorId = comment.getAuthorId();
+        mCommentAuthorId = comment.getAuthor().getId();
         mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
     }
 

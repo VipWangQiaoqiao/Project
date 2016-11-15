@@ -14,7 +14,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.NewsDetailFragment;

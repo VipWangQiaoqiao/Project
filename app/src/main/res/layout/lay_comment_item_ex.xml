@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/item_blog_about_bg_selector"
-    android:orientation="vertical"
-    android:paddingLeft="16dp">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/item_blog_about_bg_selector"
+              android:orientation="vertical"
+              android:paddingLeft="16dp"
+              tools:ignore="RtlSymmetry">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/widget_dface" />
+            android:src="@mipmap/widget_dface"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -34,20 +35,35 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="年轻的小蜜蜂"
                 android:textColor="#111111"
                 android:textSize="14sp"
-                tools:text="年轻的小蜜蜂" />
+                tools:text="年轻的小蜜蜂"/>
 
             <TextView
                 android:id="@+id/tv_pub_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12楼  6分钟前"
                 android:textColor="#6a6a6a"
                 android:textSize="12sp"
-                tools:text="12楼  6分钟前" />
+                tools:text="12楼  6分钟前"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_mark_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/zero"
+            tools:text="8"/>
+
+        <ImageView
+            android:id="@+id/btn_mark"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="@dimen/lay_16"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_thumbup_normal"/>
 
         <ImageView
             android:id="@+id/btn_comment"
@@ -56,7 +72,7 @@
             android:layout_marginRight="@dimen/lay_16"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_comment_30" />
+            android:src="@mipmap/ic_comment_30"/>
 
         <ImageView
             android:id="@+id/iv_best_answer"
@@ -65,14 +81,14 @@
             android:contentDescription="@string/app_name"
             android:scaleType="fitEnd"
             android:src="@mipmap/label_best_answer"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/lay_refer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical"/>
 
     <net.oschina.app.widget.TweetTextView
         android:id="@+id/tv_content"
@@ -81,16 +97,15 @@
         android:layout_marginBottom="4dp"
         android:layout_marginTop="8dp"
         android:paddingRight="16dp"
-        android:text="诺灬晓月 你好，想跟你请教个问题：就是你用Echart做的甘特图，那个矩形的颜色是怎么设置，能不能显示进度条啊"
         android:textColor="#111111"
         android:textSize="14sp"
         tools:ignore="RtlHardcoded,RtlSymmetry"
-        tools:text="诺灬晓月 你好，想跟你请教个问题：就是你用Echart做的甘特图，那个矩形的颜色是怎么设置，能不能显示进度条啊" />
+        tools:text="诺灬晓月 你好，想跟你请教个问题：就是你用Echart做的甘特图，那个矩形的颜色是怎么设置，能不能显示进度条啊"/>
 
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginTop="16dp"
-        android:background="@color/list_divider_color" />
+        android:background="@color/list_divider_color"/>
 </LinearLayout>

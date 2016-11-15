@@ -29,7 +29,8 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
@@ -44,11 +45,14 @@ import java.util.List;
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
+/**
+ * 有评论引用层级的评论UI
+ */
 public class CommentExsActivity extends BaseBackActivity {
     private long mId;
     private int mType;
 
-    private PageBean<CommentEX> mPageBean;
+    private PageBean<Comment> mPageBean;
 
     @Bind(R.id.lay_refreshLayout)
     RecyclerRefreshLayout mRefreshLayout;
@@ -60,7 +64,7 @@ public class CommentExsActivity extends BaseBackActivity {
     CoordinatorLayout mCoorLayout;
 
     private Adapter mAdapter;
-    private CommentEX reply;
+    private Comment reply;
     private KeyboardInputDelegation mDelegation;
     private View.OnClickListener onReplyBtnClickListener;
     private ProgressDialog mDialog;
@@ -98,7 +102,7 @@ public class CommentExsActivity extends BaseBackActivity {
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
             @Override
             public void onSubmit(TextView v, String content) {
-                handleSendComment(mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthorId(), content);
+                handleSendComment(mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthor().getId(), content);
             }
 
             @Override
@@ -191,12 +195,12 @@ public class CommentExsActivity extends BaseBackActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<CommentEX>>() {
+                    Type type = new TypeToken<ResultBean<Comment>>() {
                     }.getType();
 
-                    ResultBean<CommentEX> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                    ResultBean<Comment> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
-                        CommentEX respComment = resultBean.getResult();
+                        Comment respComment = resultBean.getResult();
                         if (respComment != null) {
 
                             Toast.makeText(CommentExsActivity.this, "评论成功", Toast.LENGTH_LONG).show();
@@ -217,11 +221,12 @@ public class CommentExsActivity extends BaseBackActivity {
     }
 
     /**
-     * show waittDialog
+     * show waitDialog
      *
      * @param messageId messageId
      * @return progressDialog
      */
+    @SuppressWarnings("deprecation")
     private ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
@@ -265,10 +270,10 @@ public class CommentExsActivity extends BaseBackActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<PageBean<CommentEX>>>() {
+                    Type type = new TypeToken<ResultBean<PageBean<Comment>>>() {
                     }.getType();
 
-                    ResultBean<PageBean<CommentEX>> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                    ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         if (resultBean.getResult() != null
                                 && resultBean.getResult().getItems() != null
@@ -287,7 +292,7 @@ public class CommentExsActivity extends BaseBackActivity {
         });
     }
 
-    private void handleData(List<CommentEX> comments, boolean clearData) {
+    private void handleData(List<Comment> comments, boolean clearData) {
         if (clearData)
             mAdapter.clear();
 
@@ -296,27 +301,14 @@ public class CommentExsActivity extends BaseBackActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-    public View.OnClickListener getReplyBtnClickListener() {
-        if (onReplyBtnClickListener == null) {
-            onReplyBtnClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CommentEX comment = (CommentEX) v.getTag();
-                    mDelegation.getInputView().setHint("@" + comment.getAuthor() + " :");
-                    reply = comment;
-                    mDelegation.notifyWrapper();
-                }
-            };
-        }
-        return onReplyBtnClickListener;
-    }
-
     private static class CommentHolder extends RecyclerView.ViewHolder {
         private ImageView mAvatar;
         private TextView mName;
         private TextView mDate;
         private TweetTextView mContent;
         private LinearLayout mRefers;
+        private TextView mMarkCount;
+        private ImageView btnMark;
         private ImageView btn_comment, iv_best_comment;
 
         CommentHolder(View itemView) {
@@ -329,24 +321,29 @@ public class CommentExsActivity extends BaseBackActivity {
             iv_best_comment = (ImageView) itemView.findViewById(R.id.iv_best_answer);
             mContent = ((TweetTextView) itemView.findViewById(R.id.tv_content));
             mRefers = ((LinearLayout) itemView.findViewById(R.id.lay_refer));
+            mMarkCount = (TextView) itemView.findViewById(R.id.tv_mark_count);
+            btnMark = (ImageView) itemView.findViewById(R.id.btn_mark);
         }
 
-        void setData(CommentEX comment, RequestManager imageLoader, View.OnClickListener l) {
-            if (comment.getAuthorPortrait() != null)
-                imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
+        void setData(Comment comment, RequestManager imageLoader, View.OnClickListener l) {
+            if (comment.getAuthor().getPortrait() != null)
+                imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
                         .into((mAvatar));
             else
                 mAvatar.setImageResource(R.mipmap.widget_dface);
 
-            mName.setText(comment.getAuthor());
+            mName.setText(comment.getAuthor().getName());
             mDate.setText(comment.getPubDate());
             CommentsUtil.formatHtml(mContent.getResources(), mContent, comment.getContent());
 
             mRefers.removeAllViews();
             if (comment.getRefer() != null) {
                 // 最多5层
-                View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), comment.getRefer(), 5);
-                mRefers.addView(view);
+                for (int i = 0; i < comment.getRefer().length; i++) {
+                    Refer refer = comment.getRefer()[i];
+                    View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), refer, 5);
+                    mRefers.addView(view);
+                }
             }
 
             btn_comment.setTag(comment);
@@ -355,7 +352,7 @@ public class CommentExsActivity extends BaseBackActivity {
         }
     }
 
-    private class Adapter extends BaseRecyclerAdapter<CommentEX> {
+    private class Adapter extends BaseRecyclerAdapter<Comment> {
 
         Adapter(Context context) {
             super(context, ONLY_FOOTER);
@@ -376,7 +373,7 @@ public class CommentExsActivity extends BaseBackActivity {
         }
 
         @Override
-        protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, CommentEX item, int position) {
+        protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
             if (holder instanceof CommentHolder) {
                 CommentHolder commentHolder = (CommentHolder) holder;
                 RequestManager requestManager = getImageLoader();
@@ -394,7 +391,7 @@ public class CommentExsActivity extends BaseBackActivity {
 
     }
 
-    private void onItemClick(CommentEX comment) {
+    private void onItemClick(Comment comment) {
         QuestionAnswerDetailActivity.show(this, comment, mId);
     }
 }

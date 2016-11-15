@@ -15,8 +15,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.QuestionDetail;
-import net.oschina.app.improve.bean.simple.Comment;
-import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
@@ -225,12 +224,11 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
             mDelegation.setFavDrawable(R.drawable.ic_fav);
     }
 
-
     @Override
-    public void toSendCommentOk(CommentEX commentEX) {
+    public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mDelegation.setCommentHint("添加评论");
-        mComments.addComment(commentEX, getImgLoader(), null);
+        mComments.addComment(comment, getImgLoader(), null);
         mDelegation.getBottomSheet().dismiss();
     }
 

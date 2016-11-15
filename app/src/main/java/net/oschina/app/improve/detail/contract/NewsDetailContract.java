@@ -1,7 +1,7 @@
 package net.oschina.app.improve.detail.contract;
 
 import net.oschina.app.improve.bean.NewsDetail;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
 
 /**
  * Created by fei on 2016/6/13.

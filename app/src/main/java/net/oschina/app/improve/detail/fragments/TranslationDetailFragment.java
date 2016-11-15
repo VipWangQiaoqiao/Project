@@ -17,7 +17,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.TranslationDetail;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentsView;
@@ -211,7 +211,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     public void onClick(View view, Comment comment) {
         FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
-        mCommentAuthorId = comment.getAuthorId();
+        mCommentAuthorId = comment.getAuthor().getId();
         mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
     }
 

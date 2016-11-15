@@ -353,9 +353,11 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         mLayBackBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        hideKeyBoard(getCurrentFocus().getWindowToken());
         mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 

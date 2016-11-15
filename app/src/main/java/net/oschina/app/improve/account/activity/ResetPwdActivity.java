@@ -181,9 +181,11 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
         mLlResetBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        hideKeyBoard(getCurrentFocus().getWindowToken());
         mLlResetBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 

@@ -17,7 +17,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.Software;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
@@ -238,7 +238,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     @Override
     public void onClick(View view, Comment comment) {
         mCommentId = comment.getId();
-        mCommentAuthorId = comment.getAuthorId();
+        mCommentAuthorId = comment.getAuthor().getId();
         mDelegation.getCommentText().setHint(String.format("回复: %s", comment.getAuthor()));
     }
 

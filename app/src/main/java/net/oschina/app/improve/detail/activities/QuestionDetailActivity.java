@@ -16,7 +16,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.QuestionDetailFragment;
@@ -169,12 +169,12 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<CommentEX>>() {
+                    Type type = new TypeToken<ResultBean<Comment>>() {
                     }.getType();
 
-                    ResultBean<CommentEX> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                    ResultBean<Comment> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
-                        CommentEX respComment = resultBean.getResult();
+                        Comment respComment = resultBean.getResult();
                         if (respComment != null) {
                             QuestionDetailContract.View view = mView;
                             if (view != null) {

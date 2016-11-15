@@ -15,13 +15,13 @@ import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
@@ -121,7 +121,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 
             int clearLine = comments.size() - 1;
             for (final Comment comment : comments) {
-                if (comment == null || comment.getId() == 0 || TextUtils.isEmpty(comment.getAuthor()))
+                if (comment == null || comment.getId() == 0 || TextUtils.isEmpty(comment.getAuthor().getName()))
                     continue;
                 ViewGroup lay = addComment(false, comment, imageLoader, onCommentClickListener);
                 if (clearLine <= 0) {
@@ -147,24 +147,26 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
         ImageView ivAvatar = (ImageView) lay.findViewById(R.id.iv_avatar);
-        imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
+        imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
                 .into(ivAvatar);
         ivAvatar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                OtherUserHomeActivity.show(getContext(), comment.getAuthorId());
+                OtherUserHomeActivity.show(getContext(), comment.getAuthor().getId());
             }
         });
 
-        ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor());
+        ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor().getName());
 
         TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
         CommentsUtil.formatHtml(getResources(), content, comment.getContent());
-
-        if (comment.getRefer() != null) {
+        Refer[] refers = comment.getRefer();
+        if (refers != null && refers.length > 0) {
             // 最多5层
-            View view = CommentsUtil.getReferLayout(inflater, comment.getRefer(), 5);
-            lay.addView(view, lay.indexOfChild(content));
+            for (Refer refer : refers) {
+                View view = CommentsUtil.getReferLayout(inflater, refer, 5);
+                lay.addView(view, lay.indexOfChild(content));
+            }
         }
 
         ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(

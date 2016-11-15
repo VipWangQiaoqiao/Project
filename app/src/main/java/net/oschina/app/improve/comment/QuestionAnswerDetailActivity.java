@@ -21,14 +21,14 @@ import android.widget.Toast;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.comment.Reply;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
@@ -83,10 +83,10 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
     private long sid;
     private Dialog mVoteDialog;
     private Dialog mWaitingDialog;
-    private CommentEX comment;
-    private CommentEX.Reply reply;
+    private Comment comment;
+    private Reply reply;
     private View mVoteDialogView;
-    private List<CommentEX.Reply> replies = new ArrayList<>();
+    private List<Reply> replies = new ArrayList<>();
     private KeyboardInputDelegation mDelegation;
     private TextHttpResponseHandler onSendCommentHandler;
     private View.OnClickListener onReplyButtonClickListener;
@@ -96,7 +96,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
      * @param comment comment
      * @param sid     文章id
      */
-    public static void show(Context context, CommentEX comment, long sid) {
+    public static void show(Context context, Comment comment, long sid) {
         Intent intent = new Intent(context, QuestionAnswerDetailActivity.class);
         intent.putExtra(BUNDLE_KEY, comment);
         intent.putExtra(BUNDLE_ARTICLE_KEY, sid);
@@ -105,7 +105,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
     @Override
     protected boolean initBundle(Bundle bundle) {
-        comment = (CommentEX) getIntent().getSerializableExtra(BUNDLE_KEY);
+        comment = (Comment) getIntent().getSerializableExtra(BUNDLE_KEY);
         sid = getIntent().getLongExtra(BUNDLE_ARTICLE_KEY, 0);
         return !(comment == null || comment.getId() <= 0) && super.initBundle(bundle);
     }
@@ -127,11 +127,11 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
     @SuppressWarnings("deprecation")
     protected void initWidget() {
         // portrait
-        if (TextUtils.isEmpty(comment.getAuthorPortrait())) {
+        if (TextUtils.isEmpty(comment.getAuthor().getPortrait())) {
             ivPortrait.setImageResource(R.mipmap.widget_dface);
         } else {
             getImageLoader()
-                    .load(comment.getAuthorPortrait())
+                    .load(comment.getAuthor().getPortrait())
                     .asBitmap()
                     .placeholder(getResources().getDrawable(R.mipmap.widget_dface))
                     .error(getResources().getDrawable(R.mipmap.widget_dface))
@@ -139,7 +139,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         }
 
         // nick
-        tvNick.setText(comment.getAuthor());
+        tvNick.setText(comment.getAuthor().getName());
 
         // publish time
         if (!TextUtils.isEmpty(comment.getPubDate()))
@@ -147,15 +147,15 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
         // vote state
         switch (comment.getVoteState()) {
-            case CommentEX.VOTE_STATE_UP:
+            case Comment.VOTE_STATE_UP:
                 ivVoteUp.setSelected(true);
                 break;
-            case CommentEX.VOTE_STATE_DOWN:
+            case Comment.VOTE_STATE_DOWN:
                 ivVoteDown.setSelected(true);
         }
 
         // vote count
-        tvVoteCount.setText(String.valueOf(comment.getVoteCount()));
+        tvVoteCount.setText(String.valueOf(comment.getVote()));
 
         tvCmnCount.setText("评论 (" + (comment.getReply() == null ? 0 : comment.getReply().length) + ")");
 
@@ -176,7 +176,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                 mWaitingDialog = DialogHelper.getProgressDialog(QuestionAnswerDetailActivity.this, "正在发表评论...",false);
                 mWaitingDialog.show();
 
-                OSChinaApi.publishComment(sid, -1, comment.getId(), comment.getAuthorId(), 2, content, onSendCommentHandler);
+                OSChinaApi.publishComment(sid, -1, comment.getId(), comment.getAuthor().getId(), 2, content, onSendCommentHandler);
             }
 
             @Override
@@ -192,7 +192,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             replies.clear();
             Collections.addAll(replies, comment.getReply());
             Collections.reverse(replies); // 反转集合, 最新的评论在集合后面
-            for (int i = 0; i < replies.size(); i++) {
+            for (int i = 0 ,len=replies.size(); i < len; i++) {
                 appendComment(i, replies.get(i));
             }
         }
@@ -206,15 +206,15 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
     }
 
     @SuppressWarnings("deprecation")
-    private void appendComment(int i, CommentEX.Reply reply) {
+    private void appendComment(int i, Reply reply) {
         View view = LayoutInflater.from(this).inflate(R.layout.list_item_tweet_comment, mLayoutContainer, false);
         TweetCommentAdapter.TweetCommentHolderView holder = new TweetCommentAdapter.TweetCommentHolderView(view);
-        holder.tvName.setText(reply.getAuthor());
-        if (TextUtils.isEmpty(reply.getAuthorPortrait())) {
+        holder.tvName.setText(reply.getAuthor().getName());
+        if (TextUtils.isEmpty(reply.getAuthor().getPortrait())) {
             holder.ivPortrait.setImageResource(R.mipmap.widget_dface);
         } else {
             getImageLoader()
-                    .load(reply.getAuthorPortrait())
+                    .load(reply.getAuthor().getPortrait())
                     .asBitmap()
                     .placeholder(getResources().getDrawable(R.mipmap.widget_dface))
                     .error(getResources().getDrawable(R.mipmap.widget_dface))
@@ -232,7 +232,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             onReplyButtonClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CommentEX.Reply reply = (CommentEX.Reply) v.getTag();
+                  Reply reply = (Reply) v.getTag();
                     mDelegation.notifyWrapper();
                     mDelegation.getInputView().setText("回复 @" + reply.getAuthor() + " : ");
                     mDelegation.getInputView().setSelection(mDelegation.getInputView().getText().length());
@@ -257,9 +257,9 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                ResultBean<CommentEX.Reply> result = AppOperator.createGson().fromJson(
+                ResultBean<Reply> result = AppOperator.createGson().fromJson(
                         responseString,
-                        new TypeToken<ResultBean<CommentEX.Reply>>() {
+                        new TypeToken<ResultBean<Reply>>() {
                         }.getType()
                 );
                 if (result.isSuccess()) {
@@ -282,7 +282,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             }
         };
 
-        OSChinaApi.getComment(comment.getId(), comment.getAuthorId(), 2, new TextHttpResponseHandler() {
+        OSChinaApi.getCommentDetail(comment.getId(), comment.getAuthor().getId(), 2, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String respStr, Throwable throwable) {
                 Toast.makeText(QuestionAnswerDetailActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
@@ -290,11 +290,11 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String respStr) {
-                ResultBean<CommentEX> result = AppOperator.createGson().fromJson(respStr,
-                        new TypeToken<ResultBean<CommentEX>>() {
+                ResultBean<Comment> result = AppOperator.createGson().fromJson(respStr,
+                        new TypeToken<ResultBean<Comment>>() {
                         }.getType());
                 if (result.isSuccess()) {
-                    CommentEX cmn = result.getResult();
+                    Comment cmn = result.getResult();
                     if (cmn != null && cmn.getId() > 0) {
                         comment = cmn;
                         initWidget();
@@ -319,7 +319,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     }
                     final int opt = (int) v.getTag();
                     switch (opt) {
-                        case CommentEX.VOTE_STATE_UP:
+                        case Comment.VOTE_STATE_UP:
                             if (ivVoteDown.isSelected()) {
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "你已经踩过了", Toast.LENGTH_SHORT).show();
                                 return;
@@ -327,7 +327,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                             holder.mVoteUp.setVisibility(View.GONE);
                             holder.mProgressBar.setVisibility(View.VISIBLE);
                             break;
-                        case CommentEX.VOTE_STATE_DOWN:
+                        case Comment.VOTE_STATE_DOWN:
                             if (ivVoteUp.isSelected()) {
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "你已经顶过了", Toast.LENGTH_SHORT).show();
                                 return;
@@ -342,11 +342,11 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                             Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
                             if (mVoteDialog != null && mVoteDialog.isShowing()) {
                                 switch (opt) {
-                                    case CommentEX.VOTE_STATE_UP:
+                                    case Comment.VOTE_STATE_UP:
                                         holder.mVoteUp.setVisibility(View.VISIBLE);
                                         holder.mProgressBar.setVisibility(View.GONE);
                                         break;
-                                    case CommentEX.VOTE_STATE_DOWN:
+                                    case Comment.VOTE_STATE_DOWN:
                                         holder.mVoteDown.setVisibility(View.VISIBLE);
                                         holder.mProgressBar.setVisibility(View.GONE);
                                         break;
@@ -356,19 +356,19 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            ResultBean<CommentEX> result = AppOperator.createGson().fromJson(
-                                    responseString, new TypeToken<ResultBean<CommentEX>>() {
+                            ResultBean<Comment> result = AppOperator.createGson().fromJson(
+                                    responseString, new TypeToken<ResultBean<Comment>>() {
                                     }.getType());
                             if (result.isSuccess()) {
                                 comment.setVoteState(result.getResult().getVoteState());
-                                comment.setVoteCount(result.getResult().getVoteCount());
-                                tvVoteCount.setText(String.valueOf(result.getResult().getVoteCount()));
+                                comment.setVote(result.getResult().getVote());
+                                tvVoteCount.setText(String.valueOf(result.getResult().getVote()));
                                 v.setSelected(!v.isSelected());
                                 switch (opt) {
-                                    case CommentEX.VOTE_STATE_UP:
+                                    case Comment.VOTE_STATE_UP:
                                         ivVoteUp.setSelected(!ivVoteUp.isSelected());
                                         break;
-                                    case CommentEX.VOTE_STATE_DOWN:
+                                    case Comment.VOTE_STATE_DOWN:
                                         ivVoteDown.setSelected(!ivVoteDown.isSelected());
                                         break;
                                 }
@@ -382,8 +382,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     });
                 }
             };
-            holder.mVoteUp.setTag(CommentEX.VOTE_STATE_UP);
-            holder.mVoteDown.setTag(CommentEX.VOTE_STATE_DOWN);
+            holder.mVoteUp.setTag(Comment.VOTE_STATE_UP);
+            holder.mVoteDown.setTag(Comment.VOTE_STATE_DOWN);
             holder.mVoteUp.setOnClickListener(listener);
             holder.mVoteDown.setOnClickListener(listener);
             mVoteDialogView.setTag(holder);
@@ -402,13 +402,13 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                 holder.mVoteUp.setText("顶");
                 holder.mVoteDown.setText("踩");
                 break;
-            case CommentEX.VOTE_STATE_UP:
+            case Comment.VOTE_STATE_UP:
                 holder.mVoteUp.setSelected(true);
                 holder.mVoteDown.setSelected(false);
                 holder.mVoteUp.setText("已顶");
                 holder.mVoteDown.setText("踩");
                 break;
-            case CommentEX.VOTE_STATE_DOWN:
+            case Comment.VOTE_STATE_DOWN:
                 holder.mVoteUp.setSelected(false);
                 holder.mVoteDown.setSelected(true);
                 holder.mVoteUp.setText("顶");
@@ -418,6 +418,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         return mVoteDialogView;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @OnClick(R.id.layout_vote)
     void onClickVote() {
         mVoteDialog = DialogHelper.getDialog(this)
@@ -451,6 +452,5 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         }
         super.onDestroy();
     }
-
 
 }

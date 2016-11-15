@@ -3,6 +3,8 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -14,8 +16,9 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.UserRelation;
+import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.detail.fragments.BlogDetailFragment;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
@@ -27,7 +30,10 @@ import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
-public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailContract.View> implements BlogDetailContract.Operator {
+public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailContract.View>
+        implements BlogDetailContract.Operator {
+
+    private static final String TAG = "BlogDetailActivity";
 
     //private static final String TAG = "BlogDetailActivity";
 
@@ -97,6 +103,26 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean createOptionsMenu = super.onCreateOptionsMenu(menu);
+        if (createOptionsMenu) {
+            mCommentCountView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommentsActivity.show(BlogDetailActivity.this, mDataId, 3);
+                }
+            });
+        }
+        return createOptionsMenu;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
     public void toShare() {
         if (getDataId() != 0 && getData() != null) {
             String content;
@@ -124,7 +150,7 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
 
     @Override
     public void toFollow() {
-       long uid = requestCheck();
+        long uid = requestCheck();
         if (uid == 0)
             return;
         showWaitDialog(R.string.progress_submit);
@@ -212,4 +238,5 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
             }
         });
     }
+
 }

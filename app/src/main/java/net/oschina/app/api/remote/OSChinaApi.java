@@ -1309,7 +1309,7 @@ public class OSChinaApi {
      * @param id      评论Id
      * @param handler AsyncHttpResponseHandler
      */
-    public static void getComment(long id, long aid, int type, TextHttpResponseHandler handler) {
+    public static void getCommentDetail(long id, long aid, int type, TextHttpResponseHandler handler) {
         if (id <= 0) return;
         RequestParams params = new RequestParams();
         params.put("id", id);
@@ -1318,7 +1318,7 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/comment", params, handler);
     }
 
-    public static final int COMMENT_SOFT = 1; // 软件推荐-不支持
+    public static final int COMMENT_SOFT = 1; // 软件推荐-不支持(默认软件评论其实是动弹)
     public static final int COMMENT_QUESTION = 2; // 讨论区帖子
     public static final int COMMENT_BLOG = 3; // 博客
     public static final int COMMENT_TRANSLATION = 4; // 翻译文章
@@ -2058,7 +2058,7 @@ public class OSChinaApi {
      * @param phoneToken token
      * @param handler    handler
      */
-    public static void resetPwd(String password, String phoneToken,TextHttpResponseHandler handler) {
+    public static void resetPwd(String password, String phoneToken, TextHttpResponseHandler handler) {
 
         RequestParams params = new RequestParams();
         params.put("password", password);

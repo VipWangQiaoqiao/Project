@@ -29,7 +29,8 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
@@ -44,6 +45,9 @@ import java.util.List;
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
+/**
+ * 无评论引用层级的评论UI,可对评论进行顶踩操作,适用于问答
+ */
 public class CommentsActivity extends BaseBackActivity {
 
     private long mId;
@@ -139,7 +143,7 @@ public class CommentsActivity extends BaseBackActivity {
             @Override
             public void onSubmit(TextView v, String content) {
 
-                handleSendComment(mType, mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthorId(), content);
+                handleSendComment(mType, mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthor().getId(), content);
 
             }
 
@@ -234,6 +238,7 @@ public class CommentsActivity extends BaseBackActivity {
      * @param messageId messageId
      * @return progressDialog
      */
+    @SuppressWarnings("deprecation")
     private ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
@@ -374,21 +379,24 @@ public class CommentsActivity extends BaseBackActivity {
         }
 
         void setData(Comment comment, RequestManager imageLoader, View.OnClickListener l) {
-            if (comment.getAuthorPortrait() != null)
-                imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
+            if (comment.getAuthor().getPortrait() != null)
+                imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
                         .into((mAvatar));
             else
                 mAvatar.setImageResource(R.mipmap.widget_dface);
 
-            mName.setText(comment.getAuthor());
+            mName.setText(comment.getAuthor().getName());
             mDate.setText(comment.getPubDate());
             CommentsUtil.formatHtml(mContent.getResources(), mContent, comment.getContent());
 
             mRefers.removeAllViews();
-            if (comment.getRefer() != null) {
-                // 最多5层
-                View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), comment.getRefer(), 5);
-                mRefers.addView(view);
+            Refer[] refers = comment.getRefer();
+            if (refers != null && refers.length > 0) {
+                for (Refer refer : refers) {
+                    // 最多5层
+                    View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), refer, 5);
+                    mRefers.addView(view);
+                }
             }
             btnReply.setTag(comment);
             btnReply.setOnClickListener(l);
