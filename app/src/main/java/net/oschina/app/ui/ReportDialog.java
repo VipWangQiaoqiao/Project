@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Report;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 
 public class ReportDialog extends CommonDialog implements
@@ -75,7 +75,7 @@ public class ReportDialog extends CommonDialog implements
     AlertDialog reson = null;
 
     private void selectReason() {
-        reson = DialogHelp.getSingleChoiceDialog(getContext(), "举报原因", reasons, reasonIndex, new OnClickListener() {
+        reson = DialogHelper.getSingleChoiceDialog(getContext(), "举报原因", reasons, reasonIndex, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mTvReason.setText(reasons[i]);

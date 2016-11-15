@@ -15,6 +15,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.general.fragments.NewsFragment;
 import net.oschina.app.util.StringUtils;
 
@@ -24,13 +25,17 @@ import net.oschina.app.util.StringUtils;
  * on 2016/10/26.
  */
 
-public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack{
+public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
 
-    private String mSystemTime;
+    private SubTab mTab;
 
     public NewsSubAdapter(Context context, int mode) {
         super(context, mode);
         setOnLoadingHeaderCallBack(this);
+    }
+
+    public void setTab(SubTab tab) {
+        this.mTab = tab;
     }
 
     @Override
@@ -41,10 +46,6 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
     @Override
     public void onBindHeaderHolder(RecyclerView.ViewHolder holder, int position) {
 
-    }
-
-    public void setSystemTime(String systemTime) {
-        this.mSystemTime = systemTime;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         vh.tv_comment_count.setText(String.valueOf(item.getStatistics().getComment()));
 
-        if (StringUtils.isSameDay(mSystemTime, item.getPubDate())) {
+        if (StringUtils.isSameDay(mSystemTime, item.getPubDate()) && mTab.getSubtype() != 2 && item.getType() != 7) {
 
             String text = "[icon] " + item.getTitle();
             Drawable drawable = mContext.getResources().getDrawable(R.mipmap.ic_label_today);

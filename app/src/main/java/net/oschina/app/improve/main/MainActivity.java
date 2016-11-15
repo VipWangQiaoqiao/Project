@@ -29,8 +29,8 @@ import net.oschina.app.improve.main.nav.NavigationButton;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.notice.NoticeManager;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.util.DialogHelp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        DialogHelp.getConfirmDialog(this, "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", new DialogInterface.OnClickListener() {
+        DialogHelper.getConfirmDialog(this, "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", false, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));

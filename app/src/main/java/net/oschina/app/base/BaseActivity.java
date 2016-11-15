@@ -12,10 +12,10 @@ import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.ui.dialog.CommonToast;
 import net.oschina.app.ui.dialog.DialogControl;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 
 import org.kymjs.kjframe.utils.StringUtils;
@@ -186,7 +186,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     public ProgressDialog showWaitDialog(String message) {
         if (_isVisible) {
             if (_waitDialog == null) {
-                _waitDialog = DialogHelp.getWaitDialog(this, message);
+                _waitDialog = DialogHelper.getProgressDialog(this, message);
             }
             if (_waitDialog != null) {
                 _waitDialog.setMessage(message);

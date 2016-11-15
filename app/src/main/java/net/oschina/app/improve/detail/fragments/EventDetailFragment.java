@@ -125,7 +125,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         setBodyContent(mDetail.getBody());
     }
 
-    @OnClick({R.id.ll_fav, R.id.ll_sign})
+    @OnClick({R.id.ll_fav, R.id.ll_sign, R.id.ll_comment})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -162,6 +162,8 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                         UIHelper.showLoginActivity(getActivity());
                     }
                 }
+                break;
+            case R.id.ll_comment:
                 break;
         }
     }

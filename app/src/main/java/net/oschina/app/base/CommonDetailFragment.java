@@ -28,11 +28,11 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FontSizeUtils;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
@@ -300,7 +300,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
 
         final String[] items = getResources().getStringArray(
                 R.array.font_size);
-        fontSizeChange = DialogHelp.getSingleChoiceDialog(getActivity(), items, FontSizeUtils.getSaveFontSizeIndex(), new DialogInterface.OnClickListener() {
+        fontSizeChange = DialogHelper.getSingleChoiceDialog(getActivity(), "", items, FontSizeUtils.getSaveFontSizeIndex(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // 更改字体大小
