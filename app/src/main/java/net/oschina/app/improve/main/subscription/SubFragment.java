@@ -55,8 +55,8 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
     public void initData() {
         if (mTab.getBanner() != null) {
             mHeaderView = mTab.getBanner().getCatalog() == SubTab.BANNER_CATEGORY_NEWS ?
-                    new NewsHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref()) :
-                    new EventHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref());
+                    new NewsHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref(), mTab.getToken() + "banner" + mTab.getType()) :
+                    new EventHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref(), mTab.getToken() + "banner" + mTab.getType());
         }
         super.initData();
         mAdapter.setHeaderView(mHeaderView);
@@ -128,5 +128,10 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
     protected Type getType() {
         return new TypeToken<ResultBean<PageBean<SubBean>>>() {
         }.getType();
+    }
+
+    @Override
+    protected Class<SubBean> getCacheClass() {
+        return SubBean.class;
     }
 }

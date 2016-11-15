@@ -20,8 +20,8 @@ import java.util.List;
 public class NewsHeaderView extends HeaderView {
     private TextView mTitleTextView;
 
-    public NewsHeaderView(Context context, RequestManager loader, String api) {
-        super(context, loader, api);
+    public NewsHeaderView(Context context, RequestManager loader, String api, String bannerCache) {
+        super(context, loader, api,bannerCache);
     }
 
     @Override
