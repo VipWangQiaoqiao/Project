@@ -25,8 +25,8 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.db.NoteDatabase;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -244,7 +244,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
         if (isNewNote) {
             final String content = mEtContent.getText().toString();
             if (!TextUtils.isEmpty(content)) {
-                DialogHelp.getConfirmDialog(getActivity(), "是否保存为草稿?", new OnClickListener() {
+                DialogHelper.getConfirmDialog(getActivity(), "是否保存为草稿?", new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         AppContext.setNoteDraft("");

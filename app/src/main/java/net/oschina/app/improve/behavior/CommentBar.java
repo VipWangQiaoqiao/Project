@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.widget.BottomSheetBar;
 
 /**
@@ -45,10 +47,14 @@ public class CommentBar {
         mFavView = (ImageButton) mRootView.findViewById(R.id.ib_fav);
         mShareView = (ImageButton) mRootView.findViewById(R.id.ib_share);
         mCommentText = (TextView) mRootView.findViewById(R.id.tv_comment);
-        mCommentText.setOnClickListener(new View.OnClickListener() {
+        mRootView.findViewById(R.id.ll_comment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDelegation.show(mCommentText.getHint().toString());
+                if(AccountHelper.isLogin()){
+                    mDelegation.show(mCommentText.getHint().toString());
+                }else {
+                    LoginActivity.show(mContext);
+                }
             }
         });
     }
@@ -81,11 +87,11 @@ public class CommentBar {
         mDelegation.getBtnCommit().setEnabled(enable);
     }
 
-    public void hideShare(){
+    public void hideShare() {
         mShareView.setVisibility(View.GONE);
     }
 
-    public void hideFav(){
+    public void hideFav() {
         mFavView.setVisibility(View.GONE);
     }
 

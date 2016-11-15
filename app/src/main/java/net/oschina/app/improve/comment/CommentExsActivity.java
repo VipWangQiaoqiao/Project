@@ -32,8 +32,8 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
@@ -225,7 +225,7 @@ public class CommentExsActivity extends BaseBackActivity {
     private ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
+            mDialog = DialogHelper.getProgressDialog(this, message);
         }
 
         mDialog.setMessage(message);

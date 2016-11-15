@@ -231,6 +231,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mDelegation.setCommentHint("添加评论");
         mComments.addComment(commentEX, getImgLoader(), null);
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override

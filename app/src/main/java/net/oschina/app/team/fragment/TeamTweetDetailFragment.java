@@ -30,6 +30,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.team.adapter.TeamReplyAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActiveDetail;
@@ -39,7 +40,6 @@ import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.BitmapHelper;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -263,7 +263,7 @@ public class TeamTweetDetailFragment extends
         if (itemsLen == 2) {
             items[1] = getResources().getString(R.string.delete);
         }
-        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
+        DialogHelper.getSelectDialog(getActivity(), items, "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {

@@ -76,11 +76,11 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginTop="64dp"
-        android:background="@drawable/bg_login_submit"
+        android:background="@drawable/bg_login_submit_lock"
         android:elevation="0dp"
         android:outlineProvider="none"
         android:text="@string/reset_pwd_submit"
-        android:textColor="@color/white"
+        android:textColor="@color/account_lock_font_color"
         android:textSize="@dimen/font_18"
         android:translationZ="0dp"
         tools:targetApi="lollipop"/>

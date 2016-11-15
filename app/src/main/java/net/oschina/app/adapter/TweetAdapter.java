@@ -26,8 +26,8 @@ import net.oschina.app.bean.User;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.OSCPhotosActivity;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -221,7 +221,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     @SuppressWarnings("unused")
     private void optionDel(Context context, final Tweet tweet, final int position) {
 
-        DialogHelp.getConfirmDialog(context, "确定删除吗?", new DialogInterface.OnClickListener() {
+        DialogHelper.getConfirmDialog(context, "确定删除吗?", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 OSChinaApi.deleteTweet(tweet.getAuthorid(), tweet.getId(),

@@ -26,6 +26,7 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueCatalog;
@@ -35,7 +36,6 @@ import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.team.bean.TeamReplyBean;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TypefaceUtils;
@@ -417,7 +417,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
             }
         }
         final int selIndex = index;
-        dialog = DialogHelp.getSingleChoiceDialog(getActivity(), "更改任务状态", items, selIndex, new
+        dialog = DialogHelper.getSingleChoiceDialog(getActivity(), "更改任务状态", items, selIndex, new
                 DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

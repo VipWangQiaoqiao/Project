@@ -41,9 +41,9 @@ import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -111,6 +111,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     private TweetDetailContract.IAgencyView mAgencyViewImp;
 
     private CommentBar mDelegation;
+    private boolean mInputDoubleEmpty = false;
+
     private View.OnClickListener onPortraitClickListener;
     private ShareDialogBuilder mShareDialogBuilder;
     private AlertDialog alertDialog;
@@ -186,6 +188,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 mCmnViewImp.onCommentSuccess(null);
                 replies.clear(); // 清除
                 mViewInput.setHint("发表评论");
+                mDelegation.setCommentHint("发表评论");
                 mViewInput.setText(null);
                 mDelegation.getBottomSheet().dismiss();
                 dismissDialog();
@@ -237,7 +240,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
                     handleKeyDel();
                 }
                 return false;
@@ -272,7 +275,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 }
                 if (replies != null && replies.size() > 0)
                     content = mViewInput.getHint() + ": " + content;
-                dialog = DialogHelp.getWaitDialog(TweetDetailActivity.this, "正在发表评论...");
+                dialog = DialogHelper.getProgressDialog(TweetDetailActivity.this, "正在发表评论...");
                 dialog.show();
                 OSChinaApi.pubTweetComment(tweet.getId(), content, 0, publishCommentHandler);
             }
@@ -429,7 +432,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             if (cmm.getAuthor().getId() == comment.getAuthor().getId()) return;
         }
         if (replies.size() == 0) {
-            mViewInput.setHint("回复 @" + comment.getAuthor().getName());
+            mViewInput.setHint("回复: @" + comment.getAuthor().getName());
             mDelegation.setCommentHint(mViewInput.getHint().toString());
         } else {
             mViewInput.setHint(mViewInput.getHint() + " @" + comment.getAuthor().getName());
@@ -447,7 +450,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     @OnClick(R.id.iv_thumbup)
     void onClickThumbUp() {
         if (checkLogin()) return;
-        this.dialog = DialogHelp.getWaitDialog(this, "正在提交请求...");
+        this.dialog = DialogHelper.getProgressDialog(this, "正在提交请求...");
         this.dialog.show();
         OSChinaApi.reverseTweetLike(tweet.getId(), publishAdmireHandler);
     }
@@ -479,17 +482,26 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     private void handleKeyDel() {
         if (replies == null || replies.size() == 0) return;
-        replies.remove(replies.size() - 1);
-        if (replies.size() == 0) {
-            mViewInput.setHint("发表评论");
-            mDelegation.setCommentHint(mViewInput.getHint().toString());
-            return;
+        if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
+            if (mInputDoubleEmpty) {
+                replies.remove(replies.size() - 1);
+                if (replies.size() == 0) {
+                    mViewInput.setHint("发表评论");
+                    mDelegation.setCommentHint(mViewInput.getHint().toString());
+                    return;
+                }
+                mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
+                if (replies.size() == 2) {
+                    mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor()
+                            .getName());
+                }
+            } else {
+                mInputDoubleEmpty = true;
+            }
+        } else {
+            mInputDoubleEmpty = false;
         }
-        mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
-        if (replies.size() == 2) {
-            mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor()
-                    .getName());
-        }
+
     }
 
     @Override
