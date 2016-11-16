@@ -24,6 +24,7 @@ import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 
 import java.util.regex.Matcher;
@@ -107,7 +108,7 @@ public class OWebView extends WebView {
                 }
             });
         } else {
-            Log.e(OWebView.class.getName(), "loadDetailDataAsync error, the Context isn't ok");
+            TLog.e(OWebView.class.getName(), "loadDetailDataAsync error, the Context isn't ok");
         }
     }
 
@@ -131,7 +132,7 @@ public class OWebView extends WebView {
                 }
             });
         } else {
-            Log.e(OWebView.class.getName(), "loadDetailDataAsync error, the Context isn't ok");
+            TLog.e(OWebView.class.getName(), "loadDetailDataAsync error, the Context isn't ok");
         }
     }
 

@@ -31,6 +31,7 @@ import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.util.TLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +90,7 @@ public class MainActivity extends BaseActivity implements
         if (intent == null || intent.getAction() == null)
             return;
         String action = intent.getAction();
-        Log.e("TAG", "onNewIntent action:" + action + " isCreate:" + isCreate);
+        TLog.e("TAG", "onNewIntent action:" + action + " isCreate:" + isCreate);
         if (action.equals(ACTION_NOTICE)) {
             NavFragment bar = mNavBar;
             if (bar != null) {

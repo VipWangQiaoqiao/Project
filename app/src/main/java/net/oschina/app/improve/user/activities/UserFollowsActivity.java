@@ -48,7 +48,7 @@ public class UserFollowsActivity extends BaseRecyclerViewActivity<UserFansOrFoll
     @Override
     protected boolean initBundle(Bundle bundle) {
         userId = bundle.getLong(BUNDLE_KEY_ID, 0);
-        // Log.e(TAG, "initBundle: ---------->userId=" + userId);
+        // TLog.e(TAG, "initBundle: ---------->userId=" + userId);
         return super.initBundle(bundle);
     }
 
