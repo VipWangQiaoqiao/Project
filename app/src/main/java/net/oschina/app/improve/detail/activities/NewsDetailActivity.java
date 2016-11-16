@@ -30,7 +30,8 @@ import cz.msebera.android.httpclient.Header;
  * Created by fei on 2016/6/13.
  * desc:   news detail  module
  */
-public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View> implements NewsDetailContract.Operator {
+public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View>
+        implements NewsDetailContract.Operator {
 
     /**
      * show news detail

@@ -63,7 +63,7 @@
             android:layout_marginRight="@dimen/lay_16"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_thumbup_normal"/>
+            android:src="@mipmap/ic_thumb_normal"/>
 
         <ImageView
             android:id="@+id/btn_comment"

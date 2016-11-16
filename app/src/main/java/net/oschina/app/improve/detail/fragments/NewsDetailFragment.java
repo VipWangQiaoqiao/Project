@@ -68,7 +68,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     protected void initWidget(View root) {
         super.initWidget(root);
 
-
         //mTVAuthorName = (TextView) root.findViewById(R.id.tv_name);
         mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_title);
@@ -184,7 +183,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         mAbouts.setAbout(newsDetail.getAbouts(), 6);
 
-        mComments.setTitle(String.format("评论 (%s)", newsDetail.getCommentCount()));
+        mComments.setTitle(String.format("热门评论 (%s)", newsDetail.getCommentCount()));
         mComments.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, newsDetail.getCommentCount(), getImgLoader(), this);
     }
 
