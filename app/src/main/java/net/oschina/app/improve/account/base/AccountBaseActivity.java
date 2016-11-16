@@ -66,9 +66,11 @@ public class AccountBaseActivity extends BaseActivity {
         hideWaitDialog();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        hideKeyBoard(getCurrentFocus().getWindowToken());
         if (mManager != null) {
             if (mReceiver != null)
                 mManager.unregisterReceiver(mReceiver);
