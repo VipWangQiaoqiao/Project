@@ -1,6 +1,7 @@
 package net.oschina.app.improve.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -19,6 +20,7 @@ public class RippleIntroView extends RelativeLayout implements Runnable {
     private int mInterval = 20;
     private int count = 0;
 
+    private Bitmap mCacheBitmap;
     private Paint mRipplePaint;
     private Paint mCirclePaint;
     private Path mArcPath;
@@ -52,35 +54,56 @@ public class RippleIntroView extends RelativeLayout implements Runnable {
     }
 
     @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (mCacheBitmap != null){
+            mCacheBitmap.recycle();
+            mCacheBitmap = null;
+        }
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        View child = getChildAt(0);
-        View child2 = getChildAt(1);
-        if (child == null) return;
+        // 我知道直接getChildAt(int)很挫，但是我就是要这么简单粗暴！
+        View mPlusChild = getChildAt(0);
+        View mRefsChild = getChildAt(1);
+        if (mPlusChild == null || mRefsChild == null) return;
 
-        final int width = child.getWidth();
-        final int height = child.getHeight();
-        if (width == 0 || height == 0) return;
-        final float px = child.getX() + width / 2;
-        final float py = child.getY() + height / 2;
+        final int pw = mPlusChild.getWidth();
+        final int ph = mPlusChild.getHeight();
 
-        final int rw = width / 2;
-        final int rh = height / 2;
-        double radius = Math.pow(rw * rw + rh * rh, 1 / 2.f);
+        final int fw = mRefsChild.getWidth();
+        final int fh = mRefsChild.getHeight();
+
+        if (pw == 0 || ph == 0) return;
+
+        final float px = mPlusChild.getX() + pw / 2;
+        final float py = mPlusChild.getY() + ph / 2;
+        final float fx = mRefsChild.getX();
+        final float fy = mRefsChild.getY();
+        final int rw = pw / 2;
+        final int rh = ph / 2;
+
+        if (mCacheBitmap == null){
+            mCacheBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas cv = new Canvas(mCacheBitmap);
+            super.onDraw(cv);
+
+            mArcPath.reset();
+            mArcPath.moveTo(px, py + rh + mInterval);
+            mArcPath.quadTo(px, fy - mInterval, fx + fw * 0.618f, fy - mInterval);
+            mRipplePaint.setAlpha(255);
+            cv.drawPath(mArcPath, mRipplePaint);
+            cv.drawCircle(px, py + rh + mInterval, 6, mCirclePaint);
+        }
+
+        canvas.drawBitmap(mCacheBitmap, 0, 0, mCirclePaint);
 
         int save = canvas.save();
         for (int step = count; step <= mMaxRadius; step += mInterval){
             mRipplePaint.setAlpha(255 * (mMaxRadius - step) / mMaxRadius);
             canvas.drawCircle(px, py, (float) (rw + step), mRipplePaint);
         }
-        mArcPath.reset();
-        mArcPath.moveTo(px, py + rh + mInterval);
-        mArcPath.quadTo(px, child2.getY() - mInterval, (float) (child2.getX() + child2.getWidth() * 0.618), child2.getY() - mInterval);
-        mRipplePaint.setAlpha(255);
-        canvas.drawPath(mArcPath, mRipplePaint);
-
-        canvas.drawCircle(px, py + rh + mInterval, 6, mCirclePaint);
-
         canvas.restoreToCount(save);
         postDelayed(this, 80);
     }
