@@ -23,8 +23,8 @@ import java.util.Map;
  * on 2016/10/27.
  */
 
-public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack{
-    public EventSubAdapter(Callback callback,int mode) {
+public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
+    public EventSubAdapter(Callback callback, int mode) {
         super(callback, mode);
         setOnLoadingHeaderCallBack(this);
     }
@@ -49,18 +49,18 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
         EventViewHolder vh = (EventViewHolder) holder;
         vh.tv_event_title.setText(item.getTitle());
         SubBean.Image image = item.getImage();
-        if (image != null){
+        if (image != null) {
             mCallBack.getImgLoader()
                     .load(image.getHref() != null && image.getHref().length > 0 ? image.getHref()[0] : null)
                     .placeholder(R.drawable.bg_normal)
                     .into(vh.iv_event);
-        }else {
+        } else {
             vh.iv_event.setImageResource(R.drawable.bg_normal);
         }
         Map<String, Object> extras = item.getExtra();
         if (extras != null) {
             vh.tv_event_pub_date.setText(StringUtils.getDateString(extras.get("eventStartDate").toString()));
-            vh.tv_event_member.setText(extras.get("eventApplyCount") + "人参与");
+            vh.tv_event_member.setText(Double.valueOf(extras.get("eventApplyCount").toString()).intValue() + "人参与");
 
             switch (Double.valueOf(extras.get("eventStatus").toString()).intValue()) {
                 case Event.STATUS_END:

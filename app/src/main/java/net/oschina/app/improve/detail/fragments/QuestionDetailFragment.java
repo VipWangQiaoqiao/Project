@@ -131,7 +131,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
             case R.id.tv_see_more_comment:
                 UIHelper.showBlogComment(getActivity(), (int) mId,
                         (int) mOperator.getData().getAuthorId());
-                System.out.println("-------------------------->");
                 break;
         }
     }
