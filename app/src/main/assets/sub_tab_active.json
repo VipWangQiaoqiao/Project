@@ -2,11 +2,11 @@
   {
     "banner": {
       "catalog": 1,
-      "href": "https://www.oschina.net/action/apiv2/banner?catalog=1"
+      "href": "https://www.oschina.net/action/apiv2//banner?catalog=1"
     },
+    "fixed": true,
     "href": "https://www.oschina.net/action/apiv2/sub_list?token=d6112fa662bc4bf21084670a857fbd20",
     "name": "推荐",
-    "fixed": true,
     "needLogin": false,
     "order": 73,
     "subtype": 1,
@@ -15,23 +15,12 @@
   },
   {
     "fixed": false,
-    "href": "https://www.oschina.net/action/apiv2/sub_list?token=e3e35d14a62b4f816ec878b6597b60aa",
-    "name": "热门资讯",
+    "href": "https://www.oschina.net/action/apiv2/sub_list?token=df985be3c5d5449f8dfb47e06e098ef9",
+    "name": "推荐博客",
     "needLogin": false,
-    "order": 72,
-    "subtype": 2,
-    "tag": "hot",
-    "token": "e3e35d14a62b4f816ec878b6597b60aa",
-    "type": 6
-  },
-  {
-    "fixed": false,
-    "href": "https://www.oschina.net/action/apiv2/sub_list?token=1abf09a23a87442184c2f9bf9dc29e35",
-    "name": "每日一博",
-    "needLogin": false,
-    "order": 92,
-    "subtype": 1,
-    "token": "1abf09a23a87442184c2f9bf9dc29e35",
+    "order": 89,
+    "subtype": 4,
+    "token": "df985be3c5d5449f8dfb47e06e098ef9",
     "type": 3
   },
   {
@@ -46,6 +35,52 @@
   },
   {
     "fixed": false,
+    "href": "https://www.oschina.net/action/apiv2/sub_list?token=e3e35d14a62b4f816ec878b6597b60aa",
+    "name": "热门资讯",
+    "needLogin": false,
+    "order": 72,
+    "subtype": 2,
+    "tag": "hot",
+    "token": "e3e35d14a62b4f816ec878b6597b60aa",
+    "type": 6
+  },
+  {
+    "fixed": false,
+    "href": "https://www.oschina.net/action/apiv2/sub_list?token=299975006aa7f9b8a158deeb0d27a011",
+    "name": "码云推荐",
+    "needLogin": false,
+    "order": 71,
+    "subtype": 1,
+    "tag": "new",
+    "token": "299975006aa7f9b8a158deeb0d27a011",
+    "type": 7
+  },
+  {
+    "banner": {
+      "catalog": 3,
+      "href": "https://www.oschina.net/action/apiv2//banner?catalog=3"
+    },
+    "fixed": false,
+    "href": "https://www.oschina.net/action/apiv2/sub_list?token=727d77c15b2ca641fff392b779658512",
+    "name": "线下活动",
+    "needLogin": false,
+    "order": 74,
+    "subtype": 1,
+    "token": "727d77c15b2ca641fff392b779658512",
+    "type": 5
+  },
+  {
+    "fixed": false,
+    "href": "https://www.oschina.net/action/apiv2/sub_list?token=1abf09a23a87442184c2f9bf9dc29e35",
+    "name": "每日一博",
+    "needLogin": false,
+    "order": 92,
+    "subtype": 1,
+    "token": "1abf09a23a87442184c2f9bf9dc29e35",
+    "type": 3
+  },
+  {
+    "fixed": false,
     "href": "https://www.oschina.net/action/apiv2/sub_list?token=263ee86f538884e70ee1ee50aed759b6",
     "name": "每日乱弹",
     "needLogin": false,
@@ -53,16 +88,6 @@
     "subtype": 5,
     "tag": "hot",
     "token": "263ee86f538884e70ee1ee50aed759b6",
-    "type": 3
-  },
-  {
-    "fixed": false,
-    "href": "https://www.oschina.net/action/apiv2/sub_list?token=df985be3c5d5449f8dfb47e06e098ef9",
-    "name": "推荐博客",
-    "needLogin": false,
-    "order": 89,
-    "subtype": 4,
-    "token": "df985be3c5d5449f8dfb47e06e098ef9",
     "type": 3
   }
 ]
