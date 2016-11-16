@@ -108,6 +108,8 @@ repositories {
             url DEBUG_COMPILE_URL
         }
     }
+
+    android.enforceUniquePackageName = false
 }
 
 dependencies {
