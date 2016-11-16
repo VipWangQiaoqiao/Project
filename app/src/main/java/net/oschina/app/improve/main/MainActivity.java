@@ -78,6 +78,7 @@ public class MainActivity extends BaseActivity implements
 
         if (AppContext.get("isFirstComing", true)){
             View view = findViewById(R.id.layout_ripple);
+            view.setVisibility(View.VISIBLE);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

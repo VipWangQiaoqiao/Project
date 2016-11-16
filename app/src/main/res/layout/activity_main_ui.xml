@@ -32,6 +32,7 @@
         android:layout_height="match_parent"
         android:clickable="true"
         android:fitsSystemWindows="true"
+        android:visibility="gone"
         android:background="#AA000000">
 
         <ImageView
