@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -82,11 +83,16 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         } else {
             vh.tv_title.setText(item.getTitle());
         }
+        if(item.getType() == 7 || item.getType() == 4 || item.getType() == 1){
+            vh.iv_comment.setVisibility(View.GONE);
+            vh.tv_comment_count.setVisibility(View.GONE);
+        }
     }
 
     private static class NewsViewHolder extends RecyclerView.ViewHolder {
         TextView tv_title, tv_description, tv_time, tv_comment_count;
         LinearLayout ll_title;
+        ImageView iv_comment;
 
         public NewsViewHolder(View itemView) {
             super(itemView);
@@ -95,6 +101,7 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
             tv_time = (TextView) itemView.findViewById(R.id.tv_time);
             tv_comment_count = (TextView) itemView.findViewById(R.id.tv_comment_count);
             ll_title = (LinearLayout) itemView.findViewById(R.id.ll_title);
+            iv_comment = (ImageView) itemView.findViewById(R.id.iv_info_comment);
         }
     }
 }
