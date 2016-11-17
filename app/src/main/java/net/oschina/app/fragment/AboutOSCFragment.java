@@ -59,7 +59,7 @@ public class AboutOSCFragment extends BaseFragment {
 
                 if (!res) {
                     if (!TDevice.isHaveMarket(getActivity())) {
-                        UIHelper.openExternalBrowser(getActivity(),
+                        UIHelper.openInternalBrowser(getActivity(),
                                 "http://git.oschina.net/appclient");
                     } else {
                         TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");
