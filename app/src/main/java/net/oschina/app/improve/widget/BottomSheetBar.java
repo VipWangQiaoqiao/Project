@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.Selection;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -159,8 +158,8 @@ public class BottomSheetBar {
     }
 
     public void dismiss() {
-        mDialog.dismiss();
         TDevice.closeKeyboard(mEditText);
+        mDialog.dismiss();
     }
 
     public void setMentionListener(View.OnClickListener listener) {

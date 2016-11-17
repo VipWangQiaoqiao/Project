@@ -18,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -84,7 +85,8 @@ public class TDevice {
         }
     }
 
-    public static void closeKeyboard(View view) {
+    public static void closeKeyboard(EditText view) {
+        view.clearFocus();
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
