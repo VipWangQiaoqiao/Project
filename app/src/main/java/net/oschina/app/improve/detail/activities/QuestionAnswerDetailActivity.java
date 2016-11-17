@@ -1,4 +1,4 @@
-package net.oschina.app.improve.comment;
+package net.oschina.app.improve.detail.activities;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -29,15 +29,10 @@ import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
-<<<<<<< HEAD
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.comment.Reply;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.behavior.KeyboardInputDelegation;
-=======
-import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
->>>>>>> master
+import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.OWebView;
@@ -94,13 +89,9 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
     private Comment comment;
     private Reply reply;
     private View mVoteDialogView;
-<<<<<<< HEAD
     private List<Reply> replies = new ArrayList<>();
-    private KeyboardInputDelegation mDelegation;
-=======
-    private List<CommentEX.Reply> replies = new ArrayList<>();
     private CommentBar mDelegation;
->>>>>>> master
+
     private TextHttpResponseHandler onSendCommentHandler;
     private View.OnClickListener onReplyButtonClickListener;
 
@@ -225,7 +216,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             replies.clear();
             //Collections.addAll(replies, comment.getReply());
             Collections.reverse(replies); // 反转集合, 最新的评论在集合后面
-            for (int i = 0 ,len=replies.size(); i < len; i++) {
+            for (int i = 0, len = replies.size(); i < len; i++) {
                 appendComment(i, replies.get(i));
             }
         }
@@ -265,16 +256,14 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             onReplyButtonClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-<<<<<<< HEAD
-                  Reply reply = (Reply) v.getTag();
-                    mDelegation.notifyWrapper();
-                    mDelegation.getInputView().setText("回复 @" + reply.getAuthor() + " : ");
-                    mDelegation.getInputView().setSelection(mDelegation.getInputView().getText().length());
-=======
-                    CommentEX.Reply reply = (CommentEX.Reply) v.getTag();
+                    Reply reply = (Reply) v.getTag();
+//                    mDelegation.notifyWrapper();
+//                    mDelegation.getInputView().setText("回复 @" + reply.getAuthor() + " : ");
+//                    mDelegation.getInputView().setSelection(mDelegation.getInputView().getText().length());
+
                     mDelegation.getBottomSheet().getEditText().setText("回复 @" + reply.getAuthor() + " : ");
                     mDelegation.setCommentHint("回复 @" + reply.getAuthor() + " : ");
->>>>>>> master
+
                     QuestionAnswerDetailActivity.this.reply = reply;
                 }
             };
@@ -495,8 +484,6 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         super.onDestroy();
     }
 
-<<<<<<< HEAD
-=======
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -505,5 +492,4 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
     }
->>>>>>> master
 }

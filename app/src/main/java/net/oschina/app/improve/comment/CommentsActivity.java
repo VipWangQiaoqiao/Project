@@ -31,17 +31,10 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-<<<<<<< HEAD
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.comment.Refer;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.behavior.KeyboardInputDelegation;
-=======
-import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.utils.DialogHelper;
->>>>>>> master
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TDevice;
@@ -55,7 +48,9 @@ import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * 无评论引用层级的评论UI,可对评论进行顶踩操作,适用于问答
+ * Created by  fei
+ * on  16/11/17
+ * desc:详情评论列表ui
  */
 public class CommentsActivity extends BaseBackActivity {
 
@@ -63,6 +58,7 @@ public class CommentsActivity extends BaseBackActivity {
     private int mType;
 
     private PageBean<Comment> mPageBean;
+    private Context context;
 
     @Bind(R.id.lay_refreshLayout)
     RecyclerRefreshLayout mRefreshLayout;
@@ -71,7 +67,7 @@ public class CommentsActivity extends BaseBackActivity {
     RecyclerView mLayComments;
 
     @Bind(R.id.activity_comments)
-    CoordinatorLayout mCoorLayout;
+    CoordinatorLayout mCoordLayout;
 
     private Adapter mAdapter;
     private Comment reply;
@@ -148,21 +144,9 @@ public class CommentsActivity extends BaseBackActivity {
         mAdapter = new Adapter(this);
         mLayComments.setAdapter(mAdapter);
 
-        mDelegation = CommentBar.delegation(this, mCoorLayout);
+        mDelegation = CommentBar.delegation(this, mCoordLayout);
         mDelegation.hideFav();
         mDelegation.hideShare();
-        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
-            @Override
-<<<<<<< HEAD
-            public void onSubmit(TextView v, String content) {
-
-                handleSendComment(mType, mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthor().getId(), content);
-=======
-            public void onClick(View v) {
-                handleSendComment(mType, mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthorId(), mDelegation.getBottomSheet().getCommentText());
-            }
-        });
->>>>>>> master
 
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
@@ -189,6 +173,34 @@ public class CommentsActivity extends BaseBackActivity {
         mRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        this.context = getApplicationContext();
+        mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
+            @Override
+            public void onRefreshing() {
+                getData(true, null);
+            }
+
+            @Override
+            public void onLoadMore() {
+                String token = null;
+                if (mPageBean != null)
+                    token = mPageBean.getNextPageToken();
+                getData(false, token);
+            }
+        });
+
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+                mRefreshLayout.onRefresh();
+            }
+        });
     }
 
     /**
@@ -299,33 +311,6 @@ public class CommentsActivity extends BaseBackActivity {
     }
 
 
-    @Override
-    protected void initData() {
-        super.initData();
-        mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
-            @Override
-            public void onRefreshing() {
-                getData(true, null);
-            }
-
-            @Override
-            public void onLoadMore() {
-                String token = null;
-                if (mPageBean != null)
-                    token = mPageBean.getNextPageToken();
-                getData(false, token);
-            }
-        });
-
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                mRefreshLayout.onRefresh();
-            }
-        });
-    }
-
     private void getData(final boolean clearData, String token) {
         OSChinaApi.getComments(mId, mType, "refer", token, new TextHttpResponseHandler() {
             @Override
@@ -388,17 +373,17 @@ public class CommentsActivity extends BaseBackActivity {
     }
 
 
-    private static class CommentHolder extends RecyclerView.ViewHolder {
+    private class CommentHolder extends RecyclerView.ViewHolder {
         private ImageView mAvatar;
         private TextView mName;
         private TextView mDate;
         private TweetTextView mContent;
         private LinearLayout mRefers;
         private ImageView btnReply;
+        private ViewGroup mRootView;
 
         CommentHolder(View itemView) {
             super(itemView);
-
             mAvatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
             mName = (TextView) itemView.findViewById(R.id.tv_name);
             mDate = (TextView) itemView.findViewById(R.id.tv_pub_date);
@@ -406,6 +391,7 @@ public class CommentsActivity extends BaseBackActivity {
 
             mContent = ((TweetTextView) itemView.findViewById(R.id.tv_content));
             mRefers = ((LinearLayout) itemView.findViewById(R.id.lay_refer));
+            this.mRootView = (ViewGroup) itemView;
         }
 
         void setData(Comment comment, RequestManager imageLoader, View.OnClickListener l) {
@@ -422,11 +408,9 @@ public class CommentsActivity extends BaseBackActivity {
             mRefers.removeAllViews();
             Refer[] refers = comment.getRefer();
             if (refers != null && refers.length > 0) {
-                for (Refer refer : refers) {
-                    //为每一个子评论添加refer
-                    //  View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), refer, 5);
-                    // mRefers.addView(view);
-                }
+                LayoutInflater inflater = LayoutInflater.from(context);
+                View view = CommentsUtil.getReferLayout(inflater, refers, 0);
+                mRefers.addView(view, mRootView.indexOfChild(mContent));
             }
             btnReply.setTag(comment);
             btnReply.setOnClickListener(l);
@@ -470,6 +454,7 @@ public class CommentsActivity extends BaseBackActivity {
             }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

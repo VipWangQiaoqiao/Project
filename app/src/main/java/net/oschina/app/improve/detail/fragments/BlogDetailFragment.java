@@ -297,13 +297,9 @@ public class BlogDetailFragment
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
-<<<<<<< HEAD
                         Log.e("oschina", "onFailure");
                         //error.toString();
-=======
-                        TLog.e("oschina", "onFailure");
-                        error.toString();
->>>>>>> master
+
                     }
 
                     @Override
