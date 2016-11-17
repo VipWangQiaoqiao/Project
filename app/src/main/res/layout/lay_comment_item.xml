@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/item_blog_about_bg_selector"
     android:orientation="vertical"
-    android:paddingLeft="16dp">
+    android:paddingLeft="16dp"
+    tools:ignore="RtlHardcoded,RtlSymmetry">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +14,8 @@
         android:layout_marginBottom="4dp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        android:paddingRight="8dp">
+        android:paddingRight="8dp"
+        tools:ignore="RtlSymmetry">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_avatar"
@@ -35,7 +37,7 @@
 
             <TextView
                 android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#111111"
                 android:textSize="14sp"
@@ -43,12 +45,13 @@
 
             <TextView
                 android:id="@+id/tv_pub_date"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#6a6a6a"
                 android:textSize="12sp"
                 tools:text="12楼  6分钟前" />
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/tv_vote_count"
@@ -84,6 +87,7 @@
             android:scaleType="fitCenter"
             android:src="@mipmap/ic_comment_30"
             tools:ignore="RtlHardcoded" />
+
     </LinearLayout>
 
     <LinearLayout

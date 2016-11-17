@@ -17,7 +17,7 @@ import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.comment.CommentExsView;
+import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.widget.FlowLayout;
@@ -42,9 +42,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private long mCommentId;
     private long mCommentAuthorId;
-    private CommentExsView mComments;
-    private CoordinatorLayout mLayCoordinator;
-    private NestedScrollView mLayContent;
+    private CommentView mComments;
 
     private FlowLayout mFlowLayout;
 
@@ -65,9 +63,9 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         mFlowLayout = (FlowLayout) root.findViewById(R.id.ques_detail_flow);
 
-        mComments = (CommentExsView) root.findViewById(R.id.lay_detail_comment);
-        mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
-        mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
+        mComments = (CommentView) root.findViewById(R.id.lay_detail_comment);
+        CoordinatorLayout mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
+        NestedScrollView mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
 
         registerScroller(mLayContent, mComments);
 
@@ -130,7 +128,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
             case R.id.tv_see_more_comment:
                 UIHelper.showBlogComment(getActivity(), (int) mId,
                         (int) mOperator.getData().getAuthorId());
-                System.out.println("-------------------------->");
                 break;
         }
     }
@@ -177,8 +174,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
 
         mComments.setTitle(String.format("回答 (%s)", questionDetail.getCommentCount()));
-        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION,
-                questionDetail.getCommentCount(), getImgLoader(), this);
+        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, getImgLoader(), this);
 
     }
 

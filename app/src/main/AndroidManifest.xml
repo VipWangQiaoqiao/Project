@@ -223,12 +223,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
-            android:name=".improve.comment.CommentExsActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="评论列表"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity
             android:name=".improve.detail.activities.SchemeUrlActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"

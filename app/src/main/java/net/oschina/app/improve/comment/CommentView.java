@@ -159,7 +159,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     private void addComment(Comment[] comments, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         if (comments != null && comments.length > 0) {
 
-            if (comments.length < 4) {
+            if (comments.length > 4) {
                 mSeeMore.setVisibility(VISIBLE);
                 mSeeMore.setOnClickListener(this);
             }

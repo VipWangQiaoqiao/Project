@@ -20,7 +20,7 @@ import net.oschina.app.improve.bean.TranslationDetail;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.comment.CommentsView;
+import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.TranslateDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
@@ -46,7 +46,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     private long mCommentAuthorId;
     private boolean mInputDoubleEmpty = false;
     private DetailAboutView mAbouts;
-    private CommentsView mComments;
+    private CommentView mComments;
     private CoordinatorLayout mLayCoordinator;
     private NestedScrollView mLayContent;
     private View mLayBottom;
@@ -76,7 +76,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
 
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
         mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
-        mComments = (CommentsView) root.findViewById(R.id.lay_detail_comment);
+        mComments = (CommentView) root.findViewById(R.id.lay_detail_comment);
 
         mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
         mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
@@ -155,8 +155,8 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         mAboutSoftware.setVisibility(View.GONE);
         mAbouts.setVisibility(View.GONE);
 
-        mComments.setTitle(String.format("评论 (%s)", translationDetail.getCommentCount()));
-        mComments.init(translationDetail.getId(), OSChinaApi.COMMENT_TRANSLATION, translationDetail.getCommentCount(), getImgLoader(), this);
+        mComments.setTitle(String.format("%s (%s)", getResources().getString(R.string.hot_comment_hint),translationDetail.getCommentCount()));
+        mComments.init(translationDetail.getId(), OSChinaApi.COMMENT_TRANSLATION, getImgLoader(), this);
     }
 
     private void handleKeyDel() {

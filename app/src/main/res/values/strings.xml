@@ -284,8 +284,17 @@
     <string name="message_pwd_error">密码错误</string>
     <string name="tv_my_score">积分 0</string>
     <string name="zero">0</string>
+
+    <!--新版评论专用-->
     <string name="send_tweet">转发到动弹</string>
     <string name="send_hint">发送</string>
     <string name="comment_hint">请输入评论</string>
+    <string name="hot_comment_hint">热门评论</string>
+    <string name="new_comment_hint">最新评论</string>
+    <string name="pub_comment_hint">发表评论</string>
+    <string name="pub_comment_success">评论成功</string>
+    <string name="add_comment_hint">添加评论</string>
+    <string name="replay_hint">回复:</string>
+    <string name="pub_about">发布于</string>
 
 </resources>
