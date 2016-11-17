@@ -25,6 +25,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -33,6 +34,7 @@ import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.OWebView;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -162,6 +164,16 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
         mDelegation.hideFav();
         mDelegation.hideShare();
+
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(QuestionAnswerDetailActivity.this);
+                else
+                    LoginActivity.show(QuestionAnswerDetailActivity.this);
+            }
+        });
 
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
@@ -463,5 +475,12 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         super.onDestroy();
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
+        }
+    }
 }

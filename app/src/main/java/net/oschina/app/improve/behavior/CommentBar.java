@@ -11,7 +11,9 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
+import net.oschina.app.improve.media.Util;
 import net.oschina.app.improve.widget.BottomSheetBar;
+import net.oschina.app.util.UIHelper;
 
 /**
  * Created by haibin
@@ -50,9 +52,9 @@ public class CommentBar {
         mRootView.findViewById(R.id.ll_comment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(AccountHelper.isLogin()){
+                if (AccountHelper.isLogin()) {
                     mDelegation.show(mCommentText.getHint().toString());
-                }else {
+                } else {
                     LoginActivity.show(mContext);
                 }
             }
