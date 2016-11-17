@@ -190,7 +190,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         if (comment.getReply() != null) {
             mLayoutContainer.removeAllViews();
             replies.clear();
-            Collections.addAll(replies, comment.getReply());
+            //Collections.addAll(replies, comment.getReply());
             Collections.reverse(replies); // 反转集合, 最新的评论在集合后面
             for (int i = 0 ,len=replies.size(); i < len; i++) {
                 appendComment(i, replies.get(i));

@@ -21,7 +21,6 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
@@ -163,14 +162,14 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
         TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
         CommentsUtil.formatHtml(getResources(), content, comment.getContent());
 
-        Refer[] refers = comment.getRefer();
-        if (refers != null && refers.length > 0) {
+       // Refer[] refers = comment.getRefer();
+     //   if (refers != null && refers.length > 0) {
             // 最多5层
-            for (Refer refer : refers) {
-                View view = CommentsUtil.getReferLayout(inflater, refer, 5);
-                lay.addView(view, lay.indexOfChild(content));
-            }
-        }
+         //   for (Refer refer : refers) {
+               // View view = CommentsUtil.getReferLayout(inflater, refer, 5);
+          //      //lay.addView(view, lay.indexOfChild(content));
+         //   }
+       // }/
 
         ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
                 StringUtils.formatSomeAgo(comment.getPubDate()));

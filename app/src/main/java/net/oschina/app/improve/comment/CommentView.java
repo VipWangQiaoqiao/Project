@@ -33,11 +33,13 @@ import java.lang.reflect.Type;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by JuQiu
- * on 16/6/12.
+ * Created by fei
+ * on 2016/11/16.
+ * desc:  资讯、问答、博客、翻译、活动详情评论列表当中进行展示的子view.
+ * 包括直接渲染出评论下的refer和reply
  */
+public class CommentView extends LinearLayout implements View.OnClickListener {
 
-public class CommentsView extends LinearLayout implements View.OnClickListener {
     private static final String TAG = "CommentsView";
     private long mId;
     private int mType;
@@ -45,17 +47,17 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
     private TextView mSeeMore;
     private LinearLayout mLayComments;
 
-    public CommentsView(Context context) {
+    public CommentView(Context context) {
         super(context);
         init();
     }
 
-    public CommentsView(Context context, @Nullable AttributeSet attrs) {
+    public CommentView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CommentsView(Context context, @Nullable AttributeSet attrs, int defStyle) {
+    public CommentView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
@@ -156,6 +158,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 
     private void addComment(Comment[] comments, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         if (comments != null && comments.length > 0) {
+
             if (comments.length < 4) {
                 mSeeMore.setVisibility(VISIBLE);
                 mSeeMore.setOnClickListener(this);
@@ -236,3 +239,6 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
             CommentsActivity.show(getContext(), mId, mType);
     }
 }
+
+
+

@@ -30,7 +30,6 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
@@ -339,11 +338,11 @@ public class CommentExsActivity extends BaseBackActivity {
             mRefers.removeAllViews();
             if (comment.getRefer() != null) {
                 // 最多5层
-                for (int i = 0; i < comment.getRefer().length; i++) {
-                    Refer refer = comment.getRefer()[i];
-                    View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), refer, 5);
-                    mRefers.addView(view);
-                }
+                //for (int i = 0; i < comment.getRefer().length; i++) {
+                  //  Refer refer = comment.getRefer()[i];
+                   // View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), refer, 5);
+                    //mRefers.addView(view);
+              //  }
             }
 
             btn_comment.setTag(comment);

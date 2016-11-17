@@ -31,7 +31,7 @@ public final class CommentsUtil {
     private static final String TAG = "CommentsUtil";
 
     @SuppressWarnings("deprecation")
-    public static View getReferLayout(LayoutInflater inflater, Refer refer, int count) {
+    public static View getReferLayout(LayoutInflater inflater, Refer[] refer, int count) {
         Context context = inflater.getContext();
         @SuppressLint("InflateParams")
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
@@ -43,10 +43,11 @@ public final class CommentsUtil {
         drawable = new ShapeDrawable(new BorderShape(new RectF(0, 0, 0, 1)));
         drawable.getPaint().setColor(0xffd7d6da);
         textView.setBackgroundDrawable(drawable);
-
-        formatHtml(context.getResources(), textView, refer.getAuthor() + ":<br>" + refer.getContent());
-        Log.e(TAG, "getReferLayout: --------->" + count);
-        if (--count > 0) {
+        Log.e(TAG, "getReferLayout: ----->刚进来的   ====" + count);
+        formatHtml(context.getResources(), textView, refer[count].getAuthor() + ":<br>" + refer[count].getContent());
+        if (count < (refer.length < 5 ? refer.length - 1 : 4)) {
+            count++;
+            Log.d(TAG, "getReferLayout: ------变化之后--->" + count);
             View view = getReferLayout(inflater, refer, count);
             lay.addView(view, lay.indexOfChild(textView));
         }

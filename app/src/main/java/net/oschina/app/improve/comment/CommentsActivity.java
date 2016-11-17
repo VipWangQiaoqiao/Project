@@ -30,7 +30,6 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
@@ -390,14 +389,14 @@ public class CommentsActivity extends BaseBackActivity {
             CommentsUtil.formatHtml(mContent.getResources(), mContent, comment.getContent());
 
             mRefers.removeAllViews();
-            Refer[] refers = comment.getRefer();
-            if (refers != null && refers.length > 0) {
-                for (Refer refer : refers) {
+         //   Refer[] refers = comment.getRefer();
+          //  if (refers != null && refers.length > 0) {
+             //   for (Refer refer : refers) {
                     // 最多5层
-                    View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), refer, 5);
-                    mRefers.addView(view);
-                }
-            }
+                   // View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), refer, 5);
+                  //  mRefers.addView(view);
+             //   }
+          //  }
             btnReply.setTag(comment);
             btnReply.setOnClickListener(l);
         }
