@@ -116,7 +116,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
             }
         });
         if (AccountHelper.isLogin()) {
-            UIHelper.sendBroadcastForNotice(getActivity());
+
         }
     }
 
