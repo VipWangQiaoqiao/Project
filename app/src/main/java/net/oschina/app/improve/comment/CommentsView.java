@@ -302,8 +302,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         Refer[] refers = comment.getRefer();
         if (refers != null && refers.length > 0) {
             // 最多5层
-            for (int i = 0; i < 5; i++) {
-                Refer refer = refers[i];
+            for (Refer refer : refers) {
                 View view = CommentsUtil.getReferLayout(inflater, refer, 5);
                 lay.addView(view, lay.indexOfChild(content));
             }

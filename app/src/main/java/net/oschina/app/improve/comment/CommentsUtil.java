@@ -7,6 +7,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.ShapeDrawable;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import net.qiujuer.genius.ui.drawable.shape.BorderShape;
  */
 
 public final class CommentsUtil {
+    private static final String TAG = "CommentsUtil";
+
     @SuppressWarnings("deprecation")
     public static View getReferLayout(LayoutInflater inflater, Refer refer, int count) {
         Context context = inflater.getContext();
@@ -42,6 +45,7 @@ public final class CommentsUtil {
         textView.setBackgroundDrawable(drawable);
 
         formatHtml(context.getResources(), textView, refer.getAuthor() + ":<br>" + refer.getContent());
+        Log.e(TAG, "getReferLayout: --------->" + count);
         if (--count > 0) {
             View view = getReferLayout(inflater, refer, count);
             lay.addView(view, lay.indexOfChild(textView));
