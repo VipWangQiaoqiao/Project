@@ -1,22 +1,21 @@
 package net.oschina.app.improve.widget;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,6 +50,7 @@ public class TabPickerView extends FrameLayout {
     private RecyclerView mRecyclerActive;
     private RecyclerView mRecyclerInactive;
     private LinearLayout mLayoutWrapper;
+    private NestedScrollView mViewScroller;
     private ItemTouchHelper mItemTouchHelper;
 
     private TabAdapter<TabAdapter.ViewHolder> mActiveAdapter;
@@ -132,6 +132,7 @@ public class TabPickerView extends FrameLayout {
         mViewArrow = (ImageView) view.findViewById(R.id.iv_arrow);
         mRecyclerActive = (RecyclerView) view.findViewById(R.id.view_recycler_active);
         mRecyclerInactive = (RecyclerView) view.findViewById(R.id.view_recycler_inactive);
+        mViewScroller = (NestedScrollView) view.findViewById(R.id.view_scroller);
         mViewDone = (TextView) view.findViewById(R.id.tv_done);
         mViewOperator = (TextView) view.findViewById(R.id.tv_operator);
         mLayoutWrapper = (LinearLayout) view.findViewById(R.id.layout_wrapper);
@@ -176,17 +177,15 @@ public class TabPickerView extends FrameLayout {
             animate().start();
 
             mViewArrow.setRotation(0);
-            mViewArrow.animate()
-                    .rotation(315)
-                    .setDuration(380)
-                    .setInterpolator(new LinearInterpolator())
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            mViewArrow.setRotation(45);
-                        }
-                    }).start();
+            ValueAnimator animator = ValueAnimator.ofFloat(0, 225);
+            animator.setDuration(350);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    mViewArrow.setRotation((Float) animation.getAnimatedValue());
+                }
+            });
+            animator.start();
         } else {
             setVisibility(VISIBLE);
         }
@@ -415,7 +414,17 @@ public class TabPickerView extends FrameLayout {
         void startEditMode() {
             mViewOperator.setText("拖动排序");
             mViewDone.setText("完成");
-//            mLayoutWrapper.setVisibility(GONE);
+
+            mLayoutWrapper.setVisibility(GONE);
+            int sh = mViewScroller.getMeasuredHeight();
+            int rh = mRecyclerActive.getHeight();
+            Log.i("oschina", "sh: " + sh + " rh: " + rh);
+            if (rh < sh) {
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mRecyclerActive.getLayoutParams();
+                params.height = sh;
+                mRecyclerActive.setLayoutParams(params);
+            }
+
             isEditMode = true;
             notifyDataSetChanged();
         }
@@ -423,7 +432,13 @@ public class TabPickerView extends FrameLayout {
         void cancelEditMode() {
             mViewOperator.setText("切换栏目");
             mViewDone.setText("排序删除");
-//            mLayoutWrapper.setVisibility(VISIBLE);
+
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mRecyclerActive.getLayoutParams();
+            params.height = params.WRAP_CONTENT;
+            mRecyclerActive.setLayoutParams(params);
+            mLayoutWrapper.setVisibility(VISIBLE);
+
+
             isEditMode = false;
             notifyDataSetChanged();
         }
