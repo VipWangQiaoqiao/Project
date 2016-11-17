@@ -32,10 +32,6 @@ import cz.msebera.android.httpclient.Header;
 public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailContract.View>
         implements BlogDetailContract.Operator {
 
-    private static final String TAG = "BlogDetailActivity";
-
-    //private static final String TAG = "BlogDetailActivity";
-
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, BlogDetailActivity.class);
         intent.putExtra("id", id);
@@ -113,12 +109,6 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
             });
         }
         return createOptionsMenu;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     @Override
@@ -208,7 +198,7 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                AppContext.showToast("评论失败!");
+                AppContext.showToast(getResources().getString(R.string.pub_comment_failed));
                 hideWaitDialog();
             }
 

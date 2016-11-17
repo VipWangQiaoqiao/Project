@@ -17,7 +17,8 @@
         android:layout_alignParentTop="true"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_scrollFlags="scroll|enterAlways">
+        app:layout_scrollFlags="scroll|enterAlways"
+        tools:ignore="RtlHardcoded">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,7 +104,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/list_divider_color" />
+                android:background="@color/list_divider_color"
+                android:visibility="gone" />
 
             <net.oschina.app.improve.comment.CommentView
                 android:id="@+id/lay_detail_comment"

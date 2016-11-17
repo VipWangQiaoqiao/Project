@@ -1,5 +1,6 @@
-package net.oschina.app.improve.detail.activities;
+package net.oschina.app.improve.comment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +33,6 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.comment.Reply;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.OWebView;
@@ -52,10 +52,13 @@ import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * 问答的评论详情
- * Created by thanatos on 16/6/16.
+ * Created by thanatos
+ * on 16/6/16.
+ * change by fie
+ * on 16/11/17
+ * desc:问答的评论详情,可以对评论进行顶踩操作
  */
-public class QuestionAnswerDetailActivity extends BaseBackActivity {
+public class QuesAnswerDetailActivity extends BaseBackActivity {
 
     public static final String BUNDLE_KEY = "BUNDLE_KEY";
     public static final String BUNDLE_ARTICLE_KEY = "BUNDLE_ARTICLE_KEY";
@@ -101,7 +104,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
      * @param sid     文章id
      */
     public static void show(Context context, Comment comment, long sid) {
-        Intent intent = new Intent(context, QuestionAnswerDetailActivity.class);
+        Intent intent = new Intent(context, QuesAnswerDetailActivity.class);
         intent.putExtra(BUNDLE_KEY, comment);
         intent.putExtra(BUNDLE_ARTICLE_KEY, sid);
         context.startActivity(intent);
@@ -172,9 +175,9 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             @Override
             public void onClick(View v) {
                 if (AccountHelper.isLogin())
-                    SelectFriendsActivity.show(QuestionAnswerDetailActivity.this);
+                    SelectFriendsActivity.show(QuesAnswerDetailActivity.this);
                 else
-                    LoginActivity.show(QuestionAnswerDetailActivity.this);
+                    LoginActivity.show(QuesAnswerDetailActivity.this);
             }
         });
 
@@ -183,15 +186,15 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             public void onClick(View v) {
                 String content = mDelegation.getBottomSheet().getCommentText();
                 if (TextUtils.isEmpty(content.replaceAll("[ \\s\\n]+", ""))) {
-                    Toast.makeText(QuestionAnswerDetailActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(QuesAnswerDetailActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!AccountHelper.isLogin()) {
-                    UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
+                    UIHelper.showLoginActivity(QuesAnswerDetailActivity.this);
                     return;
                 }
 
-                mWaitingDialog = DialogHelper.getProgressDialog(QuestionAnswerDetailActivity.this, "正在发表评论...", false);
+                mWaitingDialog = DialogHelper.getProgressDialog(QuesAnswerDetailActivity.this, "正在发表评论...", false);
                 mWaitingDialog.show();
 
                 OSChinaApi.publishComment(sid, -1, comment.getId(), comment.getAuthor().getId(), 2, content, onSendCommentHandler);
@@ -264,7 +267,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     mDelegation.getBottomSheet().getEditText().setText("回复 @" + reply.getAuthor() + " : ");
                     mDelegation.setCommentHint("回复 @" + reply.getAuthor() + " : ");
 
-                    QuestionAnswerDetailActivity.this.reply = reply;
+                    QuesAnswerDetailActivity.this.reply = reply;
                 }
             };
         }
@@ -275,7 +278,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         onSendCommentHandler = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(QuestionAnswerDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(QuesAnswerDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
                 if (mWaitingDialog != null) {
                     mWaitingDialog.dismiss();
                     mWaitingDialog = null;
@@ -297,7 +300,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                     appendComment(replies.size() - 1, result.getResult());
                 } else {
-                    Toast.makeText(QuestionAnswerDetailActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(QuesAnswerDetailActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 mDelegation.getBottomSheet().dismiss();
                 if (mWaitingDialog != null) {
@@ -316,7 +319,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         OSChinaApi.getCommentDetail(comment.getId(), comment.getAuthor().getId(), 2, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String respStr, Throwable throwable) {
-                Toast.makeText(QuestionAnswerDetailActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(QuesAnswerDetailActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -332,11 +335,12 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                         return;
                     }
                 }
-                Toast.makeText(QuestionAnswerDetailActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(QuesAnswerDetailActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    @SuppressLint("InflateParams")
     private View getVoteDialogView() {
         if (mVoteDialogView == null) {
             mVoteDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_question_comment_detail_vote, null, false);
@@ -345,14 +349,14 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                 @Override
                 public void onClick(final View v) {
                     if (!AccountHelper.isLogin()) {
-                        UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
+                        UIHelper.showLoginActivity(QuesAnswerDetailActivity.this);
                         return;
                     }
                     final int opt = (int) v.getTag();
                     switch (opt) {
                         case Comment.VOTE_STATE_UP:
                             if (ivVoteDown.isSelected()) {
-                                Toast.makeText(QuestionAnswerDetailActivity.this, "你已经踩过了", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(QuesAnswerDetailActivity.this, "你已经踩过了", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             holder.mVoteUp.setVisibility(View.GONE);
@@ -360,7 +364,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                             break;
                         case Comment.VOTE_STATE_DOWN:
                             if (ivVoteUp.isSelected()) {
-                                Toast.makeText(QuestionAnswerDetailActivity.this, "你已经顶过了", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(QuesAnswerDetailActivity.this, "你已经顶过了", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             holder.mVoteDown.setVisibility(View.GONE);
@@ -370,7 +374,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     OSChinaApi.questionVote(sid, comment.getId(), opt, new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(QuesAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
                             if (mVoteDialog != null && mVoteDialog.isShowing()) {
                                 switch (opt) {
                                     case Comment.VOTE_STATE_UP:
@@ -403,9 +407,9 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                                         ivVoteDown.setSelected(!ivVoteDown.isSelected());
                                         break;
                                 }
-                                Toast.makeText(QuestionAnswerDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(QuesAnswerDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(QuestionAnswerDetailActivity.this, TextUtils.isEmpty(result.getMessage())
+                                Toast.makeText(QuesAnswerDetailActivity.this, TextUtils.isEmpty(result.getMessage())
                                         ? "操作失败" : result.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                             if (mVoteDialog != null) mVoteDialog.dismiss();

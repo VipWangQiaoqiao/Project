@@ -3,7 +3,9 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -17,6 +19,7 @@ import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.QuestionDetailFragment;
@@ -42,6 +45,20 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
     @Override
     int getOptionsMenuId() {
         return R.menu.menu_detail_report;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean createOptionsMenu = super.onCreateOptionsMenu(menu);
+        if (createOptionsMenu) {
+            mCommentCountView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommentsActivity.show(QuestionDetailActivity.this, mDataId, 2);
+                }
+            });
+        }
+        return createOptionsMenu;
     }
 
     @Override

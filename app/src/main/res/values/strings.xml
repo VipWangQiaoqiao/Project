@@ -114,6 +114,7 @@
 
     <string name="favorite">收藏</string>
     <string name="following">关注</string>
+    <string name="follow_done">已关注</string>
     <string name="follower">粉丝</string>
     <string name="join_time">加入于 :</string>
     <string name="location">所在地区:</string>
@@ -293,8 +294,9 @@
     <string name="new_comment_hint">最新评论</string>
     <string name="pub_comment_hint">发表评论</string>
     <string name="pub_comment_success">评论成功</string>
+    <string name="pub_comment_failed">评论失败</string>
     <string name="add_comment_hint">添加评论</string>
-    <string name="replay_hint">回复:</string>
+    <string name="reply_hint">回复:</string>
     <string name="pub_about">发布于</string>
 
 </resources>

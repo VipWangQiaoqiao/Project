@@ -50,6 +50,9 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by qiujuer
  * on 16/5/26.
+ * Change by fei
+ * on 16/11/17
+ * desc:blog detail
  */
 
 @SuppressWarnings("WeakerAccess")
@@ -227,8 +230,8 @@ public class BlogDetailFragment
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.setCommentHint("发表评论");
-                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.setCommentHint(getString(R.string.pub_comment_hint));
+                    mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.pub_comment_hint));
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -325,16 +328,16 @@ public class BlogDetailFragment
     @Override
     public void toFollowOk(BlogDetail blogDetail) {
         if (blogDetail.getAuthorRelation() <= 2) {
-            mBtnRelation.setText("已关注");
+            mBtnRelation.setText(getString(R.string.follow_done));
         } else {
-            mBtnRelation.setText("关注");
+            mBtnRelation.setText(getString(R.string.following));
         }
     }
 
     @Override
     public void toSendCommentOk(Comment comment) {
-        (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mDelegation.setCommentHint("添加评论");
+        (Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
+        mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
         mDelegation.getBottomSheet().dismiss();
     }
 
@@ -342,7 +345,7 @@ public class BlogDetailFragment
     public void onClick(View view, Comment comment) {
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthor().getId();
-        mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
+        mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
     }
 
     @Override

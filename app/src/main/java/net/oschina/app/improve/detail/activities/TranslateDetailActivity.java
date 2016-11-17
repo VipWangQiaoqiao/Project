@@ -3,6 +3,8 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -15,6 +17,7 @@ import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.TranslationDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.contract.TranslateDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.TranslationDetailFragment;
@@ -26,10 +29,12 @@ import java.lang.reflect.Type;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by fei on 2016/6/13.
- * desc:   news detail  module
+ * Created by fei
+ * on 2016/6/13.
+ * desc: translate detail
  */
-public class TranslateDetailActivity extends DetailActivity<TranslationDetail, TranslateDetailContract.View> implements TranslateDetailContract.Operator {
+public class TranslateDetailActivity extends DetailActivity<TranslationDetail, TranslateDetailContract.View>
+        implements TranslateDetailContract.Operator {
 
     /**
      * show news detail
@@ -51,6 +56,21 @@ public class TranslateDetailActivity extends DetailActivity<TranslationDetail, T
     protected int getContentView() {
         return R.layout.activity_blog_detail;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean createOptionsMenu = super.onCreateOptionsMenu(menu);
+        if (createOptionsMenu) {
+            mCommentCountView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommentsActivity.show(TranslateDetailActivity.this, mDataId, 2);
+                }
+            });
+        }
+        return createOptionsMenu;
+    }
+
 
     @Override
     void requestData() {

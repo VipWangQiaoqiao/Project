@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.TranslationDetail;
@@ -30,6 +29,9 @@ import net.oschina.app.util.StringUtils;
 /**
  * Created by fei
  * on 16/06/28.
+ * Change by fei
+ * on 16/11/17
+ * desc: translation detail
  */
 
 public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
@@ -46,7 +48,6 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     private long mCommentAuthorId;
     private boolean mInputDoubleEmpty = false;
     private DetailAboutView mAbouts;
-    private CommentView mComments;
     private CoordinatorLayout mLayCoordinator;
     private NestedScrollView mLayContent;
     private View mLayBottom;
@@ -76,12 +77,11 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
 
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
         mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
-        mComments = (CommentView) root.findViewById(R.id.lay_detail_comment);
+        CommentView mComments = (CommentView) root.findViewById(R.id.lay_detail_comment);
+        mComments.setVisibility(View.GONE);
 
         mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
         mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
-
-        registerScroller(mLayContent, mComments);
 
         mLayBottom = root.findViewById(R.id.lay_option);
 
@@ -149,14 +149,10 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
 
         toFavoriteOk(translationDetail);
 
-        // setText(R.id.tv_info_view, String.valueOf(translationDetail.getViewCount()));
         setText(R.id.tv_info_comment, translationDetail.getPubDate());
 
         mAboutSoftware.setVisibility(View.GONE);
         mAbouts.setVisibility(View.GONE);
-
-        mComments.setTitle(String.format("%s (%s)", getResources().getString(R.string.hot_comment_hint),translationDetail.getCommentCount()));
-        mComments.init(translationDetail.getId(), OSChinaApi.COMMENT_TRANSLATION, getImgLoader(), this);
     }
 
     private void handleKeyDel() {
@@ -165,8 +161,8 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.setCommentHint("发表评论");
-                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.setCommentHint(getResources().getString(R.string.pub_comment_hint));
+                    mDelegation.getBottomSheet().getEditText().setHint(getResources().getString(R.string.pub_comment_hint));
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -201,9 +197,8 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
 
     @Override
     public void toSendCommentOk(Comment comment) {
-        (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mDelegation.setCommentHint("添加评论");
-        mComments.addComment(comment, getImgLoader(), this);
+        (Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
+        mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
         mDelegation.getBottomSheet().dismiss();
     }
 
@@ -212,7 +207,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthor().getId();
-        mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
+        mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
     }
 
     @Override

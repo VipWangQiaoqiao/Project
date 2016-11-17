@@ -2,7 +2,6 @@ package net.oschina.app.improve.detail.fragments;
 
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.QuestionDetail;
@@ -42,7 +40,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private long mCommentId;
     private long mCommentAuthorId;
-    private CommentView mComments;
 
     private FlowLayout mFlowLayout;
 
@@ -63,11 +60,10 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         mFlowLayout = (FlowLayout) root.findViewById(R.id.ques_detail_flow);
 
-        mComments = (CommentView) root.findViewById(R.id.lay_detail_comment);
-        CoordinatorLayout mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
-        NestedScrollView mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
+        CommentView mComments = (CommentView) root.findViewById(R.id.lay_detail_comment);
+        mComments.setVisibility(View.GONE);
 
-        registerScroller(mLayContent, mComments);
+        CoordinatorLayout mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
 
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
 
@@ -126,8 +122,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         switch (v.getId()) {
             // 评论列表
             case R.id.tv_see_more_comment:
-                UIHelper.showBlogComment(getActivity(), (int) mId,
-                        (int) mOperator.getData().getAuthorId());
+                UIHelper.showBlogComment(getActivity(), (int) mId, (int) mOperator.getData().getAuthorId());
                 break;
         }
     }
@@ -152,7 +147,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         List<String> tags = questionDetail.getTags();
 
-        // mFlowLayout.removeAllViews();
         if (tags != null && !tags.isEmpty()) {
             for (String tag : tags) {
                 TextView tvTag = (TextView) getActivity().getLayoutInflater().inflate(R.layout.flowlayout_item, mFlowLayout, false);
@@ -173,9 +167,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         setText(R.id.tv_info_view, String.valueOf(questionDetail.getViewCount()));
         setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
 
-        mComments.setTitle(String.format("回答 (%s)", questionDetail.getCommentCount()));
-        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, getImgLoader(), this);
-
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -186,8 +177,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.setCommentHint("发表评论");
-                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.setCommentHint(getString(R.string.pub_comment_hint));
+                    mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.pub_comment_hint));
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -222,9 +213,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     @Override
     public void toSendCommentOk(Comment comment) {
-        (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mDelegation.setCommentHint("添加评论");
-        mComments.addComment(comment, getImgLoader(), null);
+        (Toast.makeText(getContext(), getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
+        mDelegation.setCommentHint(getString(R.string.add_comment_hint));
         mDelegation.getBottomSheet().dismiss();
     }
 

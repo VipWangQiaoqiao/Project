@@ -239,7 +239,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     public void onClick(View view, Comment comment) {
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthor().getId();
-        mDelegation.getCommentText().setHint(String.format("%s %s", getResources().getString(R.string.replay_hint), comment.getAuthor()));
+        mDelegation.getCommentText().setHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
     }
 
     @Override
