@@ -11,6 +11,7 @@ import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
+import net.oschina.app.improve.comment.CommentExsActivity;
 import net.oschina.app.improve.detail.contract.EventDetailContract;
 import net.oschina.app.improve.dialog.EventDetailApplyDialog;
 import net.oschina.app.util.UIHelper;
@@ -68,6 +69,8 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
     @Bind(R.id.tv_apply_status)
     TextView tv_apply_status;
 
+    @Bind(R.id.tv_comment)
+    TextView tv_comment;
 
     private EventDetailApplyDialog mEventApplyDialog;
 
@@ -81,6 +84,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
     protected void initData() {
         final EventDetail mDetail = mOperator.getData();
         if (mDetail == null) return;
+        tv_comment.setText(String.format("评论(%s)",mDetail.getCommentCount() ));
         tv_event_title.setText(mDetail.getTitle());
         tv_event_author.setText(String.format("发起人：%s", mDetail.getAuthor()));
         tv_event_member.setText(String.format("%s人参与", mDetail.getApplyCount()));
@@ -164,6 +168,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 }
                 break;
             case R.id.ll_comment:
+                CommentExsActivity.show(getActivity(),mOperator.getData().getId(),5);
                 break;
         }
     }
