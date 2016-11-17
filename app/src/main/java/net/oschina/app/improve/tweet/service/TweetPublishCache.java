@@ -3,6 +3,8 @@ package net.oschina.app.improve.tweet.service;
 import android.content.Context;
 import android.util.Log;
 
+import net.oschina.app.util.TLog;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -157,6 +159,6 @@ public class TweetPublishCache {
     }
 
     private static void log(String action, String msg) {
-        Log.e(TAG, String.format("%s:%s", action, msg));
+        TLog.e(TAG, String.format("%s:%s", action, msg));
     }
 }

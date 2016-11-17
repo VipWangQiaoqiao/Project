@@ -14,6 +14,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.tweet.activities.TopicTweetActivity;
+import net.oschina.app.util.TLog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,7 +54,7 @@ public class TopicTweetAdapter extends BaseRecyclerAdapter implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        Log.d("oschina", "------onClick-----");
+        TLog.d("oschina", "------onClick-----");
         TopicTweetActivity.show(v.getContext());
     }
 

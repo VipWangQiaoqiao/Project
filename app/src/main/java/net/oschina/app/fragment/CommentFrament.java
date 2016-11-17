@@ -30,8 +30,8 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -254,7 +254,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         if (itemsLen == 2) {
             items[1] = getResources().getString(R.string.delete);
         }
-        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
+        DialogHelper.getSelectDialog(getActivity(), items, "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {

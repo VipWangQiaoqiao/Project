@@ -20,6 +20,7 @@ import net.oschina.app.bean.Banner;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.widget.indicator.CirclePagerIndicator;
 import net.oschina.app.widget.SmoothScroller;
 
@@ -44,17 +45,24 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     protected TextHttpResponseHandler mCallBack;
     protected String mUrl;
     private boolean isScrolling;
+    protected String mBannerCache;
 
-    public HeaderView(Context context, RequestManager loader, String api) {
+    public HeaderView(Context context, RequestManager loader, String api, String bannerCache) {
         super(context);
         mImageLoader = loader;
         this.mUrl = api;
+        this.mBannerCache = bannerCache;
         init(context);
     }
 
     protected void init(Context context) {
         mHandler = new Handler();
         mBanners = new ArrayList<>();
+        List<Banner> banners = CacheManager.readFromJson(context, mBannerCache, Banner.class);
+        if (banners != null){
+            mBanners.addAll(banners);
+            mHandler.postDelayed(this,5000);
+        }
         LayoutInflater.from(context).inflate(getLayoutId(), this, true);
         mViewPager = (ViewPager) findViewById(R.id.vp_banner);
         mIndicator = (CirclePagerIndicator) findViewById(R.id.indicator);
@@ -94,6 +102,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
                             new TypeToken<ResultBean<PageBean<Banner>>>() {
                             }.getType());
                     if (result != null && result.isSuccess()) {
+                        CacheManager.saveToJson(getContext(), mBannerCache, result.getResult().getItems());
                         setBanners(result.getResult().getItems());
                     }
                 } catch (Exception e) {

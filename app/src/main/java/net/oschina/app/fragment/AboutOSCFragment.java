@@ -11,9 +11,11 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+import net.oschina.common.admin.Boss;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class AboutOSCFragment extends BaseFragment {
 
@@ -44,6 +46,7 @@ public class AboutOSCFragment extends BaseFragment {
     }
 
     @Override
+    @OnClick(R.id.img_portrait)
     public void onClick(View v) {
         final int id = v.getId();
         switch (id) {
@@ -56,7 +59,7 @@ public class AboutOSCFragment extends BaseFragment {
 
                 if (!res) {
                     if (!TDevice.isHaveMarket(getActivity())) {
-                        UIHelper.openExternalBrowser(getActivity(),
+                        UIHelper.openInternalBrowser(getActivity(),
                                 "http://git.oschina.net/appclient");
                     } else {
                         TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");
@@ -69,6 +72,9 @@ public class AboutOSCFragment extends BaseFragment {
             case R.id.tv_knowmore:
                 UIHelper.openInternalBrowser(getActivity(),
                         "https://www.oschina.net/home/aboutosc");
+                break;
+            case R.id.img_portrait:
+                Boss.verifyApp(getContext());
                 break;
             default:
                 break;

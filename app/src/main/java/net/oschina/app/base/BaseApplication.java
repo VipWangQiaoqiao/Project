@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.StringUtils;
 
 @SuppressLint("InflateParams")
@@ -166,22 +167,6 @@ public class BaseApplication extends Application {
                 Context.MODE_MULTI_PROCESS);
     }
 
-    public static int[] getDisplaySize() {
-        return new int[]{getPreferences().getInt("screen_width", 480),
-                getPreferences().getInt("screen_height", 854)};
-    }
-
-    public static void saveDisplaySize(Activity activity) {
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay()
-                .getMetrics(displaymetrics);
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putInt("screen_width", displaymetrics.widthPixels);
-        editor.putInt("screen_height", displaymetrics.heightPixels);
-        editor.putFloat("density", displaymetrics.density);
-        editor.commit();
-    }
-
     public static String string(int id) {
         return _resource.getString(id);
     }
@@ -232,34 +217,7 @@ public class BaseApplication extends Application {
         showToast(context().getString(message, args), duration, icon, gravity);
     }
 
-    public static void showToast(String message, int duration, int icon,
-                                 int gravity) {
-        if (message != null && !message.equalsIgnoreCase("")) {
-            long time = System.currentTimeMillis();
-            if (!message.equalsIgnoreCase(lastToast)
-                    || Math.abs(time - lastToastTime) > 2000) {
-                View view = LayoutInflater.from(context()).inflate(
-                        R.layout.view_toast, null);
-                ((TextView) view.findViewById(R.id.title_tv)).setText(message);
-                if (icon != 0) {
-                    ((ImageView) view.findViewById(R.id.icon_iv))
-                            .setImageResource(icon);
-                    ((ImageView) view.findViewById(R.id.icon_iv))
-                            .setVisibility(View.VISIBLE);
-                }
-                Toast toast = new Toast(context());
-                toast.setView(view);
-                if (gravity == Gravity.CENTER) {
-                    toast.setGravity(gravity, 0, 0);
-                } else {
-                    toast.setGravity(gravity, 0, 35);
-                }
-
-                toast.setDuration(duration);
-                toast.show();
-                lastToast = message;
-                lastToastTime = System.currentTimeMillis();
-            }
-        }
+    public static void showToast(String message, int duration, int icon, int gravity) {
+        SimplexToast.show(_context, message, gravity, duration);
     }
 }

@@ -162,6 +162,7 @@ public class BottomSheetBar {
 
     public void dismiss() {
         mDialog.dismiss();
+        TDevice.closeKeyboard(mEditText);
     }
 
     public void setMentionListener(View.OnClickListener listener) {

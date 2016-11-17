@@ -11,7 +11,9 @@ public class PageBean<T> implements Serializable {
     private List<T> items;
     private String nextPageToken;
     private String prevPageToken;
-    private PageInfo pageInfo;
+    private int requestCount;
+    private int responseCount;
+    private int totalResults;
 
     public List<T> getItems() {
         return items;
@@ -37,12 +39,28 @@ public class PageBean<T> implements Serializable {
         this.prevPageToken = prevPageToken;
     }
 
-    public PageInfo getPageInfo() {
-        return pageInfo;
+    public int getRequestCount() {
+        return requestCount;
     }
 
-    public void setPageInfo(PageInfo pageInfo) {
-        this.pageInfo = pageInfo;
+    public void setRequestCount(int requestCount) {
+        this.requestCount = requestCount;
+    }
+
+    public int getResponseCount() {
+        return responseCount;
+    }
+
+    public void setResponseCount(int responseCount) {
+        this.responseCount = responseCount;
+    }
+
+    public int getTotalResults() {
+        return totalResults;
+    }
+
+    public void setTotalResults(int totalResults) {
+        this.totalResults = totalResults;
     }
 
     public static class PageInfo implements Serializable {

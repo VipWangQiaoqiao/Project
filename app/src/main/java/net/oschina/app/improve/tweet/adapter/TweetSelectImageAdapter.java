@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewerItemTouchCallback;
 import net.oschina.app.improve.utils.CollectionUtil;
 
@@ -72,6 +73,11 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
                         // Start a drag whenever the handle view it touched
                         mCallback.onStartDrag(holder);
                     }
+                }
+
+                @Override
+                public void onClick(Model model) {
+                    ImageGalleryActivity.show(mCallback.getContext(), model.path, false);
                 }
             });
         } else {
@@ -172,6 +178,8 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
 
         RequestManager getImgLoader();
 
+        Context getContext();
+
         /**
          * Called when a view is requesting a start of a drag.
          *
@@ -214,6 +222,16 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
                         holderListener.onDrag(TweetSelectImageHolder.this);
                     }
                     return true;
+                }
+            });
+            mImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Object obj = mDelete.getTag();
+                    final HolderListener holderListener = mListener;
+                    if (holderListener != null && obj != null && obj instanceof TweetSelectImageAdapter.Model) {
+                        holderListener.onClick((TweetSelectImageAdapter.Model) obj);
+                    }
                 }
             });
             mImage.setBackgroundColor(0xffdadada);
@@ -276,6 +294,8 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
             void onDelete(TweetSelectImageAdapter.Model model);
 
             void onDrag(TweetSelectImageHolder holder);
+
+            void onClick(TweetSelectImageAdapter.Model model);
         }
     }
 

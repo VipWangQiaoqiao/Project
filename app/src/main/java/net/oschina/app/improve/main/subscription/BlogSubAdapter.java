@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.general.fragments.BlogFragment;
 import net.oschina.app.util.StringUtils;
 
 /**
@@ -23,17 +25,11 @@ import net.oschina.app.util.StringUtils;
  * on 2016/10/26.
  */
 
-public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack{
+public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
 
-    private String mSystemTime;
-
-    public BlogSubAdapter(Context context,int mode) {
+    public BlogSubAdapter(Context context, int mode) {
         super(context, mode);
         setOnLoadingHeaderCallBack(this);
-    }
-
-    public void setSystemTime(String systemTime) {
-        this.mSystemTime = systemTime;
     }
 
     @Override
@@ -63,6 +59,18 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
 
         String text = "";
         SpannableStringBuilder spannable = new SpannableStringBuilder(text);
+
+        boolean isToday = StringUtils.isSameDay(mSystemTime, item.getPubDate());
+        if (isToday) {
+            spannable.append("[icon] ");
+            Drawable originate = mContext.getResources().getDrawable(R.mipmap.ic_label_today);
+            if (originate != null) {
+                originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
+            }
+            ImageSpan imageSpan = new ImageSpan(originate, ImageSpan.ALIGN_BOTTOM);
+            spannable.setSpan(imageSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+
         if (item.isOriginal()) {
             spannable.append("[icon] ");
             Drawable originate = mContext.getResources().getDrawable(R.mipmap.ic_label_originate);
@@ -70,7 +78,15 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
                 originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
             }
             ImageSpan imageSpan = new ImageSpan(originate, ImageSpan.ALIGN_BOTTOM);
-            spannable.setSpan(imageSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(imageSpan, isToday ? 7 : 0, isToday ? 13 : 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        } else {
+            spannable.append("[icon] ");
+            Drawable originate = mContext.getResources().getDrawable(R.mipmap.ic_label_reprint);
+            if (originate != null) {
+                originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
+            }
+            ImageSpan imageSpan = new ImageSpan(originate, ImageSpan.ALIGN_BOTTOM);
+            spannable.setSpan(imageSpan, isToday ? 7 : 0, isToday ? 13 : 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
         if (item.isRecommend()) {
@@ -80,11 +96,7 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
                 recommend.setBounds(0, 0, recommend.getIntrinsicWidth(), recommend.getIntrinsicHeight());
             }
             ImageSpan imageSpan = new ImageSpan(recommend, ImageSpan.ALIGN_BOTTOM);
-            if (item.isOriginal()) {
-                spannable.setSpan(imageSpan, 7, 13, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            } else {
-                spannable.setSpan(imageSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            }
+            spannable.setSpan(imageSpan, isToday ? 14 : 7, isToday ? 20 : 13, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
         title.setText(spannable.append(item.getTitle()));
@@ -100,14 +112,14 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
             }
         }
 
-
-//        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
-//            title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-//            content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-//        } else {
-//            title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
-//            content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
-//        }
+        String cacheName = verifyFileName(item);
+        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
+            title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
+            content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
+        } else {
+            title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
+            content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
+        }
 
         String author = item.getAuthor().getName();
         if (!TextUtils.isEmpty(author)) {
@@ -118,6 +130,12 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
 
         see.setText(String.valueOf(item.getStatistics().getView()));
         answer.setText(String.valueOf(item.getStatistics().getComment()));
+    }
+
+    private String verifyFileName(SubBean item) {
+        if (item.isRecommend())
+            return BlogFragment.BLOG_RECOMMEND;
+        return BlogFragment.BLOG_RECOMMEND;
     }
 
     private static class BlogViewHolder extends RecyclerView.ViewHolder {

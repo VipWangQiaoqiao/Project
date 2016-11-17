@@ -30,9 +30,9 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
@@ -104,7 +104,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     public ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
+            mDialog = DialogHelper.getProgressDialog(this, message);
         }
 
         mDialog.setMessage(message);

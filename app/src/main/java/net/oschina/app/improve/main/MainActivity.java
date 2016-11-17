@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -14,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -29,8 +31,10 @@ import net.oschina.app.improve.main.nav.NavigationButton;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.notice.NoticeManager;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.TLog;
+import net.oschina.common.helper.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +75,18 @@ public class MainActivity extends BaseActivity implements
         FragmentManager manager = getSupportFragmentManager();
         mNavBar = ((NavFragment) manager.findFragmentById(R.id.fag_nav));
         mNavBar.setup(this, manager, R.id.main_container, this);
+
+        if (AppContext.get("isFirstComing", true)){
+            View view = findViewById(R.id.layout_ripple);
+            view.setVisibility(View.VISIBLE);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ViewGroup)v.getParent()).removeView(v);
+//                    AppContext.set("isFirstComing", false);
+                }
+            });
+        }
     }
 
     @Override
@@ -89,7 +105,7 @@ public class MainActivity extends BaseActivity implements
         if (intent == null || intent.getAction() == null)
             return;
         String action = intent.getAction();
-        Log.e("TAG", "onNewIntent action:" + action + " isCreate:" + isCreate);
+        TLog.e("TAG", "onNewIntent action:" + action + " isCreate:" + isCreate);
         if (action.equals(ACTION_NOTICE)) {
             NavFragment bar = mNavBar;
             if (bar != null) {
@@ -139,7 +155,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        DialogHelp.getConfirmDialog(this, "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", new DialogInterface.OnClickListener() {
+        DialogHelper.getConfirmDialog(this, "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", false, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));

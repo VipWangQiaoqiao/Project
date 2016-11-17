@@ -31,17 +31,9 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-<<<<<<< HEAD
-import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.bean.comment.Refer;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.behavior.KeyboardInputDelegation;
-=======
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.utils.DialogHelper;
->>>>>>> master
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TDevice;
@@ -54,15 +46,11 @@ import java.util.List;
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
-/**
- * 无评论引用层级的评论UI,可对评论进行顶踩操作,适用于问答
- */
-public class CommentsActivity extends BaseBackActivity {
-
+public class CommentExsActivity extends BaseBackActivity {
     private long mId;
     private int mType;
 
-    private PageBean<Comment> mPageBean;
+    private PageBean<CommentEX> mPageBean;
 
     @Bind(R.id.lay_refreshLayout)
     RecyclerRefreshLayout mRefreshLayout;
@@ -74,54 +62,13 @@ public class CommentsActivity extends BaseBackActivity {
     CoordinatorLayout mCoorLayout;
 
     private Adapter mAdapter;
-    private Comment reply;
+    private CommentEX reply;
     private CommentBar mDelegation;
     private View.OnClickListener onReplyBtnClickListener;
     private ProgressDialog mDialog;
-    private boolean mInputDoubleEmpty;
-    private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
-        @Override
-        public void onStart() {
-            super.onStart();
-            showWaitDialog(R.string.progress_submit);
-        }
-
-        @Override
-        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            AppContext.showToast("评论失败!");
-            hideWaitDialog();
-        }
-
-        @Override
-        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            try {
-                Type type = new TypeToken<ResultBean<Comment>>() {
-                }.getType();
-
-                ResultBean<Comment> resultBean = AppOperator.createGson().fromJson(responseString, type);
-                if (resultBean.isSuccess()) {
-                    Comment respComment = resultBean.getResult();
-                    if (respComment != null) {
-
-                        Toast.makeText(CommentsActivity.this, "评论成功", Toast.LENGTH_LONG).show();
-                        mDelegation.getBottomSheet().getEditText().setText("");
-                        mDelegation.setCommentHint("发表评论");
-                        mDelegation.getBottomSheet().getEditText().setHint("发表评论");
-                        getData(true, null);
-                    }
-                }
-                hideWaitDialog();
-            } catch (Exception e) {
-                e.printStackTrace();
-                onFailure(statusCode, headers, responseString, e);
-            }
-            hideWaitDialog();
-            mDelegation.getBottomSheet().dismiss();
-        }
-    };
 
     public static void show(Context context, long id, int type) {
-        Intent intent = new Intent(context, CommentsActivity.class);
+        Intent intent = new Intent(context, CommentExsActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("type", type);
         context.startActivity(intent);
@@ -149,28 +96,23 @@ public class CommentsActivity extends BaseBackActivity {
         mLayComments.setAdapter(mAdapter);
 
         mDelegation = CommentBar.delegation(this, mCoorLayout);
-        mDelegation.hideFav();
-        mDelegation.hideShare();
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
-<<<<<<< HEAD
-            public void onSubmit(TextView v, String content) {
-
-                handleSendComment(mType, mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthor().getId(), content);
-=======
             public void onClick(View v) {
-                handleSendComment(mType, mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthorId(), mDelegation.getBottomSheet().getCommentText());
+                handleSendComment(mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthorId(), mDelegation.getBottomSheet().getCommentText());
             }
         });
->>>>>>> master
+
+        mDelegation.hideFav();
+        mDelegation.hideShare();
 
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (AccountHelper.isLogin())
-                    SelectFriendsActivity.show(CommentsActivity.this);
+                    SelectFriendsActivity.show(CommentExsActivity.this);
                 else
-                    LoginActivity.show(CommentsActivity.this);
+                    LoginActivity.show(CommentExsActivity.this);
             }
         });
 
@@ -180,8 +122,8 @@ public class CommentsActivity extends BaseBackActivity {
                 if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (reply == null) return false;
                     reply = null;
-
-                    handleKeyDel();
+                    mDelegation.getCommentText().setHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                 }
                 return false;
             }
@@ -190,114 +132,6 @@ public class CommentsActivity extends BaseBackActivity {
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
     }
-
-    /**
-     * 检查当前数据,并检查网络状况
-     *
-     * @return 返回当前登录用户, 未登录或者未通过检查返回0
-     */
-    private long requestCheck() {
-        if (mId == 0) {
-            AppContext.showToast("数据加载中...");
-            return 0;
-        }
-        if (!TDevice.hasInternet()) {
-            AppContext.showToastShort(R.string.tip_no_internet);
-            return 0;
-        }
-        if (!AccountHelper.isLogin()) {
-            UIHelper.showLoginActivity(this);
-            return 0;
-        }
-        // 返回当前登录用户ID
-        return AccountHelper.getUserId();
-    }
-
-    /**
-     * handle send comment
-     */
-    private void handleSendComment(int type, long id, final long commentId, long commentAuthorId, String content) {
-        long uid = requestCheck();
-        if (uid == 0)
-            return;
-
-        if (TextUtils.isEmpty(content)) {
-            AppContext.showToastShort(R.string.tip_comment_content_empty);
-            return;
-        }
-
-        switch (type) {
-            case 2:
-                OSChinaApi.pubQuestionComment(id, commentId, commentAuthorId, content, mHandler);
-                break;
-            case 3:
-                OSChinaApi.pubBlogComment(id, commentId, commentAuthorId, content, mHandler);
-                break;
-            case 4:
-                OSChinaApi.pubTranslateComment(id, commentId, commentAuthorId, content, mHandler);
-                break;
-            case 6:
-                OSChinaApi.pubNewsComment(id, commentId, commentAuthorId, content, mHandler);
-                break;
-            default:
-                break;
-        }
-
-    }
-
-
-    /**
-     * handle key del content
-     */
-    private void handleKeyDel() {
-        if (reply.getId() != mId) {
-            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
-                if (mInputDoubleEmpty) {
-                    mDelegation.setCommentHint("发表评论");
-                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
-                } else {
-                    mInputDoubleEmpty = true;
-                }
-            } else {
-                mInputDoubleEmpty = false;
-            }
-        }
-    }
-
-    /**
-     * show waittDialog
-     *
-     * @param messageId messageId
-     * @return progressDialog
-     */
-    @SuppressWarnings("deprecation")
-    private ProgressDialog showWaitDialog(int messageId) {
-        String message = getResources().getString(messageId);
-        if (mDialog == null) {
-            mDialog = DialogHelper.getProgressDialog(this, message);
-        }
-
-        mDialog.setMessage(message);
-        mDialog.show();
-
-        return mDialog;
-    }
-
-    /**
-     * hideWaitDialog
-     */
-    public void hideWaitDialog() {
-        ProgressDialog dialog = mDialog;
-        if (dialog != null) {
-            mDialog = null;
-            try {
-                dialog.dismiss();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
 
     @Override
     protected void initData() {
@@ -326,11 +160,127 @@ public class CommentsActivity extends BaseBackActivity {
         });
     }
 
+    /**
+     * 检查当前数据,并检查网络状况
+     *
+     * @return 返回当前登录用户, 未登录或者未通过检查返回0
+     */
+    private long requestCheck() {
+        if (mId == 0) {
+            AppContext.showToast("数据加载中...");
+            return 0;
+        }
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_no_internet);
+            return 0;
+        }
+        if (!AccountHelper.isLogin()) {
+            UIHelper.showLoginActivity(this);
+            return 0;
+        }
+        // 返回当前登录用户ID
+        return AccountHelper.getUserId();
+    }
+
+
+    /**
+     * handle send comment
+     */
+    private void handleSendComment(long id, final long commentId, long commentAuthorId, String content) {
+        long uid = requestCheck();
+        if (uid == 0)
+            return;
+
+        if (TextUtils.isEmpty(content)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            return;
+        }
+        OSChinaApi.pubQuestionComment(id, commentId, commentAuthorId, content, new TextHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                super.onStart();
+                showWaitDialog(R.string.progress_submit);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                AppContext.showToast("评论失败!");
+                hideWaitDialog();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<CommentEX>>() {
+                    }.getType();
+
+                    ResultBean<CommentEX> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                    if (resultBean.isSuccess()) {
+                        CommentEX respComment = resultBean.getResult();
+                        if (respComment != null) {
+
+                            Toast.makeText(CommentExsActivity.this, "评论成功", Toast.LENGTH_LONG).show();
+                            mDelegation.setCommentHint("发表评论");
+                            mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                            getData(true, null);
+                            mDelegation.getBottomSheet().dismiss();
+                        }
+                    }
+                    hideWaitDialog();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+                hideWaitDialog();
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mDelegation.getBottomSheet().dismiss();
+            }
+        });
+
+    }
+
+    /**
+     * show waittDialog
+     *
+     * @param messageId messageId
+     * @return progressDialog
+     */
+    private ProgressDialog showWaitDialog(int messageId) {
+        String message = getResources().getString(messageId);
+        if (mDialog == null) {
+            mDialog = DialogHelper.getProgressDialog(this, message);
+        }
+
+        mDialog.setMessage(message);
+        mDialog.show();
+
+        return mDialog;
+    }
+
+    /**
+     * hideWaitDialog
+     */
+    public void hideWaitDialog() {
+        ProgressDialog dialog = mDialog;
+        if (dialog != null) {
+            mDialog = null;
+            try {
+                dialog.dismiss();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     private void getData(final boolean clearData, String token) {
         OSChinaApi.getComments(mId, mType, "refer", token, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
+
             }
 
             @Override
@@ -342,10 +292,10 @@ public class CommentsActivity extends BaseBackActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<PageBean<Comment>>>() {
+                    Type type = new TypeToken<ResultBean<PageBean<CommentEX>>>() {
                     }.getType();
 
-                    ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                    ResultBean<PageBean<CommentEX>> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         if (resultBean.getResult() != null
                                 && resultBean.getResult().getItems() != null
@@ -364,13 +314,14 @@ public class CommentsActivity extends BaseBackActivity {
         });
     }
 
-    private void handleData(List<Comment> comments, boolean clearData) {
+    private void handleData(List<CommentEX> comments, boolean clearData) {
         if (clearData)
             mAdapter.clear();
 
         mAdapter.setState(BaseRecyclerAdapter.STATE_LOADING, false);
         mAdapter.addAll(comments);
-        mAdapter.notifyDataSetChanged();
+        if (mAdapter.getItems().size() < 20)
+            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
     }
 
     public View.OnClickListener getReplyBtnClickListener() {
@@ -378,8 +329,9 @@ public class CommentsActivity extends BaseBackActivity {
             onReplyBtnClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Comment comment = (Comment) v.getTag();
+                    CommentEX comment = (CommentEX) v.getTag();
                     mDelegation.setCommentHint("@" + comment.getAuthor() + " :");
+                    mDelegation.getBottomSheet().getEditText().setHint("@" + comment.getAuthor() + " :");
                     reply = comment;
                 }
             };
@@ -387,14 +339,13 @@ public class CommentsActivity extends BaseBackActivity {
         return onReplyBtnClickListener;
     }
 
-
     private static class CommentHolder extends RecyclerView.ViewHolder {
         private ImageView mAvatar;
         private TextView mName;
         private TextView mDate;
         private TweetTextView mContent;
         private LinearLayout mRefers;
-        private ImageView btnReply;
+        private ImageView btn_comment, iv_best_comment;
 
         CommentHolder(View itemView) {
             super(itemView);
@@ -402,53 +353,45 @@ public class CommentsActivity extends BaseBackActivity {
             mAvatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
             mName = (TextView) itemView.findViewById(R.id.tv_name);
             mDate = (TextView) itemView.findViewById(R.id.tv_pub_date);
-            btnReply = (ImageView) itemView.findViewById(R.id.btn_comment);
-
+            btn_comment = (ImageView) itemView.findViewById(R.id.btn_comment);
+            iv_best_comment = (ImageView) itemView.findViewById(R.id.iv_best_answer);
             mContent = ((TweetTextView) itemView.findViewById(R.id.tv_content));
             mRefers = ((LinearLayout) itemView.findViewById(R.id.lay_refer));
         }
 
-        void setData(Comment comment, RequestManager imageLoader, View.OnClickListener l) {
-            if (comment.getAuthor().getPortrait() != null)
-                imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
+        void setData(CommentEX comment, RequestManager imageLoader, View.OnClickListener l) {
+            if (comment.getAuthorPortrait() != null)
+                imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
                         .into((mAvatar));
             else
                 mAvatar.setImageResource(R.mipmap.widget_dface);
 
-            mName.setText(comment.getAuthor().getName());
+            mName.setText(comment.getAuthor());
             mDate.setText(comment.getPubDate());
             CommentsUtil.formatHtml(mContent.getResources(), mContent, comment.getContent());
 
             mRefers.removeAllViews();
-            Refer[] refers = comment.getRefer();
-            if (refers != null && refers.length > 0) {
-                for (Refer refer : refers) {
-                    //为每一个子评论添加refer
-                    //  View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), refer, 5);
-                    // mRefers.addView(view);
-                }
+            if (comment.getRefer() != null) {
+                // 最多5层
+                View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), comment.getRefer(), 5);
+                mRefers.addView(view);
             }
-            btnReply.setTag(comment);
-            btnReply.setOnClickListener(l);
+
+            btn_comment.setTag(comment);
+            if (l != null)
+                btn_comment.setOnClickListener(l);
         }
     }
 
-    private void onItemClick(Comment comment) {
-
-
-    }
-
-    private class Adapter extends BaseRecyclerAdapter<Comment> {
-
-        private CommentHolder commentHolder;
+    private class Adapter extends BaseRecyclerAdapter<CommentEX> {
 
         Adapter(Context context) {
             super(context, ONLY_FOOTER);
-            mState = STATE_HIDE;
+            mState = STATE_LOADING;
             setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(int position, long itemId) {
-                    CommentsActivity.this.onItemClick(getItem(position));
+                    CommentExsActivity.this.onItemClick(getItem(position));
                 }
             });
         }
@@ -456,20 +399,33 @@ public class CommentsActivity extends BaseBackActivity {
         @Override
         protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View view = inflater.inflate(R.layout.lay_comment_item, parent, false);
+            View view = inflater.inflate(R.layout.lay_comment_item_ex, parent, false);
             return new CommentHolder(view);
         }
 
         @Override
-        protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
+        protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, CommentEX item, int position) {
             if (holder instanceof CommentHolder) {
-                commentHolder = (CommentHolder) holder;
+                CommentHolder commentHolder = (CommentHolder) holder;
                 RequestManager requestManager = getImageLoader();
                 if (requestManager != null)
-                    commentHolder.setData(item, requestManager, getReplyBtnClickListener());
+                    commentHolder.setData(item, requestManager, null);
+                if (item.isBest()) {
+                    commentHolder.btn_comment.setVisibility(View.GONE);
+                    commentHolder.iv_best_comment.setVisibility(View.VISIBLE);
+                } else {
+                    commentHolder.btn_comment.setVisibility(View.VISIBLE);
+                    commentHolder.iv_best_comment.setVisibility(View.GONE);
+                }
             }
         }
+
     }
+
+    private void onItemClick(CommentEX comment) {
+        QuestionAnswerDetailActivity.show(this, comment, mId);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -36,6 +36,7 @@ import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 
 import java.net.URLEncoder;
@@ -291,13 +292,18 @@ public class BlogDetailFragment
                 OSChinaApi.reward(pairs, new TextHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String responseBody) {
-                        Log.e("oschina", "response body: " + responseBody);
+                        TLog.e("oschina", "response body: " + responseBody);
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
+<<<<<<< HEAD
                         Log.e("oschina", "onFailure");
                         //error.toString();
+=======
+                        TLog.e("oschina", "onFailure");
+                        error.toString();
+>>>>>>> master
                     }
 
                     @Override

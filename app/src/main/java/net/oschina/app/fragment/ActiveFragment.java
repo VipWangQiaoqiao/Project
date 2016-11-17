@@ -18,8 +18,8 @@ import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -116,7 +116,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
             }
         });
         if (AccountHelper.isLogin()) {
-            UIHelper.sendBroadcastForNotice(getActivity());
+
         }
     }
 
@@ -153,7 +153,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
         if (active == null)
             return false;
         String[] items = new String[]{getResources().getString(R.string.copy)};
-        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
+        DialogHelper.getSelectDialog(getActivity(), items, "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(active.getMessage()));
