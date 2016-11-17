@@ -64,7 +64,7 @@ public class TranslateDetailActivity extends DetailActivity<TranslationDetail, T
             mCommentCountView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CommentsActivity.show(TranslateDetailActivity.this, mDataId, 2);
+                    CommentsActivity.show(TranslateDetailActivity.this, mDataId, 4);
                 }
             });
         }

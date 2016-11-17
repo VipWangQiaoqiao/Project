@@ -33,6 +33,7 @@ import net.oschina.app.improve.pay.dialog.RewardDialog;
 import net.oschina.app.improve.pay.util.RewardUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.BottomSheetBar;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
@@ -58,7 +59,7 @@ import cz.msebera.android.httpclient.Header;
 @SuppressWarnings("WeakerAccess")
 public class BlogDetailFragment
         extends DetailFragment<BlogDetail, BlogDetailContract.View, BlogDetailContract.Operator>
-        implements BlogDetailContract.View, View.OnClickListener, OnCommentClickListener {
+        implements BlogDetailContract.View, View.OnClickListener, OnCommentClickListener, BottomSheetBar.OnSyncListener {
 
     private long mId;
     private long mCommentId;
@@ -113,6 +114,7 @@ public class BlogDetailFragment
         }
 
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
+        mDelegation.setOnSyncListener(this);
 
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
@@ -137,12 +139,7 @@ public class BlogDetailFragment
                 handleFavorite();
             }
         });
-        mDelegation.setShareListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleShare();
-            }
-        });
+        mDelegation.setShareListener(this);
 
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
@@ -355,5 +352,12 @@ public class BlogDetailFragment
             mDelegation.getBottomSheet().handleSelectFriendsResult(data);
             mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
+    }
+
+    @Override
+    public void sync(boolean isSync) {
+        if (isSync)
+            handleShare();
+
     }
 }

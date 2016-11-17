@@ -24,6 +24,7 @@ import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.BottomSheetBar;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
@@ -38,7 +39,7 @@ import net.oschina.app.util.TDevice;
  */
 
 public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailContract.View, NewsDetailContract.Operator>
-        implements View.OnClickListener, NewsDetailContract.View, OnCommentClickListener {
+        implements View.OnClickListener, NewsDetailContract.View, OnCommentClickListener, BottomSheetBar.OnSyncListener {
 
     private long mId;
     // private TextView mTVAuthorName;
@@ -90,6 +91,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         registerScroller(mLayContent, mComment);
 
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
+        mDelegation.setOnSyncListener(this);
 
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -107,12 +109,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
                 handleFavorite();
             }
         });
-        mDelegation.setShareListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleShare();
-            }
-        });
+        mDelegation.setShareListener(this);
         mDelegation.getBottomSheet().setFaceListener(new View.OnClickListener() {
 
             @Override
@@ -249,5 +246,12 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             mDelegation.getBottomSheet().handleSelectFriendsResult(data);
             mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
+    }
+
+
+    @Override
+    public void sync(boolean isSync) {
+        if (isSync)
+            handleShare();
     }
 }

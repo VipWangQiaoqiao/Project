@@ -18,6 +18,7 @@ import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
+import net.oschina.app.improve.widget.BottomSheetBar;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
@@ -32,7 +33,7 @@ import java.util.List;
  */
 
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
-        implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
+        implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener, BottomSheetBar.OnSyncListener {
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
@@ -66,6 +67,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         CoordinatorLayout mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
 
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
+        mDelegation.setOnSyncListener(this);
 
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -83,12 +85,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 handleFavorite();
             }
         });
-        mDelegation.setShareListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleShare();
-            }
-        });
+        mDelegation.setShareListener(this);
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -232,4 +229,9 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         }
     }
 
+    @Override
+    public void sync(boolean isSync) {
+        if (isSync)
+            handleShare();
+    }
 }

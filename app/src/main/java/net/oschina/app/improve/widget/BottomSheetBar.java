@@ -31,7 +31,7 @@ import net.oschina.app.util.TDevice;
  * on 2016/11/10.
  */
 @SuppressWarnings("unused")
-public class BottomSheetBar {
+public class BottomSheetBar implements View.OnClickListener {
     private View mRootView;
     private EditText mEditText;
     private ImageButton mAtView;
@@ -42,6 +42,9 @@ public class BottomSheetBar {
     private Dialog mDialog;
     private FrameLayout mFrameLayout;
     private EmojiView mEmojiView;
+
+    private OnSyncListener mOnSyncListener;
+    private OnSyncListener onSyncListener;
 
     private BottomSheetBar(Context context) {
         this.mContext = context;
@@ -55,13 +58,18 @@ public class BottomSheetBar {
         return bar;
     }
 
+    public void setOnSendListener(OnSyncListener mOnSyncListener) {
+        this.mOnSyncListener = mOnSyncListener;
+    }
+
     private void initView() {
         mFrameLayout = (FrameLayout) mRootView.findViewById(R.id.fl_face);
         mEditText = (EditText) mRootView.findViewById(R.id.et_comment);
         mAtView = (ImageButton) mRootView.findViewById(R.id.ib_mention);
         mFaceView = (ImageButton) mRootView.findViewById(R.id.ib_face);
-        mFaceView.setVisibility(View.VISIBLE);
+        mFaceView.setVisibility(View.GONE);
         mSyncToTweetView = (ImageButton) mRootView.findViewById(R.id.cb_sync);
+        mSyncToTweetView.setOnClickListener(this);
         mBtnCommit = (Button) mRootView.findViewById(R.id.btn_comment);
         mBtnCommit.setEnabled(false);
 
@@ -169,6 +177,15 @@ public class BottomSheetBar {
         mAtView.setOnClickListener(listener);
     }
 
+    /**
+     * sync 2 tweet
+     *
+     * @param onSyncListener onSyncListener
+     */
+    public void setOnSyncListener(OnSyncListener onSyncListener) {
+        this.onSyncListener = onSyncListener;
+    }
+
     public void setFaceListener(View.OnClickListener listener) {
         mFaceView.setOnClickListener(listener);
     }
@@ -204,5 +221,27 @@ public class BottomSheetBar {
 
     public Button getBtnCommit() {
         return mBtnCommit;
+    }
+
+    @Override
+    public void onClick(View v) {
+        ImageButton shareView = this.mSyncToTweetView;
+        Object tag = v.getTag();
+        boolean isSync;
+        if (tag == null) {
+            shareView.setBackgroundResource(R.mipmap.form_checkbox_checked);
+            shareView.setTag(true);
+            isSync = true;
+        } else {
+            shareView.setBackgroundResource(R.mipmap.form_checkbox_normal);
+            shareView.setTag(null);
+            isSync = false;
+        }
+        if (mOnSyncListener != null)
+            mOnSyncListener.sync(isSync);
+    }
+
+    public interface OnSyncListener {
+        void sync(boolean isSync);
     }
 }

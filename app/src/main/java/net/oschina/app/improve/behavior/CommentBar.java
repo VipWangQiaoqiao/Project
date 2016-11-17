@@ -11,16 +11,18 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
-import net.oschina.app.improve.media.Util;
 import net.oschina.app.improve.widget.BottomSheetBar;
-import net.oschina.app.util.UIHelper;
 
 /**
  * Created by haibin
  * on 2016/11/10.
+ * Change by fei
+ * on 2016/11/17
+ * desc:详情页输入框
  */
 @SuppressWarnings("all")
 public class CommentBar {
+
     private Context mContext;
     private View mRootView;
     private FrameLayout mFrameLayout;
@@ -29,6 +31,7 @@ public class CommentBar {
     private ImageButton mShareView;
     private TextView mCommentText;
     private BottomSheetBar mDelegation;
+
 
     private CommentBar(Context context) {
         this.mContext = context;
@@ -59,6 +62,10 @@ public class CommentBar {
                 }
             }
         });
+    }
+
+    public void setOnSyncListener(BottomSheetBar.OnSyncListener OnSyncListener) {
+       this.mDelegation.setOnSyncListener(OnSyncListener);
     }
 
     public void setShareListener(View.OnClickListener listener) {
@@ -100,4 +107,5 @@ public class CommentBar {
     public TextView getCommentText() {
         return mCommentText;
     }
+
 }
