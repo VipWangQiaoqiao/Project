@@ -213,6 +213,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthorId();
         mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
+        mDelegation.getBottomSheet().show(String.format("回复: %s", comment.getAuthor()));
     }
 
     @Override

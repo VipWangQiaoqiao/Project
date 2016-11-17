@@ -233,6 +233,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthorId();
         mDelegation.getCommentText().setHint(String.format("回复: %s", comment.getAuthor()));
+        mDelegation.getBottomSheet().show(String.format("回复: %s", comment.getAuthor()));
     }
 
     @Override
