@@ -66,7 +66,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
 
     private ShareItem[] initAdapterData() {
 
-        ShareItem[] shareActions = new ShareItem[6];
+        ShareItem[] shareActions = new ShareItem[7];
 
         //0.新浪微博
         ShareItem shareAction0 = new ShareItem();
@@ -118,12 +118,10 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
         shareActions[5] = shareAction6;
 
         //7.更多
-//        ShareItem shareAction7 = new ShareItem();
-//        shareAction7.iconId = R.mipmap.ic_action_more;
-//        shareAction7.nameId = R.string.platform_more_option;
-
-
-        //shareActions[7] = shareAction7;
+        ShareItem shareAction7 = new ShareItem();
+        shareAction7.iconId = R.mipmap.ic_action_more;
+        shareAction7.nameId = R.string.platform_more_option;
+        shareActions[6] = shareAction7;
 
         return shareActions;
     }
@@ -210,7 +208,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                 break;
             //QQ
             case 3:
-                // showWaitDialog(R.string.login_tencent_hint);
+                showWaitDialog(R.string.login_tencent_hint);
                 OpenBuilder.with(mActivity)
                         .useTencent(OpenConstant.QQ_APP_ID)
                         .share(share, new IUiListener() {
@@ -232,10 +230,9 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                         }, this);
                 break;
             //转发到动弹
-           // case 4:
-                //TODO:2016 / 11 / 18
-               // cancelLoading();
-              //  break;
+            // case 4:
+            // cancelLoading();
+            //  break;
             //在浏览器中打开
             case 4:
 
@@ -253,10 +250,10 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                 cancelLoading();
                 break;
             //更多(调用系统分享)
-            //default:
-                //showSystemShareOption(share.getTitle(), share.getUrl());
-                //cancelLoading();
-                //break;
+            default:
+                showSystemShareOption(share.getTitle(), share.getUrl());
+                cancelLoading();
+                break;
         }
 
     }
