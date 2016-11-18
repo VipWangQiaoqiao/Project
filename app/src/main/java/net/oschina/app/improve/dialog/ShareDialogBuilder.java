@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
@@ -51,7 +52,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
     private ShareDialogBuilder(@NonNull Activity context, @StyleRes int themeResId) {
         super(context, themeResId);
         mActivity = context;
-       // setTitle(R.string.share_to);
+        setTitle(null);
         setView(R.layout.dialog_share_main);
     }
 
@@ -232,10 +233,17 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                 break;
             //转发到动弹
             case 4:
-
+                //TODO:2016 / 11 / 18
                 break;
             //在浏览器中打开
             case 5:
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                // intent.setAction(Intent.CATEGORY_BROWSABLE);
+                Uri content_url = Uri.parse(share.getUrl());
+                intent.setData(content_url);
+                mActivity.startActivity(intent);
 
                 break;
             //复制链接

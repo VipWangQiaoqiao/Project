@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ic_material"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="UseCompoundDrawables">
 
     <ImageView
         android:id="@+id/share_icon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="4dp"
+        android:background="@drawable/ic_material"
         android:contentDescription="@null"
-        app:srcCompat="@mipmap/share_icon_qq" />
+        app:srcCompat="@mipmap/ic_login_3party_qq" />
 
     <TextView
         android:id="@+id/share_name"
