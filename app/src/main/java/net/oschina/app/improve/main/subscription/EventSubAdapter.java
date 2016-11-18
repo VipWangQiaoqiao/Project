@@ -12,7 +12,6 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.SubBean;
-import net.oschina.app.improve.general.fragments.EventFragment;
 import net.oschina.app.util.StringUtils;
 
 import java.util.Map;
@@ -93,7 +92,7 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
             vh.tv_event_type.setText(typeStr);
         }
         vh.tv_event_title.setTextColor(
-                AppContext.isOnReadedPostList(EventFragment.HISTORY_EVENT, item.getId() + "") ?
+                AppContext.isOnReadedPostList("sub_list", item.getId() + "") ?
                         (mContext.getResources().getColor(R.color.count_text_color_light)) : (mContext.getResources().getColor(R.color.day_textColor)));
 
     }

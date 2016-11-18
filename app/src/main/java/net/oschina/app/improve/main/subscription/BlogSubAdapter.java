@@ -16,7 +16,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
-import net.oschina.app.improve.general.fragments.BlogFragment;
 import net.oschina.app.util.StringUtils;
 
 /**
@@ -112,8 +111,8 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
             }
         }
 
-        String cacheName = verifyFileName(item);
-        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
+
+        if (AppContext.isOnReadedPostList("sub_list", item.getId() + "")) {
             title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
             content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
         } else {
@@ -130,12 +129,6 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
 
         see.setText(String.valueOf(item.getStatistics().getView()));
         answer.setText(String.valueOf(item.getStatistics().getComment()));
-    }
-
-    private String verifyFileName(SubBean item) {
-        if (item.isRecommend())
-            return BlogFragment.BLOG_RECOMMEND;
-        return BlogFragment.BLOG_RECOMMEND;
     }
 
     private static class BlogViewHolder extends RecyclerView.ViewHolder {

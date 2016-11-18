@@ -57,7 +57,7 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, SubBean item, int position) {
         NewsViewHolder vh = (NewsViewHolder) holder;
-        if (AppContext.isOnReadedPostList(NewsFragment.HISTORY_NEWS, String.valueOf(item.getId()))) {
+        if (AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))) {
             vh.tv_title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
             vh.tv_description.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
         } else {
