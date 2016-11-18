@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
@@ -56,13 +57,13 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impl
         vh.tv_question_title.setText(item.getTitle());
         vh.tv_question_content.setText(item.getBody());
 
-//        if (AppContext.isOnReadedPostList(cacheName, String.valueOf(item.getId()))) {
-//            vh.tv_question_title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-//            vh.tv_question_content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-//        } else {
-//            vh.tv_question_title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
-//            vh.tv_question_content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
-//        }
+        if (AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))) {
+            vh.tv_question_title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
+            vh.tv_question_content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
+        } else {
+            vh.tv_question_title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
+            vh.tv_question_content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
+        }
 
         if (author != null) {
             vh.tv_time.setText((author.getName().length() > 9 ? author.getName().substring(0, 9) : author.getName().trim()) + "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.AppConfig;
+import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
@@ -92,6 +93,8 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
                 UIHelper.showUrlRedirect(mContext, sub.getHref());
                 break;
         }
+        AppContext.putReadedPostList("sub_list", String.valueOf(sub.getId()), "true");
+        mAdapter.updateItem(position);
     }
 
     @Override
