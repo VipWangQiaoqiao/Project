@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity implements
                 @Override
                 public void onClick(View v) {
                     ((ViewGroup)v.getParent()).removeView(v);
-//                    AppContext.set("isFirstComing", false);
+                    AppContext.set("isFirstComing", false);
                 }
             });
         }
