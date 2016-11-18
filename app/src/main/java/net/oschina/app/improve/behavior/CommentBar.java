@@ -111,10 +111,9 @@ public class CommentBar {
         return mCommentText;
     }
 
-<<<<<<< HEAD
-=======
+
     public void performClick() {
         mCommentLayout.performClick();
     }
->>>>>>> master
+
 }
