@@ -96,12 +96,12 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
             cacheName = UserBlogFragment.HISTORY_BLOG;
         }
 
-        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
-            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
-            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
+        if (AppContext.isOnReadedPostList(cacheName, String.valueOf(item.getId()))) {
+            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.text_secondary_color));
+            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.text_secondary_color));
         } else {
-            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.blog_title_text_color_light));
-            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.ques_bt_text_color_dark));
+            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.text_title_color));
+            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.text_desc_color));
         }
 
         String author = item.getAuthor();

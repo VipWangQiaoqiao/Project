@@ -39,7 +39,7 @@
                 android:minLines="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:textColor="@color/blog_title_text_color_light"
+                android:textColor="@color/text_title_color"
                 android:textSize="22sp"
                 tools:text="HDFS用于存储，请问它与FTP或者市面流行的存储系统的优缺点？" />
 
@@ -80,7 +80,7 @@
                     android:lines="1"
                     android:maxEms="10"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/count_text_color_light"
+                    android:textColor="@color/text_secondary_color"
                     android:textSize="12sp"
                     tools:text="风雨冲" />
 
@@ -93,7 +93,7 @@
                     android:gravity="left|center"
                     android:lines="1"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/count_text_color_light"
+                    android:textColor="@color/text_secondary_color"
                     android:textSize="12sp"
                     tools:text="4分钟前" />
 
