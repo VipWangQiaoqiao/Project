@@ -18,6 +18,7 @@ import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 
@@ -1518,9 +1519,10 @@ public class OSChinaApi {
      * @param content     内容
      * @param imagesToken 图片token
      * @param audioToken  语音token
+     * @param about       相关节点，仅仅关注 {@link About#id}, {@link About#type}, {@link About#image}
      * @param handler     回调
      */
-    public static void pubTweet(String content, String imagesToken, String audioToken, AsyncHttpResponseHandler handler) {
+    public static void pubTweet(String content, String imagesToken, String audioToken, About about, AsyncHttpResponseHandler handler) {
         if (TextUtils.isEmpty(content))
             throw new NullPointerException("content is not null.");
         RequestParams params = new RequestParams();
@@ -1529,6 +1531,11 @@ public class OSChinaApi {
             params.put("images", imagesToken);
         if (!TextUtils.isEmpty(audioToken))
             params.put("audio", audioToken);
+        if (about != null) {
+            params.put("aboutId", about.getId());
+            params.put("aboutType", about.getType());
+            params.put("aboutImage", about.getImage());
+        }
         ApiHttpClient.post("action/apiv2/tweet", params, handler);
     }
 

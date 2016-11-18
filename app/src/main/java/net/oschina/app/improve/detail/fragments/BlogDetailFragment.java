@@ -342,10 +342,23 @@ public class BlogDetailFragment
     public void onClick(View view, Comment comment) {
         mCommentId = comment.getId();
 
+<<<<<<< HEAD
         mCommentAuthorId = comment.getAuthor().getId();
         mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
 
         mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+=======
+        mCommentAuthorId = comment.getAuthorId();
+        mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
+        mDelegation.getBottomSheet().show(String.format("回复: %s", comment.getAuthor()));
+
+//
+//        mCommentAuthorId = comment.getAuthor().getId();
+//        mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+//
+//        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+
+>>>>>>> master
 
     }
 

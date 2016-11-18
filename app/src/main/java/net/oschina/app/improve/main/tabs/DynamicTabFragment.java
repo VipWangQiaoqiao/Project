@@ -12,7 +12,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
@@ -186,49 +185,36 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             }
         });
 
-        final float dp32 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics());
-
         mViewTabPicker.setOnShowAnimation(new TabPickerView.Action1<ViewPropertyAnimator>() {
             @Override
             public void call(ViewPropertyAnimator animator) {
                 mViewArrowDown.setEnabled(false);
-
-                mViewTabPicker.setVisibility(View.VISIBLE);
-                mViewTabPicker.setTranslationY(-dp32);
-                mViewTabPicker.setAlpha(0);
                 activity.toggleNavTabView(false);
-                animator.translationY(0)
-                        .alpha(1)
-                        .setDuration(380)
-                        .setInterpolator(new DecelerateInterpolator())
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                mViewTabPicker.setVisibility(View.VISIBLE);
-                                mViewTabPicker.setTranslationY(0);
-                                mViewTabPicker.setAlpha(1);
-                            }
-                        });
+                mViewArrowDown.animate().rotation(225).setDuration(380).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        super.onAnimationEnd(animator);
+                        mViewArrowDown.setRotation(45);
+                        mViewArrowDown.setEnabled(true);
+                    }
+                });
+
             }
         });
 
         mViewTabPicker.setOnHideAnimator(new TabPickerView.Action1<ViewPropertyAnimator>() {
             @Override
             public void call(ViewPropertyAnimator animator) {
+                mViewArrowDown.setEnabled(false);
                 activity.toggleNavTabView(true);
-                animator.translationY(-dp32)
-                        .setDuration(380)
-                        .alpha(0)
-                        .setInterpolator(new DecelerateInterpolator())
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                mViewTabPicker.setVisibility(View.GONE);
-                                mViewArrowDown.setEnabled(true);
-                            }
-                        });
+                mViewArrowDown.animate().rotation(-180).setDuration(380).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        super.onAnimationEnd(animator);
+                        mViewArrowDown.setRotation(0);
+                        mViewArrowDown.setEnabled(true);
+                    }
+                });
             }
         });
 
@@ -295,7 +281,11 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
 
     @OnClick(R.id.iv_arrow_down)
     void onClickArrow() {
-        mViewTabPicker.show(mLayoutTab.getSelectedTabPosition());
+        if (mViewArrowDown.getRotation() != 0) {
+            mViewTabPicker.hide();
+        } else {
+            mViewTabPicker.show(mLayoutTab.getSelectedTabPosition());
+        }
     }
 
     @Override
