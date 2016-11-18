@@ -1,6 +1,7 @@
 package net.oschina.app.improve.widget;
 
-import android.animation.ValueAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.v4.view.MotionEventCompat;
@@ -19,6 +20,7 @@ import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -44,12 +46,13 @@ import java.util.List;
 @SuppressWarnings("all")
 public class TabPickerView extends FrameLayout {
 
-    private ImageView mViewArrow;
     private TextView mViewDone;
     private TextView mViewOperator;
     private RecyclerView mRecyclerActive;
     private RecyclerView mRecyclerInactive;
     private LinearLayout mLayoutWrapper;
+    private RelativeLayout mLayoutTop;
+    private LinearLayout mViewWrapper;
     private NestedScrollView mViewScroller;
     private ItemTouchHelper mItemTouchHelper;
 
@@ -129,10 +132,11 @@ public class TabPickerView extends FrameLayout {
         View view = LayoutInflater.from(getContext())
                 .inflate(R.layout.view_tab_picker, this, false);
 
-        mViewArrow = (ImageView) view.findViewById(R.id.iv_arrow);
         mRecyclerActive = (RecyclerView) view.findViewById(R.id.view_recycler_active);
         mRecyclerInactive = (RecyclerView) view.findViewById(R.id.view_recycler_inactive);
         mViewScroller = (NestedScrollView) view.findViewById(R.id.view_scroller);
+        mLayoutTop = (RelativeLayout) view.findViewById(R.id.layout_top);
+        mViewWrapper = (LinearLayout) view.findViewById(R.id.view_wrapper);
         mViewDone = (TextView) view.findViewById(R.id.tv_done);
         mViewOperator = (TextView) view.findViewById(R.id.tv_operator);
         mLayoutWrapper = (LinearLayout) view.findViewById(R.id.layout_wrapper);
@@ -148,14 +152,6 @@ public class TabPickerView extends FrameLayout {
         });
 
         addView(view);
-
-        mViewArrow.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onTurnBack();
-            }
-        });
-
     }
 
     public void setOnShowAnimation(Action1<ViewPropertyAnimator> l) {
@@ -172,23 +168,25 @@ public class TabPickerView extends FrameLayout {
         mActiveAdapter.notifyItemChanged(tempIndex);
         mActiveAdapter.notifyItemChanged(mSelectedIndex);
 
-        if (mOnShowAnimator != null) {
-            mOnShowAnimator.call(animate());
-            animate().start();
+        if (mOnShowAnimator != null) mOnShowAnimator.call(null);
+        setVisibility(VISIBLE);
+        mLayoutTop.setAlpha(0);
+        mLayoutTop.animate().alpha(1).setDuration(380).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mLayoutTop.setAlpha(1);
+            }
+        });
 
-            mViewArrow.setRotation(0);
-            ValueAnimator animator = ValueAnimator.ofFloat(0, 225);
-            animator.setDuration(350);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mViewArrow.setRotation((Float) animation.getAnimatedValue());
-                }
-            });
-            animator.start();
-        } else {
-            setVisibility(VISIBLE);
-        }
+        mViewScroller.setTranslationY(-mViewScroller.getHeight());
+        mViewScroller.animate().translationY(0).setDuration(380).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mViewScroller.setTranslationY(0);
+            }
+        });
     }
 
     public void hide() {
@@ -196,12 +194,16 @@ public class TabPickerView extends FrameLayout {
             mTabPickingListener.onRestore(mTabManager.mActiveDataSet);
             mTabPickingListener.onSelected(mSelectedIndex);
         }
-        if (mOnHideAnimator != null) {
-            mOnHideAnimator.call(animate());
-            animate().start();
-        } else {
-            setVisibility(GONE);
-        }
+
+        if (mOnHideAnimator != null) mOnHideAnimator.call(null);
+        mLayoutTop.animate().alpha(0).setDuration(380).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                setVisibility(GONE);
+            }
+        });
+        mViewScroller.animate().translationY(-mViewScroller.getHeight()).setDuration(380);
     }
 
     private void initRecyclerView() {
