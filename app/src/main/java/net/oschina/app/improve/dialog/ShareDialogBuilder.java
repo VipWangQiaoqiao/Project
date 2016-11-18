@@ -34,9 +34,6 @@ import net.oschina.open.bean.Share;
 import net.oschina.open.constants.OpenConstant;
 import net.oschina.open.factory.OpenBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -54,7 +51,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
     private ShareDialogBuilder(@NonNull Activity context, @StyleRes int themeResId) {
         super(context, themeResId);
         mActivity = context;
-        setTitle(R.string.share_to);
+       // setTitle(R.string.share_to);
         setView(R.layout.dialog_share_main);
     }
 
@@ -66,50 +63,66 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
         return new ShareDialogBuilder(activity, themeResId).createBuilder();
     }
 
-    private List<ShareItem> initAdapterData() {
-        List<ShareItem> shareActions = new ArrayList<>(6);
+    private ShareItem[] initAdapterData() {
+
+        ShareItem[] shareActions = new ShareItem[8];
+
+        //0.新浪微博
+        ShareItem shareAction0 = new ShareItem();
+        shareAction0.iconId = R.mipmap.ic_login_3party_weibo;
+        shareAction0.nameId = R.string.platform_sina;
+
+        shareActions[0] = shareAction0;
 
         //1.朋友圈
-        ShareItem shareAction0 = new ShareItem();
-        shareAction0.iconId = R.drawable.share_icon_wechatfriends_selector;
-        shareAction0.nameId = R.string.platform_weichat_circle;
+        ShareItem shareAction1 = new ShareItem();
+        shareAction1.iconId = R.mipmap.ic_action_moments;
+        shareAction1.nameId = R.string.platform_wechat_circle;
 
-        shareActions.add(shareAction0);
+        shareActions[1] = shareAction1;
 
         //2.微信
-        ShareItem shareAction1 = new ShareItem();
-        shareAction1.iconId = R.drawable.share_icon_wechat_selector;
-        shareAction1.nameId = R.string.platform_wechat;
-
-        shareActions.add(shareAction1);
-
-        //3.新浪微博
         ShareItem shareAction2 = new ShareItem();
-        shareAction2.iconId = R.drawable.share_icon_sinaweibo_selector;
-        shareAction2.nameId = R.string.platform_sina;
+        shareAction2.iconId = R.mipmap.ic_login_3party_wechat;
+        shareAction2.nameId = R.string.platform_wechat;
 
-        shareActions.add(shareAction2);
+        shareActions[2] = shareAction2;
 
-        //4.QQ
+        //3.QQ
         ShareItem shareAction3 = new ShareItem();
-        shareAction3.iconId = R.drawable.share_icon_qq_selector;
+        shareAction3.iconId = R.mipmap.ic_login_3party_qq;
         shareAction3.nameId = R.string.platform_qq;
 
-        shareActions.add(shareAction3);
+        shareActions[3] = shareAction3;
 
-        //5.复制链接
+        //4.动弹
         ShareItem shareAction4 = new ShareItem();
-        shareAction4.iconId = R.drawable.share_icon_copy_link_selector;
-        shareAction4.nameId = R.string.platform_copy_link;
+        shareAction4.iconId = R.mipmap.ic_action_tweet;
+        shareAction4.nameId = R.string.platform_tweet;
 
-        shareActions.add(shareAction4);
+        shareActions[4] = shareAction4;
 
-        //6.更多
+        //5.browser
         ShareItem shareAction5 = new ShareItem();
-        shareAction5.iconId = R.drawable.share_icon_more_selector;
-        shareAction5.nameId = R.string.platform_more_option;
+        shareAction5.iconId = R.mipmap.ic_action_browser;
+        shareAction5.nameId = R.string.platform_browser;
 
-        shareActions.add(shareAction5);
+        shareActions[5] = shareAction5;
+
+        //6.复制链接
+        ShareItem shareAction6 = new ShareItem();
+        shareAction6.iconId = R.mipmap.ic_action_url;
+        shareAction6.nameId = R.string.platform_copy_link;
+
+        shareActions[6] = shareAction6;
+
+        //7.更多
+        ShareItem shareAction7 = new ShareItem();
+        shareAction7.iconId = R.mipmap.ic_action_more;
+        shareAction7.nameId = R.string.platform_more_option;
+
+
+        shareActions[7] = shareAction7;
 
         return shareActions;
     }
@@ -142,7 +155,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
             RecyclerView shareRecycle = (RecyclerView) contentView.findViewById(R.id.share_recycler);
             shareRecycle.setAdapter(new ShareActionAdapter(initAdapterData()));
             shareRecycle.setItemAnimator(new DefaultItemAnimator());
-            shareRecycle.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            shareRecycle.setLayoutManager(new GridLayoutManager(getContext(), 4));
             builder.setView(contentView);
             builder.setOnCancelListener(this);
             builder.setOnDismissListener(this);
@@ -173,26 +186,26 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
     public void onItemClick(int position, long itemId) {
         Share share = getShare();
         switch (position) {
-            //朋友圈
+            //新浪微博
             case 0:
+                showWaitDialog(R.string.login_webo_hint);
+                OpenBuilder.with(mActivity)
+                        .useWeibo(OpenConstant.WB_APP_KEY)
+                        .share(share, this);
+                break;
+            //朋友圈
+            case 1:
                 showWaitDialog(R.string.login_wechat_hint);
                 OpenBuilder.with(mActivity)
                         .useWechat(OpenConstant.WECHAT_APP_ID)
                         .shareTimeLine(share, this);
                 break;
             //微信会话
-            case 1:
+            case 2:
                 showWaitDialog(R.string.login_wechat_hint);
                 OpenBuilder.with(mActivity)
                         .useWechat(OpenConstant.WECHAT_APP_ID)
                         .shareSession(share, this);
-                break;
-            //新浪微博
-            case 2:
-                showWaitDialog(R.string.login_webo_hint);
-                OpenBuilder.with(mActivity)
-                        .useWeibo(OpenConstant.WB_APP_KEY)
-                        .share(share, this);
                 break;
             //QQ
             case 3:
@@ -217,8 +230,16 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                             }
                         }, this);
                 break;
-            //复制链接
+            //转发到动弹
             case 4:
+
+                break;
+            //在浏览器中打开
+            case 5:
+
+                break;
+            //复制链接
+            case 6:
                 TDevice.copyTextToBoard(share.getUrl());
                 break;
             //更多(调用系统分享)
@@ -362,9 +383,9 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
 
     private class ShareActionAdapter extends RecyclerView.Adapter<ViewHolder>
             implements View.OnClickListener {
-        private List<ShareItem> mShareActions;
+        private ShareItem[] mShareActions;
 
-        ShareActionAdapter(List<ShareItem> shareActions) {
+        ShareActionAdapter(ShareItem[] shareActions) {
             this.mShareActions = shareActions;
         }
 
@@ -380,7 +401,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            ShareItem shareAction = mShareActions.get(position);
+            ShareItem shareAction = mShareActions[position];
 
             holder.mIvIcon.setTag(holder);
             holder.mIvIcon.setImageResource(shareAction.iconId);
@@ -390,7 +411,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
 
         @Override
         public int getItemCount() {
-            return mShareActions == null ? 0 : mShareActions.size();
+            return mShareActions == null ? 0 : mShareActions.length;
         }
 
         @Override
