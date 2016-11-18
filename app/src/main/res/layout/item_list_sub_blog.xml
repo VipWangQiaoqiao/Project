@@ -23,7 +23,7 @@
             android:gravity="center_vertical"
             android:maxLines="2"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/blog_title_text_color_light"
+            android:textColor="@color/text_title_color"
             android:textSize="16sp"
             tools:text="Large Text" />
 
@@ -39,7 +39,8 @@
             android:lineSpacingExtra="4dp"
             android:maxLines="3"
             android:minLines="1"
-            android:textSize="14sp"
+            android:textColor="@color/text_desc_color"
+            android:textSize="13sp"
             tools:text="New Text" />
 
         <LinearLayout
@@ -57,7 +58,7 @@
                 android:gravity="left"
                 android:lines="1"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/count_text_color_light"
+                android:textColor="@color/text_secondary_color"
                 android:textSize="12sp"
                 tools:text="2012-12-01 22:10" />
 

@@ -1,6 +1,7 @@
 package net.oschina.app.improve.main.subscription;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -17,8 +18,8 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.SubTab;
-import net.oschina.app.improve.general.fragments.NewsFragment;
 import net.oschina.app.util.StringUtils;
+import net.qiujuer.genius.ui.compat.UiCompat;
 
 /**
  * 新版新闻订阅栏目
@@ -57,13 +58,17 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, SubBean item, int position) {
         NewsViewHolder vh = (NewsViewHolder) holder;
-        if (AppContext.isOnReadedPostList(NewsFragment.HISTORY_NEWS, String.valueOf(item.getId()))) {
-            vh.tv_title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-            vh.tv_description.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
+
+        Resources resources = mContext.getResources();
+
+        if (AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))) {
+            vh.tv_title.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
+            vh.tv_description.setTextColor(UiCompat.getColor(resources, R.color.text_secondary_color));
         } else {
-            vh.tv_title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
-            vh.tv_description.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
+            vh.tv_title.setTextColor(UiCompat.getColor(resources, R.color.text_title_color));
+            vh.tv_description.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
         }
+
 
         vh.tv_description.setText(item.getBody());
         vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
@@ -72,7 +77,7 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         if (StringUtils.isSameDay(mSystemTime, item.getPubDate()) && mTab.getSubtype() != 2 && item.getType() != 7) {
 
             String text = "[icon] " + item.getTitle();
-            Drawable drawable = mContext.getResources().getDrawable(R.mipmap.ic_label_today);
+            Drawable drawable = resources.getDrawable(R.mipmap.ic_label_today);
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
             ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
 
@@ -83,7 +88,7 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         } else {
             vh.tv_title.setText(item.getTitle());
         }
-        if(item.getType() == 7 || item.getType() == 4 || item.getType() == 1){
+        if (item.getType() == 7 || item.getType() == 4 || item.getType() == 1 || (mTab.getSubtype() == 1 && item.getType() == 6)) {
             vh.iv_comment.setVisibility(View.GONE);
             vh.tv_comment_count.setVisibility(View.GONE);
         }

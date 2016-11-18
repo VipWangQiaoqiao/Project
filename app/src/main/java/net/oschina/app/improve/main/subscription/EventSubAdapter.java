@@ -1,5 +1,6 @@
 package net.oschina.app.improve.main.subscription;
 
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,8 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.SubBean;
-import net.oschina.app.improve.general.fragments.EventFragment;
 import net.oschina.app.util.StringUtils;
+import net.qiujuer.genius.ui.compat.UiCompat;
 
 import java.util.Map;
 
@@ -57,6 +58,9 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
         } else {
             vh.iv_event.setImageResource(R.drawable.bg_normal);
         }
+
+        Resources resources = mContext.getResources();
+
         Map<String, Object> extras = item.getExtra();
         if (extras != null) {
             vh.tv_event_pub_date.setText(StringUtils.getDateString(extras.get("eventStartDate").toString()));
@@ -65,14 +69,14 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
             switch (Double.valueOf(extras.get("eventStatus").toString()).intValue()) {
                 case Event.STATUS_END:
                     setText(vh.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);
-                    setTextColor(vh.tv_event_title, mContext.getResources().getColor(R.color.light_gray));
+                    setTextColor(vh.tv_event_title, UiCompat.getColor(resources, R.color.light_gray));
                     break;
                 case Event.STATUS_ING:
                     setText(vh.tv_event_state, R.string.event_status_ing, R.drawable.bg_event_ing, 0xFF24cf5f);
                     break;
                 case Event.STATUS_SING_UP:
                     setText(vh.tv_event_state, R.string.event_status_sing_up, R.drawable.bg_event_end, 0x1a000000);
-                    setTextColor(vh.tv_event_title, mContext.getResources().getColor(R.color.light_gray));
+                    setTextColor(vh.tv_event_title, UiCompat.getColor(resources, R.color.light_gray));
                     break;
             }
             int typeStr = R.string.oscsite;
@@ -92,9 +96,10 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
             }
             vh.tv_event_type.setText(typeStr);
         }
-        vh.tv_event_title.setTextColor(
-                AppContext.isOnReadedPostList(EventFragment.HISTORY_EVENT, item.getId() + "") ?
-                        (mContext.getResources().getColor(R.color.count_text_color_light)) : (mContext.getResources().getColor(R.color.day_textColor)));
+
+        vh.tv_event_title.setTextColor(UiCompat.getColor(resources,
+                AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))
+                        ? R.color.text_desc_color : R.color.text_title_color));
 
     }
 

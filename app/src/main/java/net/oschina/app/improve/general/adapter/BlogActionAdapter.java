@@ -55,7 +55,7 @@ public class BlogActionAdapter extends BaseAdapter {
         if (positions[position] == 1) {
             viewHolder.tv_action.setTextColor(context.getResources().getColor(R.color.ques_bt_text_color_light));
         } else {
-            viewHolder.tv_action.setTextColor(context.getResources().getColor(R.color.ques_bt_text_color_dark));
+            viewHolder.tv_action.setTextColor(context.getResources().getColor(R.color.text_desc_color));
         }
         viewHolder.tv_action.setText(data[position]);
         return convertView;

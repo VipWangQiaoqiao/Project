@@ -66,7 +66,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
 
     private ShareItem[] initAdapterData() {
 
-        ShareItem[] shareActions = new ShareItem[8];
+        ShareItem[] shareActions = new ShareItem[6];
 
         //0.新浪微博
         ShareItem shareAction0 = new ShareItem();
@@ -96,34 +96,34 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
 
         shareActions[3] = shareAction3;
 
-        //4.动弹
-        ShareItem shareAction4 = new ShareItem();
-        shareAction4.iconId = R.mipmap.ic_action_tweet;
-        shareAction4.nameId = R.string.platform_tweet;
-
-        shareActions[4] = shareAction4;
+//        //4.动弹
+//        ShareItem shareAction4 = new ShareItem();
+//        shareAction4.iconId = R.mipmap.ic_action_tweet;
+//        shareAction4.nameId = R.string.platform_tweet;
+//
+//        shareActions[4] = shareAction4;
 
         //5.browser
         ShareItem shareAction5 = new ShareItem();
         shareAction5.iconId = R.mipmap.ic_action_browser;
         shareAction5.nameId = R.string.platform_browser;
 
-        shareActions[5] = shareAction5;
+        shareActions[4] = shareAction5;
 
         //6.复制链接
         ShareItem shareAction6 = new ShareItem();
         shareAction6.iconId = R.mipmap.ic_action_url;
         shareAction6.nameId = R.string.platform_copy_link;
 
-        shareActions[6] = shareAction6;
+        shareActions[5] = shareAction6;
 
         //7.更多
-        ShareItem shareAction7 = new ShareItem();
-        shareAction7.iconId = R.mipmap.ic_action_more;
-        shareAction7.nameId = R.string.platform_more_option;
+//        ShareItem shareAction7 = new ShareItem();
+//        shareAction7.iconId = R.mipmap.ic_action_more;
+//        shareAction7.nameId = R.string.platform_more_option;
 
 
-        shareActions[7] = shareAction7;
+        //shareActions[7] = shareAction7;
 
         return shareActions;
     }
@@ -232,11 +232,12 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                         }, this);
                 break;
             //转发到动弹
-            case 4:
+           // case 4:
                 //TODO:2016 / 11 / 18
-                break;
+               // cancelLoading();
+              //  break;
             //在浏览器中打开
-            case 5:
+            case 4:
 
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
@@ -244,16 +245,18 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                 Uri content_url = Uri.parse(share.getUrl());
                 intent.setData(content_url);
                 mActivity.startActivity(intent);
-
+                cancelLoading();
                 break;
             //复制链接
-            case 6:
+            case 5:
                 TDevice.copyTextToBoard(share.getUrl());
+                cancelLoading();
                 break;
             //更多(调用系统分享)
-            default:
-                showSystemShareOption(share.getTitle(), share.getUrl());
-                break;
+            //default:
+                //showSystemShareOption(share.getTitle(), share.getUrl());
+                //cancelLoading();
+                //break;
         }
 
     }
@@ -410,7 +413,6 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             ShareItem shareAction = mShareActions[position];
-
             holder.mIvIcon.setTag(holder);
             holder.mIvIcon.setImageResource(shareAction.iconId);
             holder.mIvIcon.setOnClickListener(this);

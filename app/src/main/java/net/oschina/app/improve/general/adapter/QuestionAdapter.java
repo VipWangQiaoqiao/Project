@@ -65,11 +65,11 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
         }
 
         if (AppContext.isOnReadedPostList(cacheName, String.valueOf(item.getId()))) {
-            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
-            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
+            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.text_secondary_color));
+            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.text_secondary_color));
         } else {
-            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.blog_title_text_color_light));
-            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.ques_bt_text_color_dark));
+            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.text_title_color));
+            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.text_desc_color));
         }
 
         TextView history = vh.getView(R.id.tv_ques_item_history);

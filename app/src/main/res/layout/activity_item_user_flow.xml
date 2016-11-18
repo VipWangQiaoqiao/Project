@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:gravity="center_vertical"
-                android:textColor="@color/count_text_color_light"
+                android:textColor="@color/text_secondary_color"
                 android:textSize="@dimen/font_12"
                 tools:text="CEO CTO" />
 
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:gravity="center_vertical"
-                android:textColor="@color/count_text_color_light"
+                android:textColor="@color/text_secondary_color"
                 android:textSize="@dimen/font_12"
                 tools:text="这是一个大佬" />
 
