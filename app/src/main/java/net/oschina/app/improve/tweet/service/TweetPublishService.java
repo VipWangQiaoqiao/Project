@@ -18,6 +18,7 @@ import android.support.v4.util.ArrayMap;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.utils.CollectionUtil;
 import net.oschina.app.util.TLog;
 
@@ -41,6 +42,7 @@ public class TweetPublishService extends Service implements Contract.IService {
 
     private static final String EXTRA_CONTENT = "net.oschina.app.improve.tweet.service.extra.CONTENT";
     private static final String EXTRA_IMAGES = "net.oschina.app.improve.tweet.service.extra.IMAGES";
+    private static final String EXTRA_ABOUT = "net.oschina.app.improve.tweet.service.extra.ABOUT";
     private static final String EXTRA_ID = "net.oschina.app.improve.tweet.service.extra.ID";
     public static final String EXTRA_IDS = "net.oschina.app.improve.tweet.service.extra.IDS";
 
@@ -65,8 +67,11 @@ public class TweetPublishService extends Service implements Contract.IService {
 
     /**
      * 发起动弹发布服务
+     * <p>
+     * 如果发布的动弹绑定到相关资讯等，则About节点不为NULL
+     * 仅仅关注：{@link About#id}, {@link About#type}, {@link About#image}
      */
-    public static void startActionPublish(Context context, String content, List<String> images) {
+    public static void startActionPublish(Context context, String content, List<String> images, About about) {
         Intent intent = new Intent(context, TweetPublishService.class);
         intent.setAction(ACTION_PUBLISH);
         intent.putExtra(EXTRA_CONTENT, content);
@@ -74,6 +79,9 @@ public class TweetPublishService extends Service implements Contract.IService {
             String[] pubImages = new String[images.size()];
             images.toArray(pubImages);
             intent.putExtra(EXTRA_IMAGES, pubImages);
+        }
+        if (about != null && about.getId() > 0 && about.getType() > 0) {
+            intent.putExtra(EXTRA_ABOUT, about);
         }
         context.startService(intent);
     }
@@ -198,7 +206,8 @@ public class TweetPublishService extends Service implements Contract.IService {
             if (ACTION_PUBLISH.equals(action)) {
                 final String content = intent.getStringExtra(EXTRA_CONTENT);
                 final String[] images = intent.getStringArrayExtra(EXTRA_IMAGES);
-                handleActionPublish(content, images, startId);
+                final About about = (About) intent.getSerializableExtra(EXTRA_ABOUT);
+                handleActionPublish(content, images, about, startId);
             } else {
                 if (ACTION_CONTINUE.equals(action)) {
                     final String id = intent.getStringExtra(EXTRA_ID);
@@ -221,8 +230,8 @@ public class TweetPublishService extends Service implements Contract.IService {
     /**
      * 发布动弹,在后台服务中进行
      */
-    private void handleActionPublish(String content, String[] images, int startId) {
-        TweetPublishModel model = new TweetPublishModel(content, images);
+    private void handleActionPublish(String content, String[] images, About about, int startId) {
+        TweetPublishModel model = new TweetPublishModel(content, images, about);
         TweetPublishCache.save(getApplicationContext(), model.getId(), model);
         Contract.IOperator operator = new TweetPublishOperator(model, this, startId);
         operator.run();
