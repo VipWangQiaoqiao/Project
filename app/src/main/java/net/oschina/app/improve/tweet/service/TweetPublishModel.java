@@ -1,5 +1,7 @@
 package net.oschina.app.improve.tweet.service;
 
+import net.oschina.app.improve.bean.simple.About;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -18,16 +20,24 @@ public class TweetPublishModel implements Serializable {
     private String cacheImagesToken;
     private int cacheImagesIndex;
     private String errorString;
+    private long aboutId;
+    private int aboutType;
+    private String aboutImage;
 
     public TweetPublishModel() {
         id = UUID.randomUUID().toString();
         date = System.currentTimeMillis();
     }
 
-    public TweetPublishModel(String content, String[] images) {
+    public TweetPublishModel(String content, String[] images, About about) {
         this();
         this.content = content;
         this.srcImages = images;
+        if (about != null) {
+            this.aboutId = about.getId();
+            this.aboutType = about.getType();
+            this.aboutImage = about.getImage();
+        }
     }
 
     public String getId() {
@@ -44,6 +54,17 @@ public class TweetPublishModel implements Serializable {
 
     public String getContent() {
         return content;
+    }
+
+    public About getAbout() {
+        if (aboutId > 0 && aboutType > 0) {
+            About about = new About();
+            about.setId(aboutId);
+            about.setType(aboutType);
+            about.setImage(aboutImage);
+            return about;
+        }
+        return null;
     }
 
     public String[] getSrcImages() {

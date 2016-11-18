@@ -64,7 +64,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
 
         // To service publish
         content = content.replaceAll("[\n\\s]+", " ");
-        TweetPublishService.startActionPublish(context, content, paths);
+        TweetPublishService.startActionPublish(context, content, paths, null);
 
         // Toast
         AppContext.showToast(R.string.tweet_publishing_toast);
