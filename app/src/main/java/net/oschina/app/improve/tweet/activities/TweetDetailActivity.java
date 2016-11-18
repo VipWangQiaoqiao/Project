@@ -426,20 +426,20 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     @Override
     public void toReply(TweetComment comment) {
         if (checkLogin()) return;
-        mDelegation.getBottomSheet().dismiss();
-        if (replies.size() >= 3) return;
-        for (TweetComment cmm : replies) {
-            if (cmm.getAuthor().getId() == comment.getAuthor().getId()) return;
+        if (replies.size() < 5) {
+            for (TweetComment cmm : replies) {
+                if (cmm.getAuthor().getId() == comment.getAuthor().getId()) return;
+            }
+            if (replies.size() == 0) {
+                mViewInput.setHint("回复: @" + comment.getAuthor().getName());
+                mDelegation.setCommentHint(mViewInput.getHint().toString());
+            } else {
+                mViewInput.setHint(mViewInput.getHint() + " @" + comment.getAuthor().getName());
+                mDelegation.setCommentHint(mViewInput.getHint().toString());
+            }
+            this.replies.add(comment);
         }
-        if (replies.size() == 0) {
-            mViewInput.setHint("回复: @" + comment.getAuthor().getName());
-            mDelegation.setCommentHint(mViewInput.getHint().toString());
-        } else {
-            mViewInput.setHint(mViewInput.getHint() + " @" + comment.getAuthor().getName());
-            mDelegation.setCommentHint(mViewInput.getHint().toString());
-        }
-        this.replies.add(comment);
-        TDevice.showSoftKeyboard(mViewInput);
+        this.mDelegation.performClick();
     }
 
     @Override
@@ -491,8 +491,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     return;
                 }
                 mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
-                if (replies.size() == 2) {
-                    mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor()
+                for (int i = 1; i < replies.size(); i++) {
+                    mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(i).getAuthor()
                             .getName());
                 }
             } else {

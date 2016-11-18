@@ -169,8 +169,8 @@ public class BottomSheetBar implements View.OnClickListener {
     }
 
     public void dismiss() {
-        mDialog.dismiss();
         TDevice.closeKeyboard(mEditText);
+        mDialog.dismiss();
     }
 
     public void setMentionListener(View.OnClickListener listener) {

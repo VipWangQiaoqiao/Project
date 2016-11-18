@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -31,6 +32,7 @@ public class CommentBar {
     private ImageButton mShareView;
     private TextView mCommentText;
     private BottomSheetBar mDelegation;
+    private LinearLayout mCommentLayout;
 
 
     private CommentBar(Context context) {
@@ -52,7 +54,8 @@ public class CommentBar {
         mFavView = (ImageButton) mRootView.findViewById(R.id.ib_fav);
         mShareView = (ImageButton) mRootView.findViewById(R.id.ib_share);
         mCommentText = (TextView) mRootView.findViewById(R.id.tv_comment);
-        mRootView.findViewById(R.id.ll_comment).setOnClickListener(new View.OnClickListener() {
+        mCommentLayout = (LinearLayout) mRootView.findViewById(R.id.ll_comment);
+        mCommentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (AccountHelper.isLogin()) {
@@ -108,4 +111,10 @@ public class CommentBar {
         return mCommentText;
     }
 
+<<<<<<< HEAD
+=======
+    public void performClick() {
+        mCommentLayout.performClick();
+    }
+>>>>>>> master
 }

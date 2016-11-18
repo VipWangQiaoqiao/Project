@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
-import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubTab;
-import net.oschina.app.improve.general.fragments.BlogFragment;
-import net.oschina.app.improve.general.fragments.EventFragment;
-import net.oschina.app.improve.general.fragments.NewsFragment;
-import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.main.subscription.SubFragment;
 import net.oschina.app.improve.search.activities.SearchActivity;
@@ -200,7 +194,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
                 mViewArrowDown.setEnabled(false);
 
                 mViewTabPicker.setVisibility(View.VISIBLE);
-                mViewTabPicker.setTranslationY(dp32);
+                mViewTabPicker.setTranslationY(-dp32);
                 mViewTabPicker.setAlpha(0);
                 activity.toggleNavTabView(false);
                 animator.translationY(0)
@@ -223,7 +217,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             @Override
             public void call(ViewPropertyAnimator animator) {
                 activity.toggleNavTabView(true);
-                animator.translationY(dp32)
+                animator.translationY(-dp32)
                         .setDuration(380)
                         .alpha(0)
                         .setInterpolator(new DecelerateInterpolator())
@@ -278,28 +272,15 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
         });
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
-            public void onPageSelected(int position) {
-                mAdapter.commitUpdate();
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    mAdapter.commitUpdate();
+                }
             }
         });
         mLayoutTab.setupWithViewPager(mViewPager);
-    }
-
-    public Fragment instantiateFragment(SubTab tab) {
-        if (!TextUtils.isEmpty(tab.getHref())) {
-            return SubFragment.newInstance(getContext(), tab);
-        }
-        switch (tab.getType()) {
-            case News.TYPE_NEWS:
-                return new NewsFragment();
-            case News.TYPE_EVENT:
-                return new EventFragment();
-            case News.TYPE_QUESTION:
-                return QuestionFragment.instantiate(getContext(), tab.getSubtype());
-            case News.TYPE_BLOG:
-                return BlogFragment.instantiate(getContext(), tab.getSubtype());
-        }
-        throw new RuntimeException("Fuck you!!!!!");
+        mLayoutTab.setSmoothScrollingEnabled(true);
     }
 
     @Override
