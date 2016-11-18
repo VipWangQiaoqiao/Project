@@ -1,6 +1,7 @@
 package net.oschina.app.improve.main.subscription;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -17,6 +18,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.util.StringUtils;
+import net.qiujuer.genius.ui.compat.UiCompat;
 
 /**
  * 新板博客栏目
@@ -59,10 +61,12 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         String text = "";
         SpannableStringBuilder spannable = new SpannableStringBuilder(text);
 
+        Resources resources = mContext.getResources();
+
         boolean isToday = StringUtils.isSameDay(mSystemTime, item.getPubDate());
         if (isToday) {
             spannable.append("[icon] ");
-            Drawable originate = mContext.getResources().getDrawable(R.mipmap.ic_label_today);
+            Drawable originate = resources.getDrawable(R.mipmap.ic_label_today);
             if (originate != null) {
                 originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
             }
@@ -72,7 +76,7 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
 
         if (item.isOriginal()) {
             spannable.append("[icon] ");
-            Drawable originate = mContext.getResources().getDrawable(R.mipmap.ic_label_originate);
+            Drawable originate = resources.getDrawable(R.mipmap.ic_label_originate);
             if (originate != null) {
                 originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
             }
@@ -80,7 +84,7 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
             spannable.setSpan(imageSpan, isToday ? 7 : 0, isToday ? 13 : 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         } else {
             spannable.append("[icon] ");
-            Drawable originate = mContext.getResources().getDrawable(R.mipmap.ic_label_reprint);
+            Drawable originate = resources.getDrawable(R.mipmap.ic_label_reprint);
             if (originate != null) {
                 originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
             }
@@ -90,7 +94,7 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
 
         if (item.isRecommend()) {
             spannable.append("[icon] ");
-            Drawable recommend = mContext.getResources().getDrawable(R.mipmap.ic_label_recommend);
+            Drawable recommend = resources.getDrawable(R.mipmap.ic_label_recommend);
             if (recommend != null) {
                 recommend.setBounds(0, 0, recommend.getIntrinsicWidth(), recommend.getIntrinsicHeight());
             }
@@ -111,13 +115,12 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
             }
         }
 
-
-        if (AppContext.isOnReadedPostList("sub_list", item.getId() + "")) {
-            title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-            content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
+        if (AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))) {
+            title.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
+            content.setTextColor(UiCompat.getColor(resources, R.color.text_secondary_color));
         } else {
-            title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
-            content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
+            title.setTextColor(UiCompat.getColor(resources, R.color.text_title_color));
+            content.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
         }
 
         String author = item.getAuthor().getName();

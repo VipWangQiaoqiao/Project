@@ -30,11 +30,11 @@ public class NewsAdapter extends BaseListAdapter<News> {
     protected void convert(ViewHolder vh, News item, int position) {
         //    vh.setText(R.id.tv_title, item.getTitle());
         if (AppContext.isOnReadedPostList(NewsFragment.HISTORY_NEWS, String.valueOf(item.getId()))) {
-            vh.setTextColor(R.id.tv_title, mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
-            vh.setTextColor(R.id.tv_description, mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
+            vh.setTextColor(R.id.tv_title, mCallback.getContext().getResources().getColor(R.color.text_secondary_color));
+            vh.setTextColor(R.id.tv_description, mCallback.getContext().getResources().getColor(R.color.text_secondary_color));
         } else {
-            vh.setTextColor(R.id.tv_title, mCallback.getContext().getResources().getColor(R.color.blog_title_text_color_light));
-            vh.setTextColor(R.id.tv_description, mCallback.getContext().getResources().getColor(R.color.ques_bt_text_color_dark));
+            vh.setTextColor(R.id.tv_title, mCallback.getContext().getResources().getColor(R.color.text_title_color));
+            vh.setTextColor(R.id.tv_description, mCallback.getContext().getResources().getColor(R.color.text_desc_color));
         }
 
         vh.setText(R.id.tv_description, item.getBody());
