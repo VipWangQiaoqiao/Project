@@ -7,7 +7,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.ShapeDrawable;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,11 +42,9 @@ public final class CommentsUtil {
         drawable = new ShapeDrawable(new BorderShape(new RectF(0, 0, 0, 1)));
         drawable.getPaint().setColor(0xffd7d6da);
         textView.setBackgroundDrawable(drawable);
-        Log.e(TAG, "getReferLayout: ----->刚进来的   ====" + count);
         formatHtml(context.getResources(), textView, refer[count].getAuthor() + ":<br>" + refer[count].getContent());
         if (count < (refer.length < 5 ? refer.length - 1 : 4)) {
             count++;
-            Log.d(TAG, "getReferLayout: ------变化之后--->" + count);
             View view = getReferLayout(inflater, refer, count);
             lay.addView(view, lay.indexOfChild(textView));
         }
