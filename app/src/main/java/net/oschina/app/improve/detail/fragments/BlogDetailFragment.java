@@ -139,7 +139,12 @@ public class BlogDetailFragment
                 handleFavorite();
             }
         });
-        mDelegation.setShareListener(this);
+        mDelegation.setShareListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleShare();
+            }
+        });
 
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
@@ -342,23 +347,10 @@ public class BlogDetailFragment
     public void onClick(View view, Comment comment) {
         mCommentId = comment.getId();
 
-<<<<<<< HEAD
         mCommentAuthorId = comment.getAuthor().getId();
         mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
 
         mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-=======
-        mCommentAuthorId = comment.getAuthorId();
-        mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
-        mDelegation.getBottomSheet().show(String.format("回复: %s", comment.getAuthor()));
-
-//
-//        mCommentAuthorId = comment.getAuthor().getId();
-//        mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-//
-//        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-
->>>>>>> master
 
     }
 
@@ -373,8 +365,6 @@ public class BlogDetailFragment
 
     @Override
     public void sync(boolean isSync) {
-        if (isSync)
-            handleShare();
-
+        //  if (isSync)
     }
 }
