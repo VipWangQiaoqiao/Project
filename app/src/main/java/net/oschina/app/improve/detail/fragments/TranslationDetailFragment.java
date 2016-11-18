@@ -211,9 +211,19 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     public void onClick(View view, Comment comment) {
         FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
+
         mCommentAuthorId = comment.getAuthorId();
         mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
         mDelegation.getBottomSheet().show(String.format("回复: %s", comment.getAuthor()));
+
+
+//        mCommentAuthorId = comment.getAuthor().getId();
+//        mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint),
+//                comment.getAuthor().getName()));
+//
+//        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint),
+//                comment.getAuthor().getName()));
+
     }
 
     @Override

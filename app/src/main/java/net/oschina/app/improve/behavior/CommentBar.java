@@ -102,7 +102,9 @@ public class CommentBar {
         return mCommentText;
     }
 
+
     public void performClick() {
         mCommentLayout.performClick();
     }
+
 }
