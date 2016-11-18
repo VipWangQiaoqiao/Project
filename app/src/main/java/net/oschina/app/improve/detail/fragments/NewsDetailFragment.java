@@ -23,7 +23,6 @@ import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
-import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
@@ -231,8 +230,13 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     @Override
     public void onClick(View view, Comment comment) {
         mCommentId = comment.getId();
+
         mCommentAuthorId = comment.getAuthorId();
         mDelegation.getCommentText().setHint(String.format("回复: %s", comment.getAuthor()));
+
+//        mCommentAuthorId = comment.getAuthor().getId();
+//        mDelegation.getCommentText().setHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+
         mDelegation.getBottomSheet().show(String.format("回复: %s", comment.getAuthor()));
     }
 

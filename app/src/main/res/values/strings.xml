@@ -48,13 +48,15 @@
     <string name="actionbar_title_detail">详情</string>
     <string name="actionbar_title_active">好友圈</string>
 
-    <string name="share_to">分享到</string>
+    <string name="share_to">分享</string>
+    <string name="platform_sina">微博</string>
+    <string name="platform_wechat_circle">朋友圈</string>
+    <string name="platform_wechat">微信</string>
     <string name="platform_qq">QQ</string>
+    <string name="platform_tweet">动弹</string>
+    <string name="platform_browser">浏览器</string>
     <string name="platform_copy_link">复制链接</string>
     <string name="platform_more_option">更多</string>
-    <string name="platform_sina">微博</string>
-    <string name="platform_wechat">微信</string>
-    <string name="platform_weichat_circle">朋友圈</string>
     <string name="share_title">开源中国分享</string>
 
     <string name="add_favorite_success">收藏成功</string>
