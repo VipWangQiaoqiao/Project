@@ -460,7 +460,7 @@ public class CommentsActivity extends BaseBackActivity {
             setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(int position, long itemId) {
-                    CommentsActivity.this.onItemClick(getItem(position));
+                  //  CommentsActivity.this.onItemClick(getItem(position));
                 }
             });
         }
@@ -477,8 +477,8 @@ public class CommentsActivity extends BaseBackActivity {
             if (holder instanceof CommentHolder) {
                 commentHolder = (CommentHolder) holder;
                 RequestManager requestManager = getImageLoader();
-                if (requestManager != null)
-                    commentHolder.addComment(item, requestManager, getReplyBtnClickListener());
+               // if (requestManager != null)
+                  //  commentHolder.addComment(item, requestManager, getReplyBtnClickListener());
             }
         }
     }
