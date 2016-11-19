@@ -1310,16 +1310,17 @@ public class OSChinaApi {
      * @param id      评论Id
      * @param handler AsyncHttpResponseHandler
      */
-    public static void getComment(long id, long aid, int type, TextHttpResponseHandler handler) {
+    public static void getCommentDetail(long id, long aid, int type, TextHttpResponseHandler handler) {
         if (id <= 0) return;
         RequestParams params = new RequestParams();
         params.put("id", id);
         params.put("authorId", aid);
         params.put("type", type);
-        ApiHttpClient.get("action/apiv2/comment", params, handler);
+        ApiHttpClient.get("action/apiv2/comment_detail", params, handler);
     }
 
-    public static final int COMMENT_SOFT = 1; // 软件推荐-不支持
+
+    public static final int COMMENT_SOFT = 1; // 软件推荐-不支持(默认软件评论其实是动弹)
     public static final int COMMENT_QUESTION = 2; // 讨论区帖子
     public static final int COMMENT_BLOG = 3; // 博客
     public static final int COMMENT_TRANSLATION = 4; // 翻译文章
@@ -1336,6 +1337,7 @@ public class OSChinaApi {
      * @param pageToken 请求上下页数据令牌
      * @param handler   AsyncHttpResponseHandler
      */
+    @Deprecated
     public static void getComments(long sourceId, int type, String parts, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
@@ -1347,6 +1349,34 @@ public class OSChinaApi {
             params.put("pageToken", pageToken);
         }
         ApiHttpClient.get("action/apiv2/comment", params, handler);
+    }
+
+
+    /**
+     * 请求评论列表(适用于所有的评论,但不包括软件评论列表,软件评论列表实际为动弹)
+     *
+     * @param sourceId  sourceId  该sourceId为资讯、博客、问答等文章的Id
+     * @param type      type    问答类型  {@link #COMMENT_SOFT, #COMMENT_QUESTION, #COMMENT_BLOG},
+     *                  {@link #COMMENT_TRANSLATION, #COMMENT_EVENT, #COMMENT_NEWS}
+     * @param parts     parts  请求的数据节点 parts="refer,reply"
+     * @param order     order  请求的排序方式 1.最新 2.热门
+     * @param pageToken pageToken   请求上下页数据令牌
+     * @param handler   handler
+     */
+    public static void getComments(long sourceId, int type, String parts, int order, String pageToken, TextHttpResponseHandler handler) {
+
+        if (sourceId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("type", type);
+        if (!TextUtils.isEmpty(parts)) {
+            params.put("parts", parts);
+        }
+        params.put("order", order);
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+        ApiHttpClient.get("action/apiv2/comment_list", params, handler);
     }
 
     /**
@@ -1447,6 +1477,17 @@ public class OSChinaApi {
         params.put("commentId", cid);
         params.put("voteOpt", opt);
         ApiHttpClient.post("action/apiv2/question_vote", params, handler);
+    }
+
+    /**
+     * 对某一条评论进行投票 顶/踩
+     */
+    public static void commentVote(long sourceId, long commentId, int voteOpt, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("commentId", commentId);
+        params.put("voteOpt", voteOpt);
+        ApiHttpClient.post("action/apiv2/comment_vote_reverse", params, handler);
     }
 
     /**

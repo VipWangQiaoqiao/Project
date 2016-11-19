@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
@@ -28,8 +28,10 @@ import net.qiujuer.genius.ui.drawable.shape.BorderShape;
  */
 
 public final class CommentsUtil {
+    private static final String TAG = "CommentsUtil";
+
     @SuppressWarnings("deprecation")
-    public static View getReferLayout(LayoutInflater inflater, Comment.Refer refer, int count) {
+    public static View getReferLayout(LayoutInflater inflater, Refer[] refer, int count) {
         Context context = inflater.getContext();
         @SuppressLint("InflateParams")
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
@@ -41,11 +43,12 @@ public final class CommentsUtil {
         drawable = new ShapeDrawable(new BorderShape(new RectF(0, 0, 0, 1)));
         drawable.getPaint().setColor(0xffd7d6da);
         textView.setBackgroundDrawable(drawable);
-
-        formatHtml(context.getResources(), textView, refer.author + ":<br>" + refer.content);
-
-        if (refer.refer != null && (--count) > 0) {
-            View view = getReferLayout(inflater, refer.refer, count);
+        Log.e(TAG, "getReferLayout: ----->刚进来的   ====" + count);
+        formatHtml(context.getResources(), textView, refer[count].getAuthor() + ":<br>" + refer[count].getContent());
+        if (count < (refer.length < 5 ? refer.length - 1 : 4)) {
+            count++;
+            Log.d(TAG, "getReferLayout: ------变化之后--->" + count);
+            View view = getReferLayout(inflater, refer, count);
             lay.addView(view, lay.indexOfChild(textView));
         }
 

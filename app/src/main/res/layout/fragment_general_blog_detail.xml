@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_blog_detail"
@@ -40,7 +41,7 @@
                     android:id="@+id/iv_avatar"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@mipmap/widget_dface" />
+                    android:src="@mipmap/widget_dface"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -56,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="#111111"
                         android:textSize="14sp"
-                        tools:text="年轻的小蜜蜂" />
+                        tools:text="年轻的小蜜蜂"/>
 
                     <TextView
                         android:id="@+id/tv_pub_date"
@@ -64,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="#6a6a6a"
                         android:textSize="12sp"
-                        tools:text="发表于1天前 (2016-06-24 20:12)" />
+                        tools:text="发表于1天前 (2016-06-24 20:12)"/>
                 </LinearLayout>
 
                 <Button
@@ -75,13 +76,13 @@
                     android:minWidth="48dp"
                     android:text="关注"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/list_divider_color" />
+                android:background="@color/list_divider_color"/>
 
             <!--推荐 or 原创-->
             <LinearLayout
@@ -97,7 +98,7 @@
                     android:layout_marginRight="4dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_label_recommend" />
+                    android:src="@mipmap/ic_label_recommend"/>
 
                 <ImageView
                     android:id="@+id/iv_label_originate"
@@ -105,7 +106,7 @@
                     android:layout_height="20dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_label_originate" />
+                    android:src="@mipmap/ic_label_originate"/>
             </LinearLayout>
 
 
@@ -128,11 +129,11 @@
                     android:maxLines="2"
                     android:text="Webpack从零开始"
                     android:textColor="#111111"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
 
                 <include
                     android:id="@+id/lay_info_view_comment"
-                    layout="@layout/item_info_view_comment" />
+                    layout="@layout/item_info_view_comment"/>
 
                 <!--摘要-->
                 <LinearLayout
@@ -146,7 +147,7 @@
                         android:layout_height="1px"
                         android:layout_marginBottom="16dp"
                         android:layout_marginTop="16dp"
-                        android:background="@color/list_divider_color" />
+                        android:background="@color/list_divider_color"/>
 
                     <TextView
                         android:id="@+id/tv_blog_detail_abstract"
@@ -156,13 +157,13 @@
                         android:maxLines="6"
                         android:textColor="#6a6a6a"
                         android:textSize="14sp"
-                        tools:text="在Google IO大会中不仅仅带来了Android Studio 2.2预览版，同时带给我们一个依赖约束的库。 简单来说，她是相对布局的升级版本，但是区别与相对布局更加强调约束。何为约束，即控件之间的关系。" />
+                        tools:text="在Google IO大会中不仅仅带来了Android Studio 2.2预览版，同时带给我们一个依赖约束的库。 简单来说，她是相对布局的升级版本，但是区别与相对布局更加强调约束。何为约束，即控件之间的关系。"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_marginTop="16dp"
-                        android:background="@color/list_divider_color" />
+                        android:background="@color/list_divider_color"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -174,7 +175,7 @@
                 android:background="@color/white"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="8dp" />
+                android:paddingTop="8dp"/>
 
 
             <!--reward widgets start-->
@@ -183,7 +184,7 @@
                 android:layout_height="1px"
                 android:layout_margin="16dp"
                 android:background="@color/list_divider_color"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/btn_reward"
@@ -191,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/selector_reward_btn"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -202,20 +203,15 @@
                 android:text="写得不错,打赏作者"
                 android:textColor="#111111"
                 android:textSize="15sp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
             <!--reward widgets end-->
 
             <net.oschina.app.improve.widget.DetailAboutView
                 android:id="@+id/lay_detail_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/ques_detail_bg_color" />
+                android:background="@color/ques_detail_bg_color"/>
 
-            <net.oschina.app.improve.comment.CommentsView
-                android:id="@+id/lay_detail_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/ques_detail_bg_color" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

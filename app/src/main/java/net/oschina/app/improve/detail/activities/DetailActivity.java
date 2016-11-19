@@ -49,7 +49,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         BaseBackActivity
         implements DetailContract.Operator<Data, DataView> {
 
-    private static final String TAG = "DetailActivity";
     long mDataId;
     Data mData;
     DataView mView;

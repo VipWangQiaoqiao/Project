@@ -184,7 +184,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         if (tweet.getIsLike() == 1) {
             vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_actived);
         } else {
-            vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_normal);
+            vh.ivLikeState.setImageResource(R.mipmap.ic_thumb_normal);
         }
         PlatfromUtil.setPlatFromString(vh.platform, tweet.getAppclient());
         return convertView;
@@ -201,7 +201,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                     handler,mContext);
 //            vh.ivLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .gray));
-            vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_normal);
+            vh.ivLikeState.setImageResource(R.mipmap.ic_thumb_normal);
         } else {
             //vh.tvLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
             List<User> likeUser = tweet.getLikeUser();

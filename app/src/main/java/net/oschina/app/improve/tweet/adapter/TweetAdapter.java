@@ -123,7 +123,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         }
 
         ImageView iv_tweet_like = vh.getView(R.id.iv_like_state);
-        iv_tweet_like.setImageResource(item.isLiked() ? R.mipmap.ic_thumbup_actived : R.mipmap.ic_thumbup_normal);
+        iv_tweet_like.setImageResource(item.isLiked() ? R.mipmap.ic_thumbup_actived : R.mipmap.ic_thumb_normal);
         iv_tweet_like.setTag(position);
         iv_tweet_like.setOnClickListener(listener);
 

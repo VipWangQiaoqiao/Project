@@ -2,7 +2,7 @@ package net.oschina.app.improve.comment;
 
 import android.view.View;
 
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
 
 /**
  * Created by JuQiu

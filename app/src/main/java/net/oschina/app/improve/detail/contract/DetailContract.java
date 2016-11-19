@@ -22,6 +22,7 @@ public interface DetailContract {
     interface View {
         // 滚动到评论区域
         void scrollToComment();
+
     }
 
 }

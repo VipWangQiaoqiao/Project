@@ -127,7 +127,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
             holder.mViewContent.setText(spannable);
         }
 
-        holder.mViewLikeState.setImageResource(item.isLiked() ? R.mipmap.ic_thumbup_actived : R.mipmap.ic_thumbup_normal);
+        holder.mViewLikeState.setImageResource(item.isLiked() ? R.mipmap.ic_thumbup_actived : R.mipmap.ic_thumb_normal);
         holder.mViewLikeState.setTag(position);
         holder.mViewLikeState.setOnClickListener(listener);
 

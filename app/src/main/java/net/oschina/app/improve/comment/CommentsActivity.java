@@ -31,9 +31,9 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
@@ -47,12 +47,18 @@ import java.util.List;
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
+/**
+ * Created by  fei
+ * on  16/11/17
+ * desc:详情评论列表ui
+ */
 public class CommentsActivity extends BaseBackActivity {
 
     private long mId;
     private int mType;
 
     private PageBean<Comment> mPageBean;
+    private Context context;
 
     @Bind(R.id.lay_refreshLayout)
     RecyclerRefreshLayout mRefreshLayout;
@@ -61,7 +67,7 @@ public class CommentsActivity extends BaseBackActivity {
     RecyclerView mLayComments;
 
     @Bind(R.id.activity_comments)
-    CoordinatorLayout mCoorLayout;
+    CoordinatorLayout mCoordLayout;
 
     private Adapter mAdapter;
     private Comment reply;
@@ -138,15 +144,9 @@ public class CommentsActivity extends BaseBackActivity {
         mAdapter = new Adapter(this);
         mLayComments.setAdapter(mAdapter);
 
-        mDelegation = CommentBar.delegation(this, mCoorLayout);
+        mDelegation = CommentBar.delegation(this, mCoordLayout);
         mDelegation.hideFav();
         mDelegation.hideShare();
-        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleSendComment(mType, mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthorId(), mDelegation.getBottomSheet().getCommentText());
-            }
-        });
 
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
@@ -173,6 +173,34 @@ public class CommentsActivity extends BaseBackActivity {
         mRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        this.context = getApplicationContext();
+        mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
+            @Override
+            public void onRefreshing() {
+                getData(true, null);
+            }
+
+            @Override
+            public void onLoadMore() {
+                String token = null;
+                if (mPageBean != null)
+                    token = mPageBean.getNextPageToken();
+                getData(false, token);
+            }
+        });
+
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+                mRefreshLayout.onRefresh();
+            }
+        });
     }
 
     /**
@@ -254,6 +282,7 @@ public class CommentsActivity extends BaseBackActivity {
      * @param messageId messageId
      * @return progressDialog
      */
+    @SuppressWarnings("deprecation")
     private ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
@@ -281,33 +310,6 @@ public class CommentsActivity extends BaseBackActivity {
         }
     }
 
-
-    @Override
-    protected void initData() {
-        super.initData();
-        mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
-            @Override
-            public void onRefreshing() {
-                getData(true, null);
-            }
-
-            @Override
-            public void onLoadMore() {
-                String token = null;
-                if (mPageBean != null)
-                    token = mPageBean.getNextPageToken();
-                getData(false, token);
-            }
-        });
-
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                mRefreshLayout.onRefresh();
-            }
-        });
-    }
 
     private void getData(final boolean clearData, String token) {
         OSChinaApi.getComments(mId, mType, "refer", token, new TextHttpResponseHandler() {
@@ -371,17 +373,17 @@ public class CommentsActivity extends BaseBackActivity {
     }
 
 
-    private static class CommentHolder extends RecyclerView.ViewHolder {
+    private class CommentHolder extends RecyclerView.ViewHolder {
         private ImageView mAvatar;
         private TextView mName;
         private TextView mDate;
         private TweetTextView mContent;
         private LinearLayout mRefers;
         private ImageView btnReply;
+        private ViewGroup mRootView;
 
         CommentHolder(View itemView) {
             super(itemView);
-
             mAvatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
             mName = (TextView) itemView.findViewById(R.id.tv_name);
             mDate = (TextView) itemView.findViewById(R.id.tv_pub_date);
@@ -389,24 +391,26 @@ public class CommentsActivity extends BaseBackActivity {
 
             mContent = ((TweetTextView) itemView.findViewById(R.id.tv_content));
             mRefers = ((LinearLayout) itemView.findViewById(R.id.lay_refer));
+            this.mRootView = (ViewGroup) itemView;
         }
 
         void setData(Comment comment, RequestManager imageLoader, View.OnClickListener l) {
-            if (comment.getAuthorPortrait() != null)
-                imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
+            if (comment.getAuthor().getPortrait() != null)
+                imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
                         .into((mAvatar));
             else
                 mAvatar.setImageResource(R.mipmap.widget_dface);
 
-            mName.setText(comment.getAuthor());
+            mName.setText(comment.getAuthor().getName());
             mDate.setText(comment.getPubDate());
             CommentsUtil.formatHtml(mContent.getResources(), mContent, comment.getContent());
 
             mRefers.removeAllViews();
-            if (comment.getRefer() != null) {
-                // 最多5层
-                View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), comment.getRefer(), 5);
-                mRefers.addView(view);
+            Refer[] refers = comment.getRefer();
+            if (refers != null && refers.length > 0) {
+                LayoutInflater inflater = LayoutInflater.from(context);
+                View view = CommentsUtil.getReferLayout(inflater, refers, 0);
+                mRefers.addView(view, mRootView.indexOfChild(mContent));
             }
             btnReply.setTag(comment);
             btnReply.setOnClickListener(l);
@@ -450,6 +454,7 @@ public class CommentsActivity extends BaseBackActivity {
             }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
