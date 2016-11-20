@@ -376,8 +376,8 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onResume() {
+        super.onResume();
         if (mShareDialogBuilder != null) {
             mShareDialogBuilder.cancelLoading();
         }
