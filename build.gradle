@@ -22,7 +22,7 @@ ext {
     minSdkVersion = 19
     targetSdkVersion = 24
     versionCode = 268
-    versionName = "v2.6.8(1611041550)"
+    versionName = "v2.6.8(1611211050)"
     supportVersion = '25.0.1'
     debugCompile = project.hasProperty('DEBUG_COMPILE')
 }
