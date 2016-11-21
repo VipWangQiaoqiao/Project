@@ -2,6 +2,7 @@ package net.oschina.app.improve.comment.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +25,11 @@ import net.oschina.app.improve.comment.OnCommentClickListener;
 public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
 
 
+    private static final String TAG = "CommentAdapter";
     private RequestManager mRequestManager;
 
     public CommentAdapter(Context context, RequestManager requestManager) {
         super(context, ONLY_FOOTER);
-        mState = STATE_HIDE;
         setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position, long itemId) {
@@ -47,8 +48,9 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
 
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
+        Log.e(TAG, "onBindDefaultViewHolder: --------->" + position);
         if (holder instanceof CommentHolder) {
-            ((CommentHolder) holder).addComment(item, mRequestManager);
+            //((CommentHolder) holder).addComment(item, mRequestManager);
         }
     }
 
@@ -60,6 +62,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         CommentHolder(View itemView) {
             super(itemView);
             CommentView commentView = (CommentView) itemView.findViewById(R.id.comment);
+            commentView.setLabelLineGone();
             commentView.setTitleGone();
             commentView.setSeeMoreGone();
             this.mCommentView = commentView;

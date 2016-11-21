@@ -57,6 +57,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     private TextView mSeeMore;
     private LinearLayout mLayComments;
     private ProgressDialog mDialog;
+    private View mLabelLine;
 
     public CommentView(Context context) {
         super(context);
@@ -79,6 +80,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         inflater.inflate(R.layout.lay_detail_comment_layout, this, true);
 
         mTitle = (TextView) findViewById(R.id.tv_blog_detail_comment);
+        mLabelLine = findViewById(R.id.label_line);
         mLayComments = (LinearLayout) findViewById(R.id.lay_blog_detail_comment);
         mSeeMore = (TextView) findViewById(R.id.tv_see_more_comment);
     }
@@ -87,6 +89,11 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         if (!android.text.TextUtils.isEmpty(title)) {
             mTitle.setText(title);
         }
+    }
+
+    public void setLabelLineGone() {
+        if (mLabelLine != null)
+            mLabelLine.setVisibility(GONE);
     }
 
     public void setTitleGone() {
@@ -223,131 +230,125 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         return addComment(false, comment, imageLoader, onCommentClickListener);
     }
 
+
     private ViewGroup addComment(final boolean first, final Comment comment, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") final ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
 
-//        lay.post(new Runnable() {
-//            @Override
-//            public void run() {
+        ImageView ivAvatar = (ImageView) lay.findViewById(R.id.iv_avatar);
+        final TextView tvVoteCount = (TextView) lay.findViewById(R.id.tv_vote_count);
+        tvVoteCount.setText(String.valueOf(comment.getVote()));
+        final ImageView ivVoteStatus = (ImageView) lay.findViewById(R.id.btn_vote);
+        ivVoteStatus.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                handVote();
+            }
 
-                ImageView ivAvatar = (ImageView) lay.findViewById(R.id.iv_avatar);
-                final TextView tvVoteCount = (TextView) lay.findViewById(R.id.tv_vote_count);
-                tvVoteCount.setText(String.valueOf(comment.getVote()));
-                final ImageView ivVoteStatus = (ImageView) lay.findViewById(R.id.btn_vote);
-                ivVoteStatus.setOnClickListener(new OnClickListener() {
+            private void handVote() {
+
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(getContext());
+                    return;
+                }
+                if (!TDevice.hasInternet()) {
+                    AppContext.showToast(getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
+                    return;
+                }
+                int voteState = 0;
+                if (comment.getVoteState() == 0) {
+                    voteState = 1;
+                } else if (comment.getVoteState() == 1) {
+                    voteState = 0;
+                }
+                OSChinaApi.voteComment(comment.getId(), mId, voteState, new TextHttpResponseHandler() {
+
                     @Override
-                    public void onClick(final View v) {
-                        handVote();
+                    public void onStart() {
+                        super.onStart();
+                        showWaitDialog(R.string.progress_submit);
                     }
 
-                    private void handVote() {
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        requestFailureHint(throwable);
+                    }
 
-                        if (!AccountHelper.isLogin()) {
-                            LoginActivity.show(getContext());
-                            return;
-                        }
-                        if (!TDevice.hasInternet()) {
-                            AppContext.showToast(getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
-                            return;
-                        }
-                        int voteState = 0;
-                        if (comment.getVoteState() == 0) {
-                            voteState = 1;
-                        } else if (comment.getVoteState() == 1) {
-                            voteState = 0;
-                        }
-                        OSChinaApi.voteComment(comment.getId(), mId, voteState, new TextHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
-                            @Override
-                            public void onStart() {
-                                super.onStart();
-                                showWaitDialog(R.string.progress_submit);
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                requestFailureHint(throwable);
-                            }
-
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                                ResultBean<Vote> resultBean = AppOperator.createGson().fromJson(responseString, getVoteType());
-                                if (resultBean.isSuccess()) {
-                                    Vote vote = resultBean.getResult();
-                                    if (vote != null) {
-                                        if (vote.getVoteState() == 1) {
-                                            comment.setVoteState(1);
-                                            ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
-                                        } else if (vote.getVoteState() == 0) {
-                                            comment.setVoteState(0);
-                                            ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
-                                        }
-                                        long voteVoteCount = vote.getVote();
-                                        comment.setVote(voteVoteCount);
-                                        tvVoteCount.setText(String.valueOf(voteVoteCount));
-                                    }
-                                } else {
-                                    AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                        ResultBean<Vote> resultBean = AppOperator.createGson().fromJson(responseString, getVoteType());
+                        if (resultBean.isSuccess()) {
+                            Vote vote = resultBean.getResult();
+                            if (vote != null) {
+                                if (vote.getVoteState() == 1) {
+                                    comment.setVoteState(1);
+                                    ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
+                                } else if (vote.getVoteState() == 0) {
+                                    comment.setVoteState(0);
+                                    ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
                                 }
+                                long voteVoteCount = vote.getVote();
+                                comment.setVote(voteVoteCount);
+                                tvVoteCount.setText(String.valueOf(voteVoteCount));
                             }
-
-                            @Override
-                            public void onFinish() {
-                                super.onFinish();
-                                hideWaitDialog();
-                            }
-                        });
+                        } else {
+                            AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                        }
                     }
-                });
 
-                if (comment.getVoteState() == 1) {
-                    ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
-                } else if (comment.getVoteState() == 0) {
-                    ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
-                }
-                imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
-                        .into(ivAvatar);
-                ivAvatar.setOnClickListener(new OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        OtherUserHomeActivity.show(getContext(), comment.getAuthor().getId());
+                    public void onFinish() {
+                        super.onFinish();
+                        hideWaitDialog();
                     }
                 });
+            }
+        });
 
-                ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor().getName());
+        if (comment.getVoteState() == 1) {
+            ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
+        } else if (comment.getVoteState() == 0) {
+            ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
+        }
+        imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
+                .into(ivAvatar);
+        ivAvatar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OtherUserHomeActivity.show(getContext(), comment.getAuthor().getId());
+            }
+        });
 
-                ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
-                        StringUtils.formatSomeAgo(comment.getPubDate()));
+        ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor().getName());
 
-                TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
-                CommentsUtil.formatHtml(getResources(), content, comment.getContent());
-                Refer[] refers = comment.getRefer();
+        ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
+                StringUtils.formatSomeAgo(comment.getPubDate()));
 
-                if (refers != null && refers.length > 0) {
-                    int len = refers.length;
-                    Log.e(TAG, "addComment: ------------------>len=" + len);
+        TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
+        CommentsUtil.formatHtml(getResources(), content, comment.getContent());
+        Refer[] refers = comment.getRefer();
 
-                    View view = CommentsUtil.getReferLayout(inflater, refers, 0);
-                    lay.addView(view, lay.indexOfChild(content));
+        if (refers != null && refers.length > 0) {
+            int len = refers.length;
+            Log.e(TAG, "addComment: ------------------>len=" + len);
 
-                }
+            View view = CommentsUtil.getReferLayout(inflater, refers, 0);
+            lay.addView(view, lay.indexOfChild(content));
 
-                lay.findViewById(R.id.btn_comment).setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onCommentClickListener.onClick(v, comment);
-                    }
-                });
+        }
 
-                if (first)
-                    mLayComments.addView(lay, 0);
-                else
-                    mLayComments.addView(lay);
+        lay.findViewById(R.id.btn_comment).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCommentClickListener.onClick(v, comment);
+            }
+        });
 
-            //}
-       // });
+        if (first)
+            mLayComments.addView(lay, 0);
+        else
+            mLayComments.addView(lay);
 
         return lay;
     }

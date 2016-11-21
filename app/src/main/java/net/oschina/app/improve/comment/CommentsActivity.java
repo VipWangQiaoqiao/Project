@@ -36,6 +36,7 @@ import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
@@ -182,7 +183,7 @@ public class CommentsActivity extends BaseBackActivity {
     protected void initData() {
         super.initData();
         //第一次请求初始化数据
-        getData(true, null);
+        //etData(true, null);
 
         mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
             @Override
@@ -393,7 +394,8 @@ public class CommentsActivity extends BaseBackActivity {
                     // return;
                     //  }
                     // }
-                    mCommentAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
+                    if (pageBean.getItems().size() > 20)
+                        mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_MORE, false);
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseString, e);
@@ -403,12 +405,17 @@ public class CommentsActivity extends BaseBackActivity {
     }
 
     private void handleData(List<Comment> comments, boolean clearData) {
+        TLog.error("handleData:" + comments.size() + " " + clearData);
+        for (Comment comment : comments) {
+            TLog.error(comment.toString());
+        }
+
+
         if (clearData)
             mCommentAdapter.clear();
-
         mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOADING, false);
+
         mCommentAdapter.addAll(comments);
-        mCommentAdapter.notifyDataSetChanged();
     }
 
 
