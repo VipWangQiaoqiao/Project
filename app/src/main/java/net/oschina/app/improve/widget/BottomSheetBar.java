@@ -14,7 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -170,10 +169,13 @@ public class BottomSheetBar {
         mFaceView.setOnClickListener(listener);
     }
 
-    public void showSyncView(CompoundButton.OnCheckedChangeListener listener) {
-        mSyncToTweetView.setOnCheckedChangeListener(listener);
+    public void showSyncView() {
         mSyncToTweetView.setVisibility(View.VISIBLE);
         mRootView.findViewById(R.id.tv_sync).setVisibility(View.VISIBLE);
+    }
+
+    public boolean isSyncToTweet() {
+        return mSyncToTweetView.isChecked();
     }
 
     public void setCommitListener(View.OnClickListener listener) {
