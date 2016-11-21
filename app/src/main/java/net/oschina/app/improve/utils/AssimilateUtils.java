@@ -377,7 +377,9 @@ public class AssimilateUtils {
     }
 
     public static boolean machEmail(CharSequence email) {
-        String regex = "^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$";
+        //String regex = "^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$";
+        String regex="([a-zA-Z0-9_\\-.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})";
+        //String  regex="\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";后台现在是这种规则，当前面多个子域会出问题。并且不支持连接线。已提示后台修改
         return Pattern.matches(regex, email);
     }
 
