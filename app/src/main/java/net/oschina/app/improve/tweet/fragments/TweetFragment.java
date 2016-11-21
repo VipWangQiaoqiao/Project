@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -176,14 +177,20 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @Override
     protected void requestData() {
         super.requestData();
+        String pageToken = mIsRefresh ? null : mBean.getNextPageToken();
         switch (requestCategory) {
             case CATEGORY_TYPE:
+//                OSChinaApi.getTweetList(null, null, 1, tweetType, pageToken, mHandler);
                 OSChinaApi.getTweetList(tweetType, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 break;
             case CATEGORY_USER:
                 if (authorId != 0) {
+//                    OSChinaApi.getTweetList(authorId, null, null, null, pageToken, mHandler);
                     OSChinaApi.getUserTweetList(authorId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 }
+                break;
+            case CATEGORY_FRIEND:
+                OSChinaApi.getTweetList(null, null, 2, null, pageToken, mHandler);
                 break;
         }
     }
@@ -244,8 +251,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     private void handleLongClick(final Tweet tweet, final int position) {
         String[] items;
         if (AccountHelper.getUserId() == (int) tweet.getAuthor().getId()) {
-            items = new String[]{getString(R.string.copy),
-                    getString(R.string.delete)};
+            items = new String[]{getString(R.string.copy), getString(R.string.delete)};
         } else {
             items = new String[]{getString(R.string.copy)};
         }
