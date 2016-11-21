@@ -15,12 +15,14 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.QuestionDetail;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
@@ -96,6 +98,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 handleShare();
             }
         });
+        mDelegation.getBottomSheet().showSyncView();
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,6 +215,12 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            About about = new About();
+            QuestionDetail detail = mOperator.getData();
+            about.setId(detail.getId());
+            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+        }
     }
 
 

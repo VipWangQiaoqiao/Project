@@ -17,12 +17,14 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.Software;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
@@ -112,6 +114,8 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
                 handleShare();
             }
         });
+
+        mDelegation.getBottomSheet().showSyncView();
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,6 +212,13 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            About about = new About();
+            NewsDetail detail = mOperator.getData();
+            about.setId(detail.getId());
+            about.setType(detail.getType());
+            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+        }
     }
 
     @SuppressWarnings("deprecation")
