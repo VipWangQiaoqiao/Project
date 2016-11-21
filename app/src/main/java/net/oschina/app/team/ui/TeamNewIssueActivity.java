@@ -25,6 +25,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamGit;
 import net.oschina.app.team.bean.TeamIssue;
@@ -34,7 +35,6 @@ import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamMemberList;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.bean.TeamProjectList;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.XmlUtils;
 
@@ -288,7 +288,7 @@ public class TeamNewIssueActivity extends BaseActivity {
                 }
             }
         }
-        projectDialog = DialogHelp.getSingleChoiceDialog(this, "指定项目", arrays, projectIndex, new
+        projectDialog = DialogHelper.getSingleChoiceDialog(this, "指定项目", arrays, projectIndex, new
                 DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -317,7 +317,7 @@ public class TeamNewIssueActivity extends BaseActivity {
                 }
             }
         }
-        catalogDialog = DialogHelp.getSingleChoiceDialog(this, "指定任务列表", catalogs, catalogIndex,
+        catalogDialog = DialogHelper.getSingleChoiceDialog(this, "指定任务列表", catalogs, catalogIndex,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -339,7 +339,7 @@ public class TeamNewIssueActivity extends BaseActivity {
         for (int i = 0; i < list.size(); i++) {
             toUsers[i] = list.get(i).getName();
         }
-        toUserDialog = DialogHelp.getSingleChoiceDialog(this, "指派成员", toUsers, toUserIndex, new
+        toUserDialog = DialogHelper.getSingleChoiceDialog(this, "指派成员", toUsers, toUserIndex, new
                 DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

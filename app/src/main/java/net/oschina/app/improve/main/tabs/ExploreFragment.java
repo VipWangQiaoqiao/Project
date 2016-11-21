@@ -57,7 +57,7 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
         switch (id) {
             case R.id.rl_soft:
                 UIHelper.showSimpleBack(getActivity(),
-                        SimpleBackPage.OPENSOURCE_SOFTWARE);
+                        SimpleBackPage.OPEN_SOURCE_SOFTWARE);
                 break;
             case R.id.rl_scan:
                 UIHelper.showScanActivity(getActivity());

@@ -1,16 +1,16 @@
 package net.oschina.app.improve.detail.fragments;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,10 +21,11 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.simple.Comment;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
@@ -34,8 +35,9 @@ import net.oschina.app.improve.pay.util.RewardUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.DetailAboutView;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 
 import java.net.URLEncoder;
@@ -75,13 +77,9 @@ public class BlogDetailFragment
     ImageView mIVLabelOriginate;
     @Bind(R.id.iv_avatar)
     ImageView mIVAuthorPortrait;
-    @Bind(R.id.iv_fav)
-    ImageView mIVFav;
+
     @Bind(R.id.btn_relation)
     Button mBtnRelation;
-
-    @Bind(R.id.et_input)
-    EditText mETInput;
 
     @Bind(R.id.lay_detail_about)
     DetailAboutView mAbouts;
@@ -94,10 +92,10 @@ public class BlogDetailFragment
     CoordinatorLayout mLayCoordinator;
     @Bind(R.id.lay_nsv)
     NestedScrollView mLayContent;
-    @Bind(R.id.lay_option)
-    View mLayBottom;
 
     private Dialog mWaitDialog;
+
+    private CommentBar mDelegation;
 
     @Override
     protected int getLayoutId() {
@@ -115,18 +113,16 @@ public class BlogDetailFragment
             mBtnRelation.setElevation(0);
         }
 
-        mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
+
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    handleSendComment();
-                    return true;
-                }
-                return false;
+            public void onClick(View v) {
+                handleSendComment();
             }
         });
 
-        mETInput.setOnKeyListener(new View.OnKeyListener() {
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -135,23 +131,38 @@ public class BlogDetailFragment
                 return false;
             }
         });
+
+        mDelegation.setFavListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleFavorite();
+            }
+        });
+        mDelegation.setShareListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleShare();
+            }
+        });
+
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(BlogDetailFragment.this);
+                else
+                    LoginActivity.show(getActivity());
+            }
+        });
     }
 
-    @OnClick({R.id.iv_share, R.id.iv_fav, R.id.btn_relation, R.id.iv_avatar, R.id.btn_reward})
+    @OnClick({R.id.btn_relation, R.id.iv_avatar, R.id.btn_reward})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             // 关注按钮
             case R.id.btn_relation:
                 handleRelation();
-                break;
-            // 收藏
-            case R.id.iv_fav:
-                handleFavorite();
-                break;
-            // 分享
-            case R.id.iv_share:
-                handleShare();
                 break;
             // 评论列表
             case R.id.tv_see_more_comment:
@@ -218,11 +229,12 @@ public class BlogDetailFragment
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
-            if (TextUtils.isEmpty(mETInput.getText())) {
+            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mETInput.setHint("发表评论");
+                    mDelegation.setCommentHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -245,7 +257,7 @@ public class BlogDetailFragment
     }
 
     private void handleSendComment() {
-        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
     }
 
     private void handleReward() {
@@ -279,18 +291,18 @@ public class BlogDetailFragment
                 String sign = RewardUtil.sign(pairs);
                 pairs.put("sign", sign);
 
-                mWaitDialog = DialogHelper.getProgressDialog(getContext(), "正在提交数据",false);
+                mWaitDialog = DialogHelper.getProgressDialog(getContext(), "正在提交数据", false);
                 mWaitDialog.setCancelable(false);
 
                 OSChinaApi.reward(pairs, new TextHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String responseBody) {
-                        Log.e("oschina", "response body: " + responseBody);
+                        TLog.e("oschina", "response body: " + responseBody);
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
-                        Log.e("oschina", "onFailure");
+                        TLog.e("oschina", "onFailure");
                         error.toString();
                     }
 
@@ -309,9 +321,9 @@ public class BlogDetailFragment
     @Override
     public void toFavoriteOk(BlogDetail blogDetail) {
         if (blogDetail.isFavorite())
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved));
+            mDelegation.setFavDrawable(R.drawable.ic_faved);
         else
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav));
+            mDelegation.setFavDrawable(R.drawable.ic_fav);
     }
 
     @Override
@@ -326,17 +338,34 @@ public class BlogDetailFragment
     @Override
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mETInput.setText("");
+        mDelegation.setCommentHint("添加评论");
         mComments.addComment(comment, getImgLoader(), this);
-        TDevice.hideSoftKeyboard(mETInput);
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override
     public void onClick(View view, Comment comment) {
-        FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
+
         mCommentAuthorId = comment.getAuthorId();
-        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
-        TDevice.showSoftKeyboard(mETInput);
+        mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
+        mDelegation.getBottomSheet().show(String.format("回复: %s", comment.getAuthor()));
+
+//
+//        mCommentAuthorId = comment.getAuthor().getId();
+//        mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+//
+//        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
+        }
     }
 }

@@ -191,20 +191,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @SuppressWarnings("unchecked")
     @Override
     public void onItemClick(int position, long itemId) {
-        UserTweetAdapter.ViewHolder holder = (UserTweetAdapter.ViewHolder) mRecyclerView.findViewHolderForAdapterPosition(position);
-        if (holder == null) return;
-
-        ImageView mp = (ImageView) holder.itemView.findViewById(R.id.iv_tweet_face);
-        TextView mn = (TextView) holder.itemView.findViewById(R.id.tv_tweet_name);
-
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                Pair.<View, String>create(mp, ViewCompat.getTransitionName(mp)),
-                Pair.<View, String>create(mn, ViewCompat.getTransitionName(mn))
-        );
-
-        Intent intent = new Intent(getContext(), TweetDetailActivity.class);
-        intent.putExtra(BUNDLE_KEY_TWEET, mAdapter.getItem(position));
-        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+        TweetDetailActivity.show(getContext(), mAdapter.getItem(position));
     }
 
     @Override

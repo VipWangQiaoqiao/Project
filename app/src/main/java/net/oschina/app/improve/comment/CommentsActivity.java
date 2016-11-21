@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +25,18 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Comment;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.behavior.CommentBar;
+import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
-import net.oschina.app.util.DialogHelp;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
@@ -62,7 +65,7 @@ public class CommentsActivity extends BaseBackActivity {
 
     private Adapter mAdapter;
     private Comment reply;
-    private KeyboardInputDelegation mDelegation;
+    private CommentBar mDelegation;
     private View.OnClickListener onReplyBtnClickListener;
     private ProgressDialog mDialog;
     private boolean mInputDoubleEmpty;
@@ -91,9 +94,10 @@ public class CommentsActivity extends BaseBackActivity {
                     if (respComment != null) {
 
                         Toast.makeText(CommentsActivity.this, "评论成功", Toast.LENGTH_LONG).show();
-                        mDelegation.getInputView().setText("");
+                        mDelegation.getBottomSheet().getEditText().setText("");
+                        mDelegation.setCommentHint("发表评论");
+                        mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                         getData(true, null);
-                        TDevice.hideSoftKeyboard(mDelegation.getInputView());
                     }
                 }
                 hideWaitDialog();
@@ -102,6 +106,7 @@ public class CommentsActivity extends BaseBackActivity {
                 onFailure(statusCode, headers, responseString, e);
             }
             hideWaitDialog();
+            mDelegation.getBottomSheet().dismiss();
         }
     };
 
@@ -133,22 +138,36 @@ public class CommentsActivity extends BaseBackActivity {
         mAdapter = new Adapter(this);
         mLayComments.setAdapter(mAdapter);
 
-        mDelegation = KeyboardInputDelegation.delegation(this, mCoorLayout, mRefreshLayout);
-        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
-        mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
+        mDelegation = CommentBar.delegation(this, mCoorLayout);
+        mDelegation.hideFav();
+        mDelegation.hideShare();
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
-            public void onSubmit(TextView v, String content) {
-
-                handleSendComment(mType, mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthorId(), content);
-
+            public void onClick(View v) {
+                handleSendComment(mType, mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthorId(), mDelegation.getBottomSheet().getCommentText());
             }
+        });
 
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
-            public void onFinalBackSpace(View v) {
-                if (reply == null) return;
-                reply = null;
-                mDelegation.getInputView().setHint("发表评论");
-                handleKeyDel();
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(CommentsActivity.this);
+                else
+                    LoginActivity.show(CommentsActivity.this);
+            }
+        });
+
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (reply == null) return false;
+                    reply = null;
+
+                    handleKeyDel();
+                }
+                return false;
             }
         });
         mRefreshLayout.setColorSchemeResources(
@@ -216,9 +235,10 @@ public class CommentsActivity extends BaseBackActivity {
      */
     private void handleKeyDel() {
         if (reply.getId() != mId) {
-            if (TextUtils.isEmpty(mDelegation.getInputView().getText())) {
+            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
                 if (mInputDoubleEmpty) {
-                    mDelegation.getInputView().setHint("发表评论");
+                    mDelegation.setCommentHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -237,7 +257,7 @@ public class CommentsActivity extends BaseBackActivity {
     private ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
+            mDialog = DialogHelper.getProgressDialog(this, message);
         }
 
         mDialog.setMessage(message);
@@ -342,10 +362,8 @@ public class CommentsActivity extends BaseBackActivity {
                 @Override
                 public void onClick(View v) {
                     Comment comment = (Comment) v.getTag();
-                    mDelegation.getInputView().setHint("@" + comment.getAuthor() + " :");
+                    mDelegation.setCommentHint("@" + comment.getAuthor() + " :");
                     reply = comment;
-                    mDelegation.notifyWrapper();
-                    TDevice.showSoftKeyboard(mDelegation.getInputView());
                 }
             };
         }
@@ -431,6 +449,13 @@ public class CommentsActivity extends BaseBackActivity {
                     commentHolder.setData(item, requestManager, getReplyBtnClickListener());
             }
         }
-
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
+        }
     }
 }

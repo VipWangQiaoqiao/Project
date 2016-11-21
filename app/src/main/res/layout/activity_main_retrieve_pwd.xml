@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/lay_retrieve_container"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@mipmap/bg_login"
@@ -117,6 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
+            android:alpha="0.4"
             android:background="@drawable/bg_register_call_sms"
             android:gravity="center_vertical"
             android:paddingBottom="2dp"
@@ -140,7 +142,7 @@
         android:elevation="0dp"
         android:outlineProvider="none"
         android:text="@string/retrieve_pwd_step_hint"
-        android:textColor="@color/white"
+        android:textColor="@color/account_lock_font_color"
         android:textSize="@dimen/font_18"
         tools:targetApi="lollipop"/>
 

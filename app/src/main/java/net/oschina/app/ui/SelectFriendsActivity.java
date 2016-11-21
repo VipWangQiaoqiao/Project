@@ -1,11 +1,13 @@
 package net.oschina.app.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
@@ -151,6 +153,16 @@ public class SelectFriendsActivity extends BaseActivity {
     private int lineColor;
     //选中edittext的线条颜色
     private int colorPrimary;
+
+    public static void show(Fragment fragment) {
+        Intent intent = new Intent(fragment.getActivity(), SelectFriendsActivity.class);
+        fragment.startActivityForResult(intent, 1);
+    }
+
+    public static void show(Activity activity) {
+        Intent intent = new Intent(activity, SelectFriendsActivity.class);
+        activity.startActivityForResult(intent, 1);
+    }
 
     @Override
     public void onClick(View v) {

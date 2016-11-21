@@ -1,12 +1,13 @@
 package net.oschina.app.improve.utils;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+
+import net.oschina.app.util.TLog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,10 +57,13 @@ public final class CacheManager {
     }
 
     public static <T> ArrayList<T> readFromJson(Context context, String fileName, Class<T> cls) {
+        String json = readJson(context, fileName);
+        if (json == null)
+            return null;
         try {
             ArrayList<T> mList = new ArrayList<>();
             Gson gson = new Gson();
-            JsonArray array = new JsonParser().parse(readJson(context, fileName)).getAsJsonArray();
+            JsonArray array = new JsonParser().parse(json).getAsJsonArray();
             for (final JsonElement elem : array) {
                 mList.add(gson.fromJson(elem, cls));
             }
@@ -71,8 +75,11 @@ public final class CacheManager {
     }
 
     public static <T> T fromJson(Context context, String fileName, Class<T> cla) {
+        String json = readJson(context, fileName);
+        if (json == null)
+            return null;
         try {
-            return new Gson().fromJson(readJson(context, fileName), cla);
+            return new Gson().fromJson(json, cla);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -81,7 +88,6 @@ public final class CacheManager {
 
     private static String readJson(Context context, String fileName) {
         String path = context.getCacheDir() + "/" + fileName;
-        Log.e("path",path);
         File file = new File(path);
         if (!file.exists())
             return null;

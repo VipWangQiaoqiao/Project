@@ -241,7 +241,7 @@
     <LinearLayout
         android:id="@+id/ll_operate"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
         android:background="@color/white"
         android:orientation="horizontal"
         app:layout_anchor="@+id/nsv"
@@ -262,8 +262,8 @@
 
             <ImageView
                 android:id="@+id/iv_fav"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/ic_fav" />
@@ -279,6 +279,44 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
+        <View
+            style="@style/h_line"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="?attr/lineColor" />
+
+        <LinearLayout
+            android:id="@+id/ll_comment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_event_fav"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp">
+
+            <ImageView
+                android:id="@+id/iv_comment"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_comment_40_selector" />
+
+            <TextView
+                android:id="@+id/tv_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_8"
+                android:layout_marginRight="@dimen/lay_8"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="评论(4000)"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/ll_sign"
             android:layout_width="0dp"
@@ -290,8 +328,8 @@
 
             <ImageView
                 android:id="@+id/iv_sign"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/selector_sign" />

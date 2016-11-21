@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <View style="@style/h_line" />
+
+        <EditText
+            android:id="@+id/et_comment"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginBottom="@dimen/lay_12"
+            android:layout_marginLeft="@dimen/lay_16"
+            android:layout_marginRight="@dimen/lay_16"
+            android:layout_marginTop="@dimen/lay_12"
+            android:focusable="true"
+            android:textSize="@dimen/font_16"
+            android:background="@drawable/bg_comment"
+            android:gravity="top"
+            android:hint="请输入评论"
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="6dp"
+            android:paddingLeft="@dimen/lay_16"
+            android:paddingRight="@dimen/lay_16">
+
+
+            <ImageButton
+                android:id="@+id/ib_mention"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginRight="@dimen/lay_16"
+                android:background="@drawable/ic_material"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_tweet_mention_normal" />
+
+            <ImageButton
+                android:id="@+id/ib_face"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginRight="@dimen/lay_16"
+                android:background="@drawable/ic_material"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_tweet_expression_normal" />
+
+
+            <CheckBox
+                android:id="@+id/cb_sync"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_sync"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_4"
+                android:layout_weight="1"
+                android:text="同步到动弹"
+                android:textSize="@dimen/font_12"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/btn_comment"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:background="@drawable/selector_comment"
+                android:text="发送" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="?attr/lineColor" />
+
+        <FrameLayout
+            android:id="@+id/fl_face"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            android:visibility="gone" />
+    </LinearLayout>
+</RelativeLayout>

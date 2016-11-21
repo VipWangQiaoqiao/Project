@@ -23,9 +23,9 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -247,7 +247,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
             items = new String[]{getString(R.string.copy)};
         }
 
-        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
+        DialogHelper.getSelectDialog(getActivity(), items, "消息", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -264,7 +264,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     }
 
     private void handleDeleteTweet(final Tweet tweet) {
-        DialogHelp.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
+        DialogHelper.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
                 .OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

@@ -22,7 +22,6 @@ import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.QuestionDetailFragment;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.URLsUtils;
 
 import java.lang.reflect.Type;
 
@@ -119,7 +118,7 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
         if (getDataId() != 0 && getData() != null) {
             String content;
 
-            String url = String.format(URLsUtils.URL_MOBILE + "question/%s", getDataId());
+            String url = getData().getHref();
             final QuestionDetail blogDetail = getData();
             if (blogDetail.getBody().length() > 55) {
                 content = HTMLUtil.delHTMLTag(blogDetail.getBody().trim());

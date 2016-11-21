@@ -10,9 +10,11 @@ import java.io.Serializable;
 public class About implements Serializable {
     private long id;
     private String title;
-    private int commentCount;
     private int type;
+    private int href;
     private int viewCount;
+    private int commentCount;
+    private String image;
 
     public long getId() {
         return id;
@@ -52,5 +54,21 @@ public class About implements Serializable {
 
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public int getHref() {
+        return href;
+    }
+
+    public void setHref(int href) {
+        this.href = href;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_blog_detail"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ques_detail_bg_color">
@@ -20,53 +19,4 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </net.oschina.app.improve.widget.RecyclerRefreshLayout>
-
-
-    <LinearLayout
-        android:id="@+id/lay_option"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="end|bottom"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        app:layout_anchor="@id/recyclerView"
-        app:layout_anchorGravity="bottom"
-        app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
-        app:layout_scrollFlags="scroll|enterAlways">
-
-        <EditText
-            android:id="@+id/et_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/ic_bg_edit"
-            android:hint="@string/comment_pub"
-            android:imeOptions="actionSend"
-            android:inputType="text"
-            android:lines="1"
-            android:maxLines="1"
-            android:paddingBottom="6dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="6dp"
-            android:textSize="14sp"
-            tools:ignore="RtlHardcoded" />
-
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/list_divider_color"
-        app:layout_anchor="@id/lay_option"
-        app:layout_anchorGravity="top"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_scrollFlags="scroll|enterAlways" />
 </android.support.design.widget.CoordinatorLayout>

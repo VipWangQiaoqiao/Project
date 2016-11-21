@@ -216,8 +216,9 @@ public final class PicturesCompressor {
                 return false;
         }
 
+
         // if the in file size <= maxSize, we can copy to savePath
-        if (sourceFile.length() <= maxSize) {
+        if (sourceFile.length() <= maxSize && confirmImage(srcPath, options)) {
             return copyFile(sourceFile, saveFile);
         }
 
@@ -322,6 +323,17 @@ public final class PicturesCompressor {
                 options.inDensity = options.inTargetDensity = 0;
             }
         }
+    }
+
+    public static boolean confirmImage(String filePath, BitmapFactory.Options opts) {
+        if (opts == null) opts = createOptions();
+        opts.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, opts);
+        String mimeType = opts.outMimeType.toLowerCase();
+        if (mimeType.contains("jpeg") || mimeType.contains("png") || mimeType.contains("gif")) {
+            return true;
+        }
+        return false;
     }
 
     public static String verifyPictureExt(String filePath) {

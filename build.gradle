@@ -1,4 +1,3 @@
-
 buildscript {
     repositories {
         jcenter()
@@ -12,6 +11,9 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url 'https://dl.bintray.com/apposchina/maven/'
+        }
     }
 }
 
@@ -22,7 +24,6 @@ ext {
     minSdkVersion = 19
     targetSdkVersion = 24
     versionCode = 268
-    versionName = "v2.6.8(1611041550)"
-    supportVersion = '25.0.0'
-    debugCompile = project.hasProperty('DEBUG_COMPILE')
+    versionName = "v2.6.8(1611211050)"
+    supportVersion = '25.0.1'
 }

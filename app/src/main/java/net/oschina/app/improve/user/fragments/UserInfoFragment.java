@@ -96,8 +96,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
     @Bind(R.id.tv_nick)
     TextView mTvName;
-    @Bind(R.id.tv_summary)
-    TextView mTvSummary;
     @Bind(R.id.tv_score)
     TextView mTvScore;
     @Bind(R.id.user_view_solar_system)
@@ -106,8 +104,11 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     LinearLayout mRlShowInfo;
 
 
+    @Bind(R.id.about_line)
+    View mAboutLine;
+
     @Bind(R.id.lay_about_info)
-    LinearLayout layAboutCount;
+    LinearLayout mLayAboutCount;
     @Bind(R.id.tv_tweet)
     TextView mTvTweetCount;
     @Bind(R.id.tv_favorite)
@@ -267,6 +268,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
         mTvName.setText(userInfo.getName());
         mTvName.setVisibility(View.VISIBLE);
+        mTvName.setTextSize(20.0f);
 
         switch (userInfo.getGender()) {
             case 0:
@@ -284,11 +286,10 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 break;
         }
 
-        mTvSummary.setText(userInfo.getDesc());
-        mTvSummary.setVisibility(View.VISIBLE);
         mTvScore.setText(String.format("%s  %s", getString(R.string.user_score), formatCount(userInfo.getStatistics().getScore())));
         mTvScore.setVisibility(View.VISIBLE);
-        layAboutCount.setVisibility(View.VISIBLE);
+        mAboutLine.setVisibility(View.VISIBLE);
+        mLayAboutCount.setVisibility(View.VISIBLE);
         mTvTweetCount.setText(formatCount(userInfo.getStatistics().getTweet()));
         mTvFavoriteCount.setText(formatCount(userInfo.getStatistics().getCollect()));
         mTvFollowCount.setText(formatCount(userInfo.getStatistics().getFollow()));
@@ -359,7 +360,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
                     mPx = x + +rlShowInfoX + (width >> 1);
                     mPy = y1 + y + (height - y) / 2;
-                    mMaxRadius = (int) (mSolarSystem.getHeight() - mPy + 50);
+                    mMaxRadius = (int) (mSolarSystem.getHeight() - mPy + 250);
                     mR = (portraitWidth >> 1);
 
                     updateSolar(mPx, mPy);
@@ -382,7 +383,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         int maxRadius = mMaxRadius;
         int r = mR;
         solarSystemView.clear();
-        for (int i = 60, radius = r + i; radius <= maxRadius; i = (int) (i * 1.4), radius += i) {
+        for (int i = 40, radius = r + i; radius <= maxRadius; i = (int) (i * 1.4), radius += i) {
             SolarSystemView.Planet planet = new SolarSystemView.Planet();
             planet.setClockwise(random.nextInt(10) % 2 == 0);
             planet.setAngleRate((random.nextInt(35) + 1) / 1000.f);
@@ -399,10 +400,11 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     private void hideView() {
         mCirclePortrait.setImageResource(R.mipmap.widget_dface);
         mTvName.setText(R.string.user_hint_login);
+        mTvName.setTextSize(16.0f);
         mIvGander.setVisibility(View.INVISIBLE);
-        mTvSummary.setVisibility(View.INVISIBLE);
         mTvScore.setVisibility(View.INVISIBLE);
-        layAboutCount.setVisibility(View.INVISIBLE);
+        mLayAboutCount.setVisibility(View.GONE);
+        mAboutLine.setVisibility(View.GONE);
     }
 
     /**
@@ -418,8 +420,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
     @SuppressWarnings("deprecation")
     @OnClick({R.id.iv_logo_setting, R.id.iv_logo_zxing, R.id.iv_portrait, R.id.user_view_solar_system, R.id.ly_tweet,
-            R.id.ly_favorite, R.id.ly_following, R.id.ly_follower, R.id.rl_message, R.id.rl_blog, R.id.rl_info_avtivities,
-            R.id.rl_team
+            R.id.ly_favorite, R.id.ly_following, R.id.ly_follower, R.id.rl_message, R.id.rl_blog, R.id.rl_info_question,
+            R.id.rl_info_activities, R.id.rl_team
     })
     @Override
     public void onClick(View v) {
@@ -474,7 +476,10 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 case R.id.rl_blog:
                     UIHelper.showUserBlog(getActivity(), AccountHelper.getUserId());
                     break;
-                case R.id.rl_info_avtivities:
+                case R.id.rl_info_question:
+                    UIHelper.showUserQuestion(getActivity(), AccountHelper.getUserId());
+                    break;
+                case R.id.rl_info_activities:
                     Bundle bundle = new Bundle();
                     bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS, 1);
                     UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);

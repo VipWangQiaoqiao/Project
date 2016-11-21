@@ -20,7 +20,6 @@ import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.NewsDetailFragment;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.URLsUtils;
 
 import java.lang.reflect.Type;
 
@@ -115,7 +114,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         if (getDataId() != 0 && getData() != null) {
             String content;
 
-            String url = String.format(URLsUtils.URL_MOBILE + "news/%s", getDataId());
+            String url = getData().getHref();
             final NewsDetail newsDetail = getData();
             if (newsDetail.getBody().length() > 55) {
                 content = HTMLUtil.delHTMLTag(newsDetail.getBody().trim());

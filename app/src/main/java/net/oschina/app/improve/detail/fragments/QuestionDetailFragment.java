@@ -1,27 +1,29 @@
 package net.oschina.app.improve.detail.fragments;
 
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.widget.FlowLayout;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.util.List;
@@ -38,19 +40,16 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
     private TextView mTVTitle;
-    private EditText mETInput;
 
     private long mCommentId;
     private long mCommentAuthorId;
     private CommentExsView mComments;
     private CoordinatorLayout mLayCoordinator;
     private NestedScrollView mLayContent;
-    private View mLayBottom;
-    private TextView mTvTagOne;
 
-    private ImageView mIVFav;
     private FlowLayout mFlowLayout;
 
+    private CommentBar mDelegation;
 
     @Override
     protected int getLayoutId() {
@@ -66,11 +65,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mTVTitle = (TextView) root.findViewById(R.id.tv_ques_detail_title);
 
         mFlowLayout = (FlowLayout) root.findViewById(R.id.ques_detail_flow);
-        mTvTagOne = (TextView) root.findViewById(R.id.tv_ques_detail_tag);
-
-
-        mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
-        mIVFav.setOnClickListener(this);
 
         mComments = (CommentExsView) root.findViewById(R.id.lay_detail_comment);
         mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
@@ -78,22 +72,9 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         registerScroller(mLayContent, mComments);
 
-        mLayBottom = root.findViewById(R.id.lay_option);
+        mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
 
-        mETInput = (EditText) root.findViewById(R.id.et_input);
-
-        root.findViewById(R.id.iv_share).setOnClickListener(this);
-        mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    handleSendComment();
-                    return true;
-                }
-                return false;
-            }
-        });
-        mETInput.setOnKeyListener(new View.OnKeyListener() {
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -102,24 +83,54 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 return false;
             }
         });
+
+        mDelegation.setFavListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleFavorite();
+            }
+        });
+        mDelegation.setShareListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleShare();
+            }
+        });
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleSendComment();
+            }
+        });
+
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                    handleKeyDel();
+                }
+                return false;
+            }
+        });
+
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(QuestionDetailFragment.this);
+                else
+                    LoginActivity.show(getActivity());
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            // 收藏
-            case R.id.iv_fav:
-                handleFavorite();
-                break;
-            // 分享
-            case R.id.iv_share:
-                handleShare();
-                break;
             // 评论列表
             case R.id.tv_see_more_comment:
                 UIHelper.showBlogComment(getActivity(), (int) mId,
                         (int) mOperator.getData().getAuthorId());
-                System.out.println("-------------------------->");
                 break;
         }
     }
@@ -175,11 +186,12 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
-            if (TextUtils.isEmpty(mETInput.getText().toString().trim())) {
+            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mETInput.setHint("我要回答");
+                    mDelegation.setCommentHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -199,7 +211,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     }
 
     private void handleSendComment() {
-        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
     }
 
 
@@ -207,22 +219,32 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     @Override
     public void toFavoriteOk(QuestionDetail questionDetail) {
         if (questionDetail.isFavorite())
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved));
+            mDelegation.setFavDrawable(R.drawable.ic_faved);
         else
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav));
+            mDelegation.setFavDrawable(R.drawable.ic_fav);
     }
 
 
     @Override
     public void toSendCommentOk(CommentEX commentEX) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mETInput.setText("");
+        mDelegation.setCommentHint("添加评论");
         mComments.addComment(commentEX, getImgLoader(), null);
-        TDevice.hideSoftKeyboard(mETInput);
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override
     public void onClick(View view, Comment comment) {
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
+        }
+    }
+
 }

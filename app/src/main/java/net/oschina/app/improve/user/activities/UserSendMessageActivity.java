@@ -8,16 +8,13 @@ import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
@@ -116,10 +113,11 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
                 });
             }
         });
-        mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
+
+        mDelegation.setSendListener(new View.OnClickListener() {
             @Override
-            public void onSubmit(TextView v, String content) {
-                content = content.replaceAll("[ \\s\\n]+", " ");
+            public void onClick(View v) {
+                String content = mDelegation.getInputText().replaceAll("[ \\s\\n]+", " ");
                 if (TextUtils.isEmpty(content)) {
                     Toast.makeText(UserSendMessageActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                     return;
@@ -127,11 +125,6 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
                 mDialog.setMessage("正在发送中...");
                 mDialog.show();
                 OSChinaApi.pubMessage(mReceiver.getId(), content, new CallBack(null));
-            }
-
-            @Override
-            public void onFinalBackSpace(View v) {
-
             }
         });
         mViewInput = mDelegation.getInputView();

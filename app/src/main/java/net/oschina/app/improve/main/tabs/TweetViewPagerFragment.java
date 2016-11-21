@@ -53,17 +53,23 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
     @Override
     protected PagerInfo[] getPagers() {
 
-        String[] titles = getResources().getStringArray(R.array.tweets_viewpage_arrays);
-        PagerInfo[] infoList = new PagerInfo[4];
-
-        infoList[0] = new PagerInfo(titles[0], TweetFragment.class,
+        /*
+        infoList[0] = new PagerInfo("好友动弹", TweetFragment.class,
                 getBundle(TweetFragment.CATEGORY_USER, (int) AccountHelper.getUserId()));
-        infoList[1] = new PagerInfo(titles[1], TopicTweetFragment.class, null);
-        infoList[2] = new PagerInfo(titles[2], TweetFragment.class,
+        infoList[1] = new PagerInfo("推荐话题", TopicTweetFragment.class, null);
+        infoList[2] = new PagerInfo("热门动弹", TweetFragment.class,
                 getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_HOT));
-        infoList[3] = new PagerInfo(titles[3], TweetFragment.class,
-                getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_NEW));
+        infoList[3] = new PagerInfo("最新动弹", TweetFragment.class,
+                getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_NEW));*/
 
+        PagerInfo[] infoList = new PagerInfo[3];
+
+        infoList[2] = new PagerInfo("我的动弹", TweetFragment.class,
+                getBundle(TweetFragment.CATEGORY_USER, (int) AccountHelper.getUserId()));
+        infoList[1] = new PagerInfo("热门动弹", TweetFragment.class,
+                getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_HOT));
+        infoList[0] = new PagerInfo("最新动弹", TweetFragment.class,
+                getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_NEW));
 
         return infoList;
     }

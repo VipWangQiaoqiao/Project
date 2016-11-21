@@ -25,7 +25,6 @@ import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.TDevice;
-import net.oschina.common.verify.Verifier;
 
 import java.lang.reflect.Type;
 
@@ -136,8 +135,7 @@ public class WXEntryActivity extends Activity {
                 //新版微信登录
                 if (!TextUtils.isEmpty(responseString)) {
 
-                    String appToken = Verifier.getPrivateToken(getApplication());
-                    OSChinaApi.openLogin(OSChinaApi.LOGIN_WECHAT, responseString, appToken, new TextHttpResponseHandler() {
+                    OSChinaApi.openLogin(OSChinaApi.LOGIN_WECHAT, responseString, new TextHttpResponseHandler() {
 
                         @Override
                         public void onStart() {

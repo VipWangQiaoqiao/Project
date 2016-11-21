@@ -3,15 +3,20 @@ package net.oschina.app.improve.behavior;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -40,7 +45,13 @@ public class KeyboardInputDelegation {
     private ImageView mViewPic;
     private FrameLayout mKeyboardFrame;
 
+    private Button mBtnSend;
+    private LinearLayout mBottomLayout;
+
     private KeyboardActionDelegation mActionDelegation;
+
+    private int mInputHeight;
+    private int mCurrentInputHeight;
 
     private KeyboardInputDelegation(Context context) {
         this.context = context;
@@ -56,8 +67,8 @@ public class KeyboardInputDelegation {
         return delegator;
     }
 
-    public void setBehavior(CoordinatorLayout.Behavior behavior){
-        ((CoordinatorLayout.LayoutParams)mWrapperView.getLayoutParams()).setBehavior(behavior);
+    public void setBehavior(CoordinatorLayout.Behavior behavior) {
+        ((CoordinatorLayout.LayoutParams) mWrapperView.getLayoutParams()).setBehavior(behavior);
     }
 
     public void showEmoji(FragmentManager fragManager) {
@@ -107,6 +118,23 @@ public class KeyboardInputDelegation {
         });
     }
 
+    public void hideSendButton() {
+        if (mBottomLayout == null) {
+            mBottomLayout = (LinearLayout) mWrapperView.findViewById(R.id.ll_bottom);
+
+        }
+        mBottomLayout.setVisibility(View.VISIBLE);
+        mBtnSend.setVisibility(View.GONE);
+    }
+
+    public void showSendButton() {
+        if (mBottomLayout == null) {
+            mBottomLayout = (LinearLayout) mWrapperView.findViewById(R.id.ll_bottom);
+        }
+        mBottomLayout.setVisibility(View.GONE);
+        mBtnSend.setVisibility(View.VISIBLE);
+    }
+
     public void showShare(View.OnClickListener l) {
         if (mViewShare == null)
             mViewShare = (ImageView) mWrapperView.findViewById(R.id.iv_share);
@@ -121,8 +149,12 @@ public class KeyboardInputDelegation {
         mViewFavor.setVisibility(View.VISIBLE);
     }
 
-    public void showPic(View.OnClickListener l){
-        if (mViewPic == null){
+    public void setFavorDrawable(int drawable) {
+        mViewFavor.setImageResource(drawable);
+    }
+
+    public void showPic(View.OnClickListener l) {
+        if (mViewPic == null) {
             mViewPic = (ImageView) mWrapperView.findViewById(R.id.iv_pic);
         }
         if (l != null) mViewPic.setOnClickListener(l);
@@ -132,6 +164,15 @@ public class KeyboardInputDelegation {
     private void setWrapperView(View view) {
         this.mWrapperView = view;
         mViewInput = (EditText) this.mWrapperView.findViewById(R.id.et_input);
+        mViewInput.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (mInputHeight == 0) {
+                    mInputHeight = mViewInput.getMeasuredHeight();
+                }
+            }
+        });
+        mBtnSend = (Button) mWrapperView.findViewById(R.id.btn_send);
     }
 
     private void setCoorLayout(CoordinatorLayout view) {
@@ -174,10 +215,56 @@ public class KeyboardInputDelegation {
                 return false;
             }
         });
+
+    }
+
+    public void setSendListener(View.OnClickListener listener) {
+        mBtnSend.setOnClickListener(listener);
+        mViewInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s.toString().replace("\n", "").replace(" ", ""))) {
+                    showSendButton();
+                } else {
+                    hideSendButton();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mCurrentInputHeight = mViewInput.getMeasuredHeight();
+            }
+        });
+        mViewInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (TextUtils.isEmpty(getInputText())) {
+                        mViewInput.setText("");
+                    }
+                    mViewInput.getLayoutParams().height = mInputHeight;
+                    mViewInput.requestLayout();
+                } else {
+                    if (mCurrentInputHeight >= mInputHeight) {
+                        mViewInput.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                        mViewInput.requestLayout();
+                    }
+                }
+            }
+        });
     }
 
     public EditText getInputView() {
         return mViewInput;
+    }
+
+    public String getInputText() {
+        return mViewInput.getText().toString().trim();
     }
 
     public void notifyWrapper() {

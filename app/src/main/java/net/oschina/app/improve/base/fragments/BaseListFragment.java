@@ -194,10 +194,10 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
      */
     protected void updateTextColor(TextView title, TextView content) {
         if (title != null) {
-            title.setTextColor(getResources().getColor(R.color.count_text_color_light));
+            title.setTextColor(getResources().getColor(R.color.text_secondary_color));
         }
         if (content != null) {
-            content.setTextColor(getResources().getColor(R.color.count_text_color_light));
+            content.setTextColor(getResources().getColor(R.color.text_secondary_color));
         }
     }
 

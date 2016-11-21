@@ -14,8 +14,8 @@ import net.oschina.app.improve.widget.ViewEventBanner;
  */
 
 public class EventHeaderView extends HeaderView {
-    public EventHeaderView(Context context, RequestManager loader, String api) {
-        super(context, loader, api);
+    public EventHeaderView(Context context, RequestManager loader, String api, String bannerCache) {
+        super(context, loader, api, bannerCache);
     }
 
     @Override

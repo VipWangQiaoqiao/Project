@@ -3,17 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/view_root"
     android:orientation="vertical"
-    android:background="#fff"
-    android:fitsSystemWindows="false"
+    android:background="#F6F6F6"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:fitsSystemWindows="true"
-        android:background="#F6F6F6">
+        android:orientation="vertical">
 
         <LinearLayout
             android:orientation="horizontal"

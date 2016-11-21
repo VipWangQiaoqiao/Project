@@ -86,7 +86,7 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
     public void onItemClick(int position, long itemId) {
         super.onItemClick(position, itemId);
         News item = mAdapter.getItem(position);
-        switch (catalog) {
+        switch (item.getType()) {
             case News.TYPE_BLOG:
                 BlogDetailActivity.show(getContext(), item.getId());
                 break;
