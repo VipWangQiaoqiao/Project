@@ -108,6 +108,9 @@ repositories {
             url DEBUG_COMPILE_URL
         }
     }
+    maven {
+        url 'https://dl.bintray.com/apposchina/maven/'
+    }
 }
 
 dependencies {
