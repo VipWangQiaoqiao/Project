@@ -139,7 +139,12 @@ public class BlogDetailFragment
                 handleFavorite();
             }
         });
-        mDelegation.setShareListener(this);
+        mDelegation.setShareListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleShare();
+            }
+        });
 
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
@@ -348,7 +353,6 @@ public class BlogDetailFragment
 
         mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
 
-
     }
 
     @Override
@@ -362,8 +366,6 @@ public class BlogDetailFragment
 
     @Override
     public void sync(boolean isSync) {
-        if (isSync)
-            handleShare();
-
+        //  if (isSync)
     }
 }

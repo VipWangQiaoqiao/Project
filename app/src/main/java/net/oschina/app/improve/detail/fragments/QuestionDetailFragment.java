@@ -85,7 +85,12 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 handleFavorite();
             }
         });
-        mDelegation.setShareListener(this);
+        mDelegation.setShareListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleShare();
+            }
+        });
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,7 +236,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     @Override
     public void sync(boolean isSync) {
-        if (isSync)
-            handleShare();
+        // if (isSync)
+
     }
 }

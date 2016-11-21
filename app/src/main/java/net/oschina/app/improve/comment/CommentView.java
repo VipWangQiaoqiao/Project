@@ -1,8 +1,10 @@
 package net.oschina.app.improve.comment;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,21 +13,29 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.bean.comment.Reply;
+import net.oschina.app.improve.bean.comment.Vote;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.TweetTextView;
 
 import java.lang.reflect.Type;
@@ -46,6 +56,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     private TextView mTitle;
     private TextView mSeeMore;
     private LinearLayout mLayComments;
+    private ProgressDialog mDialog;
 
     public CommentView(Context context) {
         super(context);
@@ -81,8 +92,13 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     /**
      * @return TypeToken
      */
-    Type getDataType() {
+    Type getCommentType() {
         return new TypeToken<ResultBean<PageBean<Comment>>>() {
+        }.getType();
+    }
+
+    Type getVoteType() {
+        return new TypeToken<ResultBean<Vote>>() {
         }.getType();
     }
 
@@ -118,7 +134,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                         comment.setPubDate("2013-09-17 16:49:34");
                         comment.setAppClient(2);
                         comment.setVote(200);
-                        comment.setVoteState(1);
+                        comment.setVoteState((int) (Math.random() * 1));
                         comment.setBest(true);
 
                         Refer[] refers = new Refer[(int) (Math.random() * 10 + 1)];
@@ -191,6 +207,81 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
         ImageView ivAvatar = (ImageView) lay.findViewById(R.id.iv_avatar);
+        final TextView tvVoteCount = (TextView) lay.findViewById(R.id.tv_vote_count);
+        tvVoteCount.setText(String.valueOf(comment.getVote()));
+        final ImageView ivVoteStatus = (ImageView) lay.findViewById(R.id.btn_vote);
+        ivVoteStatus.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                handVote();
+            }
+
+            private void handVote() {
+
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(getContext());
+                    return;
+                }
+                if (!TDevice.hasInternet()) {
+                    AppContext.showToast(getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
+                    return;
+                }
+                int voteState = 0;
+                if (comment.getVoteState() == 0) {
+                    voteState = 1;
+                } else if (comment.getVoteState() == 1) {
+                    voteState = 0;
+                }
+                OSChinaApi.voteComment(comment.getId(), mId, voteState, new TextHttpResponseHandler() {
+
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        showWaitDialog(R.string.progress_submit);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        requestFailureHint(throwable);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                        ResultBean<Vote> resultBean = AppOperator.createGson().fromJson(responseString, getVoteType());
+                        if (resultBean.isSuccess()) {
+                            Vote vote = resultBean.getResult();
+                            if (vote != null) {
+                                if (vote.getVoteState() == 1) {
+                                    comment.setVoteState(1);
+                                    ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
+                                } else if (vote.getVoteState() == 0) {
+                                    comment.setVoteState(0);
+                                    ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
+                                }
+                                long voteVoteCount = vote.getVote();
+                                comment.setVote(voteVoteCount);
+                                tvVoteCount.setText(String.valueOf(voteVoteCount));
+                            }
+                        } else {
+                            AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                        }
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        hideWaitDialog();
+                    }
+                });
+            }
+        });
+
+        if (comment.getVoteState() == 1) {
+            ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
+        } else if (comment.getVoteState() == 0) {
+            ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
+        }
         imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
                 .into(ivAvatar);
         ivAvatar.setOnClickListener(new OnClickListener() {
@@ -237,6 +328,55 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     public void onClick(View v) {
         if (mId != 0 && mType != 0)
             CommentsActivity.show(getContext(), mId, mType);
+    }
+
+    /**
+     * show WaitDialog
+     *
+     * @return progressDialog
+     */
+    private ProgressDialog showWaitDialog(@StringRes int messageId) {
+
+        if (mDialog == null) {
+            if (messageId <= 0) {
+                mDialog = DialogHelper.getProgressDialog(getContext(), true);
+            } else {
+                String message = getResources().getString(messageId);
+                mDialog = DialogHelper.getProgressDialog(getContext(), message, true);
+            }
+        }
+        mDialog.show();
+
+        return mDialog;
+    }
+
+
+    /**
+     * hide waitDialog
+     */
+    private void hideWaitDialog() {
+        ProgressDialog dialog = mDialog;
+        if (dialog != null) {
+            mDialog = null;
+            try {
+                dialog.cancel();
+                // dialog.dismiss();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * request network error
+     *
+     * @param throwable throwable
+     */
+    protected void requestFailureHint(Throwable throwable) {
+        AppContext.showToast(R.string.request_error_hint);
+        if (throwable != null) {
+            throwable.printStackTrace();
+        }
     }
 }
 

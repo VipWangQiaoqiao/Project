@@ -1464,6 +1464,26 @@ public class OSChinaApi {
     }
 
     /**
+     * 对评论进行顶操作(默认只有问答可以顶/踩,其余详情评论可以顶或者取消顶)
+     *
+     * @param sourceId  sourceId
+     * @param commentId commentId
+     * @param voteState voteState
+     * @param handler   handler
+     */
+    public static void voteComment(long sourceId, long commentId, int voteState, TextHttpResponseHandler handler) {
+
+        if (sourceId <= 0 || commentId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("commentId", commentId);
+        params.put("voteOpt", voteState);
+
+        ApiHttpClient.post("action/apiv2/comment_vote_reverse", params, handler);
+
+    }
+
+    /**
      * 问答的回答, 顶\踩
      *
      * @param sid     source id 问答的id

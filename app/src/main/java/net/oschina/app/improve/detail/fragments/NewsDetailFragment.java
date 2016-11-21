@@ -109,7 +109,12 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
                 handleFavorite();
             }
         });
-        mDelegation.setShareListener(this);
+        mDelegation.setShareListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleShare();
+            }
+        });
         mDelegation.getBottomSheet().setFaceListener(new View.OnClickListener() {
 
             @Override
@@ -239,7 +244,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mCommentAuthorId = comment.getAuthor().getId();
         mDelegation.getCommentText().setHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
 
-
         mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
     }
 
@@ -255,7 +259,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     @Override
     public void sync(boolean isSync) {
-        if (isSync)
-            handleShare();
+        //   if (isSync)
+
     }
 }
