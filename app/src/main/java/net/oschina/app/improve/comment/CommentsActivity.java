@@ -57,7 +57,6 @@ public class CommentsActivity extends BaseBackActivity {
     private int mType;
 
     private PageBean<Comment> mPageBean;
-    private Context context;
 
     @Bind(R.id.lay_refreshLayout)
     RecyclerRefreshLayout mRefreshLayout;
@@ -177,7 +176,6 @@ public class CommentsActivity extends BaseBackActivity {
     @Override
     protected void initData() {
         super.initData();
-        this.context = getApplicationContext();
         mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
             @Override
             public void onRefreshing() {
@@ -215,7 +213,7 @@ public class CommentsActivity extends BaseBackActivity {
      */
     private long requestCheck() {
         if (mId == 0) {
-            AppContext.showToast("数据加载中...");
+            AppContext.showToast(getResources().getString(R.string.state_loading_error));
             return 0;
         }
         if (!TDevice.hasInternet()) {
@@ -270,8 +268,8 @@ public class CommentsActivity extends BaseBackActivity {
         if (reply.getId() != mId) {
             if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
                 if (mInputDoubleEmpty) {
-                    mDelegation.setCommentHint("发表评论");
-                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.setCommentHint(getString(R.string.pub_comment_hint));
+                    mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.pub_comment_hint));
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -460,7 +458,7 @@ public class CommentsActivity extends BaseBackActivity {
             setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(int position, long itemId) {
-                  //  CommentsActivity.this.onItemClick(getItem(position));
+                    //  CommentsActivity.this.onItemClick(getItem(position));
                 }
             });
         }
@@ -477,8 +475,8 @@ public class CommentsActivity extends BaseBackActivity {
             if (holder instanceof CommentHolder) {
                 commentHolder = (CommentHolder) holder;
                 RequestManager requestManager = getImageLoader();
-               // if (requestManager != null)
-                  //  commentHolder.addComment(item, requestManager, getReplyBtnClickListener());
+                // if (requestManager != null)
+                //  commentHolder.addComment(item, requestManager, getReplyBtnClickListener());
             }
         }
     }

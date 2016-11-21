@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
@@ -34,11 +35,11 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.ui.ShareDialog;
+import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.ui.SimpleBackActivity;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 浏览器界面
@@ -72,6 +73,8 @@ public class BrowserFragment extends BaseFragment {
     private Animation animBottomIn, animBottomOut;
     private GestureDetector mGestureDetector;
     private CookieManager cookie;
+    private ShareDialogBuilder mShareDialogBuilder;
+    private AlertDialog alertDialog;
 
     @Override
     public void onClick(View v) {
@@ -121,6 +124,9 @@ public class BrowserFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         mWebView.onResume();
+        if (mShareDialogBuilder != null) {
+            mShareDialogBuilder.cancelLoading();
+        }
     }
 
     @Override
@@ -215,13 +221,18 @@ public class BrowserFragment extends BaseFragment {
      * 打开分享dialog
      */
     private void showSharedDialog() {
-        final ShareDialog dialog = new ShareDialog(getActivity());
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.setTitle(R.string.share_to);
-        dialog.setShareInfo(getShareTitle(), getShareContent(), mCurrentUrl);
-        dialog.show();
+        if (mShareDialogBuilder == null) {
+            mShareDialogBuilder = ShareDialogBuilder.with(getActivity())
+                    .title(getShareTitle())
+                    .content(getShareContent())
+                    .url(mCurrentUrl)
+                    .build();
+        }
+        if (alertDialog == null)
+            alertDialog = mShareDialogBuilder.create();
+        alertDialog.show();
     }
+
 
     /**
      * 载入链接之前会被调用
