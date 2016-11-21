@@ -37,10 +37,10 @@ import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamMemberList;
-import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
@@ -164,7 +164,7 @@ public class TeamNewActiveActivity extends BaseActivity {
     private void handleClearWords() {
         if (TextUtils.isEmpty(mEtInput.getText().toString()))
             return;
-        DialogHelp.getConfirmDialog(this, "是否清空内容?", new OnClickListener() {
+        DialogHelper.getConfirmDialog(this, "是否清空内容?", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mEtInput.getText().clear();
@@ -330,7 +330,7 @@ public class TeamNewActiveActivity extends BaseActivity {
     }
 
     private void showConfirmExit() {
-        DialogHelp.getConfirmDialog(this, "是否放弃这次操作?", new OnClickListener() {
+        DialogHelper.getConfirmDialog(this, "是否放弃这次操作?", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
@@ -339,7 +339,7 @@ public class TeamNewActiveActivity extends BaseActivity {
     }
 
     private void handleSelectPicture() {
-        DialogHelp.getSelectDialog(this, getResources().getStringArray(R.array.choose_picture),
+        DialogHelper.getSelectDialog(this, getResources().getStringArray(R.array.choose_picture), "取消",
                 new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -557,7 +557,7 @@ public class TeamNewActiveActivity extends BaseActivity {
             for (int i = 1; i < toUsers.length; i++) {
                 toUsers[i] = mTeamMemberList.get(i - 1).getName();
             }
-            metionUserDialog = DialogHelp.getSingleChoiceDialog(this, "艾特团队成员", toUsers, -1, new
+            metionUserDialog = DialogHelper.getSingleChoiceDialog(this, "艾特团队成员", toUsers, -1, new
                     OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {

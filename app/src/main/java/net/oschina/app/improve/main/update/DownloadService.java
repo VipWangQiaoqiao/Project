@@ -36,7 +36,7 @@ public class DownloadService extends Service {
     private String mUrl;
     private String mTitle = "正在下载";
     private String saveFileName = AppConfig.DEFAULT_SAVE_FILE_PATH;
-    ;
+
     private NotificationManager mNotificationManager;
     private Notification mNotification;
 

@@ -26,6 +26,7 @@ import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
+import net.oschina.app.util.TLog;
 
 import java.lang.reflect.Type;
 
@@ -334,6 +335,6 @@ public class NoticeServer extends Service {
 
     static void log(String str) {
         if (BuildConfig.DEBUG)
-            Log.d(TAG, str);
+            TLog.d(TAG, str);
     }
 }

@@ -1,13 +1,9 @@
 package net.oschina.app.improve.search.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -17,10 +13,8 @@ import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -137,10 +131,10 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     protected void initWindow() {
         mPagerItems = new ArrayList<>();
 
-        mPagerItems.add(new Pair<>("软件", SearchArticleFragment.instantiate(this, News.TYPE_SOFTWARE)));
-        mPagerItems.add(new Pair<>("问答", SearchArticleFragment.instantiate(this, News.TYPE_QUESTION)));
         mPagerItems.add(new Pair<>("博客", SearchArticleFragment.instantiate(this, News.TYPE_BLOG)));
-        mPagerItems.add(new Pair<>("新闻", SearchArticleFragment.instantiate(this, News.TYPE_NEWS)));
+        mPagerItems.add(new Pair<>("软件", SearchArticleFragment.instantiate(this, News.TYPE_SOFTWARE)));
+        mPagerItems.add(new Pair<>("资讯", SearchArticleFragment.instantiate(this, News.TYPE_NEWS)));
+        mPagerItems.add(new Pair<>("问答", SearchArticleFragment.instantiate(this, News.TYPE_QUESTION)));
         mPagerItems.add(new Pair<>("找人", SearchUserFragment.instantiate(this)));
     }
 
@@ -149,7 +143,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         super.initWidget();
         setStatusBarDarkMode(true);
         mViewSearchEditor.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         mViewSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -197,12 +190,13 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         params1.setMargins(0, 0, 0, 0);
         mLayoutEditFrame.setLayoutParams(params1);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            startAnimation();
-        } else {
-            mViewSearch.setIconified(false);
-        }
+        mViewSearch.post(new Runnable() {
+            @Override
+            public void run() {
+//                TDevice.showSoftKeyboard(mViewSearch);
+                mViewSearch.setIconified(false);
+            }
+        });
     }
 
 
@@ -241,59 +235,12 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
 
     @OnClick(R.id.tv_cancel)
     void onClickCancel() {
-        supportFinish();
-    }
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private void startAnimation() {
-        mViewRoot.post(new Runnable() {
-            @Override
-            public void run() {
-                int w = mViewRoot.getWidth();
-                int h = mViewRoot.getHeight();
-                Animator animator = ViewAnimationUtils.createCircularReveal(
-                        mViewRoot, mViewRoot.getWidth(), 0, 0, (float) Math.pow(w * w + h * h, 1.f / 2));
-                animator.setDuration(300);
-                animator.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mViewSearch.setIconified(false);
-                    }
-                });
-                animator.start();
-            }
-        });
-    }
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private void endAnimation() {
-        int w = mViewRoot.getWidth();
-        int h = mViewRoot.getHeight();
-        Animator animator = ViewAnimationUtils.createCircularReveal(
-                mViewRoot, mViewRoot.getWidth(), 0, (float) Math.pow(w * w + h * h, 1.f / 2), 0);
-        animator.setDuration(300);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mViewRoot.setVisibility(View.INVISIBLE); // avoid splash
-                finish();
-            }
-
-        });
-        animator.start();
+        onBackPressed();
     }
 
     @Override
     public void onBackPressed() {
-        supportFinish();
+        super.onBackPressed();
+        finish();
     }
-
-    private void supportFinish() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            endAnimation();
-        } else {
-            finish();
-        }
-    }
-
 }

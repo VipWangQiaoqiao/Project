@@ -1,6 +1,7 @@
 package net.oschina.app.improve.main.subscription;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -12,10 +13,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.util.StringUtils;
+import net.qiujuer.genius.ui.compat.UiCompat;
 
 /**
  * 新板博客栏目
@@ -23,16 +26,21 @@ import net.oschina.app.util.StringUtils;
  * on 2016/10/26.
  */
 
-public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> {
+public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
 
-    private String mSystemTime;
-
-    public BlogSubAdapter(Context context,int mode) {
+    public BlogSubAdapter(Context context, int mode) {
         super(context, mode);
+        setOnLoadingHeaderCallBack(this);
     }
 
-    public void setSystemTime(String systemTime) {
-        this.mSystemTime = systemTime;
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderHolder(ViewGroup parent) {
+        return new HeaderViewHolder(mHeaderView);
+    }
+
+    @Override
+    public void onBindHeaderHolder(RecyclerView.ViewHolder holder, int position) {
+
     }
 
     @Override
@@ -52,9 +60,13 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> {
 
         String text = "";
         SpannableStringBuilder spannable = new SpannableStringBuilder(text);
-        if (item.isOriginal()) {
+
+        Resources resources = mContext.getResources();
+
+        boolean isToday = StringUtils.isSameDay(mSystemTime, item.getPubDate());
+        if (isToday) {
             spannable.append("[icon] ");
-            Drawable originate = mContext.getResources().getDrawable(R.mipmap.ic_label_originate);
+            Drawable originate = resources.getDrawable(R.mipmap.ic_label_today);
             if (originate != null) {
                 originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
             }
@@ -62,18 +74,32 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> {
             spannable.setSpan(imageSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
+        if (item.isOriginal()) {
+            spannable.append("[icon] ");
+            Drawable originate = resources.getDrawable(R.mipmap.ic_label_originate);
+            if (originate != null) {
+                originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
+            }
+            ImageSpan imageSpan = new ImageSpan(originate, ImageSpan.ALIGN_BOTTOM);
+            spannable.setSpan(imageSpan, isToday ? 7 : 0, isToday ? 13 : 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        } else {
+            spannable.append("[icon] ");
+            Drawable originate = resources.getDrawable(R.mipmap.ic_label_reprint);
+            if (originate != null) {
+                originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
+            }
+            ImageSpan imageSpan = new ImageSpan(originate, ImageSpan.ALIGN_BOTTOM);
+            spannable.setSpan(imageSpan, isToday ? 7 : 0, isToday ? 13 : 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+
         if (item.isRecommend()) {
             spannable.append("[icon] ");
-            Drawable recommend = mContext.getResources().getDrawable(R.mipmap.ic_label_recommend);
+            Drawable recommend = resources.getDrawable(R.mipmap.ic_label_recommend);
             if (recommend != null) {
                 recommend.setBounds(0, 0, recommend.getIntrinsicWidth(), recommend.getIntrinsicHeight());
             }
             ImageSpan imageSpan = new ImageSpan(recommend, ImageSpan.ALIGN_BOTTOM);
-            if (item.isOriginal()) {
-                spannable.setSpan(imageSpan, 7, 13, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            } else {
-                spannable.setSpan(imageSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            }
+            spannable.setSpan(imageSpan, isToday ? 14 : 7, isToday ? 20 : 13, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
         title.setText(spannable.append(item.getTitle()));
@@ -89,14 +115,13 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> {
             }
         }
 
-
-//        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
-//            title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-//            content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-//        } else {
-//            title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
-//            content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
-//        }
+        if (AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))) {
+            title.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
+            content.setTextColor(UiCompat.getColor(resources, R.color.text_secondary_color));
+        } else {
+            title.setTextColor(UiCompat.getColor(resources, R.color.text_title_color));
+            content.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
+        }
 
         String author = item.getAuthor().getName();
         if (!TextUtils.isEmpty(author)) {

@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
@@ -20,14 +18,17 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.tweet.adapter.SoftwareTweetAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
@@ -45,9 +46,10 @@ import static net.oschina.app.improve.base.adapter.BaseRecyclerAdapter.ONLY_FOOT
 public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     public static final String BUNDLE_KEY_NAME = "bundle_key_name";
     private String softwareName;
-    private EditText mETInput;
     private ProgressDialog mDialog;
     private boolean mInputDoubleEmpty = false;
+
+    private CommentBar mDelegation;
 
     public static void show(Context context, String tag) {
         Intent intent = new Intent(context, SoftwareTweetActivity.class);
@@ -70,29 +72,31 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     protected void initWidget() {
         super.initWidget();
 
-        mETInput = (EditText) findViewById(R.id.et_input);
+        mDelegation = CommentBar.delegation(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
 
-        mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-
-                    String input = mETInput.getText().toString().trim();
-                    handleSendComment(input);
-
-                    return true;
-                }
-                return false;
+            public void onClick(View v) {
+                handleSendComment(mDelegation.getBottomSheet().getCommentText());
             }
         });
-
-        mETInput.setOnKeyListener(new View.OnKeyListener() {
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
                     handleKeyDel();
                 }
                 return false;
+            }
+        });
+
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(SoftwareTweetActivity.this);
+                else
+                    LoginActivity.show(SoftwareTweetActivity.this);
             }
         });
     }
@@ -160,8 +164,8 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
                     if (resultBean.isSuccess()) {
                         onRefreshing();
-                        TDevice.hideSoftKeyboard(mETInput);
-                        mETInput.setText(null);
+                        mDelegation.getBottomSheet().dismiss();
+                        mDelegation.getBottomSheet().getEditText().setText("");
                     }
                     hideWaitDialog();
                 } catch (Exception e) {
@@ -175,9 +179,10 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
     private void handleKeyDel() {
 
-        if (TextUtils.isEmpty(mETInput.getText())) {
+        if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
             if (mInputDoubleEmpty) {
-                mETInput.setHint("发表评论");
+                mDelegation.getCommentText().setHint("发表评论");
+                mDelegation.getBottomSheet().getEditText().setHint("发表评论");
             } else {
                 mInputDoubleEmpty = true;
             }
@@ -276,5 +281,11 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
         TweetDetailActivity.show(this, item);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+        }
+    }
 }

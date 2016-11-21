@@ -1,7 +1,6 @@
 package net.oschina.app.util;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -33,14 +31,10 @@ import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.News;
-import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.bean.Tweet;
 import net.oschina.app.fragment.BrowserFragment;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.QuestionTagFragment;
-import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
@@ -54,6 +48,7 @@ import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
+import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.Team;
@@ -178,78 +173,8 @@ public class UIHelper {
         showSimpleBack(context, SimpleBackPage.QUESTION_TAG, args);
     }
 
-    /**
-     * 显示动弹详情
-     *
-     * @param context context
-     * @param tweetid 动弹的id
-     */
-    public static void showTweetDetail(Context context, Tweet tweet, long tweetid) {
-        Intent intent = new Intent(context, DetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("tweet_id", (int) tweetid);
-        bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_TWEET);
-        if (tweet != null) {
-            bundle.putParcelable("tweet", tweet);
-        }
-        intent.putExtras(bundle);
-        context.startActivity(intent);
-    }
-
-    /**
-     * 显示软件详情
-     *
-     * @param context
-     * @param ident
-     */
-    public static void showSoftwareDetail(Context context, String ident) {
-        SoftwareDetailActivity.show(context, ident);
-    }
-
     public static void showSoftwareDetailById(Context context, int id) {
         SoftwareDetailActivity.show(context, id);
-    }
-
-    /**
-     * 新闻超链接点击跳转
-     *
-     * @param context context
-     */
-    public static void showNewsRedirect(Context context, News news) {
-        String url = news.getUrl();
-        // 如果是活动则直接跳转活动详情页面
-        String eventUrl = news.getNewType().getEventUrl();
-        if (!StringUtils.isEmpty(eventUrl)) {
-            showEventDetail(context,
-                    StringUtils.toInt(news.getNewType().getAttachment()));
-            return;
-        }
-        // url为空-旧方法
-        if (StringUtils.isEmpty(url)) {
-            int newsId = news.getId();
-            int newsType = news.getNewType().getType();
-            String objId = news.getNewType().getAttachment();
-            switch (newsType) {
-                case News.NEWSTYPE_NEWS:
-                    showNewsDetail(context, newsId, news.getCommentCount());
-                    break;
-                case News.NEWSTYPE_SOFTWARE:
-                    showSoftwareDetail(context, objId);
-                    break;
-                case News.NEWSTYPE_POST:
-                    showPostDetail(context, StringUtils.toInt(objId),
-                            news.getCommentCount());
-                    break;
-                case News.NEWSTYPE_BLOG:
-                    showBlogDetail(context, Long.valueOf(objId));
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            showUrlRedirect(context, url);
-        }
     }
 
     /**
@@ -465,30 +390,6 @@ public class UIHelper {
         context.startActivity(Intent.createChooser(intent, "选择打开的应用"));
     }
 
-    public static void showSimpleBackForResult(Fragment fragment,
-                                               int requestCode, SimpleBackPage page, Bundle args) {
-        Intent intent = new Intent(fragment.getActivity(),
-                SimpleBackActivity.class);
-        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
-        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
-        fragment.startActivityForResult(intent, requestCode);
-    }
-
-    public static void showSimpleBackForResult(Activity context,
-                                               int requestCode, SimpleBackPage page, Bundle args) {
-        Intent intent = new Intent(context, SimpleBackActivity.class);
-        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
-        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
-        context.startActivityForResult(intent, requestCode);
-    }
-
-    public static void showSimpleBackForResult(Activity context,
-                                               int requestCode, SimpleBackPage page) {
-        Intent intent = new Intent(context, SimpleBackActivity.class);
-        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
-        context.startActivityForResult(intent, requestCode);
-    }
-
     public static void showSimpleBack(Context context, SimpleBackPage page) {
         Intent intent = new Intent(context, SimpleBackActivity.class);
         intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
@@ -502,16 +403,6 @@ public class UIHelper {
         intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
         context.startActivity(intent);
     }
-
-    public static void showComment(Context context, int id, int catalog) {
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_ID, id);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_COMMENT);
-        context.startActivity(intent);
-    }
-
 
     public static void showBlogComment(Context context, int id, int ownerId) {
         Intent intent = new Intent(context, DetailActivity.class);
@@ -601,35 +492,6 @@ public class UIHelper {
     }
 
     /**
-     * 发送通知广播
-     *
-     * @param context
-     * @param notice
-     */
-    public static void sendBroadCast(Context context, Notice notice) {
-        if (!AccountHelper.isLogin()
-                || notice == null)
-            return;
-        Intent intent = new Intent(Constants.INTENT_ACTION_NOTICE);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("notice_bean", notice);
-        intent.putExtras(bundle);
-        context.sendBroadcast(intent);
-    }
-
-    /**
-     * 发送通知广播
-     *
-     * @param context
-     */
-    public static void sendBroadcastForNotice(Context context) {
-        /*
-        Intent intent = new Intent(NoticeService.INTENT_ACTION_BROADCAST);
-        context.sendBroadcast(intent);
-        */
-    }
-
-    /**
      * 显示用户中心页面
      *
      * @param context
@@ -656,6 +518,18 @@ public class UIHelper {
         Bundle args = new Bundle();
         args.putLong(UserBlogFragment.BUNDLE_KEY_USER_ID, uid);
         showSimpleBack(context, SimpleBackPage.USER_BLOG, args);
+    }
+
+    /**
+     * 显示用户的问答列表
+     *
+     * @param context context
+     * @param uid     authorId
+     */
+    public static void showUserQuestion(Context context, long uid) {
+        Bundle args = new Bundle();
+        args.putLong(UserQuestionFragment.BUNDLE_KEY_AUTHOR_ID, uid);
+        showSimpleBack(context, SimpleBackPage.MY_QUESTION, args);
     }
 
     /**
@@ -744,10 +618,6 @@ public class UIHelper {
                     handler.sendMessage(msg);
             }
         });
-    }
-
-    public static void openDownLoadService(Context context, String downurl,
-                                           String tilte) {
     }
 
     /**

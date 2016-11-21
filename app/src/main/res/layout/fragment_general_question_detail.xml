@@ -39,7 +39,7 @@
                 android:minLines="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:textColor="@color/blog_title_text_color_light"
+                android:textColor="@color/text_title_color"
                 android:textSize="22sp"
                 tools:text="HDFS用于存储，请问它与FTP或者市面流行的存储系统的优缺点？" />
 
@@ -80,7 +80,7 @@
                     android:lines="1"
                     android:maxEms="10"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/count_text_color_light"
+                    android:textColor="@color/text_secondary_color"
                     android:textSize="12sp"
                     tools:text="风雨冲" />
 
@@ -93,7 +93,7 @@
                     android:gravity="left|center"
                     android:lines="1"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/count_text_color_light"
+                    android:textColor="@color/text_secondary_color"
                     android:textSize="12sp"
                     tools:text="4分钟前" />
 
@@ -114,69 +114,4 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
-    <LinearLayout
-        android:id="@+id/lay_option"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="end|bottom"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="8dp"
-        app:layout_anchor="@id/lay_nsv"
-        app:layout_anchorGravity="bottom"
-        app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
-        app:layout_scrollFlags="scroll|enterAlways">
-
-        <EditText
-            android:id="@+id/et_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/ic_bg_edit"
-            android:hint="我要回答"
-            android:imeOptions="actionSend"
-            android:inputType="text"
-            android:lines="1"
-            android:paddingBottom="6dp"
-            android:paddingLeft="8dp"
-            android:paddingTop="6dp"
-            android:textSize="14sp"
-            tools:ignore="RtlHardcoded" />
-
-
-        <ImageView
-            android:id="@+id/iv_fav"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:contentDescription="@string/app_name"
-            android:paddingLeft="16dp"
-            android:paddingRight="8dp"
-            android:src="@drawable/ic_fav" />
-
-        <ImageView
-            android:id="@+id/iv_share"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:contentDescription="@string/app_name"
-            android:paddingLeft="8dp"
-            android:paddingRight="16dp"
-            android:src="@drawable/share_ic_selector" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/list_divider_color"
-        app:layout_anchor="@id/lay_option"
-        app:layout_anchorGravity="top"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_scrollFlags="scroll|enterAlways" />
-
 </android.support.design.widget.CoordinatorLayout>

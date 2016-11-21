@@ -18,6 +18,7 @@ import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 
@@ -1477,9 +1478,10 @@ public class OSChinaApi {
      * @param content     内容
      * @param imagesToken 图片token
      * @param audioToken  语音token
+     * @param about       相关节点，仅仅关注 {@link About#id}, {@link About#type}, {@link About#image}
      * @param handler     回调
      */
-    public static void pubTweet(String content, String imagesToken, String audioToken, AsyncHttpResponseHandler handler) {
+    public static void pubTweet(String content, String imagesToken, String audioToken, About about, AsyncHttpResponseHandler handler) {
         if (TextUtils.isEmpty(content))
             throw new NullPointerException("content is not null.");
         RequestParams params = new RequestParams();
@@ -1488,6 +1490,11 @@ public class OSChinaApi {
             params.put("images", imagesToken);
         if (!TextUtils.isEmpty(audioToken))
             params.put("audio", audioToken);
+        if (about != null) {
+            params.put("aboutId", about.getId());
+            params.put("aboutType", about.getType());
+            params.put("aboutImage", about.getImage());
+        }
         ApiHttpClient.post("action/apiv2/tweet", params, handler);
     }
 
@@ -1945,15 +1952,13 @@ public class OSChinaApi {
     /**
      * @param catalog  open catalog
      * @param openInfo openInfo
-     * @param appToken appToken
      * @param handler  handler
      */
-    public static void openLogin(String catalog, String openInfo, String appToken, TextHttpResponseHandler handler) {
+    public static void openLogin(String catalog, String openInfo, TextHttpResponseHandler handler) {
         if (TextUtils.isEmpty(openInfo)) return;
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("info", openInfo);
-        params.put("appToken", appToken);
 
         ApiHttpClient.post("action/apiv2/account_open_login", params, handler);
     }
@@ -1979,39 +1984,34 @@ public class OSChinaApi {
      *
      * @param username username
      * @param pwd      pwd
-     * @param appToken appToken
      * @param handler  handler
      */
-    public static void login(String username, String pwd, String appToken, TextHttpResponseHandler handler) {
-        if (TextUtils.isEmpty(appToken)) return;
+    public static void login(String username, String pwd, TextHttpResponseHandler handler) {
 
         RequestParams params = new RequestParams();
         params.put("account", username);
         params.put("password", pwd);
-        params.put("appToken", appToken);
 
         ApiHttpClient.post("action/apiv2/account_login", params, handler);
 
     }
 
+
     /**
      * send  sms code
      *
      * @param phone  phone number
-     * @param appToken  appToken
      * @param smsCallType  smsCallType
      * @param handler  handler
      */
-
     public static final int REGISTER_INTENT = 1;
     public static final int RESET_PWD_INTENT = 2;
 
-    public static void sendSmsCode(String phone, String appToken, int intent, TextHttpResponseHandler handler) {
+    public static void sendSmsCode(String phone, int intent, TextHttpResponseHandler handler) {
 
         RequestParams params = new RequestParams();
 
         params.put("phone", phone);
-        params.put("appToken", appToken);
         params.put("intent", intent);
 
         ApiHttpClient.post("action/apiv2/phone_send_code", params, handler);
@@ -2024,15 +2024,13 @@ public class OSChinaApi {
      *
      * @param phoneNumber phoneNumber
      * @param smsCode     smsCode
-     * @param appToken    appToken
      * @param handler     handler
      */
-    public static void validateRegisterInfo(String phoneNumber, String smsCode, String appToken, TextHttpResponseHandler handler) {
+    public static void validateRegisterInfo(String phoneNumber, String smsCode, TextHttpResponseHandler handler) {
 
         RequestParams params = new RequestParams();
         params.put("phone", phoneNumber);
         params.put("code", smsCode);
-        params.put("appToken", appToken);
 
         ApiHttpClient.post("action/apiv2/phone_validate", params, handler);
     }
@@ -2045,10 +2043,9 @@ public class OSChinaApi {
      * @param password   pwd
      * @param gender     gender
      * @param phoneToken token
-     * @param appToken   appToken
      * @param handler    handler
      */
-    public static void register(String username, String password, int gender, String phoneToken, String appToken, TextHttpResponseHandler
+    public static void register(String username, String password, int gender, String phoneToken, TextHttpResponseHandler
             handler) {
 
         RequestParams params = new RequestParams();
@@ -2056,7 +2053,6 @@ public class OSChinaApi {
         params.put("password", password);
         params.put("gender", gender);
         params.put("phoneToken", phoneToken);
-        params.put("appToken", appToken);
 
         ApiHttpClient.post("action/apiv2/account_register", params, handler);
 
@@ -2067,15 +2063,13 @@ public class OSChinaApi {
      *
      * @param password   password
      * @param phoneToken token
-     * @param appToken   appToken
      * @param handler    handler
      */
-    public static void resetPwd(String password, String phoneToken, String appToken, TextHttpResponseHandler handler) {
+    public static void resetPwd(String password, String phoneToken, TextHttpResponseHandler handler) {
 
         RequestParams params = new RequestParams();
         params.put("password", password);
         params.put("phoneToken", phoneToken);
-        params.put("appToken", appToken);
 
         ApiHttpClient.post("action/apiv2/account_password_forgot", params, handler);
 

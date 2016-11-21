@@ -370,6 +370,7 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
                                 image.setId(id);
                                 image.setThumbPath(thumbPath);
                                 image.setFolderName(bucket);
+
                                 images.add(image);
 
                                 //如果是新拍的照片

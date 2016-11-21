@@ -67,13 +67,12 @@
     <!--  created by  fei -->
     <color name="ques_bt_bg">#f6f6f6</color>
     <color name="ques_bt_text_color_light">#24cf5f</color>
-    <color name="ques_bt_text_color_dark">#6a6a6a</color>
-    <color name="blog_title_text_color_light">#111111</color>
-    <color name="count_text_color_light">#9d9d9d</color>
     <color name="ques_detail_bg_color">#f9f9f9</color>
-    <color name="user_info_bg_color">#20B955</color>
     <color name="user_info_message_notice">#E35B5A</color>
 
+    <color name="text_title_color">#111111</color>
+    <color name="text_desc_color">#6a6a6a</color>
+    <color name="text_secondary_color">#9d9d9d</color>
 
     <color name="tweet_indicator_text_color">#111111</color>
     <color name="tweet_indicator_text_color_error">#e35050</color>
@@ -84,7 +83,7 @@
     <color name="login_line_color">#dededf</color>
     <color name="login_input_active">#31b968</color>
     <color name="login_other_color">#cacaca</color>
-    <color name="account_input_bg_color">#FF909192</color>
+    <color name="account_input_bg_color">#33ffffff</color>
     <color name="account_lock_bg">#ff43815c</color>
     <color name="account_lock_font_color">#FF68997C</color>
     <color name="account_input_color">#c9c9c9</color>

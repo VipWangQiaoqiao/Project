@@ -174,7 +174,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
      * 发布动弹
      */
     private void publish() {
-        OSChinaApi.pubTweet(model.getContent(), model.getCacheImagesToken(), null, new LopperResponseHandler() {
+        OSChinaApi.pubTweet(model.getContent(), model.getCacheImagesToken(), null, model.getAbout(), new LopperResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 String error = "";

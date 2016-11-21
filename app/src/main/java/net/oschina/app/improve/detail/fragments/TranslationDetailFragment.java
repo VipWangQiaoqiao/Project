@@ -1,12 +1,12 @@
 package net.oschina.app.improve.detail.fragments;
 
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,15 +14,18 @@ import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.TranslationDetail;
 import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.TranslateDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 
 /**
  * Created by fei
@@ -31,15 +34,14 @@ import net.oschina.app.util.TDevice;
 
 public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         TranslateDetailContract.View, TranslateDetailContract.Operator>
-        implements View.OnClickListener, TranslateDetailContract.View, OnCommentClickListener {
+        implements TranslateDetailContract.View, OnCommentClickListener {
 
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
     private TextView mTVTitle;
     private ImageView mIVAuthorPortrait;
-    private ImageView mIVFav;
-    private EditText mETInput;
+
     private long mCommentId;
     private long mCommentAuthorId;
     private boolean mInputDoubleEmpty = false;
@@ -50,6 +52,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     private View mLayBottom;
     private LinearLayout mAboutSoftware;
 
+    private CommentBar mDelegation;
 
     @Override
     protected int getLayoutId() {
@@ -70,10 +73,6 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         setGone(R.id.iv_info_comment);
 
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
-        mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
-        mIVFav.setOnClickListener(this);
-
-        mETInput = (EditText) root.findViewById(R.id.et_input);
 
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
         mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
@@ -86,19 +85,16 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
 
         mLayBottom = root.findViewById(R.id.lay_option);
 
-        root.findViewById(R.id.iv_share).setOnClickListener(this);
-        mIVFav.setOnClickListener(this);
-        mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
+
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    handleSendComment();
-                    return true;
-                }
-                return false;
+            public void onClick(View v) {
+                handleSendComment();
             }
         });
-        mETInput.setOnKeyListener(new View.OnKeyListener() {
+
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -107,32 +103,30 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
                 return false;
             }
         });
-    }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            // 相关软件
-            // case R.id.lay_about_software:
-            // SoftwareDetailActivity.show(getActivity(), mOperator.getData().getSoftware().getId());
-            // break;
-            // 收藏
-            case R.id.iv_fav:
+        mDelegation.setFavListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 handleFavorite();
-                break;
-            // 分享
-            case R.id.iv_share:
+            }
+        });
+        mDelegation.setShareListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 handleShare();
-                break;
-            default:
-                break;
-            // 评论列表
-            //case R.id.tv_see_comment: {
-            // UIUtil.showBlogComment(getActivity(), (int) mId,
-            //  (int) mOperator.getNewsDetail().getId());
-            //   }
-            // break;
-        }
+            }
+        });
+
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(TranslationDetailFragment.this);
+                else
+                    LoginActivity.show(getActivity());
+            }
+        });
+
     }
 
     @Override
@@ -167,11 +161,12 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
-            if (TextUtils.isEmpty(mETInput.getText())) {
+            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mETInput.setHint("发表评论");
+                    mDelegation.setCommentHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -191,7 +186,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     }
 
     private void handleSendComment() {
-        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
     }
 
 
@@ -199,25 +194,44 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     @Override
     public void toFavoriteOk(TranslationDetail translationDetail) {
         if (translationDetail.isFavorite())
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved));
+            mDelegation.setFavDrawable(R.drawable.ic_faved);
         else
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav));
+            mDelegation.setFavDrawable(R.drawable.ic_fav);
     }
 
     @Override
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mETInput.setText("");
+        mDelegation.setCommentHint("添加评论");
         mComments.addComment(comment, getImgLoader(), this);
-        TDevice.hideSoftKeyboard(mETInput);
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override
     public void onClick(View view, Comment comment) {
         FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
+
         mCommentAuthorId = comment.getAuthorId();
-        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
-        TDevice.showSoftKeyboard(mETInput);
+        mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
+        mDelegation.getBottomSheet().show(String.format("回复: %s", comment.getAuthor()));
+
+
+//        mCommentAuthorId = comment.getAuthor().getId();
+//        mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint),
+//                comment.getAuthor().getName()));
+//
+//        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint),
+//                comment.getAuthor().getName()));
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
+        }
     }
 }

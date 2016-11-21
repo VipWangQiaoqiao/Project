@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFF"
@@ -23,18 +22,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:text="thanatosx"
         android:textColor="#111111"
-        android:textSize="18sp"
-        android:text="thanatosx" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:text="每个人都不容易,感谢作者的辛苦劳作,谢谢。"
         android:textColor="#6a6a6a"
-        android:textSize="14sp"
-        android:text="每个人都不容易,感谢作者的辛苦劳作,谢谢。" />
+        android:textSize="14sp" />
 
     <LinearLayout
         android:id="@+id/layout_casts"
@@ -52,8 +51,8 @@
             android:padding="12dp"
             android:tag="5"
             android:text="¥5"
-            android:textSize="16sp"
-            android:textColor="@drawable/selector_pay_text" />
+            android:textColor="@drawable/selector_pay_text"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -66,8 +65,8 @@
             android:padding="12dp"
             android:tag="10"
             android:text="¥10"
-            android:textSize="16sp"
-            android:textColor="@drawable/selector_pay_text" />
+            android:textColor="@drawable/selector_pay_text"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -78,12 +77,12 @@
             android:padding="12dp"
             android:tag="-1"
             android:text="其他金额"
-            android:textSize="16sp"
-            android:textColor="@drawable/selector_pay_text" />
+            android:textColor="@drawable/selector_pay_text"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <EditText
-        android:id="@id/et_input"
+        android:id="@+id/et_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -97,8 +96,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -121,10 +120,10 @@
 
     <Button
         android:id="@+id/btn_reward"
-        android:text="打赏"
-        android:textColor="#FFF"
-        android:background="@drawable/ic_bg_btn_blue"
         android:layout_width="match_parent"
-        android:layout_height="42dp" />
+        android:layout_height="42dp"
+        android:background="@drawable/ic_bg_btn_blue"
+        android:text="打赏"
+        android:textColor="#FFF" />
 
 </LinearLayout>

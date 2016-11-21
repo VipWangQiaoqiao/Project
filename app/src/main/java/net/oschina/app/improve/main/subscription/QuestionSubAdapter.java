@@ -1,15 +1,19 @@
 package net.oschina.app.improve.main.subscription;
 
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.util.StringUtils;
+import net.qiujuer.genius.ui.compat.UiCompat;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -19,10 +23,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * on 2016/10/27.
  */
 
-public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
+public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
 
-    public QuestionSubAdapter(Callback callback,int mode) {
+    public QuestionSubAdapter(Callback callback, int mode) {
         super(callback, mode);
+        setOnLoadingHeaderCallBack(this);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderHolder(ViewGroup parent) {
+        return new HeaderViewHolder(mHeaderView);
+    }
+
+    @Override
+    public void onBindHeaderHolder(RecyclerView.ViewHolder holder, int position) {
+
     }
 
     @Override
@@ -44,16 +59,19 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
         vh.tv_question_title.setText(item.getTitle());
         vh.tv_question_content.setText(item.getBody());
 
-//        if (AppContext.isOnReadedPostList(cacheName, String.valueOf(item.getId()))) {
-//            vh.tv_question_title.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-//            vh.tv_question_content.setTextColor(mContext.getResources().getColor(R.color.count_text_color_light));
-//        } else {
-//            vh.tv_question_title.setTextColor(mContext.getResources().getColor(R.color.blog_title_text_color_light));
-//            vh.tv_question_content.setTextColor(mContext.getResources().getColor(R.color.ques_bt_text_color_dark));
-//        }
+        Resources resources = mContext.getResources();
+
+        if (AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))) {
+            vh.tv_question_title.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
+            vh.tv_question_content.setTextColor(UiCompat.getColor(resources, R.color.text_secondary_color));
+        } else {
+            vh.tv_question_title.setTextColor(UiCompat.getColor(resources, R.color.text_title_color));
+            vh.tv_question_content.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
+        }
 
         if (author != null) {
-            vh.tv_time.setText((author.getName().length() > 9 ? author.getName().substring(0, 9) : author.getName().trim()) + "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
+            vh.tv_time.setText((author.getName().length() > 9 ? author.getName().substring(0, 9) :
+                    author.getName().trim()) + "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
         }
         vh.tv_view.setText(String.valueOf(item.getStatistics().getView()));
         vh.tv_view.setText(String.valueOf(item.getStatistics().getComment()));

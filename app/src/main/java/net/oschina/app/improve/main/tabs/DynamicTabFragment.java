@@ -3,30 +3,24 @@ package net.oschina.app.improve.main.tabs;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
-import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubTab;
-import net.oschina.app.improve.general.fragments.BlogFragment;
-import net.oschina.app.improve.general.fragments.EventFragment;
-import net.oschina.app.improve.general.fragments.NewsFragment;
-import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.main.subscription.SubFragment;
 import net.oschina.app.improve.search.activities.SearchActivity;
@@ -63,6 +57,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
 
     private MainActivity activity;
     private Fragment mCurFragment;
+    private FragmentPagerAdapter mAdapter;
     List<SubTab> tabs;
 
     @Override
@@ -136,7 +131,18 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             @Override
             @SuppressWarnings("all")
             public void onSelected(final int position) {
+                final int index = mViewPager.getCurrentItem();
                 mViewPager.setCurrentItem(position);
+                if (position == index) {
+                    mAdapter.commitUpdate();
+                    // notifyDataSetChanged为什么会导致TabLayout位置偏移，而且需要延迟设置才能起效？？？
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mLayoutTab.getTabAt(position).select();
+                        }
+                    }, 50);
+                }
             }
 
             @Override
@@ -155,69 +161,60 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             }
 
             @Override
-            public void onRestore(List<SubTab> activeTabs) {
+            public void onRestore(final List<SubTab> activeTabs) {
                 if (!isChangeIndex) return;
-                String json = new Gson().toJson(activeTabs);
-                try {
-                    FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
-                            Context.MODE_PRIVATE);
-                    fos.write(json.getBytes("UTF-8"));
-                    fos.flush();
-                    fos.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                AppOperator.getExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        String json = new Gson().toJson(activeTabs);
+                        try {
+                            FileOutputStream fos = getContext().openFileOutput("sub_tab_active.json",
+                                    Context.MODE_PRIVATE);
+                            fos.write(json.getBytes("UTF-8"));
+                            fos.flush();
+                            fos.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 isChangeIndex = false;
                 tabs.clear();
                 tabs.addAll(activeTabs);
-                mViewPager.getAdapter().notifyDataSetChanged();
-
+                mAdapter.notifyDataSetChanged();
             }
         });
-
-        final float dp32 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics());
 
         mViewTabPicker.setOnShowAnimation(new TabPickerView.Action1<ViewPropertyAnimator>() {
             @Override
             public void call(ViewPropertyAnimator animator) {
                 mViewArrowDown.setEnabled(false);
-
-                mViewTabPicker.setVisibility(View.VISIBLE);
-                mViewTabPicker.setTranslationY(dp32);
-                mViewTabPicker.setAlpha(0);
                 activity.toggleNavTabView(false);
-                animator.translationY(0)
-                        .alpha(1)
-                        .setDuration(380)
-                        .setInterpolator(new DecelerateInterpolator())
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                mViewTabPicker.setVisibility(View.VISIBLE);
-                                mViewTabPicker.setTranslationY(0);
-                                mViewTabPicker.setAlpha(1);
-                            }
-                        });
+                mViewArrowDown.animate().rotation(225).setDuration(380).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        super.onAnimationEnd(animator);
+                        mViewArrowDown.setRotation(45);
+                        mViewArrowDown.setEnabled(true);
+                    }
+                });
+
             }
         });
 
         mViewTabPicker.setOnHideAnimator(new TabPickerView.Action1<ViewPropertyAnimator>() {
             @Override
             public void call(ViewPropertyAnimator animator) {
+                mViewArrowDown.setEnabled(false);
                 activity.toggleNavTabView(true);
-                animator.translationY(dp32)
-                        .setDuration(380)
-                        .alpha(0)
-                        .setInterpolator(new DecelerateInterpolator())
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                mViewTabPicker.setVisibility(View.GONE);
-                                mViewArrowDown.setEnabled(true);
-                            }
-                        });
+                mViewArrowDown.animate().rotation(-180).setDuration(380).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        super.onAnimationEnd(animator);
+                        mViewArrowDown.setRotation(0);
+                        mViewArrowDown.setEnabled(true);
+                    }
+                });
             }
         });
 
@@ -227,7 +224,6 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
         }
 
-        final FragmentPagerAdapter mAdapter;
         mViewPager.setAdapter(mAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -247,7 +243,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             @Override
             public void setPrimaryItem(ViewGroup container, int position, Object object) {
                 super.setPrimaryItem(container, position, object);
-                if (mCurFragment == null){
+                if (mCurFragment == null) {
                     commitUpdate();
                 }
                 mCurFragment = (Fragment) object;
@@ -260,30 +256,17 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             }
 
         });
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
-            public void onPageSelected(int position) {
-                mAdapter.commitUpdate();
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    mAdapter.commitUpdate();
+                }
             }
         });
         mLayoutTab.setupWithViewPager(mViewPager);
-    }
-
-    public Fragment instantiateFragment(SubTab tab) {
-        if (!TextUtils.isEmpty(tab.getHref())){
-            return SubFragment.newInstance(getContext(), tab);
-        }
-        switch (tab.getType()) {
-            case News.TYPE_NEWS:
-                return new NewsFragment();
-            case News.TYPE_EVENT:
-                return new EventFragment();
-            case News.TYPE_QUESTION:
-                return QuestionFragment.instantiate(getContext(), tab.getSubtype());
-            case News.TYPE_BLOG:
-                return BlogFragment.instantiate(getContext(), tab.getSubtype());
-        }
-        throw new RuntimeException("Fuck you!!!!!");
+        mLayoutTab.setSmoothScrollingEnabled(true);
     }
 
     @Override
@@ -298,7 +281,11 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
 
     @OnClick(R.id.iv_arrow_down)
     void onClickArrow() {
-        mViewTabPicker.show(mLayoutTab.getSelectedTabPosition());
+        if (mViewArrowDown.getRotation() != 0) {
+            mViewTabPicker.hide();
+        } else {
+            mViewTabPicker.show(mLayoutTab.getSelectedTabPosition());
+        }
     }
 
     @Override

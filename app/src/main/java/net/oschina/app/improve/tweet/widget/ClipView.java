@@ -24,7 +24,7 @@ import net.qiujuer.genius.ui.Ui;
  * on 16/8/22.
  */
 public class ClipView extends FrameLayout implements ValueAnimator.AnimatorUpdateListener {
-    private static boolean IS_UP_KITKAT = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+    private static boolean IS_UP_KITKAT = false;//Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     private Path mPath;
     private boolean mInAnim = IS_UP_KITKAT;
     private float mStartRadius, mEndRadius;

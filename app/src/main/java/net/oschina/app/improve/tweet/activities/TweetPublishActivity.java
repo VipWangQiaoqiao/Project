@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.WindowManager;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.util.UIHelper;
 
 public class TweetPublishActivity extends BaseBackActivity {
     private TweetPublishContract.View mView;
@@ -41,6 +43,12 @@ public class TweetPublishActivity extends BaseBackActivity {
 
 
     public static void show(Context context, @Size(2) int[] viewLocationOnScreen, @Size(2) int[] viewSize, String defaultContent) {
+        // Check login before show
+        if (!AccountHelper.isLogin()) {
+            UIHelper.showLoginActivity(context);
+            return;
+        }
+
         Intent intent = new Intent(context, TweetPublishActivity.class);
 
         if (viewLocationOnScreen != null) {
@@ -59,7 +67,7 @@ public class TweetPublishActivity extends BaseBackActivity {
     @Override
     protected int getContentView() {
         // hide the software
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return R.layout.activity_tweet_publish;
     }
 

@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
@@ -120,7 +121,6 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mBean.setItems(items);
             //if is the first loading
             if (items == null) {
-                mBean = new PageBean<>();
                 mBean.setItems(new ArrayList<T>());
                 onRefreshing();
             } else {
@@ -198,6 +198,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
         mBean.setNextPageToken((resultBean == null ? null : resultBean.getResult().getNextPageToken()));
         if (mIsRefresh) {
+            AppConfig.getAppConfig(getActivity()).set("system_time", resultBean.getTime());
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
             mAdapter.addAll(mBean.getItems());

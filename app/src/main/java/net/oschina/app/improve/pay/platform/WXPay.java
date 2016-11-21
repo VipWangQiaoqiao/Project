@@ -13,6 +13,8 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import net.oschina.app.util.TLog;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -58,7 +60,7 @@ public class WXPay implements IWXAPIEventHandler {
     @Override
     public void onResp(BaseResp resp) {
         if(resp.getType() != ConstantsAPI.COMMAND_PAY_BY_WX) return;
-        Log.d("oschina", "微信支付成功");
+        TLog.d("oschina", "微信支付成功");
         switch (resp.errCode){
             case PAY_RESULT_CODE_SUCCESS:
                 break;
@@ -81,7 +83,7 @@ public class WXPay implements IWXAPIEventHandler {
                 list.add(Pair.create(k[0], URLEncoder.encode(k[1], "UTF-8")));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
-                Log.d("oschina", "encode url parameter error");
+                TLog.d("oschina", "encode url parameter error");
             }
         }
         return list;

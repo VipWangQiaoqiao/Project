@@ -20,7 +20,6 @@ import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.SoftWareDetailFragment;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.URLsUtils;
 
 import java.lang.reflect.Type;
 
@@ -147,7 +146,7 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
         if (getDataId() != 0 && getData() != null) {
             String content;
 
-            String url = String.format(URLsUtils.URL_MOBILE + "software/%s", getDataId());
+            String url = getData().getHref();
             final SoftwareDetail softwareDetail = getData();
             if (softwareDetail.getBody().length() > 55) {
                 content = HTMLUtil.delHTMLTag(softwareDetail.getBody().trim());

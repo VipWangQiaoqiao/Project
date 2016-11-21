@@ -1,13 +1,17 @@
 package net.oschina.app.improve.account.activity;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,10 +44,14 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RegisterStepOneActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
+public class RegisterStepOneActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener,
+        ViewTreeObserver.OnGlobalLayoutListener {
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
+
+    @Bind(R.id.iv_login_logo)
+    ImageView mIvLogo;
 
     @Bind(R.id.ll_register_phone)
     LinearLayout mLlRegisterPhone;
@@ -73,7 +81,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         @Override
         public void onStart() {
             super.onStart();
-            showWaitDialog();
+            showWaitDialog(R.string.progress_submit);
         }
 
         @Override
@@ -121,7 +129,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                             case 218:
                                 //手机号已被注册,提示重新输入
                                 mLlRegisterPhone.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                                showToastForKeyBord(resultBean.getMessage());
                                 break;
                             case 0:
                                 //异常错误，发送验证码失败,回收timer,需重新请求发送验证码
@@ -129,7 +137,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                     mTimer.onFinish();
                                     mTimer.cancel();
                                 }
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                                showToastForKeyBord(resultBean.getMessage());
                                 break;
                             default:
                                 break;
@@ -156,12 +164,12 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                         RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
                                     }
                                 } else {
-                                    AppContext.showToast(phoneTokenResultBean.getMessage());
+                                    showToastForKeyBord(phoneTokenResultBean.getMessage());
                                 }
                                 break;
                             case 215://注册失败,手机验证码错误
                                 mLlRegisterSmsCode.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(phoneTokenResultBean.getMessage());
+                                showToastForKeyBord(phoneTokenResultBean.getMessage());
                                 break;
                             default:
                                 break;
@@ -179,6 +187,8 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
 
         }
     };
+    private int mLogoHeight;
+    private int mLogoWidth;
 
     /**
      * show the register activity
@@ -224,7 +234,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                     public void afterTextChanged(Editable s) {
                         int length = s.length();
                         String input = s.toString();
-                        mMachPhoneNum = AssimilateUtils.MachPhoneNum(input);
+                        mMachPhoneNum = AssimilateUtils.machPhoneNum(input);
 
                         if (mMachPhoneNum) {
                             String smsCode = mEtRegisterAuthCode.getText().toString().trim();
@@ -254,7 +264,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                                 }
                             } else {
                                 mLlRegisterPhone.setBackgroundResource(R.drawable.bg_login_input_error);
-                                AppContext.showToast(getResources().getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+                                showToastForKeyBord(R.string.hint_username_ok);
                                 mTvRegisterSmsCall.setAlpha(0.4f);
                             }
                         } else if (length > 11) {
@@ -305,8 +315,21 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         super.initData();//必须要调用,用来注册本地广播
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLayBackBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    }
+
+    @SuppressWarnings("ConstantConditions")
     @OnClick({R.id.ib_navigation_back, R.id.iv_register_username_del, R.id.tv_register_sms_call,
-            R.id.bt_register_submit})
+            R.id.bt_register_submit, R.id.lay_register_one_container})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -322,6 +345,10 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                 break;
             case R.id.bt_register_submit:
                 requestRegister();
+                // RegisterStepTwoActivity.show(this,null);
+                break;
+            case R.id.lay_register_one_container:
+                hideKeyBoard(getCurrentFocus().getWindowToken());
                 break;
             default:
                 break;
@@ -330,36 +357,30 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
     }
 
     private void requestRegister() {
-        if (!mMachPhoneNum) {
-            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
-            return;
-        }
 
-        String SmsCode = mEtRegisterAuthCode.getText().toString().trim();
-
-        if (TextUtils.isEmpty(SmsCode)) {
-            AppContext.showToast(getString(R.string.retrieve_pwd_sms_coe_error), Toast.LENGTH_SHORT);
+        String smsCode = mEtRegisterAuthCode.getText().toString().trim();
+        if (!mMachPhoneNum || TextUtils.isEmpty(smsCode)) {
+            //showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
 
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+            showToastForKeyBord(R.string.tip_network_error);
             return;
         }
 
         mRequestType = 2;
         String phoneNumber = mEtRegisterUsername.getText().toString().trim();
-        String appToken = getAppToken();
-        OSChinaApi.validateRegisterInfo(phoneNumber, SmsCode, appToken, mHandler);
+        OSChinaApi.validateRegisterInfo(phoneNumber, smsCode, mHandler);
     }
 
     private void requestSmsCode() {
         if (!mMachPhoneNum) {
-            AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+            //showToastForKeyBord(R.string.hint_username_ok);
             return;
         }
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+            showToastForKeyBord(R.string.tip_network_error);
             return;
         }
 
@@ -384,8 +405,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                 }
             }.start();
             String phoneNumber = mEtRegisterUsername.getText().toString().trim();
-            String appToken = getAppToken();
-            OSChinaApi.sendSmsCode(phoneNumber, appToken, OSChinaApi.REGISTER_INTENT, mHandler);
+            OSChinaApi.sendSmsCode(phoneNumber, OSChinaApi.REGISTER_INTENT, mHandler);
         } else {
             AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
         }
@@ -410,5 +430,77 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onGlobalLayout() {
+
+        final ImageView ivLogo = this.mIvLogo;
+
+        Rect keypadRect = new Rect();
+
+        mLayBackBar.getWindowVisibleDisplayFrame(keypadRect);
+
+        int screenHeight = mLayBackBar.getRootView().getHeight();
+
+        int keypadHeight = screenHeight - keypadRect.bottom;
+        if (keypadHeight > 0) {
+            updateKeyBoardActiveStatus(true);
+        } else {
+            updateKeyBoardActiveStatus(false);
+        }
+
+        if (keypadHeight > 0 && ivLogo.getTag() == null) {
+            final int height = ivLogo.getHeight();
+            final int width = ivLogo.getWidth();
+            this.mLogoHeight = height;
+            this.mLogoWidth = width;
+            ivLogo.setTag(true);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) ivLogo.getLayoutParams();
+
+                    layoutParams.height = (int) (height * animatedValue);
+                    layoutParams.width = (int) (width * animatedValue);
+                    ivLogo.requestLayout();
+                    ivLogo.setAlpha(animatedValue);
+                }
+            });
+
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+
+        } else if (keypadHeight == 0 && ivLogo.getTag() != null) {
+            final int height = mLogoHeight;
+            final int width = mLogoWidth;
+            ivLogo.setTag(null);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) ivLogo.getLayoutParams();
+                    layoutParams.height = (int) (height * animatedValue);
+                    layoutParams.width = (int) (width * animatedValue);
+                    ivLogo.requestLayout();
+                    ivLogo.setAlpha(animatedValue);
+                }
+            });
+
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+        }
+
     }
 }

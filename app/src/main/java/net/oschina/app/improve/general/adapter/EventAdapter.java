@@ -24,8 +24,8 @@ public class EventAdapter extends BaseListAdapter<Event> {
         vh.setText(R.id.tv_event_pub_date, StringUtils.getDateString(item.getStartDate()));
         vh.setText(R.id.tv_event_member, item.getApplyCount() + "人参与");
         vh.setTextColor(R.id.tv_event_title,
-                AppContext.isOnReadedPostList(EventFragment.HISTORY_EVENT, item.getId() + "") ?
-                        (mCallback.getContext().getResources().getColor(R.color.count_text_color_light)) : (mCallback.getContext().getResources().getColor(R.color.day_textColor)));
+                AppContext.isOnReadedPostList(EventFragment.HISTORY_EVENT, String.valueOf(item.getId())) ?
+                        (mCallback.getContext().getResources().getColor(R.color.text_secondary_color)) : (mCallback.getContext().getResources().getColor(R.color.day_textColor)));
         switch (item.getStatus()) {
             case Event.STATUS_END:
                 vh.setText(R.id.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);

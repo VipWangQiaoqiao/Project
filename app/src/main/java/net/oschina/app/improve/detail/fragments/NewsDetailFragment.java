@@ -1,31 +1,32 @@
 package net.oschina.app.improve.detail.fragments;
 
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.Software;
 import net.oschina.app.improve.bean.simple.Comment;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 
 /**
  * Created by qiujuer
@@ -40,8 +41,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     private TextView mTVPubDate;
     private TextView mTVTitle;
     // private ImageView mIVAuthorPortrait;
-    private ImageView mIVFav;
-    private EditText mETInput;
+
     private long mCommentId;
     private long mCommentAuthorId;
     private boolean mInputDoubleEmpty = false;
@@ -49,11 +49,13 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     private CommentsView mComments;
     private CoordinatorLayout mLayCoordinator;
     private NestedScrollView mLayContent;
-    private View mLayBottom;
     private TextView mAbhoutSoftwareTitle;
     private LinearLayout mAboutSoftware;
     private TextView mTVName;
 
+    //private KeyboardInputDelegation mDelegation;
+
+    private CommentBar mDelegation;
 
     @Override
     protected int getLayoutId() {
@@ -76,13 +78,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         //setGone(R.id.tv_info_view);
         setGone(R.id.iv_info_comment);
 
-        //mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
-        //  mIVAuthorPortrait.setOnClickListener(this);
-        mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
-        mIVFav.setOnClickListener(this);
-
-        mETInput = (EditText) root.findViewById(R.id.et_input);
-
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
         mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
         mAbhoutSoftwareTitle = (TextView) root.findViewById(R.id.tv_about_software_title);
@@ -93,27 +88,44 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         registerScroller(mLayContent, mComments);
 
-        mLayBottom = root.findViewById(R.id.lay_option);
+        mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
 
-        root.findViewById(R.id.iv_share).setOnClickListener(this);
-        mIVFav.setOnClickListener(this);
-        mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    handleSendComment();
-                    return true;
-                }
-                return false;
-            }
-        });
-        mETInput.setOnKeyListener(new View.OnKeyListener() {
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
                     handleKeyDel();
                 }
                 return false;
+            }
+        });
+
+        mDelegation.setFavListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleFavorite();
+            }
+        });
+        mDelegation.setShareListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleShare();
+            }
+        });
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleSendComment();
+            }
+        });
+
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountHelper.isLogin())
+                    SelectFriendsActivity.show(NewsDetailFragment.this);
+                else
+                    LoginActivity.show(getActivity());
             }
         });
     }
@@ -125,25 +137,11 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             case R.id.lay_about_software:
                 SoftwareDetailActivity.show(getActivity(), mOperator.getData().getSoftware().getId());
                 break;
-            // 收藏
-            case R.id.iv_fav:
-                handleFavorite();
-                break;
-            // 分享
-            case R.id.iv_share:
-                handleShare();
-                break;
             case R.id.tv_info_view:
                 OtherUserHomeActivity.show(getActivity(), mOperator.getData().getAuthorId());
                 break;
             default:
                 break;
-            // 评论列表
-            //case R.id.tv_see_comment: {
-            // UIUtil.showBlogComment(getActivity(), (int) mId,
-            //  (int) mOperator.getNewsDetail().getId());
-            //   }
-            // break;
         }
     }
 
@@ -158,8 +156,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         setCommentCount(newsDetail.getCommentCount());
         setBodyContent(newsDetail.getBody());
 
-        //mTVAuthorName.setText(newsDetail.getAuthor());
-        // getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
         mTVName.setText(String.format("%s%s%s%s", "@", newsDetail.getAuthor(), "  ", "发布于 "));
 
         mTVPubDate.setText(StringUtils.formatSomeAgo(newsDetail.getPubDate()));
@@ -168,7 +164,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         toFavoriteOk(newsDetail);
 
-        // setText(R.id.tv_info_view, String.valueOf(newsDetail.getViewCount()));
         setText(R.id.tv_info_comment, StringUtils.formatYearMonthDay(newsDetail.getPubDate()));
 
         Software software = newsDetail.getSoftware();
@@ -187,11 +182,12 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
-            if (TextUtils.isEmpty(mETInput.getText())) {
+            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mETInput.setHint("发表评论");
+                    mDelegation.setCommentHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -211,32 +207,45 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     }
 
     private void handleSendComment() {
-        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void toFavoriteOk(NewsDetail newsDetail) {
         if (newsDetail.isFavorite())
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved));
+            mDelegation.setFavDrawable(R.drawable.ic_faved);
         else
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav));
+            mDelegation.setFavDrawable(R.drawable.ic_fav);
     }
 
     @Override
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mETInput.setText("");
+        mDelegation.getCommentText().setHint("添加评论");
         mComments.addComment(comment, getImgLoader(), this);
-        TDevice.hideSoftKeyboard(mETInput);
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override
     public void onClick(View view, Comment comment) {
-        FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
+
         mCommentAuthorId = comment.getAuthorId();
-        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
-        TDevice.showSoftKeyboard(mETInput);
+        mDelegation.getCommentText().setHint(String.format("回复: %s", comment.getAuthor()));
+
+//        mCommentAuthorId = comment.getAuthor().getId();
+//        mDelegation.getCommentText().setHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+
+        mDelegation.getBottomSheet().show(String.format("回复: %s", comment.getAuthor()));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
+        }
     }
 }

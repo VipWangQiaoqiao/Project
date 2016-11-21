@@ -1,14 +1,22 @@
 package net.oschina.app.improve.account.base;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.utils.DialogHelper;
@@ -30,6 +38,9 @@ public class AccountBaseActivity extends BaseActivity {
     public static final String ACTION_ACCOUNT_FINISH_ALL = "app.oschina.net.action.finish.all";
     protected LocalBroadcastManager mManager;
     private BroadcastReceiver mReceiver;
+    protected InputMethodManager mInputMethodManager;
+    protected Toast mToast;
+    private boolean mKeyBoardIsActive;
 
     @Override
     protected int getContentView() {
@@ -40,6 +51,7 @@ public class AccountBaseActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         registerLocalReceiver();
+        mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
     }
 
     @Override
@@ -49,11 +61,93 @@ public class AccountBaseActivity extends BaseActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        hideWaitDialog();
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        hideKeyBoard(getCurrentFocus().getWindowToken());
         if (mManager != null) {
             if (mReceiver != null)
                 mManager.unregisterReceiver(mReceiver);
+        }
+    }
+
+    /**
+     * showToast
+     *
+     * @param text text
+     */
+    @SuppressLint("InflateParams")
+    private void showToast(String text) {
+        Toast toast = this.mToast;
+        if (toast == null) {
+            toast = initToast();
+        }
+        View rootView = LayoutInflater.from(this).inflate(R.layout.view_toast, null, false);
+        TextView textView = (TextView) rootView.findViewById(R.id.title_tv);
+        textView.setText(text);
+        toast.setView(rootView);
+        initToastGravity(toast);
+        toast.show();
+    }
+
+    /**
+     * showToast
+     *
+     * @param id id
+     */
+    @SuppressLint("InflateParams")
+    private void showToast(@StringRes int id) {
+        Toast toast = this.mToast;
+        if (toast == null) {
+            toast = initToast();
+        }
+        View rootView = LayoutInflater.from(this).inflate(R.layout.view_toast, null, false);
+        TextView textView = (TextView) rootView.findViewById(R.id.title_tv);
+        textView.setText(id);
+        toast.setView(rootView);
+        initToastGravity(toast);
+        toast.show();
+    }
+
+    @NonNull
+    private Toast initToast() {
+        Toast toast;
+        toast = new Toast(this);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        this.mToast = toast;
+        return toast;
+    }
+
+    private void initToastGravity(Toast toast) {
+        boolean isCenter = this.mKeyBoardIsActive;
+        if (isCenter) {
+            toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+        } else {
+            toast.setGravity(Gravity.BOTTOM, 0, getResources().getDimensionPixelSize(R.dimen.toast_y_offset));
+        }
+    }
+
+    /**
+     * update keyBord active status
+     *
+     * @param isActive isActive
+     */
+    protected void updateKeyBoardActiveStatus(boolean isActive) {
+        this.mKeyBoardIsActive = isActive;
+    }
+
+    /**
+     * cancelToast
+     */
+    protected void cancelToast() {
+        if (mToast != null) {
+            mToast.cancel();
         }
     }
 
@@ -61,7 +155,7 @@ public class AccountBaseActivity extends BaseActivity {
         if (mManager != null) {
             Intent intent = new Intent();
             intent.setAction(ACTION_ACCOUNT_FINISH_ALL);
-            mManager.sendBroadcast(intent);
+            return mManager.sendBroadcast(intent);
         }
 
         return false;
@@ -93,10 +187,14 @@ public class AccountBaseActivity extends BaseActivity {
      *
      * @return progressDialog
      */
-    protected ProgressDialog showWaitDialog() {
-        String message = getResources().getString(R.string.progress_submit);
+    protected ProgressDialog showWaitDialog(@StringRes int messageId) {
         if (mDialog == null) {
-            mDialog = DialogHelper.getProgressDialog(this, message, true); //DialogHelp.getWaitDialog(this, message);
+            if (messageId <= 0) {
+                mDialog = DialogHelper.getProgressDialog(this, true);
+            } else {
+                String message = getResources().getString(messageId);
+                mDialog = DialogHelper.getProgressDialog(this, message, true);
+            }
         }
         mDialog.show();
 
@@ -135,6 +233,23 @@ public class AccountBaseActivity extends BaseActivity {
         }
     }
 
+    protected void showToastForKeyBord(@StringRes int id) {
+        showToast(id);
+    }
+
+    protected void showToastForKeyBord(String message) {
+        showToast(message);
+    }
+
+    protected void hideKeyBoard(IBinder windowToken) {
+        InputMethodManager inputMethodManager = this.mInputMethodManager;
+        if (inputMethodManager == null) return;
+        boolean active = inputMethodManager.isActive();
+        if (active) {
+            inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
+        }
+    }
+
     /**
      * request network error
      *
@@ -144,7 +259,7 @@ public class AccountBaseActivity extends BaseActivity {
         if (throwable != null) {
             throwable.printStackTrace();
         }
-        AppContext.showToast(getResources().getString(R.string.request_error_hint));
+        showToastForKeyBord(R.string.request_error_hint);
     }
 
     /**

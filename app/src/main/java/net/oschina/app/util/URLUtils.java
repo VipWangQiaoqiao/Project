@@ -158,15 +158,15 @@ public class URLUtils {
                     QuestionDetailActivity.show(context, oid);
                     break;
                 }
-                UIHelper.openExternalBrowser(context, url);
+                UIHelper.openInternalBrowser(context, url);
                 break;
             case "team.oschina.net":
                 // TODO team要独立?
-                UIHelper.openExternalBrowser(context, url);
+                UIHelper.openInternalBrowser(context, url);
                 break;
             case "git.oschina.net":
                 // TODO 如果用户安装了git@osc application, 使用git@osc打开
-                UIHelper.openExternalBrowser(context, url);
+                UIHelper.openInternalBrowser(context, url);
                 break;
             case "my.oschina.net":
                 matcher = PATTERN_PATH_USER_BLOG.matcher(path);
@@ -192,7 +192,7 @@ public class URLUtils {
                     OtherUserHomeActivity.show(context, 0, matcher.group(1));
                     break;
                 }
-                UIHelper.openExternalBrowser(context, url);
+                UIHelper.openInternalBrowser(context, url);
                 break;
             case "city.oschina.net":
                 matcher = PATTERN_PATH_CITY_EVENT.matcher(url);
@@ -202,11 +202,11 @@ public class URLUtils {
                     UIHelper.showEventDetail(context, eid);
                     return;
                 }
-                UIHelper.openExternalBrowser(context, url);
+                UIHelper.openInternalBrowser(context, url);
                 break;
             default:
                 // pass
-                UIHelper.openExternalBrowser(context, url);
+                UIHelper.openInternalBrowser(context, url);
         }
 
     }

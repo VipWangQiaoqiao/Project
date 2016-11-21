@@ -10,25 +10,61 @@ import java.util.Map;
  * on 2016/10/26.
  */
 
-public class SubBean implements Serializable{
+public class SubBean implements Serializable {
     private long id;
     private String title;
     private String body;
     private String pubDate;
-    private String  href;
+    private String href;
     private int type;
     private Author author;
     private Image image;
-    private Map<String,Object> extra;
+    private Map<String, Object> extra;
     private String[] tags;
     private Statistics statistics;
 
-    public boolean isOriginal(){
-        return true;
+    public boolean isOriginal() {
+        if (tags != null) {
+            for (String tag : tags) {
+                if ("original".equalsIgnoreCase(tag)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
-    public boolean isRecommend(){
-        return true;
+    public boolean isAD() {
+        if (tags != null) {
+            for (String tag : tags) {
+                if ("ad".equalsIgnoreCase(tag)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isStick() {
+        if (tags != null) {
+            for (String tag : tags) {
+                if ("stick".equalsIgnoreCase(tag)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isRecommend() {
+        if (tags != null) {
+            for (String tag : tags) {
+                if ("recommend".equalsIgnoreCase(tag)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public long getId() {
@@ -119,7 +155,7 @@ public class SubBean implements Serializable{
         this.statistics = statistics;
     }
 
-    public static class Image implements Serializable{
+    public static class Image implements Serializable {
         private int type;
         private String[] href;
 
@@ -140,7 +176,7 @@ public class SubBean implements Serializable{
         }
     }
 
-    public static class Statistics implements Serializable{
+    public static class Statistics implements Serializable {
         private int comment;
         private int view;
 

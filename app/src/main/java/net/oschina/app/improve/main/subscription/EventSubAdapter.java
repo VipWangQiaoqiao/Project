@@ -1,5 +1,6 @@
 package net.oschina.app.improve.main.subscription;
 
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,13 @@ import android.widget.TextView;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.SubBean;
-import net.oschina.app.improve.general.fragments.EventFragment;
 import net.oschina.app.util.StringUtils;
+import net.qiujuer.genius.ui.compat.UiCompat;
+
+import java.util.Map;
 
 /**
  * 新版活动栏目
@@ -20,9 +24,20 @@ import net.oschina.app.util.StringUtils;
  * on 2016/10/27.
  */
 
-public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
-    public EventSubAdapter(Callback callback,int mode) {
+public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
+    public EventSubAdapter(Callback callback, int mode) {
         super(callback, mode);
+        setOnLoadingHeaderCallBack(this);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderHolder(ViewGroup parent) {
+        return new HeaderViewHolder(mHeaderView);
+    }
+
+    @Override
+    public void onBindHeaderHolder(RecyclerView.ViewHolder holder, int position) {
+
     }
 
     @Override
@@ -34,41 +49,58 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, SubBean item, int position) {
         EventViewHolder vh = (EventViewHolder) holder;
         vh.tv_event_title.setText(item.getTitle());
-        mCallBack.getImgLoader().load(item.getImage().getHref()).into(vh.iv_event);
-        vh.tv_event_pub_date.setText(StringUtils.getDateString(item.getExtra().get("eventStartDate").toString()));
-        vh.tv_event_member.setText(item.getExtra().get("eventApplyCount") + "人参与");
-        vh.tv_event_title.setTextColor(
-                AppContext.isOnReadedPostList(EventFragment.HISTORY_EVENT, item.getId() + "") ?
-                        (mContext.getResources().getColor(R.color.count_text_color_light)) : (mContext.getResources().getColor(R.color.day_textColor)));
-        switch ((int) item.getExtra().get("eventStatus")) {
-            case Event.STATUS_END:
-                setText(vh.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);
-                setTextColor(vh.tv_event_title, mContext.getResources().getColor(R.color.light_gray));
-                break;
-            case Event.STATUS_ING:
-                setText(vh.tv_event_state, R.string.event_status_ing, R.drawable.bg_event_ing, 0xFF24cf5f);
-                break;
-            case Event.STATUS_SING_UP:
-                setText(vh.tv_event_state, R.string.event_status_sing_up, R.drawable.bg_event_end, 0x1a000000);
-                setTextColor(vh.tv_event_title, mContext.getResources().getColor(R.color.light_gray));
-                break;
+        SubBean.Image image = item.getImage();
+        if (image != null) {
+            mCallBack.getImgLoader()
+                    .load(image.getHref() != null && image.getHref().length > 0 ? image.getHref()[0] : null)
+                    .placeholder(R.drawable.bg_normal)
+                    .into(vh.iv_event);
+        } else {
+            vh.iv_event.setImageResource(R.drawable.bg_normal);
         }
-        int typeStr = R.string.oscsite;
-        switch ((int) item.getExtra().get("eventType")) {
-            case Event.EVENT_TYPE_OSC:
-                typeStr = R.string.event_type_osc;
-                break;
-            case Event.EVENT_TYPE_TEC:
-                typeStr = R.string.event_type_tec;
-                break;
-            case Event.EVENT_TYPE_OTHER:
-                typeStr = R.string.event_type_other;
-                break;
-            case Event.EVENT_TYPE_OUTSIDE:
-                typeStr = R.string.event_type_outside;
-                break;
+
+        Resources resources = mContext.getResources();
+
+        Map<String, Object> extras = item.getExtra();
+        if (extras != null) {
+            vh.tv_event_pub_date.setText(StringUtils.getDateString(extras.get("eventStartDate").toString()));
+            vh.tv_event_member.setText(Double.valueOf(extras.get("eventApplyCount").toString()).intValue() + "人参与");
+
+            switch (Double.valueOf(extras.get("eventStatus").toString()).intValue()) {
+                case Event.STATUS_END:
+                    setText(vh.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);
+                    setTextColor(vh.tv_event_title, UiCompat.getColor(resources, R.color.light_gray));
+                    break;
+                case Event.STATUS_ING:
+                    setText(vh.tv_event_state, R.string.event_status_ing, R.drawable.bg_event_ing, 0xFF24cf5f);
+                    break;
+                case Event.STATUS_SING_UP:
+                    setText(vh.tv_event_state, R.string.event_status_sing_up, R.drawable.bg_event_end, 0x1a000000);
+                    setTextColor(vh.tv_event_title, UiCompat.getColor(resources, R.color.light_gray));
+                    break;
+            }
+            int typeStr = R.string.oscsite;
+            switch (Double.valueOf(extras.get("eventType").toString()).intValue()) {
+                case Event.EVENT_TYPE_OSC:
+                    typeStr = R.string.event_type_osc;
+                    break;
+                case Event.EVENT_TYPE_TEC:
+                    typeStr = R.string.event_type_tec;
+                    break;
+                case Event.EVENT_TYPE_OTHER:
+                    typeStr = R.string.event_type_other;
+                    break;
+                case Event.EVENT_TYPE_OUTSIDE:
+                    typeStr = R.string.event_type_outside;
+                    break;
+            }
+            vh.tv_event_type.setText(typeStr);
         }
-        vh.tv_event_type.setText(typeStr);
+
+        vh.tv_event_title.setTextColor(UiCompat.getColor(resources,
+                AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))
+                        ? R.color.text_desc_color : R.color.text_title_color));
+
     }
 
     private void setText(TextView tv, int textRes, int bgRes, int textColor) {

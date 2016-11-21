@@ -5,9 +5,11 @@ import android.os.Bundle;
 
 import com.google.gson.reflect.TypeToken;
 
+import net.oschina.app.AppConfig;
+import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
-import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
+import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.SubTab;
@@ -31,8 +33,7 @@ import java.lang.reflect.Type;
  * on 2016/10/26.
  */
 
-public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
-
+public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
     private SubTab mTab;
     private HeaderView mHeaderView;
 
@@ -48,16 +49,21 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
         mTab = (SubTab) bundle.getSerializable("sub_tab");
+        CACHE_NAME = mTab.getToken();
     }
 
     @Override
     public void initData() {
-        super.initData();
         if (mTab.getBanner() != null) {
             mHeaderView = mTab.getBanner().getCatalog() == SubTab.BANNER_CATEGORY_NEWS ?
-                    new NewsHeaderView(mContext, getImgLoader(), mTab.getHref()) :
-                    new EventHeaderView(mContext, getImgLoader(), mTab.getHref());
-            mAdapter.setHeaderView(mHeaderView);
+                    new NewsHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref(), mTab.getToken() + "banner" + mTab.getType()) :
+                    new EventHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref(), mTab.getToken() + "banner" + mTab.getType());
+        }
+        super.initData();
+        mAdapter.setHeaderView(mHeaderView);
+        mAdapter.setSystemTime(AppConfig.getAppConfig(getActivity()).get("system_time"));
+        if (mAdapter instanceof NewsSubAdapter) {
+            ((NewsSubAdapter) mAdapter).setTab(mTab);
         }
     }
 
@@ -87,6 +93,8 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
                 UIHelper.showUrlRedirect(mContext, sub.getHref());
                 break;
         }
+        AppContext.putReadedPostList("sub_list", String.valueOf(sub.getId()), "true");
+        mAdapter.updateItem(position);
     }
 
     @Override
@@ -99,6 +107,12 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
     @Override
     protected void requestData() {
         OSChinaApi.getSubscription(mTab.getHref(), mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+    }
+
+    @Override
+    protected void setListData(ResultBean<PageBean<SubBean>> resultBean) {
+        super.setListData(resultBean);
+        mAdapter.setSystemTime(resultBean.getTime());
     }
 
     @Override
@@ -117,5 +131,10 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
     protected Type getType() {
         return new TypeToken<ResultBean<PageBean<SubBean>>>() {
         }.getType();
+    }
+
+    @Override
+    protected Class<SubBean> getCacheClass() {
+        return SubBean.class;
     }
 }

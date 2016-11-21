@@ -1,12 +1,16 @@
 package net.oschina.app.improve.account.activity;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,9 +44,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RegisterStepTwoActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
-
-    private static final String TAG = "RegisterStepTwoActivity";
+public class RegisterStepTwoActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     public static final String PHONE_TOKEN_KEY = "phoneToken";
 
@@ -74,7 +76,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
         @Override
         public void onStart() {
             super.onStart();
-            showWaitDialog();
+            showWaitDialog(R.string.progress_submit);
         }
 
         @Override
@@ -121,12 +123,12 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                     default:
                         break;
                 }
-                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                showToastForKeyBord(resultBean.getMessage());
             }
 
         }
     };
-
+    private int mTopMargin;
 
     /**
      * show register step two activity
@@ -184,13 +186,11 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 }
 
                 if (length > 12) {
-                    AppContext.showToast(getResources().getString(R.string.register_username_error), Toast.LENGTH_SHORT);
+                    showToastForKeyBord(R.string.register_username_error);
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_error);
                 } else {
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
                 }
-
-
             }
         });
         mEtRegisterUsername.setOnFocusChangeListener(this);
@@ -230,14 +230,25 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
     @Override
     protected void initData() {
         super.initData();//必须要调用,用来注册本地广播
-
         Intent intent = getIntent();
         mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONE_TOKEN_KEY);
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLlRegisterBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLlRegisterBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    }
+
+    @SuppressWarnings({"deprecation", "ConstantConditions"})
     @OnClick({R.id.ib_navigation_back, R.id.iv_register_username_del, R.id.tv_register_man,
-            R.id.tv_register_female, R.id.bt_register_submit})
+            R.id.tv_register_female, R.id.bt_register_submit, R.id.lay_register_two_container})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -281,6 +292,9 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
             case R.id.bt_register_submit:
                 requestRegisterUserInfo();
                 break;
+            case R.id.lay_register_two_container:
+                hideKeyBoard(getCurrentFocus().getWindowToken());
+                break;
             default:
                 break;
         }
@@ -290,21 +304,14 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
     private void requestRegisterUserInfo() {
 
         String username = mEtRegisterUsername.getText().toString().trim();
-
-        if (TextUtils.isEmpty(username)) {
-            AppContext.showToast(getString(R.string.hint_pwd_null));
-            return;
-        }
-
         String pwd = mEtRegisterPwd.getText().toString().trim();
 
-        if (TextUtils.isEmpty(pwd)) {
-            AppContext.showToast(getString(R.string.hint_pwd_null));
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(pwd)) {
             return;
         }
 
         if (!TDevice.hasInternet()) {
-            AppContext.showToast(getResources().getString(R.string.tip_network_error));
+            showToastForKeyBord(R.string.tip_network_error);
             return;
         }
 
@@ -320,9 +327,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
             gender = 2;
         }
 
-        String appToken = getAppToken();
-
-        OSChinaApi.register(username, getSha1(pwd), gender, mPhoneToken.getToken(), appToken, mHandler);
+        OSChinaApi.register(username, getSha1(pwd), gender, mPhoneToken.getToken(), mHandler);
     }
 
     @Override
@@ -346,5 +351,65 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
                 break;
         }
 
+    }
+
+    @Override
+    public void onGlobalLayout() {
+
+        final LinearLayout layRegisterTwoUsername = this.mLlRegisterTwoUsername;
+        Rect keypadRect = new Rect();
+
+        mLlRegisterBar.getWindowVisibleDisplayFrame(keypadRect);
+
+        int screenHeight = mLlRegisterBar.getRootView().getHeight();
+        int keypadHeight = screenHeight - keypadRect.bottom;
+
+        if (keypadHeight > 0) {
+            updateKeyBoardActiveStatus(true);
+        } else {
+            updateKeyBoardActiveStatus(false);
+        }
+
+        if (keypadHeight > 0 && layRegisterTwoUsername.getTag() == null) {
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layRegisterTwoUsername.getLayoutParams();
+            final int topMargin = layoutParams.topMargin;
+            this.mTopMargin = topMargin;
+            layRegisterTwoUsername.setTag(true);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    layoutParams.topMargin = (int) (topMargin * animatedValue);
+                    layRegisterTwoUsername.requestLayout();
+                }
+            });
+
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+        } else if (keypadHeight == 0 && layRegisterTwoUsername.getTag() != null) {
+            final int topMargin = mTopMargin;
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layRegisterTwoUsername.getLayoutParams();
+            layRegisterTwoUsername.setTag(null);
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+            valueAnimator.setDuration(400).setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float animatedValue = (float) animation.getAnimatedValue();
+                    layoutParams.topMargin = (int) (topMargin * animatedValue);
+                    layRegisterTwoUsername.requestLayout();
+                }
+            });
+            if (valueAnimator.isRunning()) {
+                valueAnimator.cancel();
+            }
+            valueAnimator.start();
+
+        }
     }
 }

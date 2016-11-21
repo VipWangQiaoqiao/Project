@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="46dp"
+    android:layout_gravity="bottom"
+    android:background="@color/white"
+    android:clickable="true"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <View
+        style="@style/h_line"
+        android:background="#d4d4d4" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/lay_16"
+        android:paddingRight="@dimen/lay_16">
+
+        <LinearLayout
+            android:id="@+id/ll_comment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/lay_8"
+            android:layout_marginTop="@dimen/lay_8"
+            android:layout_weight="1"
+            android:background="@drawable/bg_text_comment"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:src="@mipmap/ic_comment_40" />
+
+            <TextView
+                android:id="@+id/tv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="添加评论"
+                android:paddingLeft="@dimen/lay_16" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ib_fav"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginLeft="@dimen/lay_16"
+            android:background="@drawable/ic_material"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_fav_pressed" />
+
+        <ImageButton
+            android:id="@+id/ib_share"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginLeft="@dimen/lay_16"
+            android:background="@drawable/ic_material"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_share_black_normal" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -48,13 +48,15 @@
     <string name="actionbar_title_detail">详情</string>
     <string name="actionbar_title_active">好友圈</string>
 
-    <string name="share_to">分享到</string>
+    <string name="share_to">分享</string>
+    <string name="platform_sina">微博</string>
+    <string name="platform_wechat_circle">朋友圈</string>
+    <string name="platform_wechat">微信</string>
     <string name="platform_qq">QQ</string>
+    <string name="platform_tweet">动弹</string>
+    <string name="platform_browser">浏览器</string>
     <string name="platform_copy_link">复制链接</string>
     <string name="platform_more_option">更多</string>
-    <string name="platform_sina">微博</string>
-    <string name="platform_wechat">微信</string>
-    <string name="platform_weichat_circle">朋友圈</string>
     <string name="share_title">开源中国分享</string>
 
     <string name="add_favorite_success">收藏成功</string>
@@ -69,7 +71,6 @@
     <string name="tip_comment_content_empty">评论内容不能为空</string>
 
     <!-- notification messages -->
-    <string name="comment_pub">发表评论</string>
     <string name="comment_publish_success">评论成功</string>
     <string name="comment_publish_faile">评论失败</string>
 
@@ -160,6 +161,7 @@
     <string name="message">我的消息</string>
     <string name="team">我的团队</string>
     <string name="user_score">积分</string>
+    <string name="question">我的问答</string>
 
     <string name="scan">扫一扫</string>
     <string name="shake">摇一摇</string>
@@ -271,13 +273,18 @@
     <string name="retrieve_pwd_label">找回密码</string>
     <string name="retrieve_pwd_sms_coe_error">请输入正确的验证码</string>
     <string name="reset_pwd_submit">确认</string>
-    <string name="request_error_hint">网络请求失败&#8230;</string>
+    <string name="request_error_hint">网络请求失败,请重试&#8230;</string>
     <string name="login_success_hint">登录成功</string>
     <string name="send_sms_code_success_hint">已成功发送验证码</string>
     <string name="reset_success_hint">密码重置成功</string>
     <string name="register_success_hint">注册成功</string>
     <string name="share_hint">抱歉,您未安装该应用,不能分享&#8230;</string>
     <string name="login_hint">抱歉,您未安装该应用,不能登录&#8230;</string>
+    <string name="login_wechat_hint">正在启动微信中&#8230;</string>
+    <string name="login_tencent_hint">正在启动QQ中&#8230;</string>
+    <string name="login_webo_hint">正在启动微博中&#8230;</string>
     <string name="message_pwd_error">密码错误</string>
+    <string name="tv_my_score">积分 0</string>
+    <string name="zero">0</string>
 
 </resources>
