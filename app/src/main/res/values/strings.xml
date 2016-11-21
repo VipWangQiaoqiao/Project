@@ -298,7 +298,9 @@
     <string name="pub_comment_success">评论成功</string>
     <string name="pub_comment_failed">评论失败</string>
     <string name="add_comment_hint">添加评论</string>
+    <string name="comment_title_hint">评论</string>
     <string name="reply_hint">回复:</string>
     <string name="pub_about">发布于</string>
+    <string name="back_hint">返回</string>
 
 </resources>

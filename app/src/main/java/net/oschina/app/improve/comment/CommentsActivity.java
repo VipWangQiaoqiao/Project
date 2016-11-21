@@ -9,12 +9,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -33,6 +31,7 @@ import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.bean.comment.Reply;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.behavior.CommentBar;
+import net.oschina.app.improve.comment.adapter.CommentAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
@@ -66,6 +65,10 @@ public class CommentsActivity extends BaseBackActivity {
 
     @Bind(R.id.activity_comments)
     CoordinatorLayout mCoordLayout;
+    @Bind(R.id.tv_back_label)
+    TextView mBack_label;
+    @Bind(R.id.tv_title)
+    TextView mTitle;
 
     private CommentAdapter mCommentAdapter;
     private Comment reply;
@@ -136,10 +139,12 @@ public class CommentsActivity extends BaseBackActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
+
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mLayComments.setLayoutManager(manager);
 
-        mCommentAdapter = new CommentAdapter(this);
+        mCommentAdapter = new CommentAdapter(this, getImageLoader());
         mLayComments.setAdapter(mCommentAdapter);
 
         mDelegation = CommentBar.delegation(this, mCoordLayout);
@@ -176,6 +181,9 @@ public class CommentsActivity extends BaseBackActivity {
     @Override
     protected void initData() {
         super.initData();
+        //第一次请求初始化数据
+        getData(true, null);
+
         mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
             @Override
             public void onRefreshing() {
@@ -198,7 +206,6 @@ public class CommentsActivity extends BaseBackActivity {
                 mRefreshLayout.onRefresh();
             }
         });
-        getData(true, null);
     }
 
     Type getCommentType() {
@@ -332,7 +339,6 @@ public class CommentsActivity extends BaseBackActivity {
                 try {
                     Type type = getCommentType();
 
-
                     Comment[] comments = new Comment[30];
                     for (int i = 0, len = comments.length; i < len; i++) {
 
@@ -405,6 +411,7 @@ public class CommentsActivity extends BaseBackActivity {
         mCommentAdapter.notifyDataSetChanged();
     }
 
+
     public View.OnClickListener getReplyBtnClickListener() {
         if (onReplyBtnClickListener == null) {
             onReplyBtnClickListener = new View.OnClickListener() {
@@ -419,67 +426,6 @@ public class CommentsActivity extends BaseBackActivity {
         return onReplyBtnClickListener;
     }
 
-
-    private class CommentHolder extends RecyclerView.ViewHolder implements OnCommentClickListener {
-
-        private CommentView mCommentView;
-
-        CommentHolder(View itemView) {
-            super(itemView);
-            CommentView commentView = (CommentView) itemView.findViewById(R.id.comment);
-            commentView.init(mId, mType, getImageLoader(), this);
-            this.mCommentView = commentView;
-        }
-
-        /**
-         * add comment
-         *
-         * @param comment comment
-         */
-        public void addComment(Comment comment) {
-            CommentView commentView = this.mCommentView;
-            commentView.addComment(comment, getImageLoader(), this);
-        }
-
-        @Override
-        public void onClick(View view, Comment comment) {
-
-        }
-    }
-
-
-    private class CommentAdapter extends BaseRecyclerAdapter<Comment> {
-
-        private CommentHolder commentHolder;
-
-        CommentAdapter(Context context) {
-            super(context, ONLY_FOOTER);
-            mState = STATE_HIDE;
-            setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(int position, long itemId) {
-                    //  CommentsActivity.this.onItemClick(getItem(position));
-                }
-            });
-        }
-
-        @Override
-        protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View view = inflater.inflate(R.layout.activity_comment_item, parent, false);
-            return new CommentHolder(view);
-        }
-
-        @Override
-        protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
-            if (holder instanceof CommentHolder) {
-                commentHolder = (CommentHolder) holder;
-                RequestManager requestManager = getImageLoader();
-                // if (requestManager != null)
-                //  commentHolder.addComment(item, requestManager, getReplyBtnClickListener());
-            }
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

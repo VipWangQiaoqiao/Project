@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_comments"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,24 +10,69 @@
     android:orientation="horizontal"
     tools:context="net.oschina.app.improve.comment.CommentsActivity">
 
-    <net.oschina.app.improve.widget.TitleBar
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-
-    </net.oschina.app.improve.widget.TitleBar>
-
-    <net.oschina.app.improve.widget.RecyclerRefreshLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/lay_refreshLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFF">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/lay_blog_detail_comment"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/main_green"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/tv_back_label"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|left"
+                android:drawableLeft="@mipmap/btn_back_normal"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:text="@string/back_hint"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_18"
+                tools:ignore="RtlHardcoded" />
+
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/lay_4"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/comment_title_hint"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_18"
+                tools:ignore="RtlHardcoded" />
+
+            <Space
+                android:layout_width="56dp"
+                android:layout_height="match_parent" />
+
+
+        </LinearLayout>
+
+        <net.oschina.app.improve.widget.RecyclerRefreshLayout
+            android:id="@+id/lay_refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:ignore="RtlSymmetry" />
-    </net.oschina.app.improve.widget.RecyclerRefreshLayout>
+            android:background="#FFF"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-</LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/lay_blog_detail_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:ignore="RtlSymmetry" />
+        </net.oschina.app.improve.widget.RecyclerRefreshLayout>
+
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -89,6 +89,16 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         }
     }
 
+    public void setTitleGone() {
+        if (mTitle != null)
+            mTitle.setVisibility(GONE);
+    }
+
+    public void setSeeMoreGone() {
+        if (mSeeMore != null)
+            mSeeMore.setVisibility(GONE);
+    }
+
     /**
      * @return TypeToken
      */
@@ -172,154 +182,172 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         });
     }
 
-    private void addComment(Comment[] comments, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
-        if (comments != null && comments.length > 0) {
+    private void addComment(final Comment[] comments, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
 
-            if (comments.length > 4) {
-                mSeeMore.setVisibility(VISIBLE);
-                mSeeMore.setOnClickListener(this);
-            }
+        if (mLayComments != null)
 
-            if (getVisibility() != VISIBLE) {
-                setVisibility(VISIBLE);
-            }
+            if (comments != null && comments.length > 0) {
 
-            for (final Comment comment : comments) {
-                if (comment != null) {
-                    ViewGroup lay = addComment(false, comment, imageLoader, onCommentClickListener);
-                    lay.findViewById(R.id.line).setVisibility(View.VISIBLE);
+                if (comments.length > 4) {
+                    mSeeMore.setVisibility(VISIBLE);
+                    mSeeMore.setOnClickListener(CommentView.this);
                 }
+
+                if (getVisibility() != VISIBLE) {
+                    setVisibility(VISIBLE);
+                }
+
+                for (final Comment comment : comments) {
+                    if (comment != null) {
+                        ViewGroup lay = addComment(false, comment, imageLoader, onCommentClickListener);
+                        lay.findViewById(R.id.line).setVisibility(View.VISIBLE);
+                    }
+                }
+            } else {
+                setVisibility(View.GONE);
             }
-        } else {
-            setVisibility(View.GONE);
-        }
     }
 
+    /**
+     * 添加comment
+     *
+     * @param comment                comment
+     * @param imageLoader            imageLoader
+     * @param onCommentClickListener onCommentClickListener
+     * @return viewGroup
+     */
     public ViewGroup addComment(final Comment comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
         }
-
-        return addComment(true, comment, imageLoader, onCommentClickListener);
+        return addComment(false, comment, imageLoader, onCommentClickListener);
     }
 
-    private ViewGroup addComment(boolean first, final Comment comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
-        ImageView ivAvatar = (ImageView) lay.findViewById(R.id.iv_avatar);
-        final TextView tvVoteCount = (TextView) lay.findViewById(R.id.tv_vote_count);
-        tvVoteCount.setText(String.valueOf(comment.getVote()));
-        final ImageView ivVoteStatus = (ImageView) lay.findViewById(R.id.btn_vote);
-        ivVoteStatus.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                handVote();
-            }
+    private ViewGroup addComment(final boolean first, final Comment comment, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+        final LayoutInflater inflater = LayoutInflater.from(getContext());
+        @SuppressLint("InflateParams") final ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
 
-            private void handVote() {
+//        lay.post(new Runnable() {
+//            @Override
+//            public void run() {
 
-                if (!AccountHelper.isLogin()) {
-                    LoginActivity.show(getContext());
-                    return;
-                }
-                if (!TDevice.hasInternet()) {
-                    AppContext.showToast(getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                int voteState = 0;
-                if (comment.getVoteState() == 0) {
-                    voteState = 1;
-                } else if (comment.getVoteState() == 1) {
-                    voteState = 0;
-                }
-                OSChinaApi.voteComment(comment.getId(), mId, voteState, new TextHttpResponseHandler() {
-
+                ImageView ivAvatar = (ImageView) lay.findViewById(R.id.iv_avatar);
+                final TextView tvVoteCount = (TextView) lay.findViewById(R.id.tv_vote_count);
+                tvVoteCount.setText(String.valueOf(comment.getVote()));
+                final ImageView ivVoteStatus = (ImageView) lay.findViewById(R.id.btn_vote);
+                ivVoteStatus.setOnClickListener(new OnClickListener() {
                     @Override
-                    public void onStart() {
-                        super.onStart();
-                        showWaitDialog(R.string.progress_submit);
+                    public void onClick(final View v) {
+                        handVote();
                     }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        requestFailureHint(throwable);
-                    }
+                    private void handVote() {
 
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                        ResultBean<Vote> resultBean = AppOperator.createGson().fromJson(responseString, getVoteType());
-                        if (resultBean.isSuccess()) {
-                            Vote vote = resultBean.getResult();
-                            if (vote != null) {
-                                if (vote.getVoteState() == 1) {
-                                    comment.setVoteState(1);
-                                    ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
-                                } else if (vote.getVoteState() == 0) {
-                                    comment.setVoteState(0);
-                                    ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
-                                }
-                                long voteVoteCount = vote.getVote();
-                                comment.setVote(voteVoteCount);
-                                tvVoteCount.setText(String.valueOf(voteVoteCount));
-                            }
-                        } else {
-                            AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                        if (!AccountHelper.isLogin()) {
+                            LoginActivity.show(getContext());
+                            return;
                         }
-                    }
+                        if (!TDevice.hasInternet()) {
+                            AppContext.showToast(getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
+                            return;
+                        }
+                        int voteState = 0;
+                        if (comment.getVoteState() == 0) {
+                            voteState = 1;
+                        } else if (comment.getVoteState() == 1) {
+                            voteState = 0;
+                        }
+                        OSChinaApi.voteComment(comment.getId(), mId, voteState, new TextHttpResponseHandler() {
 
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
-                        hideWaitDialog();
+                            @Override
+                            public void onStart() {
+                                super.onStart();
+                                showWaitDialog(R.string.progress_submit);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                requestFailureHint(throwable);
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                                ResultBean<Vote> resultBean = AppOperator.createGson().fromJson(responseString, getVoteType());
+                                if (resultBean.isSuccess()) {
+                                    Vote vote = resultBean.getResult();
+                                    if (vote != null) {
+                                        if (vote.getVoteState() == 1) {
+                                            comment.setVoteState(1);
+                                            ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
+                                        } else if (vote.getVoteState() == 0) {
+                                            comment.setVoteState(0);
+                                            ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
+                                        }
+                                        long voteVoteCount = vote.getVote();
+                                        comment.setVote(voteVoteCount);
+                                        tvVoteCount.setText(String.valueOf(voteVoteCount));
+                                    }
+                                } else {
+                                    AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                                }
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                super.onFinish();
+                                hideWaitDialog();
+                            }
+                        });
                     }
                 });
-            }
-        });
 
-        if (comment.getVoteState() == 1) {
-            ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
-        } else if (comment.getVoteState() == 0) {
-            ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
-        }
-        imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
-                .into(ivAvatar);
-        ivAvatar.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OtherUserHomeActivity.show(getContext(), comment.getAuthor().getId());
-            }
-        });
+                if (comment.getVoteState() == 1) {
+                    ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
+                } else if (comment.getVoteState() == 0) {
+                    ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
+                }
+                imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
+                        .into(ivAvatar);
+                ivAvatar.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OtherUserHomeActivity.show(getContext(), comment.getAuthor().getId());
+                    }
+                });
 
-        ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor().getName());
+                ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor().getName());
 
-        ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
-                StringUtils.formatSomeAgo(comment.getPubDate()));
+                ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
+                        StringUtils.formatSomeAgo(comment.getPubDate()));
 
-        TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
-        CommentsUtil.formatHtml(getResources(), content, comment.getContent());
-        Refer[] refers = comment.getRefer();
+                TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
+                CommentsUtil.formatHtml(getResources(), content, comment.getContent());
+                Refer[] refers = comment.getRefer();
 
-        if (refers != null && refers.length > 0) {
-            int len = refers.length;
-            Log.e(TAG, "addComment: ------------------>len=" + len);
+                if (refers != null && refers.length > 0) {
+                    int len = refers.length;
+                    Log.e(TAG, "addComment: ------------------>len=" + len);
 
-            View view = CommentsUtil.getReferLayout(inflater, refers, 0);
-            lay.addView(view, lay.indexOfChild(content));
+                    View view = CommentsUtil.getReferLayout(inflater, refers, 0);
+                    lay.addView(view, lay.indexOfChild(content));
 
-        }
+                }
 
-        lay.findViewById(R.id.btn_comment).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCommentClickListener.onClick(v, comment);
-            }
-        });
+                lay.findViewById(R.id.btn_comment).setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onCommentClickListener.onClick(v, comment);
+                    }
+                });
 
-        if (first)
-            mLayComments.addView(lay, 0);
-        else
-            mLayComments.addView(lay);
+                if (first)
+                    mLayComments.addView(lay, 0);
+                else
+                    mLayComments.addView(lay);
+
+            //}
+       // });
 
         return lay;
     }
