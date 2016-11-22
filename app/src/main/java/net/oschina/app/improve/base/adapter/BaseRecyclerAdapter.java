@@ -299,6 +299,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     }
 
     public final T getItem(int position) {
+        int p = getIndex(position);
+        if (p < 0 || p >= mItems.size())
+            return null;
         return mItems.get(getIndex(position));
     }
 

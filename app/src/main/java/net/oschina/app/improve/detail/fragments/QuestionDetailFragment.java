@@ -238,6 +238,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     public void toSendCommentOk(CommentEX commentEX) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mDelegation.setCommentHint("添加评论");
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
         mComments.addComment(commentEX, getImgLoader(), null);
         mDelegation.getBottomSheet().dismiss();
     }

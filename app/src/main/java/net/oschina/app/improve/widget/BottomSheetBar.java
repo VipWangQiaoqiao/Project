@@ -147,7 +147,7 @@ public class BottomSheetBar {
         if (!"添加评论".equals(hint)) {
             mEditText.setHint(hint + " ");
         }
-        Selection.setSelection(mEditText.getText(), mEditText.length());
+        //Selection.setSelection(mEditText.getText(), mEditText.length());
         mRootView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -170,8 +170,8 @@ public class BottomSheetBar {
     }
 
     public void showSyncView() {
-        mSyncToTweetView.setVisibility(View.VISIBLE);
-        mRootView.findViewById(R.id.tv_sync).setVisibility(View.VISIBLE);
+        mSyncToTweetView.setVisibility(View.INVISIBLE); //hide for temp
+        mRootView.findViewById(R.id.tv_sync).setVisibility(View.INVISIBLE); //hide for temp
     }
 
     public boolean isSyncToTweet() {
