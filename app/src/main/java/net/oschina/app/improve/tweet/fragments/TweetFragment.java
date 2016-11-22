@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -295,6 +294,14 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
         outState.putInt("tweetType", tweetType);
         outState.putLong("authorId", authorId);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (requestCategory == CATEGORY_USER) {
+            authorId = AccountHelper.getUserId();
+        }
     }
 
     /**
