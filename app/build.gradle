@@ -76,17 +76,8 @@ android {
 
     //product flavors
     productFlavors {
-
         oschina {
             manifestPlaceholders = [UMENG_CHANNEL: "oschina"]
-        }
-
-        google {
-            manifestPlaceholders = [UMENG_CHANNEL: "google"]
-        }
-
-        tencent {
-            manifestPlaceholders = [UMENG_CHANNEL: "tentcent"]
         }
 
         wandoujia {
@@ -95,10 +86,6 @@ android {
 
         xiaomi {
             manifestPlaceholders = [UMENG_CHANNEL: "xiaomi"]
-        }
-
-        huawei {
-            manifestPlaceholders = [UMENG_CHANNEL: "huawei"]
         }
     }
 }

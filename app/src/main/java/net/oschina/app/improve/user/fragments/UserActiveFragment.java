@@ -73,6 +73,8 @@ public class UserActiveFragment extends BaseRecyclerViewFragment<Active> {
     @Override
     public void onItemClick(int position, long itemId) {
         Origin origin = mAdapter.getItem(position).getOrigin();
+        if (origin == null)
+            return;
         switch (origin.getType()) {
             case Origin.ORIGIN_TYPE_LINK:
                 UIHelper.showUrlRedirect(getContext(), origin.getHref());
