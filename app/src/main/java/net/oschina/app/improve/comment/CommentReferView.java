@@ -6,17 +6,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.bumptech.glide.RequestManager;
-
-import net.oschina.app.R;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.comment.Refer;
-import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
-import net.oschina.app.widget.TweetTextView;
 
 /**
  * Created by fei
@@ -27,15 +20,7 @@ import net.oschina.app.widget.TweetTextView;
 public class CommentReferView extends LinearLayout {
 
     private static final String TAG = "CommentReferView";
-    private LinearLayout mLayRoot;
-    private ImageView mIvAvatar;
-    private TextView mTvVoteCount;
-    private ImageView mIvVoteStatus;
-    private TextView mTvName;
-    private TextView mTvPubDate;
-    private TweetTextView mContent;
-    private ImageView mComment;
-    private LayoutInflater mInflate;
+
 
     public CommentReferView(Context context) {
         super(context);
@@ -53,82 +38,22 @@ public class CommentReferView extends LinearLayout {
     }
 
     private void initView() {
-
         setOrientation(VERTICAL);
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        LinearLayout rootView = (LinearLayout) inflater.inflate(R.layout.lay_comment_item, this, false);
-        this.mIvAvatar = (ImageView) rootView.findViewById(R.id.iv_avatar);
-        this.mTvVoteCount = (TextView) rootView.findViewById(R.id.tv_vote_count);
-        this.mIvVoteStatus = (ImageView) rootView.findViewById(R.id.btn_vote);
-        this.mTvName = (TextView) rootView.findViewById(R.id.tv_name);
-        this.mTvPubDate = (TextView) rootView.findViewById(R.id.tv_pub_date);
-        this.mContent = (TweetTextView) rootView.findViewById(R.id.tv_content);
-        this.mComment = (ImageView) rootView.findViewById(R.id.btn_comment);
-
-        this.mInflate = inflater;
-
-        this.mLayRoot = rootView;
     }
 
 
-    public void addComment(final Comment comment, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    public void addComment(final Comment comment) {
 
-        ImageView ivAvatar = this.mIvAvatar;
-        TextView tvVoteCount = this.mTvVoteCount;
-        ImageView ivVoteStatus = this.mIvVoteStatus;
-        TextView tvName = this.mTvName;
-        TextView tvPubDate = this.mTvPubDate;
-        TweetTextView content = this.mContent;
-        ImageView ivComment = this.mComment;
-
-        ivVoteStatus.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                handVote();
-            }
-
-            private void handVote() {
-
-            }
-        });
-
-        ivComment.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-
-        tvName.setText(comment.getAuthor().getName());
-        tvPubDate.setText(comment.getPubDate());
-
-        CommentsUtil.formatHtml(getResources(), content, comment.getContent());
-
-        imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
-                .into(ivAvatar);
-        ivAvatar.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OtherUserHomeActivity.show(getContext(), comment.getAuthor().getId());
-            }
-        });
-
-        tvVoteCount.setText(String.valueOf(comment.getVote()));
-
-        if (comment.getVoteState() == 1) {
-            ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
-        } else if (comment.getVoteState() == 0) {
-            ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
-        }
+        removeAllViews();
 
         Refer[] refers = comment.getRefer();
 
         if (refers != null && refers.length > 0) {
             int len = refers.length;
             Log.e(TAG, "addComment: ------------------>len=" + len);
-            View view = CommentsUtil.getReferLayout(mInflate, refers, 0);
-            addView(view, indexOfChild(content));
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            View child = CommentsUtil.getReferLayout(inflater, refers, 0);
+            addView(child, indexOfChild(child));
 
         }
 

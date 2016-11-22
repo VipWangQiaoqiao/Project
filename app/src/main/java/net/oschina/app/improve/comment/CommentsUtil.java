@@ -27,7 +27,6 @@ import net.qiujuer.genius.ui.drawable.shape.BorderShape;
  */
 
 public final class CommentsUtil {
-    private static final String TAG = "CommentsUtil";
 
     @SuppressWarnings("deprecation")
     public static View getReferLayout(LayoutInflater inflater, Refer[] refer, int count) {
