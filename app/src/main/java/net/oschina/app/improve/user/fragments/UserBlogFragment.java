@@ -70,6 +70,8 @@ public class UserBlogFragment extends BaseRecyclerViewFragment<Blog> {
     @Override
     public void onItemClick(int position, long itemId) {
         Blog blog = mAdapter.getItem(position);
+        if (blog == null)
+            return;
         BlogDetailActivity.show(getActivity(), blog.getId());
     }
 

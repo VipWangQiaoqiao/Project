@@ -6,15 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
@@ -32,7 +26,6 @@ import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
 import net.oschina.app.improve.utils.CacheManager;
@@ -46,8 +39,6 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
-
-import static net.oschina.app.improve.tweet.activities.TweetDetailActivity.BUNDLE_KEY_TWEET;
 
 /**
  * 动弹列表
@@ -81,7 +72,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
         return fragment;
     }
 
-    public static Fragment instantiate(int category, int type){
+    public static Fragment instantiate(int category, int type) {
         Bundle bundle = new Bundle();
         bundle.putInt("requestCategory", category);
         bundle.putInt("tweetType", type);
@@ -191,7 +182,10 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @SuppressWarnings("unchecked")
     @Override
     public void onItemClick(int position, long itemId) {
-        TweetDetailActivity.show(getContext(), mAdapter.getItem(position));
+        Tweet tweet = mAdapter.getItem(position);
+        if (tweet == null)
+            return;
+        TweetDetailActivity.show(getContext(), tweet);
     }
 
     @Override
