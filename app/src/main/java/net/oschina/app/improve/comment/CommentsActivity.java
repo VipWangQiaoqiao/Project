@@ -182,8 +182,7 @@ public class CommentsActivity extends BaseBackActivity {
     @Override
     protected void initData() {
         super.initData();
-        //第一次请求初始化数据
-        //etData(true, null);
+
 
         mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
             @Override
@@ -203,10 +202,12 @@ public class CommentsActivity extends BaseBackActivity {
         mRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                mRefreshLayout.setRefreshing(true);
-                mRefreshLayout.onRefresh();
+                //第一次请求初始化数据
+                getData(true, null);
+
             }
         });
+
     }
 
     Type getCommentType() {

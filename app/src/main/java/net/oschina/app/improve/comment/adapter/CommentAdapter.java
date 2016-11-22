@@ -12,7 +12,7 @@ import com.bumptech.glide.RequestManager;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.comment.CommentView;
+import net.oschina.app.improve.comment.CommentReferView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 
 
@@ -41,6 +41,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
 
     @Override
     protected CommentHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
+        Log.e(TAG, "onCreateDefaultViewHolder: ------->");
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.activity_comment_item, parent, false);
         return new CommentHolder(view);
@@ -50,22 +51,20 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
         Log.e(TAG, "onBindDefaultViewHolder: --------->" + position);
         if (holder instanceof CommentHolder) {
-            //((CommentHolder) holder).addComment(item, mRequestManager);
+            ((CommentHolder) holder).addComment(item, mRequestManager);
         }
     }
 
 
-    private static class CommentHolder extends RecyclerView.ViewHolder implements OnCommentClickListener {
+    protected static class CommentHolder extends RecyclerView.ViewHolder implements OnCommentClickListener {
 
-        private CommentView mCommentView;
+        private CommentReferView mCommentView;
 
         CommentHolder(View itemView) {
             super(itemView);
-            CommentView commentView = (CommentView) itemView.findViewById(R.id.comment);
-            commentView.setLabelLineGone();
-            commentView.setTitleGone();
-            commentView.setSeeMoreGone();
-            this.mCommentView = commentView;
+            Log.e(TAG, "CommentHolder: ------->hello");
+             CommentReferView commentView = (CommentReferView) itemView.findViewById(R.id.comment);
+             this.mCommentView = commentView;
         }
 
         /**
@@ -74,7 +73,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
          * @param comment comment
          */
         public void addComment(Comment comment, RequestManager requestManager) {
-            CommentView commentView = this.mCommentView;
+            CommentReferView commentView = this.mCommentView;
             commentView.addComment(comment, requestManager, this);
         }
 
