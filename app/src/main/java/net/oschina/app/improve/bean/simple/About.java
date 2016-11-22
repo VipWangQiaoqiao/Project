@@ -11,9 +11,10 @@ public class About implements Serializable {
     private long id;
     private String title;
     private int type;
-    private int href;
+    private String href;
     private int viewCount;
     private int commentCount;
+    private int transmitCount;
     private String image;
 
     public long getId() {
@@ -56,11 +57,11 @@ public class About implements Serializable {
         this.viewCount = viewCount;
     }
 
-    public int getHref() {
+    public String getHref() {
         return href;
     }
 
-    public void setHref(int href) {
+    public void setHref(String href) {
         this.href = href;
     }
 
@@ -70,5 +71,13 @@ public class About implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getTransmitCount() {
+        return transmitCount;
+    }
+
+    public void setTransmitCount(int transmitCount) {
+        this.transmitCount = transmitCount;
     }
 }
