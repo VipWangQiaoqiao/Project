@@ -115,11 +115,11 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
 
     @Override
     public void run() {
+        mHandler.postDelayed(this, 5000);
         if (isScrolling)
             return;
         mCurrentItem = (mCurrentItem + 1) % mBanners.size();
-        mViewPager.setCurrentItem(mCurrentItem, true);
-        mHandler.postDelayed(this, 5000);
+        mViewPager.setCurrentItem(mCurrentItem);
     }
 
     public void requestBanner() {
