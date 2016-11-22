@@ -182,6 +182,7 @@ public class MainActivity extends BaseActivity implements
         final View view = mNavBar.getView();
         if (view == null) return;
         // hide
+        view.setVisibility(View.VISIBLE);
         if (!isShowOrHide) {
             view.animate()
                     .translationY(view.getHeight())
@@ -196,7 +197,6 @@ public class MainActivity extends BaseActivity implements
                         }
                     });
         } else {
-            view.setVisibility(View.VISIBLE);
             view.animate()
                     .translationY(0)
                     .setDuration(180)
@@ -205,6 +205,8 @@ public class MainActivity extends BaseActivity implements
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             super.onAnimationEnd(animation);
+                            // fix:bug > 点击隐藏的同时，快速点击显示
+                            view.setVisibility(View.VISIBLE);
                             view.setTranslationY(0);
                         }
                     });
