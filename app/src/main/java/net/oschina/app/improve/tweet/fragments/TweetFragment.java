@@ -144,7 +144,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
             }
         });
 
-        if (authorId == 0 && requestCategory == CATEGORY_USER || requestCategory == CATEGORY_FRIEND) {
+        if (authorId == 0 && requestCategory == CATEGORY_USER) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
         }
@@ -179,17 +179,17 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
         String pageToken = mIsRefresh ? null : mBean.getNextPageToken();
         switch (requestCategory) {
             case CATEGORY_TYPE:
-//                OSChinaApi.getTweetList(null, null, 1, tweetType, pageToken, mHandler);
-                OSChinaApi.getTweetList(tweetType, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+                OSChinaApi.getTweetList(null, null, 1, tweetType, pageToken, mHandler);
+//                OSChinaApi.getTweetList(tweetType, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 break;
             case CATEGORY_USER:
                 if (authorId != 0) {
-//                    OSChinaApi.getTweetList(authorId, null, null, null, pageToken, mHandler);
-                    OSChinaApi.getUserTweetList(authorId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+                    OSChinaApi.getTweetList(authorId, null, null, null, pageToken, mHandler);
+//                    OSChinaApi.getUserTweetList(authorId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 }
                 break;
             case CATEGORY_FRIEND:
-                OSChinaApi.getTweetList(null, null, 2, null, pageToken, mHandler);
+                OSChinaApi.getTweetList(null, null, 2, 1, pageToken, mHandler);
                 break;
         }
     }
@@ -202,7 +202,8 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
 
     @Override
     public void onClick(View v) {
-        if (requestCategory == CATEGORY_USER && !AccountHelper.isLogin()) {
+        if ((requestCategory == CATEGORY_USER || requestCategory == CATEGORY_FRIEND)
+                && !AccountHelper.isLogin()) {
             //UIHelper.showLoginActivity(getActivity());
             LoginActivity.show(this, 1);
         } else {
