@@ -11,6 +11,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,6 +137,12 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         mPagerItems.add(new Pair<>("资讯", SearchArticleFragment.instantiate(this, News.TYPE_NEWS)));
         mPagerItems.add(new Pair<>("问答", SearchArticleFragment.instantiate(this, News.TYPE_QUESTION)));
         mPagerItems.add(new Pair<>("找人", SearchUserFragment.instantiate(this)));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mViewSearch.clearFocus();
     }
 
     @Override
