@@ -12,6 +12,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.widget.BottomSheetBar;
 
 /**

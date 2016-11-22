@@ -25,12 +25,14 @@ import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.pay.bean.Order;
 import net.oschina.app.improve.pay.dialog.RewardDialog;
 import net.oschina.app.improve.pay.util.RewardUtil;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.BottomSheetBar;
@@ -47,6 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import butterknife.Bind;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
+
 
 /**
  * Created by qiujuer
@@ -122,6 +125,8 @@ public class BlogDetailFragment
                 handleSendComment();
             }
         });
+
+        mDelegation.getBottomSheet().showSyncView(this);
 
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -257,6 +262,13 @@ public class BlogDetailFragment
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            About about = new About();
+            BlogDetail detail = mOperator.getData();
+            about.setId(detail.getId());
+            about.setType(detail.getType());
+            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+        }
     }
 
     private void handleReward() {
@@ -338,8 +350,14 @@ public class BlogDetailFragment
 
     @Override
     public void toSendCommentOk(Comment comment) {
+
         (Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
         mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
+        (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
+        mDelegation.setCommentHint("添加评论");
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
+       // mComments.addComment(comment, getImgLoader(), this);
         mDelegation.getBottomSheet().dismiss();
     }
 

@@ -187,8 +187,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 mCmnViewImp.onCommentSuccess(null);
                 replies.clear(); // 清除
-                mViewInput.setHint("发表评论");
-                mDelegation.setCommentHint("发表评论");
+                mViewInput.setHint("添加评论");
+                mDelegation.setCommentHint("添加评论");
+                mDelegation.getBottomSheet().getEditText().setText("");
+                mDelegation.getBottomSheet().getEditText().setHint("添加评论");
                 mViewInput.setText(null);
                 mDelegation.getBottomSheet().dismiss();
                 dismissDialog();

@@ -36,6 +36,8 @@ public class UserCommentFragment extends BaseRecyclerViewFragment<Mention> {
     @Override
     public void onItemClick(int position, long itemId) {
         Mention mention = mAdapter.getItem(position);
+        if (mention == null)
+            return;
         Origin origin = mention.getOrigin();
         switch (origin.getType()) {
             case Origin.ORIGIN_TYPE_LINK:

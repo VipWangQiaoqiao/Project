@@ -17,12 +17,14 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.TranslationDetail;
 import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.TranslateDetailContract;
 import net.oschina.app.improve.widget.BottomSheetBar;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
@@ -37,7 +39,7 @@ import net.oschina.app.util.StringUtils;
 
 public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         TranslateDetailContract.View, TranslateDetailContract.Operator>
-        implements TranslateDetailContract.View, OnCommentClickListener, BottomSheetBar.OnSyncListener {
+        implements TranslateDetailContract.View, OnCommentClickListener, BottomSheetBar.OnSyncListener, View.OnClickListener {
 
     private long mId;
     private TextView mTVAuthorName;
@@ -89,6 +91,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
         mDelegation.setOnSyncListener(this);
 
+        mDelegation.getBottomSheet().showSyncView(this);
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,6 +188,12 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            About about = new About();
+            TranslationDetail detail = mOperator.getData();
+            about.setId(detail.getId());
+            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+        }
     }
 
 
@@ -201,6 +210,9 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
         mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
+       // mComments.addComment(comment, getImgLoader(), this);
         mDelegation.getBottomSheet().dismiss();
     }
 
@@ -230,5 +242,10 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     @Override
     public void sync(boolean isSync) {
         //if (isSync)
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

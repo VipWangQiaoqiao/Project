@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Editable;
-import android.text.Selection;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -159,7 +158,7 @@ public class BottomSheetBar implements View.OnClickListener {
         if (!"添加评论".equals(hint)) {
             mEditText.setHint(hint + " ");
         }
-        Selection.setSelection(mEditText.getText(), mEditText.length());
+        //Selection.setSelection(mEditText.getText(), mEditText.length());
         mRootView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -194,6 +193,14 @@ public class BottomSheetBar implements View.OnClickListener {
         mSyncToTweetView.setOnClickListener(listener);
         mSyncToTweetView.setVisibility(View.VISIBLE);
         mRootView.findViewById(R.id.tv_sync).setVisibility(View.VISIBLE);
+    }
+    public void showSyncView() {
+        mSyncToTweetView.setVisibility(View.INVISIBLE); //hide for temp
+        mRootView.findViewById(R.id.tv_sync).setVisibility(View.INVISIBLE); //hide for temp
+    }
+
+    public boolean isSyncToTweet() {
+        return false;//mSyncToTweetView.isChecked();//TODO
     }
 
     public void setCommitListener(View.OnClickListener listener) {

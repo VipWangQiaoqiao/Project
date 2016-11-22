@@ -38,6 +38,8 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     @Override
     public void onItemClick(int position, long itemId) {
         Message message = mAdapter.getItem(position);
+        if (message == null)
+            return;
         User sender = message.getSender();
         if (sender != null)
             UserSendMessageActivity.show(getContext(), message.getSender());

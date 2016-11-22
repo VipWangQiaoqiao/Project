@@ -53,12 +53,16 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
     @Override
     protected PagerInfo[] getPagers() {
 
-        /*
+        /*PagerInfo[] infoList = new PagerInfo[4];
+
         infoList[0] = new PagerInfo("好友动弹", TweetFragment.class,
-                getBundle(TweetFragment.CATEGORY_USER, (int) AccountHelper.getUserId()));
+                getBundle(TweetFragment.CATEGORY_FRIEND, 0));
+
         infoList[1] = new PagerInfo("推荐话题", TopicTweetFragment.class, null);
+
         infoList[2] = new PagerInfo("热门动弹", TweetFragment.class,
                 getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_HOT));
+
         infoList[3] = new PagerInfo("最新动弹", TweetFragment.class,
                 getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_NEW));*/
 

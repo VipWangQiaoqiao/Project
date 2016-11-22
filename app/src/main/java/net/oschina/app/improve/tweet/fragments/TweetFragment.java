@@ -6,15 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
@@ -32,7 +27,6 @@ import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
 import net.oschina.app.improve.utils.CacheManager;
@@ -46,8 +40,6 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
-
-import static net.oschina.app.improve.tweet.activities.TweetDetailActivity.BUNDLE_KEY_TWEET;
 
 /**
  * 动弹列表
@@ -81,7 +73,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
         return fragment;
     }
 
-    public static Fragment instantiate(int category, int type){
+    public static Fragment instantiate(int category, int type) {
         Bundle bundle = new Bundle();
         bundle.putInt("requestCategory", category);
         bundle.putInt("tweetType", type);
@@ -176,14 +168,20 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @Override
     protected void requestData() {
         super.requestData();
+        String pageToken = mIsRefresh ? null : mBean.getNextPageToken();
         switch (requestCategory) {
             case CATEGORY_TYPE:
+//                OSChinaApi.getTweetList(null, null, 1, tweetType, pageToken, mHandler);
                 OSChinaApi.getTweetList(tweetType, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 break;
             case CATEGORY_USER:
                 if (authorId != 0) {
+//                    OSChinaApi.getTweetList(authorId, null, null, null, pageToken, mHandler);
                     OSChinaApi.getUserTweetList(authorId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 }
+                break;
+            case CATEGORY_FRIEND:
+                OSChinaApi.getTweetList(null, null, 2, null, pageToken, mHandler);
                 break;
         }
     }
@@ -191,7 +189,10 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @SuppressWarnings("unchecked")
     @Override
     public void onItemClick(int position, long itemId) {
-        TweetDetailActivity.show(getContext(), mAdapter.getItem(position));
+        Tweet tweet = mAdapter.getItem(position);
+        if (tweet == null)
+            return;
+        TweetDetailActivity.show(getContext(), tweet);
     }
 
     @Override
@@ -244,8 +245,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     private void handleLongClick(final Tweet tweet, final int position) {
         String[] items;
         if (AccountHelper.getUserId() == (int) tweet.getAuthor().getId()) {
-            items = new String[]{getString(R.string.copy),
-                    getString(R.string.delete)};
+            items = new String[]{getString(R.string.copy), getString(R.string.delete)};
         } else {
             items = new String[]{getString(R.string.copy)};
         }
