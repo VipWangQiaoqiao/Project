@@ -68,6 +68,7 @@
             android:id="@+id/btn_vote"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="@drawable/ic_material"
             android:contentDescription="@string/app_name"
             android:paddingBottom="18dp"
             android:paddingLeft="8dp"
@@ -81,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="2dp"
+            android:background="@drawable/ic_material"
             android:contentDescription="@string/app_name"
             android:paddingBottom="18dp"
             android:paddingLeft="16dp"
@@ -91,7 +93,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <net.oschina.app.improve.comment.CommentReferView
         android:id="@+id/lay_refer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

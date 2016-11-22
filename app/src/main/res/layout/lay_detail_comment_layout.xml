@@ -19,6 +19,7 @@
         android:textSize="12sp" />
 
     <View
+        android:id="@+id/label_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/list_divider_color" />

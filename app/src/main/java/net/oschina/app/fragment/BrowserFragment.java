@@ -124,8 +124,10 @@ public class BrowserFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         mWebView.onResume();
-        if (mShareDialogBuilder != null)
+
+        if (mShareDialogBuilder != null) {
             mShareDialogBuilder.cancelLoading();
+        }
 
     }
 
@@ -236,6 +238,7 @@ public class BrowserFragment extends BaseFragment {
             alertDialog = mShareDialogBuilder.create();
         alertDialog.show();
     }
+
 
     /**
      * 载入链接之前会被调用

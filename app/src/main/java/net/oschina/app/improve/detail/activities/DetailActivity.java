@@ -52,7 +52,6 @@ public abstract class DetailActivity<Data extends PrimaryBean, DataView extends 
         BaseBackActivity
         implements DetailContract.Operator<Data, DataView> {
 
-    private static final String TAG = "DetailActivity";
     long mDataId;
     Data mData;
     DataView mView;
