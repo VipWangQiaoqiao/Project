@@ -70,6 +70,8 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
     @Override
     public void onItemClick(int position, long itemId) {
         SubBean sub = mAdapter.getItem(position);
+        if (sub == null)
+            return;
         switch (sub.getType()) {
             case News.TYPE_SOFTWARE:
                 SoftwareDetailActivity.show(mContext, sub.getId());

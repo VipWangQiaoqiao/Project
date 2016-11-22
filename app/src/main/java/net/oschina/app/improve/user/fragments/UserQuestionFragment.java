@@ -52,7 +52,8 @@ public class UserQuestionFragment extends BaseRecyclerViewFragment<Question> {
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<Question>>>() {}.getType();
+        return new TypeToken<ResultBean<PageBean<Question>>>() {
+        }.getType();
     }
 
     @Override
@@ -68,6 +69,8 @@ public class UserQuestionFragment extends BaseRecyclerViewFragment<Question> {
     @Override
     public void onItemClick(int position, long itemId) {
         Question question = mAdapter.getItem(position);
+        if (question == null)
+            return;
         QuestionDetailActivity.show(getActivity(), question.getId());
     }
 

@@ -212,6 +212,8 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mDelegation.setCommentHint("添加评论");
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
         mComments.addComment(comment, getImgLoader(), this);
         mDelegation.getBottomSheet().dismiss();
     }
