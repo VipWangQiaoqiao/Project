@@ -18,8 +18,6 @@ import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.NewsDetailFragment;
-import net.oschina.app.util.HTMLUtil;
-import net.oschina.app.util.StringUtils;
 
 import java.lang.reflect.Type;
 
@@ -111,27 +109,15 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
 
     @Override
     public void toShare() {
-        if (getDataId() != 0 && getData() != null) {
-            String content;
-
-            String url = getData().getHref();
-            final NewsDetail newsDetail = getData();
-            if (newsDetail.getBody().length() > 55) {
-                content = HTMLUtil.delHTMLTag(newsDetail.getBody().trim());
-                if (content.length() > 55)
-                    content = StringUtils.getSubString(0, 55, content);
-            } else {
-                content = HTMLUtil.delHTMLTag(newsDetail.getBody().trim());
-            }
-            String title = newsDetail.getTitle();
-
-            if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
-                AppContext.showToast("内容加载失败...");
-                return;
-            }
-            toShare(title, content, url);
+        if (getData() != null) {
+            final NewsDetail detail = getData();
+            String title = detail.getTitle();
+            String content = detail.getBody();
+            String url = detail.getHref();
+            if (!toShare(title, content, url))
+                AppContext.showToast("抱歉，内容无法分享！");
         } else {
-            AppContext.showToast("内容加载失败...");
+            AppContext.showToast("内容加载失败！");
         }
     }
 

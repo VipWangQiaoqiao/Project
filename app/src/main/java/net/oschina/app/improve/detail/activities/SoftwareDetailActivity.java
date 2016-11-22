@@ -18,8 +18,7 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.SoftDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.SoftWareDetailFragment;
-import net.oschina.app.util.HTMLUtil;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TLog;
 
 import java.lang.reflect.Type;
 
@@ -86,7 +85,6 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
         } else {
             OSChinaApi.getSoftwareDetail(mIdent, OSChinaApi.CATALOG_SOFTWARE_DETAIL, getRequestHandler());
         }
-
     }
 
     @Override
@@ -119,6 +117,7 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                TLog.error(responseString);
                 try {
                     Type type = new TypeToken<ResultBean<Collection>>() {
                     }.getType();
@@ -143,27 +142,15 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
 
     @Override
     public void toShare() {
-        if (getDataId() != 0 && getData() != null) {
-            String content;
-
-            String url = getData().getHref();
-            final SoftwareDetail softwareDetail = getData();
-            if (softwareDetail.getBody().length() > 55) {
-                content = HTMLUtil.delHTMLTag(softwareDetail.getBody().trim());
-                if (content.length() > 55)
-                    content = StringUtils.getSubString(0, 55, content);
-            } else {
-                content = HTMLUtil.delHTMLTag(softwareDetail.getBody().trim());
-            }
-            String title = softwareDetail.getName();
-
-            if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
-                AppContext.showToast(getResources().getString(R.string.software_loading_error));
-                return;
-            }
-            toShare(title, content, url);
+        if (getData() != null) {
+            final SoftwareDetail detail = getData();
+            String title = detail.getName();
+            String content = detail.getBody();
+            String url = detail.getHref();
+            if (!toShare(title, content, url))
+                AppContext.showToast("抱歉，内容无法分享！");
         } else {
-            AppContext.showToast(getResources().getString(R.string.software_loading_error));
+            AppContext.showToast("内容加载失败！");
         }
     }
 }

@@ -6,9 +6,7 @@ import java.io.Serializable;
  * Created by fei on 2016/5/24.
  * desc:   blog bean
  */
-public class Blog implements Serializable {
-
-    private long id;
+public class Blog extends PrimaryBean {
     private String title;
     private String body;
     private String author;
@@ -19,14 +17,6 @@ public class Blog implements Serializable {
     private boolean recommend;  //是否推荐
     private boolean original;  //是否原创
     private int type;   //博客类型 1:常规, 2: 热门 3:最近
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;

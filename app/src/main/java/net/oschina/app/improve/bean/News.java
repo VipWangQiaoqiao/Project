@@ -1,12 +1,10 @@
 package net.oschina.app.improve.bean;
 
-import java.io.Serializable;
-
 /**
  * Created by huanghaibin
  * on 16-5-25.
  */
-public class News implements Serializable {
+public class News extends PrimaryBean {
 
     public static final int TYPE_HREF = 0;
     public static final int TYPE_SOFTWARE = 1;
@@ -17,7 +15,6 @@ public class News implements Serializable {
     public static final int TYPE_NEWS = 6;
     public static final int TYPE_FIND_PERSON = 11;
 
-    protected long id;
     protected int commentCount;
     protected int type;
     protected boolean recommend;
@@ -34,14 +31,6 @@ public class News implements Serializable {
 
     public void setPubDate(String pubDate) {
         this.pubDate = pubDate;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public int getCommentCount() {

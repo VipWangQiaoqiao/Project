@@ -1,14 +1,10 @@
 package net.oschina.app.improve.bean;
 
-import java.io.Serializable;
-
 /**
  * Created by fei on 2016/6/28.
  * desc:  question bean
  */
-public class TranslationDetail implements Serializable {
-
-    private long id;
+public class TranslationDetail extends PrimaryBean {
     private String title;
     private String originlTitle; //原始文章名称，比如英文的
     private String body;
@@ -21,14 +17,6 @@ public class TranslationDetail implements Serializable {
     private int viewCount; //浏览次数
     private String href;
     private boolean favorite;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
