@@ -19,8 +19,6 @@ import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.detail.fragments.BlogDetailFragment;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
-import net.oschina.app.util.HTMLUtil;
-import net.oschina.app.util.StringUtils;
 
 import java.lang.reflect.Type;
 
@@ -97,27 +95,15 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
 
     @Override
     public void toShare() {
-        if (getDataId() != 0 && getData() != null) {
-            String content;
-
-            String url = getData().getHref();
-            final BlogDetail blogDetail = getData();
-            if (blogDetail.getBody().length() > 55) {
-                content = HTMLUtil.delHTMLTag(blogDetail.getBody().trim());
-                if (content.length() > 55)
-                    content = StringUtils.getSubString(0, 55, content);
-            } else {
-                content = HTMLUtil.delHTMLTag(blogDetail.getBody().trim());
-            }
-            String title = blogDetail.getTitle();
-
-            if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
-                AppContext.showToast("内容加载失败...");
-                return;
-            }
-            toShare(title, content, url);
+        if (getData() != null) {
+            final BlogDetail detail = getData();
+            String title = detail.getTitle();
+            String content = detail.getBody();
+            String url = detail.getHref();
+            if (!toShare(title, content, url))
+                AppContext.showToast("抱歉，内容无法分享！");
         } else {
-            AppContext.showToast("内容加载失败...");
+            AppContext.showToast("内容加载失败！");
         }
     }
 
