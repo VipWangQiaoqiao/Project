@@ -39,25 +39,22 @@ public class CommentReferView extends LinearLayout {
 
     public CommentReferView(Context context) {
         super(context);
-        Log.e(TAG, "CommentReferView: ---------->1");
         initView();
     }
 
     public CommentReferView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView();
-        Log.e(TAG, "CommentReferView: ---------->2");
     }
 
     public CommentReferView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView();
-        Log.e(TAG, "CommentReferView: ---------->3");
     }
 
     private void initView() {
 
-
+        setOrientation(VERTICAL);
         LayoutInflater inflater = LayoutInflater.from(getContext());
         LinearLayout rootView = (LinearLayout) inflater.inflate(R.layout.lay_comment_item, this, false);
         this.mIvAvatar = (ImageView) rootView.findViewById(R.id.iv_avatar);
