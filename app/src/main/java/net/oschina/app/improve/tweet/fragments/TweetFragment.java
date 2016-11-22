@@ -68,6 +68,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     public static final String CACHE_NEW_TWEET = "cache_new_tweet";
     public static final String CACHE_HOT_TWEET = "cache_hot_tweet";
     public static final String CACHE_USER_TWEET = "cache_user_tweet";
+    public static final String CACHE_USER_FRIEND = "cache_user_friend";
 
     public int requestCategory;//请求类型
     public int tweetType;
@@ -114,15 +115,14 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
 
     @Override
     public void initData() {
-
         switch (requestCategory) {
             case CATEGORY_TYPE:
                 CACHE_NAME = tweetType == TWEET_TYPE_NEW ? CACHE_NEW_TWEET : CACHE_HOT_TWEET;
                 break;
             case CATEGORY_USER:
-                CACHE_NAME = CACHE_USER_TWEET;
-                IntentFilter filter = new IntentFilter(
-                        Constants.INTENT_ACTION_USER_CHANGE);
+            case CATEGORY_FRIEND:
+                CACHE_NAME = requestCategory == CATEGORY_FRIEND ? CACHE_USER_FRIEND : CACHE_USER_TWEET;
+                IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_USER_CHANGE);
                 filter.addAction(Constants.INTENT_ACTION_LOGOUT);
                 if (mReceiver == null) {
                     mReceiver = new LoginReceiver();
@@ -144,10 +144,9 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
             }
         });
 
-        if (authorId == 0 && requestCategory == CATEGORY_USER) {
+        if (authorId == 0 && requestCategory == CATEGORY_USER || requestCategory == CATEGORY_FRIEND) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
-
         }
     }
 
