@@ -40,7 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (true) {
+        if (false) {
             setTheme(R.style.App_Theme_Night);
         } else {
             setTheme(R.style.App_Theme_Light);
