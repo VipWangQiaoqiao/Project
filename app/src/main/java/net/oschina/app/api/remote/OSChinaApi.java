@@ -10,10 +10,8 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.AppException;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.EventApplyData;
-import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.improve.account.AccountHelper;
@@ -50,49 +48,6 @@ public class OSChinaApi {
         post(loginurl, params, handler);
     }
 
-    public static void openIdLogin(String s) {
-
-    }
-
-    /**
-     * 获取新闻列表
-     *
-     * @param catalog 类别 （1，2，3）
-     * @param page    第几页
-     * @param handler
-     */
-    public static void getNewsList(int catalog, int page,
-                                   AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("catalog", catalog);
-        params.put("pageIndex", page);
-        params.put("pageSize", AppContext.PAGE_SIZE);
-        if (catalog == NewsList.CATALOG_WEEK) {
-            params.put("show", "week");
-        } else if (catalog == NewsList.CATALOG_MONTH) {
-            params.put("show", "month");
-        }
-        ApiHttpClient.get("action/api/news_list", params, handler);
-    }
-
-    public static void getBlogList(String type, int pageIndex,
-                                   AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("type", type);
-        params.put("pageIndex", pageIndex);
-        params.put("pageSize", AppContext.PAGE_SIZE);
-        ApiHttpClient.get("action/api/blog_list", params, handler);
-    }
-
-    public static void getPostList(int catalog, int page,
-                                   AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("catalog", catalog);
-        params.put("pageIndex", page);
-        params.put("pageSize", AppContext.PAGE_SIZE);
-        ApiHttpClient.get("action/api/post_list", params, handler);
-    }
-
     public static void getPostListByTag(String tag, int page,
                                         AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
@@ -120,16 +75,6 @@ public class OSChinaApi {
         ApiHttpClient.get("action/api/tweet_topic_list", params, handler);
     }
 
-    /**
-     * get   TweetLikeList
-     *
-     * @param pageIndex begin 0
-     * @param handler   asyncHttpResponseHandler
-     */
-    public static void getTweetLikeList(int pageIndex, AsyncHttpResponseHandler handler) {
-        ApiHttpClient.get("action/api/my_tweet_like_list?pageIndex=" + pageIndex + "&pageSize=" + 20, handler);
-    }
-
     public static void pubLikeTweet(int tweetId, int authorId,
                                     AsyncHttpResponseHandler handler, Context context) {
 
@@ -149,16 +94,6 @@ public class OSChinaApi {
         post("action/api/tweet_unlike", params, handler);
     }
 
-    public static void getTweetLikeList(int tweetId, int page,
-                                        AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("tweetid", tweetId);
-        params.put("pageIndex", page);
-        params.put("pageSize", AppContext.PAGE_SIZE);
-        ApiHttpClient.get("action/api/tweet_like_list", params, handler);
-
-    }
-
     public static void getActiveList(int uid, int catalog, int page,
                                      AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
@@ -167,16 +102,6 @@ public class OSChinaApi {
         params.put("pageIndex", page);
         params.put("pageSize", AppContext.PAGE_SIZE);
         ApiHttpClient.get("action/api/active_list", params, handler);
-    }
-
-    public static void getFriendList(int uid, int relation, int page,
-                                     AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("uid", uid);
-        params.put("relation", relation);
-        params.put("pageIndex", page);
-        params.put("pageSize", AppContext.PAGE_SIZE);
-        ApiHttpClient.get("action/api/friends_list", params, handler);
     }
 
     /**
@@ -191,24 +116,6 @@ public class OSChinaApi {
         params.put("relation", relation);
         params.put("all", 1);
         ApiHttpClient.get("action/api/friends_list", params, handler);
-    }
-
-    /**
-     * 获取用户收藏
-     *
-     * @param uid     指定用户UID
-     * @param type    收藏类型: 0:全部收藏　1:软件　2:话题　3:博客　4:新闻　5:代码
-     * @param page
-     * @param handler
-     */
-    public static void getFavoriteList(int uid, int type, int page,
-                                       AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("uid", uid);
-        params.put("type", type);
-        params.put("pageIndex", page);
-        params.put("pageSize", AppContext.PAGE_SIZE);
-        ApiHttpClient.get("action/api/favorite_list", params, handler);
     }
 
     /**
@@ -618,12 +525,11 @@ public class OSChinaApi {
     }
 
     /**
-     * 清空通知消息
+     * 原创会签到
      *
-     * @param uid
-     * @param type 1:@我的信息 2:未读消息 3:评论个数 4:新粉丝个数
-     * @return
-     * @throws AppException
+     * @param uid     uid
+     * @param type    type
+     * @param handler 回调
      */
     public static void clearNotice(int uid, int type,
                                    AsyncHttpResponseHandler handler) {
@@ -635,21 +541,6 @@ public class OSChinaApi {
 
     public static void singnIn(String url, AsyncHttpResponseHandler handler) {
         ApiHttpClient.getDirect(url, handler);
-    }
-
-    /**
-     * 获取软件的动态列表
-     *
-     * @param softid
-     * @param handler
-     */
-    public static void getSoftTweetList(int softid, int page,
-                                        AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("project", softid);
-        params.put("pageIndex", page);
-        params.put("pageSize", AppContext.PAGE_SIZE);
-        ApiHttpClient.get("action/api/software_tweet_list", params, handler);
     }
 
     /**
@@ -678,23 +569,6 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
         post("action/apiv2/tweet_like_reverse", params, handler);
-    }
-
-    public static void checkUpdate(AsyncHttpResponseHandler handler) {
-        ApiHttpClient.get("MobileAppVersion.xml", handler);
-    }
-
-    /**
-     * 查找用户
-     *
-     * @param username
-     * @param handler
-     */
-    public static void findUser(String username,
-                                AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("name", username);
-        ApiHttpClient.get("action/api/find_user", params, handler);
     }
 
     /**
@@ -833,21 +707,6 @@ public class OSChinaApi {
     }
 
     /**
-     * 获取team成员个人信息
-     *
-     * @param handler
-     */
-    public static void getTeamUserInfo(String teamid, String uid,
-                                       int pageIndex, AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("teamid", teamid);
-        params.put("uid", uid);
-        params.put("pageIndex", pageIndex);
-        params.put("pageSize", 20);
-        ApiHttpClient.get("action/api/team_user_information", params, handler);
-    }
-
-    /**
      * 获取我的任务中进行中、未完成、已完成等状态的数量
      */
     public static void getMyIssueState(String teamid, String uid,
@@ -935,12 +794,6 @@ public class OSChinaApi {
         params.put("id", id); // 便签id
         ApiHttpClient
                 .get("action/api/team_stickynote_recycle", params, handler);
-    }
-
-    public static void getNoteBook(int uid, AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("uid", uid);
-        ApiHttpClient.get("action/api/team_sticky_list", params, handler);
     }
 
     /**
@@ -1077,7 +930,6 @@ public class OSChinaApi {
         params.put("content", content);
         post("action/api/message_pub", params, handler);
     }
-
 
     public static final int CATALOG_BANNER_NEWS = 1; // 资讯Banner
     public static final int CATALOG_BANNER_BLOG = 2; // 博客Banner
@@ -2185,6 +2037,4 @@ public class OSChinaApi {
         params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/tweet_list", params, handler);
     }
-
-
 }
