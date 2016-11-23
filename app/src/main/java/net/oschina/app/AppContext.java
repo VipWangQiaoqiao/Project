@@ -14,9 +14,7 @@ import org.kymjs.kjframe.utils.KJLoger;
 
 import java.util.Properties;
 
-import static net.oschina.app.AppConfig.KEY_FRITST_START;
 import static net.oschina.app.AppConfig.KEY_LOAD_IMAGE;
-import static net.oschina.app.AppConfig.KEY_TWEET_DRAFT;
 
 /**
  * 全局应用程序类
@@ -127,10 +125,6 @@ public class AppContext extends BaseApplication {
         return currentVersion >= VersionCode;
     }
 
-    public static void setTweetDraft(String draft) {
-        set(KEY_TWEET_DRAFT + AccountHelper.getUserId(), draft);
-    }
-
     public static String getNoteDraft() {
         return getPreferences().getString(
                 AppConfig.KEY_NOTE_DRAFT + AccountHelper.getUserId(), "");
@@ -138,31 +132,5 @@ public class AppContext extends BaseApplication {
 
     public static void setNoteDraft(String draft) {
         set(AppConfig.KEY_NOTE_DRAFT + AccountHelper.getUserId(), draft);
-    }
-
-    public static boolean isFirstStart() {
-        return getPreferences().getBoolean(KEY_FRITST_START, true);
-    }
-
-    public static void setFirstStart(boolean frist) {
-        set(KEY_FRITST_START, frist);
-    }
-
-    /**
-     * 夜间模式
-     *
-     * @deprecated
-     */
-    public static boolean getNightModeSwitch() {
-        return false;
-    }
-
-    /**
-     * 设置夜间模式
-     *
-     * @deprecated
-     */
-    public static void setNightModeSwitch(boolean on) {
-        // Con't do thing
     }
 }
