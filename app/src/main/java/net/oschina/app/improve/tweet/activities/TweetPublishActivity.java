@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.annotation.Size;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -17,7 +18,10 @@ import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.util.UIHelper;
 
+import java.util.ArrayList;
+
 public class TweetPublishActivity extends BaseBackActivity {
+    private static final String TAG = "TweetPublishActivity";
     private TweetPublishContract.View mView;
 
     public static void show(Context context) {
@@ -71,15 +75,37 @@ public class TweetPublishActivity extends BaseBackActivity {
         return R.layout.activity_tweet_publish;
     }
 
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     @Override
     protected void initWidget() {
         super.initWidget();
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
+        Intent intent = getIntent();
+
+        String type = intent.getType();
+        Bundle bundle = intent.getExtras();
+        ArrayList<String> uris = new ArrayList<>();
+        if ("text/plain".equals(type)) {
+            String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+            bundle.putString("defaultContent", text);
+        } else if ("image/*".equals(type)) {
+
+            ////ArrayList<Uri> list = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+            // list.trimToSize();
+            ////  for (Uri uri : list) {
+            //     uris.add(uri.getEncodedPath());
+            //  }
+        }
+
+        if (uris.size() > 0) {
+            bundle.putString("defaultContent", "请添加描述");
+            bundle.putStringArrayList("defaultImage", uris);
+        }
         TweetPublishFragment fragment = new TweetPublishFragment();
 
         // init the args bounds
-        fragment.setArguments(getIntent().getExtras());
+        fragment.setArguments(bundle);
 
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();

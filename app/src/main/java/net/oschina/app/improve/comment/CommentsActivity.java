@@ -27,20 +27,15 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.bean.comment.Refer;
-import net.oschina.app.improve.bean.comment.Reply;
-import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.adapter.CommentAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
@@ -324,7 +319,7 @@ public class CommentsActivity extends BaseBackActivity {
 
 
     private void getData(final boolean clearData, String token) {
-        OSChinaApi.getComments(mId, mType, "refer", token, new TextHttpResponseHandler() {
+        OSChinaApi.getComments(mId, mType, "refer,reply", 1, token, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
@@ -339,63 +334,15 @@ public class CommentsActivity extends BaseBackActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = getCommentType();
 
-                    Comment[] comments = new Comment[30];
-                    for (int i = 0, len = comments.length; i < len; i++) {
+                    ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, getCommentType());
 
-                        Comment comment = new Comment();
-                        comment.setId((i + 100));
-                        Author author = new Author();
-                        author.setId((i + 20));
-                        author.setName("大神" + i);
-                        author.setPortrait("https://static.oschina.net/uploads/user/1133/2267007_50.jpg?t=1415270116000");
-                        comment.setAuthor(author);
-                        comment.setContent("这是第一条评论" + i);
-                        comment.setPubDate("2013-09-17 16:49:34");
-                        comment.setAppClient(2);
-                        comment.setVote(200);
-                        comment.setVoteState((int) (Math.random() * 1));
-                        comment.setBest(true);
-
-                        Refer[] refers = new Refer[(int) (Math.random() * 10 + 1)];
-
-                        for (int j = 0; j < refers.length; j++) {
-                            Refer refer = new Refer();
-                            refer.setAuthor("引用的人的名字" + j);
-                            refer.setContent("引用的内容" + j);
-                            refer.setPubDate("2013-09-18 16:49:34");
-                            refers[j] = refer;
-                        }
-                        comment.setRefer(refers);
-
-                        Reply[] reply = new Reply[2];
-                        for (int j = 0; j < reply.length; j++) {
-                            Reply reply1 = new Reply();
-                            reply1.setId((j + 50));
-                            Author author1 = new Author();
-                            author1.setId((j + 90));
-                            author1.setName(("这是评论的人的名字" + j));
-                            author1.setPortrait("https://static.oschina.net/uploads/user/1133/2267007_50.jpg?t=1415270116000");
-                            reply1.setAuthor(author1);
-                            reply[j] = reply1;
-                        }
-                        comment.setReply(reply);
-                        comments[i] = comment;
+                    if (resultBean.isSuccess()) {
+                        mPageBean = resultBean.getResult();
+                        handleData(mPageBean.getItems(), clearData);
                     }
-                    //  ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, type);
-                    //if (resultBean != null && resultBean.isSuccess()) {
-                    // if (resultBean.getResult() != null && resultBean.getResult().getItems() != null
-                    // && resultBean.getResult().getItems().size() > 0) {
-                    PageBean<Comment> pageBean = new PageBean<>();
-                    List<Comment> commentList = Arrays.asList(comments);
-                    pageBean.setItems(commentList);
-                    mPageBean = pageBean;// resultBean.getResult();
-                    handleData(mPageBean.getItems(), clearData);
-                    // return;
-                    //  }
-                    // }
-                    if (pageBean.getItems().size() > 20)
+
+                    if (mPageBean.getItems().size() > 20)
                         mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_MORE, false);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -406,11 +353,6 @@ public class CommentsActivity extends BaseBackActivity {
     }
 
     private void handleData(List<Comment> comments, boolean clearData) {
-        TLog.error("handleData:" + comments.size() + " " + clearData);
-        for (Comment comment : comments) {
-            TLog.error(comment.toString());
-        }
-
 
         if (clearData)
             mCommentAdapter.clear();

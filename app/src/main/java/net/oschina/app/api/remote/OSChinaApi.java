@@ -5,7 +5,6 @@ import android.support.v4.util.Pair;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -30,6 +29,8 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
+import static net.oschina.app.api.ApiHttpClient.post;
+
 public class OSChinaApi {
 
     /**
@@ -46,7 +47,7 @@ public class OSChinaApi {
         params.put("pwd", password);
         params.put("keep_login", 1);
         String loginurl = "action/api/login_validate";
-        ApiHttpClient.post(loginurl, params, handler);
+        post(loginurl, params, handler);
     }
 
     public static void openIdLogin(String s) {
@@ -136,7 +137,7 @@ public class OSChinaApi {
         params.put("tweetid", tweetId);
         params.put("uid", AccountHelper.getUserId());
         params.put("ownerOfTweet", authorId);
-        ApiHttpClient.post("action/api/tweet_like", params, handler);
+        post("action/api/tweet_like", params, handler);
     }
 
     public static void pubUnLikeTweet(int tweetId, int authorId,
@@ -145,7 +146,7 @@ public class OSChinaApi {
         params.put("tweetid", tweetId);
         params.put("uid", AccountHelper.getUserId());
         params.put("ownerOfTweet", authorId);
-        ApiHttpClient.post("action/api/tweet_unlike", params, handler);
+        post("action/api/tweet_unlike", params, handler);
     }
 
     public static void getTweetLikeList(int tweetId, int page,
@@ -313,7 +314,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("hisuid", hisuid);
         params.put("newrelation", newrelation);
-        ApiHttpClient.post("action/api/user_updaterelation", params, handler);
+        post("action/api/user_updaterelation", params, handler);
     }
 
     public static void getMyInformation(int uid,
@@ -393,7 +394,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("content", content);
         params.put("isPostToMyZone", isPostToMyZone);
-        ApiHttpClient.post("action/api/comment_pub", params, handler);
+        post("action/api/comment_pub", params, handler);
     }
 
     public static void replyComment(int id, int catalog, int replyid,
@@ -406,7 +407,7 @@ public class OSChinaApi {
         params.put("content", content);
         params.put("replyid", replyid);
         params.put("authorid", authorid);
-        ApiHttpClient.post("action/api/comment_reply", params, handler);
+        post("action/api/comment_reply", params, handler);
     }
 
     public static void publicBlogComment(long blog, int uid, String content,
@@ -415,7 +416,7 @@ public class OSChinaApi {
         params.put("blog", blog);
         params.put("uid", uid);
         params.put("content", content);
-        ApiHttpClient.post("action/api/blogcomment_pub", params, handler);
+        post("action/api/blogcomment_pub", params, handler);
     }
 
     public static void replyBlogComment(long blog, long uid, String content,
@@ -427,7 +428,7 @@ public class OSChinaApi {
         params.put("content", content);
         params.put("reply_id", reply_id);
         params.put("objuid", objuid);
-        ApiHttpClient.post("action/api/blogcomment_pub", params, handler);
+        post("action/api/blogcomment_pub", params, handler);
     }
 
     public static void pubTweet(Tweet tweet, AsyncHttpResponseHandler handler) {
@@ -450,7 +451,7 @@ public class OSChinaApi {
                 e.printStackTrace();
             }
         }
-        ApiHttpClient.post("action/api/tweet_pub", params, handler);
+        post("action/api/tweet_pub", params, handler);
     }
 
 
@@ -460,7 +461,7 @@ public class OSChinaApi {
         params.put("uid", tweet.getAuthorid());
         params.put("msg", tweet.getBody());
         params.put("project", softid);
-        ApiHttpClient.post("action/api/software_tweet_pub", params, handler);
+        post("action/api/software_tweet_pub", params, handler);
     }
 
     /**
@@ -473,7 +474,7 @@ public class OSChinaApi {
         if (!TextUtils.isEmpty(content)) {
             RequestParams params = new RequestParams();
             params.put("content", content);
-            ApiHttpClient.post("/action/apiv2/tweet", params, handler);
+            post("/action/apiv2/tweet", params, handler);
         }
     }
 
@@ -487,7 +488,7 @@ public class OSChinaApi {
         if (sourceId <= 0) return;
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
-        ApiHttpClient.post("/action/apiv2/tweet_delete", params, handler);
+        post("/action/apiv2/tweet_delete", params, handler);
 
     }
 
@@ -496,7 +497,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("tweetid", tweetid);
-        ApiHttpClient.post("action/api/tweet_delete", params, handler);
+        post("action/api/tweet_delete", params, handler);
     }
 
     public static void deleteComment(int id, int catalog, int replyid,
@@ -506,7 +507,7 @@ public class OSChinaApi {
         params.put("catalog", catalog);
         params.put("replyid", replyid);
         params.put("authorid", authorid);
-        ApiHttpClient.post("action/api/comment_delete", params, handler);
+        post("action/api/comment_delete", params, handler);
     }
 
     public static void deleteBlog(int uid, int authoruid, int id,
@@ -515,7 +516,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("authoruid", authoruid);
         params.put("id", id);
-        ApiHttpClient.post("action/api/userblog_delete", params, handler);
+        post("action/api/userblog_delete", params, handler);
     }
 
     public static void deleteBlogComment(int uid, int blogid, int replyid,
@@ -527,7 +528,7 @@ public class OSChinaApi {
         params.put("replyid", replyid);
         params.put("authorid", authorid);
         params.put("owneruid", owneruid);
-        ApiHttpClient.post("action/api/blogcomment_delete", params, handler);
+        post("action/api/blogcomment_delete", params, handler);
     }
 
     /**
@@ -543,7 +544,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("objid", objid);
         params.put("type", type);
-        ApiHttpClient.post("action/api/favorite_add", params, handler);
+        post("action/api/favorite_add", params, handler);
     }
 
     public static void delFavorite(int uid, long objid, int type,
@@ -552,7 +553,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("objid", objid);
         params.put("type", type);
-        ApiHttpClient.post("action/api/favorite_delete", params, handler);
+        post("action/api/favorite_delete", params, handler);
     }
 
     public static void getSearchList(String catalog, String content,
@@ -572,7 +573,7 @@ public class OSChinaApi {
         params.put("receiver", receiver);
         params.put("content", content);
 
-        ApiHttpClient.post("action/api/message_pub", params, handler);
+        post("action/api/message_pub", params, handler);
     }
 
     public static void deleteMessage(int uid, int friendid,
@@ -580,7 +581,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("friendid", friendid);
-        ApiHttpClient.post("action/api/message_delete", params, handler);
+        post("action/api/message_delete", params, handler);
     }
 
     public static void forwardMessage(int uid, String receiverName,
@@ -589,7 +590,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("receiverName", receiverName);
         params.put("content", content);
-        ApiHttpClient.post("action/api/message_pub", params, handler);
+        post("action/api/message_pub", params, handler);
     }
 
     public static void getMessageList(int uid, int pageIndex,
@@ -607,7 +608,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("portrait", portrait);
-        ApiHttpClient.post("action/api/portrait_update", params, handler);
+        post("action/api/portrait_update", params, handler);
     }
 
     public static void getNotices(AsyncHttpResponseHandler handler, Context context) {
@@ -629,7 +630,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("type", type);
-        ApiHttpClient.post("action/api/notice_clear", params, handler);
+        post("action/api/notice_clear", params, handler);
     }
 
     public static void singnIn(String url, AsyncHttpResponseHandler handler) {
@@ -676,7 +677,7 @@ public class OSChinaApi {
         if (sourceId <= 0) return;
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
-        ApiHttpClient.post("action/apiv2/tweet_like_reverse", params, handler);
+        post("action/apiv2/tweet_like_reverse", params, handler);
     }
 
     public static void checkUpdate(AsyncHttpResponseHandler handler) {
@@ -744,7 +745,7 @@ public class OSChinaApi {
                 && !StringUtils.isEmpty(report.getOtherReason())) {
             params.put("memo", report.getOtherReason());
         }
-        ApiHttpClient.post("action/communityManage/report", params, handler);
+        post("action/communityManage/report", params, handler);
     }
 
     /**
@@ -786,7 +787,7 @@ public class OSChinaApi {
         if (!StringUtils.isEmpty(data.getRemark())) {
             params.put("misc_info", data.getRemark());
         }
-        ApiHttpClient.post("action/api/event_apply", params, handler);
+        post("action/api/event_apply", params, handler);
     }
 
     /**
@@ -973,8 +974,7 @@ public class OSChinaApi {
         params.put("pageIndex", 0);
         params.put("pageSize", "20");
         KJLoger.debug(teamid + "==getDiaryComment接口=" + diaryid);
-        ApiHttpClient
-                .get("action/api/team_reply_list_by_type", params, handler);
+        ApiHttpClient.get("action/api/team_reply_list_by_type", params, handler);
     }
 
     /**
@@ -994,7 +994,7 @@ public class OSChinaApi {
         params.put("type", "118");
         params.put("tweetid", diaryId);
         params.put("content", content);
-        ApiHttpClient.post("action/api/team_tweet_reply", params, handler);
+        post("action/api/team_tweet_reply", params, handler);
     }
 
     /***
@@ -1025,7 +1025,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("openid_info", openIdInfo);
-        ApiHttpClient.post("action/api/openid_login", params, handler);
+        post("action/api/openid_login", params, handler);
     }
 
     /***
@@ -1044,7 +1044,7 @@ public class OSChinaApi {
         params.put("openid_info", openIdInfo);
         params.put("username", userName);
         params.put("pwd", pwd);
-        ApiHttpClient.post("action/api/openid_bind", params, handler);
+        post("action/api/openid_bind", params, handler);
     }
 
     /***
@@ -1059,7 +1059,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("openid_info", openIdInfo);
-        ApiHttpClient.post("action/api/openid_reg", params, handler);
+        post("action/api/openid_reg", params, handler);
     }
 
     /**
@@ -1075,7 +1075,7 @@ public class OSChinaApi {
         params.put("uid", AccountHelper.getUserId());
         params.put("receiver", "2609904");
         params.put("content", content);
-        ApiHttpClient.post("action/api/message_pub", params, handler);
+        post("action/api/message_pub", params, handler);
     }
 
 
@@ -1402,7 +1402,7 @@ public class OSChinaApi {
             params.put("replyId", replyId);
         if (oid > 0)
             params.put("reAuthorId", oid);
-        ApiHttpClient.post("action/apiv2/comment_pub", params, handler);
+        post("action/apiv2/comment_pub", params, handler);
     }
 
 
@@ -1479,7 +1479,7 @@ public class OSChinaApi {
         params.put("commentId", commentId);
         params.put("voteOpt", voteState);
 
-        ApiHttpClient.post("action/apiv2/comment_vote_reverse", params, handler);
+        post("action/apiv2/comment_vote_reverse", params, handler);
 
     }
 
@@ -1496,7 +1496,7 @@ public class OSChinaApi {
         params.put("sourceId", sid);
         params.put("commentId", cid);
         params.put("voteOpt", opt);
-        ApiHttpClient.post("action/apiv2/question_vote", params, handler);
+        post("action/apiv2/question_vote", params, handler);
     }
 
     /**
@@ -1507,7 +1507,7 @@ public class OSChinaApi {
         params.put("sourceId", sourceId);
         params.put("commentId", commentId);
         params.put("voteOpt", voteOpt);
-        ApiHttpClient.post("action/apiv2/comment_vote_reverse", params, handler);
+        post("action/apiv2/comment_vote_reverse", params, handler);
     }
 
     /**
@@ -1529,7 +1529,7 @@ public class OSChinaApi {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ApiHttpClient.post("action/apiv2/resource_image", params, handler);
+        post("action/apiv2/resource_image", params, handler);
     }
 
     /**
@@ -1556,7 +1556,7 @@ public class OSChinaApi {
             params.put("aboutType", about.getType());
             params.put("aboutImage", about.getImage());
         }
-        ApiHttpClient.post("action/apiv2/tweet", params, handler);
+        post("action/apiv2/tweet", params, handler);
     }
 
     /**
@@ -1658,7 +1658,7 @@ public class OSChinaApi {
         params.put("sourceId", sourceId);
         params.put("content", content);
         if (replyId > 0) params.put("replyId", replyId);
-        ApiHttpClient.post("action/apiv2/tweet_comment", params, handler);
+        post("action/apiv2/tweet_comment", params, handler);
     }
 
     /**
@@ -1738,7 +1738,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("authorId", authorId);
         params.put("content", content);
-        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
+        post("action/apiv2/messages_pub", params, handler);
     }
 
     public static void pubMessage(long authorId, File content, TextHttpResponseHandler handler) {
@@ -1749,7 +1749,7 @@ public class OSChinaApi {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
+        post("action/apiv2/messages_pub", params, handler);
     }
 
     /**
@@ -1771,7 +1771,7 @@ public class OSChinaApi {
                 e.printStackTrace();
             }
         }
-        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
+        post("action/apiv2/messages_pub", params, handler);
     }
 
     /**
@@ -1862,7 +1862,7 @@ public class OSChinaApi {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ApiHttpClient.post("action/apiv2/user_edit_portrait", params, handler);
+        post("action/apiv2/user_edit_portrait", params, handler);
 
     }
 
@@ -1926,7 +1926,7 @@ public class OSChinaApi {
         params.put("timestamp", timestamp);
         params.put("appToken", appToken);
         params.put("signature", signature);
-        ApiHttpClient.post("action/apiv2/shake_present", params, handler);
+        post("action/apiv2/shake_present", params, handler);
     }
 
     /**
@@ -1975,18 +1975,15 @@ public class OSChinaApi {
         for (Pair<String, String> pair : pairs) {
             params.put(pair.first, pair.second);
         }
-        ApiHttpClient.getHttpClient().addHeader("Host", "121.41.10.133");
-        ApiHttpClient.getHttpClient().post("http://121.41.10.133/action/apiv2/blog_reward", params, handler);
+        post("action/apiv2/blog_reward", params, handler);
     }
 
     public static void reward(Map<String, String> pairs, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams(pairs);
         Log.e("oschina", "params: " + params.toString());
 
-        AsyncHttpClient client = new AsyncHttpClient();
-
         Log.e("oschina", "post request");
-        client.post("http://121.41.10.133/action/apiv2/reward_order", params, handler);
+        post("action/apiv2/reward_order", params, handler);
     }
 
     public static void checkUpdate(TextHttpResponseHandler handler) {
@@ -2021,7 +2018,7 @@ public class OSChinaApi {
         params.put("catalog", catalog);
         params.put("info", openInfo);
 
-        ApiHttpClient.post("action/apiv2/account_open_login", params, handler);
+        post("action/apiv2/account_open_login", params, handler);
     }
 
     /**
@@ -2053,7 +2050,7 @@ public class OSChinaApi {
         params.put("account", username);
         params.put("password", pwd);
 
-        ApiHttpClient.post("action/apiv2/account_login", params, handler);
+        post("action/apiv2/account_login", params, handler);
 
     }
 
@@ -2075,8 +2072,7 @@ public class OSChinaApi {
         params.put("phone", phone);
         params.put("intent", intent);
 
-        ApiHttpClient.post("action/apiv2/phone_send_code", params, handler);
-
+        post("action/apiv2/phone_send_code", params, handler);
     }
 
 
@@ -2093,7 +2089,7 @@ public class OSChinaApi {
         params.put("phone", phoneNumber);
         params.put("code", smsCode);
 
-        ApiHttpClient.post("action/apiv2/phone_validate", params, handler);
+        post("action/apiv2/phone_validate", params, handler);
     }
 
 
@@ -2115,8 +2111,7 @@ public class OSChinaApi {
         params.put("gender", gender);
         params.put("phoneToken", phoneToken);
 
-        ApiHttpClient.post("action/apiv2/account_register", params, handler);
-
+        post("action/apiv2/account_register", params, handler);
     }
 
     /**
@@ -2132,8 +2127,7 @@ public class OSChinaApi {
         params.put("password", password);
         params.put("phoneToken", phoneToken);
 
-        ApiHttpClient.post("action/apiv2/account_password_forgot", params, handler);
-
+        post("action/apiv2/account_password_forgot", params, handler);
     }
 
     /**
@@ -2164,10 +2158,11 @@ public class OSChinaApi {
 
     /**
      * 动弹列表
-     * @param aid author id, 请求某人的动弹
-     * @param tag 相关话题
-     * @param type 1: 广场（所有动弹）， 2：朋友圈（好友动弹）
-     * @param order 1: 最新， 2：最热
+     *
+     * @param aid     author id, 请求某人的动弹
+     * @param tag     相关话题
+     * @param type    1: 广场（所有动弹）， 2：朋友圈（好友动弹）
+     * @param order   1: 最新， 2：最热
      * @param handler handler
      */
     public static void getTweetList(
@@ -2177,13 +2172,13 @@ public class OSChinaApi {
             Integer order,
             String pageToken,
             TextHttpResponseHandler handler
-    ){
+    ) {
         RequestParams params = new RequestParams();
-        if (aid != null){
+        if (aid != null) {
             params.put("authorId", aid);
-        }else if (!TextUtils.isEmpty(tag)){
+        } else if (!TextUtils.isEmpty(tag)) {
             params.put("tag", tag);
-        }else {
+        } else {
             params.put("type", type);
             params.put("order", order);
         }

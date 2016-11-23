@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -563,7 +564,13 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      */
     private void showImagePick() {
         Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            //intent.setAction(Intent.ACTION_PICK);
+        } else {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+        }
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),

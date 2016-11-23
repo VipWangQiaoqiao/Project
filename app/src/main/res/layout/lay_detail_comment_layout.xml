@@ -24,15 +24,10 @@
         android:layout_height="1px"
         android:background="@color/list_divider_color" />
 
-    <LinearLayout
-        android:id="@+id/lay_blog_detail_comment"
+    <net.oschina.app.improve.widget.RecyclerRefreshLayout
+        android:id="@+id/recyclerComment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        tools:ignore="RtlSymmetry" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tv_see_more_comment"
@@ -49,5 +44,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/list_divider_color" />
+        android:background="@color/list_divider_color"
+        android:visibility="visible" />
 </merge>
