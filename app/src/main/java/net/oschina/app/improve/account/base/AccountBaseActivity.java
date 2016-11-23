@@ -20,7 +20,6 @@ import android.widget.Toast;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.utils.DialogHelper;
-import net.oschina.common.verify.Verifier;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -263,20 +262,6 @@ public class AccountBaseActivity extends BaseActivity {
     }
 
     /**
-     * finish clearTop activity
-     *
-     * @param context       context
-     * @param activityClass activityClass
-     */
-    protected void finishClearTopActivity(Context context, Class activityClass) {
-        // Kill and skip
-        Intent intent = new Intent(context, activityClass);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
-
-    /**
      * sha-1 to hex
      *
      * @param tempPwd tempPwd
@@ -305,15 +290,4 @@ public class AccountBaseActivity extends BaseActivity {
 
         return tempPwd;
     }
-
-
-    /**
-     * init appToken
-     *
-     * @return appToken
-     */
-    protected String getAppToken() {
-        return Verifier.getPrivateToken(getApplication());
-    }
-
 }
