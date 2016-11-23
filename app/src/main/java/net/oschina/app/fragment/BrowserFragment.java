@@ -30,11 +30,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.ui.SimpleBackActivity;
 
@@ -245,8 +245,7 @@ public class BrowserFragment extends BaseFragment {
      */
     protected void onUrlLoading(WebView view, String url) {
         mProgress.setVisibility(View.VISIBLE);
-        cookie.setCookie(url,
-                AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+        cookie.setCookie(url, AccountHelper.getCookie());
     }
 
     /**
