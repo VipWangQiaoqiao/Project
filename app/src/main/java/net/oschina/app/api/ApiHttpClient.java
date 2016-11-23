@@ -2,7 +2,6 @@ package net.oschina.app.api;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -17,7 +16,6 @@ import net.oschina.common.verify.Verifier;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -71,10 +69,6 @@ public class ApiHttpClient {
         return CLIENT;
     }
 
-    public static void cancelAll(Context context) {
-        CLIENT.cancelRequests(context, true);
-    }
-
     public static void delete(String partUrl, AsyncHttpResponseHandler handler) {
         CLIENT.delete(getAbsoluteApiUrl(partUrl), handler);
         log("DELETE " + partUrl);
@@ -99,10 +93,6 @@ public class ApiHttpClient {
         }
         log("request:" + url);
         return url;
-    }
-
-    public static String getApiUrl() {
-        return API_URL;
     }
 
     public static void getDirect(String url, AsyncHttpResponseHandler handler) {
@@ -142,6 +132,7 @@ public class ApiHttpClient {
         c.addHeader("Accept-Language", Locale.getDefault().toString());
         c.addHeader("Host", HOST);
         c.addHeader("Connection", "Keep-Alive");
+        //noinspection deprecation
         c.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
         // Set AppToken
@@ -278,6 +269,7 @@ public class ApiHttpClient {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private static class MySSLSocketFactory extends SSLSocketFactory {
         SSLContext sslContext = SSLContext.getInstance("TLS");
 
@@ -303,7 +295,7 @@ public class ApiHttpClient {
         }
 
         @Override
-        public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
+        public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException {
             return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
         }
 
