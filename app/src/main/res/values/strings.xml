@@ -290,6 +290,8 @@
     <string name="zero">0</string>
 
     <!--新版评论专用-->
+    <string name="about_comment_hint">相关评论</string>
+    <string name="view_more_hint">查看更多</string>
     <string name="send_tweet">转发到动弹</string>
     <string name="send_hint">发送</string>
     <string name="comment_hint">请输入评论</string>

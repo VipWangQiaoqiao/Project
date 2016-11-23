@@ -14,7 +14,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:text="相关评论"
+        android:text="@string/about_comment_hint"
         android:textColor="#6a6a6a"
         android:textSize="12sp" />
 
@@ -37,13 +37,8 @@
         android:gravity="center_horizontal"
         android:paddingBottom="16dp"
         android:paddingTop="16dp"
-        android:text="查看更多"
+        android:text="@string/view_more_hint"
         android:textColor="#24cf5f"
         android:textSize="14sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/list_divider_color"
-        android:visibility="visible" />
 </merge>
