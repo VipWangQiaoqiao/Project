@@ -6,8 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.gson.DoubleJsonDeserializer;
 import net.oschina.app.improve.app.gson.FloatJsonDeserializer;
@@ -22,9 +20,9 @@ import java.util.concurrent.Executors;
  * Created by JuQiu
  * on 16/6/24.
  */
-
 public final class AppOperator {
     private static ExecutorService EXECUTORS_INSTANCE;
+    private static Gson GSON_INSTANCE;
 
     public static Executor getExecutor() {
         if (EXECUTORS_INSTANCE == null) {
@@ -46,8 +44,7 @@ public final class AppOperator {
             return new GlideUrl(url,
                     new LazyHeaders
                             .Builder()
-                            .addHeader("Cookie",
-                                    ApiHttpClient.getCookieString(AppContext.getInstance()))
+                            .addHeader("Cookie", AccountHelper.getCookie())
                             .build());
         } else {
             return new GlideUrl(url);
@@ -75,6 +72,12 @@ public final class AppOperator {
         gsonBuilder.registerTypeAdapter(String.class, deserializer);
 
         return gsonBuilder.create();
+    }
+
+    public synchronized static Gson getGson() {
+        if (GSON_INSTANCE == null)
+            GSON_INSTANCE = createGson();
+        return GSON_INSTANCE;
     }
 
 }
