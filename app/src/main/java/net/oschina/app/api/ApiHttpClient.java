@@ -6,11 +6,10 @@ import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 
-import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.TLog;
 import net.oschina.common.verify.Verifier;
 
@@ -55,14 +54,13 @@ public class ApiHttpClient {
      * @param context AppContext
      */
     public static void init(AppContext context) {
-        COOKIE_STRING = null;
         CLIENT = null;
         AsyncHttpClient client = new AsyncHttpClient();
         //client.setCookieStore(new PersistentCookieStore(context));
         // Set
         ApiHttpClient.setHttpClient(client, context);
         // Set Cookie
-        setCookieHeader(getCookieString(context));
+        setCookieHeader(AccountHelper.getCookie());
     }
 
     public static AsyncHttpClient getHttpClient() {
@@ -143,8 +141,9 @@ public class ApiHttpClient {
         initSSL(CLIENT);
     }
 
-    private static void setCookieHeader(String cookie) {
-        CLIENT.addHeader("Cookie", cookie);
+    public static void setCookieHeader(String cookie) {
+        if (!TextUtils.isEmpty(cookie))
+            CLIENT.addHeader("Cookie", cookie);
         log("setCookieHeader:" + cookie);
     }
 
@@ -155,9 +154,9 @@ public class ApiHttpClient {
     }
 
     public static void cleanCookie() {
-        COOKIE_STRING = null;
         // first clear store
-        new PersistentCookieStore(AppContext.getInstance()).clear();
+        // new PersistentCookieStore(AppContext.getInstance()).clear();
+        // clear header
         AsyncHttpClient client = CLIENT;
         if (client != null) {
             HttpContext httpContext = client.getHttpContext();
@@ -170,32 +169,7 @@ public class ApiHttpClient {
             // 清理当前正在使用的Cookie
             client.removeHeader("Cookie");
         }
-
-        // 清理本地缓存的Cookie
-        AppContext.getInstance().removeProperty(AppConfig.CONF_COOKIE);
         log("cleanCookie");
-    }
-
-
-    private static String COOKIE_STRING;
-
-    /**
-     * 得到当前Cookie字符串
-     *
-     * @param appContext AppContext
-     * @return Cookie字符串
-     */
-    public static synchronized String getCookieString(AppContext appContext) {
-        if (TextUtils.isEmpty(COOKIE_STRING)) {
-            // 从本地拿
-            String cookie = appContext.getProperty(AppConfig.CONF_COOKIE);
-            if (TextUtils.isEmpty(cookie)) {
-                cookie = getClientCookie(CLIENT);
-            }
-            COOKIE_STRING = cookie;
-        }
-        log("getCookieString:" + COOKIE_STRING);
-        return COOKIE_STRING;
     }
 
     /**
@@ -222,13 +196,13 @@ public class ApiHttpClient {
     }
 
     /**
-     * 更新当前的网络请求Cookie
+     * 得到当前的网络请求Cookie，
+     * 登录后触发
      *
-     * @param client  AsyncHttpClient
      * @param headers Header
      */
-    public static void updateCookie(AsyncHttpClient client, Header[] headers) {
-        String cookie = getClientCookie(client);
+    public static String getCookie(Header[] headers) {
+        String cookie = getClientCookie(ApiHttpClient.getHttpClient());
         if (TextUtils.isEmpty(cookie)) {
             cookie = "";
             if (headers != null) {
@@ -244,11 +218,8 @@ public class ApiHttpClient {
             }
         }
 
-        log("updateCookie:" + cookie);
-
-        // 更新本地和正在使用的Cookie
-        setCookieHeader(cookie);
-        AppContext.getInstance().setProperty(AppConfig.CONF_COOKIE, cookie);
+        log("getCookie:" + cookie);
+        return cookie;
     }
 
     private static void initSSL(AsyncHttpClient client) {

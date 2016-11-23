@@ -1,5 +1,6 @@
 package net.oschina.app;
 
+import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.account.AccountHelper;
 
 /**
@@ -14,6 +15,9 @@ public class OSCApplication extends AppContext {
     }
 
     private void init() {
+        // 初始化账户基础信息
         AccountHelper.init(this);
+        // 初始化网络请求
+        ApiHttpClient.init(this);
     }
 }

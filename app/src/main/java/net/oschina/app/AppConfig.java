@@ -15,9 +15,7 @@ import java.util.Properties;
  * @created 2014年9月25日 下午5:29:00
  */
 public class AppConfig {
-
     private final static String APP_CONFIG = "config";
-    public final static String CONF_COOKIE = "cookie";
     public final static String CONF_APP_UNIQUEID = "APP_UNIQUEID";
 
     public static final String KEY_LOAD_IMAGE = "KEY_LOAD_IMAGE";

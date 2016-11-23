@@ -37,9 +37,6 @@ public class AppContext extends BaseApplication {
         if (!BuildConfig.DEBUG)
             handler.init(this);
 
-        // 初始化网络请求
-        ApiHttpClient.init(this);
-
         // Log控制器
         KJLoger.openDebutLog(BuildConfig.DEBUG);
         TLog.DEBUG = BuildConfig.DEBUG;
