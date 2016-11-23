@@ -194,13 +194,13 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
                         .rotation(225)
                         .setDuration(380)
                         .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        super.onAnimationEnd(animator);
-                        mViewArrowDown.setRotation(45);
-                        mViewArrowDown.setEnabled(true);
-                    }
-                });
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                super.onAnimationEnd(animator);
+                                mViewArrowDown.setRotation(45);
+                                mViewArrowDown.setEnabled(true);
+                            }
+                        }).start();
 
             }
         });
@@ -214,13 +214,13 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
                         .rotation(-180)
                         .setDuration(380)
                         .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        super.onAnimationEnd(animator);
-                        mViewArrowDown.setRotation(0);
-                        mViewArrowDown.setEnabled(true);
-                    }
-                });
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                super.onAnimationEnd(animator);
+                                mViewArrowDown.setRotation(0);
+                                mViewArrowDown.setEnabled(true);
+                            }
+                        });
             }
         });
 
