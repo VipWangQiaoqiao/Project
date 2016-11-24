@@ -206,7 +206,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             //vh.tvLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
             List<User> likeUser = tweet.getLikeUser();
             if (likeUser!=null)
-            tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
+            //tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
             OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler,mContext);
 //            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .day_colorPrimary));

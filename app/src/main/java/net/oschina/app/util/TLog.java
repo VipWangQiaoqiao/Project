@@ -6,7 +6,7 @@ import com.loopj.android.http.BuildConfig;
 
 public class TLog {
     private static final String LOG_TAG = "OSChinaLog";
-    public static boolean DEBUG = BuildConfig.DEBUG;
+    private static boolean DEBUG = BuildConfig.DEBUG;
 
     private TLog() {
     }
