@@ -190,14 +190,17 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             public void call(ViewPropertyAnimator animator) {
                 mViewArrowDown.setEnabled(false);
                 activity.toggleNavTabView(false);
-                mViewArrowDown.animate().rotation(225).setDuration(380).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        super.onAnimationEnd(animator);
-                        mViewArrowDown.setRotation(45);
-                        mViewArrowDown.setEnabled(true);
-                    }
-                });
+                mViewArrowDown.animate()
+                        .rotation(225)
+                        .setDuration(380)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                super.onAnimationEnd(animator);
+                                mViewArrowDown.setRotation(45);
+                                mViewArrowDown.setEnabled(true);
+                            }
+                        }).start();
 
             }
         });
@@ -207,14 +210,17 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             public void call(ViewPropertyAnimator animator) {
                 mViewArrowDown.setEnabled(false);
                 activity.toggleNavTabView(true);
-                mViewArrowDown.animate().rotation(-180).setDuration(380).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        super.onAnimationEnd(animator);
-                        mViewArrowDown.setRotation(0);
-                        mViewArrowDown.setEnabled(true);
-                    }
-                });
+                mViewArrowDown.animate()
+                        .rotation(-180)
+                        .setDuration(380)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                super.onAnimationEnd(animator);
+                                mViewArrowDown.setRotation(0);
+                                mViewArrowDown.setEnabled(true);
+                            }
+                        });
             }
         });
 

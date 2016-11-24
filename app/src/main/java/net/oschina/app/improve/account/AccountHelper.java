@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
@@ -36,7 +37,12 @@ public final class AccountHelper {
     }
 
     public static boolean isLogin() {
-        return getUserId() > 0;
+        return getUserId() > 0 && !TextUtils.isEmpty(getCookie());
+    }
+
+    public static String getCookie() {
+        String cookie = getUser().getCookie();
+        return cookie == null ? "" : cookie;
     }
 
     public static long getUserId() {
@@ -45,7 +51,7 @@ public final class AccountHelper {
 
     public synchronized static User getUser() {
         if (instances.user == null)
-            instances.user = SharedPreferencesHelper.load(instances.application, User.class);
+            instances.user = SharedPreferencesHelper.loadFormSource(instances.application, User.class);
         if (instances.user == null)
             instances.user = new User();
         return instances.user;
@@ -54,6 +60,9 @@ public final class AccountHelper {
     public static void updateUserCache(User user) {
         if (user == null)
             return;
+        // 保留Cookie信息
+        if (TextUtils.isEmpty(user.getCookie()) && instances.user != user)
+            user.setCookie(instances.user.getCookie());
         instances.user = user;
         SharedPreferencesHelper.save(instances.application, user);
     }
@@ -64,13 +73,15 @@ public final class AccountHelper {
     }
 
     public static void login(User user, Header[] headers) {
+        // 更新Cookie
+        String cookie = ApiHttpClient.getCookie(headers);
+        user.setCookie(cookie);
+        ApiHttpClient.setCookieHeader(cookie);
+
         // 保存缓存
         updateUserCache(user);
         // 登陆成功,重新启动消息服务
         NoticeManager.init(instances.application);
-        // 更新Cookie
-        if (headers != null)
-            ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
     }
 
     public static void logout() {
@@ -92,7 +103,7 @@ public final class AccountHelper {
         // 清除用户缓存
         clearUserCache();
 
-        // Logou 广播
+        // Logout 广播
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
         context.sendBroadcast(intent);
     }

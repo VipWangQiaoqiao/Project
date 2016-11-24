@@ -11,6 +11,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,6 +140,12 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        mViewSearch.clearFocus();
+    }
+
+    @Override
     protected void initWidget() {
         super.initWidget();
         setStatusBarDarkMode(true);
@@ -153,6 +160,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         mViewSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mViewSearch.clearFocus();
                 return doSearch(query, false);
             }
 

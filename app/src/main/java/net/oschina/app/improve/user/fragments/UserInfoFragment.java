@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -507,7 +508,10 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             //UIHelper.showLoginActivity(getActivity());
             LoginActivity.show(getActivity());
         } else {
-            DialogHelper.getSelectDialog(getActivity(), getString(R.string.action_select), getResources().getStringArray(R.array.avatar_option), "取消", new DialogInterface.OnClickListener() {
+            DialogHelper.getSelectDialog(getActivity(),
+                    getString(R.string.action_select),
+                    getResources().getStringArray(R.array.avatar_option), "取消",
+                    new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (i == 0) {
@@ -562,9 +566,9 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * 选择图片返回并准备裁剪
      */
     private void showImagePick() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),
                 ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
@@ -702,13 +706,10 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 startActionCrop(fromFile);// 拍照后裁剪
                 break;
             case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
-
                 Uri uri = imageReturnIntent.getData();
-
                 startActionCrop(uri);// 选图后裁剪
                 break;
             case ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD:
-
                 Uri uri1 = imageReturnIntent.getData();
                 File file1 = new File(uri1.getPath());
                 uploadNewPhoto(file1);
