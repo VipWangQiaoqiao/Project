@@ -42,23 +42,21 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements
                 R.array.tweets_viewpage_arrays);
 
         adapter.addTab(title[0], "tweet_new", TweetFragment.class,
-                getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_NEW));
+                getBundle(TweetFragment.CATALOG_NEW));
         adapter.addTab(title[1], "tweet_hot", TweetFragment.class,
-                getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_HOT));
+                getBundle(TweetFragment.CATALOG_HOT));
         adapter.addTab(title[2], "tweet_mine", TweetFragment.class,
-                getBundle(TweetFragment.CATEGORY_USER, 0));
+                getBundle(TweetFragment.CATALOG_MYSELF));
 
     }
 
     /**
-     * @param requestCategory 请求类型，1为普通动弹，2用户动弹
-     * @param tweetType       1最新，2最热
+     * @param catalog {@link TweetFragment}
      * @return Bundle
      */
-    private Bundle getBundle(int requestCategory, int tweetType) {
+    private Bundle getBundle(int catalog) {
         Bundle bundle = new Bundle();
-        bundle.putInt("requestCategory", requestCategory);
-        bundle.putInt("tweetType", tweetType);
+        bundle.putInt(TweetFragment.BUNDLE_KEY_REQUEST_CATALOG, catalog);
         return bundle;
     }
 
