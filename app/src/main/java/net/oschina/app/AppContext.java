@@ -27,27 +27,12 @@ public class AppContext extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-
-        init();
-    }
-
-    private void init() {
-        AppCrashHandler handler = AppCrashHandler.getInstance();
-        if (!BuildConfig.DEBUG)
-            handler.init(this);
-
-        // Log控制器
-        KJLoger.openDebutLog(BuildConfig.DEBUG);
-        TLog.DEBUG = BuildConfig.DEBUG;
-
-        // Bitmap缓存地址
-        HttpConfig.CACHEPATH = "OSChina/ImageCache";
     }
 
     /**
      * 获得当前app运行的AppContext
      *
-     * @return
+     * @return AppContext
      */
     public static AppContext getInstance() {
         return instance;

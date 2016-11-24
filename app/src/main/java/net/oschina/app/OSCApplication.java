@@ -19,5 +19,9 @@ public class OSCApplication extends AppContext {
         AccountHelper.init(this);
         // 初始化网络请求
         ApiHttpClient.init(this);
+        // 初始化异常捕获类
+        AppCrashHandler handler = AppCrashHandler.getInstance();
+        if (!BuildConfig.DEBUG)
+            handler.init(this);
     }
 }
