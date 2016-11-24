@@ -41,7 +41,7 @@ public final class CommentsUtil {
         drawable = new ShapeDrawable(new BorderShape(new RectF(0, 0, 0, 1)));
         drawable.getPaint().setColor(0xffd7d6da);
         textView.setBackgroundDrawable(drawable);
-        formatHtml(context.getResources(), textView, refer[count].getAuthor() + ":<br>" + refer[count].getContent());
+        formatHtml(context.getResources(), textView, refer[refer.length - 1 - count].getAuthor() + ":<br>" + refer[refer.length - 1 - count].getContent());
         if (count < (refer.length < 5 ? refer.length - 1 : 4)) {
             count++;
             View view = getReferLayout(inflater, refer, count);

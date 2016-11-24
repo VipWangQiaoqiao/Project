@@ -120,14 +120,14 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         }.getType();
     }
 
-    public void init(long id, int type, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    public void init(long id, int type, int order, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         this.mId = id;
         this.mType = type;
 
         mSeeMore.setVisibility(View.GONE);
         setVisibility(GONE);
 
-        OSChinaApi.getComments(id, type, "refer,reply", 2, null, new TextHttpResponseHandler() {
+        OSChinaApi.getComments(id, type, "refer,reply", order, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 if (throwable != null)
@@ -141,6 +141,17 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                     ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, getCommentType());
                     if (resultBean.isSuccess()) {
                         List<Comment> comments = resultBean.getResult().getItems();
+                        int size = comments.size();
+                        if (size > 4) {
+                            mSeeMore.setVisibility(VISIBLE);
+                            mSeeMore.setOnClickListener(CommentView.this);
+                        }
+
+                        if (mType == OSChinaApi.COMMENT_NEWS) {
+                            if (size > 4)
+                                comments = comments.subList(0, 4);
+                        }
+
                         Comment[] array = CollectionUtil.toArray(comments, Comment.class);
                         addComment(array, imageLoader, onCommentClickListener);
                     }
@@ -319,7 +330,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (mId != 0 && mType != 0)
-            CommentsActivity.show(getContext(), mId, mType);
+            CommentsActivity.show(getContext(), mId, mType,OSChinaApi.COMMENT_NEW_ORDER);
     }
 
     /**

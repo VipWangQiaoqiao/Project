@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
@@ -101,10 +100,9 @@ public class TeamBoardFragment extends BaseFragment {
         mRlIng.setOnClickListener(this);
         mRlAll.setOnClickListener(this);
 
-        mTvName.setText(AppContext.getInstance().getLoginUser().getName() + "，"
+        mTvName.setText(AccountHelper.getUser().getName() + "，"
                 + getGreetings());
-        mIvAvatarView.setAvatarUrl(AppContext.getInstance().getLoginUser()
-                .getPortrait());
+        mIvAvatarView.setAvatarUrl(AccountHelper.getUser().getPortrait());
         mTvDate.setText("今天是 " + getWeekDay() + "，"
                 + SystemTool.getDataTime("yyyy年MM月dd日"));
 

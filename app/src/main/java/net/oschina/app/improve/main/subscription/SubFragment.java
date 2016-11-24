@@ -21,9 +21,9 @@ import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
-import net.oschina.app.improve.widget.banner.EventHeaderView;
-import net.oschina.app.improve.widget.banner.HeaderView;
-import net.oschina.app.improve.widget.banner.NewsHeaderView;
+import net.oschina.app.improve.main.banner.EventHeaderView;
+import net.oschina.app.improve.main.banner.HeaderView;
+import net.oschina.app.improve.main.banner.NewsHeaderView;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;

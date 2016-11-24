@@ -37,7 +37,7 @@ public class ViewEventBanner extends RelativeLayout implements View.OnClickListe
         iv_event_banner_bg = (ImageView) findViewById(R.id.iv_event_banner_bg);
         tv_event_banner_title = (TextView) findViewById(R.id.tv_event_banner_title);
         tv_event_banner_body = (TextView) findViewById(R.id.tv_event_banner_body);
-        setOnClickListener(this);
+        //setOnClickListener(this);
     }
 
     public void initData(RequestManager manager, Banner banner) {

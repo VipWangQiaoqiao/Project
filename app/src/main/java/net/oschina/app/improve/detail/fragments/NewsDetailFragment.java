@@ -5,7 +5,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,8 +31,6 @@ import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-
-import static com.joanzapata.android.iconify.Iconify.TAG;
 
 /**
  * Created by fei
@@ -194,7 +191,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mAbouts.setAbout(newsDetail.getAbouts(), 6);
 
         mComment.setTitle(String.format("%s (%s)", getResources().getString(R.string.hot_comment_hint), newsDetail.getCommentCount()));
-        mComment.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, getImgLoader(), this);
+        mComment.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, OSChinaApi.COMMENT_HOT_ORDER, getImgLoader(), this);
     }
 
     private void handleKeyDel() {

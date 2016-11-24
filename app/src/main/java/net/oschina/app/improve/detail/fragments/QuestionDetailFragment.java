@@ -179,7 +179,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
 
         mComments.setTitle(String.format("回答 (%s)", questionDetail.getCommentCount()));
-        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, getImgLoader(), this);
+        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, OSChinaApi.COMMENT_NEW_ORDER, getImgLoader(), this);
 
     }
 

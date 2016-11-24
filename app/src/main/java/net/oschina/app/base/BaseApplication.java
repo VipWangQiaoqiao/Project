@@ -2,33 +2,22 @@ package net.oschina.app.base;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.os.Build;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import net.oschina.app.R;
 import net.oschina.app.improve.widget.SimplexToast;
-import net.oschina.app.util.StringUtils;
 
 @SuppressLint("InflateParams")
 public class BaseApplication extends Application {
     private static String PREF_NAME = "creativelocker.pref";
-    private static String LAST_REFRESH_TIME = "last_refresh_time.pref";
     static Context _context;
     static Resources _resource;
-    private static String lastToast = "";
-    private static long lastToastTime;
 
     private static boolean sIsAtLeastGB;
 
@@ -56,8 +45,8 @@ public class BaseApplication extends Application {
 
     /**
      * 放入已读文章列表中
-     *
      */
+    @Deprecated
     public static void putReadedPostList(String prefFileName, String key,
                                          String value) {
         SharedPreferences preferences = getPreferences(prefFileName);
@@ -75,37 +64,11 @@ public class BaseApplication extends Application {
      *
      * @return
      */
+    @Deprecated
     public static boolean isOnReadedPostList(String prefFileName, String key) {
         return getPreferences(prefFileName).contains(key);
     }
 
-    /**
-     * 记录列表上次刷新时间
-     *
-     * @param key
-     * @param value
-     * @return void
-     * @author 火蚁
-     * 2015-2-9 下午2:21:37
-     */
-    public static void putToLastRefreshTime(String key, String value) {
-        SharedPreferences preferences = getPreferences(LAST_REFRESH_TIME);
-        Editor editor = preferences.edit();
-        editor.putString(key, value);
-        apply(editor);
-    }
-
-    /**
-     * 获取列表的上次刷新时间
-     *
-     * @param key
-     * @return
-     * @author 火蚁
-     * 2015-2-9 下午2:22:04
-     */
-    public static String getLastRefreshTime(String key) {
-        return getPreferences(LAST_REFRESH_TIME).getString(key, StringUtils.getCurrentTimeStr());
-    }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public static void apply(SharedPreferences.Editor editor) {

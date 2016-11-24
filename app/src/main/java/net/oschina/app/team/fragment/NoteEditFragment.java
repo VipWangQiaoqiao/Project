@@ -148,7 +148,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
         noteDb = new NoteDatabase(getActivity());
         if (editData == null) {
             editData = new NotebookData();
-            editData.setContent(AppContext.getNoteDraft());
+            editData.setContent("");
             isNewNote = true;
         }
         if (StringUtils.isEmpty(editData.getDate())) {
@@ -247,13 +247,13 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
                 DialogHelper.getConfirmDialog(getActivity(), "是否保存为草稿?", new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        AppContext.setNoteDraft("");
+                        //AppContext.setNoteDraft("");
                         getActivity().finish();
                     }
                 }, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        AppContext.setNoteDraft(content);
+                        //AppContext.setNoteDraft(content);
                         getActivity().finish();
                     }
                 }).show();

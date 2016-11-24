@@ -27,7 +27,6 @@ import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.pay.bean.Order;
@@ -94,8 +93,6 @@ public class BlogDetailFragment
     @Bind(R.id.lay_detail_about)
     DetailAboutView mAbouts;
 
-    @Bind(R.id.lay_detail_comment)
-    CommentView mCommentView;
     @Bind(R.id.lay_blog_detail_abstract)
     LinearLayout mLayAbstract;
 
