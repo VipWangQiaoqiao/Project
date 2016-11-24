@@ -77,7 +77,6 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         setGone(R.id.iv_info_comment);
 
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
-
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
         mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
         CommentView mComments = (CommentView) root.findViewById(R.id.lay_detail_comment);

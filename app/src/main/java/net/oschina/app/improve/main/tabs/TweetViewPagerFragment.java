@@ -24,14 +24,12 @@ import net.oschina.app.interf.OnTabReselectListener;
 public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
 
     /**
-     * @param requestCategory 请求类型，1为普通动弹，2用户动弹
-     * @param tweetType       1最新，2最热
+     * @param catalog {@link TweetFragment}
      * @return Bundle
      */
-    private Bundle getBundle(int requestCategory, int tweetType) {
+    private Bundle getBundle(int catalog) {
         Bundle bundle = new Bundle();
-        bundle.putInt("requestCategory", requestCategory);
-        bundle.putInt("tweetType", tweetType);
+        bundle.putInt(TweetFragment.BUNDLE_KEY_REQUEST_CATALOG, catalog);
         return bundle;
     }
 
@@ -54,12 +52,12 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
     protected PagerInfo[] getPagers() {
         return new PagerInfo[]{
                 new PagerInfo("好友动弹", TweetFragment.class,
-                        getBundle(TweetFragment.CATEGORY_FRIEND, 0)),
+                        getBundle(TweetFragment.CATALOG_FRIENDS)),
                 new PagerInfo("推荐话题", TopicTweetFragment.class, null),
                 new PagerInfo("热门动弹", TweetFragment.class,
-                        getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_HOT)),
+                        getBundle(TweetFragment.CATALOG_HOT)),
                 new PagerInfo("最新动弹", TweetFragment.class,
-                        getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_NEW))
+                        getBundle(TweetFragment.CATALOG_NEW))
         };
 
         /*return new PagerInfo[]{

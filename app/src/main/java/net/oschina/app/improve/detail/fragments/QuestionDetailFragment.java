@@ -2,6 +2,7 @@ package net.oschina.app.improve.detail.fragments;
 
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -10,17 +11,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.QuestionDetail;
-import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.comment.CommentView;
+import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
-import net.oschina.app.improve.widget.BottomSheetBar;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
@@ -35,7 +36,7 @@ import java.util.List;
  */
 
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
-        implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener, BottomSheetBar.OnSyncListener {
+        implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
@@ -43,6 +44,9 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private long mCommentId;
     private long mCommentAuthorId;
+    private CommentExsView mComments;
+    private CoordinatorLayout mLayCoordinator;
+    private NestedScrollView mLayContent;
 
     private FlowLayout mFlowLayout;
 
@@ -63,13 +67,13 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         mFlowLayout = (FlowLayout) root.findViewById(R.id.ques_detail_flow);
 
-        CommentView mComments = (CommentView) root.findViewById(R.id.lay_detail_comment);
-        mComments.setVisibility(View.GONE);
+        mComments = (CommentExsView) root.findViewById(R.id.lay_detail_comment);
+        mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
+        mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
 
-        CoordinatorLayout mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
+        registerScroller(mLayContent, mComments);
 
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
-        mDelegation.setOnSyncListener(this);
 
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -93,7 +97,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 handleShare();
             }
         });
-        mDelegation.getBottomSheet().showSyncView(this);
+        mDelegation.getBottomSheet().showSyncView();
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +131,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         switch (v.getId()) {
             // 评论列表
             case R.id.tv_see_more_comment:
-                UIHelper.showBlogComment(getActivity(), (int) mId, (int) mOperator.getData().getAuthorId());
+                UIHelper.showBlogComment(getActivity(), (int) mId,
+                        (int) mOperator.getData().getAuthorId());
                 break;
         }
     }
@@ -152,6 +157,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         List<String> tags = questionDetail.getTags();
 
+        // mFlowLayout.removeAllViews();
         if (tags != null && !tags.isEmpty()) {
             for (String tag : tags) {
                 TextView tvTag = (TextView) getActivity().getLayoutInflater().inflate(R.layout.flowlayout_item, mFlowLayout, false);
@@ -172,6 +178,10 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         setText(R.id.tv_info_view, String.valueOf(questionDetail.getViewCount()));
         setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
 
+        mComments.setTitle(String.format("回答 (%s)", questionDetail.getCommentCount()));
+        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION,
+                questionDetail.getCommentCount(), getImgLoader(), this);
+
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -182,8 +192,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.setCommentHint(getString(R.string.pub_comment_hint));
-                    mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.pub_comment_hint));
+                    mDelegation.setCommentHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -223,18 +233,17 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     }
 
     @Override
-    public void toSendCommentOk(Comment comment) {
-        (Toast.makeText(getContext(), getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
-        mDelegation.setCommentHint(getString(R.string.add_comment_hint));
-        mDelegation.getBottomSheet().getEditText().setText("");
-        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
-        //mComments.addComment(commentEX, getImgLoader(), null);
-        mDelegation.getBottomSheet().dismiss();
+    public void toSendCommentOk(net.oschina.app.improve.bean.comment.Comment comment) {
+
     }
 
-    @Override
-    public void onClick(View view, Comment comment) {
-
+    public void toSendCommentOk(CommentEX commentEX) {
+        (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
+        mDelegation.setCommentHint("添加评论");
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
+        mComments.addComment(commentEX, getImgLoader(), null);
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override
@@ -247,8 +256,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     }
 
     @Override
-    public void sync(boolean isSync) {
-        // if (isSync)
+    public void onClick(View view, net.oschina.app.improve.bean.comment.Comment comment) {
 
     }
 }

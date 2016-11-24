@@ -43,40 +43,40 @@ import cz.msebera.android.httpclient.Header;
 /**
  * 动弹列表
  * Created by huanghaibin_dev
+ * Updated by thanatosx
  * on 2016/7/18.
  */
 public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
-    public static final int CATEGORY_TYPE = 1; //请求最新或者最热
-    public static final int CATEGORY_USER = 2; //请求用户
-    public static final int CATEGORY_FRIEND = 3;
-    public static final int CATEGORY_TOPIC_NEW = 4;
-    public static final int CATEGORY_TOPIC_HOT = 5;
 
-    public static final int TWEET_TYPE_NEW = 1;
-    public static final int TWEET_TYPE_HOT = 2;
+    public static final int CATALOG_NEW = 0X0001;
+    public static final int CATALOG_HOT = 0X0002;
+    public static final int CATALOG_MYSELF = 0X0003;
+    public static final int CATALOG_FRIENDS = 0X0004;
 
     public static final String CACHE_NEW_TWEET = "cache_new_tweet";
     public static final String CACHE_HOT_TWEET = "cache_hot_tweet";
     public static final String CACHE_USER_TWEET = "cache_user_tweet";
     public static final String CACHE_USER_FRIEND = "cache_user_friend";
 
-    public int requestCategory;//请求类型
-    public int tweetType;
-    public long authorId;
+    public static final String BUNDLE_KEY_LOGIN_USER_ID = "BUNDLE_KEY_LOGIN_USER_ID";
+    public static final String BUNDLE_KEY_REQUEST_CATALOG = "BUNDLE_KEY_REQUEST_CATALOG";
 
-    public static Fragment instantiate(long aid) {
+    public int mReqCatalog;//请求类型
+    public long mLoginUserId;
+    private LoginReceiver mReceiver;
+
+    public static Fragment instantiate(long uid) {
         Bundle bundle = new Bundle();
-        bundle.putLong("authorId", aid);
-        bundle.putInt("requestCategory", CATEGORY_USER);
+        bundle.putLong(BUNDLE_KEY_LOGIN_USER_ID, uid);
+        bundle.putInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_MYSELF);
         Fragment fragment = new TweetFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static Fragment instantiate(int category, int type) {
+    public static Fragment instantiate(int catalog) {
         Bundle bundle = new Bundle();
-        bundle.putInt("requestCategory", category);
-        bundle.putInt("tweetType", type);
+        bundle.putInt(BUNDLE_KEY_REQUEST_CATALOG, catalog);
         Fragment fragment = new TweetFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -85,9 +85,8 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
-        requestCategory = bundle.getInt("requestCategory", CATEGORY_TYPE);
-        tweetType = bundle.getInt("tweetType", TWEET_TYPE_NEW);
-        authorId = bundle.getLong("authorId", AccountHelper.getUserId());
+        mReqCatalog = bundle.getInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_NEW);
+        mLoginUserId = bundle.getLong(BUNDLE_KEY_LOGIN_USER_ID, AccountHelper.getUserId());
     }
 
     /**
@@ -98,31 +97,33 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @Override
     protected void onRestartInstance(Bundle bundle) {
         super.onRestartInstance(bundle);
-        requestCategory = bundle.getInt("requestCategory", 1);
-        tweetType = bundle.getInt("tweetType", 1);
-        authorId = bundle.getLong("authorId", AccountHelper.getUserId());
+        mReqCatalog = bundle.getInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_NEW);
+        mLoginUserId = bundle.getLong(BUNDLE_KEY_LOGIN_USER_ID, AccountHelper.getUserId());
     }
 
     @Override
     public void initData() {
-        switch (requestCategory) {
-            case CATEGORY_TYPE:
-                CACHE_NAME = tweetType == TWEET_TYPE_NEW ? CACHE_NEW_TWEET : CACHE_HOT_TWEET;
+        switch (mReqCatalog) {
+            case CATALOG_NEW:
+                CACHE_NAME = CACHE_NEW_TWEET;
                 break;
-            case CATEGORY_USER:
-            case CATEGORY_FRIEND:
-                CACHE_NAME = requestCategory == CATEGORY_FRIEND ? CACHE_USER_FRIEND : CACHE_USER_TWEET;
-                IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_USER_CHANGE);
-                filter.addAction(Constants.INTENT_ACTION_LOGOUT);
+            case CATALOG_HOT:
+                CACHE_NAME = CACHE_HOT_TWEET;
+                break;
+            case CATALOG_MYSELF:
+            case CATALOG_FRIENDS:
+                CACHE_NAME = mReqCatalog == CATALOG_MYSELF ? CACHE_USER_TWEET : CACHE_USER_FRIEND;
                 if (mReceiver == null) {
                     mReceiver = new LoginReceiver();
+                    IntentFilter filter = new IntentFilter();
+                    filter.addAction(Constants.INTENT_ACTION_USER_CHANGE);
+                    filter.addAction(Constants.INTENT_ACTION_LOGOUT);
                     getActivity().registerReceiver(mReceiver, filter);
                 }
                 break;
         }
 
         super.initData();
-
 
         mAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
             @Override
@@ -134,51 +135,45 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
             }
         });
 
-        if (authorId == 0 && requestCategory == CATEGORY_USER) {
+        // 某用户的动弹 or 登录用户的好友动弹
+        if (mLoginUserId == 0 && mReqCatalog == CATALOG_MYSELF ||
+                (!AccountHelper.isLogin() && mReqCatalog == CATALOG_FRIENDS)) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-            mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+            mErrorLayout.setErrorMessage("未登录");
         }
     }
 
     private class LoginReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
-            setupContent();
+            if (AccountHelper.isLogin()) {
+                mLoginUserId = AccountHelper.getUserId();
+                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                onRefreshing();
+            } else {
+                mLoginUserId = 0;
+                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                mErrorLayout.setErrorMessage("未登录");
+            }
         }
     }
-
-    private LoginReceiver mReceiver;
-
-    private void setupContent() {
-        if (AccountHelper.isLogin()) {
-            authorId = AccountHelper.getUserId();
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-            onRefreshing();
-        } else {
-            authorId = 0;
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-            mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
-        }
-    }
-
 
     @Override
     protected void requestData() {
         super.requestData();
         String pageToken = mIsRefresh ? null : mBean.getNextPageToken();
-        switch (requestCategory) {
-            case CATEGORY_TYPE:
-                OSChinaApi.getTweetList(null, null, 1, tweetType, pageToken, mHandler);
-//                OSChinaApi.getTweetList(tweetType, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        switch (mReqCatalog) {
+            case CATALOG_NEW:
+                OSChinaApi.getTweetList(null, null, 1, 1, pageToken, mHandler);
                 break;
-            case CATEGORY_USER:
-                if (authorId != 0) {
-                    OSChinaApi.getTweetList(authorId, null, null, null, pageToken, mHandler);
-//                    OSChinaApi.getUserTweetList(authorId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
-                }
+            case CATALOG_HOT:
+                OSChinaApi.getTweetList(null, null, 1, 2, pageToken, mHandler);
                 break;
-            case CATEGORY_FRIEND:
+            case CATALOG_MYSELF:
+                if (mLoginUserId == 0) break;
+                OSChinaApi.getTweetList(mLoginUserId, null, null, null, pageToken, mHandler);
+                break;
+            case CATALOG_FRIENDS:
                 OSChinaApi.getTweetList(null, null, 2, 1, pageToken, mHandler);
                 break;
         }
@@ -188,14 +183,13 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @Override
     public void onItemClick(int position, long itemId) {
         Tweet tweet = mAdapter.getItem(position);
-        if (tweet == null)
-            return;
+        if (tweet == null) return;
         TweetDetailActivity.show(getContext(), tweet);
     }
 
     @Override
     public void onClick(View v) {
-        if ((requestCategory == CATEGORY_USER || requestCategory == CATEGORY_FRIEND)
+        if ((mReqCatalog == CATALOG_MYSELF || mReqCatalog == CATALOG_FRIENDS)
                 && !AccountHelper.isLogin()) {
             //UIHelper.showLoginActivity(getActivity());
             LoginActivity.show(this, 1);
@@ -290,18 +284,14 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt("requestCategory", requestCategory);
-        outState.putInt("tweetType", tweetType);
-        outState.putLong("authorId", authorId);
+        outState.putInt(BUNDLE_KEY_REQUEST_CATALOG, mReqCatalog);
+        outState.putLong(BUNDLE_KEY_LOGIN_USER_ID, mLoginUserId);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (requestCategory == CATEGORY_USER) {
-            authorId = AccountHelper.getUserId();
-        }
     }
 
     /**
@@ -309,7 +299,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
      */
     @Override
     public void onDestroy() {
-        if (requestCategory == CATEGORY_USER && mReceiver != null) {
+        if (mReceiver != null) {
             getActivity().unregisterReceiver(mReceiver);
         }
         super.onDestroy();
@@ -320,7 +310,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == AppCompatActivity.RESULT_OK && requestCode == 1) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-            authorId = AccountHelper.getUserId();
+            mLoginUserId = AccountHelper.getUserId();
             onRefreshing();
         }
     }

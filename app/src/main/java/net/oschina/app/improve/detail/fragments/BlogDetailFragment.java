@@ -27,6 +27,7 @@ import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
+import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.pay.bean.Order;
@@ -64,6 +65,9 @@ public class BlogDetailFragment
         extends DetailFragment<BlogDetail, BlogDetailContract.View, BlogDetailContract.Operator>
         implements BlogDetailContract.View, View.OnClickListener, OnCommentClickListener, BottomSheetBar.OnSyncListener {
 
+
+    public static final String TAG = "BlogDetailFragment";
+
     private long mId;
     private long mCommentId;
     private long mCommentAuthorId;
@@ -89,6 +93,9 @@ public class BlogDetailFragment
 
     @Bind(R.id.lay_detail_about)
     DetailAboutView mAbouts;
+
+    @Bind(R.id.lay_detail_comment)
+    CommentView mCommentView;
     @Bind(R.id.lay_blog_detail_abstract)
     LinearLayout mLayAbstract;
 
@@ -187,9 +194,11 @@ public class BlogDetailFragment
         }
     }
 
+
     @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
+        super.initData();
         BlogDetail blog = mOperator.getData();
         if (blog == null)
             return;
@@ -357,7 +366,7 @@ public class BlogDetailFragment
         mDelegation.setCommentHint("添加评论");
         mDelegation.getBottomSheet().getEditText().setText("");
         mDelegation.getBottomSheet().getEditText().setHint("添加评论");
-       // mComments.addComment(comment, getImgLoader(), this);
+        // mComments.addComment(comment, getImgLoader(), this);
         mDelegation.getBottomSheet().dismiss();
     }
 

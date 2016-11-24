@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
@@ -24,10 +25,19 @@
         android:layout_height="1px"
         android:background="@color/list_divider_color" />
 
-    <net.oschina.app.improve.widget.RecyclerRefreshLayout
-        android:id="@+id/recyclerComment"
+    <LinearLayout
+        android:id="@+id/lay_detail_comment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingBottom="8dp" />
+
+    <View
+        android:id="@+id/label_line_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
 
     <TextView
         android:id="@+id/tv_see_more_comment"

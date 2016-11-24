@@ -107,7 +107,7 @@
                 android:background="@color/list_divider_color"
                 android:visibility="gone" />
 
-            <net.oschina.app.improve.comment.CommentView
+            <net.oschina.app.improve.comment.CommentExsView
                 android:id="@+id/lay_detail_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

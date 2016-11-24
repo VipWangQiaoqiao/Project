@@ -1216,7 +1216,6 @@ public class OSChinaApi {
      * @param handler   handler
      */
     public static void getComments(long sourceId, int type, String parts, int order, String pageToken, TextHttpResponseHandler handler) {
-
         if (sourceId <= 0) return;
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);

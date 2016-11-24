@@ -98,10 +98,10 @@ public class TweetPublishActivity extends BaseBackActivity {
             //  }
         }
 
-        if (uris.size() > 0) {
-            bundle.putString("defaultContent", "请添加描述");
-            bundle.putStringArrayList("defaultImage", uris);
-        }
+        // if (uris.size() > 0) {
+        //   bundle.putString("defaultContent", "请添加描述");
+        // bundle.putStringArrayList("defaultImage", uris);
+        // }
         TweetPublishFragment fragment = new TweetPublishFragment();
 
         // init the args bounds

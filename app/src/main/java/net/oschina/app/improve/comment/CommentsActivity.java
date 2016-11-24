@@ -1,5 +1,6 @@
 package net.oschina.app.improve.comment;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +42,8 @@ import java.util.List;
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
+import static net.oschina.app.R.id.tv_back_label;
+
 /**
  * Created by  fei
  * on  16/11/17
@@ -61,7 +64,7 @@ public class CommentsActivity extends BaseBackActivity {
 
     @Bind(R.id.activity_comments)
     CoordinatorLayout mCoordLayout;
-    @Bind(R.id.tv_back_label)
+    @Bind(tv_back_label)
     TextView mBack_label;
     @Bind(R.id.tv_title)
     TextView mTitle;
@@ -112,6 +115,7 @@ public class CommentsActivity extends BaseBackActivity {
             mDelegation.getBottomSheet().dismiss();
         }
     };
+    private TextView mCommentCount;
 
     public static void show(Context context, long id, int type) {
         Intent intent = new Intent(context, CommentsActivity.class);
@@ -137,10 +141,19 @@ public class CommentsActivity extends BaseBackActivity {
         super.initWidget();
 
 
+        mBack_label.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        mCommentCount = (TextView) findViewById(R.id.tv_title);
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mLayComments.setLayoutManager(manager);
 
-        mCommentAdapter = new CommentAdapter(this, getImageLoader());
+        mCommentAdapter = new CommentAdapter(this, getImageLoader(), BaseRecyclerAdapter.ONLY_FOOTER);
         mLayComments.setAdapter(mCommentAdapter);
 
         mDelegation = CommentBar.delegation(this, mCoordLayout);
@@ -331,6 +344,7 @@ public class CommentsActivity extends BaseBackActivity {
                 mRefreshLayout.onComplete();
             }
 
+            @SuppressLint("DefaultLocale")
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
@@ -339,6 +353,8 @@ public class CommentsActivity extends BaseBackActivity {
 
                     if (resultBean.isSuccess()) {
                         mPageBean = resultBean.getResult();
+                        mTitle.setText(String.format("%d%s%s", mPageBean.getTotalResults(), getString(R.string.item_hint), getString(R.string.comment_title_hint)));
+
                         handleData(mPageBean.getItems(), clearData);
                     }
 

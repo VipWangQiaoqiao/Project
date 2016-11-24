@@ -27,11 +27,8 @@ import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.ClipView;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
-import net.oschina.app.improve.utils.CollectionUtil;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.UIHelper;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -205,9 +202,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void initData() {
         super.initData();
-        ArrayList<String> defaultImages = getArguments().getStringArrayList("defaultImage");
-        setImages(CollectionUtil.toArray(defaultImages, String.class));
-        mOperator.loadXmlData();
+        // ArrayList<String> defaultImages = getArguments().getStringArrayList("defaultImage");
+        //setImages(CollectionUtil.toArray(defaultImages, String.class));
+        //mOperator.loadXmlData();
     }
 
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,

@@ -32,6 +32,7 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.comment.Reply;
+import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
@@ -89,7 +90,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
     private long sid;
     private Dialog mVoteDialog;
     private Dialog mWaitingDialog;
-    private Comment comment;
+    private CommentEX comment;
     private Reply reply;
     private View mVoteDialogView;
     private List<Reply> replies = new ArrayList<>();
@@ -103,7 +104,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
      * @param comment comment
      * @param sid     文章id
      */
-    public static void show(Context context, Comment comment, long sid) {
+    public static void show(Context context, CommentEX comment, long sid) {
         Intent intent = new Intent(context, QuesAnswerDetailActivity.class);
         intent.putExtra(BUNDLE_KEY, comment);
         intent.putExtra(BUNDLE_ARTICLE_KEY, sid);
@@ -112,7 +113,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
 
     @Override
     protected boolean initBundle(Bundle bundle) {
-        comment = (Comment) getIntent().getSerializableExtra(BUNDLE_KEY);
+        comment = (CommentEX) getIntent().getSerializableExtra(BUNDLE_KEY);
         sid = getIntent().getLongExtra(BUNDLE_ARTICLE_KEY, 0);
         return !(comment == null || comment.getId() <= 0) && super.initBundle(bundle);
     }
@@ -134,11 +135,11 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
     @SuppressWarnings("deprecation")
     protected void initWidget() {
         // portrait
-        if (TextUtils.isEmpty(comment.getAuthor().getPortrait())) {
+        if (TextUtils.isEmpty(comment.getAuthorPortrait())) {
             ivPortrait.setImageResource(R.mipmap.widget_dface);
         } else {
             getImageLoader()
-                    .load(comment.getAuthor().getPortrait())
+                    .load(comment.getAuthorPortrait())
                     .asBitmap()
                     .placeholder(getResources().getDrawable(R.mipmap.widget_dface))
                     .error(getResources().getDrawable(R.mipmap.widget_dface))
@@ -146,7 +147,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
         }
 
         // nick
-        tvNick.setText(comment.getAuthor().getName());
+        tvNick.setText(comment.getAuthor());
 
         // publish time
         if (!TextUtils.isEmpty(comment.getPubDate()))
@@ -162,7 +163,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
         }
 
         // vote count
-        tvVoteCount.setText(String.valueOf(comment.getVote()));
+        tvVoteCount.setText(String.valueOf(comment.getVoteCount()));
 
         tvCmnCount.setText("评论 (" + (comment.getReply() == null ? 0 : comment.getReply().length) + ")");
 
@@ -197,7 +198,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
                 mWaitingDialog = DialogHelper.getProgressDialog(QuesAnswerDetailActivity.this, "正在发表评论...", false);
                 mWaitingDialog.show();
 
-                OSChinaApi.publishComment(sid, -1, comment.getId(), comment.getAuthor().getId(), 2, content, onSendCommentHandler);
+                OSChinaApi.publishComment(sid, -1, comment.getId(), comment.getAuthorId(), 2, content, onSendCommentHandler);
             }
         });
 
@@ -316,7 +317,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
             }
         };
 
-        OSChinaApi.getCommentDetail(comment.getId(), comment.getAuthor().getId(), 2, new TextHttpResponseHandler() {
+        OSChinaApi.getCommentDetail(comment.getId(), comment.getAuthorId(), 2, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String respStr, Throwable throwable) {
                 Toast.makeText(QuesAnswerDetailActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
@@ -324,11 +325,11 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String respStr) {
-                ResultBean<Comment> result = AppOperator.createGson().fromJson(respStr,
-                        new TypeToken<ResultBean<Comment>>() {
+                ResultBean<CommentEX> result = AppOperator.createGson().fromJson(respStr,
+                        new TypeToken<ResultBean<CommentEX>>() {
                         }.getType());
                 if (result.isSuccess()) {
-                    Comment cmn = result.getResult();
+                    CommentEX cmn = result.getResult();
                     if (cmn != null && cmn.getId() > 0) {
                         comment = cmn;
                         initWidget();
@@ -396,7 +397,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
                                     }.getType());
                             if (result.isSuccess()) {
                                 comment.setVoteState(result.getResult().getVoteState());
-                                comment.setVote(result.getResult().getVote());
+                                comment.setVoteCount((int) result.getResult().getVote());
                                 tvVoteCount.setText(String.valueOf(result.getResult().getVote()));
                                 v.setSelected(!v.isSelected());
                                 switch (opt) {

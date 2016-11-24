@@ -5,6 +5,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.NewsDetail;
@@ -30,6 +32,8 @@ import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+
+import static com.joanzapata.android.iconify.Iconify.TAG;
 
 /**
  * Created by fei
@@ -190,7 +194,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mAbouts.setAbout(newsDetail.getAbouts(), 6);
 
         mComment.setTitle(String.format("%s (%s)", getResources().getString(R.string.hot_comment_hint), newsDetail.getCommentCount()));
-       // mComment.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, getImgLoader(), this);
+        mComment.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, getImgLoader(), this);
     }
 
     private void handleKeyDel() {
@@ -243,7 +247,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
         mDelegation.getCommentText().setHint(getString(R.string.add_comment_hint));
-       // mComment.addComment(comment, getImgLoader(), this);
+        // mComment.addComment(comment, getImgLoader(), this);
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mDelegation.getCommentText().setHint("添加评论");
         mDelegation.getBottomSheet().getEditText().setText("");

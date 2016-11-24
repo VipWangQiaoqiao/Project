@@ -214,11 +214,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/ques_detail_bg_color" />
 
-            <net.oschina.app.improve.comment.CommentView
-                android:id="@+id/detail_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
