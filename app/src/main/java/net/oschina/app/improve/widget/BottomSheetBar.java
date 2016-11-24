@@ -31,6 +31,8 @@ import net.oschina.app.util.TDevice;
  */
 @SuppressWarnings("unused")
 public class BottomSheetBar implements View.OnClickListener {
+
+    public static final String TAG = "BottomSheetBar";
     private View mRootView;
     private EditText mEditText;
     private ImageButton mAtView;
@@ -42,8 +44,6 @@ public class BottomSheetBar implements View.OnClickListener {
     private FrameLayout mFrameLayout;
     private EmojiView mEmojiView;
 
-    private OnSyncListener mOnSyncListener;
-    private OnSyncListener onSyncListener;
 
     private BottomSheetBar(Context context) {
         this.mContext = context;
@@ -55,10 +55,6 @@ public class BottomSheetBar implements View.OnClickListener {
         bar.mRootView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_sheet_comment_bar, null, false);
         bar.initView();
         return bar;
-    }
-
-    public void setOnSendListener(OnSyncListener mOnSyncListener) {
-        this.mOnSyncListener = mOnSyncListener;
     }
 
     private void initView() {
@@ -176,31 +172,8 @@ public class BottomSheetBar implements View.OnClickListener {
         mAtView.setOnClickListener(listener);
     }
 
-    /**
-     * sync 2 tweet
-     *
-     * @param onSyncListener onSyncListener
-     */
-    public void setOnSyncListener(OnSyncListener onSyncListener) {
-        this.onSyncListener = onSyncListener;
-    }
-
     public void setFaceListener(View.OnClickListener listener) {
         mFaceView.setOnClickListener(listener);
-    }
-
-    public void showSyncView(View.OnClickListener listener) {
-        mSyncToTweetView.setOnClickListener(listener);
-        mSyncToTweetView.setVisibility(View.VISIBLE);
-        mRootView.findViewById(R.id.tv_sync).setVisibility(View.VISIBLE);
-    }
-    public void showSyncView() {
-        mSyncToTweetView.setVisibility(View.INVISIBLE); //hide for temp
-        mRootView.findViewById(R.id.tv_sync).setVisibility(View.INVISIBLE); //hide for temp
-    }
-
-    public boolean isSyncToTweet() {
-        return false;//mSyncToTweetView.isChecked();//TODO
     }
 
     public void setCommitListener(View.OnClickListener listener) {
@@ -234,21 +207,17 @@ public class BottomSheetBar implements View.OnClickListener {
     public void onClick(View v) {
         ImageButton shareView = this.mSyncToTweetView;
         Object tag = v.getTag();
-        boolean isSync;
         if (tag == null) {
             shareView.setBackgroundResource(R.mipmap.form_checkbox_checked);
             shareView.setTag(true);
-            isSync = true;
         } else {
             shareView.setBackgroundResource(R.mipmap.form_checkbox_normal);
             shareView.setTag(null);
-            isSync = false;
         }
-        if (mOnSyncListener != null)
-            mOnSyncListener.sync(isSync);
     }
 
-    public interface OnSyncListener {
-        void sync(boolean isSync);
+    public boolean isSyncToTweet() {
+        return mSyncToTweetView != null && mSyncToTweetView.getTag() != null;
     }
+
 }

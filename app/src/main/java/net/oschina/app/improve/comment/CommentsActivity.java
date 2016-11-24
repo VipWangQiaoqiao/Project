@@ -153,11 +153,6 @@ public class CommentsActivity extends BaseBackActivity {
 
         mCommentCount = (TextView) findViewById(R.id.tv_title);
 
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        mLayComments.setLayoutManager(manager);
-
-        mCommentAdapter = new CommentAdapter(this, getImageLoader(), BaseRecyclerAdapter.ONLY_FOOTER);
-        mLayComments.setAdapter(mCommentAdapter);
 
         mDelegation = CommentBar.delegation(this, mCoordLayout);
         mDelegation.hideFav();
@@ -188,6 +183,29 @@ public class CommentsActivity extends BaseBackActivity {
         mRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        mLayComments.setLayoutManager(manager);
+
+        mCommentAdapter = new CommentAdapter(this, getImageLoader(), BaseRecyclerAdapter.ONLY_FOOTER);
+        mCommentAdapter.setSourceId(mId);
+        mCommentAdapter.setDelegation(mDelegation);
+        mLayComments.setAdapter(mCommentAdapter);
+        mCommentAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, long itemId) {
+
+                switch (mType) {
+                    case OSChinaApi.COMMENT_QUESTION:
+                        //// TODO: 2016/11/25 跳转到问答中单独的回答详情
+                        QuesAnswerDetailActivity.show(CommentsActivity.this, null, mId);
+                        break;
+                    default:
+
+                        break;
+                }
+
+            }
+        });
     }
 
     @Override

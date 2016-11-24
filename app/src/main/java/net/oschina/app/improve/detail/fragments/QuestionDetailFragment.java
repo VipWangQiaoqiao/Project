@@ -97,7 +97,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 handleShare();
             }
         });
-        mDelegation.getBottomSheet().showSyncView();
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,12 +212,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
-        if (mDelegation.getBottomSheet().isSyncToTweet()) {
-            About about = new About();
-            QuestionDetail detail = mOperator.getData();
-            about.setId(detail.getId());
-            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
-        }
     }
 
 
@@ -237,8 +230,14 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mDelegation.setCommentHint("添加评论");
         mDelegation.getBottomSheet().getEditText().setText("");
         mDelegation.getBottomSheet().getEditText().setHint("添加评论");
-        mComments.addComment(comment, getImgLoader(), null);
+        //mComments.addComment(comment, getImgLoader(), null);
         mDelegation.getBottomSheet().dismiss();
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            About about = new About();
+            QuestionDetail detail = mOperator.getData();
+            about.setId(detail.getId());
+            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+        }
     }
 
     public void toSendCommentOk(CommentEX commentEX) {
