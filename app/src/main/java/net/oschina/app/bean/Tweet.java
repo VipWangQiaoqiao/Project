@@ -282,7 +282,7 @@ public class Tweet extends Entity implements Parcelable {
                     getLikeUser().remove(i);
                 }
             }
-            getLikeUser().add(0, AppContext.getInstance().getLoginUser());
+            //getLikeUser().add(0, AccountHelper.getUser());
         }
 
         for (int i = 0; i < showCunt; i++) {
