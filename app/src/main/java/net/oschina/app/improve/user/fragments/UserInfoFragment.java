@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -41,6 +40,7 @@ import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.utils.StreamUtils;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
@@ -53,6 +53,7 @@ import net.oschina.app.util.UIHelper;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Random;
@@ -77,6 +78,9 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     private final static int CROP = 200;
     private final static String FILE_SAVE_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
             .getAbsolutePath() + File.separator + "开源中国" + File.separator;
+
+    // 截图后图片的临时存储Uri
+    private Uri mTempUri;
 
     private static final int CAMERA_PERM = 1;
 
@@ -566,18 +570,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * 选择图片返回并准备裁剪
      */
     private void showImagePick() {
-        Intent intent = new Intent();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            //intent.setAction(Intent.ACTION_PICK);
-        } else {
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-        }
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        //Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),
                 ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
@@ -615,10 +608,22 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * @param data 原始图片
      */
     private void startActionCrop(Uri data) {
-
+        if (!Environment.isExternalStorageEmulated()){
+            SimplexToast.show(getContext(), "外部存储设备不可用");
+            return;
+        }
+        File file = new File(getContext().getExternalCacheDir(), "IMG_CROP.png");
+        if (!file.exists())
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        mTempUri = Uri.fromFile(file);
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(data, "image/*");
-        intent.putExtra("output", data);
+        intent.putExtra("output", mTempUri);
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1);// 裁剪框比例
         intent.putExtra("aspectY", 1);
@@ -658,9 +663,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * update the new picture
      */
     private void uploadNewPhoto(File file) {
-
         // 获取头像缩略图
-        if (!file.exists()) {
+        if (file == null || !file.exists() || file.getTotalSpace() == 0) {
             AppContext.showToast(getString(R.string.title_icon_null));
         } else {
             mIsUploadIcon = true;
@@ -704,7 +708,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
         switch (requestCode) {
             case ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA:
-
                 //得到照片的bitmap
                 Bitmap bitmap = imageReturnIntent.getParcelableExtra("data");
 
@@ -719,9 +722,15 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 startActionCrop(uri);// 选图后裁剪
                 break;
             case ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD:
-                Uri uri1 = imageReturnIntent.getData();
-                File file1 = new File(uri1.getPath());
-                uploadNewPhoto(file1);
+                Uri mCropImageUri = imageReturnIntent.getData();
+                File mCropImageFile = null;
+                if (mCropImageUri != null){
+                    mCropImageFile = new File(mCropImageUri.getPath());
+                }else {
+                    if (mTempUri == null) return;
+                    mCropImageFile = new File(mTempUri.getPath());
+                }
+                uploadNewPhoto(mCropImageFile);
                 break;
         }
 

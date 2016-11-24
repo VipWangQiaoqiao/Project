@@ -18,7 +18,7 @@ import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.comment.CommentExsView;
+import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
@@ -44,7 +44,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private long mCommentId;
     private long mCommentAuthorId;
-    private CommentExsView mComments;
+    private CommentView mComments;
     private CoordinatorLayout mLayCoordinator;
     private NestedScrollView mLayContent;
 
@@ -67,7 +67,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         mFlowLayout = (FlowLayout) root.findViewById(R.id.ques_detail_flow);
 
-        mComments = (CommentExsView) root.findViewById(R.id.lay_detail_comment);
+        mComments = (CommentView) root.findViewById(R.id.lay_detail_comment);
         mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
         mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
 
@@ -179,8 +179,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
 
         mComments.setTitle(String.format("回答 (%s)", questionDetail.getCommentCount()));
-        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION,
-                questionDetail.getCommentCount(), getImgLoader(), this);
+        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, getImgLoader(), this);
 
     }
 
@@ -234,16 +233,16 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     @Override
     public void toSendCommentOk(net.oschina.app.improve.bean.comment.Comment comment) {
-
-    }
-
-    public void toSendCommentOk(CommentEX commentEX) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mDelegation.setCommentHint("添加评论");
         mDelegation.getBottomSheet().getEditText().setText("");
         mDelegation.getBottomSheet().getEditText().setHint("添加评论");
-        mComments.addComment(commentEX, getImgLoader(), null);
+        mComments.addComment(comment, getImgLoader(), null);
         mDelegation.getBottomSheet().dismiss();
+    }
+
+    public void toSendCommentOk(CommentEX commentEX) {
+
     }
 
     @Override
