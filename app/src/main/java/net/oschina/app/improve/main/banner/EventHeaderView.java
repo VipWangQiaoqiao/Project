@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.Banner;
 import net.oschina.app.improve.widget.ViewEventBanner;
+import net.oschina.app.util.UIHelper;
 
 /**
  * Created by haibin
@@ -34,6 +36,7 @@ public class EventHeaderView extends HeaderView {
 
     @Override
     public void onItemClick(int position) {
-
+        Banner banner = mBanners.get(position);
+        UIHelper.showBannerDetail(getContext(), banner);
     }
 }
