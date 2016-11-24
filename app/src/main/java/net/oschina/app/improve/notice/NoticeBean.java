@@ -1,8 +1,8 @@
 package net.oschina.app.improve.notice;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.v4.content.SharedPreferencesCompat;
+
+import net.oschina.common.helper.SharedPreferencesHelper;
 
 import java.io.Serializable;
 
@@ -91,24 +91,14 @@ public class NoticeBean implements Serializable {
     }
 
     NoticeBean save(Context context) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(NoticeBean.class.getName(), Context.MODE_PRIVATE).edit();
-        editor.putInt("mention", mention);
-        editor.putInt("letter", letter);
-        editor.putInt("review", review);
-        editor.putInt("fans", fans);
-        editor.putInt("like", like);
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+        SharedPreferencesHelper.save(context, this);
         return this;
     }
 
     static NoticeBean getInstance(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(NoticeBean.class.getName(), Context.MODE_PRIVATE);
-        NoticeBean bean = new NoticeBean();
-        bean.mention = preferences.getInt("mention", 0);
-        bean.letter = preferences.getInt("letter", 0);
-        bean.review = preferences.getInt("review", 0);
-        bean.fans = preferences.getInt("fans", 0);
-        bean.like = preferences.getInt("like", 0);
+        NoticeBean bean = SharedPreferencesHelper.load(context, NoticeBean.class);
+        if (bean == null)
+            bean = new NoticeBean();
         return bean;
     }
 }
