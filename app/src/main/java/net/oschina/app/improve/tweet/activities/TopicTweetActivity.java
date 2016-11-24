@@ -102,8 +102,8 @@ public class TopicTweetActivity extends BaseActivity {
         mLayoutAppBar.addOnOffsetChangedListener(mOffsetChangerListener = new TabLayoutOffsetChangeListener());
 
         fragments = new ArrayList<>();
-        fragments.add(Pair.create("最新", TweetFragment.instantiate(TweetFragment.CATEGORY_TYPE, 1)));
-        fragments.add(Pair.create("最热", TweetFragment.instantiate(TweetFragment.CATEGORY_TYPE, 2)));
+        fragments.add(Pair.create("最新", TweetFragment.instantiate(TweetFragment.CATALOG_NEW)));
+        fragments.add(Pair.create("最热", TweetFragment.instantiate(TweetFragment.CATALOG_HOT)));
 
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
