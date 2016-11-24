@@ -74,7 +74,7 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impl
                     author.getName().trim()) + "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
         }
         vh.tv_view.setText(String.valueOf(item.getStatistics().getView()));
-        vh.tv_view.setText(String.valueOf(item.getStatistics().getComment()));
+        vh.tv_comment_count.setText(String.valueOf(item.getStatistics().getComment()));
     }
 
     private static class QuestionViewHolder extends RecyclerView.ViewHolder {

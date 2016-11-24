@@ -74,7 +74,7 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
         if (liked) {
             vh.likeStatus.setImageResource(R.mipmap.ic_thumbup_actived);
         } else {
-            vh.likeStatus.setImageResource(R.mipmap.ic_thumbup_normal);
+            vh.likeStatus.setImageResource(R.mipmap.ic_thumb_normal);
         }
         vh.likeStatus.setTag(position);
         vh.likeStatus.setOnClickListener(this);

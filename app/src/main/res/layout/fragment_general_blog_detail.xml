@@ -17,7 +17,8 @@
         android:layout_alignParentTop="true"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_scrollFlags="scroll|enterAlways">
+        app:layout_scrollFlags="scroll|enterAlways"
+        tools:ignore="RtlHardcoded">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,9 +74,9 @@
                     android:layout_height="24dp"
                     android:background="@drawable/ic_bg_btn_blue"
                     android:minWidth="48dp"
-                    android:text="关注"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:text="关注" />
             </LinearLayout>
 
             <View
@@ -97,7 +98,8 @@
                     android:layout_marginRight="4dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_label_recommend" />
+                    android:src="@mipmap/ic_label_recommend"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:id="@+id/iv_label_originate"
@@ -126,9 +128,9 @@
                     android:layout_marginBottom="8dp"
                     android:lineSpacingExtra="4dp"
                     android:maxLines="2"
-                    android:text="Webpack从零开始"
                     android:textColor="#111111"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    tools:text="Webpack从零开始" />
 
                 <include
                     android:id="@+id/lay_info_view_comment"
@@ -190,6 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:contentDescription="@null"
                 android:src="@drawable/selector_reward_btn"
                 android:visibility="gone" />
 
@@ -199,10 +202,10 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="8dp"
-                android:text="写得不错,打赏作者"
                 android:textColor="#111111"
                 android:textSize="15sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:text="写得不错,打赏作者" />
             <!--reward widgets end-->
 
             <net.oschina.app.improve.widget.DetailAboutView
@@ -211,11 +214,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/ques_detail_bg_color" />
 
-            <net.oschina.app.improve.comment.CommentsView
-                android:id="@+id/lay_detail_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/ques_detail_bg_color" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

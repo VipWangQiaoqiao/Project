@@ -1,5 +1,6 @@
 package net.oschina.app.improve.comment;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,15 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -31,15 +27,14 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
+import net.oschina.app.improve.comment.adapter.CommentAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.TweetTextView;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -47,6 +42,13 @@ import java.util.List;
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
+import static net.oschina.app.R.id.tv_back_label;
+
+/**
+ * Created by  fei
+ * on  16/11/17
+ * desc:详情评论列表ui
+ */
 public class CommentsActivity extends BaseBackActivity {
 
     private long mId;
@@ -61,9 +63,13 @@ public class CommentsActivity extends BaseBackActivity {
     RecyclerView mLayComments;
 
     @Bind(R.id.activity_comments)
-    CoordinatorLayout mCoorLayout;
+    CoordinatorLayout mCoordLayout;
+    @Bind(tv_back_label)
+    TextView mBack_label;
+    @Bind(R.id.tv_title)
+    TextView mTitle;
 
-    private Adapter mAdapter;
+    private CommentAdapter mCommentAdapter;
     private Comment reply;
     private CommentBar mDelegation;
     private View.OnClickListener onReplyBtnClickListener;
@@ -109,6 +115,7 @@ public class CommentsActivity extends BaseBackActivity {
             mDelegation.getBottomSheet().dismiss();
         }
     };
+    private TextView mCommentCount;
 
     public static void show(Context context, long id, int type) {
         Intent intent = new Intent(context, CommentsActivity.class);
@@ -132,21 +139,26 @@ public class CommentsActivity extends BaseBackActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
+
+
+        mBack_label.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        mCommentCount = (TextView) findViewById(R.id.tv_title);
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mLayComments.setLayoutManager(manager);
 
-        mAdapter = new Adapter(this);
-        mLayComments.setAdapter(mAdapter);
+        mCommentAdapter = new CommentAdapter(this, getImageLoader(), BaseRecyclerAdapter.ONLY_FOOTER);
+        mLayComments.setAdapter(mCommentAdapter);
 
-        mDelegation = CommentBar.delegation(this, mCoorLayout);
+        mDelegation = CommentBar.delegation(this, mCoordLayout);
         mDelegation.hideFav();
         mDelegation.hideShare();
-        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleSendComment(mType, mId, reply == null ? 0 : reply.getId(), reply == null ? 0 : reply.getAuthorId(), mDelegation.getBottomSheet().getCommentText());
-            }
-        });
 
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
@@ -175,6 +187,42 @@ public class CommentsActivity extends BaseBackActivity {
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+
+
+        mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
+            @Override
+            public void onRefreshing() {
+                getData(true, null);
+            }
+
+            @Override
+            public void onLoadMore() {
+                String token = null;
+                if (mPageBean != null)
+                    token = mPageBean.getNextPageToken();
+                getData(false, token);
+            }
+        });
+
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                //第一次请求初始化数据
+                getData(true, null);
+
+            }
+        });
+
+    }
+
+    Type getCommentType() {
+        return new TypeToken<ResultBean<PageBean<Comment>>>() {
+        }.getType();
+    }
+
     /**
      * 检查当前数据,并检查网络状况
      *
@@ -182,7 +230,7 @@ public class CommentsActivity extends BaseBackActivity {
      */
     private long requestCheck() {
         if (mId == 0) {
-            AppContext.showToast("数据加载中...");
+            AppContext.showToast(getResources().getString(R.string.state_loading_error));
             return 0;
         }
         if (!TDevice.hasInternet()) {
@@ -237,8 +285,8 @@ public class CommentsActivity extends BaseBackActivity {
         if (reply.getId() != mId) {
             if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
                 if (mInputDoubleEmpty) {
-                    mDelegation.setCommentHint("发表评论");
-                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.setCommentHint(getString(R.string.pub_comment_hint));
+                    mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.pub_comment_hint));
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -254,6 +302,7 @@ public class CommentsActivity extends BaseBackActivity {
      * @param messageId messageId
      * @return progressDialog
      */
+    @SuppressWarnings("deprecation")
     private ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
@@ -282,38 +331,11 @@ public class CommentsActivity extends BaseBackActivity {
     }
 
 
-    @Override
-    protected void initData() {
-        super.initData();
-        mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
-            @Override
-            public void onRefreshing() {
-                getData(true, null);
-            }
-
-            @Override
-            public void onLoadMore() {
-                String token = null;
-                if (mPageBean != null)
-                    token = mPageBean.getNextPageToken();
-                getData(false, token);
-            }
-        });
-
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                mRefreshLayout.onRefresh();
-            }
-        });
-    }
-
     private void getData(final boolean clearData, String token) {
-        OSChinaApi.getComments(mId, mType, "refer", token, new TextHttpResponseHandler() {
+        OSChinaApi.getComments(mId, mType, "refer,reply", 1, token, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
+                mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
             }
 
             @Override
@@ -322,23 +344,22 @@ public class CommentsActivity extends BaseBackActivity {
                 mRefreshLayout.onComplete();
             }
 
+            @SuppressLint("DefaultLocale")
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<PageBean<Comment>>>() {
-                    }.getType();
 
-                    ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, type);
-                    if (resultBean != null && resultBean.isSuccess()) {
-                        if (resultBean.getResult() != null
-                                && resultBean.getResult().getItems() != null
-                                && resultBean.getResult().getItems().size() > 0) {
-                            mPageBean = resultBean.getResult();
-                            handleData(mPageBean.getItems(), clearData);
-                            return;
-                        }
+                    ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, getCommentType());
+
+                    if (resultBean.isSuccess()) {
+                        mPageBean = resultBean.getResult();
+                        mTitle.setText(String.format("%d%s%s", mPageBean.getTotalResults(), getString(R.string.item_hint), getString(R.string.comment_title_hint)));
+
+                        handleData(mPageBean.getItems(), clearData);
                     }
-                    mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
+
+                    if (mPageBean.getItems().size() > 20)
+                        mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_MORE, false);
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseString, e);
@@ -348,13 +369,14 @@ public class CommentsActivity extends BaseBackActivity {
     }
 
     private void handleData(List<Comment> comments, boolean clearData) {
-        if (clearData)
-            mAdapter.clear();
 
-        mAdapter.setState(BaseRecyclerAdapter.STATE_LOADING, false);
-        mAdapter.addAll(comments);
-        mAdapter.notifyDataSetChanged();
+        if (clearData)
+            mCommentAdapter.clear();
+        mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOADING, false);
+
+        mCommentAdapter.addAll(comments);
     }
+
 
     public View.OnClickListener getReplyBtnClickListener() {
         if (onReplyBtnClickListener == null) {
@@ -371,85 +393,6 @@ public class CommentsActivity extends BaseBackActivity {
     }
 
 
-    private static class CommentHolder extends RecyclerView.ViewHolder {
-        private ImageView mAvatar;
-        private TextView mName;
-        private TextView mDate;
-        private TweetTextView mContent;
-        private LinearLayout mRefers;
-        private ImageView btnReply;
-
-        CommentHolder(View itemView) {
-            super(itemView);
-
-            mAvatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
-            mName = (TextView) itemView.findViewById(R.id.tv_name);
-            mDate = (TextView) itemView.findViewById(R.id.tv_pub_date);
-            btnReply = (ImageView) itemView.findViewById(R.id.btn_comment);
-
-            mContent = ((TweetTextView) itemView.findViewById(R.id.tv_content));
-            mRefers = ((LinearLayout) itemView.findViewById(R.id.lay_refer));
-        }
-
-        void setData(Comment comment, RequestManager imageLoader, View.OnClickListener l) {
-            if (comment.getAuthorPortrait() != null)
-                imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
-                        .into((mAvatar));
-            else
-                mAvatar.setImageResource(R.mipmap.widget_dface);
-
-            mName.setText(comment.getAuthor());
-            mDate.setText(comment.getPubDate());
-            CommentsUtil.formatHtml(mContent.getResources(), mContent, comment.getContent());
-
-            mRefers.removeAllViews();
-            if (comment.getRefer() != null) {
-                // 最多5层
-                View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), comment.getRefer(), 5);
-                mRefers.addView(view);
-            }
-            btnReply.setTag(comment);
-            btnReply.setOnClickListener(l);
-        }
-    }
-
-    private void onItemClick(Comment comment) {
-
-
-    }
-
-    private class Adapter extends BaseRecyclerAdapter<Comment> {
-
-        private CommentHolder commentHolder;
-
-        Adapter(Context context) {
-            super(context, ONLY_FOOTER);
-            mState = STATE_HIDE;
-            setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(int position, long itemId) {
-                    CommentsActivity.this.onItemClick(getItem(position));
-                }
-            });
-        }
-
-        @Override
-        protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View view = inflater.inflate(R.layout.lay_comment_item, parent, false);
-            return new CommentHolder(view);
-        }
-
-        @Override
-        protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
-            if (holder instanceof CommentHolder) {
-                commentHolder = (CommentHolder) holder;
-                RequestManager requestManager = getImageLoader();
-                if (requestManager != null)
-                    commentHolder.setData(item, requestManager, getReplyBtnClickListener());
-            }
-        }
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

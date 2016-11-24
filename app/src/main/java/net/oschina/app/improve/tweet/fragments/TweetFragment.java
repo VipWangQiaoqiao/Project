@@ -47,18 +47,18 @@ import cz.msebera.android.httpclient.Header;
  * on 2016/7/18.
  */
 public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
-    
-    public static final int CATALOG_NEW         = 0X0001;
-    public static final int CATALOG_HOT         = 0X0002;
-    public static final int CATALOG_MYSELF      = 0X0003;
-    public static final int CATALOG_FRIENDS     = 0X0004;
-    
-    public static final String CACHE_NEW_TWEET    = "cache_new_tweet";
-    public static final String CACHE_HOT_TWEET    = "cache_hot_tweet";
-    public static final String CACHE_USER_TWEET   = "cache_user_tweet";
-    public static final String CACHE_USER_FRIEND  = "cache_user_friend";
-    
-    public static final String BUNDLE_KEY_LOGIN_USER_ID   = "BUNDLE_KEY_LOGIN_USER_ID";
+
+    public static final int CATALOG_NEW = 0X0001;
+    public static final int CATALOG_HOT = 0X0002;
+    public static final int CATALOG_MYSELF = 0X0003;
+    public static final int CATALOG_FRIENDS = 0X0004;
+
+    public static final String CACHE_NEW_TWEET = "cache_new_tweet";
+    public static final String CACHE_HOT_TWEET = "cache_hot_tweet";
+    public static final String CACHE_USER_TWEET = "cache_user_tweet";
+    public static final String CACHE_USER_FRIEND = "cache_user_friend";
+
+    public static final String BUNDLE_KEY_LOGIN_USER_ID = "BUNDLE_KEY_LOGIN_USER_ID";
     public static final String BUNDLE_KEY_REQUEST_CATALOG = "BUNDLE_KEY_REQUEST_CATALOG";
 
     public int mReqCatalog;//请求类型
@@ -287,6 +287,11 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
         outState.putInt(BUNDLE_KEY_REQUEST_CATALOG, mReqCatalog);
         outState.putLong(BUNDLE_KEY_LOGIN_USER_ID, mLoginUserId);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     /**

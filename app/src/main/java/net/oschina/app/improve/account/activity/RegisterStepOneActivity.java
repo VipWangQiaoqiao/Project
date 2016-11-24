@@ -321,9 +321,11 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
         mLayBackBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        hideKeyBoard(getCurrentFocus().getWindowToken());
         mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 

@@ -3,6 +3,7 @@ package net.oschina.app.improve.comment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,6 @@ import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.app.AppOperator;
@@ -30,7 +30,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.util.TextUtils;
 
 /**
  * Created by JuQiu
@@ -165,7 +164,7 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
 
         if (comment.getRefer() != null) {
             // 最多5层
-            View view = CommentsUtil.getReferLayout(inflater, comment.getRefer(), 5);
+            View view = CommentsEXUtil.getReferLayout(inflater, comment.getRefer(), 5);
             lay.addView(view, lay.indexOfChild(content));
         }
 
@@ -181,7 +180,7 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
                 btn_comment.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onCommentClickListener.onClick(v, comment);
+                        //onCommentClickListener.onClick(v, comment);
                     }
                 });
             }
@@ -201,7 +200,7 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
     }
 
     void onItemClick(View view, CommentEX comment) {
-        QuestionAnswerDetailActivity.show(getContext(), comment, mId);
+        QuesAnswerDetailActivity.show(getContext(), comment, mId);
     }
 
     @Override

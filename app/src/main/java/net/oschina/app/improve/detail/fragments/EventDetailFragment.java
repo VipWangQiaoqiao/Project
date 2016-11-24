@@ -11,7 +11,7 @@ import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
-import net.oschina.app.improve.comment.CommentExsActivity;
+import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.contract.EventDetailContract;
 import net.oschina.app.improve.dialog.EventDetailApplyDialog;
 import net.oschina.app.util.UIHelper;
@@ -168,7 +168,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 }
                 break;
             case R.id.ll_comment:
-                CommentExsActivity.show(getActivity(),mOperator.getData().getId(),5);
+                CommentsActivity.show(getActivity(),mOperator.getData().getId(),5);
                 break;
         }
     }
