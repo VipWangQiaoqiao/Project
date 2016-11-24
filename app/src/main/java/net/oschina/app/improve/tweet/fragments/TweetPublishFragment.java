@@ -70,6 +70,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         this.mOperator = new TweetPublishOperator();
         this.mOperator.setDataView(this, getArguments() != null ?
                 getArguments().getString("defaultContent") : null);
+
         super.onAttach(context);
     }
 
@@ -201,7 +202,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void initData() {
         super.initData();
-        mOperator.loadXmlData();
+        // ArrayList<String> defaultImages = getArguments().getStringArrayList("defaultImage");
+        //setImages(CollectionUtil.toArray(defaultImages, String.class));
+        //mOperator.loadXmlData();
     }
 
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,

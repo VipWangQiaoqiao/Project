@@ -5,7 +5,6 @@ import android.support.v4.util.Pair;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -14,6 +13,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.Report;
+import net.oschina.app.bean.Tweet;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.team.bean.Team;
@@ -23,8 +23,11 @@ import org.kymjs.kjframe.utils.KJLoger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
+
+import static net.oschina.app.api.ApiHttpClient.post;
 
 public class OSChinaApi {
 
@@ -42,7 +45,7 @@ public class OSChinaApi {
         params.put("pwd", password);
         params.put("keep_login", 1);
         String loginurl = "action/api/login_validate";
-        ApiHttpClient.post(loginurl, params, handler);
+        post(loginurl, params, handler);
     }
 
     public static void getPostListByTag(String tag, int page,
@@ -79,7 +82,7 @@ public class OSChinaApi {
         params.put("tweetid", tweetId);
         params.put("uid", AccountHelper.getUserId());
         params.put("ownerOfTweet", authorId);
-        ApiHttpClient.post("action/api/tweet_like", params, handler);
+        post("action/api/tweet_like", params, handler);
     }
 
     public static void pubUnLikeTweet(int tweetId, int authorId,
@@ -88,7 +91,7 @@ public class OSChinaApi {
         params.put("tweetid", tweetId);
         params.put("uid", AccountHelper.getUserId());
         params.put("ownerOfTweet", authorId);
-        ApiHttpClient.post("action/api/tweet_unlike", params, handler);
+        post("action/api/tweet_unlike", params, handler);
     }
 
     public static void getActiveList(int uid, int catalog, int page,
@@ -179,6 +182,106 @@ public class OSChinaApi {
         ApiHttpClient.get("action/api/blogcomment_list", params, handler);
     }
 
+    public static void getChatMessageList(int friendId, int page, AsyncHttpResponseHandler
+            handler) {
+        RequestParams params = new RequestParams();
+        params.put("id", friendId);
+        params.put("pageIndex", page);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/message_detail", params, handler);
+    }
+
+    public static void getUserInformation(int uid, int hisuid, String hisname,
+                                          int pageIndex, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("hisuid", hisuid);
+        params.put("hisname", hisname);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/user_information", params, handler);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void getUserBlogList(int authoruid, final String authorname,
+                                       final int uid, final int pageIndex,
+                                       AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authoruid", authoruid);
+        params.put("authorname", URLEncoder.encode(authorname));
+        params.put("uid", uid);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/userblog_list", params, handler);
+    }
+
+    public static void updateRelation(long uid, long hisuid, int newrelation,
+                                      AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("hisuid", hisuid);
+        params.put("newrelation", newrelation);
+        post("action/api/user_updaterelation", params, handler);
+    }
+
+    public static void getMyInformation(int uid,
+                                        AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        ApiHttpClient.get("action/api/my_information", params, handler);
+    }
+
+    /**
+     * 获取新闻明细
+     *
+     * @param id      新闻的id
+     * @param handler
+     */
+    public static void getNewsDetail(int id, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams("id", id);
+        ApiHttpClient.get("action/api/news_detail", params, handler);
+    }
+
+    public static void getBlogDetail(int id, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams("id", id);
+        ApiHttpClient.get("action/api/blog_detail", params, handler);
+    }
+
+    /**
+     * 获取软件详情
+     *
+     * @param ident
+     * @param handler
+     */
+    public static void getSoftwareDetail(String ident,
+                                         AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams("ident",
+                ident);
+        ApiHttpClient.get("action/api/software_detail", params, handler);
+    }
+
+    /***
+     * 通过id获取软件详情
+     *
+     * @param id
+     * @param handler
+     */
+    public static void getSoftwareDetail(int id, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams("id",
+                id);
+        ApiHttpClient.get("action/api/software_detail", params, handler);
+    }
+
+    public static void getPostDetail(int id, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams("id", id);
+        ApiHttpClient.get("action/api/post_detail", params, handler);
+    }
+
+    public static void getTweetDetail(int id, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams("id", id);
+        ApiHttpClient.get("action/api/tweet_detail", params, handler);
+    }
+
     /**
      * 用户针对某个新闻，帖子，动弹，消息发表评论的接口，参数使用POST方式提交
      *
@@ -198,7 +301,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("content", content);
         params.put("isPostToMyZone", isPostToMyZone);
-        ApiHttpClient.post("action/api/comment_pub", params, handler);
+        post("action/api/comment_pub", params, handler);
     }
 
     public static void replyComment(int id, int catalog, int replyid,
@@ -211,7 +314,7 @@ public class OSChinaApi {
         params.put("content", content);
         params.put("replyid", replyid);
         params.put("authorid", authorid);
-        ApiHttpClient.post("action/api/comment_reply", params, handler);
+        post("action/api/comment_reply", params, handler);
     }
 
     public static void publicBlogComment(long blog, int uid, String content,
@@ -220,7 +323,7 @@ public class OSChinaApi {
         params.put("blog", blog);
         params.put("uid", uid);
         params.put("content", content);
-        ApiHttpClient.post("action/api/blogcomment_pub", params, handler);
+        post("action/api/blogcomment_pub", params, handler);
     }
 
     public static void replyBlogComment(long blog, long uid, String content,
@@ -232,7 +335,40 @@ public class OSChinaApi {
         params.put("content", content);
         params.put("reply_id", reply_id);
         params.put("objuid", objuid);
-        ApiHttpClient.post("action/api/blogcomment_pub", params, handler);
+        post("action/api/blogcomment_pub", params, handler);
+    }
+
+    public static void pubTweet(Tweet tweet, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", tweet.getAuthorid());
+        params.put("msg", tweet.getBody());
+
+        // Map<String, File> files = new HashMap<String, File>();
+        if (!TextUtils.isEmpty(tweet.getImageFilePath())) {
+            try {
+                params.put("img", new File(tweet.getImageFilePath()));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!TextUtils.isEmpty(tweet.getAudioPath())) {
+            try {
+                params.put("amr", new File(tweet.getAudioPath()));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        post("action/api/tweet_pub", params, handler);
+    }
+
+
+    public static void pubSoftWareTweet(Tweet tweet, int softid,
+                                        AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", tweet.getAuthorid());
+        params.put("msg", tweet.getBody());
+        params.put("project", softid);
+        post("action/api/software_tweet_pub", params, handler);
     }
 
     /**
@@ -245,7 +381,7 @@ public class OSChinaApi {
         if (!TextUtils.isEmpty(content)) {
             RequestParams params = new RequestParams();
             params.put("content", content);
-            ApiHttpClient.post("/action/apiv2/tweet", params, handler);
+            post("/action/apiv2/tweet", params, handler);
         }
     }
 
@@ -259,7 +395,7 @@ public class OSChinaApi {
         if (sourceId <= 0) return;
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
-        ApiHttpClient.post("/action/apiv2/tweet_delete", params, handler);
+        post("/action/apiv2/tweet_delete", params, handler);
 
     }
 
@@ -268,7 +404,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("tweetid", tweetid);
-        ApiHttpClient.post("action/api/tweet_delete", params, handler);
+        post("action/api/tweet_delete", params, handler);
     }
 
     public static void deleteComment(int id, int catalog, int replyid,
@@ -278,7 +414,16 @@ public class OSChinaApi {
         params.put("catalog", catalog);
         params.put("replyid", replyid);
         params.put("authorid", authorid);
-        ApiHttpClient.post("action/api/comment_delete", params, handler);
+        post("action/api/comment_delete", params, handler);
+    }
+
+    public static void deleteBlog(int uid, int authoruid, int id,
+                                  AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("authoruid", authoruid);
+        params.put("id", id);
+        post("action/api/userblog_delete", params, handler);
     }
 
     public static void deleteBlogComment(int uid, int blogid, int replyid,
@@ -290,7 +435,7 @@ public class OSChinaApi {
         params.put("replyid", replyid);
         params.put("authorid", authorid);
         params.put("owneruid", owneruid);
-        ApiHttpClient.post("action/api/blogcomment_delete", params, handler);
+        post("action/api/blogcomment_delete", params, handler);
     }
 
     /**
@@ -306,7 +451,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("objid", objid);
         params.put("type", type);
-        ApiHttpClient.post("action/api/favorite_add", params, handler);
+        post("action/api/favorite_add", params, handler);
     }
 
     public static void delFavorite(int uid, long objid, int type,
@@ -315,16 +460,85 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("objid", objid);
         params.put("type", type);
-        ApiHttpClient.post("action/api/favorite_delete", params, handler);
+        post("action/api/favorite_delete", params, handler);
     }
 
+    public static void getSearchList(String catalog, String content,
+                                     int pageIndex, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        params.put("content", content);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/search_list", params, handler);
+    }
+
+    public static void publicMessage(int uid, int receiver, String content,
+                                     AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("receiver", receiver);
+        params.put("content", content);
+
+        post("action/api/message_pub", params, handler);
+    }
+
+    public static void deleteMessage(int uid, int friendid,
+                                     AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("friendid", friendid);
+        post("action/api/message_delete", params, handler);
+    }
+
+    public static void forwardMessage(int uid, String receiverName,
+                                      String content, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("receiverName", receiverName);
+        params.put("content", content);
+        post("action/api/message_pub", params, handler);
+    }
+
+    public static void getMessageList(int uid, int pageIndex,
+                                      AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/message_list", params, handler);
+    }
+
+    public static void updatePortrait(int uid, File portrait,
+                                      AsyncHttpResponseHandler handler) throws
+            FileNotFoundException {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("portrait", portrait);
+        post("action/api/portrait_update", params, handler);
+    }
+
+    public static void getNotices(AsyncHttpResponseHandler handler, Context context) {
+        RequestParams params = new RequestParams();
+        params.put("uid", AccountHelper.getUserId());
+        ApiHttpClient.get("action/api/user_notice", params, handler);
+    }
 
     /**
      * 原创会签到
      *
-     * @param url     签到地址
+     * @param uid     uid
+     * @param type    type
      * @param handler 回调
      */
+    public static void clearNotice(int uid, int type,
+                                   AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("type", type);
+        post("action/api/notice_clear", params, handler);
+    }
+
     public static void singnIn(String url, AsyncHttpResponseHandler handler) {
         ApiHttpClient.getDirect(url, handler);
     }
@@ -354,7 +568,7 @@ public class OSChinaApi {
         if (sourceId <= 0) return;
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
-        ApiHttpClient.post("action/apiv2/tweet_like_reverse", params, handler);
+        post("action/apiv2/tweet_like_reverse", params, handler);
     }
 
     /**
@@ -405,7 +619,7 @@ public class OSChinaApi {
                 && !StringUtils.isEmpty(report.getOtherReason())) {
             params.put("memo", report.getOtherReason());
         }
-        ApiHttpClient.post("action/communityManage/report", params, handler);
+        post("action/communityManage/report", params, handler);
     }
 
     /**
@@ -447,7 +661,7 @@ public class OSChinaApi {
         if (!StringUtils.isEmpty(data.getRemark())) {
             params.put("misc_info", data.getRemark());
         }
-        ApiHttpClient.post("action/api/event_apply", params, handler);
+        post("action/api/event_apply", params, handler);
     }
 
     /**
@@ -613,8 +827,27 @@ public class OSChinaApi {
         params.put("pageIndex", 0);
         params.put("pageSize", "20");
         KJLoger.debug(teamid + "==getDiaryComment接口=" + diaryid);
-        ApiHttpClient
-                .get("action/api/team_reply_list_by_type", params, handler);
+        ApiHttpClient.get("action/api/team_reply_list_by_type", params, handler);
+    }
+
+    /**
+     * 周报评论（以后可改为全局评论）
+     *
+     * @param uid
+     * @param teamid
+     * @param diaryId
+     * @param content
+     * @param handler
+     */
+    public static void sendComment(int uid, int teamid, int diaryId,
+                                   String content, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("teamid", teamid);
+        params.put("type", "118");
+        params.put("tweetid", diaryId);
+        params.put("content", content);
+        post("action/api/team_tweet_reply", params, handler);
     }
 
     /***
@@ -631,6 +864,71 @@ public class OSChinaApi {
         String uuid = url.substring(url.lastIndexOf("=") + 1);
         params.put("uuid", uuid);
         ApiHttpClient.getDirect(url, handler);
+    }
+
+    /***
+     * 使用第三方登陆
+     *
+     * @param catalog    类别
+     * @param openIdInfo 第三方的info
+     * @param handler    handler
+     */
+    public static void open_login(String catalog, String openIdInfo, AsyncHttpResponseHandler
+            handler) {
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        params.put("openid_info", openIdInfo);
+        post("action/api/openid_login", params, handler);
+    }
+
+    /***
+     * 第三方登陆账号绑定
+     *
+     * @param catalog    类别（QQ、wechat）
+     * @param openIdInfo 第三方info
+     * @param userName   用户名
+     * @param pwd        密码
+     * @param handler    handler
+     */
+    public static void bind_openid(String catalog, String openIdInfo, String userName, String
+            pwd, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        params.put("openid_info", openIdInfo);
+        params.put("username", userName);
+        params.put("pwd", pwd);
+        post("action/api/openid_bind", params, handler);
+    }
+
+    /***
+     * 使用第三方账号注册
+     *
+     * @param catalog    类别（qq、wechat）
+     * @param openIdInfo 第三方info
+     * @param handler    handler
+     */
+    public static void openid_reg(String catalog, String openIdInfo, AsyncHttpResponseHandler
+            handler) {
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        params.put("openid_info", openIdInfo);
+        post("action/api/openid_reg", params, handler);
+    }
+
+    /**
+     * 意见反馈
+     */
+    public static void feedback(String content, File file, AsyncHttpResponseHandler handler, Context context) {
+        RequestParams params = new RequestParams();
+        if (file != null && file.exists())
+            try {
+                params.put("file", file);
+            } catch (FileNotFoundException e) {
+            }
+        params.put("uid", AccountHelper.getUserId());
+        params.put("receiver", "2609904");
+        params.put("content", content);
+        post("action/api/message_pub", params, handler);
     }
 
     public static final int CATALOG_BANNER_NEWS = 1; // 资讯Banner
@@ -864,16 +1162,17 @@ public class OSChinaApi {
      * @param id      评论Id
      * @param handler AsyncHttpResponseHandler
      */
-    public static void getComment(long id, long aid, int type, TextHttpResponseHandler handler) {
+    public static void getCommentDetail(long id, long aid, int type, TextHttpResponseHandler handler) {
         if (id <= 0) return;
         RequestParams params = new RequestParams();
         params.put("id", id);
         params.put("authorId", aid);
         params.put("type", type);
-        ApiHttpClient.get("action/apiv2/comment", params, handler);
+        ApiHttpClient.get("action/apiv2/comment_detail", params, handler);
     }
 
-    public static final int COMMENT_SOFT = 1; // 软件推荐-不支持
+
+    public static final int COMMENT_SOFT = 1; // 软件推荐-不支持(默认软件评论其实是动弹)
     public static final int COMMENT_QUESTION = 2; // 讨论区帖子
     public static final int COMMENT_BLOG = 3; // 博客
     public static final int COMMENT_TRANSLATION = 4; // 翻译文章
@@ -890,6 +1189,7 @@ public class OSChinaApi {
      * @param pageToken 请求上下页数据令牌
      * @param handler   AsyncHttpResponseHandler
      */
+    @Deprecated
     public static void getComments(long sourceId, int type, String parts, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
@@ -901,6 +1201,33 @@ public class OSChinaApi {
             params.put("pageToken", pageToken);
         }
         ApiHttpClient.get("action/apiv2/comment", params, handler);
+    }
+
+
+    /**
+     * 请求评论列表(适用于所有的评论,但不包括软件评论列表,软件评论列表实际为动弹)
+     *
+     * @param sourceId  sourceId  该sourceId为资讯、博客、问答等文章的Id
+     * @param type      type    问答类型  {@link #COMMENT_SOFT, #COMMENT_QUESTION, #COMMENT_BLOG},
+     *                  {@link #COMMENT_TRANSLATION, #COMMENT_EVENT, #COMMENT_NEWS}
+     * @param parts     parts  请求的数据节点 parts="refer,reply"
+     * @param order     order  请求的排序方式 1.最新 2.热门
+     * @param pageToken pageToken   请求上下页数据令牌
+     * @param handler   handler
+     */
+    public static void getComments(long sourceId, int type, String parts, int order, String pageToken, TextHttpResponseHandler handler) {
+        if (sourceId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("type", type);
+        if (!TextUtils.isEmpty(parts)) {
+            params.put("parts", parts);
+        }
+        params.put("order", order);
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+        ApiHttpClient.get("action/apiv2/comment_list", params, handler);
     }
 
     /**
@@ -926,7 +1253,7 @@ public class OSChinaApi {
             params.put("replyId", replyId);
         if (oid > 0)
             params.put("reAuthorId", oid);
-        ApiHttpClient.post("action/apiv2/comment_pub", params, handler);
+        post("action/apiv2/comment_pub", params, handler);
     }
 
 
@@ -988,6 +1315,26 @@ public class OSChinaApi {
     }
 
     /**
+     * 对评论进行顶操作(默认只有问答可以顶/踩,其余详情评论可以顶或者取消顶)
+     *
+     * @param sourceId  sourceId
+     * @param commentId commentId
+     * @param voteState voteState
+     * @param handler   handler
+     */
+    public static void voteComment(long sourceId, long commentId, int voteState, TextHttpResponseHandler handler) {
+
+        if (sourceId <= 0 || commentId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("commentId", commentId);
+        params.put("voteOpt", voteState);
+
+        post("action/apiv2/comment_vote_reverse", params, handler);
+
+    }
+
+    /**
      * 问答的回答, 顶\踩
      *
      * @param sid     source id 问答的id
@@ -1000,7 +1347,18 @@ public class OSChinaApi {
         params.put("sourceId", sid);
         params.put("commentId", cid);
         params.put("voteOpt", opt);
-        ApiHttpClient.post("action/apiv2/question_vote", params, handler);
+        post("action/apiv2/question_vote", params, handler);
+    }
+
+    /**
+     * 对某一条评论进行投票 顶/踩
+     */
+    public static void commentVote(long sourceId, long commentId, int voteOpt, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("commentId", commentId);
+        params.put("voteOpt", voteOpt);
+        post("action/apiv2/comment_vote_reverse", params, handler);
     }
 
     /**
@@ -1022,7 +1380,7 @@ public class OSChinaApi {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ApiHttpClient.post("action/apiv2/resource_image", params, handler);
+        post("action/apiv2/resource_image", params, handler);
     }
 
     /**
@@ -1049,7 +1407,7 @@ public class OSChinaApi {
             params.put("aboutType", about.getType());
             params.put("aboutImage", about.getImage());
         }
-        ApiHttpClient.post("action/apiv2/tweet", params, handler);
+        post("action/apiv2/tweet", params, handler);
     }
 
     /**
@@ -1151,7 +1509,7 @@ public class OSChinaApi {
         params.put("sourceId", sourceId);
         params.put("content", content);
         if (replyId > 0) params.put("replyId", replyId);
-        ApiHttpClient.post("action/apiv2/tweet_comment", params, handler);
+        post("action/apiv2/tweet_comment", params, handler);
     }
 
     /**
@@ -1231,7 +1589,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("authorId", authorId);
         params.put("content", content);
-        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
+        post("action/apiv2/messages_pub", params, handler);
     }
 
     public static void pubMessage(long authorId, File content, TextHttpResponseHandler handler) {
@@ -1242,7 +1600,7 @@ public class OSChinaApi {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
+        post("action/apiv2/messages_pub", params, handler);
     }
 
     /**
@@ -1264,7 +1622,7 @@ public class OSChinaApi {
                 e.printStackTrace();
             }
         }
-        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
+        post("action/apiv2/messages_pub", params, handler);
     }
 
     /**
@@ -1355,7 +1713,7 @@ public class OSChinaApi {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ApiHttpClient.post("action/apiv2/user_edit_portrait", params, handler);
+        post("action/apiv2/user_edit_portrait", params, handler);
 
     }
 
@@ -1419,7 +1777,7 @@ public class OSChinaApi {
         params.put("timestamp", timestamp);
         params.put("appToken", appToken);
         params.put("signature", signature);
-        ApiHttpClient.post("action/apiv2/shake_present", params, handler);
+        post("action/apiv2/shake_present", params, handler);
     }
 
     /**
@@ -1468,18 +1826,15 @@ public class OSChinaApi {
         for (Pair<String, String> pair : pairs) {
             params.put(pair.first, pair.second);
         }
-        ApiHttpClient.getHttpClient().addHeader("Host", "121.41.10.133");
-        ApiHttpClient.getHttpClient().post("http://121.41.10.133/action/apiv2/blog_reward", params, handler);
+        post("action/apiv2/blog_reward", params, handler);
     }
 
     public static void reward(Map<String, String> pairs, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams(pairs);
         Log.e("oschina", "params: " + params.toString());
 
-        AsyncHttpClient client = new AsyncHttpClient();
-
         Log.e("oschina", "post request");
-        client.post("http://121.41.10.133/action/apiv2/reward_order", params, handler);
+        post("action/apiv2/reward_order", params, handler);
     }
 
     public static void checkUpdate(TextHttpResponseHandler handler) {
@@ -1514,7 +1869,7 @@ public class OSChinaApi {
         params.put("catalog", catalog);
         params.put("info", openInfo);
 
-        ApiHttpClient.post("action/apiv2/account_open_login", params, handler);
+        post("action/apiv2/account_open_login", params, handler);
     }
 
     /**
@@ -1546,7 +1901,7 @@ public class OSChinaApi {
         params.put("account", username);
         params.put("password", pwd);
 
-        ApiHttpClient.post("action/apiv2/account_login", params, handler);
+        post("action/apiv2/account_login", params, handler);
 
     }
 
@@ -1568,8 +1923,7 @@ public class OSChinaApi {
         params.put("phone", phone);
         params.put("intent", intent);
 
-        ApiHttpClient.post("action/apiv2/phone_send_code", params, handler);
-
+        post("action/apiv2/phone_send_code", params, handler);
     }
 
 
@@ -1586,7 +1940,7 @@ public class OSChinaApi {
         params.put("phone", phoneNumber);
         params.put("code", smsCode);
 
-        ApiHttpClient.post("action/apiv2/phone_validate", params, handler);
+        post("action/apiv2/phone_validate", params, handler);
     }
 
 
@@ -1608,8 +1962,7 @@ public class OSChinaApi {
         params.put("gender", gender);
         params.put("phoneToken", phoneToken);
 
-        ApiHttpClient.post("action/apiv2/account_register", params, handler);
-
+        post("action/apiv2/account_register", params, handler);
     }
 
     /**
@@ -1625,8 +1978,7 @@ public class OSChinaApi {
         params.put("password", password);
         params.put("phoneToken", phoneToken);
 
-        ApiHttpClient.post("action/apiv2/account_password_forgot", params, handler);
-
+        post("action/apiv2/account_password_forgot", params, handler);
     }
 
     /**

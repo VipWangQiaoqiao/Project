@@ -44,7 +44,6 @@ import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.open.constants.OpenConstant;
 import net.oschina.open.factory.OpenBuilder;
@@ -255,11 +254,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             public void afterTextChanged(Editable s) {
                 String username = s.toString().trim();
                 if (username.length() > 0) {
-                    if (AssimilateUtils.machPhoneNum(username) || AssimilateUtils.machEmail(username)) {
-                        mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
-                    } else {
-                        mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
-                    }
+                    mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
                     mIvLoginUsernameDel.setVisibility(View.VISIBLE);
                 } else {
                     mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
@@ -267,7 +262,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 }
 
                 String pwd = mEtLoginPwd.getText().toString().trim();
-                if ((AssimilateUtils.machPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
+                if (!TextUtils.isEmpty(pwd)) {
                     mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit);
                     mBtLoginSubmit.setTextColor(getResources().getColor(R.color.white));
                 } else {
@@ -302,8 +297,11 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 }
 
                 String username = mEtLoginUsername.getText().toString().trim();
+                if (TextUtils.isEmpty(username)) {
+                    showToastForKeyBord(R.string.message_username_null);
+                }
                 String pwd = mEtLoginPwd.getText().toString().trim();
-                if ((AssimilateUtils.machPhoneNum(username) || AssimilateUtils.machEmail(username)) && !TextUtils.isEmpty(pwd)) {
+                if (!TextUtils.isEmpty(pwd)) {
                     mBtLoginSubmit.setBackgroundResource(R.drawable.bg_login_submit);
                     mBtLoginSubmit.setTextColor(getResources().getColor(R.color.white));
                 } else {
@@ -353,9 +351,11 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         mLayBackBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        hideKeyBoard(getCurrentFocus().getWindowToken());
         mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 
@@ -632,14 +632,8 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         String tempUsername = mEtLoginUsername.getText().toString().trim();
         String tempPwd = mEtLoginPwd.getText().toString().trim();
 
-        if (TextUtils.isEmpty(tempUsername) || TextUtils.isEmpty(tempPwd)) {
-            return;
-        }
 
-        boolean machPhoneNum = AssimilateUtils.machPhoneNum(tempUsername);
-        boolean machEmail = AssimilateUtils.machEmail(tempUsername);
-
-        if (machPhoneNum || machEmail) {
+        if (!TextUtils.isEmpty(tempPwd) && !TextUtils.isEmpty(tempUsername)) {
             //登录成功,请求数据进入用户个人中心页面
 
             if (TDevice.hasInternet()) {

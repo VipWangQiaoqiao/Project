@@ -3,7 +3,6 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;

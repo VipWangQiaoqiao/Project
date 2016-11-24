@@ -127,7 +127,7 @@
                         android:padding="@dimen/space_4"
                         android:scaleType="fitCenter"
                         android:transitionName="transition_like"
-                        android:src="@mipmap/ic_thumbup_normal"
+                        android:src="@mipmap/ic_thumb_normal"
                         tools:ignore="RtlHardcoded" />
 
                     <TextView

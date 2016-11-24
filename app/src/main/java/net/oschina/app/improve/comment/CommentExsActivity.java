@@ -373,7 +373,7 @@ public class CommentExsActivity extends BaseBackActivity {
             mRefers.removeAllViews();
             if (comment.getRefer() != null) {
                 // 最多5层
-                View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), comment.getRefer(), 5);
+                View view = CommentsEXUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), comment.getRefer(), 5);
                 mRefers.addView(view);
             }
 
@@ -423,7 +423,7 @@ public class CommentExsActivity extends BaseBackActivity {
     }
 
     private void onItemClick(CommentEX comment) {
-        QuestionAnswerDetailActivity.show(this, comment, mId);
+        QuesAnswerDetailActivity.show(this, comment, mId);
     }
 
     @Override

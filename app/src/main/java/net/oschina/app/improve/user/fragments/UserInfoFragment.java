@@ -516,16 +516,16 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     getString(R.string.action_select),
                     getResources().getStringArray(R.array.avatar_option), "取消",
                     new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (i == 0) {
-                        handleSelectPicture();
-                    } else {
-                        if (mUserInfo == null) return;
-                        UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
-                    }
-                }
-            }).show();
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (i == 0) {
+                                handleSelectPicture();
+                            } else {
+                                if (mUserInfo == null) return;
+                                UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
+                            }
+                        }
+                    }).show();
         }
     }
 
