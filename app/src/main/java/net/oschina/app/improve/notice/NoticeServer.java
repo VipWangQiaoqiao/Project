@@ -12,7 +12,6 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 
 import com.google.gson.Gson;
@@ -20,7 +19,6 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.BuildConfig;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -113,7 +111,7 @@ public class NoticeServer extends Service {
     private final static int ALARM_INTERVAL_MIN = 0;
     private final static int ALARM_INTERVAL_MAX = 15;
 
-    private final static int ALARM_INTERVAL_MIN_SECOND = 20;
+    private final static int ALARM_INTERVAL_MIN_SECOND = 15;
     private final static int ALARM_INTERVAL_MAX_SECOND = 15 * 60;
     // The count 0~15, 20s->15*60s
     private static int mAlarmCount = ALARM_INTERVAL_MIN;
@@ -334,7 +332,6 @@ public class NoticeServer extends Service {
     }
 
     static void log(String str) {
-        if (BuildConfig.DEBUG)
-            TLog.d(TAG, str);
+        TLog.d(TAG, str);
     }
 }

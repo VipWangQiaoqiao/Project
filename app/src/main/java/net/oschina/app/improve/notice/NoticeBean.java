@@ -1,8 +1,8 @@
 package net.oschina.app.improve.notice;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.v4.content.SharedPreferencesCompat;
+
+import net.oschina.common.helper.SharedPreferencesHelper;
 
 import java.io.Serializable;
 
@@ -22,7 +22,7 @@ public class NoticeBean implements Serializable {
         return mention;
     }
 
-    public void setMention(int mention) {
+    void setMention(int mention) {
         this.mention = mention;
     }
 
@@ -30,7 +30,7 @@ public class NoticeBean implements Serializable {
         return letter;
     }
 
-    public void setLetter(int letter) {
+    void setLetter(int letter) {
         this.letter = letter;
     }
 
@@ -38,7 +38,7 @@ public class NoticeBean implements Serializable {
         return review;
     }
 
-    public void setReview(int review) {
+    void setReview(int review) {
         this.review = review;
     }
 
@@ -46,7 +46,7 @@ public class NoticeBean implements Serializable {
         return fans;
     }
 
-    public void setFans(int fans) {
+    void setFans(int fans) {
         this.fans = fans;
     }
 
@@ -54,7 +54,7 @@ public class NoticeBean implements Serializable {
         return like;
     }
 
-    public void setLike(int like) {
+    void setLike(int like) {
         this.like = 0;
     }
 
@@ -86,29 +86,20 @@ public class NoticeBean implements Serializable {
         this.letter += bean.letter;
         this.review += bean.review;
         this.fans += bean.fans;
-        this.like += bean.like;
+        // 暂不累加点赞数据
+        //this.like += bean.like;
         return this;
     }
 
     NoticeBean save(Context context) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(NoticeBean.class.getName(), Context.MODE_PRIVATE).edit();
-        editor.putInt("mention", mention);
-        editor.putInt("letter", letter);
-        editor.putInt("review", review);
-        editor.putInt("fans", fans);
-        editor.putInt("like", like);
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+        SharedPreferencesHelper.save(context, this);
         return this;
     }
 
     static NoticeBean getInstance(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(NoticeBean.class.getName(), Context.MODE_PRIVATE);
-        NoticeBean bean = new NoticeBean();
-        bean.mention = preferences.getInt("mention", 0);
-        bean.letter = preferences.getInt("letter", 0);
-        bean.review = preferences.getInt("review", 0);
-        bean.fans = preferences.getInt("fans", 0);
-        bean.like = preferences.getInt("like", 0);
+        NoticeBean bean = SharedPreferencesHelper.load(context, NoticeBean.class);
+        if (bean == null)
+            bean = new NoticeBean();
         return bean;
     }
 }
