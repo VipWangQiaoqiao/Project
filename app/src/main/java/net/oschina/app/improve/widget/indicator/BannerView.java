@@ -185,6 +185,7 @@ public class BannerView extends FrameLayout implements View.OnClickListener {
             }
         }
         mOffset = 0.0f;
+        mAlpha = 0.0f;
     }
 
     private void selected(int count) {
@@ -208,6 +209,8 @@ public class BannerView extends FrameLayout implements View.OnClickListener {
         //curView.setAlpha(0);
         //hideAlphaAnimation(curView,0.5f);
         notifyViewStateChanged(OnViewChangeListener.STATE_IDLE);
+        mOffset = 0.0f;
+        mAlpha = 0.0f;
     }
 
     private void notifySelected() {
