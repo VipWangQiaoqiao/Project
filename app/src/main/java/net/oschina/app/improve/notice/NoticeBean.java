@@ -22,7 +22,7 @@ public class NoticeBean implements Serializable {
         return mention;
     }
 
-    public void setMention(int mention) {
+    void setMention(int mention) {
         this.mention = mention;
     }
 
@@ -30,7 +30,7 @@ public class NoticeBean implements Serializable {
         return letter;
     }
 
-    public void setLetter(int letter) {
+    void setLetter(int letter) {
         this.letter = letter;
     }
 
@@ -38,7 +38,7 @@ public class NoticeBean implements Serializable {
         return review;
     }
 
-    public void setReview(int review) {
+    void setReview(int review) {
         this.review = review;
     }
 
@@ -46,7 +46,7 @@ public class NoticeBean implements Serializable {
         return fans;
     }
 
-    public void setFans(int fans) {
+    void setFans(int fans) {
         this.fans = fans;
     }
 
@@ -54,7 +54,7 @@ public class NoticeBean implements Serializable {
         return like;
     }
 
-    public void setLike(int like) {
+    void setLike(int like) {
         this.like = 0;
     }
 
@@ -86,7 +86,8 @@ public class NoticeBean implements Serializable {
         this.letter += bean.letter;
         this.review += bean.review;
         this.fans += bean.fans;
-        this.like += bean.like;
+        // 暂不累加点赞数据
+        //this.like += bean.like;
         return this;
     }
 
