@@ -27,13 +27,16 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     private final static String SHARE_FILE_NAME = TweetPublishFragment.class.getName();
     private final static String SHARE_VALUES_CONTENT = "content";
     private final static String SHARE_VALUES_IMAGES = "images";
+    private final static String DEFAULT_PRE = "default";
     private TweetPublishContract.View mView;
     private String mDefaultContent;
+    private String[] mDefaultImages;
 
     @Override
-    public void setDataView(TweetPublishContract.View view, String defaultContent) {
+    public void setDataView(TweetPublishContract.View view, String defaultContent, String[] defaultImages) {
         mView = view;
         mDefaultContent = defaultContent;
+        mDefaultImages = defaultImages;
     }
 
     @Override
@@ -81,7 +84,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
 
     @Override
     public void loadXmlData() {
-        if (TextUtils.isEmpty(mDefaultContent)) {
+        if (isUseXmlCache()) {
             final Context context = mView.getContext();
             SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
             String content = sharedPreferences.getString(SHARE_VALUES_CONTENT, null);
@@ -91,10 +94,12 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
             }
             if (set != null && set.size() > 0) {
                 mView.setImages(CollectionUtil.toArray(set, String.class));
-
             }
         } else {
-            mView.setContent(mDefaultContent);
+            if (!TextUtils.isEmpty(mDefaultContent))
+                mView.setContent(mDefaultContent);
+            if (mDefaultImages != null && mDefaultImages.length > 0)
+                mView.setImages(mDefaultImages);
         }
     }
 
@@ -106,6 +111,13 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
             outState.putString(SHARE_VALUES_CONTENT, content);
         if (paths != null && paths.length > 0)
             outState.putStringArray(SHARE_VALUES_IMAGES, paths);
+        // save default
+        if (mDefaultContent != null) {
+            outState.putString(DEFAULT_PRE + SHARE_VALUES_CONTENT, mDefaultContent);
+        }
+        if (mDefaultImages != null && mDefaultImages.length > 0) {
+            outState.putStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES, mDefaultImages);
+        }
     }
 
     @Override
@@ -118,10 +130,13 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         if (images != null && images.length > 0) {
             mView.setImages(images);
         }
+        // Read default
+        mDefaultContent = savedInstanceState.getString(DEFAULT_PRE + SHARE_VALUES_CONTENT, null);
+        mDefaultImages = savedInstanceState.getStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES);
     }
 
     private void clearAndFinish(Context context) {
-        if (TextUtils.isEmpty(mDefaultContent)) {
+        if (isUseXmlCache()) {
             SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(SHARE_VALUES_CONTENT, null);
@@ -133,7 +148,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
 
 
     private void saveXmlData() {
-        if (TextUtils.isEmpty(mDefaultContent)) {
+        if (isUseXmlCache()) {
             final Context context = mView.getContext();
             final String content = mView.getContent();
             final String[] paths = mView.getImages();
@@ -149,5 +164,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         }
     }
 
-
+    private boolean isUseXmlCache() {
+        return TextUtils.isEmpty(mDefaultContent) && (mDefaultImages == null || mDefaultImages.length == 0);
+    }
 }
