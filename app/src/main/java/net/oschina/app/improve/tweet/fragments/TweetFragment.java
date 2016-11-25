@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
@@ -116,9 +118,9 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
                 if (mReceiver == null) {
                     mReceiver = new LoginReceiver();
                     IntentFilter filter = new IntentFilter();
-                    filter.addAction(Constants.INTENT_ACTION_USER_CHANGE);
+                    filter.addAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
                     filter.addAction(Constants.INTENT_ACTION_LOGOUT);
-                    getActivity().registerReceiver(mReceiver, filter);
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(mReceiver, filter);
                 }
                 break;
         }
@@ -300,7 +302,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @Override
     public void onDestroy() {
         if (mReceiver != null) {
-            getActivity().unregisterReceiver(mReceiver);
+            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mReceiver);
         }
         super.onDestroy();
     }
