@@ -233,12 +233,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     @Override
     public void toSendCommentOk(Comment comment) {
-        (Toast.makeText(getContext(), getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
-        mDelegation.getCommentText().setHint(getString(R.string.add_comment_hint));
-        mDelegation.getBottomSheet().getEditText().setText("");
-        mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.add_comment_hint));
-        //mComment.addComment(comment, getImgLoader(), this);
-        mDelegation.getBottomSheet().dismiss();
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
             NewsDetail detail = mOperator.getData();
             if (detail == null) return;
@@ -251,6 +245,11 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             about.setCommentCount(detail.getCommentCount());
             TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
         }
+        Toast.makeText(getContext(), getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
+        mDelegation.getCommentText().setHint(getString(R.string.add_comment_hint));
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.add_comment_hint));
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override

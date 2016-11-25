@@ -345,13 +345,6 @@ public class BlogDetailFragment
 
     @Override
     public void toSendCommentOk(Comment comment) {
-
-        (Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
-        mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
-        mDelegation.getBottomSheet().getEditText().setText("");
-        mDelegation.getBottomSheet().getEditText().setHint(getResources().getString(R.string.add_comment_hint));
-        // mComments.addComment(comment, getImgLoader(), this);
-        mDelegation.getBottomSheet().dismiss();
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
             BlogDetail detail = mOperator.getData();
             if (detail == null) return;
@@ -364,6 +357,12 @@ public class BlogDetailFragment
             about.setViewCount(detail.getViewCount());
             TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
         }
+        Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
+        mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint(getResources().getString(R.string.add_comment_hint));
+        // mComments.addComment(comment, getImgLoader(), this);
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override

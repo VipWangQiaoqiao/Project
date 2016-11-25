@@ -188,6 +188,7 @@ public class CommentsActivity extends BaseBackActivity {
 
         mCommentAdapter = new CommentAdapter(this, getImageLoader(), BaseRecyclerAdapter.ONLY_FOOTER);
         mCommentAdapter.setSourceId(mId);
+        mCommentAdapter.setCommentType(mType);
         mCommentAdapter.setDelegation(mDelegation);
         mLayComments.setAdapter(mCommentAdapter);
         mCommentAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {

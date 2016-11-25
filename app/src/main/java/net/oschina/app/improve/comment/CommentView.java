@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.bean.comment.Vote;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.CollectionUtil;
 import net.oschina.app.improve.utils.DialogHelper;
@@ -59,6 +61,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     private ProgressDialog mDialog;
     private View mLabelLine;
     private View mLabelBottomLine;
+    private CommentBar commentBar;
 
     public CommentView(Context context) {
         super(context);
@@ -91,6 +94,10 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         if (!TextUtils.isEmpty(title)) {
             mTitle.setText(title);
         }
+    }
+
+    public void setCommentBar(CommentBar commentBar) {
+        this.commentBar = commentBar;
     }
 
     /**
@@ -204,80 +211,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         @SuppressLint("InflateParams") final ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
 
         ImageView ivAvatar = (ImageView) lay.findViewById(R.id.iv_avatar);
-        final TextView tvVoteCount = (TextView) lay.findViewById(R.id.tv_vote_count);
-        tvVoteCount.setText(String.valueOf(comment.getVote()));
-        final ImageView ivVoteStatus = (ImageView) lay.findViewById(R.id.btn_vote);
-        ivVoteStatus.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                handVote();
-            }
-
-            private void handVote() {
-
-                if (!AccountHelper.isLogin()) {
-                    LoginActivity.show(getContext());
-                    return;
-                }
-                if (!TDevice.hasInternet()) {
-                    AppContext.showToast(getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                OSChinaApi.voteComment(mId, comment.getId(), ivVoteStatus.getTag() != null ? 0 : 1, new TextHttpResponseHandler() {
-
-                    @Override
-                    public void onStart() {
-                        super.onStart();
-                        showWaitDialog(R.string.progress_submit);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        requestFailureHint(throwable);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                        ResultBean<Vote> resultBean = AppOperator.createGson().fromJson(responseString, getVoteType());
-                        if (resultBean.isSuccess()) {
-                            Vote vote = resultBean.getResult();
-                            if (vote != null) {
-                                if (vote.getVoteState() == 1) {
-                                    comment.setVoteState(1);
-                                    ivVoteStatus.setTag(true);
-                                    ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
-                                } else if (vote.getVoteState() == 0) {
-                                    comment.setVoteState(0);
-                                    ivVoteStatus.setTag(null);
-                                    ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
-                                }
-                                long voteVoteCount = vote.getVote();
-                                comment.setVote(voteVoteCount);
-                                tvVoteCount.setText(String.valueOf(voteVoteCount));
-                            }
-                        } else {
-                            AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
-                        }
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
-                        hideWaitDialog();
-                    }
-                });
-            }
-        });
-
-        if (comment.getVoteState() == 1) {
-            ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
-            ivVoteStatus.setTag(true);
-        } else if (comment.getVoteState() == 0) {
-            ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
-            ivVoteStatus.setTag(null);
-        }
-
         imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
                 .into(ivAvatar);
         ivAvatar.setOnClickListener(new OnClickListener() {
@@ -286,6 +219,108 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                 OtherUserHomeActivity.show(getContext(), comment.getAuthor().getId());
             }
         });
+        final TextView tvVoteCount = (TextView) lay.findViewById(R.id.tv_vote_count);
+        tvVoteCount.setText(String.valueOf(comment.getVote()));
+        final ImageView ivVoteStatus = (ImageView) lay.findViewById(R.id.btn_vote);
+
+        Log.e(TAG, "addComment: ---->" + mType);
+        final ImageView ivComment = (ImageView) lay.findViewById(R.id.btn_comment);
+        ivComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "onClick: ----->这是准备评论");
+                commentBar.getBottomSheet().show(String.format("%s %s",
+                        ivComment.getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+            }
+        });
+
+        if (mType == OSChinaApi.COMMENT_QUESTION || mType == OSChinaApi.COMMENT_EVENT) {
+            tvVoteCount.setVisibility(View.GONE);
+            ivVoteStatus.setVisibility(View.GONE);
+            if (comment.isBest()) {
+                ivComment.setEnabled(false);
+                ivComment.setImageResource(R.mipmap.label_best_answer);
+            } else {
+                ivComment.setEnabled(true);
+                ivComment.setImageResource(R.mipmap.ic_comment_30);
+            }
+        } else {
+            ivComment.setEnabled(true);
+            tvVoteCount.setText(String.valueOf(comment.getVote()));
+            tvVoteCount.setVisibility(View.VISIBLE);
+            ivVoteStatus.setVisibility(View.VISIBLE);
+
+            if (comment.getVoteState() == 1) {
+                ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
+                ivVoteStatus.setTag(true);
+            } else if (comment.getVoteState() == 0) {
+                ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
+                ivVoteStatus.setTag(null);
+            }
+
+            ivVoteStatus.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    handVote();
+                }
+
+                private void handVote() {
+
+                    if (!AccountHelper.isLogin()) {
+                        LoginActivity.show(getContext());
+                        return;
+                    }
+                    if (!TDevice.hasInternet()) {
+                        AppContext.showToast(getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
+                        return;
+                    }
+                    OSChinaApi.voteComment(mType, comment.getId(), comment.getAuthor().getId(), ivVoteStatus.getTag() != null ? 0 : 1, new TextHttpResponseHandler() {
+
+                        @Override
+                        public void onStart() {
+                            super.onStart();
+                            showWaitDialog(R.string.progress_submit);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            requestFailureHint(throwable);
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                            ResultBean<Vote> resultBean = AppOperator.createGson().fromJson(responseString, getVoteType());
+                            if (resultBean.isSuccess()) {
+                                Vote vote = resultBean.getResult();
+                                if (vote != null) {
+                                    if (vote.getVoteState() == 1) {
+                                        comment.setVoteState(1);
+                                        ivVoteStatus.setTag(true);
+                                        ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
+                                    } else if (vote.getVoteState() == 0) {
+                                        comment.setVoteState(0);
+                                        ivVoteStatus.setTag(null);
+                                        ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
+                                    }
+                                    long voteVoteCount = vote.getVote();
+                                    comment.setVote(voteVoteCount);
+                                    tvVoteCount.setText(String.valueOf(voteVoteCount));
+                                }
+                            } else {
+                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                            }
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                            hideWaitDialog();
+                        }
+                    });
+                }
+            });
+        }
 
         ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor().getName());
 
