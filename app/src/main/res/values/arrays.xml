@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 
-    <string-array name="general_viewpage_arrays">
-        <item>资讯</item>
-        <item>博客</item>
-        <item>问答</item>
-        <item>活动</item>
-    </string-array>
-
     <string-array name="tweets_viewpage_arrays">
         <item>好友动弹</item>
         <item>推荐话题</item>
@@ -58,18 +51,5 @@
     </string-array>
 
     <!--created by fei 20160524-->
-    <array name="ques_item">
-        <item>提问</item>
-        <item>分享</item>
-        <item>综合</item>
-        <item>职业</item>
-        <item>站务</item>
-    </array>
-
-    <array name="blog_item">
-        <item>最新推荐</item>
-        <item>本周热门</item>
-        <item>最新博客</item>
-    </array>
 
 </resources>
