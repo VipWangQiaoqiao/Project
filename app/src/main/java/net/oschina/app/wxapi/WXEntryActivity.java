@@ -172,7 +172,6 @@ public class WXEntryActivity extends Activity {
                                 finish();
                                 Intent intent = new Intent();
                                 intent.setAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
-                                sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
                                 LocalBroadcastManager.getInstance(WXEntryActivity.this).sendBroadcast(intent);
                             } else {
                                 AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);

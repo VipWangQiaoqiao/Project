@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.app.AppOperator;
@@ -172,33 +171,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
 
     protected void onRequestSuccess(int code) {
 
-    }
-
-    /**
-     * save readed list
-     *
-     * @param fileName fileName
-     * @param key      key
-     */
-    protected void saveToReadedList(String fileName, String key) {
-
-        // 放入已读列表
-        AppContext.putReadedPostList(fileName, key, "true");
-    }
-
-    /**
-     * update textColor
-     *
-     * @param title   title
-     * @param content content
-     */
-    protected void updateTextColor(TextView title, TextView content) {
-        if (title != null) {
-            title.setTextColor(getResources().getColor(R.color.text_secondary_color));
-        }
-        if (content != null) {
-            content.setTextColor(getResources().getColor(R.color.text_secondary_color));
-        }
     }
 
     protected void onRequestError(int code) {

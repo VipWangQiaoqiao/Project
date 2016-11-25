@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.OSCApplication;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
@@ -28,8 +28,11 @@ import net.qiujuer.genius.ui.compat.UiCompat;
 
 public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
 
+    private OSCApplication.ReadState mReadState;
+
     public BlogSubAdapter(Context context, int mode) {
         super(context, mode);
+        mReadState = OSCApplication.getReadState("sub_list");
         setOnLoadingHeaderCallBack(this);
     }
 
@@ -115,7 +118,7 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
             }
         }
 
-        if (AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))) {
+        if (mReadState.already(item.getKey())) {
             title.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
             content.setTextColor(UiCompat.getColor(resources, R.color.text_secondary_color));
         } else {
