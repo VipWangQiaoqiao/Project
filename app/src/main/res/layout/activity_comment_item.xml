@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<net.oschina.app.improve.comment.CommentReferView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/comment"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-</net.oschina.app.improve.comment.CommentReferView>
