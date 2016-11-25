@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.Event;
@@ -84,7 +85,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
     protected void initData() {
         final EventDetail mDetail = mOperator.getData();
         if (mDetail == null) return;
-        tv_comment.setText(String.format("评论(%s)",mDetail.getCommentCount() ));
+        tv_comment.setText(String.format("评论(%s)", mDetail.getCommentCount()));
         tv_event_title.setText(mDetail.getTitle());
         tv_event_author.setText(String.format("发起人：%s", mDetail.getAuthor()));
         tv_event_member.setText(String.format("%s人参与", mDetail.getApplyCount()));
@@ -168,7 +169,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 }
                 break;
             case R.id.ll_comment:
-                CommentsActivity.show(getActivity(),mOperator.getData().getId(),5);
+                CommentsActivity.show(getActivity(), mOperator.getData().getId(), OSChinaApi.COMMENT_EVENT, OSChinaApi.COMMENT_NEW_ORDER);
                 break;
         }
     }

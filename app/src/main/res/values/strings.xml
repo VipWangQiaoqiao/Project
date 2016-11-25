@@ -307,5 +307,9 @@
     <string name="answer_hint">回答</string>
     <string name="pub_about">发布于</string>
     <string name="back_hint">返回</string>
+    <string name="vote_success_hint">点赞成功&#8230;</string>
+    <string name="vote_failed_hint">点赞失败&#8230;</string>
+    <string name="cancel_vote_success_hint">取消点赞成功&#8230;</string>
+    <string name="cancel_vote_failed_hint">取消点赞失败&#8230;</string>
 
 </resources>

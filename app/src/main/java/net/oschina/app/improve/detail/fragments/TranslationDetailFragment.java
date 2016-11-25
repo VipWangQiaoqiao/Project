@@ -23,7 +23,6 @@ import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.TranslateDetailContract;
-import net.oschina.app.improve.widget.BottomSheetBar;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
@@ -39,7 +38,7 @@ import net.oschina.app.util.StringUtils;
 
 public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         TranslateDetailContract.View, TranslateDetailContract.Operator>
-        implements TranslateDetailContract.View, OnCommentClickListener, BottomSheetBar.OnSyncListener, View.OnClickListener {
+        implements TranslateDetailContract.View, OnCommentClickListener, View.OnClickListener {
 
     private long mId;
     private TextView mTVAuthorName;
@@ -88,9 +87,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         mLayBottom = root.findViewById(R.id.lay_option);
 
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
-        mDelegation.setOnSyncListener(this);
 
-        mDelegation.getBottomSheet().showSyncView(this);
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,12 +184,6 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
-        if (mDelegation.getBottomSheet().isSyncToTweet()) {
-            About about = new About();
-            TranslationDetail detail = mOperator.getData();
-            about.setId(detail.getId());
-            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
-        }
     }
 
 
@@ -210,9 +201,21 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         (Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
         mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
         mDelegation.getBottomSheet().getEditText().setText("");
-        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
-       // mComments.addComment(comment, getImgLoader(), this);
+        mDelegation.getBottomSheet().getEditText().setHint(getResources().getString(R.string.add_comment_hint));
+        // mComments.addComment(comment, getImgLoader(), this);
         mDelegation.getBottomSheet().dismiss();
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            TranslationDetail detail = mOperator.getData();
+            if (detail == null) return;
+            About about = new About();
+            about.setId(detail.getId());
+            //about.setType(detail.type);
+            about.setTitle(detail.getTitle());
+            about.setHref(detail.getHref());
+            about.setCommentCount(detail.getCommentCount());
+            about.setViewCount(detail.getViewCount());
+            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+        }
     }
 
     @Override
@@ -236,11 +239,6 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
             mDelegation.getBottomSheet().handleSelectFriendsResult(data);
             mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
-    }
-
-    @Override
-    public void sync(boolean isSync) {
-        //if (isSync)
     }
 
     @Override

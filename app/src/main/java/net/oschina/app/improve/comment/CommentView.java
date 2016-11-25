@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,24 +88,9 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     }
 
     public void setTitle(String title) {
-        if (!android.text.TextUtils.isEmpty(title)) {
+        if (!TextUtils.isEmpty(title)) {
             mTitle.setText(title);
         }
-    }
-
-    public void setLabelLineGone() {
-        if (mLabelLine != null)
-            mLabelLine.setVisibility(GONE);
-    }
-
-    public void setTitleGone() {
-        if (mTitle != null)
-            mTitle.setVisibility(GONE);
-    }
-
-    public void setSeeMoreGone() {
-        if (mSeeMore != null)
-            mSeeMore.setVisibility(GONE);
     }
 
     /**
@@ -115,19 +101,22 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         }.getType();
     }
 
+    /**
+     * @return TypeToken
+     */
     Type getVoteType() {
         return new TypeToken<ResultBean<Vote>>() {
         }.getType();
     }
 
-    public void init(long id, int type, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    public void init(long id, int type, int order, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         this.mId = id;
         this.mType = type;
 
         mSeeMore.setVisibility(View.GONE);
         setVisibility(GONE);
 
-        OSChinaApi.getComments(id, type, "refer,reply", 2, null, new TextHttpResponseHandler() {
+        OSChinaApi.getComments(id, type, "refer,reply", order, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 if (throwable != null)
@@ -141,8 +130,19 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                     ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, getCommentType());
                     if (resultBean.isSuccess()) {
                         List<Comment> comments = resultBean.getResult().getItems();
+                        int size = comments.size();
+                        if (size > 4) {
+                            mSeeMore.setVisibility(VISIBLE);
+                            mSeeMore.setOnClickListener(CommentView.this);
+                        }
+
+                        if (mType == OSChinaApi.COMMENT_NEWS) {
+                            if (size > 4)
+                                comments = comments.subList(0, 4);
+                        }
+
                         Comment[] array = CollectionUtil.toArray(comments, Comment.class);
-                        addComment(array, imageLoader, onCommentClickListener);
+                        initComment(array, imageLoader, onCommentClickListener);
                     }
 
                 } catch (Exception e) {
@@ -152,7 +152,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         });
     }
 
-    private void addComment(final Comment[] comments, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    private void initComment(final Comment[] comments, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
 
         if (mLayComments != null)
 
@@ -170,7 +170,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                 for (int i = 0, len = comments.length; i < len; i++) {
                     Comment comment = comments[i];
                     if (comment != null) {
-                        ViewGroup lay = addComment(comment, imageLoader, onCommentClickListener);
+                        ViewGroup lay = insertComment(true, comment, imageLoader, onCommentClickListener);
                         mLayComments.addView(lay, indexOfChild(mLabelBottomLine));
                         if (i == len - 1) {
                             lay.findViewById(R.id.line).setVisibility(GONE);
@@ -185,7 +185,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     }
 
     /**
-     * 添加comment
+     * add one comment
      *
      * @param comment                comment
      * @param imageLoader            imageLoader
@@ -195,11 +195,11 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
         }
-        return addComment(false, comment, imageLoader, onCommentClickListener);
+        return insertComment(false, comment, imageLoader, onCommentClickListener);
     }
 
 
-    private ViewGroup addComment(final boolean first, final Comment comment, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    private ViewGroup insertComment(final boolean first, final Comment comment, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") final ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
 
@@ -223,13 +223,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                     AppContext.showToast(getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
                     return;
                 }
-                int voteState = 0;
-                if (comment.getVoteState() == 0) {
-                    voteState = 1;
-                } else if (comment.getVoteState() == 1) {
-                    voteState = 0;
-                }
-                OSChinaApi.voteComment(comment.getId(), mId, voteState, new TextHttpResponseHandler() {
+                OSChinaApi.voteComment(mId, comment.getId(), ivVoteStatus.getTag() != null ? 0 : 1, new TextHttpResponseHandler() {
 
                     @Override
                     public void onStart() {
@@ -251,9 +245,11 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                             if (vote != null) {
                                 if (vote.getVoteState() == 1) {
                                     comment.setVoteState(1);
+                                    ivVoteStatus.setTag(true);
                                     ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
                                 } else if (vote.getVoteState() == 0) {
                                     comment.setVoteState(0);
+                                    ivVoteStatus.setTag(null);
                                     ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
                                 }
                                 long voteVoteCount = vote.getVote();
@@ -276,8 +272,10 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
 
         if (comment.getVoteState() == 1) {
             ivVoteStatus.setImageResource(R.mipmap.ic_thumbup_actived);
+            ivVoteStatus.setTag(true);
         } else if (comment.getVoteState() == 0) {
             ivVoteStatus.setImageResource(R.mipmap.ic_thumb_normal);
+            ivVoteStatus.setTag(null);
         }
 
         imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
@@ -302,8 +300,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
             View view = CommentsUtil.getReferLayout(inflater, refers, 0);
 
             lay.addView(view, lay.indexOfChild(content));
-
-
         }
 
         lay.findViewById(R.id.btn_comment).setOnClickListener(new OnClickListener() {
@@ -313,13 +309,17 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
             }
         });
 
+        if (!first) {
+            addView(lay, 0);
+        }
+
         return lay;
     }
 
     @Override
     public void onClick(View v) {
         if (mId != 0 && mType != 0)
-            CommentsActivity.show(getContext(), mId, mType);
+            CommentsActivity.show(getContext(), mId, mType, OSChinaApi.COMMENT_NEW_ORDER);
     }
 
     /**

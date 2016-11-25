@@ -4,7 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.Size;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -75,7 +78,7 @@ public class TweetPublishActivity extends BaseBackActivity {
         return R.layout.activity_tweet_publish;
     }
 
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection", "unchecked"})
     @Override
     protected void initWidget() {
         super.initWidget();
@@ -91,11 +94,22 @@ public class TweetPublishActivity extends BaseBackActivity {
             bundle.putString("defaultContent", text);
         } else if ("image/*".equals(type)) {
 
-            ////ArrayList<Uri> list = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-            // list.trimToSize();
-            ////  for (Uri uri : list) {
-            //     uris.add(uri.getEncodedPath());
-            //  }
+            Parcelable obj = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            if (obj instanceof Uri) {
+                Uri uri = (Uri) obj;
+
+                Uri tempUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                String[] progection = {MediaStore.Images.Media.DATA};
+                String selection = MediaStore.Images.Media._ID + "=?";
+                String[] selectionArgs={};
+                getContentResolver().query(tempUri, progection, selection, selectionArgs, null);
+
+               // uris.add()
+            } else {
+                ArrayList<Uri> list = (ArrayList<Uri>) obj;
+            }
+
+            //ArrayList<Uri> list = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         }
 
         // if (uris.size() > 0) {
