@@ -4,10 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.support.annotation.Size;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -94,20 +91,35 @@ public class TweetPublishActivity extends BaseBackActivity {
             bundle.putString("defaultContent", text);
         } else if ("image/*".equals(type)) {
 
-            Parcelable obj = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-            if (obj instanceof Uri) {
-                Uri uri = (Uri) obj;
-
-                Uri tempUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                String[] progection = {MediaStore.Images.Media.DATA};
-                String selection = MediaStore.Images.Media._ID + "=?";
-                String[] selectionArgs={};
-                getContentResolver().query(tempUri, progection, selection, selectionArgs, null);
-
-               // uris.add()
-            } else {
-                ArrayList<Uri> list = (ArrayList<Uri>) obj;
-            }
+//            Parcelable obj = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+//            if (obj instanceof Uri) {
+//                Uri uri = (Uri) obj;
+//
+//                Log.e(TAG, "initWidget: ----->" + uri.toString() + " " + uri.getEncodedUserInfo());
+//
+//                Uri tempUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+//                String[] progection = {MediaStore.Images.Media.DATA};
+//                String selection = MediaStore.Images.Media._ID + "=?";
+//                String[] selectionArgs = {};
+//
+//                Cursor cursor = getContentResolver().query(tempUri, progection, selection, selectionArgs, null);
+//                try {
+//                    while (cursor != null && cursor.moveToNext()) {
+//
+//                        String dataPath = cursor.getString(1);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    if (cursor != null && !cursor.isClosed())
+//                        cursor.close();
+//                }
+//
+//
+//                // uris.add()
+//            } else {
+//                ArrayList<Uri> list = (ArrayList<Uri>) obj;
+//            }
 
             //ArrayList<Uri> list = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         }

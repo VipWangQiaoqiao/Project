@@ -319,6 +319,8 @@ public abstract class DetailActivity<Data extends PrimaryBean, DataView extends 
             mShareDialogBuilder = ShareDialogBuilder.with(this)
                     .title(title)
                     .content(content)
+                    .summary(content)
+                    .description(content)
                     .url(url)
                     .build();
         }

@@ -199,6 +199,7 @@ public class OpenBuilder {
             //1.初始化一个WXTextObject对象,填写分享的文本内容
             WXWebpageObject wxWebpageObject = new WXWebpageObject();
             wxWebpageObject.webpageUrl = share.getUrl();
+            wxWebpageObject.extInfo = share.getDescription();
 
             //2.用WXTextObject对象初始化一个WXMediaMessage对象
             WXMediaMessage msg = new WXMediaMessage();
