@@ -516,16 +516,16 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     getString(R.string.action_select),
                     getResources().getStringArray(R.array.avatar_option), "取消",
                     new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (i == 0) {
-                        handleSelectPicture();
-                    } else {
-                        if (mUserInfo == null) return;
-                        UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
-                    }
-                }
-            }).show();
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (i == 0) {
+                                handleSelectPicture();
+                            } else {
+                                if (mUserInfo == null) return;
+                                UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
+                            }
+                        }
+                    }).show();
         }
     }
 
@@ -608,7 +608,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * @param data 原始图片
      */
     private void startActionCrop(Uri data) {
-        if (!Environment.isExternalStorageEmulated()){
+        String state = Environment.getExternalStorageState();
+        if (!Environment.MEDIA_MOUNTED.equals(state)) {
             SimplexToast.show(getContext(), "外部存储设备不可用");
             return;
         }
@@ -722,15 +723,14 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 startActionCrop(uri);// 选图后裁剪
                 break;
             case ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD:
-                Uri mCropImageUri = imageReturnIntent.getData();
-                File mCropImageFile = null;
-                if (mCropImageUri != null){
-                    mCropImageFile = new File(mCropImageUri.getPath());
-                }else {
-                    if (mTempUri == null) return;
-                    mCropImageFile = new File(mTempUri.getPath());
+                if (imageReturnIntent != null) {
+                    Uri mCropImageUri = imageReturnIntent.getData();
+                    if (mCropImageUri != null) {
+                        uploadNewPhoto(new File(mCropImageUri.getPath()));
+                        break;
+                    }
                 }
-                uploadNewPhoto(mCropImageFile);
+                uploadNewPhoto(new File(mTempUri.getPath()));
                 break;
         }
 
