@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -22,6 +23,7 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.interf.OnTabReselectListener;
@@ -92,17 +94,17 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (mCatalog > 0) {
-            IntentFilter filter = new IntentFilter(
-                    Constants.INTENT_ACTION_USER_CHANGE);
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
             filter.addAction(Constants.INTENT_ACTION_LOGOUT);
-            getActivity().registerReceiver(mReceiver, filter);
+            LocalBroadcastManager.getInstance(getContext()).registerReceiver(mReceiver, filter);
         }
     }
 
     @Override
     public void onDestroy() {
         if (mCatalog > 0) {
-            getActivity().unregisterReceiver(mReceiver);
+            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mReceiver);
         }
         super.onDestroy();
     }

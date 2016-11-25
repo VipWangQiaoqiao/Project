@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import net.oschina.app.AppContext;
@@ -105,6 +106,6 @@ public final class AccountHelper {
 
         // Logout 广播
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
-        context.sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 }

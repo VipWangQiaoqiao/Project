@@ -155,8 +155,6 @@ public class AccountBaseActivity extends BaseActivity {
         if (mManager != null) {
             Intent intent = new Intent();
             intent.setAction(ACTION_ACCOUNT_FINISH_ALL);
-
-            sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
             return mManager.sendBroadcast(intent);
         }
 
