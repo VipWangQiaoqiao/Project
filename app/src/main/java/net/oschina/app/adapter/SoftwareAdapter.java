@@ -42,8 +42,7 @@ public class SoftwareAdapter extends ListBaseAdapter<SoftwareDec> {
         SoftwareDec softwareDes = (SoftwareDec) mDatas.get(position);
         vh.name.setText(softwareDes.getName());
 
-        if (AppContext.isOnReadedPostList(SoftwareList.PREF_READED_SOFTWARE_LIST,
-                softwareDes.getName())) {
+        if (false) {
             vh.name.setTextColor(parent.getContext().getResources()
                     .getColor(ThemeSwitchUtils.getTitleReadedColor()));
         } else {

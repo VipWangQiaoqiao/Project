@@ -1,13 +1,11 @@
 package net.oschina.app.base;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Resources;
-import android.os.Build;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -15,23 +13,13 @@ import net.oschina.app.improve.widget.SimplexToast;
 
 @SuppressLint("InflateParams")
 public class BaseApplication extends Application {
-    private static String PREF_NAME = "creativelocker.pref";
+    private static final String PREF_NAME = "creativelocker.pref";
     static Context _context;
-    static Resources _resource;
-
-    private static boolean sIsAtLeastGB;
-
-    static {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            sIsAtLeastGB = true;
-        }
-    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         _context = getApplicationContext();
-        _resource = _context.getResources();
         //LeakCanary.install(this);
     }
 
@@ -39,62 +27,23 @@ public class BaseApplication extends Application {
         return (BaseApplication) _context;
     }
 
-    public static Resources resources() {
-        return _resource;
-    }
-
-    /**
-     * 放入已读文章列表中
-     */
-    @Deprecated
-    public static void putReadedPostList(String prefFileName, String key,
-                                         String value) {
-        SharedPreferences preferences = getPreferences(prefFileName);
-        int size = preferences.getAll().size();
-        Editor editor = preferences.edit();
-        if (size >= 100) {
-            editor.clear();
-        }
-        editor.putString(key, value);
-        apply(editor);
-    }
-
-    /**
-     * 读取是否是已读的文章列表
-     *
-     * @return
-     */
-    @Deprecated
-    public static boolean isOnReadedPostList(String prefFileName, String key) {
-        return getPreferences(prefFileName).contains(key);
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    public static void apply(SharedPreferences.Editor editor) {
-        if (sIsAtLeastGB) {
-            editor.apply();
-        } else {
-            editor.commit();
-        }
-    }
 
     public static void set(String key, int value) {
         Editor editor = getPreferences().edit();
         editor.putInt(key, value);
-        apply(editor);
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
     }
 
     public static void set(String key, boolean value) {
         Editor editor = getPreferences().edit();
         editor.putBoolean(key, value);
-        apply(editor);
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
     }
 
     public static void set(String key, String value) {
         Editor editor = getPreferences().edit();
         editor.putString(key, value);
-        apply(editor);
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
     }
 
     public static boolean get(String key, boolean defValue) {
@@ -117,25 +66,9 @@ public class BaseApplication extends Application {
         return getPreferences().getFloat(key, defValue);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static SharedPreferences getPreferences() {
-        SharedPreferences pre = context().getSharedPreferences(PREF_NAME,
-                Context.MODE_MULTI_PROCESS);
-        return pre;
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static SharedPreferences getPreferences(String prefName) {
-        return context().getSharedPreferences(prefName,
-                Context.MODE_MULTI_PROCESS);
-    }
-
-    public static String string(int id) {
-        return _resource.getString(id);
-    }
-
-    public static String string(int id, Object... args) {
-        return _resource.getString(id, args);
+        return context().getSharedPreferences(PREF_NAME,
+                Context.MODE_PRIVATE);
     }
 
     public static void showToast(int message) {

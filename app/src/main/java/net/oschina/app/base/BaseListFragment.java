@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -504,8 +503,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
      */
     protected void saveToReadedList(final View view, final String prefFileName,
                                     final String key) {
-        // 放入已读列表
-        AppContext.putReadedPostList(prefFileName, key, "true");
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
         if (tvTitle != null) {
             tvTitle.setTextColor(AppContext.getInstance().getResources().getColor(ThemeSwitchUtils.getTitleReadedColor()));
