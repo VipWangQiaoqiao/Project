@@ -10,20 +10,27 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Size;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 
+import net.oschina.app.BuildConfig;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.improve.utils.CollectionUtil;
 import net.oschina.app.util.UIHelper;
 
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Created by JuQiu
+ * on 16/8/22.
+ */
 public class TweetPublishActivity extends BaseBackActivity {
     private TweetPublishContract.View mView;
 
@@ -49,7 +56,8 @@ public class TweetPublishActivity extends BaseBackActivity {
     }
 
 
-    public static void show(Context context, @Size(2) int[] viewLocationOnScreen, @Size(2) int[] viewSize, String defaultContent) {
+    public static void show(Context context, @Size(2) int[] viewLocationOnScreen,
+                            @Size(2) int[] viewSize, String defaultContent) {
         // Check login before show
         if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(context);
@@ -85,55 +93,71 @@ public class TweetPublishActivity extends BaseBackActivity {
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
         Intent intent = getIntent();
-
-        String type = intent.getType();
         Bundle bundle = intent.getExtras();
+        // Read other data
+        readFastShareByOther(bundle);
 
-        ArrayList<String> uris = new ArrayList<>();
+        TweetPublishFragment fragment = new TweetPublishFragment();
+        // init the args bounds
+        fragment.setArguments(bundle);
+        FragmentTransaction trans = getSupportFragmentManager()
+                .beginTransaction();
+        trans.replace(R.id.activity_tweet_publish, fragment);
+        trans.commit();
+        mView = fragment;
+    }
+
+    /**
+     * 读取快速分享到当前界面的内容
+     *
+     * @param bundle 需要写入源
+     */
+    private void readFastShareByOther(Bundle bundle) {
+        // Check
+        if (bundle == null || getIntent() == null)
+            return;
+        Intent intent = getIntent();
+        String type = intent.getType();
+        if (TextUtils.isEmpty(type))
+            return;
 
         //判断当前分享的内容是文本，还是图片
         if ("text/plain".equals(type)) {
             String text = intent.getStringExtra(Intent.EXTRA_TEXT);
             bundle.putString("defaultContent", text);
         } else if ("image/*".equals(type)) {
-
+            ArrayList<String> uris = new ArrayList<>();
             Object obj = intent.getExtras().get(Intent.EXTRA_STREAM);
-            //Parcelable obj = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             if (obj instanceof Uri) {
                 Uri uri = (Uri) obj;
                 String decodePath = decodePath(uri);
                 if (decodePath != null)
                     uris.add(decodePath);
             } else {
-                //ArrayList<Uri> list = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-                ArrayList<Uri> list = (ArrayList<Uri>) obj;
-                //大于9张图片的分享，直接只使用前9张
-                if (list != null && list.size() > 0) {
-                    for (int i = 0, len = list.size(); i < len; i++) {
-                        if (i > 9) {
-                            break;
+                try {
+                    @SuppressWarnings("unchecked")
+                    ArrayList<Uri> list = (ArrayList<Uri>) obj;
+                    //大于9张图片的分享，直接只使用前9张
+                    if (list != null && list.size() > 0) {
+                        for (int i = 0, len = list.size(); i < len; i++) {
+                            if (i > 9) {
+                                break;
+                            }
+                            String decodePath = decodePath(list.get(i));
+                            if (decodePath != null)
+                                uris.add(decodePath);
                         }
-                        String decodePath = decodePath(list.get(i));
-                        if (decodePath != null)
-                            uris.add(decodePath);
                     }
+                } catch (Exception e) {
+                    if (BuildConfig.DEBUG)
+                        e.printStackTrace();
                 }
             }
+            if (uris.size() > 0) {
+                String[] paths = CollectionUtil.toArray(uris, String.class);
+                bundle.putStringArray("defaultImages", paths);
+            }
         }
-        if (uris.size() > 0) {
-            bundle.putString("defaultContent", "请添加描述");
-            bundle.putStringArrayList("defaultImage", uris);
-        }
-        TweetPublishFragment fragment = new TweetPublishFragment();
-
-        // init the args bounds
-        fragment.setArguments(bundle);
-
-        FragmentTransaction trans = getSupportFragmentManager()
-                .beginTransaction();
-        trans.replace(R.id.activity_tweet_publish, fragment);
-        trans.commit();
-        mView = fragment;
     }
 
     /**
@@ -154,7 +178,6 @@ public class TweetPublishActivity extends BaseBackActivity {
 
         Cursor cursor = getContentResolver().query(tempUri, projection, selection, selectionArgs, null);
         try {
-
             while (cursor != null && cursor.moveToNext()) {
                 String temp = cursor.getString(0);
                 File file = new File(temp);
@@ -162,14 +185,12 @@ public class TweetPublishActivity extends BaseBackActivity {
                     decodePath = temp;
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (cursor != null && !cursor.isClosed())
                 cursor.close();
         }
-
         return decodePath;
     }
 
