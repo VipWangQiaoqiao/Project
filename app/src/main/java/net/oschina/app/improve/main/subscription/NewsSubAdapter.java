@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.OSCApplication;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
@@ -28,11 +28,12 @@ import net.qiujuer.genius.ui.compat.UiCompat;
  */
 
 public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
-
+    private OSCApplication.ReadState mReadState;
     private SubTab mTab;
 
     public NewsSubAdapter(Context context, int mode) {
         super(context, mode);
+        mReadState = OSCApplication.getReadState("sub_list");
         setOnLoadingHeaderCallBack(this);
     }
 
@@ -61,7 +62,7 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
 
         Resources resources = mContext.getResources();
 
-        if (AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))) {
+        if (mReadState.already(item.getKey())) {
             vh.tv_title.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
             vh.tv_description.setTextColor(UiCompat.getColor(resources, R.color.text_secondary_color));
         } else {
