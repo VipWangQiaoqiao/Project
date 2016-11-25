@@ -39,6 +39,7 @@ import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.utils.PicturesCompressor;
 import net.oschina.app.improve.utils.StreamUtils;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.improve.widget.SolarSystemView;
@@ -613,11 +614,15 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             SimplexToast.show(getContext(), "外部存储设备不可用");
             return;
         }
-        File file = new File(getContext().getExternalCacheDir(), "IMG_CROP.png");
+        File file = new File(getContext().getExternalCacheDir(), "IMG_CROP.jpeg");
         if (!file.exists())
             try {
-                file.createNewFile();
+                if (!file.createNewFile()) {
+                    SimplexToast.show(getContext(), "创建文件失败");
+                    return;
+                }
             } catch (IOException e) {
+                SimplexToast.show(getContext(), "创建文件失败");
                 e.printStackTrace();
                 return;
             }
@@ -630,6 +635,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", CROP);// 输出图片大小
         intent.putExtra("outputY", CROP);
+        intent.putExtra("return-data", false);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("scale", true);// 去黑边
         intent.putExtra("scaleUpIfNeeded", true);// 去黑边
         startActivityForResult(intent,
@@ -665,7 +672,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      */
     private void uploadNewPhoto(File file) {
         // 获取头像缩略图
-        if (file == null || !file.exists() || file.getTotalSpace() == 0) {
+        if (file == null || !file.exists() || file.length() == 0) {
             AppContext.showToast(getString(R.string.title_icon_null));
         } else {
             mIsUploadIcon = true;
@@ -723,14 +730,11 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 startActionCrop(uri);// 选图后裁剪
                 break;
             case ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD:
-                if (imageReturnIntent != null) {
-                    Uri mCropImageUri = imageReturnIntent.getData();
-                    if (mCropImageUri != null) {
-                        uploadNewPhoto(new File(mCropImageUri.getPath()));
-                        break;
-                    }
+                String src = mTempUri.getPath();
+                final String path = getContext().getFilesDir() + "/message/" + src.substring(src.lastIndexOf(".") + 1);
+                if (PicturesCompressor.compressImage(mTempUri.getPath(), path, 512 * 1024, 70, 500, 500)) {
+                    uploadNewPhoto(new File(path));
                 }
-                uploadNewPhoto(new File(mTempUri.getPath()));
                 break;
         }
 
