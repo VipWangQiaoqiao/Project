@@ -344,6 +344,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
         private String title;
         private String summary;
         private String content;
+        private String description;
         private String url;
         private int bitmapResID = R.mipmap.ic_share;
 
@@ -367,6 +368,11 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
             return this;
         }
 
+        public ShareBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
         public ShareBuilder bitmapResID(int bitmapResID) {
             this.bitmapResID = bitmapResID;
             return this;
@@ -377,6 +383,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
             share.setTitle(title);
             share.setSummary(summary);
             share.setContent(content);
+            share.setDescription(description);
             share.setUrl(url);
             share.setBitmapResID(bitmapResID);
 
