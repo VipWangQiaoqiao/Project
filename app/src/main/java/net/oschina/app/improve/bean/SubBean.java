@@ -11,6 +11,8 @@ import java.util.Map;
  */
 
 public class SubBean implements Serializable {
+    private String cacheKey;
+
     private long id;
     private String title;
     private String body;
@@ -153,6 +155,12 @@ public class SubBean implements Serializable {
 
     public void setStatistics(Statistics statistics) {
         this.statistics = statistics;
+    }
+
+    public String getKey() {
+        if (cacheKey == null)
+            cacheKey = String.format("t:%s,id:%s", getType(), getId() == 0 ? getHref().hashCode() : getId());
+        return cacheKey;
     }
 
     public static class Image implements Serializable {

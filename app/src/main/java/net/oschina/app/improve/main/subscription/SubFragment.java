@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.AppConfig;
-import net.oschina.app.AppContext;
+import net.oschina.app.OSCApplication;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
@@ -21,9 +21,9 @@ import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
-import net.oschina.app.improve.main.banner.EventHeaderView;
-import net.oschina.app.improve.main.banner.HeaderView;
-import net.oschina.app.improve.main.banner.NewsHeaderView;
+import net.oschina.app.improve.widget.banner.EventHeaderView;
+import net.oschina.app.improve.widget.banner.HeaderView;
+import net.oschina.app.improve.widget.banner.NewsHeaderView;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
@@ -36,6 +36,7 @@ import java.lang.reflect.Type;
 public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
     private SubTab mTab;
     private HeaderView mHeaderView;
+    private OSCApplication.ReadState mReadState;
 
     public static SubFragment newInstance(Context context, SubTab subTab) {
         SubFragment fragment = new SubFragment();
@@ -54,6 +55,7 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
 
     @Override
     public void initData() {
+        mReadState = OSCApplication.getReadState("sub_list");
         if (mTab.getBanner() != null) {
             mHeaderView = mTab.getBanner().getCatalog() == SubTab.BANNER_CATEGORY_NEWS ?
                     new NewsHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref(), mTab.getToken() + "banner" + mTab.getType()) :
@@ -95,7 +97,8 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
                 UIHelper.showUrlRedirect(mContext, sub.getHref());
                 break;
         }
-        AppContext.putReadedPostList("sub_list", String.valueOf(sub.getId()), "true");
+
+        mReadState.put(sub.getKey());
         mAdapter.updateItem(position);
     }
 

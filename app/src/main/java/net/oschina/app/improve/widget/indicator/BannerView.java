@@ -142,7 +142,8 @@ public class BannerView extends FrameLayout implements View.OnClickListener {
         View preView = getChildAt(0);
         View nextView = getChildAt(2);
 
-        if (mAlpha < 0.7 && mAlpha != 0.0f) {//触发切换
+        if (mAlpha < 0.7 && mAlpha != 0.0f && !isUpdate) {//触发切换
+            isUpdate = true;
             int index = 0;
             if (count == 2) {
                 removeView(preView);
@@ -187,9 +188,11 @@ public class BannerView extends FrameLayout implements View.OnClickListener {
                 nextView.setAlpha(0);
             }
         }
+        isUpdate = false;
     }
 
     private void selected(int count) {
+        isUpdate = true;
         View curView = getChildAt(1);
         View preView = getChildAt(0);
         View nextView = getChildAt(2);
@@ -212,6 +215,7 @@ public class BannerView extends FrameLayout implements View.OnClickListener {
         notifyViewStateChanged(OnViewChangeListener.STATE_IDLE);
         mOffset = 0.0f;
         mAlpha = 0.0f;
+        isUpdate = false;
     }
 
     private void notifySelected() {
