@@ -115,4 +115,13 @@ public class RippleIntroView extends RelativeLayout implements Runnable {
         count %= mInterval;
         invalidate();
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mCacheBitmap != null){
+            mCacheBitmap.recycle();
+            mCacheBitmap = null;
+        }
+    }
 }
