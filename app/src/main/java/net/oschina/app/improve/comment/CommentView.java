@@ -32,11 +32,11 @@ import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.bean.comment.Vote;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
-import net.oschina.app.improve.utils.CollectionUtil;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.TweetTextView;
+import net.oschina.common.utils.CollectionUtil;
 
 import java.lang.reflect.Type;
 import java.util.List;

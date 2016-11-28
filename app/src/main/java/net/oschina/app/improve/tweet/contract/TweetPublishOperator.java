@@ -12,7 +12,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
-import net.oschina.app.improve.utils.CollectionUtil;
+import net.oschina.common.utils.CollectionUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 

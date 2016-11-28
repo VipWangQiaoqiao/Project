@@ -14,7 +14,7 @@ import com.bumptech.glide.RequestManager;
 import net.oschina.app.R;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewerItemTouchCallback;
-import net.oschina.app.improve.utils.CollectionUtil;
+import net.oschina.common.utils.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.List;

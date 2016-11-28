@@ -19,7 +19,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.bean.simple.About;
-import net.oschina.app.improve.utils.CollectionUtil;
+import net.oschina.common.utils.CollectionUtil;
 import net.oschina.app.util.TLog;
 
 import java.util.ArrayList;

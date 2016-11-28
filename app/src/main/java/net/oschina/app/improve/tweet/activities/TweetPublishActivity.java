@@ -21,7 +21,7 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
-import net.oschina.app.improve.utils.CollectionUtil;
+import net.oschina.common.utils.CollectionUtil;
 import net.oschina.app.util.UIHelper;
 
 import java.io.File;
