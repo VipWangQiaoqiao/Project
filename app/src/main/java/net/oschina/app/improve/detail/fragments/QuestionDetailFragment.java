@@ -15,8 +15,8 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.QuestionDetail;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
-import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
@@ -37,6 +37,7 @@ import java.util.List;
 
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
         implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
+
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
@@ -178,8 +179,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
 
         mComments.setTitle(String.format("回答 (%s)", questionDetail.getCommentCount()));
+        mComments.setCommentBar(mDelegation);
         mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, OSChinaApi.COMMENT_NEW_ORDER, getImgLoader(), this);
-
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -225,23 +226,19 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     }
 
     @Override
-    public void toSendCommentOk(net.oschina.app.improve.bean.comment.Comment comment) {
-        (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mDelegation.setCommentHint("添加评论");
-        mDelegation.getBottomSheet().getEditText().setText("");
-        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
-        //mComments.addComment(comment, getImgLoader(), null);
-        mDelegation.getBottomSheet().dismiss();
+    public void toSendCommentOk(Comment comment) {
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
             About about = new About();
             QuestionDetail detail = mOperator.getData();
             about.setId(detail.getId());
             TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
         }
-    }
-
-    public void toSendCommentOk(CommentEX commentEX) {
-
+        mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint(getResources().getString(R.string.add_comment_hint));
+        //mComments.addComment(comment, getImgLoader(), null);
+        mDelegation.getBottomSheet().dismiss();
+        Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -254,7 +251,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     }
 
     @Override
-    public void onClick(View view, net.oschina.app.improve.bean.comment.Comment comment) {
-
+    public void onClick(View view, Comment comment) {
     }
 }

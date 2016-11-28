@@ -1256,7 +1256,7 @@ public class OSChinaApi {
             params.put("replyId", replyId);
         if (oid > 0)
             params.put("reAuthorId", oid);
-        post("action/apiv2/comment_pub", params, handler);
+        post("action/apiv2/comment_push", params, handler);
     }
 
 
@@ -1318,20 +1318,22 @@ public class OSChinaApi {
     }
 
     /**
-     * 对评论进行顶操作(默认只有问答可以顶/踩,其余详情评论可以顶或者取消顶)
+     * 对资讯，博客，翻译详情下的评论列表进行顶操作(ps：默认现在只能顶，不能取消)
      *
-     * @param sourceId  sourceId
-     * @param commentId commentId
-     * @param voteState voteState
-     * @param handler   handler
+     * @param sourceType      sourceType
+     * @param commentId       commentId
+     * @param commentAuthorId commentAuthorId
+     * @param voteOpt         voteOpt
+     * @param handler         handler
      */
-    public static void voteComment(long sourceId, long commentId, int voteState, TextHttpResponseHandler handler) {
+    public static void voteComment(int sourceType, long commentId, long commentAuthorId, int voteOpt, TextHttpResponseHandler handler) {
 
-        if (sourceId <= 0 || commentId <= 0) return;
+        if (commentId <= 0) return;
         RequestParams params = new RequestParams();
-        params.put("sourceId", sourceId);
+        params.put("sourceType", sourceType);
         params.put("commentId", commentId);
-        params.put("voteOpt", voteState);
+        params.put("commentAuthorId", commentAuthorId);
+        params.put("voteOpt", voteOpt);
 
         post("action/apiv2/comment_vote_reverse", params, handler);
 
@@ -1351,17 +1353,6 @@ public class OSChinaApi {
         params.put("commentId", cid);
         params.put("voteOpt", opt);
         post("action/apiv2/question_vote", params, handler);
-    }
-
-    /**
-     * 对某一条评论进行投票 顶/踩
-     */
-    public static void commentVote(long sourceId, long commentId, int voteOpt, TextHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("sourceId", sourceId);
-        params.put("commentId", commentId);
-        params.put("voteOpt", voteOpt);
-        post("action/apiv2/comment_vote_reverse", params, handler);
     }
 
     /**
