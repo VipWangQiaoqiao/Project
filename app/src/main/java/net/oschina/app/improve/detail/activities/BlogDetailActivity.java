@@ -102,7 +102,7 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
             mCommentCountView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CommentsActivity.show(BlogDetailActivity.this, mDataId, 3);
+                    CommentsActivity.show(BlogDetailActivity.this, mDataId, OSChinaApi.COMMENT_BLOG,OSChinaApi.COMMENT_NEW_ORDER);
                 }
             });
         }

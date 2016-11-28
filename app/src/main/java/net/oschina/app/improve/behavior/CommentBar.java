@@ -2,7 +2,6 @@ package net.oschina.app.improve.behavior;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -68,14 +67,20 @@ public class CommentBar {
         });
     }
 
-    public void setOnSyncListener(BottomSheetBar.OnSyncListener OnSyncListener) {
-        this.mDelegation.setOnSyncListener(OnSyncListener);
-    }
-
+    /**
+     * share 2 three sdk
+     *
+     * @param listener
+     */
     public void setShareListener(View.OnClickListener listener) {
         mShareView.setOnClickListener(listener);
     }
 
+    /**
+     * favorite the detail
+     *
+     * @param listener
+     */
     public void setFavListener(View.OnClickListener listener) {
         mFavView.setOnClickListener(listener);
     }
@@ -115,7 +120,6 @@ public class CommentBar {
 
     public void performClick() {
         mCommentLayout.performClick();
-        Log.e("performClick", "performClick");
     }
 
 }

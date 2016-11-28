@@ -27,7 +27,6 @@ import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.pay.bean.Order;
@@ -36,7 +35,6 @@ import net.oschina.app.improve.pay.util.RewardUtil;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
-import net.oschina.app.improve.widget.BottomSheetBar;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
@@ -63,7 +61,7 @@ import cz.msebera.android.httpclient.Header;
 @SuppressWarnings("WeakerAccess")
 public class BlogDetailFragment
         extends DetailFragment<BlogDetail, BlogDetailContract.View, BlogDetailContract.Operator>
-        implements BlogDetailContract.View, View.OnClickListener, OnCommentClickListener, BottomSheetBar.OnSyncListener {
+        implements BlogDetailContract.View, View.OnClickListener, OnCommentClickListener {
 
 
     public static final String TAG = "BlogDetailFragment";
@@ -94,8 +92,6 @@ public class BlogDetailFragment
     @Bind(R.id.lay_detail_about)
     DetailAboutView mAbouts;
 
-    @Bind(R.id.lay_detail_comment)
-    CommentView mCommentView;
     @Bind(R.id.lay_blog_detail_abstract)
     LinearLayout mLayAbstract;
 
@@ -124,7 +120,6 @@ public class BlogDetailFragment
         }
 
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
-        mDelegation.setOnSyncListener(this);
 
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
@@ -132,8 +127,6 @@ public class BlogDetailFragment
                 handleSendComment();
             }
         });
-
-        mDelegation.getBottomSheet().showSyncView(this);
 
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -271,13 +264,6 @@ public class BlogDetailFragment
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
-        if (mDelegation.getBottomSheet().isSyncToTweet()) {
-            About about = new About();
-            BlogDetail detail = mOperator.getData();
-            about.setId(detail.getId());
-            about.setType(detail.getType());
-            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
-        }
     }
 
     private void handleReward() {
@@ -362,22 +348,29 @@ public class BlogDetailFragment
 
         (Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
         mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
-        (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mDelegation.setCommentHint("添加评论");
         mDelegation.getBottomSheet().getEditText().setText("");
-        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
+        mDelegation.getBottomSheet().getEditText().setHint(getResources().getString(R.string.add_comment_hint));
         // mComments.addComment(comment, getImgLoader(), this);
         mDelegation.getBottomSheet().dismiss();
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            BlogDetail detail = mOperator.getData();
+            if (detail == null) return;
+            About about = new About();
+            about.setId(detail.getId());
+            about.setType(detail.getType());
+            about.setTitle(detail.getTitle());
+            about.setHref(detail.getHref());
+            about.setCommentCount(detail.getCommentCount());
+            about.setViewCount(detail.getViewCount());
+            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+        }
     }
 
     @Override
     public void onClick(View view, Comment comment) {
         mCommentId = comment.getId();
-
-
         mCommentAuthorId = comment.getAuthor().getId();
         mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-
         mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
 
     }
@@ -391,8 +384,4 @@ public class BlogDetailFragment
         }
     }
 
-    @Override
-    public void sync(boolean isSync) {
-        //  if (isSync)
-    }
 }

@@ -68,7 +68,12 @@ public class OSCApplication extends AppContext {
          * @param key 一般为资讯等Id
          */
         public void put(String key) {
-            SharedPreferences.Editor editor = sp.edit().putBoolean(key, true);
+            SharedPreferences.Editor editor = sp.edit();
+            if (sp.getAll().size() > 100) {
+                // 数量大于100时采取全清楚
+                editor.clear();
+            }
+            editor.putLong(key, System.currentTimeMillis());
             SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
         }
 

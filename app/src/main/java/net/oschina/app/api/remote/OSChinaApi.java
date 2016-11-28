@@ -1179,6 +1179,9 @@ public class OSChinaApi {
     public static final int COMMENT_EVENT = 5; // 活动类型
     public static final int COMMENT_NEWS = 6; // 资讯类型
 
+    public static final int COMMENT_HOT_ORDER = 2; //热门评论顺序
+    public static final int COMMENT_NEW_ORDER = 1; //最新评论顺序
+
     /**
      * 请求评论列表
      *

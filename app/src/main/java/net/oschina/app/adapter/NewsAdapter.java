@@ -35,8 +35,7 @@ public class NewsAdapter extends ListBaseAdapter<News> {
         News news = mDatas.get(position);
         vh.title.setText(news.getTitle());
 
-        if (AppContext.isOnReadedPostList(NewsList.PREF_READED_NEWS_LIST,
-                news.getId() + "")) {
+        if (false) {
             vh.title.setTextColor(parent.getContext().getResources()
                     .getColor(ThemeSwitchUtils.getTitleReadedColor()));
         } else {

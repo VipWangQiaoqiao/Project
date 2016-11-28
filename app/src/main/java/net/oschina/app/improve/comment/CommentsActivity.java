@@ -116,11 +116,13 @@ public class CommentsActivity extends BaseBackActivity {
         }
     };
     private TextView mCommentCount;
+    private int mOrder;
 
-    public static void show(Context context, long id, int type) {
+    public static void show(Context context, long id, int type, int order) {
         Intent intent = new Intent(context, CommentsActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("type", type);
+        intent.putExtra("order", order);
         context.startActivity(intent);
     }
 
@@ -133,6 +135,7 @@ public class CommentsActivity extends BaseBackActivity {
     protected boolean initBundle(Bundle bundle) {
         mId = bundle.getLong("id");
         mType = bundle.getInt("type");
+        mOrder = bundle.getInt("order");
         return super.initBundle(bundle);
     }
 
@@ -150,11 +153,6 @@ public class CommentsActivity extends BaseBackActivity {
 
         mCommentCount = (TextView) findViewById(R.id.tv_title);
 
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        mLayComments.setLayoutManager(manager);
-
-        mCommentAdapter = new CommentAdapter(this, getImageLoader(), BaseRecyclerAdapter.ONLY_FOOTER);
-        mLayComments.setAdapter(mCommentAdapter);
 
         mDelegation = CommentBar.delegation(this, mCoordLayout);
         mDelegation.hideFav();
@@ -185,6 +183,29 @@ public class CommentsActivity extends BaseBackActivity {
         mRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        mLayComments.setLayoutManager(manager);
+
+        mCommentAdapter = new CommentAdapter(this, getImageLoader(), BaseRecyclerAdapter.ONLY_FOOTER);
+        mCommentAdapter.setSourceId(mId);
+        mCommentAdapter.setDelegation(mDelegation);
+        mLayComments.setAdapter(mCommentAdapter);
+        mCommentAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, long itemId) {
+
+                switch (mType) {
+                    case OSChinaApi.COMMENT_QUESTION:
+                        //// TODO: 2016/11/25 跳转到问答中单独的回答详情
+                        QuesAnswerDetailActivity.show(CommentsActivity.this, null, mId);
+                        break;
+                    default:
+
+                        break;
+                }
+
+            }
+        });
     }
 
     @Override
@@ -332,7 +353,7 @@ public class CommentsActivity extends BaseBackActivity {
 
 
     private void getData(final boolean clearData, String token) {
-        OSChinaApi.getComments(mId, mType, "refer,reply", 1, token, new TextHttpResponseHandler() {
+        OSChinaApi.getComments(mId, mType, "refer,reply", mOrder, token, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
@@ -358,8 +379,12 @@ public class CommentsActivity extends BaseBackActivity {
                         handleData(mPageBean.getItems(), clearData);
                     }
 
-                    if (mPageBean.getItems().size() > 20)
+                    if (mPageBean.getItems().size() > 20) {
                         mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_MORE, false);
+                    } else {
+                        mCommentAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, false);
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseString, e);
@@ -372,8 +397,6 @@ public class CommentsActivity extends BaseBackActivity {
 
         if (clearData)
             mCommentAdapter.clear();
-        mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOADING, false);
-
         mCommentAdapter.addAll(comments);
     }
 

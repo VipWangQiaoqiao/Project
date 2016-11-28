@@ -3,6 +3,7 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -29,6 +30,8 @@ import cz.msebera.android.httpclient.Header;
  */
 public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View>
         implements NewsDetailContract.Operator {
+
+    private static final String TAG = "NewsDetailActivity";
 
     /**
      * show news detail
@@ -149,6 +152,8 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                Log.e(TAG, "onSuccess: ----->" + responseString);
                 try {
                     Type type = new TypeToken<ResultBean<Comment>>() {
                     }.getType();

@@ -1,24 +1,40 @@
 package net.oschina.app.improve.comment.adapter;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.comment.Vote;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentReferView;
 import net.oschina.app.improve.comment.CommentsUtil;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.TweetTextView;
+
+import java.lang.reflect.Type;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,9 +47,28 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * on 2016/11/21.
  * desc:
  */
-
 public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
 
+    public static final String TAG = "CommentAdapter";
+
+    private static final int VIEW_TYPE_DATA_FOOTER = 2000;
+    private long mSourceId;
+
+    private int mType;
+    private CommentBar delegation;
+
+    @Override
+    public int getItemViewType(int position) {
+        int type = super.getItemViewType(position);
+        if (type == VIEW_TYPE_NORMAL && isRealDataFooter(position)) {
+            return VIEW_TYPE_DATA_FOOTER;
+        }
+        return type;
+    }
+
+    protected boolean isRealDataFooter(int position) {
+        return getIndex(position) == getCount() - 1;
+    }
 
     private RequestManager mRequestManager;
 
@@ -46,18 +81,31 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
     protected CommentHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.lay_comment_refer_item, parent, false);
-        return new CommentHolder(view);
+        return new CommentHolder(view, type == VIEW_TYPE_DATA_FOOTER, delegation);
     }
 
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
         if (holder instanceof CommentHolder) {
-            ((CommentHolder) holder).addComment(item, mRequestManager, mItems.size(), position);
+            ((CommentHolder) holder).addComment(mSourceId, mType, item, mRequestManager);
         }
     }
 
+    public void setSourceId(long sourceId) {
+        this.mSourceId = sourceId;
+    }
+
+    public void setCommentType(int Type) {
+        this.mType = Type;
+    }
+
+    public void setDelegation(CommentBar delegation) {
+        this.delegation = delegation;
+    }
 
     protected static class CommentHolder extends RecyclerView.ViewHolder {
+
+        private ProgressDialog mDialog;
 
         @Bind(R.id.iv_avatar)
         CircleImageView mIvAvatar;
@@ -81,9 +129,16 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         @Bind(R.id.line)
         View mLine;
 
-        CommentHolder(View itemView) {
+        private CommentBar commentBar;
+
+
+        CommentHolder(View itemView, boolean isFooter, CommentBar commentBar) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (isFooter) {
+                mLine.setVisibility(View.GONE);
+            }
+            this.commentBar = commentBar;
         }
 
         /**
@@ -92,59 +147,172 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
          * @param comment comment
          */
 
-        public void addComment(final Comment comment, RequestManager requestManager, int length, int position) {
+        public void addComment(final long sourceId, int commentType, final Comment comment, RequestManager requestManager) {
             requestManager.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface).into(mIvAvatar);
             mName.setText(comment.getAuthor().getName());
             mPubDate.setText(StringUtils.formatSomeAgo(comment.getPubDate()));
-            mVoteCount.setText(String.valueOf(comment.getVote()));
-            if (comment.getVoteState() == 1) {
-                mVote.setImageResource(R.mipmap.ic_thumbup_actived);
-            } else if (comment.getVoteState() == 0) {
-                mVote.setImageResource(R.mipmap.ic_thumb_normal);
-            }
-            mVote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int voteStatus = 0;
-                    if (comment.getVoteState() == 1) {
-                        mVote.setImageResource(R.mipmap.ic_thumb_normal);
-                        voteStatus = 0;
-                    } else {
-                        mVote.setImageResource(R.mipmap.ic_thumbup_actived);
-                        voteStatus = 1;
-                    }
-
-                    OSChinaApi.voteComment(0, comment.getId(), voteStatus, new TextHttpResponseHandler() {
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                        }
-                    });
-
-                }
-            });
-            mComment.setImageResource(R.mipmap.ic_comment_30);
             mComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+                    Log.e(TAG, "onClick: --------->谈起来");
+                    commentBar.getBottomSheet().show(String.format("%s %s",
+                            mComment.getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+
                 }
             });
-            mVoteCount.setText(String.valueOf(comment.getVote()));
+            if (commentType == OSChinaApi.COMMENT_QUESTION) {
+                mVoteCount.setVisibility(View.GONE);
+                mVote.setVisibility(View.GONE);
+                if (comment.isBest()) {
+                    mComment.setImageResource(R.mipmap.label_best_answer);
+                } else {
+                    mComment.setImageResource(R.mipmap.ic_comment_30);
+                }
+            } else {
+
+                mVoteCount.setText(String.valueOf(comment.getVote()));
+                mVoteCount.setVisibility(View.VISIBLE);
+                mVote.setVisibility(View.VISIBLE);
+
+                if (comment.getVoteState() == 1) {
+                    mVote.setImageResource(R.mipmap.ic_thumbup_actived);
+                    mVote.setTag(true);
+                } else if (comment.getVoteState() == 0) {
+                    mVote.setImageResource(R.mipmap.ic_thumb_normal);
+                    mVote.setTag(null);
+                }
+                mVote.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Log.e(TAG, "onClick: ------->");
+                        handVote();
+                    }
+
+                    private void handVote() {
+
+                        if (!AccountHelper.isLogin()) {
+                            LoginActivity.show(mVote.getContext());
+                            return;
+                        }
+                        if (!TDevice.hasInternet()) {
+                            AppContext.showToast(mVote.getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        OSChinaApi.voteComment(sourceId, comment.getId(), mVote.getTag() != null ? 0 : 1, new TextHttpResponseHandler() {
+
+                            @Override
+                            public void onStart() {
+                                super.onStart();
+                                showWaitDialog(R.string.progress_submit);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                requestFailureHint(throwable);
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                                ResultBean<Vote> resultBean = AppOperator.createGson().fromJson(responseString, getVoteType());
+                                if (resultBean.isSuccess()) {
+                                    Vote vote = resultBean.getResult();
+                                    if (vote != null) {
+                                        if (vote.getVoteState() == 1) {
+                                            comment.setVoteState(1);
+                                            mVote.setTag(true);
+                                            mVote.setImageResource(R.mipmap.ic_thumbup_actived);
+                                        } else if (vote.getVoteState() == 0) {
+                                            comment.setVoteState(0);
+                                            mVote.setTag(null);
+                                            mVote.setImageResource(R.mipmap.ic_thumb_normal);
+                                        }
+                                        long voteVoteCount = vote.getVote();
+                                        comment.setVote(voteVoteCount);
+                                        mVoteCount.setText(String.valueOf(voteVoteCount));
+                                    }
+                                } else {
+                                    AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                                }
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                super.onFinish();
+                                hideWaitDialog();
+                            }
+                        });
+                    }
+                });
+            }
+
 
             mCommentReferView.addComment(comment);
 
             CommentsUtil.formatHtml(mTweetTextView.getResources(), mTweetTextView, comment.getContent());
-            if (position == length - 1) {
-                mLine.setVisibility(View.GONE);
-            }
+        }
 
+        /**
+         * show WaitDialog
+         *
+         * @return progressDialog
+         */
+        private ProgressDialog showWaitDialog(@StringRes int messageId) {
+
+            if (mDialog == null) {
+                if (messageId <= 0) {
+                    mDialog = DialogHelper.getProgressDialog(mVote.getContext(), true);
+                } else {
+                    String message = mVote.getContext().getResources().getString(messageId);
+                    mDialog = DialogHelper.getProgressDialog(mVote.getContext(), message, true);
+                }
+            }
+            mDialog.show();
+
+            return mDialog;
+        }
+
+
+        /**
+         * hide waitDialog
+         */
+        private void hideWaitDialog() {
+            ProgressDialog dialog = mDialog;
+            if (dialog != null) {
+                mDialog = null;
+                try {
+                    dialog.cancel();
+                    // dialog.dismiss();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
+        /**
+         * request network error
+         *
+         * @param throwable throwable
+         */
+        private void requestFailureHint(Throwable throwable) {
+            AppContext.showToast(R.string.request_error_hint);
+            if (throwable != null) {
+                throwable.printStackTrace();
+            }
+        }
+
+        /**
+         * @return TypeToken
+         */
+        Type getVoteType() {
+            return new TypeToken<ResultBean<Vote>>() {
+            }.getType();
         }
 
     }
+
+
 }

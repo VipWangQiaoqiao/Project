@@ -5,7 +5,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -27,24 +26,23 @@ import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
-import net.oschina.app.improve.widget.BottomSheetBar;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-
-import static com.joanzapata.android.iconify.Iconify.TAG;
 
 /**
  * Created by fei
  * on 16/5/26.
  * change by fei
  * on 16/11/17
- * desc:
+ * desc:  news detail
  */
 
 public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailContract.View, NewsDetailContract.Operator>
-        implements View.OnClickListener, NewsDetailContract.View, OnCommentClickListener, BottomSheetBar.OnSyncListener {
+        implements View.OnClickListener, NewsDetailContract.View, OnCommentClickListener {
+
+    public static final String TAG = "NewsDetailFragment";
 
     private long mId;
     // private TextView mTVAuthorName;
@@ -60,8 +58,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     private TextView mAboutSoftwareTitle;
     private LinearLayout mAboutSoftware;
     private TextView mTVName;
-
-    //private KeyboardInputDelegation mDelegation;
 
     private CommentBar mDelegation;
 
@@ -96,7 +92,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         registerScroller(mLayContent, mComment);
 
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
-        mDelegation.setOnSyncListener(this);
 
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -128,7 +123,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             }
         });
 
-        mDelegation.getBottomSheet().showSyncView(this);
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +139,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
                     LoginActivity.show(getActivity());
             }
         });
+
     }
 
     @Override
@@ -194,7 +189,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mAbouts.setAbout(newsDetail.getAbouts(), 6);
 
         mComment.setTitle(String.format("%s (%s)", getResources().getString(R.string.hot_comment_hint), newsDetail.getCommentCount()));
-        mComment.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, getImgLoader(), this);
+        mComment.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, OSChinaApi.COMMENT_HOT_ORDER, getImgLoader(), this);
     }
 
     private void handleKeyDel() {
@@ -225,13 +220,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
-        if (mDelegation.getBottomSheet().isSyncToTweet()) {
-            About about = new About();
-            NewsDetail detail = mOperator.getData();
-            about.setId(detail.getId());
-            about.setType(detail.getType());
-            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
-        }
     }
 
     @SuppressWarnings("deprecation")
@@ -247,13 +235,22 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
         mDelegation.getCommentText().setHint(getString(R.string.add_comment_hint));
-        // mComment.addComment(comment, getImgLoader(), this);
-        (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mDelegation.getCommentText().setHint("添加评论");
         mDelegation.getBottomSheet().getEditText().setText("");
-        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
-        //mComments.addComment(comment, getImgLoader(), this);
+        mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.add_comment_hint));
+        //mComment.addComment(comment, getImgLoader(), this);
         mDelegation.getBottomSheet().dismiss();
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            NewsDetail detail = mOperator.getData();
+            if (detail == null) return;
+            About about = new About();
+            about.setId(detail.getId());
+            about.setType(detail.getType());
+            about.setTitle(detail.getTitle());
+            about.setHref(detail.getHref());
+            about.setViewCount(detail.getViewCount());
+            about.setCommentCount(detail.getCommentCount());
+            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+        }
     }
 
     @Override
@@ -275,10 +272,4 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         }
     }
 
-
-    @Override
-    public void sync(boolean isSync) {
-        //   if (isSync)
-
-    }
 }

@@ -4,7 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Size;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -18,10 +21,10 @@ import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.util.UIHelper;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class TweetPublishActivity extends BaseBackActivity {
-    private static final String TAG = "TweetPublishActivity";
     private TweetPublishContract.View mView;
 
     public static void show(Context context) {
@@ -75,7 +78,7 @@ public class TweetPublishActivity extends BaseBackActivity {
         return R.layout.activity_tweet_publish;
     }
 
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection", "unchecked", "ResultOfMethodCallIgnored"})
     @Override
     protected void initWidget() {
         super.initWidget();
@@ -85,23 +88,42 @@ public class TweetPublishActivity extends BaseBackActivity {
 
         String type = intent.getType();
         Bundle bundle = intent.getExtras();
+
         ArrayList<String> uris = new ArrayList<>();
+
+        //判断当前分享的内容是文本，还是图片
         if ("text/plain".equals(type)) {
             String text = intent.getStringExtra(Intent.EXTRA_TEXT);
             bundle.putString("defaultContent", text);
         } else if ("image/*".equals(type)) {
 
-            ////ArrayList<Uri> list = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-            // list.trimToSize();
-            ////  for (Uri uri : list) {
-            //     uris.add(uri.getEncodedPath());
-            //  }
+            Object obj = intent.getExtras().get(Intent.EXTRA_STREAM);
+            //Parcelable obj = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            if (obj instanceof Uri) {
+                Uri uri = (Uri) obj;
+                String decodePath = decodePath(uri);
+                if (decodePath != null)
+                    uris.add(decodePath);
+            } else {
+                //ArrayList<Uri> list = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+                ArrayList<Uri> list = (ArrayList<Uri>) obj;
+                //大于9张图片的分享，直接只使用前9张
+                if (list != null && list.size() > 0) {
+                    for (int i = 0, len = list.size(); i < len; i++) {
+                        if (i > 9) {
+                            break;
+                        }
+                        String decodePath = decodePath(list.get(i));
+                        if (decodePath != null)
+                            uris.add(decodePath);
+                    }
+                }
+            }
         }
-
-        // if (uris.size() > 0) {
-        //   bundle.putString("defaultContent", "请添加描述");
-        // bundle.putStringArrayList("defaultImage", uris);
-        // }
+        if (uris.size() > 0) {
+            bundle.putString("defaultContent", "请添加描述");
+            bundle.putStringArrayList("defaultImage", uris);
+        }
         TweetPublishFragment fragment = new TweetPublishFragment();
 
         // init the args bounds
@@ -112,6 +134,43 @@ public class TweetPublishActivity extends BaseBackActivity {
         trans.replace(R.id.activity_tweet_publish, fragment);
         trans.commit();
         mView = fragment;
+    }
+
+    /**
+     * 通过uri当中的唯一id搜索本地相册图片，是否真的存在。然后返回真实的path路径
+     *
+     * @param uri rui
+     * @return path
+     */
+    private String decodePath(Uri uri) {
+        String decodePath = null;
+        String uriPath = uri.toString();
+        int id = Integer.parseInt(uriPath.substring(uriPath.lastIndexOf("/") + 1, uriPath.length()));
+
+        Uri tempUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = {MediaStore.Images.Media.DATA};
+        String selection = MediaStore.Images.Media._ID + "=?";
+        String[] selectionArgs = {id + ""};
+
+        Cursor cursor = getContentResolver().query(tempUri, projection, selection, selectionArgs, null);
+        try {
+
+            while (cursor != null && cursor.moveToNext()) {
+                String temp = cursor.getString(0);
+                File file = new File(temp);
+                if (file.exists()) {
+                    decodePath = temp;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null && !cursor.isClosed())
+                cursor.close();
+        }
+
+        return decodePath;
     }
 
     @Override
