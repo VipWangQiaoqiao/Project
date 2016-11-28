@@ -34,20 +34,6 @@
         "type": 6
     },
     {
-        "banner": {
-            "catalog": 3,
-            "href": "https://www.oschina.net/action/apiv2//banner?catalog=3"
-        },
-        "fixed": false,
-        "href": "https://www.oschina.net/action/apiv2/sub_list?token=727d77c15b2ca641fff392b779658512",
-        "name": "线下活动",
-        "needLogin": false,
-        "order": 73,
-        "subtype": 1,
-        "token": "727d77c15b2ca641fff392b779658512",
-        "type": 5
-    },
-    {
         "fixed": false,
         "href": "https://www.oschina.net/action/apiv2/sub_list?token=177f171d41bb37d80c67bee14123f7e1",
         "name": "最新翻译",
