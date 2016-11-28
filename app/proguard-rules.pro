@@ -119,3 +119,5 @@
 -keep class com.umeng.socialize.sensor.**
 -keep class pub.devrel.easypermissions.**
 # 友盟End
+
+-dontwarn okio.**

@@ -134,7 +134,7 @@ dependencies {
     compile 'net.qiujuer.genius:res:latest.integration'
     compile 'net.qiujuer.genius:ui:latest.integration'
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile 'net.oschina.common:common:0.0.3'
+    compile 'net.oschina.common:common:0.0.5'
     testCompile 'junit:junit:4.12'
 }
 

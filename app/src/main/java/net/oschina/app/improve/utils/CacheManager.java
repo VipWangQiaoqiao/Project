@@ -7,7 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import net.oschina.app.util.TLog;
+import net.oschina.common.utils.StreamUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,7 +35,7 @@ public final class CacheManager {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            StreamUtils.close(os);
+            StreamUtil.close(os);
         }
     }
 
@@ -52,7 +52,7 @@ public final class CacheManager {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            StreamUtils.close(os);
+            StreamUtil.close(os);
         }
     }
 
@@ -102,7 +102,7 @@ public final class CacheManager {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            StreamUtils.close(is);
+            StreamUtil.close(is);
         }
         return null;
     }
