@@ -31,6 +31,8 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
     private boolean mIsFollow;
     private float mIndicatorSpace;
 
+    private int mCount;
+
     public CirclePagerIndicator(Context context) {
         this(context, null);
     }
@@ -65,7 +67,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         if (mViewPager == null) {
             return;
         }
-        final int count = mViewPager.getAdapter().getCount();
+        final int count = mCount;
         if (count == 0) {
             return;
         }
@@ -128,6 +130,9 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         canvas.drawCircle(cX, cY, mIndicatorRadius, mPaintIndicator);
     }
 
+    public void setCount(int count) {
+        this.mCount = count;
+    }
 
     @Override
     public void bindViewPager(ViewPager view) {
@@ -173,7 +178,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        mCurrentPage = position;
+        mCurrentPage = mCount == 0 ? mCount : position % mCount;
         mPageOffset = positionOffset;
         //如果指示器跟随ViewPager缓慢滑动，那么滚动的时候都绘制界面
         if (mIsFollow) {
@@ -186,8 +191,8 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
 
     @Override
     public void onPageSelected(int position) {
-        mCurrentPage = position;
-        mFollowPage = position;
+        mCurrentPage = mCount == 0 ? mCount : position % mCount;
+        mFollowPage = mCount == 0 ? mCount : position % mCount;
         invalidate();
         if (mListener != null) {
             mListener.onPageSelected(position);
@@ -212,7 +217,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         if ((specMode == MeasureSpec.EXACTLY) || (mViewPager == null)) {
             width = specSize;
         } else {
-            final int count = mViewPager.getAdapter().getCount();
+            final int count = mCount;
             width = (int) (getPaddingLeft() + getPaddingRight()
                     + (count * 2 * mRadius) + (mIndicatorRadius - mRadius) * 2 + (count - 1) * mIndicatorSpace);
             if (specMode == MeasureSpec.AT_MOST) {
