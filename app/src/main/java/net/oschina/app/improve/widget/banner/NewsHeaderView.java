@@ -1,6 +1,7 @@
 package net.oschina.app.improve.widget.banner;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -38,7 +39,8 @@ public class NewsHeaderView extends HeaderView {
     @Override
     public void onPageSelected(int position) {
         super.onPageSelected(position);
-        mTitleTextView.setText(mBanners.get(position).getName());
+        Log.e("onPageSelected","   ---    " + position % mBanners.size());
+        mTitleTextView.setText(mBanners.get(position % mBanners.size()).getName());
     }
 
     @Override
@@ -51,8 +53,9 @@ public class NewsHeaderView extends HeaderView {
 
     @Override
     protected Object instantiateItem(ViewGroup container, int position) {
+        Log.e("position","   ---    " + position);
         ViewNewsBanner view = new ViewNewsBanner(getContext());
-        view.initData(mImageLoader, mBanners.get(position));
+        view.initData(mImageLoader, mBanners.get(position % mBanners.size() ));
         container.addView(view);
         return view;
     }

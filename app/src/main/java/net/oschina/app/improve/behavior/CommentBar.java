@@ -2,6 +2,7 @@ package net.oschina.app.improve.behavior;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -12,7 +13,6 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
-import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.widget.BottomSheetBar;
 
 /**
@@ -69,7 +69,7 @@ public class CommentBar {
     }
 
     public void setOnSyncListener(BottomSheetBar.OnSyncListener OnSyncListener) {
-       this.mDelegation.setOnSyncListener(OnSyncListener);
+        this.mDelegation.setOnSyncListener(OnSyncListener);
     }
 
     public void setShareListener(View.OnClickListener listener) {
@@ -115,6 +115,7 @@ public class CommentBar {
 
     public void performClick() {
         mCommentLayout.performClick();
+        Log.e("performClick", "performClick");
     }
 
 }
