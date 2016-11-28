@@ -169,7 +169,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                 }
             });
 
-            Log.e(TAG, "addComment: ---->" + commentType);
             if (commentType == OSChinaApi.COMMENT_QUESTION || commentType == OSChinaApi.COMMENT_EVENT) {
                 mVoteCount.setVisibility(View.GONE);
                 mVote.setVisibility(View.GONE);
@@ -195,7 +194,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                 mVote.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e(TAG, "onClick: ----->voteCount=" + comment.getVote() + " voteStatus=" + comment.getVoteState() + " type=" + commentType);
                         handVote();
                     }
 
