@@ -161,6 +161,12 @@ public class SolarSystemView extends View implements Runnable {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        prepare();
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mCacheBitmap != null){

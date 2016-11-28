@@ -135,7 +135,7 @@ public class BottomSheetBar implements View.OnClickListener {
                     mFrameLayout.addView(mEmojiView);
                 }
 
-                //  TDevice.closeKeyboard(mEditText);
+                TDevice.closeKeyboard(mEditText);
                 mFrameLayout.setVisibility(View.VISIBLE);
 
             }
