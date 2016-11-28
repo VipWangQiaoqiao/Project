@@ -28,8 +28,10 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.adapter.CommentAdapter;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
@@ -72,7 +74,6 @@ public class CommentsActivity extends BaseBackActivity {
     private CommentAdapter mCommentAdapter;
     private Comment reply;
     private CommentBar mDelegation;
-    private View.OnClickListener onReplyBtnClickListener;
     private ProgressDialog mDialog;
     private boolean mInputDoubleEmpty;
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
@@ -83,9 +84,14 @@ public class CommentsActivity extends BaseBackActivity {
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            AppContext.showToast("评论失败!");
+        public void onFinish() {
+            super.onFinish();
             hideWaitDialog();
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            AppContext.showToast(getResources().getString(R.string.pub_comment_failed));
         }
 
         @Override
@@ -98,25 +104,26 @@ public class CommentsActivity extends BaseBackActivity {
                 if (resultBean.isSuccess()) {
                     Comment respComment = resultBean.getResult();
                     if (respComment != null) {
-
-                        Toast.makeText(CommentsActivity.this, "评论成功", Toast.LENGTH_LONG).show();
+                        handleSyncTweet();
+                        mDelegation.setCommentHint(getString(mSourceId));
+                        mDelegation.getBottomSheet().getEditText().setHint(getString(mSourceId));
+                        Toast.makeText(CommentsActivity.this, getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
+                        mDelegation.getCommentText().setHint(getString(mSourceId));
                         mDelegation.getBottomSheet().getEditText().setText("");
-                        mDelegation.setCommentHint("发表评论");
-                        mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                        mDelegation.getBottomSheet().dismiss();
                         getData(true, null);
                     }
                 }
-                hideWaitDialog();
             } catch (Exception e) {
                 e.printStackTrace();
                 onFailure(statusCode, headers, responseString, e);
             }
-            hideWaitDialog();
-            mDelegation.getBottomSheet().dismiss();
         }
     };
-    private TextView mCommentCount;
+
+
     private int mOrder;
+    private int mSourceId;
 
     public static void show(Context context, long id, int type, int order) {
         Intent intent = new Intent(context, CommentsActivity.class);
@@ -143,7 +150,6 @@ public class CommentsActivity extends BaseBackActivity {
     protected void initWidget() {
         super.initWidget();
 
-
         mBack_label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,10 +157,12 @@ public class CommentsActivity extends BaseBackActivity {
             }
         });
 
-        mCommentCount = (TextView) findViewById(R.id.tv_title);
-
-
         mDelegation = CommentBar.delegation(this, mCoordLayout);
+        mSourceId = R.string.pub_comment_hint;
+        if (mType == OSChinaApi.COMMENT_QUESTION || mType == OSChinaApi.COMMENT_EVENT) {
+            mSourceId = R.string.answer_hint;
+        }
+        mDelegation.getBottomSheet().getEditText().setHint(mSourceId);
         mDelegation.hideFav();
         mDelegation.hideShare();
 
@@ -174,7 +182,6 @@ public class CommentsActivity extends BaseBackActivity {
                 if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (reply == null) return false;
                     reply = null;
-
                     handleKeyDel();
                 }
                 return false;
@@ -195,15 +202,34 @@ public class CommentsActivity extends BaseBackActivity {
             @Override
             public void onItemClick(int position, long itemId) {
 
+                Comment comment = mCommentAdapter.getItem(position);
+
                 switch (mType) {
                     case OSChinaApi.COMMENT_QUESTION:
-                        //// TODO: 2016/11/25 跳转到问答中单独的回答详情
-                        QuesAnswerDetailActivity.show(CommentsActivity.this, null, mId);
+                        QuesAnswerDetailActivity.show(CommentsActivity.this, comment, mId, mType);
                         break;
                     default:
-
                         break;
                 }
+
+            }
+        });
+
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Comment comment = (Comment) v.getTag();
+                if (comment == null) {
+                    //当不引用回复的人时候，默认为commentId，authorId为0
+                    handleSendComment(mType, mId, 0, 0, mDelegation.getBottomSheet().getCommentText());
+                } else {
+                    handleSendComment(mType, mId, comment.getId(), comment.getAuthor().getId(), mDelegation.getBottomSheet().getCommentText());
+                }
+            }
+        });
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
@@ -267,6 +293,19 @@ public class CommentsActivity extends BaseBackActivity {
         return AccountHelper.getUserId();
     }
 
+
+    /**
+     * sync the tweet
+     */
+    private void handleSyncTweet() {
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            About about = new About();
+            about.setId(mId);
+            about.setType(mType);
+            TweetPublishService.startActionPublish(CommentsActivity.this, mDelegation.getBottomSheet().getCommentText(), null, about);
+        }
+    }
+
     /**
      * handle send comment
      */
@@ -324,7 +363,6 @@ public class CommentsActivity extends BaseBackActivity {
      * @param messageId messageId
      * @return progressDialog
      */
-    @SuppressWarnings("deprecation")
     private ProgressDialog showWaitDialog(int messageId) {
         String message = getResources().getString(messageId);
         if (mDialog == null) {
@@ -400,22 +438,6 @@ public class CommentsActivity extends BaseBackActivity {
             mCommentAdapter.clear();
         mCommentAdapter.addAll(comments);
     }
-
-
-    public View.OnClickListener getReplyBtnClickListener() {
-        if (onReplyBtnClickListener == null) {
-            onReplyBtnClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Comment comment = (Comment) v.getTag();
-                    mDelegation.setCommentHint("@" + comment.getAuthor() + " :");
-                    reply = comment;
-                }
-            };
-        }
-        return onReplyBtnClickListener;
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

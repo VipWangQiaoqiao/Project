@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,6 @@ import cz.msebera.android.httpclient.Header;
  */
 public class CommentView extends LinearLayout implements View.OnClickListener {
 
-    private static final String TAG = "CommentsView";
     private long mId;
     private int mType;
     private TextView mTitle;
@@ -81,8 +79,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     private void init() {
         setOrientation(VERTICAL);
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        inflater.inflate(R.layout.lay_detail_comment_layout, this, true);
-
+        View view = inflater.inflate(R.layout.lay_detail_comment_layout, this, true);
         mTitle = (TextView) findViewById(R.id.tv_blog_detail_comment);
         mLabelLine = findViewById(R.id.label_line);
         mLayComments = (LinearLayout) findViewById(R.id.lay_detail_comment);
@@ -175,9 +172,17 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                 }
 
                 for (int i = 0, len = comments.length; i < len; i++) {
-                    Comment comment = comments[i];
+                    final Comment comment = comments[i];
                     if (comment != null) {
-                        ViewGroup lay = insertComment(true, comment, imageLoader, onCommentClickListener);
+                        final ViewGroup lay = insertComment(true, comment, imageLoader, onCommentClickListener);
+                        lay.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mType == OSChinaApi.COMMENT_EVENT || mType == OSChinaApi.COMMENT_QUESTION) {
+                                    QuesAnswerDetailActivity.show(lay.getContext(), comment, mId, mType);
+                                }
+                            }
+                        });
                         mLayComments.addView(lay, indexOfChild(mLabelBottomLine));
                         if (i == len - 1) {
                             lay.findViewById(R.id.line).setVisibility(GONE);
@@ -223,12 +228,10 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         tvVoteCount.setText(String.valueOf(comment.getVote()));
         final ImageView ivVoteStatus = (ImageView) lay.findViewById(R.id.btn_vote);
 
-        Log.e(TAG, "addComment: ---->" + mType);
         final ImageView ivComment = (ImageView) lay.findViewById(R.id.btn_comment);
         ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e(TAG, "onClick: ----->这是准备评论");
                 commentBar.getBottomSheet().show(String.format("%s %s",
                         ivComment.getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
             }

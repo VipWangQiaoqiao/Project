@@ -5,7 +5,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -18,7 +17,6 @@ import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
-import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
@@ -40,7 +38,6 @@ import java.util.List;
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
         implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
 
-    public static final String TAG = "QuestionDetailFragment";
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
@@ -184,7 +181,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mComments.setTitle(String.format("回答 (%s)", questionDetail.getCommentCount()));
         mComments.setCommentBar(mDelegation);
         mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, OSChinaApi.COMMENT_NEW_ORDER, getImgLoader(), this);
-
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -245,10 +241,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG).show();
     }
 
-    public void toSendCommentOk(CommentEX commentEX) {
-
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -260,7 +252,5 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     @Override
     public void onClick(View view, Comment comment) {
-
-        Log.e(TAG, "onClick: ---------->准备进入新的评论问答详情");
     }
 }

@@ -162,6 +162,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
             mComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    commentBar.getBottomSheet().getBtnCommit().setTag(comment);
+
                     commentBar.getBottomSheet().show(String.format("%s %s",
                             mComment.getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
                 }
@@ -169,7 +171,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
 
             Log.e(TAG, "addComment: ---->" + commentType);
             if (commentType == OSChinaApi.COMMENT_QUESTION || commentType == OSChinaApi.COMMENT_EVENT) {
-                comment.setBest(true);
                 mVoteCount.setVisibility(View.GONE);
                 mVote.setVisibility(View.GONE);
                 if (comment.isBest()) {

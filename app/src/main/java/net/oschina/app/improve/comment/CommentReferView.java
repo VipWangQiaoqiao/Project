@@ -46,7 +46,6 @@ public class CommentReferView extends LinearLayout {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View child = CommentsUtil.getReferLayout(inflater, refers, 0);
             addView(child, indexOfChild(child));
-
         }
 
 
