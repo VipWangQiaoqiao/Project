@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="?attr/layout_item_bg"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/layout_item_bg"
+    android:orientation="vertical">
 
     <View
         style="@style/h_line"
@@ -43,17 +44,6 @@
     <View
         style="@style/h_line"
         android:layout_height="1px"
-        android:layout_marginTop="30dp"
-        android:visibility="gone"/>
-
-    <View
-        style="@style/h_line"
-        android:layout_height="1px"
-        android:visibility="gone"/>
-
-    <View
-        style="@style/h_line"
-        android:layout_height="1px"
         android:layout_marginTop="30dp"/>
 
     <LinearLayout
@@ -88,7 +78,8 @@
         <View
             style="@style/h_line"
             android:layout_height="1px"
-            android:layout_marginLeft="8dp"/>
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"/>
 
     </LinearLayout>
 
@@ -119,4 +110,41 @@
     <View
         style="@style/h_line"
         android:layout_height="1px"/>
+
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px"
+        android:layout_marginTop="25dp"/>
+
+    <LinearLayout
+        android:id="@+id/layout_events"
+        style="@style/option_item_rl"
+        android:background="@drawable/item_selector">
+
+        <ImageView
+            style="@style/option_item_img"
+            android:layout_marginRight="@dimen/space_10"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_my_event"/>
+
+        <TextView
+            style="@style/option_item_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="线下活动"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            app:srcCompat="@mipmap/ic_arrow_right"/>
+    </LinearLayout>
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px"/>
+
+
 </LinearLayout>

@@ -160,6 +160,15 @@ public class SolarSystemView extends View implements Runnable {
         postRepaint();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mCacheBitmap != null){
+            mCacheBitmap.recycle();
+            mCacheBitmap = null;
+        }
+    }
+
     private ValueAnimator getAccelerateAnimator(){
         if (mAccelerateAnimator != null) return mAccelerateAnimator;
         mAccelerateAnimator = ValueAnimator.ofFloat(mFlushRate, FLUSH_RATE_LIMITATION);

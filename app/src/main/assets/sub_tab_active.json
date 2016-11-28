@@ -54,20 +54,6 @@
     "type": 7
   },
   {
-    "banner": {
-      "catalog": 3,
-      "href": "https://www.oschina.net/action/apiv2//banner?catalog=3"
-    },
-    "fixed": false,
-    "href": "https://www.oschina.net/action/apiv2/sub_list?token=727d77c15b2ca641fff392b779658512",
-    "name": "线下活动",
-    "needLogin": false,
-    "order": 74,
-    "subtype": 1,
-    "token": "727d77c15b2ca641fff392b779658512",
-    "type": 5
-  },
-  {
     "fixed": false,
     "href": "https://www.oschina.net/action/apiv2/sub_list?token=1abf09a23a87442184c2f9bf9dc29e35",
     "name": "每日一博",
