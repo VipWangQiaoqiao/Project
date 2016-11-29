@@ -439,7 +439,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         } else {
 
             if (!isLogin()) {
-                //UIHelper.showLoginActivity(getActivity());
                 LoginActivity.show(getActivity());
                 return;
             }

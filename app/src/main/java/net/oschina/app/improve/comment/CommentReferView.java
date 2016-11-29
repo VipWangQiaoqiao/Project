@@ -39,7 +39,7 @@ public class CommentReferView extends LinearLayout {
 
 
     public void addComment(final Comment comment) {
-        removeAllViews();
+        removeAllViews();//因为在list中有复用问题，不同的refers长度不同，并且不一样，所以需要先清除掉原先的布局，包括
         Refer[] refers = comment.getRefer();
 
         if (refers != null && refers.length > 0) {
