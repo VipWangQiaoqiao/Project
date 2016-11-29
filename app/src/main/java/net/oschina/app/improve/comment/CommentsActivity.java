@@ -9,6 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -113,6 +114,8 @@ public class CommentsActivity extends BaseBackActivity {
                         mDelegation.getBottomSheet().dismiss();
                         getData(true, null);
                     }
+                } else {
+                    AppContext.showToastShort(resultBean.getMessage());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -320,16 +323,19 @@ public class CommentsActivity extends BaseBackActivity {
         }
 
         switch (type) {
-            case 2:
+            case OSChinaApi.COMMENT_QUESTION:
                 OSChinaApi.pubQuestionComment(id, commentId, commentAuthorId, content, mHandler);
                 break;
-            case 3:
+            case OSChinaApi.COMMENT_BLOG:
                 OSChinaApi.pubBlogComment(id, commentId, commentAuthorId, content, mHandler);
                 break;
-            case 4:
+            case OSChinaApi.COMMENT_TRANSLATION:
                 OSChinaApi.pubTranslateComment(id, commentId, commentAuthorId, content, mHandler);
                 break;
-            case 6:
+            case OSChinaApi.COMMENT_EVENT:
+                OSChinaApi.pubEventComment(id, commentId, commentAuthorId, content, mHandler);
+                break;
+            case OSChinaApi.COMMENT_NEWS:
                 OSChinaApi.pubNewsComment(id, commentId, commentAuthorId, content, mHandler);
                 break;
             default:
