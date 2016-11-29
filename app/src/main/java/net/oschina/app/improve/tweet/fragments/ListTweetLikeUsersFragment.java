@@ -74,15 +74,6 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<TweetLi
     }
 
     @Override
-    public void onLoadMore() {
-        OSChinaApi.getTweetLikeList(
-                mOperator.getTweetDetail().getId(),
-                mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(),
-                mHandler
-        );
-    }
-
-    @Override
     protected boolean isNeedCache() {
         return false;
     }
@@ -94,7 +85,8 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<TweetLi
 
     @Override
     protected void requestData() {
-        OSChinaApi.getTweetLikeList(mOperator.getTweetDetail().getId(), null, mHandler);
+        String token = mIsRefresh ? null : mBean.getNextPageToken();
+        OSChinaApi.getTweetLikeList(mOperator.getTweetDetail().getId(), token, mHandler);
     }
 
     @Override
@@ -108,6 +100,7 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<TweetLi
     public void onItemClick(int position, long itemId) {
         super.onItemClick(position, itemId);
         TweetLike liker = mAdapter.getItem(position);
+        if (liker == null) return;
         UIHelper.showUserCenter(getContext(), liker.getAuthor().getId(), liker.getAuthor().getName());
     }
 

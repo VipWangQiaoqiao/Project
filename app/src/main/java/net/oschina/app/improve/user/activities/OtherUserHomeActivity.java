@@ -255,16 +255,6 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 public CharSequence getPageTitle(int position) {
                     return fragments.get(position).first;
                 }
-
-                @Override
-                public void destroyItem(ViewGroup container, int position, Object object) {
-
-                }
-
-                @Override
-                public void destroyItem(View container, int position, Object object) {
-
-                }
             });
 
             mTabLayout.setupWithViewPager(mViewPager);
@@ -328,7 +318,6 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 .into(mLogoPortrait);
         mLogoNick.setText(user.getName());
         mNick.setText(user.getName());
-        // TODO summary
         String desc = user.getDesc();
         mSummary.setText(TextUtils.isEmpty(desc) ? "这人很懒,什么都没写" : desc);
         if (user.getStatistics() != null) {
@@ -423,6 +412,16 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 Bundle userBundle = new Bundle();
                 userBundle.putSerializable("user_info", user);
                 UIHelper.showSimpleBack(this, SimpleBackPage.MY_INFORMATION_DETAIL, userBundle);
+                break;
+            case R.id.iv_portrait:
+                DialogHelper.getSelectDialog(this, "请选择操作", new String[]{"查看头像"}, "取消",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (user == null || TextUtils.isEmpty(user.getPortrait())) return;
+                                UIHelper.showUserAvatar(OtherUserHomeActivity.this, user.getPortrait());
+                            }
+                        }).show();
                 break;
         }
     }
