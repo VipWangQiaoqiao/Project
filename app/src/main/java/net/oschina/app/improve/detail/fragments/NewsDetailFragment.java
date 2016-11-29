@@ -2,7 +2,6 @@ package net.oschina.app.improve.detail.fragments;
 
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -41,8 +40,6 @@ import net.oschina.app.util.TDevice;
 
 public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailContract.View, NewsDetailContract.Operator>
         implements View.OnClickListener, NewsDetailContract.View, OnCommentClickListener {
-
-    public static final String TAG = "NewsDetailFragment";
 
     private long mId;
     // private TextView mTVAuthorName;
@@ -87,9 +84,9 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mComment = (CommentView) root.findViewById(R.id.lay_detail_comment);
 
         CoordinatorLayout mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
-        NestedScrollView mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
+        //NestedScrollView mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
 
-        registerScroller(mLayContent, mComment);
+        //registerScroller(mLayContent, mComment);
 
         mDelegation = CommentBar.delegation(getActivity(), mLayCoordinator);
 
@@ -188,7 +185,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         mAbouts.setAbout(newsDetail.getAbouts(), 6);
 
-        mComment.setTitle(String.format("%s (%s)", getResources().getString(R.string.hot_comment_hint), newsDetail.getCommentCount()));
+        mComment.setTitle(String.format("%s", getResources().getString(R.string.hot_comment_hint)));
         mComment.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, OSChinaApi.COMMENT_HOT_ORDER, getImgLoader(), this);
     }
 
@@ -232,7 +229,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     }
 
     @Override
-    public void toSendCommentOk(Comment comment) {
+    public void toSendCommentOk(final Comment comment) {
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
             NewsDetail detail = mOperator.getData();
             if (detail == null) return;

@@ -1,10 +1,10 @@
 package net.oschina.app.improve.comment.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,7 +88,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
         if (holder instanceof CommentHolder) {
-            ((CommentHolder) holder).addComment(mSourceId, mType, item, mRequestManager);
+            ((CommentHolder) holder).addComment((position+1), mSourceId, mType, item, mRequestManager);
         }
     }
 
@@ -147,7 +147,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
          *
          * @param comment comment
          */
-        public void addComment(final long sourceId, final int commentType, final Comment comment, RequestManager requestManager) {
+        @SuppressLint("DefaultLocale")
+        public void addComment(int position, final long sourceId, final int commentType, final Comment comment, RequestManager requestManager) {
 
             requestManager.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface).into(mIvAvatar);
             mIvAvatar.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +158,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                 }
             });
             mName.setText(comment.getAuthor().getName());
-            mPubDate.setText(StringUtils.formatSomeAgo(comment.getPubDate()));
+            mPubDate.setText(String.format("%d%s  %s", position, mPubDate.getResources().getString(R.string.floor_hint),
+                    StringUtils.formatSomeAgo(comment.getPubDate())));
 
             mComment.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -169,7 +171,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                 }
             });
 
-            if (commentType == OSChinaApi.COMMENT_QUESTION || commentType == OSChinaApi.COMMENT_EVENT) {
+            if (commentType == OSChinaApi.COMMENT_QUESTION || commentType == OSChinaApi.COMMENT_EVENT
+                    || commentType == OSChinaApi.COMMENT_BLOG || commentType == OSChinaApi.COMMENT_TRANSLATION) {
                 mVoteCount.setVisibility(View.GONE);
                 mVote.setVisibility(View.GONE);
                 if (comment.isBest()) {

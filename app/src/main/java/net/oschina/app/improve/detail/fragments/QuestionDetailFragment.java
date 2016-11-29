@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -137,6 +138,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         }
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void initData() {
 
@@ -178,7 +180,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         setText(R.id.tv_info_view, String.valueOf(questionDetail.getViewCount()));
         setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
 
-        mComments.setTitle(String.format("回答 (%s)", questionDetail.getCommentCount()));
+        mComments.setTitle(String.format("%s (%d)", getResources().getString(R.string.answer_hint), questionDetail.getCommentCount()));
         mComments.setCommentBar(mDelegation);
         mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, OSChinaApi.COMMENT_NEW_ORDER, getImgLoader(), this);
     }
@@ -236,7 +238,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
         mDelegation.getBottomSheet().getEditText().setText("");
         mDelegation.getBottomSheet().getEditText().setHint(getResources().getString(R.string.add_comment_hint));
-        //mComments.addComment(comment, getImgLoader(), null);
         mDelegation.getBottomSheet().dismiss();
         Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG).show();
     }
@@ -252,5 +253,9 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     @Override
     public void onClick(View view, Comment comment) {
+        mCommentId = comment.getId();
+        mCommentAuthorId = comment.getAuthor().getId();
+        mDelegation.getCommentText().setHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
     }
 }

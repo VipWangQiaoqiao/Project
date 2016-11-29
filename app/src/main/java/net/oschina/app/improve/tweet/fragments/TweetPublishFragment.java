@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -353,7 +354,8 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void setContent(String content) {
-        mEditContent.setText(content);
+        Spannable span = InputHelper.displayEmoji(getResources(), content, (int) mEditContent.getTextSize());
+        mEditContent.setText(span);
         mEditContent.setSelection(mEditContent.getText().length());
     }
 
