@@ -24,15 +24,19 @@ import android.text.style.ImageSpan;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
-import net.oschina.app.util.TDevice;
+import net.qiujuer.genius.ui.Ui;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author kymjs (http://www.kymjs.com)
+ * Emoji 表情解析类
  */
 public class InputHelper {
+    /**
+     * 删除Emoji表情
+     * @param editText
+     */
     public static void backspace(EditText editText) {
         if (editText == null) {
             return;
@@ -59,15 +63,26 @@ public class InputHelper {
      * (I'm drunk, I go home)
      */
     public static Spannable displayEmoji(Resources res, CharSequence s) {
-        return displayEmoji(res, new SpannableString(s));
+        return displayEmoji(res, s, (int) Ui.spToPx(res, 20));
+    }
+
+    public static Spannable displayEmoji(Resources res, CharSequence s, int size) {
+        return displayEmoji(res, new SpannableString(s), size);
     }
 
     public static Spannable displayEmoji(Resources res, Spannable spannable) {
+        return displayEmoji(res, spannable, (int) Ui.spToPx(res, 20));
+    }
+
+    public static Spannable displayEmoji(Resources res, Spannable spannable, int size) {
         String str = spannable.toString();
 
         if (!str.contains(":") && !str.contains("[")) {
             return spannable;
         }
+
+        if (size == 0)
+            size = (int) Ui.spToPx(res, 20);
 
         Pattern pattern = Pattern.compile("(\\[[^\\[\\]:\\s\\n]+\\])|(:[^:\\[\\]\\s\\n]+:)");
         Matcher matcher = pattern.matcher(str);
@@ -78,7 +93,8 @@ public class InputHelper {
             if (resId <= 0) continue;
             Drawable drawable = res.getDrawable(resId);
             if (drawable == null) continue;
-            drawable.setBounds(0, 0, (int) TDevice.dp2px(20), (int) TDevice.dp2px(20));
+            drawable.setBounds(0, 0, size, size);
+
             ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
             spannable.setSpan(span, matcher.start(), matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -86,6 +102,11 @@ public class InputHelper {
         return spannable;
     }
 
+    /**
+     * 输入Emoji表情到 EditText
+     * @param editText EditText
+     * @param emojicon Emojicon
+     */
     public static void input2OSC(EditText editText, Emojicon emojicon) {
         if (editText == null || emojicon == null) {
             return;
@@ -95,11 +116,11 @@ public class InputHelper {
         if (start < 0) {
             // 没有多选时，直接在当前光标处添加
             editText.append(displayEmoji(editText.getResources(),
-                    emojicon.getRemote()));
+                    emojicon.getRemote(), (int) editText.getTextSize()));
         } else {
             // 将已选中的部分替换为表情(当长按文字时会多选刷中很多文字)
             Spannable str = displayEmoji(editText.getResources(),
-                    emojicon.getRemote());
+                    emojicon.getRemote(), (int) editText.getTextSize());
             editText.getText().replace(Math.min(start, end),
                     Math.max(start, end), str, 0, str.length());
         }
