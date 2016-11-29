@@ -24,6 +24,7 @@ import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.search.adapters.SearchArticleAdapter;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
@@ -86,6 +87,7 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
     public void onItemClick(int position, long itemId) {
         super.onItemClick(position, itemId);
         News item = mAdapter.getItem(position);
+        if (item == null) return;
         switch (item.getType()) {
             case News.TYPE_BLOG:
                 BlogDetailActivity.show(getContext(), item.getId());
@@ -99,6 +101,8 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
             case News.TYPE_NEWS:
                 NewsDetailActivity.show(getContext(), item.getId());
                 break;
+            default:
+                UIHelper.openInternalBrowser(getContext(), item.getHref());
         }
     }
 
