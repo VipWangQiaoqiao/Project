@@ -35,11 +35,13 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.bean.simple.TweetLike;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
@@ -187,6 +189,15 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 mCmnViewImp.onCommentSuccess(null);
                 replies.clear(); // 清除
+
+                if (mDelegation.getBottomSheet().isSyncToTweet()) {
+                    Tweet tempTweet = tweet;
+                    if (tempTweet == null) return;
+                    About about = new About();
+                    about.setId(tweet.getId());
+                    TweetPublishService.startActionPublish(TweetDetailActivity.this, mDelegation.getBottomSheet().getCommentText(), null, about);
+                }
+
                 mViewInput.setHint("添加评论");
                 mDelegation.setCommentHint("添加评论");
                 mDelegation.getBottomSheet().getEditText().setText("");
