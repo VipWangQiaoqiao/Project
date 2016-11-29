@@ -45,8 +45,6 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     protected String mUrl;
     private boolean isScrolling;
     protected String mBannerCache;
-    private boolean isStop;
-
     public HeaderView(Context context, RequestManager loader, String api, String bannerCache) {
         super(context);
         mImageLoader = loader;
@@ -61,7 +59,6 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         List<Banner> banners = CacheManager.readFromJson(context, mBannerCache, Banner.class);
         if (banners != null) {
             mBanners.addAll(banners);
-            //mIndicator.setCount(banners.size());
             mHandler.postDelayed(this, 5000);
         }
         LayoutInflater.from(context).inflate(getLayoutId(), this, true);
@@ -78,6 +75,8 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        isScrolling = true;
                     case MotionEvent.ACTION_UP:
                         isScrolling = false;
                         break;
@@ -156,18 +155,12 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         isScrolling = mCurrentItem != position;
-        isStop = true;
-        mHandler.removeCallbacks(this);
     }
 
     @Override
     public void onPageSelected(int position) {
         isScrolling = false;
         mCurrentItem = position;
-        if (isStop) {
-            mHandler.postDelayed(this, 5000);
-        }
-        isStop = false;
     }
 
     @Override
