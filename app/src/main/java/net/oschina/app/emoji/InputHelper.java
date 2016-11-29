@@ -62,7 +62,7 @@ public class InputHelper {
         return displayEmoji(res, new SpannableString(s));
     }
 
-    public static Spannable displayEmoji(Resources res, Spannable spannable){
+    public static Spannable displayEmoji(Resources res, Spannable spannable) {
         String str = spannable.toString();
 
         if (!str.contains(":") && !str.contains("[")) {
@@ -71,7 +71,7 @@ public class InputHelper {
 
         Pattern pattern = Pattern.compile("(\\[[^\\[\\]:\\s\\n]+\\])|(:[^:\\[\\]\\s\\n]+:)");
         Matcher matcher = pattern.matcher(str);
-        while (matcher.find()){
+        while (matcher.find()) {
             String emojiStr = matcher.group();
             if (TextUtils.isEmpty(emojiStr)) continue;
             int resId = getEmojiResId(emojiStr);
@@ -80,7 +80,7 @@ public class InputHelper {
             if (drawable == null) continue;
             drawable.setBounds(0, 0, (int) TDevice.dp2px(20), (int) TDevice.dp2px(20));
             ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
-            spannable.setSpan(span, matcher.start(), matcher.end(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(span, matcher.start(), matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         return spannable;
