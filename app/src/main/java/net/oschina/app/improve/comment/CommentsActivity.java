@@ -9,7 +9,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -52,7 +51,7 @@ import static net.oschina.app.R.id.tv_back_label;
  * on  16/11/17
  * desc:详情评论列表ui
  */
-public class CommentsActivity extends BaseBackActivity {
+public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAdapter.OnItemClickListener, BaseRecyclerAdapter.OnItemLongClickListener {
 
     private long mId;
     private int mType;
@@ -200,6 +199,8 @@ public class CommentsActivity extends BaseBackActivity {
         mCommentAdapter.setSourceId(mId);
         mCommentAdapter.setCommentType(mType);
         mCommentAdapter.setDelegation(mDelegation);
+        mCommentAdapter.setOnItemClickListener(this);
+        mCommentAdapter.setOnItemLongClickListener(this);
         mLayComments.setAdapter(mCommentAdapter);
         mCommentAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -452,5 +453,15 @@ public class CommentsActivity extends BaseBackActivity {
             mDelegation.getBottomSheet().handleSelectFriendsResult(data);
             mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
+    }
+
+    @Override
+    public void onItemClick(int position, long itemId) {
+
+    }
+
+    @Override
+    public void onLongClick(int position, long itemId) {
+
     }
 }
