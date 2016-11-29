@@ -74,6 +74,7 @@ public class AppContext extends BaseApplication {
         }
 
         // 清理图片缓存
+        Glide.get(OSCApplication.getInstance()).clearMemory();
         Glide.get(OSCApplication.getInstance()).clearDiskCache();
 
         // 清除编辑器保存的临时内容

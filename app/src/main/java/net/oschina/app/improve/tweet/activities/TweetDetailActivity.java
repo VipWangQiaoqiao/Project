@@ -431,7 +431,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         if (checkLogin()) return;
         if (replies.size() < 5) {
             for (TweetComment cmm : replies) {
-                if (cmm.getAuthor().getId() == comment.getAuthor().getId()) return;
+                if (cmm.getAuthor().getId() == comment.getAuthor().getId()) {
+                    this.mDelegation.performClick();
+                    return;
+                }
             }
             if (replies.size() == 0) {
                 mViewInput.setHint("回复: @" + comment.getAuthor().getName());

@@ -12,6 +12,8 @@ public class ResultBean<T> {
     public static final int RESULT_NOT_LOGIN = 201;
     public static final int RESULT_TOKEN_EXPRIED = 202;
     public static final int RESULT_NOT_PERMISSION = 203;
+    public static final int RESULT_TOKEN_ERROR = 204;
+
     private T result;
     private int code;
     private String message;

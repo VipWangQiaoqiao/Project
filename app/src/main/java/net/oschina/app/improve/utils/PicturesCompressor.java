@@ -15,8 +15,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static net.oschina.app.improve.utils.StreamUtils.close;
-import static net.oschina.app.improve.utils.StreamUtils.copyFile;
+import static net.oschina.common.utils.StreamUtil.close;
+import static net.oschina.common.utils.StreamUtil.copyFile;
+
 
 /**
  * Created by JuQiu

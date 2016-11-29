@@ -15,6 +15,7 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
 
@@ -97,6 +98,9 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
                         setListData(resultBean);
                         onRequestSuccess(resultBean.getCode());
                     } else {
+                        if (resultBean.getCode() == ResultBean.RESULT_TOKEN_ERROR) {
+                            SimplexToast.show(getActivity(), resultBean.getMessage());
+                        }
                         mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
                     }
                 } catch (Exception e) {

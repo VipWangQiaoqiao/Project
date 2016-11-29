@@ -30,7 +30,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.utils.PicturesCompressor;
-import net.oschina.app.improve.utils.StreamUtils;
+import net.oschina.common.utils.StreamUtil;
 import net.qiujuer.genius.ui.widget.Loading;
 
 import java.io.File;
@@ -185,7 +185,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                         }
                     }
                     final File saveFile = new File(extDirFile, String.format("IMG_%s.%s", System.currentTimeMillis(), extension));
-                    final boolean isSuccess = StreamUtils.copyFile(sourceFile, saveFile);
+                    final boolean isSuccess = StreamUtil.copyFile(sourceFile, saveFile);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

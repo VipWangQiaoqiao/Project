@@ -3,7 +3,7 @@ package net.oschina.app;
 import android.content.Context;
 import android.os.Environment;
 
-import net.oschina.app.improve.utils.StreamUtils;
+import net.oschina.common.utils.StreamUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,7 +65,7 @@ public class AppConfig {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            StreamUtils.close(fis);
+            StreamUtil.close(fis);
         }
         return props;
     }
@@ -83,7 +83,7 @@ public class AppConfig {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            StreamUtils.close(fos);
+            StreamUtil.close(fos);
         }
     }
 

@@ -22,7 +22,6 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.widget.indicator.CirclePagerIndicator;
-import net.oschina.app.widget.SmoothScroller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,6 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     protected String mUrl;
     private boolean isScrolling;
     protected String mBannerCache;
-
     public HeaderView(Context context, RequestManager loader, String api, String bannerCache) {
         super(context);
         mImageLoader = loader;
@@ -59,9 +57,9 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         mHandler = new Handler();
         mBanners = new ArrayList<>();
         List<Banner> banners = CacheManager.readFromJson(context, mBannerCache, Banner.class);
-        if (banners != null){
+        if (banners != null) {
             mBanners.addAll(banners);
-            mHandler.postDelayed(this,5000);
+            mHandler.postDelayed(this, 5000);
         }
         LayoutInflater.from(context).inflate(getLayoutId(), this, true);
         mViewPager = (ViewPager) findViewById(R.id.vp_banner);
@@ -69,13 +67,16 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         mAdapter = new BannerAdapter();
         mViewPager.addOnPageChangeListener(this);
         mViewPager.setAdapter(mAdapter);
-
         mIndicator.bindViewPager(mViewPager);
+        mIndicator.setCount(mBanners.size());
+
         new SmoothScroller(getContext()).bingViewPager(mViewPager);
         mViewPager.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        isScrolling = true;
                     case MotionEvent.ACTION_UP:
                         isScrolling = false;
                         break;
@@ -115,14 +116,15 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
 
     @Override
     public void run() {
+        mHandler.postDelayed(this, 5000);
         if (isScrolling)
             return;
-        mCurrentItem = (mCurrentItem + 1) % mBanners.size();
-        mViewPager.setCurrentItem(mCurrentItem, true);
-        mHandler.postDelayed(this, 5000);
+        mCurrentItem = mCurrentItem + 1;
+        mViewPager.setCurrentItem(mCurrentItem);
     }
 
     public void requestBanner() {
+        mHandler.removeCallbacks(this);
         OSChinaApi.getBanner(mUrl, mCallBack);
     }
 
@@ -132,9 +134,12 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
             mBanners.clear();
             mBanners.addAll(banners);
             mViewPager.getAdapter().notifyDataSetChanged();
+            mIndicator.setCount(mBanners.size());
             mIndicator.notifyDataSetChanged();
-            mCurrentItem = 0;
-            mViewPager.setCurrentItem(mCurrentItem, true);
+            if (mCurrentItem == 0 && mBanners.size() != 1) {
+                mCurrentItem = mBanners.size() * 1000;
+                mViewPager.setCurrentItem(mCurrentItem);
+            }
             if (mBanners.size() > 1) {
                 mHandler.postDelayed(this, 5000);
             }
@@ -166,7 +171,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     private class BannerAdapter extends PagerAdapter {
         @Override
         public int getCount() {
-            return mBanners.size();
+            return mBanners.size() == 1 ? 1 : Integer.MAX_VALUE;
         }
 
         @Override

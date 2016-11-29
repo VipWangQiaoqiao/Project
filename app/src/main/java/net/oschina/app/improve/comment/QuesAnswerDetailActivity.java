@@ -32,7 +32,6 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.comment.Reply;
-import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
@@ -57,12 +56,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * on 16/6/16.
  * change by fie
  * on 16/11/17
- * desc:问答的评论详情,可以对评论进行顶踩操作
+ * desc:问答,活动的评论详情（相当于帖子）,可以对评论进行顶踩操作
  */
 public class QuesAnswerDetailActivity extends BaseBackActivity {
 
+    private static final String TAG = "QuesAnswerDetailActivity";
+
     public static final String BUNDLE_KEY = "BUNDLE_KEY";
     public static final String BUNDLE_ARTICLE_KEY = "BUNDLE_ARTICLE_KEY";
+    public static final String BUNDLE_TYPE = "bundle_comment_type";
 
     @Bind(R.id.iv_portrait)
     CircleImageView ivPortrait;
@@ -88,14 +90,16 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
     NestedScrollView mScrollView;
 
     private long sid;
+    private Comment comment;
+    private int mType;
+
     private Dialog mVoteDialog;
     private Dialog mWaitingDialog;
-    private CommentEX comment;
     private Reply reply;
     private View mVoteDialogView;
     private List<Reply> replies = new ArrayList<>();
-    private CommentBar mDelegation;
 
+    private CommentBar mDelegation;
     private TextHttpResponseHandler onSendCommentHandler;
     private View.OnClickListener onReplyButtonClickListener;
 
@@ -104,17 +108,19 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
      * @param comment comment
      * @param sid     文章id
      */
-    public static void show(Context context, CommentEX comment, long sid) {
+    public static void show(Context context, Comment comment, long sid, int type) {
         Intent intent = new Intent(context, QuesAnswerDetailActivity.class);
         intent.putExtra(BUNDLE_KEY, comment);
         intent.putExtra(BUNDLE_ARTICLE_KEY, sid);
+        intent.putExtra(BUNDLE_TYPE, type);
         context.startActivity(intent);
     }
 
     @Override
     protected boolean initBundle(Bundle bundle) {
-        comment = (CommentEX) getIntent().getSerializableExtra(BUNDLE_KEY);
+        comment = (Comment) getIntent().getSerializableExtra(BUNDLE_KEY);
         sid = getIntent().getLongExtra(BUNDLE_ARTICLE_KEY, 0);
+        mType = getIntent().getIntExtra(BUNDLE_TYPE, OSChinaApi.COMMENT_QUESTION);
         return !(comment == null || comment.getId() <= 0) && super.initBundle(bundle);
     }
 
@@ -128,18 +134,18 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
         super.initWindow();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle("返回");
+            actionBar.setTitle(R.string.back_hint);
         }
     }
 
     @SuppressWarnings("deprecation")
     protected void initWidget() {
         // portrait
-        if (TextUtils.isEmpty(comment.getAuthorPortrait())) {
+        if (TextUtils.isEmpty(comment.getAuthor().getPortrait())) {
             ivPortrait.setImageResource(R.mipmap.widget_dface);
         } else {
             getImageLoader()
-                    .load(comment.getAuthorPortrait())
+                    .load(comment.getAuthor().getPortrait())
                     .asBitmap()
                     .placeholder(getResources().getDrawable(R.mipmap.widget_dface))
                     .error(getResources().getDrawable(R.mipmap.widget_dface))
@@ -147,7 +153,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
         }
 
         // nick
-        tvNick.setText(comment.getAuthor());
+        tvNick.setText(comment.getAuthor().getName());
 
         // publish time
         if (!TextUtils.isEmpty(comment.getPubDate()))
@@ -163,7 +169,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
         }
 
         // vote count
-        tvVoteCount.setText(String.valueOf(comment.getVoteCount()));
+        tvVoteCount.setText(String.valueOf(comment.getVote()));
 
         tvCmnCount.setText("评论 (" + (comment.getReply() == null ? 0 : comment.getReply().length) + ")");
 
@@ -198,7 +204,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
                 mWaitingDialog = DialogHelper.getProgressDialog(QuesAnswerDetailActivity.this, "正在发表评论...", false);
                 mWaitingDialog.show();
 
-                OSChinaApi.publishComment(sid, -1, comment.getId(), comment.getAuthorId(), 2, content, onSendCommentHandler);
+                OSChinaApi.publishComment(sid, -1, comment.getId(), comment.getAuthor().getId(), 2, content, onSendCommentHandler);
             }
         });
 
@@ -215,12 +221,13 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
             }
         });
 
-        if (comment.getReply() != null) {
+        Reply[] reply = comment.getReply();
+        if (reply != null) {
             mLayoutContainer.removeAllViews();
             replies.clear();
-            //Collections.addAll(replies, comment.getReply());
+            Collections.addAll(replies, comment.getReply());
             Collections.reverse(replies); // 反转集合, 最新的评论在集合后面
-            for (int i = 0, len = replies.size(); i < len; i++) {
+            for (int i = 0; i < replies.size(); i++) {
                 appendComment(i, replies.get(i));
             }
         }
@@ -261,12 +268,9 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
                 @Override
                 public void onClick(View v) {
                     Reply reply = (Reply) v.getTag();
-//                    mDelegation.notifyWrapper();
-//                    mDelegation.getInputView().setText("回复 @" + reply.getAuthor() + " : ");
-//                    mDelegation.getInputView().setSelection(mDelegation.getInputView().getText().length());
 
-                    mDelegation.getBottomSheet().getEditText().setText("回复 @" + reply.getAuthor() + " : ");
-                    mDelegation.setCommentHint("回复 @" + reply.getAuthor() + " : ");
+                    mDelegation.getBottomSheet().getEditText().setText("回复 @" + reply.getAuthor().getName() + " : ");
+                    mDelegation.setCommentHint("回复 @" + reply.getAuthor().getName() + " : ");
 
                     QuesAnswerDetailActivity.this.reply = reply;
                 }
@@ -317,7 +321,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
             }
         };
 
-        OSChinaApi.getCommentDetail(comment.getId(), comment.getAuthorId(), 2, new TextHttpResponseHandler() {
+        OSChinaApi.getCommentDetail(comment.getId(), comment.getAuthor().getId(), mType, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String respStr, Throwable throwable) {
                 Toast.makeText(QuesAnswerDetailActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
@@ -325,11 +329,11 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String respStr) {
-                ResultBean<CommentEX> result = AppOperator.createGson().fromJson(respStr,
-                        new TypeToken<ResultBean<CommentEX>>() {
+                ResultBean<Comment> result = AppOperator.createGson().fromJson(respStr,
+                        new TypeToken<ResultBean<Comment>>() {
                         }.getType());
                 if (result.isSuccess()) {
-                    CommentEX cmn = result.getResult();
+                    Comment cmn = result.getResult();
                     if (cmn != null && cmn.getId() > 0) {
                         comment = cmn;
                         initWidget();
@@ -397,7 +401,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
                                     }.getType());
                             if (result.isSuccess()) {
                                 comment.setVoteState(result.getResult().getVoteState());
-                                comment.setVoteCount((int) result.getResult().getVote());
+                                comment.setVote((int) result.getResult().getVote());
                                 tvVoteCount.setText(String.valueOf(result.getResult().getVote()));
                                 v.setSelected(!v.isSelected());
                                 switch (opt) {

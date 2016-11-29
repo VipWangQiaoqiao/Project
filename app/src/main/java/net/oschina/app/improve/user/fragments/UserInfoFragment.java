@@ -40,7 +40,6 @@ import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.utils.PicturesCompressor;
-import net.oschina.app.improve.utils.StreamUtils;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.improve.widget.TitleBar;
@@ -50,6 +49,7 @@ import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+import net.oschina.common.utils.StreamUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -439,7 +439,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         } else {
 
             if (!isLogin()) {
-                //UIHelper.showLoginActivity(getActivity());
                 LoginActivity.show(getActivity());
                 return;
             }
@@ -702,7 +701,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            StreamUtils.close(outputStream);
+            StreamUtil.close(outputStream);
         }
         return file;
     }

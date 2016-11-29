@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.TranslationDetail;
@@ -38,7 +39,7 @@ import net.oschina.app.util.StringUtils;
 
 public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         TranslateDetailContract.View, TranslateDetailContract.Operator>
-        implements TranslateDetailContract.View, OnCommentClickListener, View.OnClickListener {
+        implements TranslateDetailContract.View, OnCommentClickListener {
 
     private long mId;
     private TextView mTVAuthorName;
@@ -198,24 +199,24 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
 
     @Override
     public void toSendCommentOk(Comment comment) {
-        (Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_LONG)).show();
-        mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
-        mDelegation.getBottomSheet().getEditText().setText("");
-        mDelegation.getBottomSheet().getEditText().setHint(getResources().getString(R.string.add_comment_hint));
-        // mComments.addComment(comment, getImgLoader(), this);
-        mDelegation.getBottomSheet().dismiss();
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
             TranslationDetail detail = mOperator.getData();
             if (detail == null) return;
             About about = new About();
             about.setId(detail.getId());
-            //about.setType(detail.type);
+            about.setType(OSChinaApi.COMMENT_TRANSLATION);
             about.setTitle(detail.getTitle());
             about.setHref(detail.getHref());
             about.setCommentCount(detail.getCommentCount());
             about.setViewCount(detail.getViewCount());
             TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
         }
+        Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
+        mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint(getResources().getString(R.string.add_comment_hint));
+        // mComments.addComment(comment, getImgLoader(), this);
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override
@@ -239,10 +240,5 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
             mDelegation.getBottomSheet().handleSelectFriendsResult(data);
             mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 }

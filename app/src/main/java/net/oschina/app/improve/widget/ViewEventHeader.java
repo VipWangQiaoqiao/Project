@@ -16,7 +16,7 @@ import com.bumptech.glide.RequestManager;
 import net.oschina.app.R;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.improve.widget.indicator.CirclePagerIndicator;
-import net.oschina.app.widget.SmoothScroller;
+import net.oschina.app.improve.widget.banner.SmoothScroller;
 import net.oschina.app.widget.SuperRefreshLayout;
 
 import java.util.ArrayList;

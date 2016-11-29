@@ -1,10 +1,10 @@
 package net.oschina.app.improve.comment.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +29,7 @@ import net.oschina.app.improve.bean.comment.Vote;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentReferView;
 import net.oschina.app.improve.comment.CommentsUtil;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -87,7 +88,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
         if (holder instanceof CommentHolder) {
-            ((CommentHolder) holder).addComment(mSourceId, mType, item, mRequestManager);
+            ((CommentHolder) holder).addComment((position+1), mSourceId, mType, item, mRequestManager);
         }
     }
 
@@ -146,35 +147,46 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
          *
          * @param comment comment
          */
+        @SuppressLint("DefaultLocale")
+        public void addComment(int position, final long sourceId, final int commentType, final Comment comment, RequestManager requestManager) {
 
-        public void addComment(final long sourceId, int commentType, final Comment comment, RequestManager requestManager) {
             requestManager.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface).into(mIvAvatar);
+            mIvAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OtherUserHomeActivity.show(mIvAvatar.getContext(), comment.getAuthor().getId());
+                }
+            });
             mName.setText(comment.getAuthor().getName());
-            mPubDate.setText(StringUtils.formatSomeAgo(comment.getPubDate()));
+            mPubDate.setText(String.format("%d%s  %s", position, mPubDate.getResources().getString(R.string.floor_hint),
+                    StringUtils.formatSomeAgo(comment.getPubDate())));
+
             mComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    commentBar.getBottomSheet().getBtnCommit().setTag(comment);
 
-                    Log.e(TAG, "onClick: --------->谈起来");
                     commentBar.getBottomSheet().show(String.format("%s %s",
                             mComment.getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-
                 }
             });
-            if (commentType == OSChinaApi.COMMENT_QUESTION) {
+
+            if (commentType == OSChinaApi.COMMENT_QUESTION || commentType == OSChinaApi.COMMENT_EVENT
+                    || commentType == OSChinaApi.COMMENT_BLOG || commentType == OSChinaApi.COMMENT_TRANSLATION) {
                 mVoteCount.setVisibility(View.GONE);
                 mVote.setVisibility(View.GONE);
                 if (comment.isBest()) {
                     mComment.setImageResource(R.mipmap.label_best_answer);
+                    mComment.setEnabled(false);
                 } else {
+                    mComment.setEnabled(true);
                     mComment.setImageResource(R.mipmap.ic_comment_30);
                 }
             } else {
-
                 mVoteCount.setText(String.valueOf(comment.getVote()));
                 mVoteCount.setVisibility(View.VISIBLE);
                 mVote.setVisibility(View.VISIBLE);
-
+                mComment.setEnabled(true);
                 if (comment.getVoteState() == 1) {
                     mVote.setImageResource(R.mipmap.ic_thumbup_actived);
                     mVote.setTag(true);
@@ -185,13 +197,10 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                 mVote.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        Log.e(TAG, "onClick: ------->");
                         handVote();
                     }
 
                     private void handVote() {
-
                         if (!AccountHelper.isLogin()) {
                             LoginActivity.show(mVote.getContext());
                             return;
@@ -200,8 +209,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                             AppContext.showToast(mVote.getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
                             return;
                         }
-
-                        OSChinaApi.voteComment(sourceId, comment.getId(), mVote.getTag() != null ? 0 : 1, new TextHttpResponseHandler() {
+                        OSChinaApi.voteComment(commentType, comment.getId(), comment.getAuthor().getId(), mVote.getTag() != null ? 0 : 1, new TextHttpResponseHandler() {
 
                             @Override
                             public void onStart() {
@@ -248,7 +256,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                     }
                 });
             }
-
 
             mCommentReferView.addComment(comment);
 

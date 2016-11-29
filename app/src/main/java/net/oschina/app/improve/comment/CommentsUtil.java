@@ -15,6 +15,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.bean.comment.Refer;
+import net.oschina.app.improve.bean.comment.Reply;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
@@ -45,6 +46,31 @@ public final class CommentsUtil {
         if (count < (refer.length < 5 ? refer.length - 1 : 4)) {
             count++;
             View view = getReferLayout(inflater, refer, count);
+            lay.addView(view, lay.indexOfChild(textView));
+        }
+
+        return lay;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static View getReplyLayout(LayoutInflater inflater, Reply[] replies, int count) {
+        Context context = inflater.getContext();
+        @SuppressLint("InflateParams")
+        ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
+        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(context.getResources(), 1), 0, 0, 0)));
+        drawable.getPaint().setColor(0xffd7d6da);
+        lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);
+
+        TextView textView = ((TextView) lay.findViewById(R.id.tv_blog_detail_comment_refer));
+        drawable = new ShapeDrawable(new BorderShape(new RectF(0, 0, 0, 1)));
+        drawable.getPaint().setColor(0xffd7d6da);
+        textView.setBackgroundDrawable(drawable);
+
+        formatHtml(context.getResources(), textView, replies[replies.length - 1 - count].getAuthor().getName() + ":<br>" + replies[replies.length - 1 - count].getContent());
+
+        if (count < (replies.length < 5 ? replies.length - 1 : 4)) {
+            count++;
+            View view = getReplyLayout(inflater, replies, count);
             lay.addView(view, lay.indexOfChild(textView));
         }
 
