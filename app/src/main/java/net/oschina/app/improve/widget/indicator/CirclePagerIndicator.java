@@ -54,7 +54,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         mRadius = a.getDimension(R.styleable.CirclePagerIndicator_circle_indicator_radius, 10);
         mIndicatorSpace = a.getDimension(R.styleable.CirclePagerIndicator_circle_indicator_space, 20);
         mIndicatorRadius = a.getDimension(R.styleable.CirclePagerIndicator_circle_indicator_indicator_radius, 10);
-        mIsFollow = a.getBoolean(R.styleable.CirclePagerIndicator_circle_indicator_follow, true);
+        mIsFollow = a.getBoolean(R.styleable.CirclePagerIndicator_circle_indicator_follow, false);
         if (mIndicatorRadius < mRadius) mIndicatorRadius = mRadius;
         a.recycle();
     }
