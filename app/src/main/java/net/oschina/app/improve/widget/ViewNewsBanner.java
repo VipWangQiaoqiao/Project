@@ -28,7 +28,7 @@ public class ViewNewsBanner extends RelativeLayout implements View.OnClickListen
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_news_banner, this, true);
         iv_banner = (ImageView) findViewById(R.id.iv_banner);
-        //setOnClickListener(this);
+        setOnClickListener(this);
     }
 
     public void initData(RequestManager manager, Banner banner) {
