@@ -285,7 +285,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
         mViewInput = mDelegation.getBottomSheet().getEditText();
 
-        // TODO to select friends when input @ character
         resolveVoice();
         fillDetailView();
 

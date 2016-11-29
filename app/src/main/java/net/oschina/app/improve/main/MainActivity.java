@@ -105,7 +105,6 @@ public class MainActivity extends BaseActivity implements
         if (intent == null || intent.getAction() == null)
             return;
         String action = intent.getAction();
-        TLog.e("TAG", "onNewIntent action:" + action + " isCreate:" + isCreate);
         if (action.equals(ACTION_NOTICE)) {
             NavFragment bar = mNavBar;
             if (bar != null) {
