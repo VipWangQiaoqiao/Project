@@ -50,8 +50,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
 
-    public static final String TAG = "CommentAdapter";
-
     private static final int VIEW_TYPE_DATA_FOOTER = 2000;
     private long mSourceId;
 
@@ -88,7 +86,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
         if (holder instanceof CommentHolder) {
-            ((CommentHolder) holder).addComment((position+1), mSourceId, mType, item, mRequestManager);
+            ((CommentHolder) holder).addComment((position + 1), mSourceId, mType, item, mRequestManager);
         }
     }
 
