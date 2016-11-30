@@ -10,11 +10,11 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.media.contract.SelectImageContract;
+import net.oschina.app.improve.utils.DialogHelper;
 
 import java.io.Serializable;
 import java.util.List;
@@ -164,7 +164,7 @@ public class SelectImageActivity extends BaseBackActivity implements EasyPermiss
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         if (requestCode == RC_EXTERNAL_STORAGE) {
             removeView();
-            getConfirmDialog(this, "没有权限, 你需要去设置中开启读取手机存储权限.", "去设置", "取消", new DialogInterface.OnClickListener() {
+            DialogHelper.getConfirmDialog(this, "", "没有权限, 你需要去设置中开启读取手机存储权限.", "去设置", "取消", false, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
@@ -179,7 +179,7 @@ public class SelectImageActivity extends BaseBackActivity implements EasyPermiss
         } else {
             if (mView != null)
                 mView.onCameraPermissionDenied();
-            getConfirmDialog(this, "没有权限, 你需要去设置中开启相机权限.", "去设置", "取消", new DialogInterface.OnClickListener() {
+            DialogHelper.getConfirmDialog(this, "", "没有权限, 你需要去设置中开启相机权限.", "去设置", "取消", false, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
@@ -216,20 +216,6 @@ public class SelectImageActivity extends BaseBackActivity implements EasyPermiss
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static AlertDialog.Builder getConfirmDialog(Context context, String message, String
-            okString, String cancelString,
-                                                       DialogInterface.OnClickListener
-                                                               okClickListener,
-                                                       DialogInterface.OnClickListener
-                                                               cancelClickListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(message);
-        builder.setPositiveButton(okString, okClickListener);
-        builder.setNegativeButton(cancelString, cancelClickListener);
-        builder.setCancelable(false);
-        return builder;
     }
 
     public static class Config implements Serializable {
