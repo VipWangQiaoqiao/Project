@@ -235,7 +235,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             if (detail == null) return;
             About about = new About();
             about.setId(detail.getId());
-            about.setType(detail.getType());
+            about.setType(OSChinaApi.COMMENT_NEWS);
             about.setTitle(detail.getTitle());
             about.setHref(detail.getHref());
             about.setViewCount(detail.getViewCount());
