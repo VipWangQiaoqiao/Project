@@ -1333,7 +1333,7 @@ public class OSChinaApi {
             commentAuthorId = 0;
         }
 
-        publishComment(sid, 0, commentId, commentAuthorId, 3, comment, handler);
+        publishComment(sid, 0, commentId, commentAuthorId, 5, comment, handler);
     }
 
     /**
