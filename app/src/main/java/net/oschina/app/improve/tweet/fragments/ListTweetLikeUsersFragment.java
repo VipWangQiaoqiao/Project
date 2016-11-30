@@ -1,15 +1,11 @@
 package net.oschina.app.improve.tweet.fragments;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.User;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
@@ -22,9 +18,6 @@ import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
-import java.util.List;
-
-import cz.msebera.android.httpclient.Header;
 
 /**
  * 动弹详情, 点赞列表
@@ -85,7 +78,7 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<TweetLi
 
     @Override
     protected void requestData() {
-        String token = mIsRefresh ? null : mBean.getNextPageToken();
+        String token = isRefreshing ? null : mBean.getNextPageToken();
         OSChinaApi.getTweetLikeList(mOperator.getTweetDetail().getId(), token, mHandler);
     }
 

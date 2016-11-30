@@ -1,4 +1,4 @@
-package net.oschina.app.util;
+package net.oschina.app.improve.utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;

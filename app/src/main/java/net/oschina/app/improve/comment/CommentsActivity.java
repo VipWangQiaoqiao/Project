@@ -3,6 +3,7 @@ package net.oschina.app.improve.comment;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -35,6 +36,7 @@ import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
@@ -51,7 +53,7 @@ import static net.oschina.app.R.id.tv_back_label;
  * on  16/11/17
  * desc:详情评论列表ui
  */
-public class CommentsActivity extends BaseBackActivity {
+public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAdapter.OnItemLongClickListener {
 
     private long mId;
     private int mType;
@@ -113,6 +115,8 @@ public class CommentsActivity extends BaseBackActivity {
                         mDelegation.getBottomSheet().dismiss();
                         getData(true, null);
                     }
+                } else {
+                    AppContext.showToastShort(resultBean.getMessage());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -197,23 +201,19 @@ public class CommentsActivity extends BaseBackActivity {
         mCommentAdapter.setSourceId(mId);
         mCommentAdapter.setCommentType(mType);
         mCommentAdapter.setDelegation(mDelegation);
-        mLayComments.setAdapter(mCommentAdapter);
+        mCommentAdapter.setOnItemLongClickListener(this);
         mCommentAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, long itemId) {
 
                 Comment comment = mCommentAdapter.getItem(position);
 
-                switch (mType) {
-                    case OSChinaApi.COMMENT_QUESTION:
-                        QuesAnswerDetailActivity.show(CommentsActivity.this, comment, mId, mType);
-                        break;
-                    default:
-                        break;
+                if (mType == OSChinaApi.COMMENT_EVENT || mType == OSChinaApi.COMMENT_QUESTION) {
+                    QuesAnswerDetailActivity.show(CommentsActivity.this, comment, mId, mType);
                 }
-
             }
         });
+        mLayComments.setAdapter(mCommentAdapter);
 
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
@@ -320,16 +320,19 @@ public class CommentsActivity extends BaseBackActivity {
         }
 
         switch (type) {
-            case 2:
+            case OSChinaApi.COMMENT_QUESTION:
                 OSChinaApi.pubQuestionComment(id, commentId, commentAuthorId, content, mHandler);
                 break;
-            case 3:
+            case OSChinaApi.COMMENT_BLOG:
                 OSChinaApi.pubBlogComment(id, commentId, commentAuthorId, content, mHandler);
                 break;
-            case 4:
+            case OSChinaApi.COMMENT_TRANSLATION:
                 OSChinaApi.pubTranslateComment(id, commentId, commentAuthorId, content, mHandler);
                 break;
-            case 6:
+            case OSChinaApi.COMMENT_EVENT:
+                OSChinaApi.pubEventComment(id, commentId, commentAuthorId, content, mHandler);
+                break;
+            case OSChinaApi.COMMENT_NEWS:
                 OSChinaApi.pubNewsComment(id, commentId, commentAuthorId, content, mHandler);
                 break;
             default:
@@ -433,7 +436,6 @@ public class CommentsActivity extends BaseBackActivity {
     }
 
     private void handleData(List<Comment> comments, boolean clearData) {
-
         if (clearData)
             mCommentAdapter.clear();
         mCommentAdapter.addAll(comments);
@@ -446,5 +448,38 @@ public class CommentsActivity extends BaseBackActivity {
             mDelegation.getBottomSheet().handleSelectFriendsResult(data);
             mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
+    }
+
+
+    @Override
+    public void onLongClick(int position, long itemId) {
+
+        final Comment comment = mCommentAdapter.getItem(position);
+        if (comment == null) return;
+
+        String[] items;
+        // if (AccountHelper.getUserId() == (int) comment.getAuthor().getId()) {
+        //   items = new String[]{getString(R.string.copy), getString(R.string.delete)};
+        //} else {
+        items = new String[]{getString(R.string.copy)};
+        // }
+
+        DialogHelper.getSelectDialog(this, items, getString(R.string.cancle), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                switch (i) {
+                    case 0:
+                        TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(comment.getContent()));
+                        break;
+                    case 1:
+                        // TODO: 2016/11/30 delete comment
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }).show();
+
     }
 }
