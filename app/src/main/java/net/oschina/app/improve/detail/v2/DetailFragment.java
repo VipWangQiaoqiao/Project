@@ -17,6 +17,7 @@ public class DetailFragment extends BaseFragment implements DetailContract.View 
     protected DetailContract.Presenter mPresenter;
     protected OWebView mWebView;
 
+
     public static DetailFragment newInstance() {
         DetailFragment fragment = new DetailFragment();
         return fragment;
@@ -51,17 +52,25 @@ public class DetailFragment extends BaseFragment implements DetailContract.View 
     }
 
     @Override
-    public void showFavReverseSuccess(boolean isFav) {
-
+    public void showFavReverseSuccess(boolean isFav, int strId) {
+        SimplexToast.show(mContext, mContext.getResources().getString(strId));
     }
 
     @Override
     public void showFavError() {
-
+        SimplexToast.show(mContext, "收藏失败");
     }
 
     @Override
     public void showNetworkError(int strId) {
+        SimplexToast.show(mContext, mContext.getResources().getString(strId));
+    }
+
+    public void toShare(String title, String content, String url) {
+        ((DetailActivity) mContext).toShare(title, content, url);
+    }
+
+    public void scrolloToBottom() {
 
     }
 }

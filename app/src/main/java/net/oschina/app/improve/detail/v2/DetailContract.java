@@ -22,7 +22,7 @@ public interface DetailContract {
 
         void showGetDetailError(String message);
 
-        void showFavReverseSuccess(boolean isFav);
+        void showFavReverseSuccess(boolean isFav,int strId);
 
         void showFavError();
     }

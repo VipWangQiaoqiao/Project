@@ -1,11 +1,20 @@
 package net.oschina.app.improve.detail.v2;
 
+import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.HTMLUtil;
+import net.oschina.app.util.StringUtils;
 
 /**
  * 新版本详情页实现
@@ -13,10 +22,13 @@ import net.oschina.app.ui.empty.EmptyLayout;
  * on 2016/11/30.
  */
 
-public abstract class DetailActivity extends BaseBackActivity implements DetailContract.EmptyView, Runnable {
+public class DetailActivity extends BaseBackActivity implements DetailContract.EmptyView, Runnable {
     private DetailPresenter mPresenter;
     protected EmptyLayout mEmptyLayout;
     protected DetailFragment mDetailFragment;
+    private ShareDialogBuilder mShareDialogBuilder;
+    protected AlertDialog mAlertDialog;
+    protected TextView mCommentCountView;
 
     @Override
     protected int getContentView() {
@@ -55,5 +67,68 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
     @Override
     public void run() {
         hideEmptyLayout();
+    }
+
+    int getOptionsMenuId() {
+        return R.menu.menu_detail;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        int menuId = getOptionsMenuId();
+        if (menuId <= 0)
+            return false;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(menuId, menu);
+        MenuItem item = menu.findItem(R.id.menu_scroll_comment);
+        if (item != null) {
+            View action = item.getActionView();
+            if (action != null) {
+                action.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mDetailFragment != null) {
+                            mDetailFragment.scrolloToBottom();
+                        }
+                    }
+                });
+                View tv = action.findViewById(R.id.tv_comment_count);
+                if (tv != null)
+                    mCommentCountView = (TextView) tv;
+            }
+        }
+        return true;
+    }
+
+
+    protected boolean toShare(String title, String content, String url) {
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(url))
+            return false;
+
+        content = content.trim();
+        if (content.length() > 55) {
+            content = HTMLUtil.delHTMLTag(content);
+            if (content.length() > 55)
+                content = StringUtils.getSubString(0, 55, content);
+        } else {
+            content = HTMLUtil.delHTMLTag(content);
+        }
+        if (TextUtils.isEmpty(content))
+            return false;
+
+        // 分享
+        if (mShareDialogBuilder == null) {
+            mShareDialogBuilder = ShareDialogBuilder.with(this)
+                    .title(title)
+                    .content(content)
+                    .summary(content)
+                    .description(content)
+                    .url(url)
+                    .build();
+        }
+        if (mAlertDialog == null)
+            mAlertDialog = mShareDialogBuilder.create();
+        mAlertDialog.show();
+        return true;
     }
 }

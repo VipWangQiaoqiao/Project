@@ -6,6 +6,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 
@@ -52,6 +53,35 @@ public class DetailPresenter implements DetailContract.Presenter {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void favReverse() {
+        OSChinaApi.getFavReverse(mBean.getId(), mBean.getType(), new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                mView.showFavError();
+                mView.showNetworkError(R.string.tip_network_error);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<Collection>>() {
+                    }.getType();
+                    ResultBean<Collection> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                    if (resultBean != null && resultBean.isSuccess()) {
+                        Collection collection = resultBean.getResult();
+                        mView.showFavReverseSuccess(collection.isFavorite(), collection.isFavorite() ? R.string.add_favorite_success : R.string.del_favorite_success);
+                    } else {
+                        mView.showFavError();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
                 }
             }
         });
