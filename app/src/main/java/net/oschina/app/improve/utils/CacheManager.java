@@ -23,6 +23,8 @@ import java.util.List;
 
 public final class CacheManager {
     public static <T> void saveToJson(Context context, String fileName, List<T> list) {
+        if (context == null || list == null)
+            return;
         String json = new Gson().toJson(list);
         String path = context.getCacheDir() + "/" + fileName;
         File file = new File(path);

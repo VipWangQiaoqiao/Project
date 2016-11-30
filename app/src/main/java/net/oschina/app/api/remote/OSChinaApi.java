@@ -2030,4 +2030,14 @@ public class OSChinaApi {
         params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/tweet_list", params, handler);
     }
+
+    /**
+     * 新版获得各种类型详情统一接口和Model
+     */
+    public static void getDetail(int type, long id, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("type", type);
+        params.put("id", id);
+        ApiHttpClient.get("action/apiv2/detail", params, handler);
+    }
 }
