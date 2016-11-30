@@ -1035,6 +1035,26 @@ public class OSChinaApi {
     }
 
     /**
+     * 他人博客列表
+     * @param pageToken page token
+     * @param uid user id
+     * @param uname user name
+     * @param handler handler
+     */
+    public static void getSomeoneBlogs(
+            String pageToken,
+            long uid,
+            String uname,
+            AsyncHttpResponseHandler handler){
+        if (uid <= 0 && TextUtils.isEmpty(uname)) return;
+        RequestParams params = new RequestParams();
+        params.put("pageToken", pageToken);
+        params.put("authorId", uid);
+        params.put("authorName", uname);
+        ApiHttpClient.get("action/apiv2/blog_list", params, handler);
+    }
+
+    /**
      * 请求用户自己的博客列表
      *
      * @param pageToken 请求上下页数据令牌
