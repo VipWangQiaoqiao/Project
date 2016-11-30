@@ -1318,6 +1318,25 @@ public class OSChinaApi {
     }
 
     /**
+     * 发布活动评论
+     *
+     * @param sid             sourceId
+     * @param commentId       commentId
+     * @param commentAuthorId commentAuthorId
+     * @param comment         comment
+     * @param handler         handler
+     */
+    public static void pubEventComment(long sid, long commentId, long commentAuthorId, String comment, TextHttpResponseHandler handler) {
+
+        if (commentId == 0 || commentId == sid) {
+            commentId = 0;
+            commentAuthorId = 0;
+        }
+
+        publishComment(sid, 0, commentId, commentAuthorId, 5, comment, handler);
+    }
+
+    /**
      * 对资讯，博客，翻译详情下的评论列表进行顶操作(ps：默认现在只能顶，不能取消)
      *
      * @param sourceType      sourceType
