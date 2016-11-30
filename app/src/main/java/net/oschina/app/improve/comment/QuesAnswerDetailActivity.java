@@ -237,7 +237,13 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
 
     private void fillWebView() {
         if (TextUtils.isEmpty(comment.getContent())) return;
-        mWebView.loadDetailDataAsync(comment.getContent(), null);
+        if (mWebView != null)
+            mWebView.loadDetailDataAsync(comment.getContent(), new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
     }
 
     @SuppressWarnings("deprecation")
