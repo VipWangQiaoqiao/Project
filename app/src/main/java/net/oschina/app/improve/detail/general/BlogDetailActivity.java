@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.detail.v2.DetailActivity;
+import net.oschina.app.improve.detail.v2.DetailFragment;
 
 /**
  * Created by haibin
@@ -19,5 +20,10 @@ public class BlogDetailActivity extends DetailActivity {
         bundle.putSerializable("sub_bean", bean);
         intent.putExtras(bundle);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected DetailFragment getDetailFragment() {
+        return BlogDetailFragment.newInstance();
     }
 }

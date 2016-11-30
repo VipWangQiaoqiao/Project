@@ -22,7 +22,7 @@ import net.oschina.app.util.StringUtils;
  * on 2016/11/30.
  */
 
-public class DetailActivity extends BaseBackActivity implements DetailContract.EmptyView, Runnable {
+public abstract class DetailActivity extends BaseBackActivity implements DetailContract.EmptyView, Runnable {
     private DetailPresenter mPresenter;
     protected EmptyLayout mEmptyLayout;
     protected DetailFragment mDetailFragment;
@@ -48,7 +48,7 @@ public class DetailActivity extends BaseBackActivity implements DetailContract.E
                 }
             }
         });
-        mDetailFragment = DetailFragment.newInstance();
+        mDetailFragment = getDetailFragment();
         addFragment(R.id.lay_container, mDetailFragment);
         mPresenter = new DetailPresenter(mDetailFragment, this, (SubBean) getIntent().getSerializableExtra("sub_bean"));
         mPresenter.getDetail();
@@ -131,4 +131,6 @@ public class DetailActivity extends BaseBackActivity implements DetailContract.E
         mAlertDialog.show();
         return true;
     }
+
+    protected abstract DetailFragment getDetailFragment();
 }
