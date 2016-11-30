@@ -3,10 +3,7 @@ package net.oschina.app.improve.search.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -23,7 +20,6 @@ import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.search.adapters.SearchArticleAdapter;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
@@ -79,7 +75,7 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
             mRefreshLayout.setRefreshing(false);
             return;
         }
-        String token = mIsRefresh ? null : mBean.getNextPageToken();
+        String token = isRefreshing ? null : mBean.getNextPageToken();
         OSChinaApi.search(catalog, content, token, mHandler);
     }
 

@@ -163,7 +163,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @Override
     protected void requestData() {
         super.requestData();
-        String pageToken = mIsRefresh ? null : mBean.getNextPageToken();
+        String pageToken = isRefreshing ? null : mBean.getNextPageToken();
         switch (mReqCatalog) {
             case CATALOG_NEW:
                 OSChinaApi.getTweetList(null, null, 1, 1, pageToken, mHandler);
@@ -204,7 +204,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
     @Override
     protected void setListData(ResultBean<PageBean<Tweet>> resultBean) {
         mBean.setNextPageToken((resultBean == null ? null : resultBean.getResult().getNextPageToken()));
-        if (mIsRefresh) {
+        if (isRefreshing) {
             //cache the time
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();

@@ -51,7 +51,7 @@ public class SearchUserFragment extends BaseRecyclerViewFragment<User>
             mRefreshLayout.setRefreshing(false);
             return;
         }
-        String token = mIsRefresh ? null : mBean.getNextPageToken();
+        String token = isRefreshing ? null : mBean.getNextPageToken();
         OSChinaApi.search(News.TYPE_FIND_PERSON, content, token, mHandler);
     }
 

@@ -42,7 +42,7 @@ public class ApiHttpClient {
     public final static String HOST = "www.oschina.net";
     //public final static String HOST = "www.oschina.tk";
     private static String API_URL = "https://www.oschina.net/%s";
-    //private static String API_URL = "http://192.168.1.10/%s";
+//    private static String API_URL = "http://192.168.1.10/%s";
 
     private static AsyncHttpClient CLIENT;
 
@@ -135,7 +135,8 @@ public class ApiHttpClient {
         c.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
         // Set AppToken
-        c.addHeader("AppToken", Verifier.getPrivateToken(application));
+//        c.addHeader("AppToken", Verifier.getPrivateToken(application));
+        c.addHeader("AppToken", "765e06cc569b5b8ed41a4a8c979338c888d644f4");
         // setUserAgent
         c.setUserAgent(ApiClientHelper.getUserAgent(AppContext.getInstance()));
         CLIENT = c;

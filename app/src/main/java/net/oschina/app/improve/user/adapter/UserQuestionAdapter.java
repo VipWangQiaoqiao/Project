@@ -44,7 +44,9 @@ public class UserQuestionAdapter extends BaseRecyclerAdapter<Question>{
         holder.mViewTitle.setText(item.getTitle());
         holder.mViewContent.setText(item.getBody());
         String nick = item.getAuthor();
-        holder.mViewHistory.setText(nick.length() > 9 ? nick.substring(0, 9) : nick + " " + StringUtils.formatSomeAgo(item.getPubDate()));
+        holder.mViewHistory.setText(nick.length() > 9
+                ? nick.substring(0, 9)
+                : nick + " " + StringUtils.formatSomeAgo(item.getPubDate()));
         holder.mViewInfoCmm.setText(String.valueOf(item.getCommentCount()));
         holder.mViewInfoVisual.setText(String.valueOf(item.getViewCount()));
     }
