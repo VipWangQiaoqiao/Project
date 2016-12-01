@@ -354,8 +354,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     mShareDialogBuilder = ShareDialogBuilder.with(this)
                             .title(content + " - 开源中国社区 ")
                             .content(tweet.getContent())
-                            .summary(tweet.getContent())
-                            .description(tweet.getContent())
                             .url(tweet.getHref())
                             .build();
                 if (alertDialog == null)

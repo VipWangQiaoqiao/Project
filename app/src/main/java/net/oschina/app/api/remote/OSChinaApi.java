@@ -1439,7 +1439,6 @@ public class OSChinaApi {
         if (about != null) {
             params.put("aboutId", about.getId());
             params.put("aboutType", about.getType());
-            params.put("aboutImage", about.getImage());
         }
         post("action/apiv2/tweet", params, handler);
     }

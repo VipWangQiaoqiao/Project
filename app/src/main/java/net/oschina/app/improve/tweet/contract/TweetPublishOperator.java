@@ -10,11 +10,12 @@ import android.text.TextUtils;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
-import net.oschina.common.utils.CollectionUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+import net.oschina.common.utils.CollectionUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -27,16 +28,19 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     private final static String SHARE_FILE_NAME = TweetPublishFragment.class.getName();
     private final static String SHARE_VALUES_CONTENT = "content";
     private final static String SHARE_VALUES_IMAGES = "images";
+    private final static String SHARE_VALUES_ABOUT = "images";
     private final static String DEFAULT_PRE = "default";
     private TweetPublishContract.View mView;
     private String mDefaultContent;
     private String[] mDefaultImages;
+    private About mAbout;
 
     @Override
-    public void setDataView(TweetPublishContract.View view, String defaultContent, String[] defaultImages) {
+    public void setDataView(TweetPublishContract.View view, String defaultContent, String[] defaultImages, About about) {
         mView = view;
         mDefaultContent = defaultContent;
         mDefaultImages = defaultImages;
+        mAbout = about;
     }
 
     @Override
@@ -67,7 +71,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
 
         // To service publish
         content = content.replaceAll("[\n\\s]+", " ");
-        TweetPublishService.startActionPublish(context, content, paths, null);
+        TweetPublishService.startActionPublish(context, content, paths, mAbout);
 
         // Toast
         AppContext.showToast(R.string.tweet_publishing_toast);
@@ -83,7 +87,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     }
 
     @Override
-    public void loadXmlData() {
+    public void loadData() {
         if (isUseXmlCache()) {
             final Context context = mView.getContext();
             SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
@@ -100,6 +104,8 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
                 mView.setContent(mDefaultContent);
             if (mDefaultImages != null && mDefaultImages.length > 0)
                 mView.setImages(mDefaultImages);
+            if (mAbout != null && mAbout.check())
+                mView.setAbout(mAbout);
         }
     }
 
@@ -118,6 +124,9 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         if (mDefaultImages != null && mDefaultImages.length > 0) {
             outState.putStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES, mDefaultImages);
         }
+        if (mAbout != null && mAbout.check()) {
+            outState.putSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT, mAbout);
+        }
     }
 
     @Override
@@ -133,6 +142,9 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         // Read default
         mDefaultContent = savedInstanceState.getString(DEFAULT_PRE + SHARE_VALUES_CONTENT, null);
         mDefaultImages = savedInstanceState.getStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES);
+        mAbout = (About) savedInstanceState.getSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT);
+        if (mAbout != null && mAbout.check())
+            mView.setAbout(mAbout);
     }
 
     private void clearAndFinish(Context context) {
@@ -165,6 +177,8 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     }
 
     private boolean isUseXmlCache() {
-        return TextUtils.isEmpty(mDefaultContent) && (mDefaultImages == null || mDefaultImages.length == 0);
+        return TextUtils.isEmpty(mDefaultContent)
+                && (mDefaultImages == null || mDefaultImages.length == 0)
+                && (mAbout == null || !mAbout.check());
     }
 }

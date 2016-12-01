@@ -299,7 +299,7 @@ public abstract class DetailActivity<Data extends PrimaryBean, DataView extends 
      * @param content 分享内容
      * @param url     分享地址
      */
-    protected boolean toShare(String title, String content, String url) {
+    protected boolean toShare(String title, String content, String url, int type) {
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(url))
             return false;
 
@@ -317,10 +317,10 @@ public abstract class DetailActivity<Data extends PrimaryBean, DataView extends 
         // 分享
         if (mShareDialogBuilder == null) {
             mShareDialogBuilder = ShareDialogBuilder.with(this)
+                    .id(getDataId())
+                    .type(type)
                     .title(title)
                     .content(content)
-                    .summary(content)
-                    .description(content)
                     .url(url)
                     .build();
         }

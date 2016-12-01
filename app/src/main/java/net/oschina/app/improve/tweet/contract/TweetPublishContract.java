@@ -3,6 +3,8 @@ package net.oschina.app.improve.tweet.contract;
 import android.content.Context;
 import android.os.Bundle;
 
+import net.oschina.app.improve.bean.simple.About;
+
 /**
  * Created by JuQiu
  * on 16/7/14.
@@ -10,13 +12,13 @@ import android.os.Bundle;
 
 public interface TweetPublishContract {
     interface Operator {
-        void setDataView(View view, String defaultContent, String[] defaultImages);
+        void setDataView(View view, String defaultContent, String[] defaultImages, About about);
 
         void publish();
 
         void onBack();
 
-        void loadXmlData();
+        void loadData();
 
         void onSaveInstanceState(Bundle outState);
 
@@ -29,6 +31,8 @@ public interface TweetPublishContract {
         String getContent();
 
         void setContent(String content);
+
+        void setAbout(About about);
 
         String[] getImages();
 

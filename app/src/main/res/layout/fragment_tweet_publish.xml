@@ -66,15 +66,52 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer
-            android:id="@+id/recycler_images"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/lay_12"
-            android:paddingLeft="@dimen/lay_12"
-            android:paddingRight="@dimen/lay_12"
-            android:paddingTop="@dimen/lay_12"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:padding="@dimen/lay_12"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer
+                android:id="@+id/recycler_images"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/black_alpha_16"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_12"
+                android:paddingRight="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_8">
+
+                <TextView
+                    android:id="@+id/txt_about_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxLines="2"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/text_title_color"
+                    android:textSize="16sp"
+                    tools:text="Large Text" />
+
+                <TextView
+                    android:id="@+id/txt_about_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:lineSpacingExtra="4dp"
+                    android:maxLines="3"
+                    android:minLines="1"
+                    android:textColor="@color/text_desc_color"
+                    android:textSize="13sp"
+                    tools:text="New Text" />
+            </LinearLayout>
+        </FrameLayout>
 
 
     </android.support.design.widget.CoordinatorLayout>

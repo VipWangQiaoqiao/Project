@@ -10,12 +10,13 @@ import java.io.Serializable;
 public class About implements Serializable {
     private long id;
     private String title;
+    private String content;
     private int type;
     private String href;
     private int viewCount;
     private int commentCount;
     private int transmitCount;
-    private String image;
+    private String[] images;
 
     public long getId() {
         return id;
@@ -65,12 +66,20 @@ public class About implements Serializable {
         this.href = href;
     }
 
-    public String getImage() {
-        return image;
+    public String getContent() {
+        return content;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String[] getImages() {
+        return images;
+    }
+
+    public void setImages(String[] images) {
+        this.images = images;
     }
 
     public int getTransmitCount() {
@@ -79,5 +88,9 @@ public class About implements Serializable {
 
     public void setTransmitCount(int transmitCount) {
         this.transmitCount = transmitCount;
+    }
+
+    public boolean check() {
+        return id > 0 && type >= 0;
     }
 }
