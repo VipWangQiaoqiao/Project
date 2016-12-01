@@ -231,8 +231,6 @@ public class BrowserFragment extends BaseFragment {
             mShareDialogBuilder = ShareDialogBuilder.with(getActivity())
                     .title(getShareTitle())
                     .content(getShareContent())
-                    .summary(getShareContent())
-                    .description(getShareContent())
                     .url(mCurrentUrl)
                     .build();
         }

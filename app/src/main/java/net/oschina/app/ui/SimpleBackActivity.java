@@ -115,7 +115,7 @@ public class SimpleBackActivity extends BaseActivity implements
                     // 硬编码呗, view得不到, 坐标也不好取, 简单粗暴的来!!
                     TweetPublishActivity.show(this,
                             new int[]{(int) (TDevice.getScreenWidth() - 30), 45},
-                            new int[]{0, 0}, topic);
+                            new int[]{0, 0}, topic, null);
                 } else {
                     return super.onOptionsItemSelected(item);
                 }

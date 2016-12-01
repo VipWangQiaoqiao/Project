@@ -10,12 +10,12 @@ import java.io.Serializable;
 public class About implements Serializable {
     private long id;
     private String title;
+    private String content;
     private int type;
     private String href;
     private int viewCount;
     private int commentCount;
     private int transmitCount;
-    private String content;
     private String[] images;
 
     public long getId() {
@@ -88,5 +88,9 @@ public class About implements Serializable {
 
     public void setTransmitCount(int transmitCount) {
         this.transmitCount = transmitCount;
+    }
+
+    public boolean check() {
+        return id > 0 && type >= 0;
     }
 }

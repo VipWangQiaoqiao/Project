@@ -18,11 +18,12 @@ import net.oschina.app.BuildConfig;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
-import net.oschina.common.utils.CollectionUtil;
 import net.oschina.app.util.UIHelper;
+import net.oschina.common.utils.CollectionUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,6 +44,10 @@ public class TweetPublishActivity extends BaseBackActivity {
     }
 
     public static void show(Context context, View view, String defaultContent) {
+        show(context, view, defaultContent, null);
+    }
+
+    public static void show(Context context, View view, String defaultContent, About about) {
         int[] location = new int[]{0, 0};
         int[] size = new int[]{0, 0};
 
@@ -52,12 +57,12 @@ public class TweetPublishActivity extends BaseBackActivity {
             size[1] = view.getHeight();
         }
 
-        show(context, location, size, defaultContent);
+        show(context, location, size, defaultContent, about);
     }
 
 
     public static void show(Context context, @Size(2) int[] viewLocationOnScreen,
-                            @Size(2) int[] viewSize, String defaultContent) {
+                            @Size(2) int[] viewSize, String defaultContent, About about) {
         // Check login before show
         if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(context);
@@ -74,6 +79,9 @@ public class TweetPublishActivity extends BaseBackActivity {
         }
         if (defaultContent != null) {
             intent.putExtra("defaultContent", defaultContent);
+        }
+        if (about != null) {
+            intent.putExtra("about", about);
         }
 
         context.startActivity(intent);

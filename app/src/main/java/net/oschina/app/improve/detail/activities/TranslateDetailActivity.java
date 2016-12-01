@@ -134,7 +134,7 @@ public class TranslateDetailActivity extends DetailActivity<TranslationDetail, T
             String title = detail.getTitle();
             String content = detail.getBody();
             String url = detail.getHref();
-            if (!toShare(title, content, url))
+            if (!toShare(title, content, url, 4))
                 AppContext.showToast("抱歉，内容无法分享！");
         } else {
             AppContext.showToast("内容加载失败！");

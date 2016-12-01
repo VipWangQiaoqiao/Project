@@ -22,7 +22,6 @@ public class TweetPublishModel implements Serializable {
     private String errorString;
     private long aboutId;
     private int aboutType;
-    private String aboutImage;
 
     public TweetPublishModel() {
         id = UUID.randomUUID().toString();
