@@ -1199,6 +1199,7 @@ public class OSChinaApi {
     public static final int COMMENT_TRANSLATION = 4; // 翻译文章
     public static final int COMMENT_EVENT = 5; // 活动类型
     public static final int COMMENT_NEWS = 6; // 资讯类型
+    public static final int COMMENT_TWEET = 100; // 动弹
 
     public static final int COMMENT_HOT_ORDER = 2; //热门评论顺序
     public static final int COMMENT_NEW_ORDER = 1; //最新评论顺序
@@ -1424,7 +1425,7 @@ public class OSChinaApi {
      * @param content     内容
      * @param imagesToken 图片token
      * @param audioToken  语音token
-     * @param about       相关节点，仅仅关注 {@link About#id}, {@link About#type}, {@link About#image}
+     * @param about       相关节点，仅仅关注 {@link About#id}, {@link About#type}
      * @param handler     回调
      */
     public static void pubTweet(String content, String imagesToken, String audioToken, About about, AsyncHttpResponseHandler handler) {
@@ -1439,7 +1440,6 @@ public class OSChinaApi {
         if (about != null) {
             params.put("aboutId", about.getId());
             params.put("aboutType", about.getType());
-            params.put("aboutImage", about.getImage());
         }
         post("action/apiv2/tweet", params, handler);
     }
