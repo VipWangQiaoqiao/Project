@@ -66,20 +66,20 @@ public class About implements Serializable {
         this.href = href;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public String[] getImages() {
         return images;
     }
 
     public void setImages(String[] images) {
         this.images = images;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public int getTransmitCount() {

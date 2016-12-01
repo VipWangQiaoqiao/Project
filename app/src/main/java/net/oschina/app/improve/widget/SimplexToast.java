@@ -47,6 +47,10 @@ public class SimplexToast {
         show(null, content, Gravity.BOTTOM, duration);
     }
 
+    public static void show(Context context, int rid){
+        show(context, context.getResources().getString(rid));
+    }
+
     public static void show(Context context, String content){
         show(context, content, Gravity.BOTTOM);
     }
