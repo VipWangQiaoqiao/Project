@@ -143,9 +143,11 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
         if (item.getAbout() != null){
             holder.mLayoutRef.setVisibility(View.VISIBLE);
             holder.mViewDispatch.setVisibility(View.VISIBLE);
-
+            holder.mViewDispatchCount.setVisibility(View.VISIBLE);
             About about = item.getAbout();
-            if (about.getType() == 6){
+
+            holder.mViewDispatchCount.setText(String.valueOf(about.getTransmitCount()));
+            if (about.getType() == OSChinaApi.COMMENT_TWEET){
                 holder.mViewRefTitle.setVisibility(View.GONE);
                 holder.mLayoutRefImages.setImage(about.getImages());
                 String aname = "@" + about.getTitle();
@@ -157,10 +159,13 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
                 holder.mViewRefContent.setText(sp);
             }else {
                 holder.mViewRefTitle.setVisibility(View.VISIBLE);
+
                 holder.mViewRefTitle.setText(about.getTitle());
                 holder.mViewRefContent.setText(about.getContent());
             }
         }else {
+            holder.mViewDispatch.setVisibility(View.GONE);
+            holder.mViewDispatchCount.setVisibility(View.GONE);
             holder.mLayoutRef.setVisibility(View.GONE);
             holder.mViewDispatch.setVisibility(View.GONE);
         }
@@ -196,6 +201,8 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
         TweetPicturesLayout mLayoutRefImages;
         @Bind(R.id.iv_dispatch)
         ImageView mViewDispatch;
+        @Bind(R.id.tv_dispatch_count)
+        TextView mViewDispatchCount;
         @Bind(R.id.layout_ref)
         LinearLayout mLayoutRef;
 
