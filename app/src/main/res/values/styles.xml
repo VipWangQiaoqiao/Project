@@ -551,6 +551,18 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsTranslucent">true</item>
+    </style>
 
+    <style name="BaseTheme" parent="Base.App.Theme.Light">
+        <item name="colorPrimary">@color/main_green</item>
+        <item name="colorPrimaryDark">@color/main_green</item>
+        <item name="colorAccent">@color/main_green</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <!--状态栏一体式-->
+    <style name="ThemeTranslucent" parent="BaseTheme">
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 </resources>

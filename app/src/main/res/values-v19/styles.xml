@@ -26,4 +26,13 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowFrame">@null</item>
     </style>
+
+    <!--状态栏一体式-->
+    <style name="ThemeTranslucent" parent="BaseTheme">
+
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
 </resources>
