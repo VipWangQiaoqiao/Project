@@ -83,9 +83,11 @@ public class UserMessageActivity extends BaseBackActivity {
         int currentView = 0;
         if (mNotice.getMention() > 0) {
             NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
-        } else if (mNotice.getReview() > 0) {
+        }
+        if (mNotice.getReview() > 0) {
             currentView = 1;
-        } else if (mNotice.getLetter() > 0) {
+        }
+        if (mNotice.getLetter() > 0) {
             currentView = 2;
         }
         vp_user_message.setCurrentItem(currentView);

@@ -5,8 +5,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +42,7 @@ public class BottomSheetBar implements View.OnClickListener {
     private ImageButton mSyncToTweetView;
     private Context mContext;
     private Button mBtnCommit;
-    private Dialog mDialog;
+    private AlertDialog mDialog;
     private FrameLayout mFrameLayout;
     private EmojiView mEmojiView;
 
@@ -68,17 +70,20 @@ public class BottomSheetBar implements View.OnClickListener {
         mBtnCommit = (Button) mRootView.findViewById(R.id.btn_comment);
         mBtnCommit.setEnabled(false);
 
-        mDialog = new Dialog(mContext, R.style.Comment_Dialog);
-        mDialog.setContentView(mRootView);
+        //mDialog = new Dialog(mContext, R.style.Comment_Dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext,R.style.share_dialog);
+        builder.setView(mRootView);
+        mDialog  = builder.create();
         Window window = mDialog.getWindow();
-        if (window != null) {
-            window.setGravity(Gravity.FILL);
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-            window.setAttributes(lp);
-        }
 
+        if (window != null) {
+            window.setGravity(Gravity.BOTTOM);
+            WindowManager m = window.getWindowManager();
+            Display d = m.getDefaultDisplay();
+            WindowManager.LayoutParams p = window.getAttributes();
+            p.width = d.getWidth();
+            window.setAttributes(p);
+        }
 
         mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
