@@ -225,6 +225,7 @@
     <string name="state_load_error">加载失败</string>
     <string name="state_refreshing">正在刷新</string>
     <string name="state_loading_error">数据加载中&#8230;</string>
+    <string name="state_submit">正在提交中&#8230;</string>
 
     <string name="label_about_title">相关文章</string>
 
@@ -313,5 +314,14 @@
     <string name="vote_failed_hint">点赞失败&#8230;</string>
     <string name="cancel_vote_success_hint">取消点赞成功&#8230;</string>
     <string name="cancel_vote_failed_hint">取消点赞失败&#8230;</string>
+
+    <!--新版活动签到-->
+    <string name="signin_phone_hint">使用手机号签到</string>
+    <string name="signin_input_hint">请输入手机号码</string>
+    <string name="signin_bt_hint">立即签到</string>
+    <string name="signin_event_type_hint">类型</string>
+    <string name="signin_event_author">发起人:</string>
+    <string name="signin_event_counts_hint">人参与</string>
+
 
 </resources>

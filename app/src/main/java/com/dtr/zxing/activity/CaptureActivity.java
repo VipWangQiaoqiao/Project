@@ -53,6 +53,7 @@ import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.detail.activities.EventSigninActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -236,6 +237,13 @@ public final class CaptureActivity extends BaseActivity implements
     private void showUrlOption(final String url) {
         if (url.contains("scan_login")) {
             showConfirmLogin(url);
+            return;
+        }
+
+        if (url.contains("www.oschina.net/event/signin?event")) {
+            long sourceId = Long.valueOf(url.substring(url.indexOf("=") + 1));//2192570;
+            finish();
+            EventSigninActivity.show(this, sourceId);
             return;
         }
         if (url.contains("oschina.net")) {

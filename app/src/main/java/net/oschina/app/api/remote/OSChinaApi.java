@@ -1036,16 +1036,17 @@ public class OSChinaApi {
 
     /**
      * 他人博客列表
+     *
      * @param pageToken page token
-     * @param uid user id
-     * @param uname user name
-     * @param handler handler
+     * @param uid       user id
+     * @param uname     user name
+     * @param handler   handler
      */
     public static void getSomeoneBlogs(
             String pageToken,
             long uid,
             String uname,
-            AsyncHttpResponseHandler handler){
+            AsyncHttpResponseHandler handler) {
         if (uid <= 0 && TextUtils.isEmpty(uname)) return;
         RequestParams params = new RequestParams();
         params.put("pageToken", pageToken);
@@ -2078,5 +2079,22 @@ public class OSChinaApi {
         params.put("type", type);
         params.put("id", id);
         ApiHttpClient.get("action/apiv2/detail", params, handler);
+    }
+
+    /**
+     * event signin
+     *
+     * @param sourceId sourceId
+     * @param phone    phone
+     * @param handler  handler
+     */
+    public static void eventSignin(long sourceId, String phone, TextHttpResponseHandler handler) {
+        if (sourceId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        if (!TextUtils.isEmpty(phone))
+            params.put("phone", phone);
+
+        ApiHttpClient.post("action/apiv2/event_signIn", params, handler);
     }
 }
