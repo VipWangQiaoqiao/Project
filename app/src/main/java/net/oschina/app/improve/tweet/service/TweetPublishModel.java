@@ -36,7 +36,6 @@ public class TweetPublishModel implements Serializable {
         if (about != null) {
             this.aboutId = about.getId();
             this.aboutType = about.getType();
-            this.aboutImage = about.getImage();
         }
     }
 
@@ -61,7 +60,6 @@ public class TweetPublishModel implements Serializable {
             About about = new About();
             about.setId(aboutId);
             about.setType(aboutType);
-            about.setImage(aboutImage);
             return about;
         }
         return null;
