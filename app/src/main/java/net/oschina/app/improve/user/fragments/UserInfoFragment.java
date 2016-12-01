@@ -233,7 +233,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     public void onResume() {
         super.onResume();
         mIsUploadIcon = false;
-        requestUserCache();
+        //requestUserCache();
         NoticeManager.bindNotify(this);
     }
 
