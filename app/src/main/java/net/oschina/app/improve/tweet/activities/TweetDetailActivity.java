@@ -512,7 +512,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     @OnClick(R.id.layout_ref) void onClickRef(){
         if (tweet.getAbout() == null) return;
-        TweetDetailActivity.show(this, tweet.getAbout().getId());
+        UIHelper.showDetail(this, tweet.getAbout().getType(), tweet.getAbout().getId(), null);
     }
 
     @OnClick(R.id.iv_comment) void onClickComment() {
