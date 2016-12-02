@@ -3,6 +3,7 @@ package net.oschina.app.improve.detail.v2;
 import net.oschina.app.improve.base.BasePresenter;
 import net.oschina.app.improve.base.BaseView;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.bean.comment.Comment;
 
 /**
  * Created by haibin
@@ -20,16 +21,20 @@ public interface DetailContract {
     interface View extends BaseView<Presenter> {
         void showGetDetailSuccess(SubBean bean);
 
-        void showGetDetailError(String message);
-
-        void showFavReverseSuccess(boolean isFav,int strId);
+        void showFavReverseSuccess(boolean isFav, int strId);
 
         void showFavError();
+
+        void showCommentSuccess(Comment comment);
+
+        void showCommentError(String message);
     }
 
     interface Presenter extends BasePresenter {
-        void getDetail();
+        void getDetail();//获得详情
 
         void favReverse();
+
+        void addComment(String content, long sid, int type, long referId, long replyId, long oid);//添加评论
     }
 }
