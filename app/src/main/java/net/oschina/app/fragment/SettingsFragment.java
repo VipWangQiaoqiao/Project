@@ -211,7 +211,8 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
                         mCancel.removeCallbacks(this);
                         User user = SharedPreferencesHelper.load(getContext(), User.class);
                         if (user == null || user.getId() <= 0) {
-                            getActivity().finish();
+                            //getActivity().finish();
+                            AppContext.showToastShort(getString(R.string.logout_success_hint));
                         } else {
                             mCancel.postDelayed(this, 200);
                         }

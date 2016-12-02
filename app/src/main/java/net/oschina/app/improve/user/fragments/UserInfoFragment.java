@@ -29,6 +29,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.notice.NoticeBean;
@@ -233,8 +234,13 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     public void onResume() {
         super.onResume();
         mIsUploadIcon = false;
-        //requestUserCache();
-        NoticeManager.bindNotify(this);
+        if (isLogin()) {
+            User user = AccountHelper.getUser();
+            updateView(user);
+            NoticeManager.bindNotify(this);
+        } else {
+            hideView();
+        }
     }
 
     /**
@@ -485,7 +491,31 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     UIHelper.showUserQuestion(getActivity(), AccountHelper.getUserId());
                     break;
                 case R.id.rl_info_activities:
+
+                    SubTab tab = new SubTab();
+
+//                    SubTab.Banner banner = tab.new Banner();
+//                    banner.setCatalog(3);
+//                    banner.setHref("https://www.oschina.net/action/apiv2//banner?catalog=3");
+//                    tab.setBanner(banner);
+
+                    tab.setName("我的活动");
+                    tab.setFixed(false);
+                    tab.setHref("https://www.oschina.net/action/apiv2/sub_list?token=727d77c15b2ca641fff392b779658512");
+                    tab.setNeedLogin(false);
+                    tab.setSubtype(1);
+                    tab.setOrder(74);
+                    tab.setToken("727d77c15b2ca641fff392b779658512");
+                    tab.setType(5);
+
                     Bundle bundle = new Bundle();
+                    bundle.putSerializable("sub_tab", tab);
+
+                    //UserEventFragment.newInstance(getContext(), tab);
+                    // getChildFragmentManager().beginTransaction().add();
+
+                    //UIHelper.showSimpleBack(getContext(), SimpleBackPage.OUTLINE_EVENTS, bundle);
+
                     bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS, 1);
                     UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);
                     break;
