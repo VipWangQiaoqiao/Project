@@ -171,6 +171,7 @@
     <string name="add_notebook">新建便签</string>
     <string name="submit_notebook">保存便签</string>
 
+    <!--设置中心-->
     <string name="loading_img">加载图片</string>
     <string name="clean_cache">清理缓存</string>
     <string name="double_click_exit">双击退出</string>
@@ -178,7 +179,8 @@
     <string name="update">检查更新</string>
     <string name="about" translatable="false">关于我们</string>
     <string name="feedback">意见反馈</string>
-    <string name="setting_cancle">注销</string>
+    <string name="setting_cancel">注销</string>
+    <string name="logout_success_hint">注销成功</string>
     <string name="grade">去评分</string>
 
     <string name="oscsite">官网</string>
