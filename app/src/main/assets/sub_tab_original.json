@@ -1,5 +1,39 @@
 [
     {
+        "banner": {
+            "catalog": 1,
+            "href": "https://www.oschina.net/action/apiv2//banner?catalog=1"
+        },
+        "fixed": true,
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=d6112fa662bc4bf21084670a857fbd20",
+        "name": "开源资讯",
+        "needLogin": false,
+        "order": 1,
+        "subtype": 1,
+        "token": "d6112fa662bc4bf21084670a857fbd20",
+        "type": 6
+    },
+    {
+        "fixed": true,
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=df985be3c5d5449f8dfb47e06e098ef9",
+        "name": "推荐博客",
+        "needLogin": false,
+        "order": 2,
+        "subtype": 4,
+        "token": "df985be3c5d5449f8dfb47e06e098ef9",
+        "type": 3
+    },
+    {
+        "fixed": true,
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=98d04eb58a1d12b75d254deecbc83790",
+        "name": "技术问答",
+        "needLogin": false,
+        "order": 3,
+        "subtype": 3,
+        "token": "98d04eb58a1d12b75d254deecbc83790",
+        "type": 2
+    },
+    {
         "fixed": false,
         "href": "https://www.oschina.net/action/apiv2/sub_list?token=299975006aa7f9b8a158deeb0d27a011",
         "name": "码云推荐",
@@ -17,20 +51,6 @@
         "order": 71,
         "subtype": 2,
         "token": "e3e35d14a62b4f816ec878b6597b60aa",
-        "type": 6
-    },
-    {
-        "banner": {
-            "catalog": 1,
-            "href": "https://www.oschina.net/action/apiv2//banner?catalog=1"
-        },
-        "fixed": true,
-        "href": "https://www.oschina.net/action/apiv2/sub_list?token=d6112fa662bc4bf21084670a857fbd20",
-        "name": "推荐",
-        "needLogin": false,
-        "order": 72,
-        "subtype": 1,
-        "token": "d6112fa662bc4bf21084670a857fbd20",
         "type": 6
     },
     {
@@ -175,26 +195,6 @@
     },
     {
         "fixed": false,
-        "href": "https://www.oschina.net/action/apiv2/sub_list?token=263ee86f538884e70ee1ee50aed759b6",
-        "name": "每日乱弹",
-        "needLogin": false,
-        "order": 88,
-        "subtype": 5,
-        "token": "263ee86f538884e70ee1ee50aed759b6",
-        "type": 3
-    },
-    {
-        "fixed": false,
-        "href": "https://www.oschina.net/action/apiv2/sub_list?token=df985be3c5d5449f8dfb47e06e098ef9",
-        "name": "推荐博客",
-        "needLogin": false,
-        "order": 89,
-        "subtype": 4,
-        "token": "df985be3c5d5449f8dfb47e06e098ef9",
-        "type": 3
-    },
-    {
-        "fixed": false,
         "href": "https://www.oschina.net/action/apiv2/sub_list?token=0048958a909973b5d83a8eca65d90afb",
         "name": "最新博客",
         "needLogin": false,
@@ -261,16 +261,6 @@
         "order": 96,
         "subtype": 4,
         "token": "b56759c46cb81192b7d1cbb1a478a45d",
-        "type": 2
-    },
-    {
-        "fixed": false,
-        "href": "https://www.oschina.net/action/apiv2/sub_list?token=98d04eb58a1d12b75d254deecbc83790",
-        "name": "技术问答",
-        "needLogin": false,
-        "order": 97,
-        "subtype": 3,
-        "token": "98d04eb58a1d12b75d254deecbc83790",
         "type": 2
     },
     {
