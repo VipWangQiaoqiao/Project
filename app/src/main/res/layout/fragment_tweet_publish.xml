@@ -78,6 +78,7 @@
                 android:layout_height="match_parent" />
 
             <LinearLayout
+                android:id="@+id/lay_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/black_alpha_16"
@@ -85,7 +86,8 @@
                 android:paddingBottom="@dimen/lay_8"
                 android:paddingLeft="@dimen/lay_12"
                 android:paddingRight="@dimen/lay_12"
-                android:paddingTop="@dimen/lay_8">
+                android:paddingTop="@dimen/lay_8"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/txt_about_title"
