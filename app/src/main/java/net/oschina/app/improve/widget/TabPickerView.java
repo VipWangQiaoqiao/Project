@@ -27,6 +27,8 @@ import net.oschina.app.R;
 import net.oschina.app.improve.bean.SubTab;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
