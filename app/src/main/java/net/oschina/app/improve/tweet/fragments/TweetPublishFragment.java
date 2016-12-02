@@ -365,11 +365,14 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void setAbout(About about) {
+        if (TextUtils.isEmpty(about.getTitle()) && TextUtils.isEmpty(about.getContent()))
+            return;
+        // Change the layout visibility
         mLayImages.setVisibility(View.GONE);
-        if (!TextUtils.isEmpty(about.getTitle()))
-            ((TextView) findView(R.id.txt_about_title)).setText(about.getTitle());
-        if (!TextUtils.isEmpty(about.getContent()))
-            ((TextView) findView(R.id.txt_about_content)).setText(about.getContent());
+        findView(R.id.lay_about).setVisibility(View.VISIBLE);
+        // Set title and content
+        ((TextView) findView(R.id.txt_about_title)).setText(about.getTitle());
+        ((TextView) findView(R.id.txt_about_content)).setText(about.getContent());
     }
 
     @Override
