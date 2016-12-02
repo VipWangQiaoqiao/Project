@@ -7,7 +7,6 @@
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/lay_nsv"
-        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/lay_option"
@@ -188,9 +187,4 @@
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-    <LinearLayout
-        android:id="@+id/ll_comment"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -6,11 +6,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -30,6 +32,9 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
     protected AlertDialog mAlertDialog;
     protected TextView mCommentCountView;
 
+    protected CommentBar mDelegation;
+    private LinearLayout mLayComment;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_detail_v2;
@@ -38,6 +43,7 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
     @Override
     protected void initWidget() {
         super.initWidget();
+        mLayComment = (LinearLayout) findViewById(R.id.ll_comment);
         mEmptyLayout = (EmptyLayout) findViewById(R.id.lay_error);
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +54,7 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
                 }
             }
         });
+        mDelegation = CommentBar.delegation(this, mLayComment);
         mDetailFragment = getDetailFragment();
         addFragment(R.id.lay_container, mDetailFragment);
         mPresenter = new DetailPresenter(mDetailFragment, this, (SubBean) getIntent().getSerializableExtra("sub_bean"));

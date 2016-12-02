@@ -3,14 +3,13 @@ package net.oschina.app.improve.detail.v2;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
-import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.detail.general.AboutAdapter;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.improve.widget.SimplexToast;
@@ -27,8 +26,6 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
     protected OWebView mWebView;
     protected RecyclerView mRecyclerView;
     protected AboutAdapter mAdapter;
-    private CommentBar mDelegation;
-    private LinearLayout mComment;
 
     public static DetailFragment newInstance() {
         DetailFragment fragment = new DetailFragment();
@@ -43,14 +40,13 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-        mComment = (LinearLayout) mRoot.findViewById(R.id.ll_comment);
         mWebView = (OWebView) mRoot.findViewById(R.id.webView);
         mRecyclerView = (RecyclerView) mRoot.findViewById(R.id.rv_about);
         mAdapter = new AboutAdapter(getActivity());
         mAdapter.setOnItemClickListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
-        mDelegation = CommentBar.delegation(mContext, mComment);
+
     }
 
     @Override
@@ -89,6 +85,16 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
 
     public void toShare(String title, String content, String url) {
         ((DetailActivity) mContext).toShare(title, content, url);
+    }
+
+    @Override
+    public void showCommentSuccess(Comment comment) {
+
+    }
+
+    @Override
+    public void showCommentError(String message) {
+
     }
 
     public void scrollToBottom() {
