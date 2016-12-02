@@ -383,7 +383,7 @@ public final class CaptureActivity extends BaseActivity implements
                 hideWaitDialog();
             }
         };
-        OSChinaApi.singnIn(barCode.getUrl(), handler);
+        OSChinaApi.signin(barCode.getUrl(), handler);
     }
 
     private void showLogin() {

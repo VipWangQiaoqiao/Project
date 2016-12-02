@@ -173,7 +173,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
                 break;
             case CATALOG_MYSELF:
                 if (mLoginUserId == 0) break;
-                OSChinaApi.getTweetList(mLoginUserId, null, null, null, pageToken, mHandler);
+                OSChinaApi.getTweetList(mLoginUserId, null, null, 1, pageToken, mHandler);
                 break;
             case CATALOG_FRIENDS:
                 OSChinaApi.getTweetList(null, null, 2, 1, pageToken, mHandler);
