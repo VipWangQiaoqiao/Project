@@ -9,6 +9,8 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.ui.empty.EmptyLayout;
 
 import java.lang.reflect.Type;
 
@@ -36,7 +38,8 @@ public class DetailPresenter implements DetailContract.Presenter {
         OSChinaApi.getDetail(mBean.getType(), mBean.getId(), new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                mView.showNetworkError(R.string.tip_network_error);
+                //mView.showNetworkError(R.string.tip_network_error);
+                mEmptyView.showErrorLayout(EmptyLayout.NETWORK_ERROR);
             }
 
             @Override
@@ -49,7 +52,7 @@ public class DetailPresenter implements DetailContract.Presenter {
                         mBean = bean.getResult();
                         mView.showGetDetailSuccess(mBean);
                     } else {
-                        mView.showGetDetailError(bean.getMessage());
+                        mEmptyView.showErrorLayout(EmptyLayout.NODATA);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -78,6 +81,37 @@ public class DetailPresenter implements DetailContract.Presenter {
                         mView.showFavReverseSuccess(collection.isFavorite(), collection.isFavorite() ? R.string.add_favorite_success : R.string.del_favorite_success);
                     } else {
                         mView.showFavError();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void addComment(final String content, long sid, int type, long referId, long replyId, long oid) {
+        OSChinaApi.publishComment(sid, referId, replyId, oid, type, content, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                mView.showNetworkError(R.string.tip_network_error);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<Comment>>() {
+                    }.getType();
+
+                    ResultBean<Comment> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                    if (resultBean.isSuccess()) {
+                        Comment respComment = resultBean.getResult();
+                        if (respComment != null) {
+                            mView.showCommentSuccess(respComment);
+                        }
+                    } else {
+                        mView.showCommentError(resultBean.getMessage());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
