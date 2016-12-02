@@ -88,7 +88,7 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
                     @Override
                     public void onClick(View v) {
                         if (mDetailFragment != null) {
-                            mDetailFragment.scrolloToBottom();
+                            mDetailFragment.scrollToBottom();
                         }
                     }
                 });

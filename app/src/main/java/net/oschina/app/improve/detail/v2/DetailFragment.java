@@ -73,11 +73,6 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
     }
 
     @Override
-    public void showGetDetailError(String message) {
-        SimplexToast.show(mContext, message);
-    }
-
-    @Override
     public void showFavReverseSuccess(boolean isFav, int strId) {
         SimplexToast.show(mContext, mContext.getResources().getString(strId));
     }
@@ -96,7 +91,7 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
         ((DetailActivity) mContext).toShare(title, content, url);
     }
 
-    public void scrolloToBottom() {
+    public void scrollToBottom() {
 
     }
 }

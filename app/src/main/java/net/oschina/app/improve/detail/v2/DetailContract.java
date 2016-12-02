@@ -20,8 +20,6 @@ public interface DetailContract {
     interface View extends BaseView<Presenter> {
         void showGetDetailSuccess(SubBean bean);
 
-        void showGetDetailError(String message);
-
         void showFavReverseSuccess(boolean isFav,int strId);
 
         void showFavError();

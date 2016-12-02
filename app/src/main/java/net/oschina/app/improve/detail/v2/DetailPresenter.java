@@ -51,7 +51,7 @@ public class DetailPresenter implements DetailContract.Presenter {
                         mBean = bean.getResult();
                         mView.showGetDetailSuccess(mBean);
                     } else {
-                        mView.showGetDetailError(bean.getMessage());
+                        mEmptyView.showErrorLayout(EmptyLayout.NODATA);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
