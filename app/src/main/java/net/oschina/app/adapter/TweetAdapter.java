@@ -63,8 +63,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         ImageView image;
         @Bind(R.id.iv_like_state)
         ImageView ivLikeState;
-//        @Bind(R.id.tv_del)
-//        TextView del;
         @Bind(R.id.tv_likeusers)
         TextView likeUsers;
         @Bind(R.id.tv_tweet_like_count)
@@ -197,8 +195,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             if (!tweet.getLikeUser().isEmpty()) {
                 tweet.getLikeUser().remove(0);
             }
-            OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
-                    handler,mContext);
+            OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
 //            vh.ivLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .gray));
             vh.ivLikeState.setImageResource(R.mipmap.ic_thumb_normal);
@@ -207,7 +204,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             List<User> likeUser = tweet.getLikeUser();
             if (likeUser!=null)
             //tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
-            OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler,mContext);
+            OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
 //            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .day_colorPrimary));
             vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_actived);

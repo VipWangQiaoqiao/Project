@@ -205,7 +205,7 @@ public class UIHelper {
                 //博客
                 BlogDetailActivity.show(context, id);
                 break;
-            case OSChinaApi.CATALOG_TRANSALITON:
+            case OSChinaApi.CATALOG_TRANSLATION:
                 //4.翻译
                 TranslateDetailActivity.show(context, id);
                 break;
