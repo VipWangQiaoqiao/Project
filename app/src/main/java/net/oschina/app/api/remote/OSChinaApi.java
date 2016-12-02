@@ -31,6 +31,26 @@ import static net.oschina.app.api.ApiHttpClient.post;
 
 public class OSChinaApi {
 
+    public static final int CATALOG_ALL = 0;
+    public static final int CATALOG_SOFTWARE = 1;
+    public static final int CATALOG_QUESTION = 2;
+    public static final int CATALOG_BLOG = 3;
+    public static final int CATALOG_TRANSALITON = 4;
+    public static final int CATALOG_EVENT = 5;
+    public static final int CATALOG_NEWS = 6;
+    public static final int CATALOG_TWEET = 100;
+
+    public static final int COMMENT_SOFT = 1; // 软件推荐-不支持(默认软件评论其实是动弹)
+    public static final int COMMENT_QUESTION = 2; // 讨论区帖子
+    public static final int COMMENT_BLOG = 3; // 博客
+    public static final int COMMENT_TRANSLATION = 4; // 翻译文章
+    public static final int COMMENT_EVENT = 5; // 活动类型
+    public static final int COMMENT_NEWS = 6; // 资讯类型
+    public static final int COMMENT_TWEET = 100; // 动弹
+
+    public static final int COMMENT_HOT_ORDER = 2; //热门评论顺序
+    public static final int COMMENT_NEW_ORDER = 1; //最新评论顺序
+
     /**
      * 登陆
      *
@@ -1192,18 +1212,6 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/comment_detail", params, handler);
     }
 
-
-    public static final int COMMENT_SOFT = 1; // 软件推荐-不支持(默认软件评论其实是动弹)
-    public static final int COMMENT_QUESTION = 2; // 讨论区帖子
-    public static final int COMMENT_BLOG = 3; // 博客
-    public static final int COMMENT_TRANSLATION = 4; // 翻译文章
-    public static final int COMMENT_EVENT = 5; // 活动类型
-    public static final int COMMENT_NEWS = 6; // 资讯类型
-    public static final int COMMENT_TWEET = 100; // 动弹
-
-    public static final int COMMENT_HOT_ORDER = 2; //热门评论顺序
-    public static final int COMMENT_NEW_ORDER = 1; //最新评论顺序
-
     /**
      * 请求评论列表
      *
@@ -1772,15 +1780,6 @@ public class OSChinaApi {
         }
         ApiHttpClient.get("action/apiv2/" + uri, params, handler);
     }
-
-
-    public static final int CATALOG_ALL = 0;
-    public static final int CATALOG_SOFTWARE = 1;
-    public static final int CATALOG_QUESTION = 2;
-    public static final int CATALOG_BLOG = 3;
-    public static final int CATALOG_TRANSALITON = 4;
-    public static final int CATALOG_EVENT = 5;
-    public static final int CATALOG_NEWS = 6;
 
     /**
      * get user favorites
