@@ -13,6 +13,7 @@ import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
+import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.StringUtils;
@@ -147,10 +148,10 @@ public class URLUtils {
                 }
                 matcher = PATTERN_PATH_TWEET_TOPIC.matcher(path);
                 if (matcher.find()){
-                    // TODO replace by new activity
                     //  https://www.oschina.net/tweet-topic/Navicat+for+Postgresql
                     Bundle bundle = new Bundle();
-                    bundle.putString("topic", matcher.group(1));
+                    bundle.putInt(TweetFragment.BUNDLE_KEY_REQUEST_CATALOG, TweetFragment.CATALOG_TAG);
+                    bundle.putString(TweetFragment.BUNDLE_KEY_TAG, matcher.group(1));
                     UIHelper.showSimpleBack(context, SimpleBackPage.TWEET_TOPIC_LIST, bundle);
                     break;
                 }
