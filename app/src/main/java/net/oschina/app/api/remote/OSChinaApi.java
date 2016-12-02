@@ -2,6 +2,7 @@ package net.oschina.app.api.remote;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -1530,8 +1531,8 @@ public class OSChinaApi {
             params.put("tag", tag);
         } else {
             params.put("type", type);
-            params.put("order", order);
         }
+        params.put("order", order);
         params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/tweet_list", params, handler);
     }
