@@ -4,6 +4,7 @@ import com.bumptech.glide.Glide;
 
 import net.oschina.app.base.BaseApplication;
 import net.oschina.app.cache.DataCleanManager;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.util.MethodsCompat;
 import net.qiujuer.genius.kit.handler.Run;
 import net.qiujuer.genius.kit.handler.runable.Action;
@@ -75,10 +76,16 @@ public class AppContext extends BaseApplication {
         Run.onUiSync(new Action() {
             @Override
             public void call() {
-                // Glide 清理必须在主线程
+                // Glide 清理内存必须在主线程
                 Glide.get(OSCApplication.getInstance()).clearMemory();
-                Glide.get(OSCApplication.getInstance()).clearDiskCache();
+            }
+        });
 
+        AppOperator.runOnThread(new Runnable() {
+            @Override
+            public void run() {
+                // Glide 清理磁盘必须在子线程
+                Glide.get(OSCApplication.getInstance()).clearDiskCache();
             }
         });
 
