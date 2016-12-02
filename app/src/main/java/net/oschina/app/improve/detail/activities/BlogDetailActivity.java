@@ -116,7 +116,7 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
             String title = detail.getTitle();
             String content = detail.getBody();
             String url = detail.getHref();
-            if (!toShare(title, content, url, detail.getType()))
+            if (!toShare(title, content, url, 3))
                 AppContext.showToast("抱歉，内容无法分享！");
         } else {
             AppContext.showToast("内容加载失败！");

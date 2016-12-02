@@ -1,6 +1,7 @@
 package net.oschina.app.improve.bean.simple;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Created by JuQiu
@@ -92,5 +93,20 @@ public class About implements Serializable {
 
     public boolean check() {
         return id > 0 && type >= 0;
+    }
+
+    @Override
+    public String toString() {
+        return "About{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", type=" + type +
+                ", href='" + href + '\'' +
+                ", viewCount=" + viewCount +
+                ", commentCount=" + commentCount +
+                ", transmitCount=" + transmitCount +
+                ", images=" + Arrays.toString(images) +
+                '}';
     }
 }

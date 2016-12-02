@@ -55,7 +55,7 @@ public class TweetPublishModel implements Serializable {
     }
 
     public About getAbout() {
-        if (aboutId > 0 && aboutType > 0) {
+        if (aboutId > 0 && aboutType >= 0) {
             About about = new About();
             about.setId(aboutId);
             about.setType(aboutType);
