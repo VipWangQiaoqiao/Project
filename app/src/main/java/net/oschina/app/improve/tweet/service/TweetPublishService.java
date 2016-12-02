@@ -19,8 +19,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.bean.simple.About;
-import net.oschina.common.utils.CollectionUtil;
 import net.oschina.app.util.TLog;
+import net.oschina.common.utils.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +80,7 @@ public class TweetPublishService extends Service implements Contract.IService {
             images.toArray(pubImages);
             intent.putExtra(EXTRA_IMAGES, pubImages);
         }
-        if (about != null && about.getId() > 0 && about.getType() > 0) {
+        if (about != null && about.check()) {
             intent.putExtra(EXTRA_ABOUT, about);
         }
         context.startService(intent);
