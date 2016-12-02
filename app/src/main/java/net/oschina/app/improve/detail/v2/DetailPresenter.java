@@ -9,6 +9,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.ui.empty.EmptyLayout;
 
 import java.lang.reflect.Type;
 
@@ -36,7 +37,8 @@ public class DetailPresenter implements DetailContract.Presenter {
         OSChinaApi.getDetail(mBean.getType(), mBean.getId(), new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                mView.showNetworkError(R.string.tip_network_error);
+                //mView.showNetworkError(R.string.tip_network_error);
+                mEmptyView.showErrorLayout(EmptyLayout.NETWORK_ERROR);
             }
 
             @Override
