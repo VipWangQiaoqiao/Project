@@ -413,6 +413,15 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
+
+        <activity
+            android:name=".improve.media.crop.CropActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="图片裁剪"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
+
         <activity
             android:name=".improve.tweet.activities.TweetPublishQueueActivity"
             android:label="动弹队列"
