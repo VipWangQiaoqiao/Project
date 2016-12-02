@@ -1,13 +1,8 @@
 package net.oschina.app;
 
-import com.bumptech.glide.Glide;
-
 import net.oschina.app.base.BaseApplication;
 import net.oschina.app.cache.DataCleanManager;
-import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.util.MethodsCompat;
-import net.qiujuer.genius.kit.handler.Run;
-import net.qiujuer.genius.kit.handler.runable.Action;
 
 import org.kymjs.kjframe.Core;
 
@@ -73,6 +68,7 @@ public class AppContext extends BaseApplication {
                     .getExternalCacheDir(this));
         }
 
+        /*
         Run.onUiSync(new Action() {
             @Override
             public void call() {
@@ -88,6 +84,7 @@ public class AppContext extends BaseApplication {
                 Glide.get(OSCApplication.getInstance()).clearDiskCache();
             }
         });
+        */
 
         // 清除编辑器保存的临时内容
         Properties props = getProperties();
