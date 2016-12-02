@@ -15,7 +15,7 @@ import net.oschina.app.improve.media.Util;
  * Created by haibin
  * on 2016/12/1.
  */
-
+@SuppressWarnings("ALL")
 public class CropDrawable extends Drawable {
     private Context mContext;
     private int offset = 50;
@@ -25,7 +25,7 @@ public class CropDrawable extends Drawable {
 
     private int mCropWidth = 800, mCropHeight = 800;
 
-    private static final int RADIUS = 25;
+    private static final int RADIUS = 20;
 
     private int mLeft, mRight, mTop, mBottom;
 
@@ -36,7 +36,7 @@ public class CropDrawable extends Drawable {
 
     private void initPaint() {
         mLinePaint.setARGB(200, 50, 50, 50);
-        mLinePaint.setStrokeWidth(1F);
+        mLinePaint.setStrokeWidth(2f);
         mLinePaint.setStyle(Paint.Style.STROKE);
         mLinePaint.setAntiAlias(true);
         mLinePaint.setColor(Color.WHITE);
@@ -86,7 +86,7 @@ public class CropDrawable extends Drawable {
         return PixelFormat.UNKNOWN;
     }
 
-    void setRegion(Rect rect) {
+    public void setRegion(Rect rect) {
         int width = Util.getScreenWidth(mContext);
         int height = Util.getScreenHeight(mContext);
         rect.set((width - mCropWidth) / 2, (height - mCropHeight) / 2, (width + mCropWidth) / 2, (height + mCropHeight) / 2);
@@ -109,5 +109,13 @@ public class CropDrawable extends Drawable {
 
     public int getBottom() {
         return mBottom;
+    }
+
+    public void setCropWidth(int mCropWidth) {
+        this.mCropWidth = mCropWidth;
+    }
+
+    public void setCropHeight(int mCropHeight) {
+        this.mCropHeight = mCropHeight;
     }
 }
