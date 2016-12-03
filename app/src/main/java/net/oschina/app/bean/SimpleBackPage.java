@@ -9,8 +9,8 @@ import net.oschina.app.fragment.EventFragment;
 import net.oschina.app.fragment.MyInformationFragmentDetail;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SettingsFragment;
-import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.improve.main.subscription.SubFragment;
+import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.improve.user.fragments.UserEventFragment;
 import net.oschina.app.improve.user.fragments.UserQuestionFragment;
@@ -84,7 +84,7 @@ public enum SimpleBackPage {
 
     TEAM_PROJECT(40, R.string.team_project, TeamProjectFragment.class),
 
-    TWEET_TOPIC_LIST(42, 0, TweetsFragment.class),
+    TWEET_TOPIC_LIST(42, R.string.topic_list, TweetFragment.class),
 
     MY_EVENT(43, R.string.actionbar_title_my_event, UserEventFragment.class),
 

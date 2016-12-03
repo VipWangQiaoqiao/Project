@@ -1,22 +1,31 @@
 package net.oschina.app.improve.detail.v2;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.detail.general.AboutAdapter;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.improve.widget.SimplexToast;
+
+import java.util.ArrayList;
 
 /**
  * Created by haibin
  * on 2016/11/30.
  */
 
-public class DetailFragment extends BaseFragment implements DetailContract.View {
+public class DetailFragment extends BaseFragment implements DetailContract.View, BaseRecyclerAdapter.OnItemClickListener {
     protected DetailContract.Presenter mPresenter;
     protected OWebView mWebView;
-
+    protected RecyclerView mRecyclerView;
+    protected AboutAdapter mAdapter;
 
     public static DetailFragment newInstance() {
         DetailFragment fragment = new DetailFragment();
@@ -32,6 +41,17 @@ public class DetailFragment extends BaseFragment implements DetailContract.View 
     protected void initWidget(View root) {
         super.initWidget(root);
         mWebView = (OWebView) mRoot.findViewById(R.id.webView);
+        mRecyclerView = (RecyclerView) mRoot.findViewById(R.id.rv_about);
+        mAdapter = new AboutAdapter(getActivity());
+        mAdapter.setOnItemClickListener(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mAdapter);
+
+    }
+
+    @Override
+    public void onItemClick(int position, long itemId) {
+
     }
 
     @Override
@@ -42,13 +62,10 @@ public class DetailFragment extends BaseFragment implements DetailContract.View 
 
     @Override
     public void showGetDetailSuccess(SubBean bean) {
-        if (mContext != null)
-            mWebView.loadDetailDataAsync(bean.getBody(), (Runnable) mContext);
-    }
-
-    @Override
-    public void showGetDetailError(String message) {
-        SimplexToast.show(mContext, message);
+        if (mContext == null) return;
+        bean.setAbouts(new ArrayList<About>());
+        mAdapter.addAll(bean.getAbouts());
+        mWebView.loadDetailDataAsync(bean.getBody(), (Runnable) mContext);
     }
 
     @Override
@@ -70,7 +87,17 @@ public class DetailFragment extends BaseFragment implements DetailContract.View 
         ((DetailActivity) mContext).toShare(title, content, url);
     }
 
-    public void scrolloToBottom() {
+    @Override
+    public void showCommentSuccess(Comment comment) {
+
+    }
+
+    @Override
+    public void showCommentError(String message) {
+
+    }
+
+    public void scrollToBottom() {
 
     }
 }

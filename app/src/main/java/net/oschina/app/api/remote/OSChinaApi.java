@@ -26,49 +26,49 @@ import static net.oschina.app.api.ApiHttpClient.post;
 
 /**
  * OSChina Api v1 and v2
- *
+ * <p>
  * 什么时候不在使用AsyncHttp了???
  * 什么时候用VM模式？？？
  */
 public class OSChinaApi {
 
-    public static final int CATALOG_ALL         = 0;
-    public static final int CATALOG_SOFTWARE    = 1;
-    public static final int CATALOG_QUESTION    = 2;
-    public static final int CATALOG_BLOG        = 3;
+    public static final int CATALOG_ALL = 0;
+    public static final int CATALOG_SOFTWARE = 1;
+    public static final int CATALOG_QUESTION = 2;
+    public static final int CATALOG_BLOG = 3;
     public static final int CATALOG_TRANSLATION = 4;
-    public static final int CATALOG_EVENT       = 5;
-    public static final int CATALOG_NEWS        = 6;
-    public static final int CATALOG_TWEET       = 100;
+    public static final int CATALOG_EVENT = 5;
+    public static final int CATALOG_NEWS = 6;
+    public static final int CATALOG_TWEET = 100;
 
-    public static final int COMMENT_SOFT        = 1;    // 软件推荐-不支持(默认软件评论其实是动弹)
-    public static final int COMMENT_QUESTION    = 2;    // 讨论区帖子
-    public static final int COMMENT_BLOG        = 3;    // 博客
+    public static final int COMMENT_SOFT = 1;    // 软件推荐-不支持(默认软件评论其实是动弹)
+    public static final int COMMENT_QUESTION = 2;    // 讨论区帖子
+    public static final int COMMENT_BLOG = 3;    // 博客
     public static final int COMMENT_TRANSLATION = 4;    // 翻译文章
-    public static final int COMMENT_EVENT       = 5;    // 活动类型
-    public static final int COMMENT_NEWS        = 6;    // 资讯类型
-    public static final int COMMENT_TWEET       = 100;  // 动弹
+    public static final int COMMENT_EVENT = 5;    // 活动类型
+    public static final int COMMENT_NEWS = 6;    // 资讯类型
+    public static final int COMMENT_TWEET = 100;  // 动弹
 
     public static final int COMMENT_HOT_ORDER = 2; //热门评论顺序
     public static final int COMMENT_NEW_ORDER = 1; //最新评论顺序
 
-    public static final int CATALOG_BANNER_NEWS     = 1; // 资讯Banner
-    public static final int CATALOG_BANNER_BLOG     = 2; // 博客Banner
-    public static final int CATALOG_BANNER_EVENT    = 3; // 活动Banner
+    public static final int CATALOG_BANNER_NEWS = 1; // 资讯Banner
+    public static final int CATALOG_BANNER_BLOG = 2; // 博客Banner
+    public static final int CATALOG_BANNER_EVENT = 3; // 活动Banner
 
-    public static final int CATALOG_BLOG_NORMAL     = 1; // 最新
-    public static final int CATALOG_BLOG_HEAT       = 2; // 最热
-    public static final int CATALOG_BLOG_RECOMMEND  = 3; //推荐
+    public static final int CATALOG_BLOG_NORMAL = 1; // 最新
+    public static final int CATALOG_BLOG_HEAT = 2; // 最热
+    public static final int CATALOG_BLOG_RECOMMEND = 3; //推荐
 
-    public static final String CATALOG_NEWS_DETAIL      = "news";
+    public static final String CATALOG_NEWS_DETAIL = "news";
     public static final String CATALOG_TRANSLATE_DETAIL = "translation";
-    public static final String CATALOG_SOFTWARE_DETAIL  = "software";
+    public static final String CATALOG_SOFTWARE_DETAIL = "software";
 
-    public static final String LOGIN_WEIBO  = "weibo";
-    public static final String LOGIN_QQ     = "qq";
+    public static final String LOGIN_WEIBO = "weibo";
+    public static final String LOGIN_QQ = "qq";
     public static final String LOGIN_WECHAT = "wechat";
 
-    public static final int REGISTER_INTENT  = 1;
+    public static final int REGISTER_INTENT = 1;
     public static final int RESET_PWD_INTENT = 2;
 
 
@@ -1027,7 +1027,7 @@ public class OSChinaApi {
         params.put("content", content);
         params.put("images", imagesToken);
         params.put("audio", audioToken);
-        if (about != null) {
+        if (about != null && about.check()) {
             params.put("aboutId", about.getId());
             params.put("aboutType", about.getType());
         }

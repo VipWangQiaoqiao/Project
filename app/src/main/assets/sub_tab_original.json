@@ -214,11 +214,16 @@
         "type": 3
     },
     {
+<<<<<<< HEAD
         "fixed": false,
         "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=1abf09a23a87442184c2f9bf9dc29e35",
+=======
+        "fixed": true,
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=1abf09a23a87442184c2f9bf9dc29e35",
+>>>>>>> a9dd09f4f7c066630908d82bae9fd4b34d53cef4
         "name": "每日一博",
         "needLogin": false,
-        "order": 92,
+        "order": 4,
         "subtype": 1,
         "token": "1abf09a23a87442184c2f9bf9dc29e35",
         "type": 3

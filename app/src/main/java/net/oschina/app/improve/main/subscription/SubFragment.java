@@ -83,6 +83,7 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
                 break;
             case News.TYPE_BLOG:
                 BlogDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.BlogDetailActivity.show(mContext, sub);
                 break;
             case News.TYPE_TRANSLATE:
                 TranslateDetailActivity.show(mContext, sub.getId());
@@ -92,6 +93,7 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
                 break;
             case News.TYPE_NEWS:
                 NewsDetailActivity.show(mContext, sub.getId());
+                //net.oschina.app.improve.detail.general.NewsDetailActivity.show(mContext, sub);
                 break;
             default:
                 UIHelper.showUrlRedirect(mContext, sub.getHref());

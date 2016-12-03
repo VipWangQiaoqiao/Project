@@ -145,18 +145,32 @@
         <!-- ############ QQ空间和QQ  wechat SSO授权的Activity注册完 ############ -->
 
         <activity
+            android:name=".improve.detail.general.NewsDetailActivity"
+            android:label="资讯详情"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".improve.detail.general.BlogDetailActivity"
+            android:label="博客详情"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
             android:name=".improve.detail.activities.BlogDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="博客详情"
-            android:theme="@style/ThemeTranslucent"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.detail.activities.QuestionDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="问答详情"
-            android:theme="@style/ThemeTranslucent"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.tweet.activities.TweetDetailActivity"
@@ -169,8 +183,8 @@
             android:name=".improve.detail.activities.EventDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="活动详情"
-            android:theme="@style/ThemeTranslucent"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.detail.activities.NewsDetailActivity"
@@ -183,8 +197,8 @@
             android:name=".improve.detail.activities.SoftwareDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="软件详情"
-            android:theme="@style/ThemeTranslucent"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.user.activities.UserTweetActivity"
@@ -399,6 +413,15 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
+
+        <activity
+            android:name=".improve.media.crop.CropActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="图片裁剪"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
+
         <activity
             android:name=".improve.tweet.activities.TweetPublishQueueActivity"
             android:label="动弹队列"

@@ -511,6 +511,15 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("sub_tab", tab);
 
+<<<<<<< HEAD
+=======
+                    //UserEventFragment.newInstance(getContext(), tab);
+                    // getChildFragmentManager().beginTransaction().add();
+
+                    //UIHelper.showSimpleBack(getContext(), SimpleBackPage.OUTLINE_EVENTS, bundle);
+
+                    bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS, 1);
+>>>>>>> a9dd09f4f7c066630908d82bae9fd4b34d53cef4
                     UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);
                     break;
                 case R.id.rl_team:
