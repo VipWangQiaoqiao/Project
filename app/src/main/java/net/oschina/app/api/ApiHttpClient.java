@@ -39,10 +39,10 @@ import cz.msebera.android.httpclient.protocol.HttpContext;
 @SuppressWarnings("WeakerAccess")
 public class ApiHttpClient {
 
-    public final static String HOST = "www.oschina.net";
-    //public final static String HOST = "www.oschina.tk";
-    private static String API_URL = "https://www.oschina.net/%s";
-//    private static String API_URL = "http://192.168.1.10/%s";
+    //public final static String HOST = "www.oschina.net";
+    public final static String HOST = "www.oschina.tk";
+    //private static String API_URL = "http://192.168.1.10:8000/%s";
+    private static String API_URL = "http://192.168.1.10/%s";
 
     private static AsyncHttpClient CLIENT;
 

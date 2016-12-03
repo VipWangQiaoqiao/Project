@@ -9,6 +9,6 @@ package net.oschina.app.improve.account.constants;
 public interface UserConstants {
 
     String HOLD_ACCOUNT = "hold_account";
-    String RETRIEVE_PWD_URL = "https://www.oschina.net/home/reset-pwd";
+    String RETRIEVE_PWD_URL = "http://192.168.1.10:8000/home/reset-pwd";
 
 }

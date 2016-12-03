@@ -72,12 +72,12 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
 
                 SubTab.Banner banner = tab.new Banner();
                 banner.setCatalog(3);
-                banner.setHref("https://www.oschina.net/action/apiv2//banner?catalog=3");
+                banner.setHref("http://192.168.1.10:8000/action/apiv2//banner?catalog=3");
                 tab.setBanner(banner);
 
                 tab.setName("线下活动");
                 tab.setFixed(false);
-                tab.setHref("https://www.oschina.net/action/apiv2/sub_list?token=727d77c15b2ca641fff392b779658512");
+                tab.setHref("http://192.168.1.10:8000/action/apiv2/sub_list?token=727d77c15b2ca641fff392b779658512");
                 tab.setNeedLogin(false);
                 tab.setSubtype(1);
                 tab.setOrder(74);

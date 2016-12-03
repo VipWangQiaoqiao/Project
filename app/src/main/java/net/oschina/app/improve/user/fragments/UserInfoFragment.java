@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -46,7 +47,6 @@ import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQRCodeDialog;
-import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -496,12 +496,12 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
 //                    SubTab.Banner banner = tab.new Banner();
 //                    banner.setCatalog(3);
-//                    banner.setHref("https://www.oschina.net/action/apiv2//banner?catalog=3");
+//                    banner.setHref("http://192.168.1.10:8000/action/apiv2//banner?catalog=3");
 //                    tab.setBanner(banner);
 
                     tab.setName("我的活动");
                     tab.setFixed(false);
-                    tab.setHref("https://www.oschina.net/action/apiv2/sub_list?token=727d77c15b2ca641fff392b779658512");
+                    tab.setHref("http://192.168.1.10:8000/action/apiv2/sub_list?token=727d77c15b2ca641fff392b779658512");
                     tab.setNeedLogin(false);
                     tab.setSubtype(1);
                     tab.setOrder(74);
@@ -511,12 +511,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("sub_tab", tab);
 
-                    UserEventFragment.newInstance(getContext(), tab);
-                    // getChildFragmentManager().beginTransaction().add();
-
-                    //UIHelper.showSimpleBack(getContext(), SimpleBackPage.OUTLINE_EVENTS, bundle);
-
-                    bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS, 1);
                     UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);
                     break;
                 case R.id.rl_team:

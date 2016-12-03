@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.annotation.StringRes;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -50,6 +51,7 @@ import static net.oschina.app.improve.app.AppOperator.createGson;
 public class EventSigninActivity extends BaseBackActivity {
 
     public static final String EVENT_ID_KEY = "event_id_key";
+    private static final String TAG = "EventSigninActivity";
 
     @Bind(R.id.iv_event_img)
     ImageView mIvImg;
@@ -142,11 +144,13 @@ public class EventSigninActivity extends BaseBackActivity {
                 mRequestType = 0x02;
                 ResultBean<EventSignin> resultBean = AppOperator.createGson().fromJson(responseString, EventSigninTypeToken());
                 if (resultBean.isSuccess()) {
-                    hideLoading();
+                    //hideLoading();
                     EventSignin eventSignin = resultBean.getResult();
+                    Log.e(TAG, "onSuccess: -------->true" + eventSignin.toString());
                     updateSigninView(eventSignin);
                 } else {
-                    showError(EmptyLayout.NODATA);
+                    Log.e(TAG, "onSuccess: -------->false");
+                    //showError(EmptyLayout.NODATA);
                 }
 
             }

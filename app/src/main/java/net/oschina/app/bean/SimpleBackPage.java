@@ -12,6 +12,7 @@ import net.oschina.app.fragment.SettingsFragment;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.improve.main.subscription.SubFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
+import net.oschina.app.improve.user.fragments.UserEventFragment;
 import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
@@ -26,7 +27,6 @@ import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
 import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
 import net.oschina.app.team.viewpagefragment.TeamIssueViewPageFragment;
 import net.oschina.app.team.viewpagefragment.TeamProjectViewPagerFragment;
-import net.oschina.app.viewpagerfragment.EventViewPagerFragment;
 import net.oschina.app.viewpagerfragment.OpenSoftwareFragment;
 
 public enum SimpleBackPage {
@@ -86,7 +86,7 @@ public enum SimpleBackPage {
 
     TWEET_TOPIC_LIST(42, 0, TweetsFragment.class),
 
-    MY_EVENT(43, R.string.actionbar_title_my_event, EventViewPagerFragment.class),
+    MY_EVENT(43, R.string.actionbar_title_my_event, UserEventFragment.class),
 
     MY_QUESTION(44, R.string.question, UserQuestionFragment.class),
 

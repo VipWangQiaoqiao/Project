@@ -67,11 +67,11 @@ public class AboutOSCFragment extends BaseFragment {
                 }
                 break;
             case R.id.tv_oscsite:
-                UIHelper.openInternalBrowser(getActivity(), "https://www.oschina.net");
+                UIHelper.openInternalBrowser(getActivity(), "http://192.168.1.10:8000");
                 break;
             case R.id.tv_knowmore:
                 UIHelper.openInternalBrowser(getActivity(),
-                        "https://www.oschina.net/home/aboutosc");
+                        "http://192.168.1.10:8000/home/aboutosc");
                 break;
             case R.id.img_portrait:
                 Boss.verifyApp(getContext());

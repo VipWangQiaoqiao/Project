@@ -2,7 +2,6 @@ package net.oschina.app.api.remote;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -1559,6 +1558,6 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
         params.put("phone", phone);
-        ApiHttpClient.post("action/apiv2/event_signIn", params, handler);
+        ApiHttpClient.post("action/apiv2/event_signin", params, handler);
     }
 }

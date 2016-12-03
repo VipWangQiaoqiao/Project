@@ -1,6 +1,7 @@
 package net.oschina.app.improve.detail.fragments;
 
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -84,6 +85,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
     @Override
     protected void initData() {
         final EventDetail mDetail = mOperator.getData();
+        Log.e("123", "initData: ----->" + mDetail.getId());
         if (mDetail == null) return;
         tv_comment.setText(String.format("评论(%s)", mDetail.getCommentCount()));
         tv_event_title.setText(mDetail.getTitle());
