@@ -12,6 +12,7 @@ import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.Report;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.bean.SignUpEventOptions;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
@@ -20,6 +21,7 @@ import org.kymjs.kjframe.utils.KJLoger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Map;
 
 import static net.oschina.app.api.ApiHttpClient.post;
@@ -1559,5 +1561,23 @@ public class OSChinaApi {
         params.put("sourceId", sourceId);
         params.put("phone", phone);
         ApiHttpClient.post("action/apiv2/event_signIn", params, handler);
+    }
+
+    /**
+     * 新版获得活动报名参数
+     */
+    public static void getSignUpOptions(long sourceId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.get("action/apiv2/event_apply_preload", params, handler);
+    }
+
+    /**
+     * 新版活动报名，动态参数
+     */
+    public static void signUpEvent(long sourceId, List<SignUpEventOptions> optionses, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.get("action/apiv2/event_apply", params, handler);
     }
 }
