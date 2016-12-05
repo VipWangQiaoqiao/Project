@@ -2,6 +2,7 @@ package net.oschina.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -52,25 +53,13 @@ public class LaunchActivity extends BaseActivity {
         //TODO Check use new version
         //int currentVersion = TDevice.getVersionCode();
 
-        AppOperator.getExecutor().execute(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                todo();
-
-                try {
-                    Thread.sleep(800);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                Run.onUiSync(new Action() {
-                    @Override
-                    public void call() {
-                        redirectTo();
-                    }
-                });
+                redirectTo();
             }
-        });
+        }, 800);
+
     }
 
     private void redirectTo() {
