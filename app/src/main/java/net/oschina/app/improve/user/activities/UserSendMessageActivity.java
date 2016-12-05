@@ -26,6 +26,7 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.media.SelectImageActivity;
+import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.user.adapter.UserSendMessageAdapter;
 import net.oschina.app.improve.utils.PicturesCompressor;
 
@@ -98,19 +99,22 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
         mDelegation.showPic(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectImageActivity.showImage(UserSendMessageActivity.this, 1, true, null, new SelectImageActivity.Callback() {
-                    @Override
-                    public void doSelectDone(String[] images) {
-                        final File file = new File(images[0]);
-                        String path = file.getPath();
-                        if (mSendQuent.containsKey(getFileName(path))) {
-                            Toast.makeText(UserSendMessageActivity.this, "图片已经在发送队列", Toast.LENGTH_SHORT).show();
-                        } else {
-                            compress(path, new Run());
-                        }
 
-                    }
-                });
+                SelectImageActivity.show(UserSendMessageActivity.this, new SelectOptions.Builder()
+                        .setHasCam(false)
+                        .setSelectCount(1)
+                        .setCallback(new SelectOptions.Callback() {
+                            @Override
+                            public void doSelected(String[] images) {
+                                final File file = new File(images[0]);
+                                String path = file.getPath();
+                                if (mSendQuent.containsKey(getFileName(path))) {
+                                    Toast.makeText(UserSendMessageActivity.this, "图片已经在发送队列", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    compress(path, new Run());
+                                }
+                            }
+                        }).build());
             }
         });
 

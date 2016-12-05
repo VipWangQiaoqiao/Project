@@ -20,6 +20,7 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.media.SelectImageActivity;
+import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.utils.PicturesCompressor;
 
 import java.io.File;
@@ -101,14 +102,17 @@ public class FeedBackActivity extends BaseBackActivity implements View.OnClickLi
     }
 
     public void openImageSelector() {
-        SelectImageActivity.showImage(this, 1, false, null, new SelectImageActivity.Callback() {
-            @Override
-            public void doSelectDone(String[] images) {
-                mFilePath = images[0];
-                getImageLoader().load(mFilePath).into(iv_add);
-                iv_clear_img.setVisibility(View.VISIBLE);
-            }
-        });
+        SelectImageActivity.show(this, new SelectOptions.Builder()
+                .setHasCam(false)
+                .setSelectCount(1)
+                .setCallback(new SelectOptions.Callback() {
+                    @Override
+                    public void doSelected(String[] images) {
+                        mFilePath = images[0];
+                        getImageLoader().load(mFilePath).into(iv_add);
+                        iv_clear_img.setVisibility(View.VISIBLE);
+                    }
+                }).build());
     }
 
     /**
