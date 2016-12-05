@@ -66,6 +66,10 @@ public class CropActivity extends BaseActivity implements View.OnClickListener {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
                     os.flush();
                     os.close();
+
+                    Intent intent = new Intent();
+                    intent.putExtra("crop_path", path);
+                    setResult(RESULT_OK, intent);
                     finish();
                 } catch (Exception e) {
                     e.printStackTrace();

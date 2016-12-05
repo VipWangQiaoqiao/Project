@@ -1,16 +1,12 @@
 package net.oschina.app.improve.user.fragments;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -29,8 +25,11 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.media.SelectImageActivity;
+import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.activities.UserCollectionActivity;
@@ -40,21 +39,16 @@ import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.utils.DialogHelper;
-import net.oschina.app.improve.utils.PicturesCompressor;
-import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQRCodeDialog;
+import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
-import net.oschina.common.utils.StreamUtil;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Random;
@@ -63,27 +57,16 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
-import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by fei on 2016/8/15.
- * desc: UserInfo module
+ *
+ * 用户个人界面
  */
 
 public class UserInfoFragment extends BaseFragment implements View.OnClickListener,
         EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
-
-    public static final int ACTION_TYPE_ALBUM = 0;
-    public static final int ACTION_TYPE_PHOTO = 1;
-    private final static int CROP = 200;
-    private final static String FILE_SAVE_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-            .getAbsolutePath() + File.separator + "开源中国" + File.separator;
-
-    // 截图后图片的临时存储Uri
-    private Uri mTempUri;
-
-    private static final int CAMERA_PERM = 1;
 
     @Bind(R.id.iv_logo_setting)
     ImageView mIvLogoSetting;
@@ -147,20 +130,16 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void onStart() {
             super.onStart();
-            if (mSolarSystem != null)
-                mSolarSystem.accelerate();
             if (mIsUploadIcon) {
-                showWaitDialog(R.string.title_update_success_status);
+                showWaitDialog(R.string.title_updating_user_avatar);
             }
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            if (mSolarSystem != null)
-                mSolarSystem.decelerate();
+        public void onFailure(int statusCode, Header[] headers, String responseString
+                , Throwable throwable) {
             if (mIsUploadIcon) {
                 Toast.makeText(getActivity(), R.string.title_update_fail_status, Toast.LENGTH_SHORT).show();
-                mIsUploadIcon = false;
                 deleteCacheImage();
             }
         }
@@ -168,11 +147,9 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
             try {
-                if (mSolarSystem != null)
-                    mSolarSystem.decelerate();
+                if (mSolarSystem != null) mSolarSystem.decelerate();
 
-                Type type = new TypeToken<ResultBean<User>>() {
-                }.getType();
+                Type type = new TypeToken<ResultBean<User>>() {}.getType();
 
                 ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
@@ -182,8 +159,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     AccountHelper.updateUserCache(userInfo);
                 }
                 if (mIsUploadIcon) {
-                    hideWaitDialog();
-                    mIsUploadIcon = false;
                     deleteCacheImage();
                 }
             } catch (Exception e) {
@@ -192,6 +167,13 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             }
         }
 
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            if (mSolarSystem != null) mSolarSystem.accelerate();
+            if (mIsUploadIcon) mIsUploadIcon = false;
+            if (mDialog != null && mDialog.isShowing()) mDialog.dismiss();
+        }
     };
 
 
@@ -233,7 +215,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     public void onResume() {
         super.onResume();
         mIsUploadIcon = false;
-        if (isLogin()) {
+        if (AccountHelper.isLogin()) {
             User user = AccountHelper.getUser();
             updateView(user);
             NoticeManager.bindNotify(this);
@@ -247,7 +229,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * And then request user info and update user info
      */
     private void requestUserCache() {
-        if (isLogin()) {
+        if (AccountHelper.isLogin()) {
             User user = AccountHelper.getUser();
             updateView(user);
             if (TDevice.hasInternet()) {
@@ -261,7 +243,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onPause() {
         super.onPause();
-        if (!isLogin()) {
+        if (!AccountHelper.isLogin()) {
             hideView();
         }
         NoticeManager.unBindNotify(this);
@@ -297,7 +279,11 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 break;
         }
 
-        mTvScore.setText(String.format("%s  %s", getString(R.string.user_score), formatCount(userInfo.getStatistics().getScore())));
+        mTvScore.setText(String.format(
+                "%s  %s",
+                getString(R.string.user_score),
+                formatCount(userInfo.getStatistics().getScore()))
+        );
         mTvScore.setVisibility(View.VISIBLE);
         mAboutLine.setVisibility(View.VISIBLE);
         mLayAboutCount.setVisibility(View.VISIBLE);
@@ -307,12 +293,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         mTvFollowerCount.setText(formatCount(userInfo.getStatistics().getFans()));
 
         mUserInfo = userInfo;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mUserInfo = null;
     }
 
     /**
@@ -344,8 +324,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * requestData
      */
     private void sendRequestData() {
-        if (isLogin())
-            OSChinaApi.getUserInfo(textHandler);
+        if (AccountHelper.isLogin()) OSChinaApi.getUserInfo(textHandler);
     }
 
     /**
@@ -430,9 +409,11 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     }
 
     @SuppressWarnings("deprecation")
-    @OnClick({R.id.iv_logo_setting, R.id.iv_logo_zxing, R.id.iv_portrait, R.id.user_view_solar_system, R.id.ly_tweet,
-            R.id.ly_favorite, R.id.ly_following, R.id.ly_follower, R.id.rl_message, R.id.rl_blog, R.id.rl_info_question,
-            R.id.rl_info_activities, R.id.rl_team
+    @OnClick({
+            R.id.iv_logo_setting, R.id.iv_logo_zxing, R.id.iv_portrait,
+            R.id.user_view_solar_system, R.id.ly_tweet, R.id.ly_favorite,
+            R.id.ly_following, R.id.ly_follower, R.id.rl_message, R.id.rl_blog,
+            R.id.rl_info_question, R.id.rl_info_activities, R.id.rl_team
     })
     @Override
     public void onClick(View v) {
@@ -443,7 +424,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             UIHelper.showSetting(getActivity());
         } else {
 
-            if (!isLogin()) {
+            if (!AccountHelper.isLogin()) {
                 LoginActivity.show(getActivity());
                 return;
             }
@@ -454,8 +435,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     dialog.show();
                     break;
                 case R.id.iv_portrait:
-                    //编辑头像
-                    showClickAvatar();
+                    //查看头像 or 更换头像
+                    showAvatarOperation();
                     break;
                 case R.id.user_view_solar_system:
                     //显示我的资料
@@ -502,17 +483,10 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     }
 
     /**
-     * isLogin
-     *
-     * @return true/false
+     * 更换头像 or 查看头像
      */
-    private boolean isLogin() {
-        return AccountHelper.isLogin();
-    }
-
-    private void showClickAvatar() {
-        if (!isLogin()) {
-            //UIHelper.showLoginActivity(getActivity());
+    private void showAvatarOperation() {
+        if (!AccountHelper.isLogin()) {
             LoginActivity.show(getActivity());
         } else {
             DialogHelper.getSelectDialog(getActivity(),
@@ -521,78 +495,29 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            if (i == 0) {
-                                handleSelectPicture();
-                            } else {
-                                if (mUserInfo == null) return;
-                                UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
+                            switch (i) {
+                                case 0:
+                                    SelectImageActivity.show(getContext(), new SelectOptions.Builder()
+                                            .setSelectCount(1)
+                                            .setHasCam(true)
+                                            .setCrop(700, 700)
+                                            .setCallback(new SelectOptions.Callback() {
+                                                @Override
+                                                public void doSelected(String[] images) {
+                                                    String path = images[0];
+                                                    uploadNewPhoto(new File(path));
+                                                }
+                                            }).build());
+                                    break;
+
+                                case 1:
+                                    if (mUserInfo == null
+                                            || TextUtils.isEmpty(mUserInfo.getPortrait())) return;
+                                    UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
+                                    break;
                             }
                         }
                     }).show();
-        }
-    }
-
-    /**
-     * show select-picture  dialog
-     */
-    private void handleSelectPicture() {
-        if (!isLogin()) {
-            //UIHelper.showLoginActivity(getActivity());
-            LoginActivity.show(getActivity());
-        } else {
-            DialogHelper.getSelectDialog(getActivity(), getResources().getString(R.string.action_select_picture),
-                    getResources().getStringArray(R.array.choose_picture), "取消",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            goToSelectPicture(i);
-                        }
-                    }).show();
-        }
-    }
-
-    /**
-     * select picture
-     *
-     * @param position action position
-     */
-    private void goToSelectPicture(int position) {
-        switch (position) {
-            case ACTION_TYPE_ALBUM:
-                showImagePick();
-                break;
-            case ACTION_TYPE_PHOTO:
-                startTakePhotoByPermissions();
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * 选择图片返回并准备裁剪
-     */
-    private void showImagePick() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),
-                ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
-    }
-
-    @AfterPermissionGranted(CAMERA_PERM)
-    private void startTakePhotoByPermissions() {
-        String[] perms = {Manifest.permission.CAMERA};
-        if (EasyPermissions.hasPermissions(this.getContext(), perms)) {
-            try {
-                startTakePhoto();
-            } catch (Exception e) {
-                Toast.makeText(this.getContext(), R.string.permissions_camera_error, Toast.LENGTH_LONG).show();
-            }
-        } else {
-            // Request one permission
-            EasyPermissions.requestPermissions(this,
-                    getResources().getString(R.string.str_request_camera_message),
-                    CAMERA_PERM, perms);
         }
     }
 
@@ -603,46 +528,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent,
                 ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
-    }
-
-    /**
-     * 拍照后裁剪
-     *
-     * @param data 原始图片
-     */
-    private void startActionCrop(Uri data) {
-        String state = Environment.getExternalStorageState();
-        if (!Environment.MEDIA_MOUNTED.equals(state)) {
-            SimplexToast.show(getContext(), "外部存储设备不可用");
-            return;
-        }
-        File file = new File(getContext().getExternalCacheDir(), "IMG_CROP.jpeg");
-        if (!file.exists())
-            try {
-                if (!file.createNewFile()) {
-                    SimplexToast.show(getContext(), "创建文件失败");
-                    return;
-                }
-            } catch (IOException e) {
-                SimplexToast.show(getContext(), "创建文件失败");
-                e.printStackTrace();
-                return;
-            }
-        mTempUri = Uri.fromFile(file);
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(data, "image/*");
-        intent.putExtra("output", mTempUri);
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);// 裁剪框比例
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", CROP);// 输出图片大小
-        intent.putExtra("outputY", CROP);
-        intent.putExtra("return-data", false);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        intent.putExtra("scale", true);// 去黑边
-        intent.putExtra("scaleUpIfNeeded", true);// 去黑边
-        startActivityForResult(intent,
-                ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
     }
 
     public ProgressDialog showWaitDialog(int messageId) {
@@ -657,18 +542,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         return mDialog;
     }
 
-    public void hideWaitDialog() {
-        ProgressDialog dialog = mDialog;
-        if (dialog != null) {
-            mDialog = null;
-            try {
-                dialog.dismiss();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
     /**
      * update the new picture
      */
@@ -680,64 +553,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             mIsUploadIcon = true;
             this.mCacheFile = file;
             OSChinaApi.updateUserIcon(file, textHandler);
-        }
-
-    }
-
-    /**
-     * 保存到随机文件
-     *
-     * @param bmp     bmp
-     * @param quality quality
-     * @return file
-     */
-    public File saveToCacheFile(Bitmap bmp, int quality) {
-        //保存图片千万不能放在app自己的cache 目录下,不然系统裁决功能无法访问- - 这系统级的裁剪权限控制得比较高啊
-        //getActivity().getApplication().getCacheDir().getPath()  这个是会出问题的
-
-        File file = new File(org.kymjs.kjframe.utils.ImageUtils.getRandomFileName(FILE_SAVE_PATH));
-        BufferedOutputStream outputStream = null;
-        try {
-            outputStream = new BufferedOutputStream(new FileOutputStream(file));
-            bmp.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            outputStream.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            StreamUtil.close(outputStream);
-        }
-        return file;
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnIntent);
-        if (resultCode != Activity.RESULT_OK)
-            return;
-
-        switch (requestCode) {
-            case ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA:
-                //得到照片的bitmap
-                Bitmap bitmap = imageReturnIntent.getParcelableExtra("data");
-
-                File file = saveToCacheFile(bitmap, 100);
-                Uri fromFile = Uri.fromFile(file);
-                bitmap.recycle();//记得释放bitmap
-
-                startActionCrop(fromFile);// 拍照后裁剪
-                break;
-            case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
-                Uri uri = imageReturnIntent.getData();
-                startActionCrop(uri);// 选图后裁剪
-                break;
-            case ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD:
-                String src = mTempUri.getPath();
-                final String path = getContext().getFilesDir() + "/message/" + src.substring(src.lastIndexOf(".") + 1);
-                if (PicturesCompressor.compressImage(mTempUri.getPath(), path, 512 * 1024, 70, 500, 500)) {
-                    uploadNewPhoto(new File(path));
-                }
-                break;
         }
 
     }
@@ -757,7 +572,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions
+            , @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
@@ -780,7 +596,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onTabReselect() {
-        if (isLogin() && TDevice.hasInternet()) {
+        if (AccountHelper.isLogin() && TDevice.hasInternet()) {
             sendRequestData();
         }
     }
