@@ -3,9 +3,7 @@ package net.oschina.app.improve.user.fragments;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -35,6 +33,7 @@ import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.activities.UserCollectionActivity;
+import net.oschina.app.improve.user.activities.UserEventActivity;
 import net.oschina.app.improve.user.activities.UserFansActivity;
 import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
@@ -48,11 +47,8 @@ import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
-import net.oschina.common.utils.StreamUtil;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Random;
@@ -475,21 +471,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     UIHelper.showUserQuestion(getActivity(), AccountHelper.getUserId());
                     break;
                 case R.id.rl_info_activities:
-                    SubTab tab = new SubTab();
-                    tab.setName("我的活动");
-                    tab.setFixed(false);
-                    tab.setHref("https://www.oschina.net/action/apiv2/sub_list?token=727d77c15b2ca641fff392b779658512");
-                    tab.setNeedLogin(false);
-                    tab.setSubtype(1);
-                    tab.setOrder(74);
-                    tab.setToken("727d77c15b2ca641fff392b779658512");
-                    tab.setType(5);
-
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("sub_tab", tab);
-
-                    bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS, 1);
-                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);
+                    UserEventActivity.show(getActivity());
                     break;
                 case R.id.rl_team:
                     UIHelper.showTeamMainActivity(getActivity());

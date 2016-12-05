@@ -1,6 +1,7 @@
 package net.oschina.app.improve.detail.fragments;
 
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

@@ -1560,7 +1560,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
         params.put("phone", phone);
-        ApiHttpClient.post("action/apiv2/event_signIn", params, handler);
+        ApiHttpClient.post("action/apiv2/event_signin", params, handler);
     }
 
     /**

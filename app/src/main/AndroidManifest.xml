@@ -459,6 +459,15 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
+        <activity
+            android:name=".improve.user.activities.UserEventActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="我的活动"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.App.Theme.NoTitle"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <service
             android:name=".improve.tweet.service.TweetPublishService"
             android:exported="false"
