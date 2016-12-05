@@ -12,7 +12,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.improve.media.SelectImageActivity;
+import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.tweet.adapter.TweetSelectImageAdapter;
+
+import java.util.Arrays;
 
 /**
  * Created by JuQiu
@@ -23,7 +26,7 @@ import net.oschina.app.improve.tweet.adapter.TweetSelectImageAdapter;
  * 提供图片预览/图片操作 返回选中图片等功能
  */
 
-public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectImageAdapter.Callback, SelectImageActivity.Callback {
+public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectImageAdapter.Callback {
     private TweetSelectImageAdapter mImageAdapter;
     private ItemTouchHelper mItemTouchHelper;
     private RequestManager mCurImageLoader;
@@ -66,7 +69,16 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
 
     @Override
     public void onLoadMoreClick() {
-        SelectImageActivity.showImage(getContext(), 9, true, mImageAdapter.getPaths(), this);
+        SelectImageActivity.show(getContext(), new SelectOptions.Builder()
+                .setHasCam(true)
+                .setSelectCount(9)
+                .setSelectedImages(mImageAdapter.getPaths())
+                .setCallback(new SelectOptions.Callback() {
+                    @Override
+                    public void doSelected(String[] images) {
+                        set(images);
+                    }
+                }).build());
     }
 
     @Override
@@ -84,10 +96,5 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
 
     public String[] getPaths() {
         return mImageAdapter.getPaths();
-    }
-
-    @Override
-    public void doSelectDone(String[] images) {
-        set(images);
     }
 }
