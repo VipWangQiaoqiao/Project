@@ -350,7 +350,7 @@ public class BlogDetailFragment
             if (detail == null) return;
             About about = new About();
             about.setId(detail.getId());
-            about.setType(detail.getType());
+            about.setType(OSChinaApi.COMMENT_BLOG);
             about.setTitle(detail.getTitle());
             about.setHref(detail.getHref());
             about.setCommentCount(detail.getCommentCount());

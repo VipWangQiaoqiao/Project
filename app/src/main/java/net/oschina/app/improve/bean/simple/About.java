@@ -1,6 +1,7 @@
 package net.oschina.app.improve.bean.simple;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Created by JuQiu
@@ -10,12 +11,13 @@ import java.io.Serializable;
 public class About implements Serializable {
     private long id;
     private String title;
+    private String content;
     private int type;
     private String href;
     private int viewCount;
     private int commentCount;
     private int transmitCount;
-    private String image;
+    private String[] images;
 
     public long getId() {
         return id;
@@ -65,12 +67,20 @@ public class About implements Serializable {
         this.href = href;
     }
 
-    public String getImage() {
-        return image;
+    public String[] getImages() {
+        return images;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImages(String[] images) {
+        this.images = images;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public int getTransmitCount() {
@@ -79,5 +89,24 @@ public class About implements Serializable {
 
     public void setTransmitCount(int transmitCount) {
         this.transmitCount = transmitCount;
+    }
+
+    public boolean check() {
+        return id > 0 && type >= 0;
+    }
+
+    @Override
+    public String toString() {
+        return "About{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", type=" + type +
+                ", href='" + href + '\'' +
+                ", viewCount=" + viewCount +
+                ", commentCount=" + commentCount +
+                ", transmitCount=" + transmitCount +
+                ", images=" + Arrays.toString(images) +
+                '}';
     }
 }

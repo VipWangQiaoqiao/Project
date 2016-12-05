@@ -40,7 +40,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
     protected BaseRecyclerAdapter<T> mAdapter;
     protected RecyclerView mRecyclerView;
     protected RecyclerRefreshLayout mRefreshLayout;
-    protected boolean mIsRefresh;
+    protected boolean isRefreshing;
     protected TextHttpResponseHandler mHandler;
     protected PageBean<T> mBean;
     protected String CACHE_NAME = getClass().getName();
@@ -166,7 +166,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
 
     @Override
     public void onRefreshing() {
-        mIsRefresh = true;
+        isRefreshing = true;
         requestData();
     }
 
@@ -196,12 +196,12 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
 
     protected void onComplete() {
         mRefreshLayout.onComplete();
-        mIsRefresh = false;
+        isRefreshing = false;
     }
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
         mBean.setNextPageToken((resultBean == null ? null : resultBean.getResult().getNextPageToken()));
-        if (mIsRefresh) {
+        if (isRefreshing) {
             AppConfig.getAppConfig(getActivity()).set("system_time", resultBean.getTime());
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();

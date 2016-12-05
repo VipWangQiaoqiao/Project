@@ -452,6 +452,13 @@
             android:label="意见反馈"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".improve.detail.activities.EventSigninActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="活动签到"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <service
             android:name=".improve.tweet.service.TweetPublishService"
             android:exported="false"

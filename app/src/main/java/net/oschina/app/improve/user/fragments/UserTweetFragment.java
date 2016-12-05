@@ -55,7 +55,8 @@ public class UserTweetFragment extends BaseRecyclerViewFragment<Tweet> implement
 
     @Override
     protected void requestData() {
-        OSChinaApi.getUserTweetList(userId, null, mHandler);
+        String token = isRefreshing ? null : mBean.getNextPageToken();
+        OSChinaApi.getUserTweetList(userId, token, mHandler);
     }
 
     @Override
@@ -84,13 +85,8 @@ public class UserTweetFragment extends BaseRecyclerViewFragment<Tweet> implement
     @Override
     public void onItemClick(int position, long itemId) {
         Tweet tweet = mAdapter.getItem(position);
+        if (tweet == null) return;
         TweetDetailActivity.show(getActivity(), tweet.getId());
-    }
-
-
-    @Override
-    public void onLoadMore() {
-        OSChinaApi.getUserTweetList(userId, mBean.getNextPageToken(), mHandler);
     }
 
     @Override
@@ -101,8 +97,7 @@ public class UserTweetFragment extends BaseRecyclerViewFragment<Tweet> implement
     private void handleLongClick(final Tweet tweet, final int position) {
         String[] items;
         if (AccountHelper.getUserId() == tweet.getAuthor().getId()) {
-            items = new String[]{getString(R.string.copy),
-                    getString(R.string.delete)};
+            items = new String[]{getString(R.string.copy), getString(R.string.delete)};
         } else {
             items = new String[]{getString(R.string.copy)};
         }
@@ -116,7 +111,6 @@ public class UserTweetFragment extends BaseRecyclerViewFragment<Tweet> implement
                         TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getContent()));
                         break;
                     case 1:
-                        // TODO: 2016/7/21 删除动弹
                         DialogHelper.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
                                 .OnClickListener() {
                             @Override

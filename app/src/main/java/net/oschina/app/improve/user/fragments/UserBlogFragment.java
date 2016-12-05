@@ -10,9 +10,11 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Blog;
+import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.main.subscription.BlogSubAdapter;
 import net.oschina.app.improve.user.adapter.UserBlogAdapter;
 
 import java.lang.reflect.Type;
@@ -20,7 +22,7 @@ import java.lang.reflect.Type;
 /**
  * created by thanatosx  on 2016/8/16.
  */
-public class UserBlogFragment extends BaseRecyclerViewFragment<Blog> {
+public class UserBlogFragment extends BaseRecyclerViewFragment<SubBean> {
 
     public static final String HISTORY_BLOG = "history_my_blog";
     public static final String BUNDLE_KEY_USER_ID = "BUNDLE_KEY_USER_ID";
@@ -42,19 +44,19 @@ public class UserBlogFragment extends BaseRecyclerViewFragment<Blog> {
 
     @Override
     protected void requestData() {
-        OSChinaApi.getUserBlogList(null, userId, mHandler);
-
+        super.requestData();
+        String token = isRefreshing ? null : mBean.getNextPageToken();
+        OSChinaApi.getSomeoneBlogs(token, userId, null, mHandler);
     }
 
     @Override
-    protected BaseRecyclerAdapter<Blog> getRecyclerAdapter() {
-        return new UserBlogAdapter(getContext(), BaseRecyclerAdapter.ONLY_FOOTER);
+    protected BaseRecyclerAdapter<SubBean> getRecyclerAdapter() {
+        return new BlogSubAdapter(getContext(), BaseRecyclerAdapter.ONLY_FOOTER);
     }
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<Blog>>>() {
-        }.getType();
+        return new TypeToken<ResultBean<PageBean<SubBean>>>() {}.getType();
     }
 
     @Override
@@ -69,14 +71,8 @@ public class UserBlogFragment extends BaseRecyclerViewFragment<Blog> {
 
     @Override
     public void onItemClick(int position, long itemId) {
-        Blog blog = mAdapter.getItem(position);
-        if (blog == null)
-            return;
+        SubBean blog = mAdapter.getItem(position);
+        if (blog == null) return;
         BlogDetailActivity.show(getActivity(), blog.getId());
-    }
-
-    @Override
-    public void onLoadMore() {
-        OSChinaApi.getUserBlogList(mBean.getNextPageToken(), userId, mHandler);
     }
 }

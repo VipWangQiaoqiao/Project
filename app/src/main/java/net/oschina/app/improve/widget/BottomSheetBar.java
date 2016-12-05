@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.Emojicon;
@@ -45,6 +46,7 @@ public class BottomSheetBar implements View.OnClickListener {
     private AlertDialog mDialog;
     private FrameLayout mFrameLayout;
     private EmojiView mEmojiView;
+    private TextView mTvSyncLabel;
 
 
     private BottomSheetBar(Context context) {
@@ -66,6 +68,10 @@ public class BottomSheetBar implements View.OnClickListener {
         mFaceView = (ImageButton) mRootView.findViewById(R.id.ib_face);
         mFaceView.setVisibility(View.GONE);
         mSyncToTweetView = (ImageButton) mRootView.findViewById(R.id.cb_sync);
+        mTvSyncLabel = (TextView) mRootView.findViewById(R.id.tv_sync);
+        if (mFaceView.getVisibility() == View.GONE) {
+            mTvSyncLabel.setText(R.string.send_tweet);
+        }
         mSyncToTweetView.setOnClickListener(this);
         mBtnCommit = (Button) mRootView.findViewById(R.id.btn_comment);
         mBtnCommit.setEnabled(false);
@@ -119,6 +125,7 @@ public class BottomSheetBar implements View.OnClickListener {
     }
 
     public void showEmoji() {
+        mTvSyncLabel.setText(R.string.tweet_publish_title);
         mFaceView.setVisibility(View.VISIBLE);
         mFaceView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,13 +140,11 @@ public class BottomSheetBar implements View.OnClickListener {
 
                         @Override
                         public void onEmojiClick(Emojicon v) {
-                            TDevice.showSoftKeyboard(mEditText);
 
                         }
                     });
                     mFrameLayout.addView(mEmojiView);
                 }
-
                 TDevice.closeKeyboard(mEditText);
                 mFrameLayout.setVisibility(View.VISIBLE);
 

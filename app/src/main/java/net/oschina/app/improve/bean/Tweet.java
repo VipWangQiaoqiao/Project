@@ -1,5 +1,6 @@
 package net.oschina.app.improve.bean;
 
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Author;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ public class Tweet implements Serializable {
     private String href;
     private Audio[] audio;
     private Image[] images;
+    private About about;
 
     public long getId() {
         return id;
@@ -117,6 +119,14 @@ public class Tweet implements Serializable {
 
     public void setImages(Image[] images) {
         this.images = images;
+    }
+
+    public About getAbout() {
+        return about;
+    }
+
+    public void setAbout(About about) {
+        this.about = about;
     }
 
     public static class Code implements Serializable {

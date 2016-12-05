@@ -92,7 +92,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
 
     @Override
     public void requestData() {
-        String token = mIsRefresh ? null : mBean.getNextPageToken();
+        String token = isRefreshing ? null : mBean.getNextPageToken();
         OSChinaApi.getTweetCommentList(mOperator.getTweetDetail().getId(), token, mHandler);
     }
 

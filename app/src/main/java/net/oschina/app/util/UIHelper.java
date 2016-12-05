@@ -27,6 +27,7 @@ import com.dtr.zxing.activity.CaptureActivity;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.bean.Comment;
@@ -49,6 +50,7 @@ import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.improve.user.fragments.UserQuestionFragment;
+import net.oschina.app.improve.utils.URLUtils;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.Team;
@@ -186,31 +188,34 @@ public class UIHelper {
      */
     public static void showDetail(Context context, int type, long id, String href) {
         switch (type) {
-            case 0:
+            case OSChinaApi.CATALOG_ALL:
                 //新闻链接
                 showUrlRedirect(context, id, href);
                 break;
-            case 1:
+            case OSChinaApi.CATALOG_SOFTWARE:
                 //软件推荐
                 SoftwareDetailActivity.show(context, id);
                 //UIUtil.showSoftwareDetailById(context, (int) id);
                 break;
-            case 2:
+            case OSChinaApi.CATALOG_QUESTION:
                 //问答
                 QuestionDetailActivity.show(context, id);
                 break;
-            case 3:
+            case OSChinaApi.CATALOG_BLOG:
                 //博客
                 BlogDetailActivity.show(context, id);
                 break;
-            case 4:
+            case OSChinaApi.CATALOG_TRANSLATION:
                 //4.翻译
                 TranslateDetailActivity.show(context, id);
                 break;
-            case 5:
+            case OSChinaApi.CATALOG_EVENT:
                 //活动
                 EventDetailActivity.show(context, id);
                 break;
+            case OSChinaApi.CATALOG_TWEET:
+                // 动弹
+                TweetDetailActivity.show(context, id);
             default:
                 //6.资讯
                 NewsDetailActivity.show(context, id);

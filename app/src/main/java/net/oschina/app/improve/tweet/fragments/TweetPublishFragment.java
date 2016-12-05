@@ -24,6 +24,7 @@ import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.ClipView;
@@ -71,11 +72,14 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         this.mOperator = new TweetPublishOperator();
         String defaultContent = null;
         String[] paths = null;
-        if (getArguments() != null) {
-            defaultContent = getArguments().getString("defaultContent");
-            paths = getArguments().getStringArray("defaultImages");
+        About about = null;
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            defaultContent = bundle.getString("defaultContent");
+            paths = bundle.getStringArray("defaultImages");
+            about = (About) bundle.getSerializable("about");
         }
-        this.mOperator.setDataView(this, defaultContent, paths);
+        this.mOperator.setDataView(this, defaultContent, paths, about);
 
         super.onAttach(context);
     }
@@ -208,7 +212,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void initData() {
         super.initData();
-        mOperator.loadXmlData();
+        mOperator.loadData();
     }
 
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
@@ -357,6 +361,18 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         Spannable span = InputHelper.displayEmoji(getResources(), content, (int) mEditContent.getTextSize());
         mEditContent.setText(span);
         mEditContent.setSelection(mEditContent.getText().length());
+    }
+
+    @Override
+    public void setAbout(About about) {
+        if (TextUtils.isEmpty(about.getTitle()) && TextUtils.isEmpty(about.getContent()))
+            return;
+        // Change the layout visibility
+        mLayImages.setVisibility(View.GONE);
+        findView(R.id.lay_about).setVisibility(View.VISIBLE);
+        // Set title and content
+        ((TextView) findView(R.id.txt_about_title)).setText(about.getTitle());
+        ((TextView) findView(R.id.txt_about_content)).setText(about.getContent());
     }
 
     @Override

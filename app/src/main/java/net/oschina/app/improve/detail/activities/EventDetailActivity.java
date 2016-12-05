@@ -73,7 +73,7 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
         if (item.getItemId() == R.id.menu_share) {
             final EventDetail detail = getData();
             if (detail != null) {
-                toShare(detail.getTitle(), detail.getBody(), detail.getHref());
+                toShare(detail.getTitle(), detail.getBody(), detail.getHref(), 5);
             }
         }
         return super.onOptionsItemSelected(item);

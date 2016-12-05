@@ -25,6 +25,7 @@ public class SubTab implements Serializable {
     private int order;
     private String href;
     private Banner banner;
+    private boolean isActived;
 
 
     public class Banner implements Serializable {
@@ -70,6 +71,14 @@ public class SubTab implements Serializable {
             return tab.getToken().equals(this.token);
         }
         return false;
+    }
+
+    public boolean isActived() {
+        return isActived;
+    }
+
+    public void setActived(boolean actived) {
+        isActived = actived;
     }
 
     public String getToken() {

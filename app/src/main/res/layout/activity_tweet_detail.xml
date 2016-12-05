@@ -31,7 +31,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="@dimen/lay_16"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
                 android:background="@color/white"
                 app:layout_scrollFlags="scroll">
 
@@ -39,13 +40,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/iv_portrait"
                         android:layout_width="@dimen/size_48"
                         android:layout_height="@dimen/size_48"
-                        android:transitionName="transition_portrait"
                         tools:src="@mipmap/widget_dface" />
 
                     <TextView
@@ -54,11 +56,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_weight="1"
                         android:textColor="#111111"
                         android:textSize="16sp"
-                        android:transitionName="transition_name"
                         tools:text="李大神" />
                 </LinearLayout>
 
@@ -68,21 +68,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:lineSpacingMultiplier="1.2"
                     android:textColor="#333"
                     android:textSize="16sp"
-                    android:transitionName="transition_content"
                     tools:text="又改需求!!!" />
 
                 <net.oschina.app.improve.widget.TweetPicturesLayout
                     android:id="@+id/tweet_pics_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:layout_marginTop="@dimen/lay_8"
                     android:visibility="gone"
                     app:column="3"
                     app:horizontalSpace="@dimen/lay_4"
-                    android:transitionName="transition_pictures"
                     app:verticalSpace="@dimen/lay_4" />
 
                 <RelativeLayout
@@ -91,7 +93,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/selector_record_layout"
-                    android:padding="3dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:visibility="gone"
                     tools:visibility="visible">
 
@@ -108,20 +111,65 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="4dp"
-                        android:layout_marginRight="4dp"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
                         tools:text="34'" />
                 </RelativeLayout>
 
+                <LinearLayout
+                    android:id="@+id/layout_ref"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:paddingTop="16dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="12dp"
+                    android:background="@mipmap/bg_forward"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tv_ref_title"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorPrimary"
+                        android:lineSpacingMultiplier="1.1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Python爬虫使用Selenium+PhantomJS抓取Ajax和动态HTML内容"/>
+
+                    <TextView
+                        android:id="@+id/tv_ref_content"
+                        android:textSize="13sp"
+                        android:layout_marginTop="4dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingMultiplier="1.2"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        tools:text="生产环境MySQL快速备份工具XtraBackup使用案例MySQL 的备份有很多种方式，最常用的应该是MySQLdump了，将数据库导出一个 sql文件，还原的时候source db.sql 就欢快的执行了。小伙伴愉快的布上一个shell脚本，配上…"/>
+
+                    <net.oschina.app.improve.widget.TweetPicturesLayout
+                        android:id="@+id/layout_ref_images"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:horizontalSpace="@dimen/lay_4"
+                        app:verticalSpace="@dimen/lay_4" />
+                </LinearLayout>
+
                 <!--bottom info-->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/lay_8">
+                    android:layout_marginTop="@dimen/lay_8"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp">
 
                     <TextView
                         android:id="@+id/tv_time"
@@ -129,7 +177,6 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:textSize="12sp"
-                        android:transitionName="transition_time"
                         tools:text="6分钟前" />
 
                     <TextView
@@ -138,13 +185,10 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/lay_8"
-                        android:layout_marginLeft="8dp"
                         android:layout_toEndOf="@id/tv_time"
-                        android:layout_toRightOf="@id/tv_time"
                         android:textSize="12sp"
                         android:visibility="gone"
                         tools:text="Android"
-                        android:transitionName="transition_platform"
                         tools:visibility="visible" />
 
                     <ImageView
@@ -152,16 +196,25 @@
                         android:layout_width="14dp"
                         android:layout_height="14dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="4dp"
                         android:layout_marginRight="4dp"
                         android:layout_toStartOf="@id/tv_comment_count"
-                        android:layout_toLeftOf="@id/tv_comment_count"
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitCenter"
-                        android:transitionName="transition_comment"
                         android:src="@mipmap/ic_comment" />
+
+                    <ImageView
+                        android:id="@+id/iv_dispatch"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/iv_comment"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/ic_forward" />
 
                     <ImageView
                         android:id="@+id/iv_thumbup"
@@ -169,11 +222,10 @@
                         android:layout_height="14dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
-                        android:layout_toLeftOf="@id/iv_comment"
-                        android:layout_toStartOf="@id/iv_comment"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/iv_dispatch"
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitCenter"
-                        android:transitionName="transition_like"
                         android:src="@drawable/selector_thumb" />
                 </RelativeLayout>
             </LinearLayout>

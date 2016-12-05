@@ -238,6 +238,13 @@ public final class CaptureActivity extends BaseActivity implements
             showConfirmLogin(url);
             return;
         }
+
+//        if (url.contains("www.oschina.net/event/signin?event")) {
+//            long sourceId = Long.valueOf(url.substring(url.indexOf("=") + 1));//2192570;
+//            finish();
+//            EventSigninActivity.show(this, sourceId);
+//            return;
+//        }
         if (url.contains("oschina.net")) {
             UIHelper.showUrlRedirect(CaptureActivity.this, url);
             finish();
@@ -375,7 +382,7 @@ public final class CaptureActivity extends BaseActivity implements
                 hideWaitDialog();
             }
         };
-        OSChinaApi.singnIn(barCode.getUrl(), handler);
+        OSChinaApi.signin(barCode.getUrl(), handler);
     }
 
     private void showLogin() {

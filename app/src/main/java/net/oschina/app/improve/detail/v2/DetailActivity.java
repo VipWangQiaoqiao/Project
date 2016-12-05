@@ -128,8 +128,6 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
             mShareDialogBuilder = ShareDialogBuilder.with(this)
                     .title(title)
                     .content(content)
-                    .summary(content)
-                    .description(content)
                     .url(url)
                     .build();
         }

@@ -113,7 +113,7 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
 
     @Override
     protected void requestData() {
-        OSChinaApi.getSubscription(mTab.getHref(), mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getSubscription(mTab.getHref(), isRefreshing ? null : mBean.getNextPageToken(), mHandler);
     }
 
     @Override

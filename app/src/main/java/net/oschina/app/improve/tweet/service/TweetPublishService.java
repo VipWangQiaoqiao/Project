@@ -19,8 +19,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.bean.simple.About;
-import net.oschina.common.utils.CollectionUtil;
 import net.oschina.app.util.TLog;
+import net.oschina.common.utils.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class TweetPublishService extends Service implements Contract.IService {
      * 发起动弹发布服务
      * <p>
      * 如果发布的动弹绑定到相关资讯等，则About节点不为NULL
-     * 仅仅关注：{@link About#id}, {@link About#type}, {@link About#image}
+     * 仅仅关注：{@link About#id}, {@link About#type}}
      */
     public static void startActionPublish(Context context, String content, List<String> images, About about) {
         Intent intent = new Intent(context, TweetPublishService.class);
@@ -80,7 +80,7 @@ public class TweetPublishService extends Service implements Contract.IService {
             images.toArray(pubImages);
             intent.putExtra(EXTRA_IMAGES, pubImages);
         }
-        if (about != null && about.getId() > 0 && about.getType() > 0) {
+        if (about != null && about.check()) {
             intent.putExtra(EXTRA_ABOUT, about);
         }
         context.startService(intent);
