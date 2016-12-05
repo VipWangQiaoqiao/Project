@@ -659,19 +659,35 @@ public class TabPickerView extends FrameLayout {
         public TabPickerDataManager() {
             mActiveDataSet = setupActiveDataSet();
             mOriginalDataSet = setupOriginalDataSet();
-
-            if (mActiveDataSet == null || mActiveDataSet.size() == 0) {
-                throw new RuntimeException("Active Data Set can't be null or empty");
-            }
+            mInactiveDataSet = new ArrayList<>();
 
             if (mOriginalDataSet == null || mOriginalDataSet.size() == 0) {
                 throw new RuntimeException("Original Data Set can't be null or empty");
             }
 
-            mInactiveDataSet = new ArrayList<>();
-            for (SubTab item : mOriginalDataSet) {
-                if (mActiveDataSet.contains(item)) continue;
-                mInactiveDataSet.add(item);
+            if (mActiveDataSet == null) {
+                mActiveDataSet = new ArrayList<>();
+                for (SubTab item : mOriginalDataSet) {
+                    if (item.isActived()){
+                        mActiveDataSet.add(item);
+                    }else {
+                        mInactiveDataSet.add(item);
+                    }
+                }
+            } else {
+                List<SubTab> mActiveList = new ArrayList<>();
+
+                for (SubTab item : mActiveDataSet) {
+                    int position = mOriginalDataSet.indexOf(item);
+                    mActiveList.add(mOriginalDataSet.get(position));
+                }
+
+                mActiveDataSet = mActiveList;
+
+                for (SubTab item : mOriginalDataSet) {
+                    if (mActiveDataSet.contains(item)) continue;
+                    mInactiveDataSet.add(item);
+                }
             }
         }
 
