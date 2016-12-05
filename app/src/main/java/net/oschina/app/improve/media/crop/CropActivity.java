@@ -79,6 +79,7 @@ public class CropActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_cancel:
+                finish();
                 break;
         }
     }

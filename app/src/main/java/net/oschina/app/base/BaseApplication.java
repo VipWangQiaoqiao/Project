@@ -67,8 +67,7 @@ public class BaseApplication extends Application {
     }
 
     public static SharedPreferences getPreferences() {
-        return context().getSharedPreferences(PREF_NAME,
-                Context.MODE_PRIVATE);
+        return context().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public static void showToast(int message) {
