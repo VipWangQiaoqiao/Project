@@ -83,7 +83,7 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
                 break;
             case News.TYPE_BLOG:
                 BlogDetailActivity.show(mContext, sub.getId());
-                net.oschina.app.improve.detail.general.BlogDetailActivity.show(mContext, sub);
+                //net.oschina.app.improve.detail.general.BlogDetailActivity.show(mContext, sub);
                 break;
             case News.TYPE_TRANSLATE:
                 TranslateDetailActivity.show(mContext, sub.getId());

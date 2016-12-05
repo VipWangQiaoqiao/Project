@@ -2,13 +2,14 @@ package net.oschina.app.improve.media.crop;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.WindowManager;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.improve.media.config.SelectOptions;
+import net.oschina.common.utils.StreamUtil;
 
 import java.io.FileOutputStream;
 
@@ -21,11 +22,11 @@ import butterknife.OnClick;
 
 public class CropActivity extends BaseActivity implements View.OnClickListener {
     private CropLayout mCropLayout;
-    private String mPath;
+    private static SelectOptions mOption;
 
-    public static void show(Fragment fragment, String path) {
+    public static void show(Fragment fragment, SelectOptions options) {
         Intent intent = new Intent(fragment.getActivity(), CropActivity.class);
-        intent.putExtra("path", path);
+        mOption = options;
         fragment.startActivityForResult(intent, 0x04);
     }
 
@@ -45,10 +46,9 @@ public class CropActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initData() {
         super.initData();
-        mPath = getIntent().getStringExtra("path");
-        getImageLoader().load(mPath).into(mCropLayout.getImageView());
-        mCropLayout.setCropWidth(600);
-        mCropLayout.setCropHeight(600);
+        getImageLoader().load(mOption.getSelectedImages().get(0)).into(mCropLayout.getImageView());
+        mCropLayout.setCropWidth(mOption.getCropWidth());
+        mCropLayout.setCropHeight(mOption.getCropHeight());
         mCropLayout.start();
     }
 
@@ -57,20 +57,31 @@ public class CropActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_crop:
+                Bitmap bitmap = null;
+                FileOutputStream os = null;
                 try {
-                    Bitmap bitmap = mCropLayout.cropBitmap();
-                    String path = Environment.getExternalStorageDirectory() + "/crop.jpg";
-                    FileOutputStream os = new FileOutputStream(path);
+                    bitmap = mCropLayout.cropBitmap();
+                    String path = getFilesDir() + "/crop.jpg";
+                    os = new FileOutputStream(path);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
                     os.flush();
                     os.close();
                     finish();
                 } catch (Exception e) {
                     e.printStackTrace();
+                } finally {
+                    if (bitmap != null) bitmap.recycle();
+                    StreamUtil.close(os);
                 }
                 break;
             case R.id.tv_cancel:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mOption = null;
+        super.onDestroy();
     }
 }
