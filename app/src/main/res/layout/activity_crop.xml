@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
@@ -8,13 +8,12 @@
     <net.oschina.app.improve.media.crop.CropLayout
         android:id="@+id/cropLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_height="match_parent"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="16dp"
+        android:layout_gravity="bottom"
         android:background="@drawable/shape_other_user_wrapper"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
@@ -51,4 +50,4 @@
             android:textSize="16sp" />
 
     </LinearLayout>
-</LinearLayout>
+</FrameLayout>
