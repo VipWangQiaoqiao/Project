@@ -134,21 +134,16 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void onStart() {
             super.onStart();
-            if (mSolarSystem != null)
-                mSolarSystem.accelerate();
             if (mIsUploadIcon) {
-                showWaitDialog(R.string.title_update_success_status);
+                showWaitDialog(R.string.title_updating_user_avatar);
             }
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString
                 , Throwable throwable) {
-            if (mSolarSystem != null)
-                mSolarSystem.decelerate();
             if (mIsUploadIcon) {
                 Toast.makeText(getActivity(), R.string.title_update_fail_status, Toast.LENGTH_SHORT).show();
-                mIsUploadIcon = false;
                 deleteCacheImage();
             }
         }
@@ -156,11 +151,9 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
             try {
-                if (mSolarSystem != null)
-                    mSolarSystem.decelerate();
+                if (mSolarSystem != null) mSolarSystem.decelerate();
 
-                Type type = new TypeToken<ResultBean<User>>() {
-                }.getType();
+                Type type = new TypeToken<ResultBean<User>>() {}.getType();
 
                 ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
@@ -170,8 +163,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     AccountHelper.updateUserCache(userInfo);
                 }
                 if (mIsUploadIcon) {
-                    hideWaitDialog();
-                    mIsUploadIcon = false;
                     deleteCacheImage();
                 }
             } catch (Exception e) {
@@ -180,6 +171,13 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             }
         }
 
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            if (mSolarSystem != null) mSolarSystem.accelerate();
+            if (mIsUploadIcon) mIsUploadIcon = false;
+            if (mDialog != null && mDialog.isShowing()) mDialog.dismiss();
+        }
     };
 
 
@@ -330,8 +328,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * requestData
      */
     private void sendRequestData() {
-        if (AccountHelper.isLogin())
-            OSChinaApi.getUserInfo(textHandler);
+        if (AccountHelper.isLogin()) OSChinaApi.getUserInfo(textHandler);
     }
 
     /**
@@ -561,18 +558,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         mDialog.show();
 
         return mDialog;
-    }
-
-    public void hideWaitDialog() {
-        ProgressDialog dialog = mDialog;
-        if (dialog != null) {
-            mDialog = null;
-            try {
-                dialog.dismiss();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
     }
 
     /**

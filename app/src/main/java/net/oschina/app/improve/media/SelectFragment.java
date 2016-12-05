@@ -216,6 +216,7 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
                 List<String> selectedImage = mOption.getSelectedImages();
                 selectedImage.clear();
                 selectedImage.add(mSelectedImage.get(0).getPath());
+                mSelectedImage.clear();
                 CropActivity.show(this, mOption);
             } else {
                 mOption.getCallback().doSelected(Util.toArray(mSelectedImage));
