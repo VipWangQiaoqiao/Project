@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.google.gson.reflect.TypeToken;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
@@ -25,14 +26,16 @@ import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.widget.FragmentPagerAdapter;
 import net.oschina.app.improve.widget.TabPickerView;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.common.utils.StreamUtil;
+import net.oschina.app.util.TDevice;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +61,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
     private MainActivity activity;
     private Fragment mCurFragment;
     private FragmentPagerAdapter mAdapter;
+    private static TabPickerView.TabPickerDataManager mTabPickerDataManager;
     List<SubTab> tabs;
 
     @Override
@@ -72,65 +76,57 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
         });
     }
 
+    public static TabPickerView.TabPickerDataManager initTabPickerManager(){
+        if (mTabPickerDataManager == null) {
+            mTabPickerDataManager = new TabPickerView.TabPickerDataManager() {
+                @Override
+                public List<SubTab> setupActiveDataSet() {
+                    try {
+                        File file = AppContext.getInstance().getFileStreamPath("sub_tab_active.json");
+                        if (!file.exists()) return null;
+                        return AppOperator.getGson().fromJson(
+                                new FileReader(file),
+                                new TypeToken<ArrayList<SubTab>>() {}.getType());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                public List<SubTab> setupOriginalDataSet() {
+                    try {
+                        InputStream is = AppContext.getInstance().getAssets().open("sub_tab_original.json");
+                        return AppOperator.getGson().<ArrayList<SubTab>>fromJson(
+                                new InputStreamReader(is, "UTF-8"),
+                                new TypeToken<ArrayList<SubTab>>() {}.getType());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                public void restoreActiveDataSet(List<SubTab> mActiveDataSet) {
+                    try {
+                        FileOutputStream fos = AppContext.getInstance().openFileOutput(
+                                "sub_tab_active.json", Context.MODE_PRIVATE);
+                        AppOperator.getGson().toJson(mActiveDataSet, new OutputStreamWriter(fos, "UTF-8"));
+                        AppContext.set("TabsMask", TDevice.getVersionCode());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+        }
+        return mTabPickerDataManager;
+    }
+
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
 
-        mViewTabPicker.setTabPickerManager(new TabPickerView.TabPickerDataManager() {
-            @Override
-            public List<SubTab> setupActiveDataSet() {
-                InputStream is = null;
-                ByteArrayOutputStream baos = null;
-                try {
-                    baos = new ByteArrayOutputStream();
-
-                    byte[] bytes = new byte[1024];
-                    int length;
-
-                    File file = getContext().getFileStreamPath("sub_tab_active.json");
-                    if (!file.exists()) return null;
-
-                    is = new FileInputStream(file);
-                    while ((length = is.read(bytes)) != -1) {
-                        baos.write(bytes, 0, length);
-                    }
-                    return AppOperator.getGson().<ArrayList<SubTab>>fromJson(
-                            new String(baos.toByteArray(), "UTF-8"),
-                            new TypeToken<ArrayList<SubTab>>() {
-                            }.getType());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    StreamUtil.close(is, baos);
-                }
-                return null;
-            }
-
-            @Override
-            public List<SubTab> setupOriginalDataSet() {
-                InputStream is = null;
-                ByteArrayOutputStream baos = null;
-                try {
-                    is = getResources().getAssets().open("sub_tab_original.json");
-                    baos = new ByteArrayOutputStream();
-                    byte[] bytes = new byte[1024];
-                    int length;
-                    while ((length = is.read(bytes)) != -1) {
-                        baos.write(bytes, 0, length);
-                    }
-                    return AppOperator.getGson().<ArrayList<SubTab>>fromJson(
-                            new String(baos.toByteArray(), "UTF-8"),
-                            new TypeToken<ArrayList<SubTab>>() {
-                            }.getType());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    StreamUtil.close(is, baos);
-                }
-                return null;
-            }
-        });
-
+        mViewTabPicker.setTabPickerManager(initTabPickerManager());
         mViewTabPicker.setOnTabPickingListener(new TabPickerView.OnTabPickingListener() {
 
             private boolean isChangeIndex = false;
@@ -173,17 +169,12 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
                 AppOperator.getExecutor().execute(new Runnable() {
                     @Override
                     public void run() {
-                        String json = AppOperator.getGson().toJson(activeTabs);
-                        FileOutputStream fos = null;
                         try {
-                            fos = getContext().openFileOutput("sub_tab_active.json",
-                                    Context.MODE_PRIVATE);
-                            fos.write(json.getBytes("UTF-8"));
-                            fos.flush();
+                            FileOutputStream fos = getContext().openFileOutput(
+                                    "sub_tab_active.json", Context.MODE_PRIVATE);
+                            AppOperator.getGson().toJson(activeTabs, new OutputStreamWriter(fos, "UTF-8"));
                         } catch (Exception e) {
                             e.printStackTrace();
-                        } finally {
-                            StreamUtil.close(fos);
                         }
                     }
                 });
