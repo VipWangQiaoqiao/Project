@@ -48,9 +48,7 @@ import static net.oschina.app.improve.app.AppOperator.createGson;
  */
 
 public class EventSigninActivity extends BaseBackActivity {
-
     public static final String EVENT_ID_KEY = "event_id_key";
-    private static final String TAG = "EventSigninActivity";
 
     @Bind(R.id.iv_event_img)
     ImageView mIvImg;
@@ -85,14 +83,11 @@ public class EventSigninActivity extends BaseBackActivity {
     @Bind(R.id.lay_error)
     EmptyLayout mEmptyLayout;
 
-
     private long mId;
     private int mRequestType = 0x01;//0x01 请求活动详情 0x02 签到
     private ProgressDialog mDialog;
 
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
-
-
         @Override
         public void onStart() {
             super.onStart();
@@ -125,10 +120,8 @@ public class EventSigninActivity extends BaseBackActivity {
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
             //第一次初始化数据
             if (mRequestType == 0x01) {
-
                 ResultBean<EventDetail> resultBean = createGson().fromJson(responseString, EventTypeToken());
                 if (resultBean.isSuccess()) {
                     hideLoading();
@@ -143,17 +136,12 @@ public class EventSigninActivity extends BaseBackActivity {
                 mRequestType = 0x02;
                 ResultBean<EventSignin> resultBean = AppOperator.createGson().fromJson(responseString, EventSigninTypeToken());
                 if (resultBean.isSuccess()) {
-                    //hideLoading();
                     EventSignin eventSignin = resultBean.getResult();
-                    //Log.e(TAG, "onSuccess: -------->true" + eventSignin.toString());
                     updateSigninView(eventSignin);
                 } else {
-                    //Log.e(TAG, "onSuccess: -------->false");
                     //showError(EmptyLayout.NODATA);
                 }
-
             }
-
         }
     };
 
@@ -483,11 +471,5 @@ public class EventSigninActivity extends BaseBackActivity {
                 ex.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 }
