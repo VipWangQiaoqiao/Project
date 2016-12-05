@@ -1,5 +1,6 @@
 package net.oschina.app.improve.user.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -49,6 +50,7 @@ public class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implem
         return new EventViewHolder(mInflater.inflate(R.layout.item_list_sub_event, parent, false));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, SubBean item, int position) {
         EventViewHolder vh = (EventViewHolder) holder;

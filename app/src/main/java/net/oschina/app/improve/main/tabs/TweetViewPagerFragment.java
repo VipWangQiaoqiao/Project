@@ -57,7 +57,7 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
         tab.setFixed(false);
         tab.setName("每日乱弹");
         tab.setNeedLogin(false);
-        tab.setHref("http://192.168.1.10:8000/action/apiv2/sub_list?token=263ee86f538884e70ee1ee50aed759b6");
+        tab.setHref("https://www.oschina.net/action/apiv2/sub_list?token=263ee86f538884e70ee1ee50aed759b6");
         tab.setSubtype(5);
         tab.setToken("263ee86f538884e70ee1ee50aed759b6");
 

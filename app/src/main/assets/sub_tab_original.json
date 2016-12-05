@@ -2,10 +2,10 @@
     {
         "banner": {
             "catalog": 1,
-            "href": "http://192.168.1.10:8000/action/apiv2//banner?catalog=1"
+            "href": "https://www.oschina.net/action/apiv2//banner?catalog=1"
         },
         "fixed": true,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=d6112fa662bc4bf21084670a857fbd20",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=d6112fa662bc4bf21084670a857fbd20",
         "name": "开源资讯",
         "needLogin": false,
         "order": 1,
@@ -15,7 +15,7 @@
     },
     {
         "fixed": true,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=df985be3c5d5449f8dfb47e06e098ef9",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=df985be3c5d5449f8dfb47e06e098ef9",
         "name": "推荐博客",
         "needLogin": false,
         "order": 2,
@@ -25,7 +25,7 @@
     },
     {
         "fixed": true,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=98d04eb58a1d12b75d254deecbc83790",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=98d04eb58a1d12b75d254deecbc83790",
         "name": "技术问答",
         "needLogin": false,
         "order": 3,
@@ -35,7 +35,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=299975006aa7f9b8a158deeb0d27a011",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=299975006aa7f9b8a158deeb0d27a011",
         "name": "码云推荐",
         "needLogin": false,
         "order": 70,
@@ -45,7 +45,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=e3e35d14a62b4f816ec878b6597b60aa",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=e3e35d14a62b4f816ec878b6597b60aa",
         "name": "热门资讯",
         "needLogin": false,
         "order": 71,
@@ -55,7 +55,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=177f171d41bb37d80c67bee14123f7e1",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=177f171d41bb37d80c67bee14123f7e1",
         "name": "最新翻译",
         "needLogin": false,
         "order": 74,
@@ -65,7 +65,7 @@
     },
     {
         "fixed":false,
-        "href":"http://192.168.1.10:8000/action/apiv2/sub_list?token=5718df855db5913f25cab8ee4f7c656c",
+        "href":"https://www.oschina.net/action/apiv2/sub_list?token=5718df855db5913f25cab8ee4f7c656c",
         "name":"移动开发",
         "needLogin":false,
         "order":75,
@@ -75,7 +75,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=7975ce15d909bb61a6b85b9392db6149",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=7975ce15d909bb61a6b85b9392db6149",
         "name": "开源硬件",
         "needLogin": false,
         "order": 76,
@@ -85,7 +85,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=99838268b3bc311a2e763a6a2c4bb9ec",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=99838268b3bc311a2e763a6a2c4bb9ec",
         "name": "云计算",
         "needLogin": false,
         "order": 77,
@@ -95,7 +95,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=ce53a71a371867582eb3023415c83489",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=ce53a71a371867582eb3023415c83489",
         "name": "软件工程",
         "needLogin": false,
         "order": 78,
@@ -105,7 +105,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=253b519335b59c011b6db7d1165932bf",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=253b519335b59c011b6db7d1165932bf",
         "name": "系统运维",
         "needLogin": false,
         "order": 79,
@@ -115,7 +115,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=ad0f1d9e413aeadde89eb899817edd81",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=ad0f1d9e413aeadde89eb899817edd81",
         "name": "图像多媒体",
         "needLogin": false,
         "order": 80,
@@ -125,7 +125,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=1d76f396e1aad15cf167754bfba9ca78",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=1d76f396e1aad15cf167754bfba9ca78",
         "name": "企业开发",
         "needLogin": false,
         "order": 81,
@@ -135,7 +135,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=471587b6f0a943f4d675281fa5d13975",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=471587b6f0a943f4d675281fa5d13975",
         "name": "数据库",
         "needLogin": false,
         "order": 82,
@@ -145,7 +145,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=285cfaccd55f60ebc919d30ad709c6b4",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=285cfaccd55f60ebc919d30ad709c6b4",
         "name": "编程语言",
         "needLogin": false,
         "order": 83,
@@ -155,7 +155,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=5ca68e0307f68ccd2d181b07d45b110b",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=5ca68e0307f68ccd2d181b07d45b110b",
         "name": "游戏开发",
         "needLogin": false,
         "order": 84,
@@ -165,7 +165,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=32704cb501253b0422544fd84b7de35b",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=32704cb501253b0422544fd84b7de35b",
         "name": "服务端开发",
         "needLogin": false,
         "order": 85,
@@ -175,7 +175,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=1299ab1d9f2981cf6100083e106aa531",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=1299ab1d9f2981cf6100083e106aa531",
         "name": "前端开发",
         "needLogin": false,
         "order": 86,
@@ -185,7 +185,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=63697c05f04140b1ca1dba8e0822ebf4",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=63697c05f04140b1ca1dba8e0822ebf4",
         "name": "源创君",
         "needLogin": false,
         "order": 87,
@@ -195,7 +195,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=0048958a909973b5d83a8eca65d90afb",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=0048958a909973b5d83a8eca65d90afb",
         "name": "最新博客",
         "needLogin": false,
         "order": 90,
@@ -205,7 +205,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=b5a06540fdf8d2d4de5c40775585a188",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=b5a06540fdf8d2d4de5c40775585a188",
         "name": "热门博客",
         "needLogin": false,
         "order": 91,
@@ -214,13 +214,8 @@
         "type": 3
     },
     {
-<<<<<<< HEAD
-        "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=1abf09a23a87442184c2f9bf9dc29e35",
-=======
         "fixed": true,
         "href": "https://www.oschina.net/action/apiv2/sub_list?token=1abf09a23a87442184c2f9bf9dc29e35",
->>>>>>> a9dd09f4f7c066630908d82bae9fd4b34d53cef4
         "name": "每日一博",
         "needLogin": false,
         "order": 4,
@@ -230,7 +225,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=2953c7a3d4ebfbae2c45fd34698a6545",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=2953c7a3d4ebfbae2c45fd34698a6545",
         "name": "站务建议",
         "needLogin": false,
         "order": 93,
@@ -240,7 +235,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=ce1231d4a15c3d1e944943a6aa54d695",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=ce1231d4a15c3d1e944943a6aa54d695",
         "name": "职业生涯",
         "needLogin": false,
         "order": 94,
@@ -250,7 +245,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=44fe8b07756796cf620dbd18a4cd56e1",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=44fe8b07756796cf620dbd18a4cd56e1",
         "name": "行业杂烩",
         "needLogin": false,
         "order": 95,
@@ -260,7 +255,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=b56759c46cb81192b7d1cbb1a478a45d",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=b56759c46cb81192b7d1cbb1a478a45d",
         "name": "技术分享",
         "needLogin": false,
         "order": 96,
@@ -270,7 +265,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=8f7029b477abf806b1125aff3a666e80",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=8f7029b477abf806b1125aff3a666e80",
         "name": "开源访谈",
         "needLogin": false,
         "order": 98,
@@ -280,7 +275,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=8ebb873ebbdb5f60d33db3f7dd15d63b",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=8ebb873ebbdb5f60d33db3f7dd15d63b",
         "name": "高手问答",
         "needLogin": false,
         "order": 99,
@@ -290,7 +285,7 @@
     },
     {
         "fixed": false,
-        "href": "http://192.168.1.10:8000/action/apiv2/sub_list?token=b4ca1962b3a80823c6138441015d9836",
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=b4ca1962b3a80823c6138441015d9836",
         "name": "最新软件",
         "needLogin": false,
         "order": 100,

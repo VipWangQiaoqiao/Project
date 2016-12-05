@@ -13,7 +13,7 @@ import android.widget.TextView;
 public class TweetTextView extends TextView {
 	
 	private final static String AT_HOST_PRE = "https://my.oschina.net";
-	private final static String MAIN_HOST = "http://192.168.1.10:8000";
+	private final static String MAIN_HOST = "https://www.oschina.net";
 
 	private boolean dispatchToParent;
 

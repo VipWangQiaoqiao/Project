@@ -136,7 +136,7 @@ public class URLUtils {
                 }
                 matcher = PATTERN_PATH_SOFTWARE.matcher(path);
                 if (matcher.find()){
-                    // http://192.168.1.10:8000/p/parallels-desktop
+                    // https://www.oschina.net/p/parallels-desktop
                     SoftwareDetailActivity.show(context, matcher.group(1));
                     break;
                 }
@@ -148,12 +148,9 @@ public class URLUtils {
                 }
                 matcher = PATTERN_PATH_TWEET_TOPIC.matcher(path);
                 if (matcher.find()){
-<<<<<<< HEAD
                     // TODO replace by new activity
-                    //  http://192.168.1.10:8000/tweet-topic/Navicat+for+Postgresql
-=======
                     //  https://www.oschina.net/tweet-topic/Navicat+for+Postgresql
->>>>>>> a9dd09f4f7c066630908d82bae9fd4b34d53cef4
+                    //  https://www.oschina.net/tweet-topic/Navicat+for+Postgresql
                     Bundle bundle = new Bundle();
                     bundle.putInt(TweetFragment.BUNDLE_KEY_REQUEST_CATALOG, TweetFragment.CATALOG_TAG);
                     bundle.putString(TweetFragment.BUNDLE_KEY_TAG, matcher.group(1));

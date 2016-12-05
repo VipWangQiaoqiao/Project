@@ -2,7 +2,6 @@ package net.oschina.app.improve.user.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -27,7 +26,6 @@ import java.lang.reflect.Type;
  * on 2016/12/2.
  * desc:
  */
-
 public class UserEventFragment extends BaseGeneralRecyclerFragment<SubBean> {
 
     private static final String TAG = "UserEventFragment";
@@ -39,14 +37,14 @@ public class UserEventFragment extends BaseGeneralRecyclerFragment<SubBean> {
         bundle.putSerializable("sub_tab", subTab);
         UserEventFragment userEventFragment = new UserEventFragment();
         userEventFragment.setArguments(bundle);
-        return userEventFragment;//(UserEventFragment) Fragment.instantiate(context, UserEventFragment.class.getClass().getName(), bundle);
+        return userEventFragment;
+        //return (UserEventFragment) Fragment.instantiate(context, UserEventFragment.class.getClass().getName(), bundle);
     }
 
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
         mTab = (SubTab) bundle.getSerializable("sub_tab");
-        Log.e(TAG, "initBundle: ----->" + mTab.toString());
         CACHE_NAME = mTab.getToken();
     }
 
@@ -77,7 +75,6 @@ public class UserEventFragment extends BaseGeneralRecyclerFragment<SubBean> {
     @Override
     public void onRefreshing() {
         super.onRefreshing();
-        Log.e(TAG, "onRefreshing: ------>");
     }
 
     @Override
@@ -110,6 +107,5 @@ public class UserEventFragment extends BaseGeneralRecyclerFragment<SubBean> {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.e(TAG, "onDetach: ----->");
     }
 }

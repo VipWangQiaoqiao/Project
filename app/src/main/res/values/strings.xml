@@ -324,6 +324,9 @@
     <string name="signin_event_type_hint">类型</string>
     <string name="signin_event_author">发起人:</string>
     <string name="signin_event_counts_hint">人参与</string>
+    <string name="user_event_hint">我的活动</string>
+
+
     <string name="topic_list">话题列表</string>
 
 
