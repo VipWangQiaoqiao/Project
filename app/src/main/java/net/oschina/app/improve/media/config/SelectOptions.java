@@ -58,9 +58,13 @@ public final class SelectOptions {
         private List<String> selectedImages;
 
         public Builder() {
+            selectCount = 1;
+            hasCam = true;
         }
 
         public void setCrop(int cropWidth, int cropHeight) {
+            if (cropWidth <= 0 || cropHeight <= 0)
+                throw new IllegalArgumentException("cropWidth or cropHeight mast be greater than 0 ");
             this.isCrop = true;
             this.cropWidth = cropWidth;
             this.cropHeight = cropHeight;
@@ -77,6 +81,8 @@ public final class SelectOptions {
         }
 
         public Builder setSelectCount(int selectCount) {
+            if (selectCount <= 0)
+                throw new IllegalArgumentException("selectCount mast be greater than 0 ");
             this.selectCount = selectCount;
             return this;
         }
