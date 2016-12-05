@@ -25,6 +25,9 @@ public class ZoomImageView extends ImageView implements
         OnScaleGestureListener, OnTouchListener,
         ViewTreeObserver.OnGlobalLayoutListener {
 
+    private int mCropWidth;//设置裁剪宽度
+    private int mCropHeight;//设置裁剪高度
+
     private int mOffset = 0;
     private int mVOffset = 0;
 
@@ -246,10 +249,12 @@ public class ZoomImageView extends ImageView implements
         boolean change = super.setFrame(l, t, r, b);
         Drawable drawable = getDrawable();
         if (drawable == null) return false;
-        int mBoundWidth = drawable.getBounds().width();
+        int boundWidth = drawable.getBounds().width();
+        int boundHeight = drawable.getBounds().height();
+        if (boundWidth > mCropWidth || boundHeight > mCropHeight) return false;
         int width = getWidth();
         int height = getHeight();
-        mScale = (float) width / mBoundWidth;
+        mScale = (float) width / boundWidth;
         isInit = true;
         postDelayed(new ScaleRunnable(mScale, width / 2, height / 2), 50);
         isAutoScale = false;
@@ -349,5 +354,13 @@ public class ZoomImageView extends ImageView implements
 
     public void setVOffset(int vOffset) {
         this.mVOffset = vOffset;
+    }
+
+    public void setCropWidth(int mCropWidth) {
+        this.mCropWidth = mCropWidth;
+    }
+
+    public void setCropHeight(int mCropHeight) {
+        this.mCropHeight = mCropHeight;
     }
 }
