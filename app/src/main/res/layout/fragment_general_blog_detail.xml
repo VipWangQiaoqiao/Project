@@ -214,6 +214,10 @@
                 android:layout_height="wrap_content"
                 android:background="@color/ques_detail_bg_color" />
 
+            <View
+                android:id="@+id/view_bottom_spacing"
+                android:layout_width="0dp"
+                android:layout_height="46dp" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

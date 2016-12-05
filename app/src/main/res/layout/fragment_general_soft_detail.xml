@@ -299,6 +299,11 @@
                 android:id="@+id/lay_detail_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <View
+                android:id="@+id/view_bottom_spacing"
+                android:layout_width="0dp"
+                android:layout_height="46dp" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
@@ -395,6 +400,8 @@
                 android:textSize="@dimen/font_16"
                 tools:ignore="HardcodedText,RtlHardcoded" />
         </LinearLayout>
+
+
     </LinearLayout>
 
     <View
