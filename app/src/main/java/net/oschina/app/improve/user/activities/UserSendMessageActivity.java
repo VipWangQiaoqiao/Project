@@ -101,7 +101,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
             public void onClick(View v) {
 
                 SelectImageActivity.show(UserSendMessageActivity.this, new SelectOptions.Builder()
-                        .setHasCam(false)
+                        .setHasCam(true)
                         .setSelectCount(1)
                         .setCallback(new SelectOptions.Callback() {
                             @Override

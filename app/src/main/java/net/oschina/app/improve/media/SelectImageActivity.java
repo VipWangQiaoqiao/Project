@@ -42,38 +42,6 @@ public class SelectImageActivity extends BaseBackActivity implements EasyPermiss
         context.startActivity(new Intent(context, SelectImageActivity.class));
     }
 
-//    public static void showImage(Context context, int selectCount, boolean haveCamera, String[] selectedImages, Callback callBack) {
-//        if (callBack == null)
-//            throw new NullPointerException("SelectImageActivity's Callback isn't set null.");
-//
-//        if (selectCount <= 0)
-//            throw new RuntimeException("SelectCount must >= 1");
-//
-//        mCallbackSnapshot = callBack;
-//
-//        // Set config
-//        Config config = new Config();
-//        config.selectCount = selectCount;
-//        config.haveCamera = haveCamera;
-//        config.selectedImages = selectedImages;
-//
-//        Intent intent = new Intent(context, SelectImageActivity.class);
-//        intent.putExtra(KEY_CONFIG, config);
-//        context.startActivity(intent);
-//    }
-
-//    @Override
-//    protected boolean initBundle(Bundle bundle) {
-//        Serializable serializable = bundle.getSerializable(KEY_CONFIG);
-//        if (serializable == null && serializable instanceof Config) {
-//            return false;
-//        } else {
-//            mConfig = (Config) serializable;
-//            // We must need set one result
-//            return mConfig.getSelectCount() >= 1;
-//        }
-//    }
-
     @Override
     protected int getContentView() {
         return R.layout.activity_select_image;
@@ -118,16 +86,6 @@ public class SelectImageActivity extends BaseBackActivity implements EasyPermiss
     public void setDataView(SelectImageContract.View view) {
         mView = view;
     }
-
-//    @Override
-//    public Callback getCallback() {
-//        return mCallback;
-//    }
-//
-//    @Override
-//    public Config getConfig() {
-//        return mConfig;
-//    }
 
     @Override
     protected void onDestroy() {
@@ -209,38 +167,4 @@ public class SelectImageActivity extends BaseBackActivity implements EasyPermiss
             e.printStackTrace();
         }
     }
-
-//    public static class Config implements Serializable {
-//        private int selectCount;
-//        private boolean haveCamera;
-//        private String[] selectedImages;
-//
-//        public int getSelectCount() {
-//            return selectCount;
-//        }
-//
-//        public void setSelectCount(int selectCount) {
-//            this.selectCount = selectCount;
-//        }
-//
-//        public boolean isHaveCamera() {
-//            return haveCamera;
-//        }
-//
-//        public void setHaveCamera(boolean haveCamera) {
-//            this.haveCamera = haveCamera;
-//        }
-//
-//        public String[] getSelectedImages() {
-//            return selectedImages;
-//        }
-//
-//        public void setSelectedImages(String[] selectedImages) {
-//            this.selectedImages = selectedImages;
-//        }
-//    }
-//
-//    public static interface Callback {
-//        void doSelectDone(String[] images);
-//    }
 }
