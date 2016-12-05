@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.support.annotation.StringRes;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -146,10 +145,10 @@ public class EventSigninActivity extends BaseBackActivity {
                 if (resultBean.isSuccess()) {
                     //hideLoading();
                     EventSignin eventSignin = resultBean.getResult();
-                    Log.e(TAG, "onSuccess: -------->true" + eventSignin.toString());
+                    //Log.e(TAG, "onSuccess: -------->true" + eventSignin.toString());
                     updateSigninView(eventSignin);
                 } else {
-                    Log.e(TAG, "onSuccess: -------->false");
+                    //Log.e(TAG, "onSuccess: -------->false");
                     //showError(EmptyLayout.NODATA);
                 }
 
