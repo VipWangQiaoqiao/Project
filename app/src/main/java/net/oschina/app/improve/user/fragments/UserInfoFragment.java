@@ -25,7 +25,6 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
-import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.media.SelectImageActivity;
@@ -43,7 +42,6 @@ import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQRCodeDialog;
-import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -61,7 +59,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by fei on 2016/8/15.
- *
+ * <p>
  * 用户个人界面
  */
 
@@ -149,7 +147,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             try {
                 if (mSolarSystem != null) mSolarSystem.decelerate();
 
-                Type type = new TypeToken<ResultBean<User>>() {}.getType();
+                Type type = new TypeToken<ResultBean<User>>() {
+                }.getType();
 
                 ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
@@ -451,8 +450,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     UserTweetActivity.show(getActivity(), AccountHelper.getUserId());
                     break;
                 case R.id.ly_favorite:
-//                    UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
-//                            .getLoginUid());
                     UserCollectionActivity.show(getActivity());
                     break;
                 case R.id.ly_following:
