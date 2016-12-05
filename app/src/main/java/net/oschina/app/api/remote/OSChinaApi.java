@@ -15,6 +15,7 @@ import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.bean.SignUpEventOptions;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
@@ -2039,5 +2040,23 @@ public class OSChinaApi {
         params.put("type", type);
         params.put("id", id);
         ApiHttpClient.get("action/apiv2/detail", params, handler);
+    }
+
+    /**
+     * 获取活动报名的动态配置参数
+     */
+    public static void getEventSignUpOptions(long sourceId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.get("action/apiv2/event_apply_preload", params, handler);
+    }
+
+    /**
+     * 活动报名
+     */
+    public static void signUpEvent(long sourceId, List<SignUpEventOptions> optionses, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.post("action/apiv2/event_apply", params, handler);
     }
 }
