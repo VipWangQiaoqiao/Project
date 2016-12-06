@@ -8,6 +8,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.SignUpEventOptions;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.ui.empty.EmptyLayout;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -23,7 +24,7 @@ public class SignUpPresenter implements SignUpContract.Presenter {
     private final SignUpContract.View mView;
     private final SignUpContract.EmptyView mEmptyView;
 
-    public SignUpPresenter(SignUpContract.View mView,SignUpContract.EmptyView mEmptyView) {
+    public SignUpPresenter(SignUpContract.View mView, SignUpContract.EmptyView mEmptyView) {
         this.mView = mView;
         this.mEmptyView = mEmptyView;
         this.mView.setPresenter(this);
@@ -34,7 +35,7 @@ public class SignUpPresenter implements SignUpContract.Presenter {
         OSChinaApi.getSignUpOptions(sourceId, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                mView.showNetworkError(R.string.tip_network_error);
+                mEmptyView.showErrorLayout(EmptyLayout.NETWORK_ERROR);
             }
 
             @Override
@@ -44,13 +45,15 @@ public class SignUpPresenter implements SignUpContract.Presenter {
                     }.getType();
                     ResultBean<List<SignUpEventOptions>> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
+                        mEmptyView.hideEmptyLayout();
                         mView.showGetSignUpOptionsSuccess(resultBean.getResult());
                     } else {
-                        mView.showGetSignUpOptionsError(resultBean.getMessage());
+                        mEmptyView.showErrorLayout(EmptyLayout.NODATA);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    mView.showGetSignUpOptionsError("获取失败");
+                    //mView.showGetSignUpOptionsError("获取失败");
+                    mEmptyView.showErrorLayout(EmptyLayout.NODATA);
                 }
             }
         });

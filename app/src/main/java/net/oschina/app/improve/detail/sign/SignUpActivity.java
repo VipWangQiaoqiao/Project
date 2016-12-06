@@ -2,9 +2,14 @@ package net.oschina.app.improve.detail.sign;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.widget.SimplexToast;
+import net.oschina.app.ui.empty.EmptyLayout;
+
+import butterknife.Bind;
 
 /**
  * 新版活动报名页面,动态请求活动报名参数，按服务器返回的顺序inflate各自对应的View
@@ -14,7 +19,14 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 
 public class SignUpActivity extends BaseBackActivity implements SignUpContract.EmptyView {
 
+    @Bind(R.id.layout_error)
+    EmptyLayout mEmptyLayout;
+
     private SignUpFragment mFragment;
+
+    private SignUpPresenter mPresenter;
+
+    private long mSourceId;
 
     public static void show(Fragment fragment, long sourceId) {
         Intent intent = new Intent(fragment.getActivity(), SignUpActivity.class);
@@ -28,12 +40,39 @@ public class SignUpActivity extends BaseBackActivity implements SignUpContract.E
     }
 
     @Override
-    public void hideEmptyLayout() {
+    protected void initWidget() {
+        super.initWidget();
+        mFragment = SignUpFragment.newInstance();
+        addFragment(R.id.fl_content, mFragment);
+        mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mEmptyLayout.getErrorState() != EmptyLayout.NETWORK_LOADING) {
+                    mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                    mPresenter.getSignUpOptions(mSourceId);
+                }
+            }
+        });
+    }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        mSourceId = getIntent().getLongExtra("sourceId", 0);
+        if (mSourceId <= 0) {
+            SimplexToast.show(this, "活动资源不存在");
+            finish();
+        }
+        mPresenter = new SignUpPresenter(mFragment, this);
+    }
+
+    @Override
+    public void hideEmptyLayout() {
+        mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
     }
 
     @Override
     public void showErrorLayout(int errorType) {
-
+        mEmptyLayout.setErrorType(errorType);
     }
 }

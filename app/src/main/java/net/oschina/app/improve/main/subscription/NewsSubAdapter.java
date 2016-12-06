@@ -89,9 +89,12 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         } else {
             vh.tv_title.setText(item.getTitle());
         }
-        if (item.getType() == 7 || item.getType() == 4 || item.getType() == 1 || (mTab.getSubtype() == 1 && item.getType() == 6)) {
+        if (item.getType() == 7 || item.getType() == 4 || item.getType() == 1 || (mTab.getSubtype() == 1 && mTab.getType() == 6)) {
             vh.iv_comment.setVisibility(View.GONE);
             vh.tv_comment_count.setVisibility(View.GONE);
+        } else {
+            vh.iv_comment.setVisibility(View.VISIBLE);
+            vh.tv_comment_count.setVisibility(View.VISIBLE);
         }
     }
 

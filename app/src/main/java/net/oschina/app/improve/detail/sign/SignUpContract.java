@@ -22,8 +22,6 @@ public interface SignUpContract {
     interface View extends BaseView<Presenter> {
         void showGetSignUpOptionsSuccess(List<SignUpEventOptions> options);
 
-        void showGetSignUpOptionsError(String message);
-
         void showSignUpSuccess();
 
         void showSignUpError(String message);
