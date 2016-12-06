@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
@@ -27,9 +28,9 @@ import net.oschina.app.improve.widget.FragmentPagerAdapter;
 import net.oschina.app.improve.widget.TabPickerView;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.util.TDevice;
+import net.oschina.common.utils.StreamUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -76,7 +77,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
         });
     }
 
-    public static TabPickerView.TabPickerDataManager initTabPickerManager(){
+    public static TabPickerView.TabPickerDataManager initTabPickerManager() {
         if (mTabPickerDataManager == null) {
             mTabPickerDataManager = new TabPickerView.TabPickerDataManager() {
                 @Override
@@ -86,7 +87,8 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
                         if (!file.exists()) return null;
                         return AppOperator.getGson().fromJson(
                                 new FileReader(file),
-                                new TypeToken<ArrayList<SubTab>>() {}.getType());
+                                new TypeToken<ArrayList<SubTab>>() {
+                                }.getType());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -99,7 +101,8 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
                         InputStream is = AppContext.getInstance().getAssets().open("sub_tab_original.json");
                         return AppOperator.getGson().<ArrayList<SubTab>>fromJson(
                                 new InputStreamReader(is, "UTF-8"),
-                                new TypeToken<ArrayList<SubTab>>() {}.getType());
+                                new TypeToken<ArrayList<SubTab>>() {
+                                }.getType());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -164,23 +167,38 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             }
 
             @Override
-            public void onRestore(final List<SubTab> activeTabs) {
+            public void onRestore(final List<SubTab> mActiveDataSet) {
                 if (!isChangeIndex) return;
                 AppOperator.getExecutor().execute(new Runnable() {
                     @Override
                     public void run() {
+                        String json = AppOperator.getGson().toJson(mActiveDataSet);
+                        FileOutputStream fos = null;
                         try {
-                            FileOutputStream fos = getContext().openFileOutput(
+                            fos = AppContext.getInstance().openFileOutput("sub_tab_active.json",
+                                    Context.MODE_PRIVATE);
+                            fos.write(json.getBytes("UTF-8"));
+                            fos.flush();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            StreamUtil.close(fos);
+                        }
+                        /*
+                        // 为什么使用toJson无法写进去？？
+                        try {
+                            FileOutputStream fos = AppContext.getInstance().openFileOutput(
                                     "sub_tab_active.json", Context.MODE_PRIVATE);
-                            AppOperator.getGson().toJson(activeTabs, new OutputStreamWriter(fos, "UTF-8"));
+                            AppOperator.getGson().toJson(mActiveDataSet, new OutputStreamWriter(fos, "UTF-8"));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        */
                     }
                 });
                 isChangeIndex = false;
                 tabs.clear();
-                tabs.addAll(activeTabs);
+                tabs.addAll(mActiveDataSet);
                 mAdapter.notifyDataSetChanged();
             }
         });

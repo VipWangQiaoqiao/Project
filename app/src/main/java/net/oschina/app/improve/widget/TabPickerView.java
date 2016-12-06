@@ -29,6 +29,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -672,6 +673,7 @@ public class TabPickerView extends FrameLayout {
                 throw new RuntimeException("Original Data Set can't be null or empty");
             }
 
+            TLog.i("oschina", "Active Data Set: " + (mActiveDataSet == null ? "true" : "" + mActiveDataSet.size()));
             if (mActiveDataSet == null) {
                 mActiveDataSet = new ArrayList<>();
                 for (SubTab item : mOriginalDataSet) {
@@ -679,6 +681,7 @@ public class TabPickerView extends FrameLayout {
                         mActiveDataSet.add(item);
                     }
                 }
+                restoreActiveDataSet(mActiveDataSet);
             } else if (isUpdate()) {
                 List<SubTab> mActiveList = new ArrayList<>();
 
@@ -696,19 +699,19 @@ public class TabPickerView extends FrameLayout {
                     }
                 }
 
-                Collections.sort(mActiveList, new Comparator<SubTab>() {
-                    @Override
-                    public int compare(SubTab o1, SubTab o2) {
-                        if (o1.isFixed() && !o2.isFixed()) return -1;
-                        if (!o1.isFixed() && o2.isFixed()) return 1;
-                        return o1.getOrder() - o2.getOrder();
-                    }
-                });
-
                 mActiveDataSet = mActiveList;
                 mActiveList = null;
                 restoreActiveDataSet(mActiveDataSet);
             }
+
+            Collections.sort(mActiveDataSet, new Comparator<SubTab>() {
+                @Override
+                public int compare(SubTab o1, SubTab o2) {
+                    if (o1.isFixed() && !o2.isFixed()) return -1;
+                    if (!o1.isFixed() && o2.isFixed()) return 1;
+                    return o1.getOrder() - o2.getOrder();
+                }
+            });
 
             for (SubTab item : mOriginalDataSet) {
                 if (mActiveDataSet.contains(item)) continue;
@@ -716,9 +719,11 @@ public class TabPickerView extends FrameLayout {
             }
         }
 
+
         public static boolean isUpdate() {
             int mVersionCode = TDevice.getVersionCode();
             int mask = AppContext.get("TabsMask", -1);
+            TLog.i("oschina", "Current Version Code: " + mVersionCode + ", Mask Version Code: " + mask);
             if (BuildConfig.DEBUG) return true;
             return mVersionCode != mask;
         }
