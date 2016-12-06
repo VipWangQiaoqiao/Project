@@ -241,7 +241,7 @@ public final class CaptureActivity extends BaseActivity implements
         }
 
         if (url.contains("www.oschina.net/event/signin?event")) {
-            long sourceId = 2193441;//Long.valueOf(url.substring(url.indexOf("=") + 1));//2192570;
+            long sourceId = Long.valueOf(url.substring(url.indexOf("=") + 1));//2192570;2193441
             finish();
             EventSigninActivity.show(this, sourceId);
             return;
@@ -252,6 +252,7 @@ public final class CaptureActivity extends BaseActivity implements
             finish();
             return;
         }
+
         DialogHelper.getConfirmDialog(this, "可能存在风险，是否打开链接?\n" + url, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

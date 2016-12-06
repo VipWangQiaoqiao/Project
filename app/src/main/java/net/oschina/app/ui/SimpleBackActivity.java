@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -17,9 +15,6 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.fragment.TweetsFragment;
-import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
-import net.oschina.app.util.TDevice;
 
 import java.lang.ref.WeakReference;
 

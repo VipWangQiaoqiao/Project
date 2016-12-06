@@ -19,6 +19,11 @@ import butterknife.OnClick;
 
 public class UserEventActivity extends BaseActivity implements View.OnClickListener {
 
+    /**
+     * show the  activity
+     *
+     * @param context context
+     */
     public static void show(Context context) {
         Intent intent = new Intent(context, UserEventActivity.class);
         context.startActivity(intent);
@@ -48,11 +53,16 @@ public class UserEventActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.ib_event_scan:
                 UIHelper.showScanActivity(this);
-                finish();
+                //finish();
                 break;
             default:
                 break;
         }
     }
-    
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
