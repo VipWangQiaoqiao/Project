@@ -25,7 +25,6 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
-import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.media.SelectImageActivity;
@@ -33,7 +32,6 @@ import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.activities.UserCollectionActivity;
-import net.oschina.app.improve.user.activities.UserEventActivity;
 import net.oschina.app.improve.user.activities.UserFansActivity;
 import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
@@ -61,7 +59,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by fei on 2016/8/15.
- *
+ * <p>
  * 用户个人界面
  */
 
@@ -149,7 +147,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
             try {
                 if (mSolarSystem != null) mSolarSystem.decelerate();
 
-                Type type = new TypeToken<ResultBean<User>>() {}.getType();
+                Type type = new TypeToken<ResultBean<User>>() {
+                }.getType();
 
                 ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
@@ -451,8 +450,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     UserTweetActivity.show(getActivity(), AccountHelper.getUserId());
                     break;
                 case R.id.ly_favorite:
-//                    UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
-//                            .getLoginUid());
                     UserCollectionActivity.show(getActivity());
                     break;
                 case R.id.ly_following:
@@ -471,7 +468,11 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     UIHelper.showUserQuestion(getActivity(), AccountHelper.getUserId());
                     break;
                 case R.id.rl_info_activities:
-                    UserEventActivity.show(getActivity());
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS, 1);
+                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);
+
                     break;
                 case R.id.rl_team:
                     UIHelper.showTeamMainActivity(getActivity());

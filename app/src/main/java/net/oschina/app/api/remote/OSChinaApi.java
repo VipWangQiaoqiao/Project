@@ -1580,4 +1580,22 @@ public class OSChinaApi {
         params.put("sourceId", sourceId);
         ApiHttpClient.get("action/apiv2/event_apply", params, handler);
     }
+
+    /**
+     * 获取用户自己的活动
+     *
+     * @param authorId   authorId
+     * @param authorName authorName
+     * @param pageToken  pageToken
+     * @param handler    handler
+     */
+    public static void getUserEvent(long authorId, String authorName, String pageToken, TextHttpResponseHandler handler) {
+        if (authorId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("authorId", authorId);
+        params.put("authorName", authorName);
+        params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/event_list", params, handler);
+
+    }
 }
