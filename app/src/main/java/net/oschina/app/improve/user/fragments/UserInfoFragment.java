@@ -32,7 +32,6 @@ import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.activities.UserCollectionActivity;
-import net.oschina.app.improve.user.activities.UserEventActivity;
 import net.oschina.app.improve.user.activities.UserFansActivity;
 import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
@@ -42,6 +41,7 @@ import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQRCodeDialog;
+import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -468,7 +468,11 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     UIHelper.showUserQuestion(getActivity(), AccountHelper.getUserId());
                     break;
                 case R.id.rl_info_activities:
-                    UserEventActivity.show(getActivity());
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS, 1);
+                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);
+
                     break;
                 case R.id.rl_team:
                     UIHelper.showTeamMainActivity(getActivity());

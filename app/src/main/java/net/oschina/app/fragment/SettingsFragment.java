@@ -206,12 +206,14 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
                 AccountHelper.logout();
                 // 等待成功清理完成
                 mCancel.postDelayed(new Runnable() {
+                    @SuppressLint("DefaultLocale")
                     @Override
                     public void run() {
                         mCancel.removeCallbacks(this);
                         User user = SharedPreferencesHelper.load(getContext(), User.class);
                         if (user == null || user.getId() <= 0) {
                             //getActivity().finish();
+                            mTvCacheSize.setText(String.format("%d%s", 0, "KB"));
                             AppContext.showToastShort(getString(R.string.logout_success_hint));
                         } else {
                             mCancel.postDelayed(this, 200);

@@ -37,8 +37,6 @@ public class EventAdapter extends ListBaseAdapter<Event> {
         TextView time;
         @Bind(R.id.tv_event_spot)
         TextView spot;
-        @Bind(R.id.iv_scan_signin)
-        ImageView scan;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -90,8 +88,6 @@ public class EventAdapter extends ListBaseAdapter<Event> {
                     vh.status.setImageResource(R.mipmap.icon_event_status_attend);
                 } else if (event.getStatus() == Event.EVNET_STATUS_APPLYING) {
                     vh.status.setImageResource(R.mipmap.icon_event_status_checked);
-                    vh.scan.setImageResource(R.mipmap.ic_discover_scan);
-                    vh.scan.setVisibility(View.VISIBLE);
                 } else {
                     vh.status.setImageResource(R.mipmap.icon_event_status_over);
                 }
