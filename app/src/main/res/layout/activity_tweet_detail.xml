@@ -163,6 +163,7 @@
                         app:verticalSpace="@dimen/lay_4" />
                 </LinearLayout>
 
+
                 <!--bottom info-->
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -183,50 +184,44 @@
                         android:id="@+id/tv_client"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/lay_8"
                         android:layout_toEndOf="@id/tv_time"
+                        android:layout_centerVertical="true"
                         android:textSize="12sp"
                         android:visibility="gone"
                         tools:text="Android"
                         tools:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/iv_comment"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_toStartOf="@id/tv_comment_count"
-                        android:contentDescription="@string/app_name"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/ic_comment" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_alignParentEnd="true">
 
-                    <ImageView
-                        android:id="@+id/iv_dispatch"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/iv_comment"
-                        android:contentDescription="@string/app_name"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/ic_forward" />
+                        <ImageView
+                            android:id="@+id/iv_thumbup"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:contentDescription="@string/app_name"
+                            android:src="@drawable/selector_thumb" />
 
-                    <ImageView
-                        android:id="@+id/iv_thumbup"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/iv_dispatch"
-                        android:contentDescription="@string/app_name"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/selector_thumb" />
+                        <ImageView
+                            android:id="@+id/iv_comment"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:layout_marginStart="12dp"
+                            android:contentDescription="@string/app_name"
+                            android:src="@mipmap/ic_comment_30" />
+
+                        <ImageView
+                            android:id="@+id/iv_dispatch"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:layout_marginStart="12dp"
+                            android:contentDescription="@string/app_name"
+                            android:src="@mipmap/ic_forward" />
+                    </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
         </android.support.design.widget.AppBarLayout>
