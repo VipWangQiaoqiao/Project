@@ -1575,9 +1575,12 @@ public class OSChinaApi {
     /**
      * 新版活动报名，动态参数
      */
-    public static void signUpEvent(long sourceId, List<SignUpEventOptions> optionses, TextHttpResponseHandler handler) {
+    public static void signUpEvent(long sourceId, List<SignUpEventOptions> options, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
+        for (SignUpEventOptions option : options) {
+            params.put(option.getKey(), option.getValue());
+        }
         ApiHttpClient.get("action/apiv2/event_apply", params, handler);
     }
 }

@@ -1,7 +1,5 @@
 package net.oschina.app.improve.bean;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 /**
@@ -22,6 +20,7 @@ public class SignUpEventOptions implements Serializable {
     public static final String FORM_TYPE_URL = "url";
 
     private String key;
+    private String value;//用户输入的参数
     private int keyType;
     private int formType;
     private String label;
@@ -36,6 +35,14 @@ public class SignUpEventOptions implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public int getKeyType() {

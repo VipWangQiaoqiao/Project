@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.sign;
 
+import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.SignUpEventOptions;
 
@@ -20,16 +21,11 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
 
     @Override
     protected int getLayoutId() {
-        return 0;
+        return R.layout.fragment_sign_up;
     }
 
     @Override
     public void showGetSignUpOptionsSuccess(List<SignUpEventOptions> options) {
-
-    }
-
-    @Override
-    public void showGetSignUpOptionsError(String message) {
 
     }
 
