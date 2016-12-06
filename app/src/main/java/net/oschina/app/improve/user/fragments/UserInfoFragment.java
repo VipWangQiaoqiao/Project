@@ -473,6 +473,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS, 1);
                     UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);
 
+                    //UserEventActivity.show(getActivity());
+
                     break;
                 case R.id.rl_team:
                     UIHelper.showTeamMainActivity(getActivity());

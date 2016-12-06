@@ -27,8 +27,6 @@ import java.lang.reflect.Type;
  */
 public class UserEventFragment extends BaseGeneralRecyclerFragment<SubBean> {
 
-    private static final String TAG = "UserEventFragment";
-
     private OSCApplication.ReadState mReadState;
 
     /**
@@ -70,6 +68,45 @@ public class UserEventFragment extends BaseGeneralRecyclerFragment<SubBean> {
     @Override
     public void onRefreshing() {
         super.onRefreshing();
+
+//        List<SubBean> subBeans = new ArrayList<>(30);
+//        for (int i = 0; i < 30; i++) {
+//
+//            SubBean subBean = new SubBean();
+//            subBean.setId(2193441);
+//            subBean.setTitle("这是我的活动" + i);
+//            subBean.setBody("这是body" + i);
+//            subBean.setPubDate("013-09-17 16:49:50.222");
+//            subBean.setHref("http://www.oschina.net");
+//            subBean.setType(5);
+//            Author author = new Author();
+//            author.setId(AccountHelper.getUserId());
+//            author.setName(AccountHelper.getUser().getName() + i);
+//            author.setPortrait(AccountHelper.getUser().getPortrait());
+//            subBean.setAuthor(author);
+//            SubBean.Image image = new SubBean.Image();
+//            image.setType(2);
+//            String[] href = new String[]{AccountHelper.getUser().getPortrait(),
+//                    AccountHelper.getUser().getPortrait(), AccountHelper.getUser().getPortrait()};
+//            image.setHref(href);
+//            subBean.setImage(image);
+//            String[] tags = new String[]{"recommend", "original", "ad", "stick"};
+//            subBean.setTags(tags);
+//            SubBean.Statistics statistics = new SubBean.Statistics();
+//            statistics.setView(300);
+//            statistics.setComment(500);
+//            subBean.setStatistics(statistics);
+//
+//            subBeans.add(subBean);
+//        }
+//
+//        mBean.setItems(subBeans);
+
+    }
+
+    @Override
+    protected void onRequestFinish() {
+        super.onRequestFinish();
     }
 
     @Override

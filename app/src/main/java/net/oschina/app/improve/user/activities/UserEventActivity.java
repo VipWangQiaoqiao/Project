@@ -19,6 +19,10 @@ import butterknife.OnClick;
 
 public class UserEventActivity extends BaseActivity implements View.OnClickListener {
 
+    /**
+     * show the  activity
+     * @param context  context
+     */
     public static void show(Context context) {
         Intent intent = new Intent(context, UserEventActivity.class);
         context.startActivity(intent);
