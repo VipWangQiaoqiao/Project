@@ -1,7 +1,6 @@
 package net.oschina.app.improve.behavior;
 
 import android.content.Context;
-import android.support.design.widget.CoordinatorLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

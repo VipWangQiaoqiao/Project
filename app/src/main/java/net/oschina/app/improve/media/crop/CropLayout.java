@@ -43,11 +43,13 @@ public class CropLayout extends FrameLayout {
     public void setCropWidth(int mCropWidth) {
         this.mCropWidth = mCropWidth;
         mCropView.setCropWidth(mCropWidth);
+        mZoomImageView.setCropWidth(mCropWidth);
     }
 
     public void setCropHeight(int mCropHeight) {
         this.mCropHeight = mCropHeight;
         mCropView.setCropHeight(mCropHeight);
+        mZoomImageView.setCropHeight(mCropHeight);
     }
 
     public void start() {
