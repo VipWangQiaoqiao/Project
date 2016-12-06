@@ -243,7 +243,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     tweet = result.getResult();
                     mAgencyViewImp.resetCmnCount(tweet.getCommentCount());
                     mAgencyViewImp.resetLikeCount(tweet.getLikeCount());
-                    fillDetailView();
+                    setupDetailView();
                 } else {
                     onFailure(500, headers, "妈的智障", null);
                 }
@@ -311,7 +311,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         mViewInput = mDelegation.getBottomSheet().getEditText();
 
         resolveVoice();
-        fillDetailView();
+        setupDetailView();
 
         TweetDetailViewPagerFragment mPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
         mCmnViewImp = mPagerFrag.getCommentViewHandler();
@@ -392,7 +392,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         dialog = null;
     }
 
-    private void fillDetailView() {
+    /**
+     * 填充数据
+     */
+    private void setupDetailView() {
         // 有可能传入的tweet只有id这一个值
         if (tweet == null || isDestroy())
             return;

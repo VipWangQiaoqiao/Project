@@ -23,6 +23,7 @@ public class Tweet implements Serializable {
     private String href;
     private Audio[] audio;
     private Image[] images;
+    private Statistics statistics;
     private About about;
 
     public long getId() {
@@ -129,6 +130,14 @@ public class Tweet implements Serializable {
         this.about = about;
     }
 
+    public Statistics getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
+    }
+
     public static class Code implements Serializable {
         private String brush;
         private String content;
@@ -217,6 +226,36 @@ public class Tweet implements Serializable {
                 paths[i] = images[i].href;
             }
             return paths;
+        }
+    }
+
+    public static class Statistics implements Serializable{
+        private int comment;
+        private int transmit;
+        private int like;
+
+        public int getLike() {
+            return like;
+        }
+
+        public void setLike(int like) {
+            this.like = like;
+        }
+
+        public int getComment() {
+            return comment;
+        }
+
+        public void setComment(int comment) {
+            this.comment = comment;
+        }
+
+        public int getTransmit() {
+            return transmit;
+        }
+
+        public void setTransmit(int transmit) {
+            this.transmit = transmit;
         }
     }
 

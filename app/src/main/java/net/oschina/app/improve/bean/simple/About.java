@@ -95,6 +95,36 @@ public class About implements Serializable {
         return id > 0 && type >= 0;
     }
 
+    public static class Statistics implements Serializable{
+        private int comment;
+        private int view;
+        private int transmit;
+
+        public int getComment() {
+            return comment;
+        }
+
+        public void setComment(int comment) {
+            this.comment = comment;
+        }
+
+        public int getView() {
+            return view;
+        }
+
+        public void setView(int view) {
+            this.view = view;
+        }
+
+        public int getTransmit() {
+            return transmit;
+        }
+
+        public void setTransmit(int transmit) {
+            this.transmit = transmit;
+        }
+    }
+
     @Override
     public String toString() {
         return "About{" +

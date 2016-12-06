@@ -51,6 +51,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by
  * thanatos on 16/8/17.
+ *
+ * 突然间变成各个地方都在用的Adapter了...
  */
 public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
     private Bitmap mRecordBitmap;
@@ -103,8 +105,19 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
         holder.mViewName.setText(item.getAuthor().getName());
         holder.mViewTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         PlatfromUtil.setPlatFromString(holder.mViewPlatform, item.getAppClient());
-        holder.mViewLikeCount.setText(String.valueOf(item.getLikeCount()));
-        holder.mViewCmmCount.setText(String.valueOf(item.getCommentCount()));
+
+        /* - statistics - */
+        if (item.getStatistics() != null){
+            holder.mViewLikeCount.setText(String.valueOf(item.getStatistics().getLike()));
+            holder.mViewCmmCount.setText(String.valueOf(item.getStatistics().getComment()));
+            holder.mViewDispatchCount.setText(String.valueOf(item.getStatistics().getTransmit()));
+        }else {
+            holder.mViewLikeCount.setText(String.valueOf(item.getLikeCount()));
+            holder.mViewCmmCount.setText(String.valueOf(item.getCommentCount()));
+            holder.mViewDispatchCount.setText(String.valueOf(0));
+        }
+
+
 
         String content = "";
         if (!TextUtils.isEmpty(item.getContent())) {
@@ -146,7 +159,6 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
             holder.mViewDispatchCount.setVisibility(View.VISIBLE);
             About about = item.getAbout();
 
-            holder.mViewDispatchCount.setText(String.valueOf(about.getTransmitCount()));
             if (about.getType() == OSChinaApi.COMMENT_TWEET){
                 holder.mViewRefTitle.setVisibility(View.GONE);
                 holder.mLayoutRefImages.setImage(about.getImages());
@@ -159,15 +171,11 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
                 holder.mViewRefContent.setText(sp);
             }else {
                 holder.mViewRefTitle.setVisibility(View.VISIBLE);
-
                 holder.mViewRefTitle.setText(about.getTitle());
                 holder.mViewRefContent.setText(about.getContent());
             }
         }else {
-            holder.mViewDispatch.setVisibility(View.GONE);
-            holder.mViewDispatchCount.setVisibility(View.GONE);
             holder.mLayoutRef.setVisibility(View.GONE);
-            holder.mViewDispatch.setVisibility(View.GONE);
         }
     }
 
