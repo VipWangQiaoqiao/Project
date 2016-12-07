@@ -70,10 +70,8 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
             vh.tv_description.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
         }
 
-
         vh.tv_description.setText(item.getBody());
         vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
-        vh.tv_comment_count.setText(String.valueOf(item.getStatistics().getComment()));
 
         if (StringUtils.isSameDay(mSystemTime, item.getPubDate()) && mTab.getSubtype() != 2 && item.getType() != 7) {
 
@@ -89,28 +87,38 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         } else {
             vh.tv_title.setText(item.getTitle());
         }
-        if (item.getType() == 7 || item.getType() == 4 || item.getType() == 1 || (mTab.getSubtype() == 1 && mTab.getType() == 6)) {
-            vh.iv_comment.setVisibility(View.GONE);
-            vh.tv_comment_count.setVisibility(View.GONE);
+        if (item.getType() == 0) {
+            vh.ll_info.setVisibility(View.GONE);
         } else {
-            vh.iv_comment.setVisibility(View.VISIBLE);
-            vh.tv_comment_count.setVisibility(View.VISIBLE);
+            if (item.getType() == 6) {
+                vh.iv_view.setVisibility(View.GONE);
+                vh.tv_view_count.setVisibility(View.GONE);
+            } else {
+                vh.iv_view.setVisibility(View.VISIBLE);
+                vh.tv_view_count.setVisibility(View.VISIBLE);
+            }
+            vh.ll_info.setVisibility(View.VISIBLE);
+            vh.tv_comment_count.setText(String.valueOf(item.getStatistics().getComment()));
+            vh.tv_view_count.setText(String.valueOf(item.getStatistics().getView()));
         }
     }
 
     private static class NewsViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_title, tv_description, tv_time, tv_comment_count;
-        LinearLayout ll_title;
-        ImageView iv_comment;
+        TextView tv_title, tv_description, tv_time, tv_comment_count, tv_view_count;
+        LinearLayout ll_title, ll_info;
+        ImageView iv_view;
 
         public NewsViewHolder(View itemView) {
             super(itemView);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_description = (TextView) itemView.findViewById(R.id.tv_description);
             tv_time = (TextView) itemView.findViewById(R.id.tv_time);
-            tv_comment_count = (TextView) itemView.findViewById(R.id.tv_comment_count);
             ll_title = (LinearLayout) itemView.findViewById(R.id.ll_title);
-            iv_comment = (ImageView) itemView.findViewById(R.id.iv_info_comment);
+
+            ll_info = (LinearLayout) itemView.findViewById(R.id.lay_info);
+            tv_comment_count = (TextView) ll_info.findViewById(R.id.tv_info_comment);
+            tv_view_count = (TextView) ll_info.findViewById(R.id.tv_info_view);
+            iv_view = (ImageView) ll_info.findViewById(R.id.iv_info_view);
         }
     }
 }
