@@ -10,6 +10,7 @@
         android:id="@+id/nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="46dp"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_scrollFlags="scroll|enterAlways">
@@ -232,7 +233,7 @@
 
     <View
         style="@style/h_line"
-        android:layout_height="2px"
+        android:layout_height="1px"
         app:layout_anchor="@+id/ll_operate"
         app:layout_anchorGravity="top"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

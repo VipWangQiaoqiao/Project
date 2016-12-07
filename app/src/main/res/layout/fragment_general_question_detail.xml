@@ -15,6 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="46dp"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_scrollFlags="scroll|enterAlways"
@@ -112,11 +113,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/ques_detail_bg_color" />
-
-            <View
-                android:id="@+id/view_bottom_spacing"
-                android:layout_width="0dp"
-                android:layout_height="46dp" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
