@@ -179,14 +179,13 @@
                 android:paddingTop="8dp" />
 
 
-            <!--reward widgets start-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_margin="16dp"
                 android:background="@color/list_divider_color"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
+            <!--reward widgets start-->
             <ImageView
                 android:id="@+id/btn_reward"
                 android:layout_width="wrap_content"

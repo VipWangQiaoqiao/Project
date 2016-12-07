@@ -63,9 +63,6 @@ public class BlogDetailFragment
         extends DetailFragment<BlogDetail, BlogDetailContract.View, BlogDetailContract.Operator>
         implements BlogDetailContract.View, View.OnClickListener, OnCommentClickListener {
 
-
-    public static final String TAG = "BlogDetailFragment";
-
     private long mId;
     private long mCommentId;
     private long mCommentAuthorId;
