@@ -1,7 +1,6 @@
 package net.oschina.app.improve.detail.fragments;
 
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -146,7 +145,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                             mEventApplyDialog = new EventDetailApplyDialog(getActivity(), mDetail);
                             mEventApplyDialog.setCanceledOnTouchOutside(true);
                             mEventApplyDialog.setCancelable(true);
-                            mEventApplyDialog.setTitle("活动报名");
+                            mEventApplyDialog.setTitle(getString(R.string.event_sign_hint));
                             mEventApplyDialog.setCanceledOnTouchOutside(true);
                             mEventApplyDialog.setNegativeButton(R.string.cancle, null);
                             mEventApplyDialog.setPositiveButton(R.string.ok,

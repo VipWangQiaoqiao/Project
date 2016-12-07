@@ -163,8 +163,11 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
 
         mDelegation = CommentBar.delegation(this, mCoordLayout);
         mSourceId = R.string.pub_comment_hint;
-        if (mType == OSChinaApi.COMMENT_QUESTION || mType == OSChinaApi.COMMENT_EVENT) {
+        if (mType == OSChinaApi.COMMENT_QUESTION) {
             mSourceId = R.string.answer_hint;
+        }
+        if (mType == OSChinaApi.COMMENT_EVENT) {
+            mSourceId = R.string.comment_hint;
         }
         mDelegation.getBottomSheet().getEditText().setHint(mSourceId);
         mDelegation.hideFav();
@@ -191,6 +194,20 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                 return false;
             }
         });
+
+        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Comment comment = (Comment) v.getTag();
+                if (comment == null) {
+                    //当不引用回复的人时候，默认为commentId，authorId为0
+                    handleSendComment(mType, mId, 0, 0, mDelegation.getBottomSheet().getCommentText());
+                } else {
+                    handleSendComment(mType, mId, comment.getId(), comment.getAuthor().getId(), mDelegation.getBottomSheet().getCommentText());
+                }
+            }
+        });
+
         mRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
@@ -214,25 +231,6 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
             }
         });
         mLayComments.setAdapter(mCommentAdapter);
-
-        mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Comment comment = (Comment) v.getTag();
-                if (comment == null) {
-                    //当不引用回复的人时候，默认为commentId，authorId为0
-                    handleSendComment(mType, mId, 0, 0, mDelegation.getBottomSheet().getCommentText());
-                } else {
-                    handleSendComment(mType, mId, comment.getId(), comment.getAuthor().getId(), mDelegation.getBottomSheet().getCommentText());
-                }
-            }
-        });
-        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     @Override
