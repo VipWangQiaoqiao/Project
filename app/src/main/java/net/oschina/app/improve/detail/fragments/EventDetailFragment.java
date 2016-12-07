@@ -14,6 +14,7 @@ import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.contract.EventDetailContract;
+import net.oschina.app.improve.detail.sign.SignUpActivity;
 import net.oschina.app.improve.dialog.EventDetailApplyDialog;
 import net.oschina.app.util.UIHelper;
 
@@ -138,6 +139,10 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 mOperator.toFav();
                 break;
             case R.id.ll_sign:
+                if(true){
+                    SignUpActivity.show(this,mOperator.getData().getId());
+                    return;
+                }
                 final EventDetail mDetail = mOperator.getData();
                 if (mDetail.getApplyStatus() == EventDetail.APPLY_STATUS_UN_SIGN && mDetail.getStatus() == Event.STATUS_ING) {
                     if (AccountHelper.isLogin()) {

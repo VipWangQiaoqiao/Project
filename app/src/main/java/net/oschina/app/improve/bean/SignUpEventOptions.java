@@ -8,16 +8,16 @@ import java.io.Serializable;
  */
 
 public class SignUpEventOptions implements Serializable {
-    public static final String FORM_TYPE_TEXT = "text";
-    public static final String FORM_TYPE_TEXT_AREA = "textarea";
-    public static final String FORM_TYPE_SELECT = "select";
-    public static final String FORM_TYPE_CHECK_BOX = "checkbox";
-    public static final String FORM_TYPE_RADIO = "radio";
-    public static final String FORM_TYPE_EMAIL = "email";
-    public static final String FORM_TYPE_DATE = "date";
-    public static final String FORM_TYPE_MOBILE = "mobile";
-    public static final String FORM_TYPE_NUMBER = "number";
-    public static final String FORM_TYPE_URL = "url";
+    public static final int FORM_TYPE_TEXT = 0;
+    public static final int FORM_TYPE_TEXT_AREA = 1;
+    public static final int FORM_TYPE_SELECT = 2;
+    public static final int FORM_TYPE_CHECK_BOX = 3;
+    public static final int FORM_TYPE_RADIO = 4;
+    public static final int FORM_TYPE_EMAIL = 5;
+    public static final int FORM_TYPE_DATE = 6;
+    public static final int FORM_TYPE_MOBILE = 7;
+    public static final int FORM_TYPE_NUMBER = 8;
+    public static final int FORM_TYPE_URL = 9;
 
     private String key;
     private String value;//用户输入的参数

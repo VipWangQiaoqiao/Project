@@ -1,5 +1,8 @@
 package net.oschina.app.improve.detail.sign;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -22,6 +25,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class SignUpPresenter implements SignUpContract.Presenter {
     private final SignUpContract.View mView;
+    private List<SignUpEventOptions> mOptions;
     private final SignUpContract.EmptyView mEmptyView;
 
     public SignUpPresenter(SignUpContract.View mView, SignUpContract.EmptyView mEmptyView) {
@@ -40,19 +44,21 @@ public class SignUpPresenter implements SignUpContract.Presenter {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.e("res",responseString);
+                Type type = new TypeToken<ResultBean<List<SignUpEventOptions>>>() {
+                }.getType();
+                ResultBean<List<SignUpEventOptions>> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                if (resultBean.isSuccess()) {
+                    mOptions = resultBean.getResult();
+                    mView.showGetSignUpOptionsSuccess(resultBean.getResult());
+                    mEmptyView.hideEmptyLayout();
+                } else {
+                    mEmptyView.showErrorLayout(EmptyLayout.NODATA);
+                }
                 try {
-                    Type type = new TypeToken<ResultBean<List<SignUpEventOptions>>>() {
-                    }.getType();
-                    ResultBean<List<SignUpEventOptions>> resultBean = AppOperator.createGson().fromJson(responseString, type);
-                    if (resultBean.isSuccess()) {
-                        mEmptyView.hideEmptyLayout();
-                        mView.showGetSignUpOptionsSuccess(resultBean.getResult());
-                    } else {
-                        mEmptyView.showErrorLayout(EmptyLayout.NODATA);
-                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
-                    //mView.showGetSignUpOptionsError("获取失败");
                     mEmptyView.showErrorLayout(EmptyLayout.NODATA);
                 }
             }
@@ -61,7 +67,9 @@ public class SignUpPresenter implements SignUpContract.Presenter {
 
     @Override
     public void signUpEvent(long sourceId) {
-        OSChinaApi.signUpEvent(sourceId, null, new TextHttpResponseHandler() {
+        if (!check())
+            return;
+        OSChinaApi.signUpEvent(sourceId, mOptions, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 mView.showNetworkError(R.string.tip_network_error);
@@ -69,8 +77,33 @@ public class SignUpPresenter implements SignUpContract.Presenter {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
+                Log.e("res", responseString);
+//                try {
+//                    Type type = new TypeToken<ResultBean<List<SignUpEventOptions>>>() {
+//                    }.getType();
+//                    ResultBean<List<SignUpEventOptions>> resultBean = AppOperator.createGson().fromJson(responseString, type);
+//                    if (resultBean.isSuccess()) {
+//                        mOptions = resultBean.getResult();
+//                        mView.showGetSignUpOptionsSuccess(resultBean.getResult());
+//                        mEmptyView.hideEmptyLayout();
+//                    } else {
+//                        mEmptyView.showErrorLayout(EmptyLayout.NODATA);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    mEmptyView.showErrorLayout(EmptyLayout.NODATA);
+//                }
             }
         });
+    }
+
+    private boolean check() {
+        for (SignUpEventOptions options : mOptions) {
+            if (options.isRequired() && TextUtils.isEmpty(options.getValue()) && TextUtils.isEmpty(options.getDefaultValue())) {
+                mView.showInputEmpty(options.getLabel() + "不能为空");
+                return false;
+            }
+        }
+        return true;
     }
 }

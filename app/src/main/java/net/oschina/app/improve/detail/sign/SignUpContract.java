@@ -25,6 +25,8 @@ public interface SignUpContract {
         void showSignUpSuccess();
 
         void showSignUpError(String message);
+
+        void showInputEmpty(String message);
     }
 
     interface Presenter extends BasePresenter {
