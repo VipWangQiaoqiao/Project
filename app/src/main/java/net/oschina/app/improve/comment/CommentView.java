@@ -234,7 +234,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 commentBar.getBottomSheet().show(String.format("%s %s",
                         ivComment.getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
             }

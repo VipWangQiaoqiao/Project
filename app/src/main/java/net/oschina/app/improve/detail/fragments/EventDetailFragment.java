@@ -10,6 +10,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.comment.CommentsActivity;
@@ -133,6 +134,12 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
     @OnClick({R.id.ll_fav, R.id.ll_sign, R.id.ll_comment})
     @Override
     public void onClick(View v) {
+
+        if (!AccountHelper.isLogin()) {
+            LoginActivity.show(EventDetailFragment.this, 1);
+            return;
+        }
+
         switch (v.getId()) {
             case R.id.ll_fav:
                 mOperator.toFav();

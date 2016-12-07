@@ -1,6 +1,7 @@
 package net.oschina.app.improve.comment.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.StringRes;
@@ -166,6 +167,11 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
             mComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    if (!AccountHelper.isLogin()){
+                          LoginActivity.show((Activity) mComment.getContext(),1);
+                        return;
+                    }
                     commentBar.getBottomSheet().getBtnCommit().setTag(comment);
 
                     commentBar.getBottomSheet().show(String.format("%s %s",
