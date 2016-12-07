@@ -52,18 +52,6 @@
                 tools:text="12楼  6分钟前" />
         </LinearLayout>
 
-
-        <TextView
-            android:id="@+id/tv_vote_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:textColor="#6a6a6a"
-            android:textSize="12sp"
-            tools:ignore="RtlHardcoded"
-            tools:text="12" />
-
         <ImageView
             android:id="@+id/btn_vote"
             android:layout_width="wrap_content"
@@ -75,6 +63,17 @@
             android:scaleType="fitCenter"
             android:src="@mipmap/ic_thumb_normal"
             tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/tv_vote_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:textColor="#9d9d9d"
+            android:textSize="12sp"
+            tools:ignore="RtlHardcoded"
+            tools:text="12" />
 
         <ImageView
             android:id="@+id/btn_comment"

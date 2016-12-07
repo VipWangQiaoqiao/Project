@@ -146,7 +146,8 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                         if (type == OSChinaApi.COMMENT_NEWS) {
                             List<Comment> hotComments = new ArrayList<>();
                             //筛选出热门评论
-                            for (Comment comment : comments) {
+                            for (int i = 0, len = comments.size(); i < (len > 5 ? 5 : len); i++) {
+                                Comment comment = comments.get(i);
                                 if (comment.getVote() > 0) {
                                     hotComments.add(comment);
                                 }
@@ -155,7 +156,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                             int len = hotComments.size();
                             if (len > 0) {
                                 //表示热门评论数目
-                                setTitle(String.format("%s (%d)", getResources().getString(R.string.hot_comment_hint), len));
+                                setTitle(String.format("%s", getResources().getString(R.string.hot_comment_hint)));
                             }
                         }
 
@@ -233,7 +234,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 commentBar.getBottomSheet().show(String.format("%s %s",
                         ivComment.getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
             }
@@ -329,7 +329,11 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
             });
         }
 
-        ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor().getName());
+        String name = comment.getAuthor().getName();
+        if (TextUtils.isEmpty(name)) {
+            name = getResources().getString(R.string.martian_hint);
+        }
+        ((TextView) lay.findViewById(R.id.tv_name)).setText(name);
 
         ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
                 String.format("%d%s  %s", position, getResources().getString(R.string.floor_hint),

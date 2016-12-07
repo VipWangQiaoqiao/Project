@@ -47,8 +47,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     private long mCommentId;
     private long mCommentAuthorId;
     private CommentView mComments;
-    private CoordinatorLayout mLayCoordinator;
-    private NestedScrollView mLayContent;
 
     private FlowLayout mFlowLayout;
 
@@ -70,8 +68,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mFlowLayout = (FlowLayout) root.findViewById(R.id.ques_detail_flow);
 
         mComments = (CommentView) root.findViewById(R.id.lay_detail_comment);
-        mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
-        mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
+        CoordinatorLayout mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
+        NestedScrollView mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
 
         registerScroller(mLayContent, mComments);
 
@@ -193,8 +191,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.setCommentHint("发表评论");
-                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.setCommentHint(getString(R.string.pub_comment_hint));
+                    mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.pub_comment_hint));
                 } else {
                     mInputDoubleEmpty = true;
                 }

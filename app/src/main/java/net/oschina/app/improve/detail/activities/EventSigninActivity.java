@@ -110,11 +110,6 @@ public class EventSigninActivity extends BaseBackActivity {
                 showError(EmptyLayout.NETWORK_ERROR);
             } else if (mRequestType == 0x02) {
                 AppContext.showToastShort(R.string.state_network_error);
-//                EventSignin eventSignin = new EventSignin();
-//                eventSignin.setOptStatus(3);
-//                eventSignin.setMessage("活动已结束／活动报名已截止");
-//                eventSignin.setCost(50);
-//                updateSigninView(eventSignin);
             }
         }
 
@@ -124,8 +119,14 @@ public class EventSigninActivity extends BaseBackActivity {
             if (mRequestType == 0x01) {
                 ResultBean<EventDetail> resultBean = createGson().fromJson(responseString, EventTypeToken());
                 if (resultBean.isSuccess()) {
-                    hideLoading();
                     EventDetail eventDetail = resultBean.getResult();
+                    if (eventDetail.getId() <= 0) {
+                        AppContext.showToastShort(getString(R.string.event_null_hint));
+                        showError(EmptyLayout.NODATA);
+                        finish();
+                        return;
+                    }
+                    hideLoading();
                     updateView(eventDetail);
                     mRequestType = 0x02;
                 } else {

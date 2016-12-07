@@ -152,6 +152,7 @@
     <string name="footer_type_net_error">网络错误</string>
     <string name="footer_type_not_more">没有更多数据</string>
     <string name="software_loading_error">内容加载失败&#8230;</string>
+    <string name="software_about_hint">相关软件</string>
 
     <string name="you_have_unread_messages">你有%s条未读消息</string>
     <string name="mention_count">\@我[%s] </string>
@@ -248,8 +249,6 @@
     <string name="title_update_success_status">个人信息更新成功&#8230;</string>
     <string name="title_update_fail_status">个人信息更新失败&#8230;</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-
     <!--新版登录专用-->
     <string name="login_input_username_hint">手机号或邮箱</string>
     <string name="login_input_username_hint_error">请输入正确的手机号或邮箱&#8230;</string>
@@ -317,6 +316,7 @@
     <string name="vote_failed_hint">点赞失败&#8230;</string>
     <string name="cancel_vote_success_hint">取消点赞成功&#8230;</string>
     <string name="cancel_vote_failed_hint">取消点赞失败&#8230;</string>
+    <string name="martian_hint">火星网友</string>
 
     <!--新版活动签到-->
     <string name="signin_phone_hint">使用手机号签到</string>
@@ -326,6 +326,7 @@
     <string name="signin_event_author">发起人:</string>
     <string name="signin_event_counts_hint">人参与</string>
     <string name="user_event_hint">我的活动</string>
+    <string name="event_null_hint">未找到该活动&#8230;</string>
 
 
     <string name="topic_list">话题列表</string>
