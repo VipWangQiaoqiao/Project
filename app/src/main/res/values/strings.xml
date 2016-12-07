@@ -139,6 +139,7 @@
 
     <string name="copy">复制</string>
     <string name="delete">删除</string>
+    <string name="transmit">转发</string>
     <string name="copy_success">复制成功</string>
     <string name="deleting">正在删除…</string>
     <string name="delete_success">删除成功</string>

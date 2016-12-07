@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import net.oschina.app.BuildConfig;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
@@ -64,17 +65,33 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
         Bundle bundle = new Bundle();
         bundle.putSerializable("sub_tab", tab);
 
-        return new PagerInfo[]{
-//                new PagerInfo("推荐话题", TopicTweetFragment.class, null),
-                new PagerInfo("最新动弹", TweetFragment.class,
-                        getBundle(TweetFragment.CATALOG_NEW)),
-                new PagerInfo("热门动弹", TweetFragment.class,
-                        getBundle(TweetFragment.CATALOG_HOT)),
-                new PagerInfo("每日乱弹", SubFragment.class, bundle),
-                new PagerInfo("我的动弹", TweetFragment.class,
-                        getBundle(TweetFragment.CATALOG_MYSELF))
+        if (BuildConfig.DEBUG){
+            return new PagerInfo[]{
+                    new PagerInfo("最新动弹", TweetFragment.class,
+                            getBundle(TweetFragment.CATALOG_NEW)),
+                    new PagerInfo("好友动弹", TweetFragment.class,
+                            getBundle(TweetFragment.CATALOG_FRIENDS)),
+                    new PagerInfo("我的动弹", TweetFragment.class,
+                            getBundle(TweetFragment.CATALOG_MYSELF)),
+                    new PagerInfo("热门动弹", TweetFragment.class,
+                            getBundle(TweetFragment.CATALOG_HOT)),
 
-        };
+            };
+        }else {
+            return new PagerInfo[]{
+//                new PagerInfo("推荐话题", TopicTweetFragment.class, null),
+                    new PagerInfo("最新动弹", TweetFragment.class,
+                            getBundle(TweetFragment.CATALOG_NEW)),
+                    new PagerInfo("热门动弹", TweetFragment.class,
+                            getBundle(TweetFragment.CATALOG_HOT)),
+                    new PagerInfo("每日乱弹", SubFragment.class,
+                            bundle),
+                    new PagerInfo("我的动弹", TweetFragment.class,
+                            getBundle(TweetFragment.CATALOG_MYSELF))
+
+            };
+        }
+
     }
 
     @Override

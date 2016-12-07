@@ -209,7 +209,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     if (tempTweet == null) return;
                     About about = new About();
                     about.setId(tweet.getId());
-                    TweetPublishService.startActionPublish(TweetDetailActivity.this, mDelegation.getBottomSheet().getCommentText(), null, about);
+                    TweetPublishService.startActionPublish(TweetDetailActivity.this
+                            , mDelegation.getBottomSheet().getCommentText(), null, about);
                 }
 
                 mViewInput.setHint("添加评论");
@@ -436,7 +437,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         /* -- about reference -- */
         if (tweet.getAbout() != null){
             mLayoutRef.setVisibility(View.VISIBLE);
-            mViewDispatch.setVisibility(View.VISIBLE);
             About about = tweet.getAbout();
 
             if (about.getType() == OSChinaApi.COMMENT_TWEET){
@@ -451,12 +451,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 mViewRefContent.setText(sp);
             }else {
                 mViewRefTitle.setVisibility(View.VISIBLE);
-
                 mViewRefTitle.setText(about.getTitle());
                 mViewRefContent.setText(about.getContent());
             }
         }else {
-            mViewDispatch.setVisibility(View.GONE);
             mLayoutRef.setVisibility(View.GONE);
         }
     }
@@ -522,6 +520,16 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         if (checkLogin()) return;
         mDelegation.getBottomSheet().dismiss();
         TDevice.showSoftKeyboard(mViewInput);
+    }
+
+    @OnClick(R.id.iv_dispatch) void onClickTransmit(){
+        if (tweet == null || tweet.getId() <= 0) return;
+        About about = new About();
+        about.setId(tweet.getId());
+        about.setType(OSChinaApi.CATALOG_TWEET);
+        about.setTitle(tweet.getAuthor().getName());
+        about.setContent(tweet.getContent());
+        TweetPublishActivity.show(this, null, null, about);
     }
 
     private boolean checkLogin() {

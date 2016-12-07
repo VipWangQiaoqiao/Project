@@ -110,14 +110,17 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
         if (item.getStatistics() != null){
             holder.mViewLikeCount.setText(String.valueOf(item.getStatistics().getLike()));
             holder.mViewCmmCount.setText(String.valueOf(item.getStatistics().getComment()));
-            holder.mViewDispatchCount.setText(String.valueOf(item.getStatistics().getTransmit()));
+            int mDispatchCount = item.getStatistics().getTransmit();
+            if (mDispatchCount <= 0) {
+                holder.mViewDispatchCount.setVisibility(View.GONE);
+            }else {
+                holder.mViewDispatchCount.setText(String.valueOf(item.getStatistics().getTransmit()));
+            }
         }else {
             holder.mViewLikeCount.setText(String.valueOf(item.getLikeCount()));
             holder.mViewCmmCount.setText(String.valueOf(item.getCommentCount()));
-            holder.mViewDispatchCount.setText(String.valueOf(0));
+            holder.mViewDispatchCount.setVisibility(View.GONE);
         }
-
-
 
         String content = "";
         if (!TextUtils.isEmpty(item.getContent())) {
