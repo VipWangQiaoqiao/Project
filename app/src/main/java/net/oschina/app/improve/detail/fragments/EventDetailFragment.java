@@ -135,13 +135,12 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
     @Override
     public void onClick(View v) {
 
-        if (!AccountHelper.isLogin()) {
-            LoginActivity.show(EventDetailFragment.this, 1);
-            return;
-        }
-
         switch (v.getId()) {
             case R.id.ll_fav:
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(EventDetailFragment.this, 1);
+                    return;
+                }
                 mOperator.toFav();
                 break;
             case R.id.ll_sign:
