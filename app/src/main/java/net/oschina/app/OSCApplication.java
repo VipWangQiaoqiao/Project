@@ -1,11 +1,8 @@
 package net.oschina.app;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.v4.content.SharedPreferencesCompat;
-
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.common.helper.ReadStateHelper;
 
 /**
  * Created by qiujuer
@@ -38,19 +35,19 @@ public class OSCApplication extends AppContext {
      * @return 已读状态管理器
      */
     public static ReadState getReadState(String mark) {
-        SharedPreferences preferences = getInstance()
-                .getSharedPreferences(CONFIG_READ_STATE_PRE + mark, Context.MODE_PRIVATE);
-        return new ReadState(preferences);
+        ReadStateHelper helper = ReadStateHelper.create(getInstance(),
+                CONFIG_READ_STATE_PRE + mark, 100);
+        return new ReadState(helper);
     }
 
     /**
      * 一个已读状态管理器
      */
     public static class ReadState {
-        private SharedPreferences sp;
+        private ReadStateHelper helper;
 
-        ReadState(SharedPreferences sp) {
-            this.sp = sp;
+        ReadState(ReadStateHelper helper) {
+            this.helper = helper;
         }
 
         /**
@@ -59,7 +56,7 @@ public class OSCApplication extends AppContext {
          * @param key 一般为资讯等Id
          */
         public void put(long key) {
-            put(String.valueOf(key));
+            helper.put(key);
         }
 
         /**
@@ -68,13 +65,7 @@ public class OSCApplication extends AppContext {
          * @param key 一般为资讯等Id
          */
         public void put(String key) {
-            SharedPreferences.Editor editor = sp.edit();
-            if (sp.getAll().size() > 100) {
-                // 数量大于100时采取全清楚
-                editor.clear();
-            }
-            editor.putLong(key, System.currentTimeMillis());
-            SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+            helper.put(key);
         }
 
         /**
@@ -84,7 +75,7 @@ public class OSCApplication extends AppContext {
          * @return True 已读
          */
         public boolean already(long key) {
-            return already(String.valueOf(key));
+            return helper.already(key);
         }
 
         /**
@@ -94,7 +85,7 @@ public class OSCApplication extends AppContext {
          * @return True 已读
          */
         public boolean already(String key) {
-            return sp.contains(key);
+            return helper.already(key);
         }
     }
 }
