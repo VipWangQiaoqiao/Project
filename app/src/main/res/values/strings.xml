@@ -16,6 +16,7 @@
     <string name="event_type_other">其他</string>
     <string name="event_type_outside">站外活动</string>
     <string name="event_type_outline">线下活动</string>
+    <string name="event_sign_hint">活动报名</string>
 
     <string name="event_apply_status_un_sign">我要报名</string>
     <string name="event_apply_status_audit">审核中</string>
