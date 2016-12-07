@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -155,7 +156,10 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                     OtherUserHomeActivity.show(mIvAvatar.getContext(), comment.getAuthor().getId());
                 }
             });
-            mName.setText(comment.getAuthor().getName());
+            String name = comment.getAuthor().getName();
+            if (TextUtils.isEmpty(name))
+                name = mName.getResources().getString(R.string.martian_hint);
+            mName.setText(name);
             mPubDate.setText(String.format("%d%s  %s", position, mPubDate.getResources().getString(R.string.floor_hint),
                     StringUtils.formatSomeAgo(comment.getPubDate())));
 

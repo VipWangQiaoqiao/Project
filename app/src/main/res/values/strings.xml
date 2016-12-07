@@ -316,6 +316,7 @@
     <string name="vote_failed_hint">点赞失败&#8230;</string>
     <string name="cancel_vote_success_hint">取消点赞成功&#8230;</string>
     <string name="cancel_vote_failed_hint">取消点赞失败&#8230;</string>
+    <string name="martian_hint">火星网友</string>
 
     <!--新版活动签到-->
     <string name="signin_phone_hint">使用手机号签到</string>
