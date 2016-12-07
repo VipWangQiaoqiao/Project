@@ -17,7 +17,8 @@
         android:layout_alignParentTop="true"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_scrollFlags="scroll|enterAlways">
+        app:layout_scrollFlags="scroll|enterAlways"
+        tools:ignore="RtlHardcoded">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,9 +91,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:maxLines="2"
-                    android:text="Webpack从零开始"
                     android:textColor="#111111"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    tools:text="Webpack从零开始" />
 
                 <include
                     android:id="@+id/lay_info_view_comment"
@@ -127,9 +128,14 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="8dp"
-                    android:text="相关软件"
+                    android:text="@string/software_about_hint"
                     android:textColor="#6a6a6a"
                     android:textSize="12sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/list_divider_color" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -145,12 +151,11 @@
                         android:id="@+id/tv_about_software_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
+                        android:layout_marginBottom="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_weight="1"
                         android:maxLines="1"
                         android:paddingRight="16dp"
-                        android:singleLine="true"
                         android:textColor="#111111"
                         android:textSize="14sp"
                         tools:ignore="RtlHardcoded,RtlSymmetry"
@@ -159,7 +164,10 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
-                        android:layout_margin="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:contentDescription="@null"
                         android:scaleType="centerInside"
                         android:src="@mipmap/ic_arrow_right" />
 

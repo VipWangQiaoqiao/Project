@@ -152,6 +152,7 @@
     <string name="footer_type_net_error">网络错误</string>
     <string name="footer_type_not_more">没有更多数据</string>
     <string name="software_loading_error">内容加载失败&#8230;</string>
+    <string name="software_about_hint">相关软件</string>
 
     <string name="you_have_unread_messages">你有%s条未读消息</string>
     <string name="mention_count">\@我[%s] </string>
@@ -247,8 +248,6 @@
     <string name="title_icon_null">图像不存在，上传失败</string>
     <string name="title_update_success_status">个人信息更新成功&#8230;</string>
     <string name="title_update_fail_status">个人信息更新失败&#8230;</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
 
     <!--新版登录专用-->
     <string name="login_input_username_hint">手机号或邮箱</string>
