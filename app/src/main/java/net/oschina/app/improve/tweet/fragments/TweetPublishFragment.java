@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
@@ -371,8 +372,10 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         mLayImages.setVisibility(View.GONE);
         findView(R.id.lay_about).setVisibility(View.VISIBLE);
         // Set title and content
-        ((TextView) findView(R.id.txt_about_title)).setText(about.getTitle());
+        ((TextView) findView(R.id.txt_about_title)).setText(about.getType() == OSChinaApi.COMMENT_TWEET ?
+                "@" + about.getTitle() : about.getTitle());
         ((TextView) findView(R.id.txt_about_content)).setText(about.getContent());
+        findView(R.id.iv_picture).setEnabled(false);
     }
 
     @Override
