@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
@@ -31,10 +30,8 @@ import net.oschina.app.util.TDevice;
 import net.oschina.common.utils.StreamUtil;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -82,42 +79,54 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
             mTabPickerDataManager = new TabPickerView.TabPickerDataManager() {
                 @Override
                 public List<SubTab> setupActiveDataSet() {
+                    FileReader reader = null;
                     try {
                         File file = AppContext.getInstance().getFileStreamPath("sub_tab_active.json");
                         if (!file.exists()) return null;
-                        return AppOperator.getGson().fromJson(
-                                new FileReader(file),
+                        reader = new FileReader(file);
+                        return AppOperator.getGson().fromJson(reader,
                                 new TypeToken<ArrayList<SubTab>>() {
                                 }.getType());
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } finally {
+                        StreamUtil.close(reader);
                     }
                     return null;
                 }
 
                 @Override
                 public List<SubTab> setupOriginalDataSet() {
+                    InputStreamReader reader = null;
                     try {
-                        InputStream is = AppContext.getInstance().getAssets().open("sub_tab_original.json");
-                        return AppOperator.getGson().<ArrayList<SubTab>>fromJson(
-                                new InputStreamReader(is, "UTF-8"),
+                        reader = new InputStreamReader(
+                                AppContext.getInstance().getAssets().open("sub_tab_original.json")
+                                , "UTF-8");
+                        return AppOperator.getGson().<ArrayList<SubTab>>fromJson(reader,
                                 new TypeToken<ArrayList<SubTab>>() {
                                 }.getType());
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } finally {
+                        StreamUtil.close(reader);
                     }
                     return null;
                 }
 
                 @Override
                 public void restoreActiveDataSet(List<SubTab> mActiveDataSet) {
+                    OutputStreamWriter writer = null;
                     try {
-                        FileOutputStream fos = AppContext.getInstance().openFileOutput(
-                                "sub_tab_active.json", Context.MODE_PRIVATE);
-                        AppOperator.getGson().toJson(mActiveDataSet, new OutputStreamWriter(fos, "UTF-8"));
+                        writer = new OutputStreamWriter(
+                                AppContext.getInstance().openFileOutput(
+                                        "sub_tab_active.json", Context.MODE_PRIVATE)
+                                , "UTF-8");
+                        AppOperator.getGson().toJson(mActiveDataSet, writer);
                         AppContext.set("TabsMask", TDevice.getVersionCode());
                     } catch (Exception e) {
                         e.printStackTrace();
+                    } finally {
+                        StreamUtil.close(writer);
                     }
                 }
             };
@@ -172,7 +181,20 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
                 AppOperator.getExecutor().execute(new Runnable() {
                     @Override
                     public void run() {
-                        String json = AppOperator.getGson().toJson(mActiveDataSet);
+                        OutputStreamWriter writer = null;
+                        try {
+                            writer = new OutputStreamWriter(
+                                    AppContext.getInstance().openFileOutput(
+                                            "sub_tab_active.json", Context.MODE_PRIVATE)
+                                    , "UTF-8");
+                            AppOperator.getGson().toJson(mActiveDataSet, writer);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            StreamUtil.close(writer);
+                        }
+
+                        /*String json = AppOperator.getGson().toJson(mActiveDataSet);
                         FileOutputStream fos = null;
                         try {
                             fos = AppContext.getInstance().openFileOutput("sub_tab_active.json",
@@ -183,17 +205,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements OnTabResele
                             e.printStackTrace();
                         } finally {
                             StreamUtil.close(fos);
-                        }
-                        /*
-                        // 为什么使用toJson无法写进去？？
-                        try {
-                            FileOutputStream fos = AppContext.getInstance().openFileOutput(
-                                    "sub_tab_active.json", Context.MODE_PRIVATE);
-                            AppOperator.getGson().toJson(mActiveDataSet, new OutputStreamWriter(fos, "UTF-8"));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        */
+                        }*/
                     }
                 });
                 isChangeIndex = false;
