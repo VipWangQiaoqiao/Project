@@ -200,13 +200,13 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
     }
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
-        mBean.setNextPageToken((resultBean == null ? null : resultBean.getResult().getNextPageToken()));
+        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
         if (isRefreshing) {
             AppConfig.getAppConfig(getActivity()).set("system_time", resultBean.getTime());
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
             mAdapter.addAll(mBean.getItems());
-            mBean.setPrevPageToken((resultBean == null ? null : resultBean.getResult().getPrevPageToken()));
+            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore(true);
             if (isNeedCache()) {
                 CacheManager.saveToJson(getActivity(), CACHE_NAME, mBean.getItems());
@@ -215,14 +215,20 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mAdapter.addAll(resultBean.getResult().getItems());
         }
 
-        mAdapter.setState(resultBean.getResult().getItems() == null || resultBean.getResult().getItems().size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOADING, true);
+        mAdapter.setState(resultBean.getResult().getItems() == null
+                || resultBean.getResult().getItems().size() < 20
+                ? BaseRecyclerAdapter.STATE_NO_MORE
+                : BaseRecyclerAdapter.STATE_LOADING, true);
 
         if (mAdapter.getItems().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.VISIBLE);
         } else {
-            mErrorLayout.setErrorType(isNeedEmptyView() ? EmptyLayout.NODATA : EmptyLayout.HIDE_LAYOUT);
+            mErrorLayout.setErrorType(
+                    isNeedEmptyView()
+                    ? EmptyLayout.NODATA
+                    : EmptyLayout.HIDE_LAYOUT);
         }
     }
 

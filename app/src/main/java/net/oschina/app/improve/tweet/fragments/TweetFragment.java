@@ -24,18 +24,19 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.account.base.AccountBaseActivity;
-import net.oschina.app.improve.app.AppOperator;
-import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
-import net.oschina.app.improve.utils.CacheManager;
+import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
@@ -43,6 +44,8 @@ import net.oschina.app.util.TDevice;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -52,7 +55,8 @@ import cz.msebera.android.httpclient.Header;
  * Updated by thanatosx
  * on 2016/7/18.
  */
-public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
+public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
+        implements BaseRecyclerAdapter.OnItemLongClickListener {
 
     public static final int CATALOG_NEW     = 0X0001;
     public static final int CATALOG_HOT     = 0X0002;
@@ -156,22 +160,59 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
 
         super.initData();
 
-        mAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
-            @Override
-            public void onLongClick(int position, long itemId) {
-                Tweet tweet = mAdapter.getItem(position);
-                if (tweet != null) {
-                    handleLongClick(tweet, position);
-                }
-            }
-        });
-
+        mAdapter.setOnItemLongClickListener(this);
         // 某用户的动弹 or 登录用户的好友动弹
         if (mLoginUserId == 0 && mReqCatalog == CATALOG_MYSELF ||
                 (!AccountHelper.isLogin() && mReqCatalog == CATALOG_FRIENDS)) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mErrorLayout.setErrorMessage("未登录");
         }
+    }
+
+    @Override
+    public void onLongClick(final int position, long itemId) {
+        final Tweet tweet = mAdapter.getItem(position);
+        if (tweet == null) return;
+
+        List<String> operators = new ArrayList<>();
+        operators.add(getString(R.string.copy));
+        if (AccountHelper.getUserId() == (int) tweet.getAuthor().getId()) {
+            operators.add(getString(R.string.delete));
+        }
+        operators.add(getString(R.string.transmit));
+
+        final String[] os = new String[operators.size()];
+        operators.toArray(os);
+
+        DialogHelper.getSelectDialog(getContext(), os, getString(R.string.cancle),
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int index) {
+                switch (index) {
+                    case 0:
+                        TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getContent()));
+                        break;
+                    case 1:
+                        if (os.length != 2) {
+                            DialogHelper.getConfirmDialog(getActivity(), "是否删除该动弹?",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            OSChinaApi.deleteTweet(tweet.getId(), new DeleteHandler(position));
+                                        }
+                                    }).show();
+                            break;
+                        }
+                    case 2:
+                        About about = new About();
+                        about.setId(tweet.getId());
+                        about.setTitle(tweet.getAuthor().getName());
+                        about.setContent(tweet.getContent());
+                        about.setType(OSChinaApi.CATALOG_TWEET);
+                        TweetPublishActivity.show(getContext(), null, null, about);
+                }
+            }
+        }).show();
     }
 
     private class LoginReceiver extends BroadcastReceiver {
@@ -260,74 +301,6 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected void setListData(ResultBean<PageBean<Tweet>> resultBean) {
-        mBean.setNextPageToken((resultBean == null ? null : resultBean.getResult().getNextPageToken()));
-        if (isRefreshing) {
-            //cache the time
-            mBean.setItems(resultBean.getResult().getItems());
-            mAdapter.clear();
-
-            ((BaseGeneralRecyclerAdapter) mAdapter).clearPreItems();
-            ((BaseGeneralRecyclerAdapter) mAdapter).addItems(mBean.getItems());
-
-            mBean.setPrevPageToken((resultBean == null ? null : resultBean.getResult().getPrevPageToken()));
-            mRefreshLayout.setCanLoadMore(true);
-            if (isNeedCache()) {
-                AppOperator.runOnThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        CacheManager.saveToJson(getActivity(), CACHE_NAME, mBean.getItems());
-                    }
-                });
-            }
-        } else {
-            ((BaseGeneralRecyclerAdapter) mAdapter).addItems(resultBean.getResult().getItems());
-        }
-
-        mAdapter.setState(resultBean.getResult().getItems() == null || resultBean.getResult().getItems().size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOADING, true);
-
-        if (mAdapter.getItems().size() > 0) {
-            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            mRefreshLayout.setVisibility(View.VISIBLE);
-            mRecyclerView.setVisibility(View.VISIBLE);
-        } else {
-            mErrorLayout.setErrorType(isNeedEmptyView() ? EmptyLayout.NODATA : EmptyLayout.HIDE_LAYOUT);
-        }
-    }
-
-    private void handleLongClick(final Tweet tweet, final int position) {
-        String[] items;
-        if (AccountHelper.getUserId() == (int) tweet.getAuthor().getId()) {
-            items = new String[]{getString(R.string.copy), getString(R.string.delete)};
-        } else {
-            items = new String[]{getString(R.string.copy)};
-        }
-
-        DialogHelper.getSelectDialog(getActivity(), items, "取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                switch (i) {
-                    case 0:
-                        TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getContent()));
-                        break;
-                    case 1:
-                        DialogHelper.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
-                                .OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                OSChinaApi.deleteTweet(tweet.getId(), new DeleteHandler(position));
-                            }
-                        }).show();
-                        break;
-                }
-            }
-        }).show();
-    }
-
-
     @Override
     protected BaseRecyclerAdapter<Tweet> getRecyclerAdapter() {
         return new UserTweetAdapter(this, BaseRecyclerAdapter.ONLY_FOOTER);
@@ -386,7 +359,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+            SimplexToast.show(getContext(), "删除失败");
         }
 
         @Override
@@ -401,6 +374,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet> {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                onFailure(statusCode, headers, responseString, e);
             }
         }
     }
