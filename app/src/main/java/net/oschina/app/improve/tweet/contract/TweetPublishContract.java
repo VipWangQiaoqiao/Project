@@ -30,7 +30,7 @@ public interface TweetPublishContract {
 
         String getContent();
 
-        void setContent(String content);
+        void setContent(String content, boolean needSelectionEnd);
 
         void setAbout(About about);
 

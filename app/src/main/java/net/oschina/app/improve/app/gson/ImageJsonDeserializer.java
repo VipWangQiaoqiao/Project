@@ -24,16 +24,14 @@ public class ImageJsonDeserializer implements JsonDeserializer<Tweet.Image> {
         image.setH(100);
 
         try {
-            // Only the ID is available
             if (json.isJsonPrimitive()) {
+                // Only the ID is available
                 final JsonPrimitive primitive = json.getAsJsonPrimitive();
                 String thumb = primitive.getAsString();
                 image.setThumb(thumb);
                 image.setHref(thumb);
-            }
-
-            // The whole object is available
-            if (json.isJsonObject()) {
+            } else if (json.isJsonObject()) {
+                // The whole object is available
                 final JsonObject jsonObject = json.getAsJsonObject();
                 image.setThumb(jsonObject.get("thumb").getAsString());
                 image.setHref(jsonObject.get("href").getAsString());
