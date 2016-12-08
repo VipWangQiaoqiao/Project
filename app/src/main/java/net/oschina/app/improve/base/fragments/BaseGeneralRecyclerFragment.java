@@ -9,7 +9,7 @@ import net.oschina.app.interf.OnTabReselectListener;
 public abstract class BaseGeneralRecyclerFragment<T> extends BaseRecyclerViewFragment<T> implements OnTabReselectListener{
     @Override
     public void onTabReselect() {
-        if(mRecyclerView != null){
+        if(mRecyclerView != null && !isRefreshing){
             mRecyclerView.scrollToPosition(0);
             mRefreshLayout.setRefreshing(true);
             onRefreshing();
