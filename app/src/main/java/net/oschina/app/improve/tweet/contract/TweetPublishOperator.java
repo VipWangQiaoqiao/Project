@@ -94,18 +94,23 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
             String content = sharedPreferences.getString(SHARE_VALUES_CONTENT, null);
             Set<String> set = sharedPreferences.getStringSet(SHARE_VALUES_IMAGES, null);
             if (content != null) {
-                mView.setContent(content);
+                mView.setContent(content, false);
             }
             if (set != null && set.size() > 0) {
                 mView.setImages(CollectionUtil.toArray(set, String.class));
             }
         } else {
-            if (!TextUtils.isEmpty(mDefaultContent))
-                mView.setContent(mDefaultContent);
             if (mDefaultImages != null && mDefaultImages.length > 0)
                 mView.setImages(mDefaultImages);
-            if (mAbout != null && mAbout.check())
+
+            boolean needStoEnd = false;
+            if (mAbout != null && mAbout.check()) {
                 mView.setAbout(mAbout);
+                needStoEnd = true;
+            }
+
+            if (!TextUtils.isEmpty(mDefaultContent))
+                mView.setContent(mDefaultContent, needStoEnd);
         }
     }
 
@@ -134,7 +139,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         String content = savedInstanceState.getString(SHARE_VALUES_CONTENT, null);
         String[] images = savedInstanceState.getStringArray(SHARE_VALUES_IMAGES);
         if (content != null) {
-            mView.setContent(content);
+            mView.setContent(content, false);
         }
         if (images != null && images.length > 0) {
             mView.setImages(images);

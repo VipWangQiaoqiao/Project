@@ -358,10 +358,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void setContent(String content) {
+    public void setContent(String content, boolean needSelectionEnd) {
         Spannable span = InputHelper.displayEmoji(getResources(), content, (int) mEditContent.getTextSize());
         mEditContent.setText(span);
-        mEditContent.setSelection(mEditContent.getText().length());
+        if (needSelectionEnd)
+            mEditContent.setSelection(mEditContent.getText().length());
     }
 
     @Override
