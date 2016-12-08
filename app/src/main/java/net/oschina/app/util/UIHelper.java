@@ -34,7 +34,6 @@ import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.BrowserFragment;
-import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
@@ -407,16 +406,6 @@ public class UIHelper {
         Intent intent = new Intent(context, SimpleBackActivity.class);
         intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
         intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
-        context.startActivity(intent);
-    }
-
-    public static void showBlogComment(Context context, int id, int ownerId) {
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_ID, id);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_OWNER_ID, ownerId);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_BLOG, true);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_COMMENT);
         context.startActivity(intent);
     }
 

@@ -26,7 +26,6 @@ import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.UIHelper;
 
 import java.util.List;
 
@@ -37,7 +36,7 @@ import java.util.List;
  */
 
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
-        implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
+        implements QuestionDetailContract.View, OnCommentClickListener {
 
     private long mId;
     private TextView mTVAuthorName;
@@ -123,17 +122,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                     LoginActivity.show(getActivity());
             }
         });
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            // 评论列表
-            case R.id.tv_see_more_comment:
-                UIHelper.showBlogComment(getActivity(), (int) mId,
-                        (int) mOperator.getData().getAuthorId());
-                break;
-        }
     }
 
     @SuppressLint("DefaultLocale")

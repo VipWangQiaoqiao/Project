@@ -39,7 +39,6 @@ import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
-import net.oschina.app.util.UIHelper;
 
 import java.net.URLEncoder;
 import java.util.Map;
@@ -167,11 +166,6 @@ public class BlogDetailFragment
             // 关注按钮
             case R.id.btn_relation:
                 handleRelation();
-                break;
-            // 评论列表
-            case R.id.tv_see_more_comment:
-                UIHelper.showBlogComment(getActivity(), (int) mId,
-                        (int) mOperator.getData().getAuthorId());
                 break;
             case R.id.iv_avatar:
                 OtherUserHomeActivity.show(getActivity(), mOperator.getData().getAuthorId());
