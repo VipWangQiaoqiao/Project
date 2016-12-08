@@ -16,7 +16,6 @@ import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.emoji.ToolbarFragment;
 import net.oschina.app.emoji.ToolbarFragment.OnActionClickListener;
 import net.oschina.app.emoji.ToolbarFragment.ToolAction;
-import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.team.fragment.TeamDiaryDetailFragment;
 import net.oschina.app.team.fragment.TeamDiscussDetailFragment;
 import net.oschina.app.team.fragment.TeamIssueDetailFragment;
@@ -83,9 +82,6 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 actionBarTitle = R.string.team_diary_detail;
                 fragment = new TeamDiaryDetailFragment();
                 break;
-            case DISPLAY_COMMENT:
-                actionBarTitle = R.string.actionbar_title_comment;
-                fragment = new CommentFrament();
             default:
                 finish();
                 break;
@@ -119,8 +115,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
         if (currentFragment instanceof TeamTweetDetailFragment
                 || currentFragment instanceof TeamDiaryDetailFragment
                 || currentFragment instanceof TeamIssueDetailFragment
-                || currentFragment instanceof TeamDiscussDetailFragment
-                || currentFragment instanceof CommentFrament) {
+                || currentFragment instanceof TeamDiscussDetailFragment) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.emoji_keyboard, emojiFragment).commit();
         } else {

@@ -30,7 +30,7 @@ import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 public final class CommentsUtil {
 
     @SuppressWarnings("deprecation")
-    public static View getReferLayout(LayoutInflater inflater, Refer[] refer, int count) {
+    static View getReferLayout(LayoutInflater inflater, Refer[] refer, int count) {
         Context context = inflater.getContext();
         @SuppressLint("InflateParams")
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
@@ -53,7 +53,7 @@ public final class CommentsUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static View getReplyLayout(LayoutInflater inflater, Reply[] replies, int count) {
+    static View getReplyLayout(LayoutInflater inflater, Reply[] replies, int count) {
         Context context = inflater.getContext();
         @SuppressLint("InflateParams")
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
@@ -77,6 +77,7 @@ public final class CommentsUtil {
         return lay;
     }
 
+    @SuppressWarnings("deprecation")
     public static void formatHtml(Resources resources, TextView textView, String str) {
         str = str.trim();
 
