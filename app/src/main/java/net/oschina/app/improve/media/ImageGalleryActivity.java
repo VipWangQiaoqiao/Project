@@ -30,6 +30,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.utils.PicturesCompressor;
+import net.oschina.common.utils.BitmapUtil;
 import net.oschina.common.utils.StreamUtil;
 import net.qiujuer.genius.ui.widget.Loading;
 
@@ -173,7 +174,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                     File sourceFile = future.get();
                     if (sourceFile == null || !sourceFile.exists())
                         return;
-                    String extension = PicturesCompressor.getExtension(sourceFile.getAbsolutePath());
+                    String extension = BitmapUtil.getExtension(sourceFile.getAbsolutePath());
                     String extDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                             .getAbsolutePath() + File.separator + "开源中国";
                     File extDirFile = new File(extDir);
@@ -366,7 +367,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                     try {
                         File sourceFile = future.get();
 
-                        BitmapFactory.Options options = PicturesCompressor.createOptions();
+                        BitmapFactory.Options options = BitmapUtil.createOptions();
                         // First decode with inJustDecodeBounds=true to check dimensions
                         options.inJustDecodeBounds = true;
                         // First decode with inJustDecodeBounds=true to check dimensions
@@ -374,7 +375,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
                         int width = options.outWidth;
                         int height = options.outHeight;
-                        PicturesCompressor.resetOptions(options);
+                        BitmapUtil.resetOptions(options);
 
                         if (width > 0 && height > 0) {
                             // Get Screen
