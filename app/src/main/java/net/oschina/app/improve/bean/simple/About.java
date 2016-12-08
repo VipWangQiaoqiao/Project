@@ -1,5 +1,7 @@
 package net.oschina.app.improve.bean.simple;
 
+import net.oschina.app.improve.bean.Tweet;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -17,7 +19,7 @@ public class About implements Serializable {
     private int viewCount;
     private int commentCount;
     private int transmitCount;
-    private String[] images;
+    private Tweet.Image[] images;
 
     public long getId() {
         return id;
@@ -67,11 +69,11 @@ public class About implements Serializable {
         this.href = href;
     }
 
-    public String[] getImages() {
+    public Tweet.Image[] getImages() {
         return images;
     }
 
-    public void setImages(String[] images) {
+    public void setImages(Tweet.Image[] images) {
         this.images = images;
     }
 

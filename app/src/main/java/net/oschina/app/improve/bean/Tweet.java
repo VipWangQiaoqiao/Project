@@ -183,8 +183,26 @@ public class Tweet implements Serializable {
     public static class Image implements Serializable {
         private String thumb;
         private String href;
+        private String name;
+        private int type;
         private int w;
         private int h;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
 
         public String getThumb() {
             return thumb;

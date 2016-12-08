@@ -37,6 +37,7 @@ import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.utils.DensityUtils;
@@ -54,7 +55,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  *
  * 突然间变成各个地方都在用的Adapter了...
  */
-public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
+public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implements View.OnClickListener {
     private Bitmap mRecordBitmap;
     private View.OnClickListener mOnLikeClickListener;
 
@@ -158,6 +159,8 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
 
         if (item.getAbout() != null){
             holder.mLayoutRef.setVisibility(View.VISIBLE);
+            holder.mLayoutRef.setTag(position);
+            holder.mLayoutRef.setOnClickListener(this);
             holder.mViewDispatch.setVisibility(View.VISIBLE);
             holder.mViewDispatchCount.setVisibility(View.VISIBLE);
             About about = item.getAbout();
@@ -180,6 +183,20 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> {
         }else {
             holder.mLayoutRef.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * 点击引用时触发
+     * @param v Ref View
+     */
+    @Override
+    public void onClick(View v) {
+        int position = Integer.valueOf(v.getTag().toString());
+        Tweet tweet = getItem(position);
+        if (tweet == null) return;
+        About about = tweet.getAbout();
+        if (about == null) return;
+        UIHelper.showDetail(mContext, about.getType(), about.getId(), about.getHref());
     }
 
     /**

@@ -188,7 +188,7 @@ public class AssimilateUtils {
         });
     }
 
-    public static Spannable clearHtmlTag(final Context context, CharSequence content) {
+    public static Spannable clearHtmlTag(CharSequence content) {
         SpannableStringBuilder builder = new SpannableStringBuilder(content);
         Matcher matcher;
         while (true) {
