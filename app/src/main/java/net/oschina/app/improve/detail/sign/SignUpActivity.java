@@ -19,7 +19,7 @@ import butterknife.Bind;
 
 public class SignUpActivity extends BaseBackActivity implements SignUpContract.EmptyView {
 
-    @Bind(R.id.layout_error)
+    @Bind(R.id.error_layout)
     EmptyLayout mEmptyLayout;
 
     private SignUpFragment mFragment;
@@ -42,8 +42,10 @@ public class SignUpActivity extends BaseBackActivity implements SignUpContract.E
     @Override
     protected void initWidget() {
         super.initWidget();
-        mFragment = SignUpFragment.newInstance();
+        mSourceId = getIntent().getLongExtra("sourceId", 0);
+        mFragment = SignUpFragment.newInstance(mSourceId);
         addFragment(R.id.fl_content, mFragment);
+        mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,12 +60,13 @@ public class SignUpActivity extends BaseBackActivity implements SignUpContract.E
     @Override
     protected void initData() {
         super.initData();
-        mSourceId = getIntent().getLongExtra("sourceId", 0);
+
         if (mSourceId <= 0) {
             SimplexToast.show(this, "活动资源不存在");
             finish();
         }
         mPresenter = new SignUpPresenter(mFragment, this);
+        mPresenter.getSignUpOptions(mSourceId);
     }
 
     @Override

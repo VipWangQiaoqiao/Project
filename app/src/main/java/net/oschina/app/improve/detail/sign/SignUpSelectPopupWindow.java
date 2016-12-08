@@ -1,4 +1,4 @@
-package net.oschina.app.improve.media;
+package net.oschina.app.improve.detail.sign;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -12,32 +12,29 @@ import android.widget.PopupWindow;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
-import net.oschina.app.improve.media.adapter.ImageFolderAdapter;
-import net.oschina.app.improve.media.bean.ImageFolder;
 
 /**
- * 图片选择器菜单选择界面
+ * Created by haibin
+ * on 2016/12/7.
  */
-public class ImageFolderPopupWindow extends PopupWindow implements
-        View.OnAttachStateChangeListener,
+
+public class SignUpSelectPopupWindow extends PopupWindow implements View.OnAttachStateChangeListener,
         BaseRecyclerAdapter.OnItemClickListener {
-    private ImageFolderAdapter mAdapter;
-    private RecyclerView mFolderView;
+    private StringAdapter mAdapter;
+    private RecyclerView mRecyclerView;
     private Callback mCallback;
 
-    public ImageFolderPopupWindow(Context context, Callback callback) {
-        super(LayoutInflater.from(context).inflate(R.layout.popup_window_folder, null),
+    public SignUpSelectPopupWindow(Context context, Callback callback) {
+        super(LayoutInflater.from(context).inflate(R.layout.event_sign_up_popup_selected, null),
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         mCallback = callback;
 
-        // init
         setAnimationStyle(R.style.popup_anim_style_alpha);
         setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setOutsideTouchable(true);
         setFocusable(true);
 
-        // content
         View content = getContentView();
         content.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,40 +44,37 @@ public class ImageFolderPopupWindow extends PopupWindow implements
         });
         content.addOnAttachStateChangeListener(this);
 
-        mFolderView = (RecyclerView) content.findViewById(R.id.rv_popup_folder);
-        mFolderView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView = (RecyclerView) content.findViewById(R.id.rv_select);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-    }
-
-    public void setAdapter(ImageFolderAdapter adapter) {
-        this.mAdapter = adapter;
-        mFolderView.setAdapter(adapter);
-        mAdapter.setOnItemClickListener(this);
     }
 
     @Override
     public void onViewAttachedToWindow(View v) {
-        final Callback callback = mCallback;
-        if (callback != null)
-            callback.onShow();
+        if (mCallback != null)
+            mCallback.onShow();
     }
 
     @Override
     public void onViewDetachedFromWindow(View v) {
-        final Callback callback = mCallback;
-        if (callback != null)
-            callback.onDismiss();
+        if (mCallback != null)
+            mCallback.onDismiss();
     }
 
     @Override
     public void onItemClick(int position, long itemId) {
-        final Callback callback = mCallback;
-        if (callback != null)
-            callback.onSelect(this, mAdapter.getItem(position));
+        if (mCallback != null)
+            mCallback.onSelect(this, mAdapter.getItem(position));
+    }
+
+    public void setAdapter(StringAdapter adapter) {
+        this.mAdapter = adapter;
+        mRecyclerView.setAdapter(adapter);
+        mAdapter.setOnItemClickListener(this);
     }
 
     public interface Callback {
-        void onSelect(ImageFolderPopupWindow popupWindow, ImageFolder model);
+        void onSelect(SignUpSelectPopupWindow popupWindow, String value);
 
         void onDismiss();
 

@@ -186,6 +186,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".improve.detail.sign.SignUpActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="活动报名"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <activity
             android:name=".improve.detail.activities.NewsDetailActivity"
             android:configChanges="keyboardHidden|orientation"
