@@ -1,6 +1,7 @@
 package net.oschina.app.improve.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by haibin
@@ -21,6 +22,7 @@ public class SignUpEventOptions implements Serializable {
 
     private String key;
     private String value;//用户输入的参数
+    private List<String> selectList;//用户多选的参数
     private int keyType;
     private int formType;
     private String label;
@@ -39,6 +41,14 @@ public class SignUpEventOptions implements Serializable {
 
     public String getValue() {
         return value;
+    }
+
+    public List<String> getSelectList() {
+        return selectList;
+    }
+
+    public void setSelectList(List<String> selectList) {
+        this.selectList = selectList;
     }
 
     public void setValue(String value) {

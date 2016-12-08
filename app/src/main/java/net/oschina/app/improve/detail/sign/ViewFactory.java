@@ -1,15 +1,19 @@
 package net.oschina.app.improve.detail.sign;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -17,10 +21,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SignUpEventOptions;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.FlowLayout;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  * Created by haibin
@@ -73,6 +79,8 @@ final class ViewFactory {
         View view = inflater.inflate(R.layout.event_sign_up_edit_text, null);
         ((TextView) view.findViewById(R.id.tv_label)).setText(options.getLabel() + (options.isRequired() ? "" : "（选填）") + ":");
         EditText editText = (EditText) view.findViewById(R.id.et_value);
+        editText.setText(options.getDefaultValue());
+        options.setValue(options.getDefaultValue());
         editText.setInputType(inputType);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,6 +108,8 @@ final class ViewFactory {
         View view = inflater.inflate(R.layout.event_sign_up_edit_text_area, null);
         ((TextView) view.findViewById(R.id.tv_area)).setText(options.getLabel() + (options.isRequired() ? "" : "（选填）") + ":");
         EditText editText = (EditText) view.findViewById(R.id.et_area);
+        editText.setText(options.getDefaultValue());
+        options.setValue(options.getDefaultValue());
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -173,24 +183,37 @@ final class ViewFactory {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMarginEnd(100);
+        if (options.getSelectList() == null)
+            options.setSelectList(new ArrayList<String>());
         if (!TextUtils.isEmpty(options.getOption())) {
-            String[] list = options.getOption().split(";");
+            final String[] list = options.getOption().split(";");
             String[] status = null;
             if (!TextUtils.isEmpty(options.getOptionStatus()))
                 status = options.getOptionStatus().split(";");
             for (int i = 0; i < list.length; i++) {
-                CheckBox button = new CheckBox(activity);
+                final CheckBox button = new CheckBox(activity);
                 button.setLayoutParams(params);
                 button.setText(list[i]);
-                boolean enable = false;
+                boolean enable ;
                 if (status == null)
                     enable = true;
                 else if (status.length <= i)
                     enable = true;
                 else
-                    enable = "0".equals(status[0]);
+                    enable = "0".equals(status[i]);
                 button.setId(i);
                 button.setEnabled(enable);
+                button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        String item = list[button.getId()];
+                        if (isChecked) {
+                            options.getSelectList().add(item);
+                        } else {
+                            options.getSelectList().remove(item);
+                        }
+                    }
+                });
                 ll_check_box.addView(button);
             }
         }
@@ -200,30 +223,57 @@ final class ViewFactory {
     private static View getSelect(Activity activity, LayoutInflater inflater, final SignUpEventOptions options) {
         View view = inflater.inflate(R.layout.event_sign_up_select, null);
         ((TextView) view.findViewById(R.id.tv_label)).setText(options.getLabel() + (options.isRequired() ? "" : "（选填）") + ":");
-        final SignUpSelectPopupWindow popupWindow = new SignUpSelectPopupWindow(activity, new SignUpSelectPopupWindow.Callback() {
-            @Override
-            public void onSelect(SignUpSelectPopupWindow popupWindow, String value) {
-                options.setValue(value);
+        final TextView tv_select = (TextView) view.findViewById(R.id.tv_select);
+        tv_select.setText(options.getDefaultValue());
+        RecyclerView rv_select = (RecyclerView) inflater.inflate(R.layout.event_sign_up_select_list, null);
+        final StringAdapter adapter = new StringAdapter(activity);
+        rv_select.setLayoutManager(new LinearLayoutManager(activity));
+        rv_select.setAdapter(adapter);
+        if (options.getOption() != null) {
+            String[] status = null;
+            if (!TextUtils.isEmpty(options.getOptionStatus()))
+                status = options.getOptionStatus().split(";");
+            String[] list = options.getOption().split(";");
+            for (int i = 0; i < list.length; i++) {
+                StringAdapter.Select s = new StringAdapter.Select();
+                s.setLabel(list[i]);
+                boolean enable = false;
+                if (status == null)
+                    enable = true;
+                else if (status.length <= i)
+                    enable = true;
+                else
+                    enable = "0".equals(status[i]);
+                s.setEnable(enable);
+                adapter.addItem(s);
             }
+        }
 
+
+        final AlertDialog dialog = DialogHelper.getSelectDialog(activity, rv_select, "取消", new DialogInterface.OnClickListener() {
             @Override
-            public void onDismiss() {
-
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
+        }).create();
 
+        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onShow() {
-
+            public void onItemClick(int position, long itemId) {
+                StringAdapter.Select s = adapter.getItem(position);
+                if (s.isEnable()) {
+                    tv_select.setText(s.getLabel());
+                    options.setValue(s.getLabel());
+                    dialog.dismiss();
+                }
             }
         });
-        StringAdapter adapter = new StringAdapter(activity);
-        adapter.addAll(Arrays.asList(options.getOption().split(";")));
-        popupWindow.setAdapter(adapter);
+
         final LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.ll_select);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindow.showAtLocation(linearLayout, Gravity.TOP, (int) linearLayout.getX(), (int) linearLayout.getY());
+                dialog.show();
             }
         });
         return view;

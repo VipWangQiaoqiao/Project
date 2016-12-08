@@ -1,5 +1,7 @@
 package net.oschina.app.improve.detail.sign;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -67,6 +69,9 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
     @Override
     public void showSignUpSuccess() {
         SimplexToast.show(mContext, "报名成功");
+        Intent intent = new Intent();
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        getActivity().finish();
     }
 
     @Override
@@ -87,5 +92,11 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
     @Override
     public void showNetworkError(int strId) {
         SimplexToast.show(mContext, strId);
+    }
+
+    @Override
+    public void onDestroy() {
+        mLayoutRoot.removeAllViews();
+        super.onDestroy();
     }
 }
