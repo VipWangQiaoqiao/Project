@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
+import android.view.View;
 
 import net.oschina.app.R;
 
@@ -271,5 +272,12 @@ public final class DialogHelper {
                 .setItems(items, itemListener)
                 .setPositiveButton(positiveText, null);
 
+    }
+
+    public static AlertDialog.Builder getSelectDialog(Context context, View view, String positiveText,
+                                                      DialogInterface.OnClickListener itemListener) {
+        return getDialog(context)
+                .setView(view)
+                .setPositiveButton(positiveText, null);
     }
 }

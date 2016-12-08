@@ -1,6 +1,8 @@
 package net.oschina.app.improve.detail.fragments;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -10,6 +12,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.comment.CommentsActivity;
@@ -139,10 +142,15 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 mOperator.toFav();
                 break;
             case R.id.ll_sign:
-                if(true){
-                    SignUpActivity.show(this,mOperator.getData().getId());
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(getContext());
                     return;
                 }
+                if (true) {
+                    SignUpActivity.show(this, mOperator.getData().getId());
+                    return;
+                }
+
                 final EventDetail mDetail = mOperator.getData();
                 if (mDetail.getApplyStatus() == EventDetail.APPLY_STATUS_UN_SIGN && mDetail.getStatus() == Event.STATUS_ING) {
                     if (AccountHelper.isLogin()) {
@@ -229,6 +237,19 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 break;
         }
         return strId;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            switch (requestCode) {
+                case 0x01:
+                    tv_apply_status.setText(getResources().getString(getApplyStatusStrId(EventDetail.APPLY_STATUS_AUDIT)));
+                    setSignUnEnable();
+                    break;
+            }
+        }
     }
 
     private void setSignUnEnable() {
