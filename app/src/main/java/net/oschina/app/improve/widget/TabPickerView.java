@@ -709,7 +709,8 @@ public class TabPickerView extends FrameLayout {
                 public int compare(SubTab o1, SubTab o2) {
                     if (o1.isFixed() && !o2.isFixed()) return -1;
                     if (!o1.isFixed() && o2.isFixed()) return 1;
-                    return o1.getOrder() - o2.getOrder();
+                    return 0;
+//                    return o1.getOrder() - o2.getOrder();
                 }
             });
 
