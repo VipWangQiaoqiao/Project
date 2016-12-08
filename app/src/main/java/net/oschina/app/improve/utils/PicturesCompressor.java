@@ -86,10 +86,7 @@ public final class PicturesCompressor {
         opts.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, opts);
         String mimeType = opts.outMimeType.toLowerCase();
-        if (mimeType.contains("jpeg") || mimeType.contains("png") || mimeType.contains("gif")) {
-            return true;
-        }
-        return false;
+        return mimeType.contains("jpeg") || mimeType.contains("png") || mimeType.contains("gif");
     }
 
     public static String verifyPictureExt(String filePath) {
