@@ -18,7 +18,9 @@ import net.oschina.app.improve.media.bean.ImageFolder;
 /**
  * 图片选择器菜单选择界面
  */
-public class ImageFolderPopupWindow extends PopupWindow implements View.OnAttachStateChangeListener, BaseRecyclerAdapter.OnItemClickListener {
+public class ImageFolderPopupWindow extends PopupWindow implements
+        View.OnAttachStateChangeListener,
+        BaseRecyclerAdapter.OnItemClickListener {
     private ImageFolderAdapter mAdapter;
     private RecyclerView mFolderView;
     private Callback mCallback;

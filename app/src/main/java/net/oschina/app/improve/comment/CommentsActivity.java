@@ -414,8 +414,11 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
 
                     if (resultBean.isSuccess()) {
                         mPageBean = resultBean.getResult();
-                        mTitle.setText(String.format("%d%s%s", mPageBean.getTotalResults(), getString(R.string.item_hint), getString(R.string.comment_title_hint)));
-
+                        int titleHintId = R.string.comment_title_hint;
+                        if (mType == OSChinaApi.COMMENT_EVENT || mType == OSChinaApi.COMMENT_QUESTION) {
+                            titleHintId = R.string.answer_hint;
+                        }
+                        mTitle.setText(String.format("%d%s%s", mPageBean.getTotalResults(), getString(R.string.item_hint), getString(titleHintId)));
                         handleData(mPageBean.getItems(), clearData);
                     }
 

@@ -21,7 +21,7 @@
 
     <color name="comment_yellow">#FFFFEE</color>
 
-    <color name="main_background">#ffebedf0</color>
+    <color name="main_background">#F6F6F6</color>
     <color name="list_divider_color">#C8C7CC</color>
     <color name="list_item_background_pressed">#FCFCFC</color>
 

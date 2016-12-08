@@ -14,6 +14,7 @@ import net.oschina.app.bean.Report;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.SignUpEventOptions;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.detail.sign.StringParams;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 
@@ -28,9 +29,6 @@ import static net.oschina.app.api.ApiHttpClient.post;
 
 /**
  * OSChina Api v1 and v2
- * <p>
- * 什么时候不在使用AsyncHttp了???
- * 什么时候用VM模式？？？
  */
 public class OSChinaApi {
 
@@ -600,18 +598,10 @@ public class OSChinaApi {
 
 
 
-
-
-
-
-
-
-
     /* =============================================================================================
      * =============================================================================================
      *
      * Oschina Api V2
-     * TODO replace with new http request framework, not AsyncHttp any more
      *
      * =============================================================================================
      * =============================================================================================
@@ -1576,10 +1566,10 @@ public class OSChinaApi {
      * 新版活动报名，动态参数
      */
     public static void signUpEvent(long sourceId, List<SignUpEventOptions> options, TextHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("sourceId", sourceId);
+        StringParams params = new StringParams();
+        params.putForm("sourceId", String.valueOf(sourceId));
         for (SignUpEventOptions option : options) {
-            params.put(option.getKey(), option.getValue());
+            params.putForm(option.getKey(), option.getValue());
         }
         ApiHttpClient.get("action/apiv2/event_apply", params, handler);
     }
