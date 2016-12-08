@@ -3,7 +3,6 @@ package net.oschina.app.bean;
 import net.oschina.app.R;
 import net.oschina.app.fragment.AboutOSCFragment;
 import net.oschina.app.fragment.BrowserFragment;
-import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.EventAppliesFragment;
 import net.oschina.app.fragment.EventFragment;
 import net.oschina.app.fragment.MyInformationFragmentDetail;
@@ -30,8 +29,6 @@ import net.oschina.app.viewpagerfragment.EventViewPagerFragment;
 import net.oschina.app.viewpagerfragment.OpenSoftwareFragment;
 
 public enum SimpleBackPage {
-
-    COMMENT(1, R.string.actionbar_title_comment, CommentFrament.class),
 
     USER_BLOG(6, R.string.actionbar_title_user_blog, UserBlogFragment.class),
 

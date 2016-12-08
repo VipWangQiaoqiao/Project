@@ -67,7 +67,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         return type;
     }
 
-    protected boolean isRealDataFooter(int position) {
+    private boolean isRealDataFooter(int position) {
         return getIndex(position) == getCount() - 1;
     }
 
@@ -104,7 +104,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         this.delegation = delegation;
     }
 
-    protected static class CommentHolder extends RecyclerView.ViewHolder {
+    static class CommentHolder extends RecyclerView.ViewHolder {
 
         private ProgressDialog mDialog;
 
@@ -136,9 +136,9 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         CommentHolder(View itemView, boolean isFooter, CommentBar commentBar) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            if (isFooter) {
-                mLine.setVisibility(View.GONE);
-            }
+            //if (isFooter) {
+            // mLine.setVisibility(View.GONE);
+            //}
             this.commentBar = commentBar;
         }
 
@@ -148,7 +148,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
          * @param comment comment
          */
         @SuppressLint("DefaultLocale")
-        public void addComment(int position, final long sourceId, final int commentType, final Comment comment, RequestManager requestManager) {
+        void addComment(int position, final long sourceId, final int commentType, final Comment comment, RequestManager requestManager) {
 
             requestManager.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface).into(mIvAvatar);
             mIvAvatar.setOnClickListener(new View.OnClickListener() {
@@ -168,8 +168,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                 @Override
                 public void onClick(View v) {
 
-                    if (!AccountHelper.isLogin()){
-                          LoginActivity.show((Activity) mComment.getContext(),1);
+                    if (!AccountHelper.isLogin()) {
+                        LoginActivity.show((Activity) mComment.getContext(), 1);
                         return;
                     }
                     commentBar.getBottomSheet().getBtnCommit().setTag(comment);

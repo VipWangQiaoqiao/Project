@@ -36,7 +36,6 @@
                 android:textSize="@dimen/font_18"
                 tools:ignore="RtlHardcoded" />
 
-
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="0dp"
@@ -45,16 +44,14 @@
                 android:layout_margin="@dimen/lay_4"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/comment_title_hint"
+                tools:text="@string/comment_title_hint"
                 android:textColor="@color/white"
-                android:textSize="@dimen/font_18"
+                android:textSize="@dimen/font_20"
                 tools:ignore="RtlHardcoded" />
 
             <Space
                 android:layout_width="56dp"
                 android:layout_height="match_parent" />
-
-
         </LinearLayout>
 
         <net.oschina.app.improve.widget.RecyclerRefreshLayout
@@ -62,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFF"
+            android:paddingBottom="@dimen/lay_48"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <android.support.v7.widget.RecyclerView
@@ -70,7 +68,6 @@
                 android:layout_height="match_parent"
                 tools:ignore="RtlSymmetry" />
         </net.oschina.app.improve.widget.RecyclerRefreshLayout>
-
 
     </LinearLayout>
 

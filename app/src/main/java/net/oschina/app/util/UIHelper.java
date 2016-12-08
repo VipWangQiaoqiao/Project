@@ -30,11 +30,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Banner;
-import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.BrowserFragment;
-import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
@@ -410,16 +407,6 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
-    public static void showBlogComment(Context context, int id, int ownerId) {
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_ID, id);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_OWNER_ID, ownerId);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_BLOG, true);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_COMMENT);
-        context.startActivity(intent);
-    }
-
     public static SpannableString parseActiveAction(int objecttype,
                                                     int objectcatalog, String objecttitle) {
         String title = "";
@@ -624,31 +611,6 @@ public class UIHelper {
                     handler.sendMessage(msg);
             }
         });
-    }
-
-    /**
-     * 发送广播告知评论发生变化
-     *
-     * @param context
-     * @param isBlog
-     * @param id
-     * @param catalog
-     * @param operation
-     * @param replyComment
-     */
-    public static void sendBroadCastCommentChanged(Context context,
-                                                   boolean isBlog, int id, int catalog, int
-                                                           operation,
-                                                   Comment replyComment) {
-        Intent intent = new Intent(Constants.INTENT_ACTION_COMMENT_CHANGED);
-        Bundle args = new Bundle();
-        args.putInt(Comment.BUNDLE_KEY_ID, id);
-        args.putInt(Comment.BUNDLE_KEY_CATALOG, catalog);
-        args.putBoolean(Comment.BUNDLE_KEY_BLOG, isBlog);
-        args.putInt(Comment.BUNDLE_KEY_OPERATION, operation);
-        args.putParcelable(Comment.BUNDLE_KEY_COMMENT, replyComment);
-        intent.putExtras(args);
-        context.sendBroadcast(intent);
     }
 
     public static void showCreateNewIssue(Context context, Team team,

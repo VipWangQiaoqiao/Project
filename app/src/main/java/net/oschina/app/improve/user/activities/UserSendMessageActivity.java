@@ -236,7 +236,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
         AppOperator.runOnThread(new Runnable() {
             @Override
             public void run() {
-                if (PicturesCompressor.compressImage(oriPath, path, 512 * 1024, 80, 1280, 1280 * 2)) {
+                if (PicturesCompressor.compressImage(oriPath, path, 512 * 1024)) {
                     runnable.setPath(path);
                     runOnUiThread(runnable);
                 }

@@ -6,11 +6,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 
+import net.oschina.app.BuildConfig;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.gson.DoubleJsonDeserializer;
 import net.oschina.app.improve.app.gson.FloatJsonDeserializer;
+import net.oschina.app.improve.app.gson.ImageJsonDeserializer;
 import net.oschina.app.improve.app.gson.IntegerJsonDeserializer;
 import net.oschina.app.improve.app.gson.StringJsonDeserializer;
+import net.oschina.app.improve.bean.Tweet;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -70,6 +73,10 @@ public final class AppOperator {
 
         deserializer = new StringJsonDeserializer();
         gsonBuilder.registerTypeAdapter(String.class, deserializer);
+
+        if (BuildConfig.DEBUG) {
+            gsonBuilder.registerTypeAdapter(Tweet.Image.class, new ImageJsonDeserializer());
+        }
 
         return gsonBuilder.create();
     }
