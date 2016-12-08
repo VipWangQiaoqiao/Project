@@ -103,14 +103,14 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
             if (mDefaultImages != null && mDefaultImages.length > 0)
                 mView.setImages(mDefaultImages);
 
-            boolean needStoEnd = false;
+            boolean haveAbout = false;
             if (mAbout != null && mAbout.check()) {
                 mView.setAbout(mAbout);
-                needStoEnd = true;
+                haveAbout = true;
             }
 
             if (!TextUtils.isEmpty(mDefaultContent))
-                mView.setContent(mDefaultContent, needStoEnd);
+                mView.setContent(mDefaultContent, !haveAbout);
         }
     }
 
