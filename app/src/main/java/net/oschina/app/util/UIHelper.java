@@ -216,6 +216,7 @@ public class UIHelper {
             case OSChinaApi.CATALOG_TWEET:
                 // 动弹
                 TweetDetailActivity.show(context, id);
+                break;
             default:
                 //6.资讯
                 NewsDetailActivity.show(context, id);
