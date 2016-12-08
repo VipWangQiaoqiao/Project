@@ -524,12 +524,21 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     @OnClick(R.id.iv_dispatch) void onClickTransmit(){
         if (tweet == null || tweet.getId() <= 0) return;
-        About about = new About();
-        about.setId(tweet.getId());
-        about.setType(OSChinaApi.CATALOG_TWEET);
-        about.setTitle(tweet.getAuthor().getName());
-        about.setContent(tweet.getContent());
-        TweetPublishActivity.show(this, null, null, about);
+
+        String content = null;
+        About about = null;
+        if (tweet.getAbout() == null){
+            about = new About();
+            about.setId(tweet.getId());
+            about.setTitle(tweet.getAuthor().getName());
+            about.setContent(tweet.getContent());
+            about.setType(OSChinaApi.CATALOG_TWEET);
+        } else {
+            about = tweet.getAbout();
+            content = "//@" + tweet.getAuthor().getName() + " :" + tweet.getContent();
+            content = AssimilateUtils.clearHtmlTag(content).toString();
+        }
+        TweetPublishActivity.show(this, null, content, about);
     }
 
     private boolean checkLogin() {
