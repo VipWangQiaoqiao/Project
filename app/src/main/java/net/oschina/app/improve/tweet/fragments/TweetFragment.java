@@ -204,12 +204,20 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                             break;
                         }
                     case 2:
-                        About about = new About();
-                        about.setId(tweet.getId());
-                        about.setTitle(tweet.getAuthor().getName());
-                        about.setContent(tweet.getContent());
-                        about.setType(OSChinaApi.CATALOG_TWEET);
-                        TweetPublishActivity.show(getContext(), null, null, about);
+                        String content = null;
+                        About about = null;
+                        if (tweet.getAbout() == null){
+                            about = new About();
+                            about.setId(tweet.getId());
+                            about.setTitle(tweet.getAuthor().getName());
+                            about.setContent(tweet.getContent());
+                            about.setType(OSChinaApi.CATALOG_TWEET);
+                        } else {
+                            about = tweet.getAbout();
+                            content = "//@" + tweet.getAuthor().getName() + " :" + tweet.getContent();
+                            content = AssimilateUtils.clearHtmlTag(content).toString();
+                        }
+                        TweetPublishActivity.show(getContext(), null, content, about);
                 }
             }
         }).show();
