@@ -435,11 +435,11 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         mLayoutGrid.setImage(tweet.getImages());
 
         /* -- about reference -- */
-        if (tweet.getAbout() != null){
+        if (tweet.getAbout() != null) {
             mLayoutRef.setVisibility(View.VISIBLE);
             About about = tweet.getAbout();
 
-            if (about.getType() == OSChinaApi.COMMENT_TWEET){
+            if (about.getType() == OSChinaApi.COMMENT_TWEET) {
                 mViewRefTitle.setVisibility(View.GONE);
                 mLayoutRefImages.setImage(about.getImages());
                 String aname = "@" + about.getTitle();
@@ -449,12 +449,12 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                         getResources().getColor(R.color.day_colorPrimary));
                 sp.setSpan(span, 0, aname.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 mViewRefContent.setText(sp);
-            }else {
+            } else {
                 mViewRefTitle.setVisibility(View.VISIBLE);
                 mViewRefTitle.setText(about.getTitle());
                 mViewRefContent.setText(about.getContent());
             }
-        }else {
+        } else {
             mLayoutRef.setVisibility(View.GONE);
         }
     }
@@ -504,30 +504,34 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         if (mDelegation != null) mDelegation.getBottomSheet().dismiss();
     }
 
-    @OnClick(R.id.iv_thumbup) void onClickThumbUp() {
+    @OnClick(R.id.iv_thumbup)
+    void onClickThumbUp() {
         if (checkLogin()) return;
         this.dialog = DialogHelper.getProgressDialog(this, "正在提交请求...");
         this.dialog.show();
         OSChinaApi.reverseTweetLike(tweet.getId(), publishAdmireHandler);
     }
 
-    @OnClick(R.id.layout_ref) void onClickRef(){
+    @OnClick(R.id.layout_ref)
+    void onClickRef() {
         if (tweet.getAbout() == null) return;
         UIHelper.showDetail(this, tweet.getAbout().getType(), tweet.getAbout().getId(), null);
     }
 
-    @OnClick(R.id.iv_comment) void onClickComment() {
+    @OnClick(R.id.iv_comment)
+    void onClickComment() {
         if (checkLogin()) return;
         mDelegation.getBottomSheet().dismiss();
         TDevice.showSoftKeyboard(mViewInput);
     }
 
-    @OnClick(R.id.iv_dispatch) void onClickTransmit(){
+    @OnClick(R.id.iv_dispatch)
+    void onClickTransmit() {
         if (tweet == null || tweet.getId() <= 0) return;
 
         String content = null;
-        About about = null;
-        if (tweet.getAbout() == null){
+        About about;
+        if (tweet.getAbout() == null) {
             about = new About();
             about.setId(tweet.getId());
             about.setTitle(tweet.getAuthor().getName());
@@ -538,6 +542,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             content = "//@" + tweet.getAuthor().getName() + " :" + tweet.getContent();
             content = AssimilateUtils.clearHtmlTag(content).toString();
         }
+        about.setCommitTweetId(tweet.getId());
         TweetPublishActivity.show(this, null, content, about);
     }
 

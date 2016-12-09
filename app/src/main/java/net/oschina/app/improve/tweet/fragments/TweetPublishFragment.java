@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -366,17 +367,27 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void setAbout(About about) {
+    public void setAbout(About about, boolean needCommit) {
         if (TextUtils.isEmpty(about.getTitle()) && TextUtils.isEmpty(about.getContent()))
             return;
         // Change the layout visibility
         mLayImages.setVisibility(View.GONE);
-        findView(R.id.lay_about).setVisibility(View.VISIBLE);
+        setVisibility(R.id.lay_about);
         // Set title and content
         ((TextView) findView(R.id.txt_about_title)).setText(about.getType() == OSChinaApi.COMMENT_TWEET ?
                 "@" + about.getTitle() : about.getTitle());
         ((TextView) findView(R.id.txt_about_content)).setText(about.getContent());
         findView(R.id.iv_picture).setEnabled(false);
+
+        if (needCommit)
+            setVisibility(R.id.cb_commit_control);
+        else
+            setGone(R.id.cb_commit_control);
+    }
+
+    @Override
+    public boolean needCommit() {
+        return ((CheckBox) findView(R.id.cb_commit_control)).isChecked();
     }
 
     @Override

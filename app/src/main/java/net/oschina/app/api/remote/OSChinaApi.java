@@ -25,6 +25,8 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 
+import cz.msebera.android.httpclient.Header;
+
 import static net.oschina.app.api.ApiHttpClient.post;
 
 /**
@@ -1087,7 +1089,7 @@ public class OSChinaApi {
      * @param replyId  回复的用户id
      * @param handler  回调
      */
-    public static void pubTweetComment(long sourceId, String content, long replyId, TextHttpResponseHandler handler) {
+    public static void pubTweetComment(long sourceId, String content, long replyId, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
         params.put("content", content);

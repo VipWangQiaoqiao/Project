@@ -69,7 +69,7 @@ public class TweetPublishService extends Service implements Contract.IService {
      * 发起动弹发布服务
      * <p>
      * 如果发布的动弹绑定到相关资讯等，则About节点不为NULL
-     * 仅仅关注：{@link About#id}, {@link About#type}}
+     * 仅仅关注：{@link About#id}, {@link About#type}} {@link About#commitTweetId}
      */
     public static void startActionPublish(Context context, String content, List<String> images, About about) {
         Intent intent = new Intent(context, TweetPublishService.class);
