@@ -9,6 +9,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
@@ -96,6 +97,7 @@ public class OWebView extends WebView {
                 @Override
                 public void run() {
                     final String body = setupWebContent(content, true, true, "");
+                    Log.e("body", body);
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -197,7 +199,7 @@ public class OWebView extends WebView {
             // 添加点击图片放大支持
             if (isShowImagePreview) {
                 // TODO 用一个正则就搞定??
-                content = content.replaceAll("<img[^>]+src=\"([^\"\'\\s]+)\"[^>]+>",
+                content = content.replaceAll("<img[^>]+src=\"([^\"\'\\s]+)\"[^>]*>",
                         "<img src=\"$1\" onClick=\"javascript:mWebViewImageListener.showImagePreview('$1')\"/>");
                 content = content.replaceAll(
                         "<a\\s+[^<>]*href=[\"\']([^\"\']+)[\"\'][^<>]*>\\s*<img\\s+src=\"([^\"\']+)\"[^<>]*/>\\s*</a>",
