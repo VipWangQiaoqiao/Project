@@ -40,6 +40,7 @@ import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.utils.DensityUtils;
 
@@ -129,6 +130,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewContent.setText(AssimilateUtils.assimilate(mContext, content));
             holder.mViewContent.setMovementMethod(LinkMovementMethod.getInstance());
             holder.mViewContent.setFocusable(false);
+            holder.mViewContent.setDispatchToParent(true);
             holder.mViewContent.setLongClickable(false);
         }
 
@@ -163,9 +165,10 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             About about = item.getAbout();
             holder.mLayoutRefImages.setImage(about.getImages());
 
-            if (about.getId() <= 0 || about.getType() <= 0){
-                holder.mViewRefTitle.setVisibility(View.GONE);
-                holder.mViewRefContent.setText("「抱歉，该内容不存在或已被删除」");
+            if (!About.check(about)){
+                holder.mViewRefTitle.setVisibility(View.VISIBLE);
+                holder.mViewRefTitle.setText("不存在或已删除的内容");
+                holder.mViewRefContent.setText("抱歉，该内容不存在或已被删除");
             }else {
                 if (about.getType() == OSChinaApi.COMMENT_TWEET){
                     holder.mViewRefTitle.setVisibility(View.GONE);
@@ -221,7 +224,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         @Bind(R.id.tv_tweet_comment_count)
         TextView mViewCmmCount;
         @Bind(R.id.tweet_item)
-        TextView mViewContent;
+        TweetTextView mViewContent;
         @Bind(R.id.iv_like_state)
         ImageView mViewLikeState;
         @Bind(R.id.fl_image)

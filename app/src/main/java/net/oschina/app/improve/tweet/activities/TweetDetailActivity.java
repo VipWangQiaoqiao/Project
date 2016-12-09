@@ -438,9 +438,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             About about = tweet.getAbout();
             mLayoutRefImages.setImage(about.getImages());
 
-            if (about.getId() <= 0 || about.getType() <= 0){
-                mViewRefTitle.setVisibility(View.GONE);
-                mViewRefContent.setText("「抱歉，该内容不存在或已被删除」");
+            if (!About.check(about)){
+                mViewRefTitle.setVisibility(View.VISIBLE);
+                mViewRefTitle.setText("不存在或已删除的内容");
+                mViewRefContent.setText("抱歉，该内容不存在或已被删除");
             }else {
                 if (about.getType() == OSChinaApi.COMMENT_TWEET){
                     mViewRefTitle.setVisibility(View.GONE);

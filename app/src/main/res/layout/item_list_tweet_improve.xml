@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:descendantFocusability="blocksDescendants"
+    android:descendantFocusability="afterDescendants"
     android:orientation="vertical">
 
     <LinearLayout
@@ -44,7 +44,7 @@
                 android:textSize="16sp"
                 tools:text="Large Text"/>
 
-            <TextView
+            <net.oschina.app.widget.TweetTextView
                 android:id="@+id/tweet_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
