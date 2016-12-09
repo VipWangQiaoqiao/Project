@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.text.TextUtils;
+import android.util.Log;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -41,6 +42,10 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         mDefaultContent = defaultContent;
         mDefaultImages = defaultImages;
         mAboutShare = share;
+
+        if (mAboutShare != null) {
+            Log.e("TAG", "setDataView: " + mAboutShare.toString());
+        }
     }
 
     @Override
@@ -190,6 +195,6 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     private boolean isUseXmlCache() {
         return TextUtils.isEmpty(mDefaultContent)
                 && (mDefaultImages == null || mDefaultImages.length == 0)
-                && (About.check(mAboutShare));
+                && (!About.check(mAboutShare));
     }
 }

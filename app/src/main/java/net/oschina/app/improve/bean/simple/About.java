@@ -194,6 +194,17 @@ public class About implements Serializable {
         public long commitTweetId;
         public String title;
         public String content;
+
+        @Override
+        public String toString() {
+            return "Share{" +
+                    "id=" + id +
+                    ", type=" + type +
+                    ", commitTweetId=" + commitTweetId +
+                    ", title='" + title + '\'' +
+                    ", content='" + content + '\'' +
+                    '}';
+        }
     }
 
     /**
@@ -204,10 +215,5 @@ public class About implements Serializable {
      */
     public static boolean check(Share share) {
         return share != null && share.id > 0 && share.type >= 0;
-    }
-
-    @Deprecated
-    public boolean checkShare() {
-        return id > 0 && type >= 0;
     }
 }
