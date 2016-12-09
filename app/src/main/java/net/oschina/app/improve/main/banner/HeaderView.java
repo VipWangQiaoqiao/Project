@@ -57,7 +57,7 @@ public abstract class HeaderView extends RelativeLayout implements BannerView.On
         mHandler = new Handler();
         mBanners = new ArrayList<>();
 
-        List<Banner> banners = CacheManager.readFromJson(context, mBannerCache, Banner.class);
+        List<Banner> banners = CacheManager.readListJson(context, mBannerCache, Banner.class);
         if (banners != null) {
             mBanners.addAll(banners);
             mHandler.postDelayed(this, 5000);

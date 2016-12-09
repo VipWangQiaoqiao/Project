@@ -45,6 +45,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     protected String mUrl;
     private boolean isScrolling;
     protected String mBannerCache;
+
     public HeaderView(Context context, RequestManager loader, String api, String bannerCache) {
         super(context);
         mImageLoader = loader;
@@ -56,7 +57,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     protected void init(Context context) {
         mHandler = new Handler();
         mBanners = new ArrayList<>();
-        List<Banner> banners = CacheManager.readFromJson(context, mBannerCache, Banner.class);
+        List<Banner> banners = CacheManager.readListJson(context, mBannerCache, Banner.class);
         if (banners != null) {
             mBanners.addAll(banners);
             mHandler.postDelayed(this, 5000);
