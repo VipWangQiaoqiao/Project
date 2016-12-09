@@ -97,7 +97,6 @@ public class OWebView extends WebView {
                 @Override
                 public void run() {
                     final String body = setupWebContent(content, true, true, "");
-                    Log.e("body", body);
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

@@ -48,7 +48,6 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
     }
 
     void setBodyContent(String body) {
-        Log.e("res",body);
         mWebView.loadDetailDataAsync(body, new Runnable() {
             @Override
             public void run() {
