@@ -1,5 +1,7 @@
 package net.oschina.app.improve.bean.simple;
 
+import com.google.gson.annotations.Expose;
+
 import net.oschina.app.improve.bean.Tweet;
 
 import java.io.Serializable;
@@ -20,6 +22,8 @@ public class About implements Serializable {
     private int commentCount;
     private int transmitCount;
     private Tweet.Image[] images;
+    @Expose
+    private long commitTweetId;
 
     public long getId() {
         return id;
@@ -97,7 +101,15 @@ public class About implements Serializable {
         return id > 0 && type >= 0;
     }
 
-    public static class Statistics implements Serializable{
+    public long getCommitTweetId() {
+        return commitTweetId;
+    }
+
+    public void setCommitTweetId(long commitTweetId) {
+        this.commitTweetId = commitTweetId;
+    }
+
+    public static class Statistics implements Serializable {
         private int comment;
         private int view;
         private int transmit;

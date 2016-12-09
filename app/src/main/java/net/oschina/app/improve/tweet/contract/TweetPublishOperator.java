@@ -67,6 +67,12 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
             return;
         }
 
+        // Check con't commit to tweet
+        if (mAbout != null && mAbout.check() && mAbout.getCommitTweetId() > 0 && !mView.needCommit()) {
+            mAbout.setCommitTweetId(0);
+        }
+
+
         final List<String> paths = CollectionUtil.toArrayList(mView.getImages());
 
         // To service publish
@@ -105,7 +111,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
 
             boolean haveAbout = false;
             if (mAbout != null && mAbout.check()) {
-                mView.setAbout(mAbout);
+                mView.setAbout(mAbout, mAbout.getCommitTweetId() > 0);
                 haveAbout = true;
             }
 
@@ -149,7 +155,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         mDefaultImages = savedInstanceState.getStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES);
         mAbout = (About) savedInstanceState.getSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT);
         if (mAbout != null && mAbout.check())
-            mView.setAbout(mAbout);
+            mView.setAbout(mAbout, mAbout.getCommitTweetId() > 0);
     }
 
     private void clearAndFinish(Context context) {

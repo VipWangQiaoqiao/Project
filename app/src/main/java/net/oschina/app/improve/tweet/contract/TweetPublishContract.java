@@ -32,7 +32,9 @@ public interface TweetPublishContract {
 
         void setContent(String content, boolean needSelectionEnd);
 
-        void setAbout(About about);
+        void setAbout(About about, boolean needCommit);
+
+        boolean needCommit();
 
         String[] getImages();
 
