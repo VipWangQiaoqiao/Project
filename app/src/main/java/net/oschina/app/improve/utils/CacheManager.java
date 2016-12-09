@@ -92,11 +92,13 @@ public final class CacheManager {
     }
 
     public static <T> T readListJson(Context context, String fileName, Class clx) {
+        if (clx == null) return null;
         Type type = getListType(clx);
         return readJson(context, fileName, type);
     }
 
     public static <T> T readJson(Context context, String fileName, Type clx) {
+        if (clx == null) return null;
         String path = context.getCacheDir() + "/" + fileName + ".json";
         File file = new File(path);
         if (!file.exists())
