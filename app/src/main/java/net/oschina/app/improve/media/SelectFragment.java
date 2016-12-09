@@ -143,7 +143,7 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
         if (mOption.getSelectCount() > 1 && mOption.getSelectedImages() != null) {
             List<String> images = mOption.getSelectedImages();
             for (String s : images) {
-                // check file exists
+                // checkShare file exists
                 if (s != null && new File(s).exists()) {
                     Image image = new Image();
                     image.setSelect(true);

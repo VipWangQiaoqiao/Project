@@ -104,7 +104,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
         // call progress
         runnable.onUploadImage(index, token);
 
-        // check done
+        // checkShare done
         if (index < 0 || index >= paths.length) {
             runnable.onUploadImageDone();
             return;
@@ -257,7 +257,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
     private boolean checkToCommit() {
         // 如果相关节点中定义了评论参数，那么将执行评论
         About about = model.getAbout();
-        if (about != null && about.check() && about.getCommitTweetId() > 0) {
+        if (about != null && about.checkShare() && about.getCommitTweetId() > 0) {
             OSChinaApi.pubTweetComment(about.getCommitTweetId(), model.getContent(), 0, new LopperResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

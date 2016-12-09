@@ -161,7 +161,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 final int surplusLen = MAX_TEXT_LENGTH - len;
                 // set the send icon state
                 setSendIconStatus(len > 0 && surplusLen >= 0, s.toString());
-                // check the indicator state
+                // checkShare the indicator state
                 if (surplusLen > 10) {
                     // hide
                     if (mIndicator.getVisibility() != View.INVISIBLE) {

@@ -368,9 +368,9 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                         File sourceFile = future.get();
 
                         BitmapFactory.Options options = BitmapUtil.createOptions();
-                        // First decode with inJustDecodeBounds=true to check dimensions
+                        // First decode with inJustDecodeBounds=true to checkShare dimensions
                         options.inJustDecodeBounds = true;
-                        // First decode with inJustDecodeBounds=true to check dimensions
+                        // First decode with inJustDecodeBounds=true to checkShare dimensions
                         BitmapFactory.decodeFile(sourceFile.getAbsolutePath(), options);
 
                         int width = options.outWidth;
