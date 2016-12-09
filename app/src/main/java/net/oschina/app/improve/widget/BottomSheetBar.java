@@ -115,6 +115,19 @@ public class BottomSheetBar implements View.OnClickListener {
         });
     }
 
+    public void hideSyncAction(){
+        mSyncToTweetView.setVisibility(View.GONE);
+        mTvSyncLabel.setText(null);
+    }
+
+    /**
+     * 默认显示的
+     */
+    public void showSyncAction(){
+        mSyncToTweetView.setVisibility(View.VISIBLE);
+        mTvSyncLabel.setText("转发到动弹");
+    }
+
     public void showEmoji() {
         mTvSyncLabel.setText(R.string.tweet_publish_title);
         mFaceView.setVisibility(View.VISIBLE);

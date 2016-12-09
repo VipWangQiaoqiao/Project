@@ -287,6 +287,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         });
 
         mDelegation.getBottomSheet().showEmoji();
+        mDelegation.getBottomSheet().hideSyncAction();
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
