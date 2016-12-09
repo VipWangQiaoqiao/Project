@@ -14,7 +14,9 @@ import android.util.Pair;
 import android.view.View;
 
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.UIHelper;
 
 import java.util.HashMap;
@@ -72,6 +74,22 @@ public class AssimilateUtils {
 
     private interface Action1 {
         void call(String str);
+    }
+
+    /**
+     * 通常使用的过滤逻辑
+     * @param context {@link Context}
+     * @param content Content String
+     * @return String
+     */
+    public static Spannable assimilate(Context context, String content){
+        if (TextUtils.isEmpty(content)) return null;
+        content = HTMLUtil.rollbackReplaceTag(content);
+        Spannable spannable = assimilateOnlyAtUser(context, content);
+        spannable = assimilateOnlyTag(context, spannable);
+        spannable = assimilateOnlyLink(context, spannable);
+        spannable = InputHelper.displayEmoji(context.getResources(), spannable);
+        return spannable;
     }
 
     /**

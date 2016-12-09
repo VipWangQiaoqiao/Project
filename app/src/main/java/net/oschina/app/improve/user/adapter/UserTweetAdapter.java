@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -34,6 +35,7 @@ import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -122,20 +124,16 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewDispatchCount.setVisibility(View.GONE);
         }
 
-        String content = "";
         if (!TextUtils.isEmpty(item.getContent())) {
-            content = item.getContent().replaceAll("[\n\\s]+", " ");
+            String content = item.getContent().replaceAll("[\n\\s]+", " ");
+            holder.mViewContent.setText(AssimilateUtils.assimilate(mContext, content));
+            holder.mViewContent.setMovementMethod(LinkMovementMethod.getInstance());
+            holder.mViewContent.setFocusable(false);
+            holder.mViewContent.setLongClickable(false);
         }
-        Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mContext, content);
-        spannable = AssimilateUtils.assimilateOnlyTag(mContext, spannable);
-        spannable = AssimilateUtils.assimilateOnlyLink(mContext, spannable);
-        spannable = InputHelper.displayEmoji(mContext.getResources(), spannable);
-        holder.mViewContent.setText(spannable);
-        holder.mViewContent.setMovementMethod(LinkMovementMethod.getInstance());
-        holder.mViewContent.setFocusable(false);
-        holder.mViewContent.setLongClickable(false);
 
-        if (item.getAudio() != null) {
+        /* - @hide - */
+        /*if (item.getAudio() != null) {
             if (mRecordBitmap == null) {
                 initRecordImg(mContext);
             }
@@ -146,7 +144,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewContent.append(spannable);
         } else {
             holder.mViewContent.setText(spannable);
-        }
+        }*/
 
         holder.mViewLikeState.setImageResource(item.isLiked() ? R.mipmap.ic_thumbup_actived : R.mipmap.ic_thumb_normal);
         holder.mViewLikeState.setTag(position);
@@ -161,22 +159,31 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mLayoutRef.setOnClickListener(this);
             holder.mViewDispatch.setVisibility(View.VISIBLE);
             holder.mViewDispatchCount.setVisibility(View.VISIBLE);
+
             About about = item.getAbout();
             holder.mLayoutRefImages.setImage(about.getImages());
 
-            if (about.getType() == OSChinaApi.COMMENT_TWEET){
+            if (about.getId() <= 0 || about.getType() <= 0){
                 holder.mViewRefTitle.setVisibility(View.GONE);
-                String aname = "@" + about.getTitle();
-                String cnt = about.getContent();
-                Spannable sp = new SpannableString(aname + ": " + cnt);
-                ForegroundColorSpan span = new ForegroundColorSpan(
-                        mContext.getResources().getColor(R.color.day_colorPrimary));
-                sp.setSpan(span, 0, aname.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                holder.mViewRefContent.setText(sp);
+                holder.mViewRefContent.setText("「抱歉，该内容不存在或已被删除」");
             }else {
-                holder.mViewRefTitle.setVisibility(View.VISIBLE);
-                holder.mViewRefTitle.setText(about.getTitle());
-                holder.mViewRefContent.setText(about.getContent());
+                if (about.getType() == OSChinaApi.COMMENT_TWEET){
+                    holder.mViewRefTitle.setVisibility(View.GONE);
+                    String aname = "@" + about.getTitle();
+                    String cnt = about.getContent();
+                    Spannable spannable = AssimilateUtils.assimilate(mContext, cnt);
+                    SpannableStringBuilder builder = new SpannableStringBuilder();
+                    builder.append(aname + ": ");
+                    builder.append(spannable);
+                    ForegroundColorSpan span = new ForegroundColorSpan(
+                            mContext.getResources().getColor(R.color.day_colorPrimary));
+                    builder.setSpan(span, 0, aname.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    holder.mViewRefContent.setText(builder);
+                }else {
+                    holder.mViewRefTitle.setVisibility(View.VISIBLE);
+                    holder.mViewRefTitle.setText(about.getTitle());
+                    holder.mViewRefContent.setText(about.getContent());
+                }
             }
         }else {
             holder.mLayoutRef.setVisibility(View.GONE);

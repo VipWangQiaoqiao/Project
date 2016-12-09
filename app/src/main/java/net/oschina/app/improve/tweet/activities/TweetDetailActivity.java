@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -50,6 +51,7 @@ import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -424,11 +426,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         }
         if (!TextUtils.isEmpty(tweet.getContent())) {
             String content = tweet.getContent().replaceAll("[\n\\s]+", " ");
-            Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(this, content);
-            spannable = AssimilateUtils.assimilateOnlyTag(this, spannable);
-            spannable = AssimilateUtils.assimilateOnlyLink(this, spannable);
-            spannable = InputHelper.displayEmoji(getResources(), spannable);
-            mContent.setText(spannable);
+            mContent.setText(AssimilateUtils.assimilate(this, content));
             mContent.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
@@ -438,21 +436,29 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         if (tweet.getAbout() != null){
             mLayoutRef.setVisibility(View.VISIBLE);
             About about = tweet.getAbout();
+            mLayoutRefImages.setImage(about.getImages());
 
-            if (about.getType() == OSChinaApi.COMMENT_TWEET){
+            if (about.getId() <= 0 || about.getType() <= 0){
                 mViewRefTitle.setVisibility(View.GONE);
-                mLayoutRefImages.setImage(about.getImages());
-                String aname = "@" + about.getTitle();
-                String cnt = about.getContent();
-                Spannable sp = new SpannableString(aname + ": " + cnt);
-                ForegroundColorSpan span = new ForegroundColorSpan(
-                        getResources().getColor(R.color.day_colorPrimary));
-                sp.setSpan(span, 0, aname.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                mViewRefContent.setText(sp);
+                mViewRefContent.setText("「抱歉，该内容不存在或已被删除」");
             }else {
-                mViewRefTitle.setVisibility(View.VISIBLE);
-                mViewRefTitle.setText(about.getTitle());
-                mViewRefContent.setText(about.getContent());
+                if (about.getType() == OSChinaApi.COMMENT_TWEET){
+                    mViewRefTitle.setVisibility(View.GONE);
+                    String aname = "@" + about.getTitle();
+                    String cnt = about.getContent();
+                    Spannable spannable = AssimilateUtils.assimilate(this, cnt);
+                    SpannableStringBuilder builder = new SpannableStringBuilder();
+                    builder.append(aname + ": ");
+                    builder.append(spannable);
+                    ForegroundColorSpan span = new ForegroundColorSpan(
+                            getResources().getColor(R.color.day_colorPrimary));
+                    builder.setSpan(span, 0, aname.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    mViewRefContent.setText(builder);
+                }else {
+                    mViewRefTitle.setVisibility(View.VISIBLE);
+                    mViewRefTitle.setText(about.getTitle());
+                    mViewRefContent.setText(about.getContent());
+                }
             }
         }else {
             mLayoutRef.setVisibility(View.GONE);
