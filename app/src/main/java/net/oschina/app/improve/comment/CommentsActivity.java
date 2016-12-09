@@ -297,10 +297,9 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
      */
     private void handleSyncTweet() {
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
-            About about = new About();
-            about.setId(mId);
-            about.setType(mType);
-            TweetPublishService.startActionPublish(CommentsActivity.this, mDelegation.getBottomSheet().getCommentText(), null, about);
+            TweetPublishService.startActionPublish(CommentsActivity.this,
+                    mDelegation.getBottomSheet().getCommentText(), null,
+                    About.buildShare(mId, mType));
         }
     }
 

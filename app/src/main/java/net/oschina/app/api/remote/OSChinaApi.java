@@ -1009,19 +1009,19 @@ public class OSChinaApi {
      * @param content     内容
      * @param imagesToken 图片token
      * @param audioToken  语音token
-     * @param about       相关节点，仅仅关注 {@link About#id}, {@link About#type}
+     * @param share       相关分享节点，仅仅关注 {@link About.Share#id}, {@link About.Share#type}
      * @param handler     回调
      */
-    public static void pubTweet(String content, String imagesToken, String audioToken, About about, AsyncHttpResponseHandler handler) {
+    public static void pubTweet(String content, String imagesToken, String audioToken, About.Share share, AsyncHttpResponseHandler handler) {
         if (TextUtils.isEmpty(content))
             throw new NullPointerException("content is not null.");
         RequestParams params = new RequestParams();
         params.put("content", content);
         params.put("images", imagesToken);
         params.put("audio", audioToken);
-        if (about != null && about.checkShare()) {
-            params.put("aboutId", about.getId());
-            params.put("aboutType", about.getType());
+        if (About.check(share)) {
+            params.put("aboutId", share.id);
+            params.put("aboutType", share.type);
         }
         post("action/apiv2/tweet", params, handler);
     }

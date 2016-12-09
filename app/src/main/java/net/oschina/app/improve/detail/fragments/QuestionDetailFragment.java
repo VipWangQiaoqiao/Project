@@ -216,10 +216,11 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     @Override
     public void toSendCommentOk(Comment comment) {
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
-            About about = new About();
             QuestionDetail detail = mOperator.getData();
-            about.setId(detail.getId());
-            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+            if (detail == null) return;
+            TweetPublishService.startActionPublish(getActivity(),
+                    mDelegation.getBottomSheet().getCommentText(), null,
+                    About.buildShare(detail.getId(), OSChinaApi.COMMENT_QUESTION));
         }
         mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
         mDelegation.getBottomSheet().getEditText().setText("");

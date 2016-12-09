@@ -47,7 +47,7 @@ public class TweetPublishActivity extends BaseBackActivity {
         show(context, view, defaultContent, null);
     }
 
-    public static void show(Context context, View view, String defaultContent, About about) {
+    public static void show(Context context, View view, String defaultContent, About.Share share) {
         int[] location = new int[]{0, 0};
         int[] size = new int[]{0, 0};
 
@@ -57,12 +57,12 @@ public class TweetPublishActivity extends BaseBackActivity {
             size[1] = view.getHeight();
         }
 
-        show(context, location, size, defaultContent, about);
+        show(context, location, size, defaultContent, share);
     }
 
 
     public static void show(Context context, @Size(2) int[] viewLocationOnScreen,
-                            @Size(2) int[] viewSize, String defaultContent, About about) {
+                            @Size(2) int[] viewSize, String defaultContent, About.Share share) {
         // Check login before show
         if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(context);
@@ -80,8 +80,8 @@ public class TweetPublishActivity extends BaseBackActivity {
         if (defaultContent != null) {
             intent.putExtra("defaultContent", defaultContent);
         }
-        if (about != null) {
-            intent.putExtra("about", about);
+        if (share != null) {
+            intent.putExtra("aboutShare", share);
         }
 
         context.startActivity(intent);

@@ -176,7 +176,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
      * 发布动弹
      */
     private void publish() {
-        OSChinaApi.pubTweet(model.getContent(), model.getCacheImagesToken(), null, model.getAbout(), new LopperResponseHandler() {
+        OSChinaApi.pubTweet(model.getContent(), model.getCacheImagesToken(), null, model.getAboutShare(), new LopperResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 String error = "";
@@ -256,9 +256,9 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
 
     private boolean checkToCommit() {
         // 如果相关节点中定义了评论参数，那么将执行评论
-        About about = model.getAbout();
-        if (about != null && about.checkShare() && about.getCommitTweetId() > 0) {
-            OSChinaApi.pubTweetComment(about.getCommitTweetId(), model.getContent(), 0, new LopperResponseHandler() {
+        About.Share share = model.getAboutShare();
+        if (About.check(share) && share.commitTweetId > 0) {
+            OSChinaApi.pubTweetComment(share.commitTweetId, model.getContent(), 0, new LopperResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 }

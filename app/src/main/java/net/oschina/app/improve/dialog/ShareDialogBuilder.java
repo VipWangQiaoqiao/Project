@@ -50,7 +50,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
         DialogInterface.OnCancelListener, DialogInterface.OnDismissListener,
         OpenBuilder.Callback {
     private Share mShare;
-    private About mAbout;
+    private About.Share mAboutShare;
     private Activity mActivity;
     private AlertDialog mAlertDialog;
     private ProgressDialog mDialog;
@@ -85,7 +85,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
         shareActions.add(new ShareItem(R.mipmap.ic_login_3party_qq, R.string.platform_qq));
 
         //4.动弹
-        if (mAbout != null && mAbout.checkShare()) {
+        if (About.check(mAboutShare)) {
             shareActions.add(new ShareItem(R.mipmap.ic_action_tweet, R.string.platform_tweet));
         }
 
@@ -206,8 +206,8 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                 break;
             //转发到动弹
             case R.mipmap.ic_action_tweet:
-                if (mAbout != null && mAbout.checkShare())
-                    TweetPublishActivity.show(getContext(), null, null, mAbout);
+                if (About.check(mAboutShare))
+                    TweetPublishActivity.show(getContext(), null, null, mAboutShare);
                 cancelLoading();
                 break;
             //在浏览器中打开
@@ -377,12 +377,10 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
             builder.mShare = share;
 
             if (id > 0 && type >= 0) {
-                About about = new About();
-                about.setId(id);
-                about.setType(type);
-                about.setTitle(title);
-                about.setContent(content);
-                builder.mAbout = about;
+                About.Share aboutShare = About.buildShare(id, type);
+                aboutShare.title = title;
+                aboutShare.content = content;
+                builder.mAboutShare = aboutShare;
             }
 
             builder.setView(R.layout.dialog_share_main);

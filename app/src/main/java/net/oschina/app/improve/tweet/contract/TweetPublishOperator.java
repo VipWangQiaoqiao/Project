@@ -28,19 +28,19 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     private final static String SHARE_FILE_NAME = TweetPublishFragment.class.getName();
     private final static String SHARE_VALUES_CONTENT = "content";
     private final static String SHARE_VALUES_IMAGES = "images";
-    private final static String SHARE_VALUES_ABOUT = "images";
+    private final static String SHARE_VALUES_ABOUT = "about";
     private final static String DEFAULT_PRE = "default";
     private TweetPublishContract.View mView;
     private String mDefaultContent;
     private String[] mDefaultImages;
-    private About mAbout;
+    private About.Share mAboutShare;
 
     @Override
-    public void setDataView(TweetPublishContract.View view, String defaultContent, String[] defaultImages, About about) {
+    public void setDataView(TweetPublishContract.View view, String defaultContent, String[] defaultImages, About.Share share) {
         mView = view;
         mDefaultContent = defaultContent;
         mDefaultImages = defaultImages;
-        mAbout = about;
+        mAboutShare = share;
     }
 
     @Override
@@ -68,8 +68,8 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         }
 
         // Check con't commit to tweet
-        if (mAbout != null && mAbout.checkShare() && mAbout.getCommitTweetId() > 0 && !mView.needCommit()) {
-            mAbout.setCommitTweetId(0);
+        if (About.check(mAboutShare) && mAboutShare.commitTweetId > 0 && !mView.needCommit()) {
+            mAboutShare.commitTweetId = 0;
         }
 
 
@@ -77,7 +77,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
 
         // To service publish
         content = content.replaceAll("[\n\\s]+", " ");
-        TweetPublishService.startActionPublish(context, content, paths, mAbout);
+        TweetPublishService.startActionPublish(context, content, paths, mAboutShare);
 
         // Toast
         AppContext.showToast(R.string.tweet_publishing_toast);
@@ -110,8 +110,8 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
                 mView.setImages(mDefaultImages);
 
             boolean haveAbout = false;
-            if (mAbout != null && mAbout.checkShare()) {
-                mView.setAbout(mAbout, mAbout.getCommitTweetId() > 0);
+            if (About.check(mAboutShare)) {
+                mView.setAbout(mAboutShare, mAboutShare.commitTweetId > 0);
                 haveAbout = true;
             }
 
@@ -135,8 +135,8 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         if (mDefaultImages != null && mDefaultImages.length > 0) {
             outState.putStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES, mDefaultImages);
         }
-        if (mAbout != null && mAbout.checkShare()) {
-            outState.putSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT, mAbout);
+        if (About.check(mAboutShare)) {
+            outState.putSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT, mAboutShare);
         }
     }
 
@@ -153,9 +153,9 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         // Read default
         mDefaultContent = savedInstanceState.getString(DEFAULT_PRE + SHARE_VALUES_CONTENT, null);
         mDefaultImages = savedInstanceState.getStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES);
-        mAbout = (About) savedInstanceState.getSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT);
-        if (mAbout != null && mAbout.checkShare())
-            mView.setAbout(mAbout, mAbout.getCommitTweetId() > 0);
+        mAboutShare = (About.Share) savedInstanceState.getSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT);
+        if (About.check(mAboutShare))
+            mView.setAbout(mAboutShare, mAboutShare.commitTweetId > 0);
     }
 
     private void clearAndFinish(Context context) {
@@ -190,6 +190,6 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     private boolean isUseXmlCache() {
         return TextUtils.isEmpty(mDefaultContent)
                 && (mDefaultImages == null || mDefaultImages.length == 0)
-                && (mAbout == null || !mAbout.checkShare());
+                && (About.check(mAboutShare));
     }
 }
