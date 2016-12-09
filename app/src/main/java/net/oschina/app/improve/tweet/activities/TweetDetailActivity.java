@@ -9,7 +9,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -33,7 +32,6 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
@@ -51,7 +49,6 @@ import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
-import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -209,10 +206,9 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 if (mDelegation.getBottomSheet().isSyncToTweet()) {
                     Tweet tempTweet = tweet;
                     if (tempTweet == null) return;
-                    About about = new About();
-                    about.setId(tweet.getId());
                     TweetPublishService.startActionPublish(TweetDetailActivity.this
-                            , mDelegation.getBottomSheet().getCommentText(), null, about);
+                            , mDelegation.getBottomSheet().getCommentText(), null,
+                            About.buildShare(tempTweet.getId(), OSChinaApi.COMMENT_TWEET));
                 }
 
                 mViewInput.setHint("添加评论");
@@ -438,12 +434,12 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             About about = tweet.getAbout();
             mLayoutRefImages.setImage(about.getImages());
 
-            if (!About.check(about)){
+            if (!About.check(about)) {
                 mViewRefTitle.setVisibility(View.VISIBLE);
                 mViewRefTitle.setText("不存在或已删除的内容");
                 mViewRefContent.setText("抱歉，该内容不存在或已被删除");
-            }else {
-                if (about.getType() == OSChinaApi.COMMENT_TWEET){
+            } else {
+                if (about.getType() == OSChinaApi.COMMENT_TWEET) {
                     mViewRefTitle.setVisibility(View.GONE);
                     String aname = "@" + about.getTitle();
                     String cnt = about.getContent();
@@ -455,7 +451,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                             getResources().getColor(R.color.day_colorPrimary));
                     builder.setSpan(span, 0, aname.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                     mViewRefContent.setText(builder);
-                }else {
+                } else {
                     mViewRefTitle.setVisibility(View.VISIBLE);
                     mViewRefTitle.setText(about.getTitle());
                     mViewRefContent.setText(about.getContent());
@@ -537,20 +533,18 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         if (tweet == null || tweet.getId() <= 0) return;
 
         String content = null;
-        About about;
+        About.Share share;
         if (tweet.getAbout() == null) {
-            about = new About();
-            about.setId(tweet.getId());
-            about.setTitle(tweet.getAuthor().getName());
-            about.setContent(tweet.getContent());
-            about.setType(OSChinaApi.CATALOG_TWEET);
+            share = About.buildShare(tweet.getId(), OSChinaApi.CATALOG_TWEET);
+            share.title = tweet.getAuthor().getName();
+            share.content = tweet.getContent();
         } else {
-            about = tweet.getAbout();
+            share = About.buildShare(tweet.getAbout());
             content = "//@" + tweet.getAuthor().getName() + " :" + tweet.getContent();
             content = AssimilateUtils.clearHtmlTag(content).toString();
         }
-        about.setCommitTweetId(tweet.getId());
-        TweetPublishActivity.show(this, null, content, about);
+        share.commitTweetId = tweet.getId();
+        TweetPublishActivity.show(this, null, content, share);
     }
 
     private boolean checkLogin() {

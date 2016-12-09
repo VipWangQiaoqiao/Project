@@ -339,14 +339,9 @@ public class BlogDetailFragment
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
             BlogDetail detail = mOperator.getData();
             if (detail == null) return;
-            About about = new About();
-            about.setId(detail.getId());
-            about.setType(OSChinaApi.COMMENT_BLOG);
-            about.setTitle(detail.getTitle());
-            about.setHref(detail.getHref());
-            about.setCommentCount(detail.getCommentCount());
-            about.setViewCount(detail.getViewCount());
-            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+            TweetPublishService.startActionPublish(getActivity(),
+                    mDelegation.getBottomSheet().getCommentText(), null,
+                    About.buildShare(detail.getId(), OSChinaApi.COMMENT_BLOG));
         }
         Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
         mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));

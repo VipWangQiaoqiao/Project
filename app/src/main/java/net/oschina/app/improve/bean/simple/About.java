@@ -160,7 +160,7 @@ public class About implements Serializable {
      */
     public static boolean check(About about) {
         return about != null
-                && !(about.id <= 0 && about.getType() <= 0 && TextUtils.isEmpty(about.href));
+                && !(about.id <= 0 && about.type <= 0 && TextUtils.isEmpty(about.href));
     }
 
     public static Share buildShare(About about) {

@@ -32,7 +32,6 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
-import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
@@ -58,21 +57,21 @@ import cz.msebera.android.httpclient.Header;
 public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         implements BaseRecyclerAdapter.OnItemLongClickListener {
 
-    public static final int CATALOG_NEW     = 0X0001;
-    public static final int CATALOG_HOT     = 0X0002;
-    public static final int CATALOG_MYSELF  = 0X0003;
+    public static final int CATALOG_NEW = 0X0001;
+    public static final int CATALOG_HOT = 0X0002;
+    public static final int CATALOG_MYSELF = 0X0003;
     public static final int CATALOG_FRIENDS = 0X0004;
-    public static final int CATALOG_TAG     = 0X0005;
+    public static final int CATALOG_TAG = 0X0005;
 
-    public static final String CACHE_NEW_TWEET      = "cache_new_tweet";
-    public static final String CACHE_HOT_TWEET      = "cache_hot_tweet";
-    public static final String CACHE_USER_TWEET     = "cache_user_tweet";
-    public static final String CACHE_USER_FRIEND    = "cache_user_friend";
-    public static final String CACHE_USER_TAG       = "cache_user_tag";
+    public static final String CACHE_NEW_TWEET = "cache_new_tweet";
+    public static final String CACHE_HOT_TWEET = "cache_hot_tweet";
+    public static final String CACHE_USER_TWEET = "cache_user_tweet";
+    public static final String CACHE_USER_FRIEND = "cache_user_friend";
+    public static final String CACHE_USER_TAG = "cache_user_tag";
 
-    public static final String BUNDLE_KEY_LOGIN_USER_ID     = "BUNDLE_KEY_LOGIN_USER_ID";
-    public static final String BUNDLE_KEY_TAG               = "BUNDLE_KEY_LOGIN_USER_TAG";
-    public static final String BUNDLE_KEY_REQUEST_CATALOG   = "BUNDLE_KEY_REQUEST_CATALOG";
+    public static final String BUNDLE_KEY_LOGIN_USER_ID = "BUNDLE_KEY_LOGIN_USER_ID";
+    public static final String BUNDLE_KEY_TAG = "BUNDLE_KEY_LOGIN_USER_TAG";
+    public static final String BUNDLE_KEY_REQUEST_CATALOG = "BUNDLE_KEY_REQUEST_CATALOG";
 
     public int mReqCatalog;//请求类型
     public long mLoginUserId;
@@ -88,7 +87,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         return fragment;
     }
 
-    public static Fragment instantiate(String tag){
+    public static Fragment instantiate(String tag) {
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_KEY_TAG, tag);
         bundle.putInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_TAG);
@@ -109,7 +108,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
         mReqCatalog = bundle.getInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_NEW);
-        switch (mReqCatalog){
+        switch (mReqCatalog) {
             case CATALOG_FRIENDS:
             case CATALOG_MYSELF:
                 mLoginUserId = bundle.getLong(BUNDLE_KEY_LOGIN_USER_ID, AccountHelper.getUserId());
@@ -186,41 +185,42 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
 
         DialogHelper.getSelectDialog(getContext(), os, getString(R.string.cancle),
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int index) {
-                switch (index) {
-                    case 0:
-                        TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getContent()));
-                        break;
-                    case 1:
-                        if (os.length != 2) {
-                            DialogHelper.getConfirmDialog(getActivity(), "是否删除该动弹?",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            OSChinaApi.deleteTweet(tweet.getId(), new DeleteHandler(position));
-                                        }
-                                    }).show();
-                            break;
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int index) {
+                        switch (index) {
+                            case 0:
+                                TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getContent()));
+                                break;
+                            case 1:
+                                if (os.length != 2) {
+                                    DialogHelper.getConfirmDialog(getActivity(), "是否删除该动弹?",
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    OSChinaApi.deleteTweet(tweet.getId(), new DeleteHandler(position));
+                                                }
+                                            }).show();
+                                    break;
+                                }
+                            case 2:
+                                String content = null;
+                                About.Share share;
+                                if (tweet.getAbout() == null) {
+                                    share = About.buildShare(tweet.getId(), OSChinaApi.CATALOG_TWEET);
+                                    share.title = tweet.getAuthor().getName();
+                                    share.content = tweet.getContent();
+                                } else {
+                                    share = About.buildShare(tweet.getAbout());
+                                    content = "//@" + tweet.getAuthor().getName() + " :" + tweet.getContent();
+                                    content = AssimilateUtils.clearHtmlTag(content).toString();
+                                }
+                                share.commitTweetId = tweet.getId();
+                                TweetPublishActivity.show(getContext(), null, content, share);
+
+
                         }
-                    case 2:
-                        String content = null;
-                        About about = null;
-                        if (tweet.getAbout() == null){
-                            about = new About();
-                            about.setId(tweet.getId());
-                            about.setTitle(tweet.getAuthor().getName());
-                            about.setContent(tweet.getContent());
-                            about.setType(OSChinaApi.CATALOG_TWEET);
-                        } else {
-                            about = tweet.getAbout();
-                            content = "//@" + tweet.getAuthor().getName() + " :" + tweet.getContent();
-                            content = AssimilateUtils.clearHtmlTag(content).toString();
-                        }
-                        TweetPublishActivity.show(getContext(), null, content, about);
-                }
-            }
-        }).show();
+                    }
+                }).show();
     }
 
     private class LoginReceiver extends BroadcastReceiver {
@@ -275,14 +275,14 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        if (mReqCatalog == CATALOG_TAG){
+        if (mReqCatalog == CATALOG_TAG) {
             inflater.inflate(R.menu.pub_topic_menu, menu);
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.public_menu_send:
                 TweetPublishActivity.show(getContext(), null, "#" + tag + "#");
                 break;

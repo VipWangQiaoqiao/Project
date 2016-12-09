@@ -233,14 +233,9 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
             NewsDetail detail = mOperator.getData();
             if (detail == null) return;
-            About about = new About();
-            about.setId(detail.getId());
-            about.setType(OSChinaApi.COMMENT_NEWS);
-            about.setTitle(detail.getTitle());
-            about.setHref(detail.getHref());
-            about.setViewCount(detail.getViewCount());
-            about.setCommentCount(detail.getCommentCount());
-            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
+            TweetPublishService.startActionPublish(getActivity(),
+                    mDelegation.getBottomSheet().getCommentText(), null,
+                    About.buildShare(detail.getId(), OSChinaApi.COMMENT_NEWS));
         }
         Toast.makeText(getContext(), getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
         mDelegation.getCommentText().setHint(getString(R.string.add_comment_hint));
