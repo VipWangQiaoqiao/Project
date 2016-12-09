@@ -58,6 +58,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         mErrorLayout = (EmptyLayout) root.findViewById(R.id.error_layout);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initData() {
         mBean = new PageBean<>();
@@ -121,7 +122,10 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             mRefreshLayout.setVisibility(View.GONE);
             mBean = new PageBean<>();
-            List<T> items = isNeedCache() ? (List<T>) CacheManager.readFromJson(getActivity(), CACHE_NAME, getCacheClass()) : null;
+
+            List<T> items = isNeedCache() ? (List<T>) CacheManager.readListJson(getActivity(), CACHE_NAME,
+                    getCacheClass()) : null;
+
             mBean.setItems(items);
             //if is the first loading
             if (items == null) {
@@ -227,8 +231,8 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         } else {
             mErrorLayout.setErrorType(
                     isNeedEmptyView()
-                    ? EmptyLayout.NODATA
-                    : EmptyLayout.HIDE_LAYOUT);
+                            ? EmptyLayout.NODATA
+                            : EmptyLayout.HIDE_LAYOUT);
         }
     }
 
