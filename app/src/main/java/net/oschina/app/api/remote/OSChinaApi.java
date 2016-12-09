@@ -1019,7 +1019,7 @@ public class OSChinaApi {
         params.put("content", content);
         params.put("images", imagesToken);
         params.put("audio", audioToken);
-        if (about != null && about.check()) {
+        if (about != null && about.checkShare()) {
             params.put("aboutId", about.getId());
             params.put("aboutType", about.getType());
         }
@@ -1087,7 +1087,7 @@ public class OSChinaApi {
      * @param replyId  回复的用户id
      * @param handler  回调
      */
-    public static void pubTweetComment(long sourceId, String content, long replyId, TextHttpResponseHandler handler) {
+    public static void pubTweetComment(long sourceId, String content, long replyId, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
         params.put("content", content);

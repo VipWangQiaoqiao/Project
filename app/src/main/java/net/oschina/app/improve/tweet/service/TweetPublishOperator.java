@@ -9,6 +9,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.resource.ImageResource;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.utils.PicturesCompressor;
 import net.oschina.common.utils.BitmapUtil;
 
@@ -103,7 +104,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
         // call progress
         runnable.onUploadImage(index, token);
 
-        // check done
+        // checkShare done
         if (index < 0 || index >= paths.length) {
             runnable.onUploadImageDone();
             return;
@@ -214,11 +215,6 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                     onFailure(statusCode, headers, responseString, null);
                 }
             }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
         });
     }
 
@@ -247,12 +243,39 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
             // hide the notify
             service.notifyCancel(notificationId);
         }
-        stop();
+
+        // Check the about commit id
+        if (!checkToCommit())
+            stop();
     }
 
     private void setError(int resId, Object... values) {
         notifyMsg(true, resId, values);
         stop();
+    }
+
+    private boolean checkToCommit() {
+        // 如果相关节点中定义了评论参数，那么将执行评论
+        About about = model.getAbout();
+        if (about != null && about.checkShare() && about.getCommitTweetId() > 0) {
+            OSChinaApi.pubTweetComment(about.getCommitTweetId(), model.getContent(), 0, new LopperResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                }
+
+                @Override
+                public void onFinish() {
+                    super.onFinish();
+                    stop();
+                }
+            });
+            return true;
+        }
+        return false;
     }
 
 

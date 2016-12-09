@@ -67,6 +67,12 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
             return;
         }
 
+        // Check con't commit to tweet
+        if (mAbout != null && mAbout.checkShare() && mAbout.getCommitTweetId() > 0 && !mView.needCommit()) {
+            mAbout.setCommitTweetId(0);
+        }
+
+
         final List<String> paths = CollectionUtil.toArrayList(mView.getImages());
 
         // To service publish
@@ -94,18 +100,23 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
             String content = sharedPreferences.getString(SHARE_VALUES_CONTENT, null);
             Set<String> set = sharedPreferences.getStringSet(SHARE_VALUES_IMAGES, null);
             if (content != null) {
-                mView.setContent(content);
+                mView.setContent(content, false);
             }
             if (set != null && set.size() > 0) {
                 mView.setImages(CollectionUtil.toArray(set, String.class));
             }
         } else {
-            if (!TextUtils.isEmpty(mDefaultContent))
-                mView.setContent(mDefaultContent);
             if (mDefaultImages != null && mDefaultImages.length > 0)
                 mView.setImages(mDefaultImages);
-            if (mAbout != null && mAbout.check())
-                mView.setAbout(mAbout);
+
+            boolean haveAbout = false;
+            if (mAbout != null && mAbout.checkShare()) {
+                mView.setAbout(mAbout, mAbout.getCommitTweetId() > 0);
+                haveAbout = true;
+            }
+
+            if (!TextUtils.isEmpty(mDefaultContent))
+                mView.setContent(mDefaultContent, !haveAbout);
         }
     }
 
@@ -124,7 +135,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         if (mDefaultImages != null && mDefaultImages.length > 0) {
             outState.putStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES, mDefaultImages);
         }
-        if (mAbout != null && mAbout.check()) {
+        if (mAbout != null && mAbout.checkShare()) {
             outState.putSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT, mAbout);
         }
     }
@@ -134,7 +145,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         String content = savedInstanceState.getString(SHARE_VALUES_CONTENT, null);
         String[] images = savedInstanceState.getStringArray(SHARE_VALUES_IMAGES);
         if (content != null) {
-            mView.setContent(content);
+            mView.setContent(content, false);
         }
         if (images != null && images.length > 0) {
             mView.setImages(images);
@@ -143,8 +154,8 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         mDefaultContent = savedInstanceState.getString(DEFAULT_PRE + SHARE_VALUES_CONTENT, null);
         mDefaultImages = savedInstanceState.getStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES);
         mAbout = (About) savedInstanceState.getSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT);
-        if (mAbout != null && mAbout.check())
-            mView.setAbout(mAbout);
+        if (mAbout != null && mAbout.checkShare())
+            mView.setAbout(mAbout, mAbout.getCommitTweetId() > 0);
     }
 
     private void clearAndFinish(Context context) {
@@ -179,6 +190,6 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     private boolean isUseXmlCache() {
         return TextUtils.isEmpty(mDefaultContent)
                 && (mDefaultImages == null || mDefaultImages.length == 0)
-                && (mAbout == null || !mAbout.check());
+                && (mAbout == null || !mAbout.checkShare());
     }
 }

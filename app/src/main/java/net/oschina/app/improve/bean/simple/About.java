@@ -1,5 +1,9 @@
 package net.oschina.app.improve.bean.simple;
 
+import android.text.TextUtils;
+
+import com.google.gson.annotations.Expose;
+
 import net.oschina.app.improve.bean.Tweet;
 
 import java.io.Serializable;
@@ -20,6 +24,8 @@ public class About implements Serializable {
     private int commentCount;
     private int transmitCount;
     private Tweet.Image[] images;
+    @Expose
+    private long commitTweetId;
 
     public long getId() {
         return id;
@@ -93,11 +99,15 @@ public class About implements Serializable {
         this.transmitCount = transmitCount;
     }
 
-    public boolean check() {
-        return id > 0 && type >= 0;
+    public long getCommitTweetId() {
+        return commitTweetId;
     }
 
-    public static class Statistics implements Serializable{
+    public void setCommitTweetId(long commitTweetId) {
+        this.commitTweetId = commitTweetId;
+    }
+
+    public static class Statistics implements Serializable {
         private int comment;
         private int view;
         private int transmit;
@@ -140,5 +150,64 @@ public class About implements Serializable {
                 ", transmitCount=" + transmitCount +
                 ", images=" + Arrays.toString(images) +
                 '}';
+    }
+
+    /**
+     * 检查一个About节点是否有效
+     *
+     * @param about About
+     * @return True 则有效
+     */
+    public static boolean check(About about) {
+        return about != null
+                && !(about.id <= 0 && about.getType() <= 0 && TextUtils.isEmpty(about.href));
+    }
+
+    public static Share buildShare(About about) {
+        Share share = new Share();
+        share.id = about.id;
+        share.type = about.type;
+        share.title = about.title;
+        share.content = about.content;
+        return share;
+    }
+
+    public static Share buildShare(About about, long commitTweetId) {
+        Share share = buildShare(about);
+        share.commitTweetId = about.commitTweetId;
+        return share;
+    }
+
+    public static Share buildShare(long id, int type) {
+        Share share = new Share();
+        share.id = id;
+        share.type = type;
+        return share;
+    }
+
+    /**
+     * 动弹分享节点
+     */
+    public static class Share {
+        public long id;
+        public int type;
+        public long commitTweetId;
+        public String title;
+        public String content;
+    }
+
+    /**
+     * 检查About节点
+     *
+     * @param share Share
+     * @return 返回分享节点是否正确
+     */
+    public static boolean checkShare(Share share) {
+        return share != null && share.id > 0 && share.type >= 0;
+    }
+
+    @Deprecated
+    public boolean checkShare() {
+        return id > 0 && type >= 0;
     }
 }

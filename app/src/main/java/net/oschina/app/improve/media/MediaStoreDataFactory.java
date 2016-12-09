@@ -91,7 +91,7 @@ public class MediaStoreDataFactory implements LoaderManager.LoaderCallbacks<Curs
             callDataRemoved(source);
             source.clear();
         } else {
-            // check remove
+            // checkShare remove
             List<Image> removes = new ArrayList<>();
             for (Image image : source) {
                 if (!changes.contains(image))
@@ -102,7 +102,7 @@ public class MediaStoreDataFactory implements LoaderManager.LoaderCallbacks<Curs
                 callDataRemoved(removes);
             }
 
-            // check add
+            // checkShare add
             List<Image> adds = new ArrayList<>();
             for (Image image : changes) {
                 if (!source.contains(image))

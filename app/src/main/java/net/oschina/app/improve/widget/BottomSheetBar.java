@@ -1,7 +1,6 @@
 package net.oschina.app.improve.widget;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -77,9 +76,9 @@ public class BottomSheetBar implements View.OnClickListener {
         mBtnCommit.setEnabled(false);
 
         //mDialog = new Dialog(mContext, R.style.Comment_Dialog);
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext,R.style.share_dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.share_dialog);
         builder.setView(mRootView);
-        mDialog  = builder.create();
+        mDialog = builder.create();
         Window window = mDialog.getWindow();
 
         if (window != null) {
@@ -95,14 +94,6 @@ public class BottomSheetBar implements View.OnClickListener {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 mFrameLayout.setVisibility(View.GONE);
-            }
-        });
-
-        mRootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TDevice.closeKeyboard(mEditText);
-                dismiss();
             }
         });
 
