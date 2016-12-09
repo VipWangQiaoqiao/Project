@@ -3,6 +3,7 @@ package net.oschina.app.improve.detail.fragments;
 import android.content.Context;
 import android.support.annotation.IdRes;
 import android.support.v4.widget.NestedScrollView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
