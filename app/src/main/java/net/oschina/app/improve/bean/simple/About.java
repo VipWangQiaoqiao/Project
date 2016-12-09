@@ -188,7 +188,7 @@ public class About implements Serializable {
     /**
      * 动弹分享节点
      */
-    public static class Share {
+    public static class Share implements Serializable {
         public long id;
         public int type;
         public long commitTweetId;
@@ -202,7 +202,7 @@ public class About implements Serializable {
      * @param share Share
      * @return 返回分享节点是否正确
      */
-    public static boolean checkShare(Share share) {
+    public static boolean check(Share share) {
         return share != null && share.id > 0 && share.type >= 0;
     }
 

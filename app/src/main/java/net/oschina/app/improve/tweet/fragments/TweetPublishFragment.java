@@ -74,14 +74,14 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         this.mOperator = new TweetPublishOperator();
         String defaultContent = null;
         String[] paths = null;
-        About about = null;
+        About.Share share = null;
         Bundle bundle = getArguments();
         if (bundle != null) {
             defaultContent = bundle.getString("defaultContent");
             paths = bundle.getStringArray("defaultImages");
-            about = (About) bundle.getSerializable("about");
+            share = (About.Share) bundle.getSerializable("aboutShare");
         }
-        this.mOperator.setDataView(this, defaultContent, paths, about);
+        this.mOperator.setDataView(this, defaultContent, paths, share);
 
         super.onAttach(context);
     }
@@ -367,16 +367,16 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void setAbout(About about, boolean needCommit) {
-        if (TextUtils.isEmpty(about.getTitle()) && TextUtils.isEmpty(about.getContent()))
+    public void setAbout(About.Share share, boolean needCommit) {
+        if (TextUtils.isEmpty(share.title) && TextUtils.isEmpty(share.content))
             return;
         // Change the layout visibility
         mLayImages.setVisibility(View.GONE);
         setVisibility(R.id.lay_about);
         // Set title and content
-        ((TextView) findView(R.id.txt_about_title)).setText(about.getType() == OSChinaApi.COMMENT_TWEET ?
-                "@" + about.getTitle() : about.getTitle());
-        ((TextView) findView(R.id.txt_about_content)).setText(about.getContent());
+        ((TextView) findView(R.id.txt_about_title)).setText(share.type == OSChinaApi.COMMENT_TWEET ?
+                "@" + share.title : share.title);
+        ((TextView) findView(R.id.txt_about_content)).setText(share.content);
         findView(R.id.iv_picture).setEnabled(false);
 
         if (needCommit)

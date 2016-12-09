@@ -69,9 +69,9 @@ public class TweetPublishService extends Service implements Contract.IService {
      * 发起动弹发布服务
      * <p>
      * 如果发布的动弹绑定到相关资讯等，则About节点不为NULL
-     * 仅仅关注：{@link About#id}, {@link About#type}} {@link About#commitTweetId}
+     * 仅仅关注：{@link About.Share#id}, {@link About.Share#type}} {@link About.Share#commitTweetId}
      */
-    public static void startActionPublish(Context context, String content, List<String> images, About about) {
+    public static void startActionPublish(Context context, String content, List<String> images, About.Share aboutShare) {
         Intent intent = new Intent(context, TweetPublishService.class);
         intent.setAction(ACTION_PUBLISH);
         intent.putExtra(EXTRA_CONTENT, content);
@@ -80,8 +80,8 @@ public class TweetPublishService extends Service implements Contract.IService {
             images.toArray(pubImages);
             intent.putExtra(EXTRA_IMAGES, pubImages);
         }
-        if (about != null && about.checkShare()) {
-            intent.putExtra(EXTRA_ABOUT, about);
+        if (About.check(aboutShare)) {
+            intent.putExtra(EXTRA_ABOUT, aboutShare);
         }
         context.startService(intent);
     }
@@ -206,7 +206,7 @@ public class TweetPublishService extends Service implements Contract.IService {
             if (ACTION_PUBLISH.equals(action)) {
                 final String content = intent.getStringExtra(EXTRA_CONTENT);
                 final String[] images = intent.getStringArrayExtra(EXTRA_IMAGES);
-                final About about = (About) intent.getSerializableExtra(EXTRA_ABOUT);
+                final About.Share about = (About.Share) intent.getSerializableExtra(EXTRA_ABOUT);
                 handleActionPublish(content, images, about, startId);
             } else {
                 if (ACTION_CONTINUE.equals(action)) {
@@ -230,8 +230,8 @@ public class TweetPublishService extends Service implements Contract.IService {
     /**
      * 发布动弹,在后台服务中进行
      */
-    private void handleActionPublish(String content, String[] images, About about, int startId) {
-        TweetPublishModel model = new TweetPublishModel(content, images, about);
+    private void handleActionPublish(String content, String[] images, About.Share share, int startId) {
+        TweetPublishModel model = new TweetPublishModel(content, images, share);
         TweetPublishCache.save(getApplicationContext(), model.getId(), model);
         Contract.IOperator operator = new TweetPublishOperator(model, this, startId);
         operator.run();
