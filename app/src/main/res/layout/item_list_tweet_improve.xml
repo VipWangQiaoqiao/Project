@@ -42,7 +42,7 @@
                 android:lines="1"
                 tools:text="Large Text" />
 
-            <net.oschina.app.widget.TweetTextView
+            <TextView
                 android:id="@+id/tweet_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,8 +80,6 @@
                     android:lineSpacingMultiplier="1.1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
-                    android:ellipsize="end"
                     tools:text="Python爬虫使用Selenium+PhantomJS抓取Ajax和动态HTML内容"/>
 
                 <TextView
@@ -91,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingMultiplier="1.2"
-                    android:maxLines="2"
+                    android:maxLines="3"
                     android:ellipsize="end"
                     tools:text="生产环境MySQL快速备份工具XtraBackup使用案例MySQL 的备份有很多种方式，最常用的应该是MySQLdump了，将数据库导出一个 sql文件，还原的时候source db.sql 就欢快的执行了。小伙伴愉快的布上一个shell脚本，配上…"/>
 
@@ -101,20 +99,20 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:visibility="gone"
-                    app:horizontalSpace="@dimen/lay_4"
-                    app:verticalSpace="@dimen/lay_4" />
+                    app:horizontalSpace="4dp"
+                    app:verticalSpace="4dp" />
             </LinearLayout>
 
             <net.oschina.app.improve.widget.TweetPicturesLayout
                 android:id="@+id/fl_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/lay_48"
+                android:layout_marginRight="48dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="@dimen/lay_8"
                 android:visibility="gone"
-                app:horizontalSpace="@dimen/lay_4"
-                app:verticalSpace="@dimen/lay_4" />
+                app:horizontalSpace="4dp"
+                app:verticalSpace="4dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

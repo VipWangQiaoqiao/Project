@@ -80,8 +80,7 @@ public class ApiHttpClient {
     public static void get(String partUrl, RequestParams params,
                            AsyncHttpResponseHandler handler) {
         CLIENT.get(getAbsoluteApiUrl(partUrl), params, handler);
-        log("GET " + partUrl + "&" +
-                params);
+        log("GET " + partUrl + "?" + params);
     }
 
     public static String getAbsoluteApiUrl(String partUrl) {
@@ -110,8 +109,7 @@ public class ApiHttpClient {
     public static void post(String partUrl, RequestParams params,
                             AsyncHttpResponseHandler handler) {
         CLIENT.post(getAbsoluteApiUrl(partUrl), params, handler);
-        log("POST " + partUrl + "&" +
-                params);
+        log("POST " + partUrl + "?" + params);
     }
 
     public static void put(String partUrl, AsyncHttpResponseHandler handler) {
@@ -122,8 +120,7 @@ public class ApiHttpClient {
     public static void put(String partUrl, RequestParams params,
                            AsyncHttpResponseHandler handler) {
         CLIENT.put(getAbsoluteApiUrl(partUrl), params, handler);
-        log("PUT " + partUrl + "&" +
-                params);
+        log("PUT " + partUrl + "?" + params);
     }
 
     public static void setHttpClient(AsyncHttpClient c, Application application) {

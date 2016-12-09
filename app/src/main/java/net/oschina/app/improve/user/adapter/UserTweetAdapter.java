@@ -38,7 +38,6 @@ import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.utils.DensityUtils;
 
@@ -134,7 +133,6 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         holder.mViewContent.setText(spannable);
         holder.mViewContent.setMovementMethod(LinkMovementMethod.getInstance());
         holder.mViewContent.setFocusable(false);
-        holder.mViewContent.setDispatchToParent(true);
         holder.mViewContent.setLongClickable(false);
 
         if (item.getAudio() != null) {
@@ -164,10 +162,10 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewDispatch.setVisibility(View.VISIBLE);
             holder.mViewDispatchCount.setVisibility(View.VISIBLE);
             About about = item.getAbout();
+            holder.mLayoutRefImages.setImage(about.getImages());
 
             if (about.getType() == OSChinaApi.COMMENT_TWEET){
                 holder.mViewRefTitle.setVisibility(View.GONE);
-                holder.mLayoutRefImages.setImage(about.getImages());
                 String aname = "@" + about.getTitle();
                 String cnt = about.getContent();
                 Spannable sp = new SpannableString(aname + ": " + cnt);
@@ -216,7 +214,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         @Bind(R.id.tv_tweet_comment_count)
         TextView mViewCmmCount;
         @Bind(R.id.tweet_item)
-        TweetTextView mViewContent;
+        TextView mViewContent;
         @Bind(R.id.iv_like_state)
         ImageView mViewLikeState;
         @Bind(R.id.fl_image)
@@ -266,6 +264,9 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
                 if (tweet == null) return;
                 tweet.setLiked(resultBean.getResult().isLiked());
                 tweet.setLikeCount(resultBean.getResult().getLikeCount());
+                if (tweet.getStatistics() != null){
+                    tweet.getStatistics().setLike(resultBean.getResult().getLikeCount());
+                }
                 updateItem(position);
             } catch (Exception e) {
                 e.printStackTrace();
