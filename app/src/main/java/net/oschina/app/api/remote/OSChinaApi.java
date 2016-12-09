@@ -25,8 +25,6 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 
-import cz.msebera.android.httpclient.Header;
-
 import static net.oschina.app.api.ApiHttpClient.post;
 
 /**
@@ -1021,7 +1019,7 @@ public class OSChinaApi {
         params.put("content", content);
         params.put("images", imagesToken);
         params.put("audio", audioToken);
-        if (about != null && about.check()) {
+        if (about != null && about.checkShare()) {
             params.put("aboutId", about.getId());
             params.put("aboutType", about.getType());
         }

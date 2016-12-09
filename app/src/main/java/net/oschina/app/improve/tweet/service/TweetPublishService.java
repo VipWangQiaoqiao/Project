@@ -80,7 +80,7 @@ public class TweetPublishService extends Service implements Contract.IService {
             images.toArray(pubImages);
             intent.putExtra(EXTRA_IMAGES, pubImages);
         }
-        if (about != null && about.check()) {
+        if (about != null && about.checkShare()) {
             intent.putExtra(EXTRA_ABOUT, about);
         }
         context.startService(intent);

@@ -85,7 +85,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
         shareActions.add(new ShareItem(R.mipmap.ic_login_3party_qq, R.string.platform_qq));
 
         //4.动弹
-        if (mAbout != null && mAbout.check()) {
+        if (mAbout != null && mAbout.checkShare()) {
             shareActions.add(new ShareItem(R.mipmap.ic_action_tweet, R.string.platform_tweet));
         }
 
@@ -206,7 +206,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
                 break;
             //转发到动弹
             case R.mipmap.ic_action_tweet:
-                if (mAbout != null && mAbout.check())
+                if (mAbout != null && mAbout.checkShare())
                     TweetPublishActivity.show(getContext(), null, null, mAbout);
                 cancelLoading();
                 break;

@@ -68,7 +68,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         }
 
         // Check con't commit to tweet
-        if (mAbout != null && mAbout.check() && mAbout.getCommitTweetId() > 0 && !mView.needCommit()) {
+        if (mAbout != null && mAbout.checkShare() && mAbout.getCommitTweetId() > 0 && !mView.needCommit()) {
             mAbout.setCommitTweetId(0);
         }
 
@@ -110,7 +110,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
                 mView.setImages(mDefaultImages);
 
             boolean haveAbout = false;
-            if (mAbout != null && mAbout.check()) {
+            if (mAbout != null && mAbout.checkShare()) {
                 mView.setAbout(mAbout, mAbout.getCommitTweetId() > 0);
                 haveAbout = true;
             }
@@ -135,7 +135,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         if (mDefaultImages != null && mDefaultImages.length > 0) {
             outState.putStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES, mDefaultImages);
         }
-        if (mAbout != null && mAbout.check()) {
+        if (mAbout != null && mAbout.checkShare()) {
             outState.putSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT, mAbout);
         }
     }
@@ -154,7 +154,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         mDefaultContent = savedInstanceState.getString(DEFAULT_PRE + SHARE_VALUES_CONTENT, null);
         mDefaultImages = savedInstanceState.getStringArray(DEFAULT_PRE + SHARE_VALUES_IMAGES);
         mAbout = (About) savedInstanceState.getSerializable(DEFAULT_PRE + SHARE_VALUES_ABOUT);
-        if (mAbout != null && mAbout.check())
+        if (mAbout != null && mAbout.checkShare())
             mView.setAbout(mAbout, mAbout.getCommitTweetId() > 0);
     }
 
@@ -190,6 +190,6 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     private boolean isUseXmlCache() {
         return TextUtils.isEmpty(mDefaultContent)
                 && (mDefaultImages == null || mDefaultImages.length == 0)
-                && (mAbout == null || !mAbout.check());
+                && (mAbout == null || !mAbout.checkShare());
     }
 }

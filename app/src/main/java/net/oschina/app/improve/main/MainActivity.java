@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity implements
     protected void initData() {
         super.initData();
         NoticeManager.init(this);
-        // in this we can check update
+        // in this we can checkShare update
         checkUpdate();
     }
 
