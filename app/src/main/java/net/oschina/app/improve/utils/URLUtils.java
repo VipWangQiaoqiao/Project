@@ -78,6 +78,10 @@ public class URLUtils {
             "/([^/]+)/event/([0-9]+)"
     );
 
+    public static final Pattern PATTERN_PATH_EVENT = Pattern.compile(
+            "/event/([0-9]+)"
+    );
+
     public static final Pattern PATTERN_IMAGE = Pattern.compile(
             ".*?(gif|jpeg|png|jpg|bmp)"
     );
@@ -162,6 +166,14 @@ public class URLUtils {
                     oid = StringUtils.toLong(matcher.group(1).split("_")[1]);
                     QuestionDetailActivity.show(context, oid);
                     break;
+                }
+                matcher = PATTERN_PATH_EVENT.matcher(path);
+                if (matcher.find()){
+                    oid = StringUtils.toLong(matcher.group(1));
+                    if (oid > 0){
+                        UIHelper.showEventDetail(context, oid);
+                        break;
+                    }
                 }
                 UIHelper.openInternalBrowser(context, url);
                 break;
