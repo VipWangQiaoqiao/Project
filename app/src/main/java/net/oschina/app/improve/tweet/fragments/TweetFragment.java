@@ -216,8 +216,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                                 }
                                 share.commitTweetId = tweet.getId();
                                 TweetPublishActivity.show(getContext(), null, content, share);
-
-
+                                break;
                         }
                     }
                 }).show();
