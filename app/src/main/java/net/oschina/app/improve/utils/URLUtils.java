@@ -91,14 +91,15 @@ public class URLUtils {
 
     /**
      * 解析跳转链接, 使用对应应用打开
+     *
      * @param context Context
-     * @param uri give me a uri
+     * @param uri     give me a uri
      */
-    public static void parseUrl(Context context, String uri){
+    public static void parseUrl(Context context, String uri) {
         if (TextUtils.isEmpty(uri)) return;
 
         String url = uri;
-        if (!url.startsWith("http://") && !url.startsWith("https://")){
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
             url = "https://" + url;
         }
         try {
@@ -111,7 +112,7 @@ public class URLUtils {
 
         // image url ?
         matcher = PATTERN_IMAGE.matcher(url);
-        if (matcher.matches()){
+        if (matcher.matches()) {
             ImageGalleryActivity.show(context, url);
             return;
         }
@@ -130,28 +131,28 @@ public class URLUtils {
         if (TextUtils.isEmpty(host) || TextUtils.isEmpty(path)) return;
 
         long oid = 0;
-        switch (host){
+        switch (host) {
             case "www.oschina.net":
                 matcher = PATTERN_PATH_NEWS.matcher(path);
-                if (matcher.find()){
+                if (matcher.find()) {
                     oid = StringUtils.toLong(matcher.group(1));
                     NewsDetailActivity.show(context, oid);
                     break;
                 }
                 matcher = PATTERN_PATH_SOFTWARE.matcher(path);
-                if (matcher.find()){
+                if (matcher.find()) {
                     // https://www.oschina.net/p/parallels-desktop
                     SoftwareDetailActivity.show(context, matcher.group(1));
                     break;
                 }
                 matcher = PATTERN_PATH_TOPIC.matcher(path);
-                if (matcher.find()){
+                if (matcher.find()) {
                     // TODO replace by new activity
                     UIHelper.showPostListByTag(context, matcher.group(1));
                     break;
                 }
                 matcher = PATTERN_PATH_TWEET_TOPIC.matcher(path);
-                if (matcher.find()){
+                if (matcher.find()) {
                     // TODO replace by new activity
                     //  https://www.oschina.net/tweet-topic/Navicat+for+Postgresql
                     //  https://www.oschina.net/tweet-topic/Navicat+for+Postgresql
@@ -162,7 +163,7 @@ public class URLUtils {
                     break;
                 }
                 matcher = PATTERN_PATH_QUESTION.matcher(path);
-                if (matcher.find()){
+                if (matcher.find()) {
                     oid = StringUtils.toLong(matcher.group(1).split("_")[1]);
                     QuestionDetailActivity.show(context, oid);
                     break;
@@ -187,25 +188,25 @@ public class URLUtils {
                 break;
             case "my.oschina.net":
                 matcher = PATTERN_PATH_USER_BLOG.matcher(path);
-                if (matcher.find()){
+                if (matcher.find()) {
                     oid = StringUtils.toLong(matcher.group(2));
                     BlogDetailActivity.show(context, oid);
                     break;
                 }
                 matcher = PATTERN_PATH_USER_TWEET.matcher(path);
-                if (matcher.find()){
+                if (matcher.find()) {
                     oid = StringUtils.toLong(matcher.group(2));
                     TweetDetailActivity.show(context, oid);
                     break;
                 }
                 matcher = PATTERN_PATH_USER_UID.matcher(path);
-                if (matcher.find()){
+                if (matcher.find()) {
                     oid = StringUtils.toLong(matcher.group(1));
                     OtherUserHomeActivity.show(context, oid);
                     break;
                 }
                 matcher = PATTERN_PATH_USER_SUFFIX.matcher(path);
-                if (matcher.find()){
+                if (matcher.find()) {
                     OtherUserHomeActivity.show(context, 0, matcher.group(1));
                     break;
                 }
@@ -213,8 +214,8 @@ public class URLUtils {
                 break;
             case "city.oschina.net":
                 matcher = PATTERN_PATH_CITY_EVENT.matcher(url);
-                if (matcher.find()){
-                    long eid = StringUtils.toInt(matcher.group(3), 0);
+                if (matcher.find()) {
+                    long eid = StringUtils.toInt(matcher.group(2), 0);
                     if (eid <= 0) return;
                     UIHelper.showEventDetail(context, eid);
                     return;
@@ -230,7 +231,7 @@ public class URLUtils {
 
     public static void parseNonstandardUrl(Context context, String url) {
 
-        if (url.startsWith("mailto:")){
+        if (url.startsWith("mailto:")) {
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
             context.startActivity(Intent.createChooser(intent, "选择发送应用"));
