@@ -88,7 +88,10 @@
             android:layout_width="60dp"
             android:layout_height="30dp"
             android:background="@drawable/selector_comment"
-            android:text="@string/send_hint" />
+            android:elevation="0dp"
+            android:outlineProvider="none"
+            android:text="@string/send_hint"
+            tools:targetApi="lollipop" />
     </LinearLayout>
 
     <View
