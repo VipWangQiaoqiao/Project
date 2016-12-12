@@ -32,8 +32,10 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.comment.Reply;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.ui.SelectFriendsActivity;
@@ -310,6 +312,12 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
                     mDelegation.setCommentHint("发表评论");
                     mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                     appendComment(replies.size() - 1, result.getResult());
+                    boolean syncToTweet = mDelegation.getBottomSheet().isSyncToTweet();
+                    if (syncToTweet) {
+                        TweetPublishService.startActionPublish(QuesAnswerDetailActivity.this,
+                                mDelegation.getBottomSheet().getCommentText(), null,
+                                About.buildShare(sid, mType));
+                    }
                 } else {
                     Toast.makeText(QuesAnswerDetailActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                 }
