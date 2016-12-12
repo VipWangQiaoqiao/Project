@@ -53,7 +53,7 @@ public class ApiHttpClient {
      *
      * @param context AppContext
      */
-    public static void init(AppContext context) {
+    public static void init(Application context) {
         CLIENT = null;
         AsyncHttpClient client = new AsyncHttpClient();
         //client.setCookieStore(new PersistentCookieStore(context));
@@ -144,7 +144,12 @@ public class ApiHttpClient {
         log("setCookieHeader:" + cookie);
     }
 
-    public static void destroy(AppContext appContext) {
+    /**
+     * 销毁当前AsyncHttpClient 并重新初始化网络参数，初始化Cookie等信息
+     *
+     * @param appContext AppContext
+     */
+    public static void destroyAndRestore(Application appContext) {
         cleanCookie();
         CLIENT = null;
         init(appContext);
