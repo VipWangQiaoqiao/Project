@@ -65,9 +65,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class LoginActivity extends AccountBaseActivity implements View.OnClickListener, IUiListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
 
-    private static final String HOLD_PWD_KEY = "holdPwdKey";
     public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
-    private static final String HOLD_PWD_STATUS_KEY = "holdStatusKey";
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLayBackBar;
@@ -115,7 +113,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
     ImageView mImLoginQq;
 
     private int openType;
-    //private int mHoldPwd;
     private SsoHandler mSsoHandler;
     private Tencent mTencent;
 
@@ -133,6 +130,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             requestFailureHint(throwable);
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
@@ -144,6 +142,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             if (resultBean.isSuccess()) {
                 User user = resultBean.getResult();
                 AccountHelper.login(user, headers);
+                hideKeyBoard(getCurrentFocus().getWindowToken());
                 AppContext.showToast(R.string.login_success_hint);
                 setResult(RESULT_OK);
                 sendLocalReceiver();
@@ -180,21 +179,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         if (!TextUtils.isEmpty(username)) {
             editor.putString(HOLD_USERNAME_KEY, username);
         }
-
-//        if (mHoldPwd != 2) {
-//            if (!TextUtils.isEmpty(inputPwd)) {
-//                byte[] bytes = inputPwd.getBytes();
-//                String tempPwd = Base64.encodeToString(bytes, 0, bytes.length, Base64.DEFAULT);
-//                editor.putString(HOLD_PWD_KEY, tempPwd);
-//                editor.putInt(HOLD_PWD_STATUS_KEY, 1);
-//            } else {
-//                editor.putString(HOLD_PWD_KEY, inputPwd);
-//                editor.putInt(HOLD_PWD_STATUS_KEY, 2);
-//            }
-//        } else {
-//            editor.putString(HOLD_PWD_KEY, null);
-//            editor.putInt(HOLD_PWD_STATUS_KEY, 2);
-//        }
         SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
     }
 
@@ -359,15 +343,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         mLayBackBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 
-    private void updateHoldPwd(int holdStatus) {
-        ImageView ivHoldPwd = this.mIvHoldPwd;
-        if (holdStatus == 1 || holdStatus == 0) {
-            ivHoldPwd.setImageResource(R.mipmap.checkbox_checked);
-        } else {
-            ivHoldPwd.setImageResource(R.mipmap.checkbox_normal);
-        }
-    }
-
     @SuppressWarnings("ConstantConditions")
     @OnClick({R.id.ib_navigation_back, R.id.et_login_username, R.id.et_login_pwd, R.id.tv_login_forget_pwd,
             R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register, R.id.ll_login_pull,
@@ -400,19 +375,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 break;
             case R.id.iv_login_hold_pwd:
                 //记住密码
-//                String inputPwd = mEtLoginPwd.getText().toString().trim();
-//
-//                if (TextUtils.isEmpty(inputPwd)) {
-//                    AppContext.showToast(getResources().getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
-//                    return;
-//                }
-//                if (mHoldPwd == 2) {
-//                    mHoldPwd = 1;
-//                } else {
-//                    mHoldPwd = 2;
-//                }
-//                updateHoldPwd(mHoldPwd);
-                break;
             case R.id.bt_login_register:
                 RegisterStepOneActivity.show(LoginActivity.this);
                 break;
@@ -502,7 +464,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         //hideWaitDialog();
                     }
                 });
-        //finish();
     }
 
     /**
@@ -662,6 +623,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 requestFailureHint(throwable);
             }
 
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
@@ -674,6 +636,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         User user = resultBean.getResult();
                         AccountHelper.login(user, headers);
                         holdAccount();
+                        hideKeyBoard(getCurrentFocus().getWindowToken());
                         AppContext.showToast(R.string.login_success_hint);
                         setResult(RESULT_OK);
                         sendLocalReceiver();
