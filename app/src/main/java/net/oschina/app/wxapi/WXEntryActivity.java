@@ -169,6 +169,7 @@ public class WXEntryActivity extends Activity {
                             if (resultBean.isSuccess()) {
                                 User user = resultBean.getResult();
                                 AccountHelper.login(user, headers);
+                                setResult(RESULT_OK);
                                 finish();
                                 Intent intent = new Intent();
                                 intent.setAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
