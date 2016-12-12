@@ -3,6 +3,7 @@ package net.oschina.app.improve.detail.fragments;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -128,7 +129,8 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         tv_event_type.setText(String.format("类型：%s", getResources().getString(typeStr)));
         tv_apply_status.setText(getResources().getString(getApplyStatusStrId(mDetail.getApplyStatus())));
 
-        if (mDetail.getApplyStatus() != EventDetail.APPLY_STATUS_UN_SIGN) {
+        if (mDetail.getStatus() != EventDetail.STATUS_ING ||
+                mDetail.getApplyStatus() != EventDetail.APPLY_STATUS_UN_SIGN ) {
             setSignUnEnable();
         }
         setBodyContent(mDetail.getBody());
@@ -148,43 +150,10 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 break;
             case R.id.ll_sign:
                 if (!AccountHelper.isLogin()) {
-                    LoginActivity.show(getContext());
+                    LoginActivity.show(getActivity(),0x02);
                     return;
                 }
-                if (true) {
-                    SignUpActivity.show(this, mOperator.getData().getId());
-                    return;
-                }
-
-                final EventDetail mDetail = mOperator.getData();
-                if (mDetail.getApplyStatus() == EventDetail.APPLY_STATUS_UN_SIGN && mDetail.getStatus() == Event.STATUS_ING) {
-                    if (AccountHelper.isLogin()) {
-                        if (mEventApplyDialog == null) {
-                            mEventApplyDialog = new EventDetailApplyDialog(getActivity(), mDetail);
-                            mEventApplyDialog.setCanceledOnTouchOutside(true);
-                            mEventApplyDialog.setCancelable(true);
-                            mEventApplyDialog.setTitle(getString(R.string.event_sign_hint));
-                            mEventApplyDialog.setCanceledOnTouchOutside(true);
-                            mEventApplyDialog.setNegativeButton(R.string.cancle, null);
-                            mEventApplyDialog.setPositiveButton(R.string.ok,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface d, int which) {
-                                            EventApplyData data;
-                                            if ((data = mEventApplyDialog.getApplyData()) != null) {
-                                                data.setEvent(Integer.parseInt(String.valueOf(mDetail.getId())));
-                                                data.setUser((int) AccountHelper.getUserId());
-                                                mOperator.toSignUp(data);
-                                            }
-
-                                        }
-                                    });
-                        }
-                        mEventApplyDialog.show();
-                    } else {
-                        UIHelper.showLoginActivity(getActivity());
-                    }
-                }
+                SignUpActivity.show(this, mOperator.getData().getId());
                 break;
             case R.id.ll_comment:
                 CommentsActivity.show(getActivity(), mOperator.getData().getId(), OSChinaApi.COMMENT_EVENT, OSChinaApi.COMMENT_NEW_ORDER);

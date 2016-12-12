@@ -14,10 +14,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.Emojicon;
@@ -30,22 +30,24 @@ import net.oschina.app.util.TDevice;
  * 底部弹出评论框
  * Created by haibin
  * on 2016/11/10.
+ * <p>
+ * Changed by fei
+ * on 2016/11/17
  */
 @SuppressWarnings("unused")
-public class BottomSheetBar implements View.OnClickListener {
+public class BottomSheetBar {
 
     public static final String TAG = "BottomSheetBar";
     private View mRootView;
     private EditText mEditText;
     private ImageButton mAtView;
     private ImageButton mFaceView;
-    private ImageButton mSyncToTweetView;
+    private CheckBox mSyncToTweetView;
     private Context mContext;
     private Button mBtnCommit;
     private AlertDialog mDialog;
     private FrameLayout mFrameLayout;
     private EmojiView mEmojiView;
-    private TextView mTvSyncLabel;
 
 
     private BottomSheetBar(Context context) {
@@ -60,18 +62,17 @@ public class BottomSheetBar implements View.OnClickListener {
         return bar;
     }
 
+    @SuppressWarnings("deprecation")
     private void initView() {
         mFrameLayout = (FrameLayout) mRootView.findViewById(R.id.fl_face);
         mEditText = (EditText) mRootView.findViewById(R.id.et_comment);
         mAtView = (ImageButton) mRootView.findViewById(R.id.ib_mention);
         mFaceView = (ImageButton) mRootView.findViewById(R.id.ib_face);
         mFaceView.setVisibility(View.GONE);
-        mSyncToTweetView = (ImageButton) mRootView.findViewById(R.id.cb_sync);
-        mTvSyncLabel = (TextView) mRootView.findViewById(R.id.tv_sync);
+        mSyncToTweetView = (CheckBox) mRootView.findViewById(R.id.cb_sync);
         if (mFaceView.getVisibility() == View.GONE) {
-            mTvSyncLabel.setText(R.string.send_tweet);
+            mSyncToTweetView.setText(R.string.send_tweet);
         }
-        mSyncToTweetView.setOnClickListener(this);
         mBtnCommit = (Button) mRootView.findViewById(R.id.btn_comment);
         mBtnCommit.setEnabled(false);
 
@@ -115,21 +116,21 @@ public class BottomSheetBar implements View.OnClickListener {
         });
     }
 
-    public void hideSyncAction(){
-        mSyncToTweetView.setVisibility(View.GONE);
-        mTvSyncLabel.setText(null);
+    public void hideSyncAction() {
+        mSyncToTweetView.setVisibility(View.INVISIBLE);
+        mSyncToTweetView.setText(null);
     }
 
     /**
      * 默认显示的
      */
-    public void showSyncAction(){
+    public void showSyncAction() {
         mSyncToTweetView.setVisibility(View.VISIBLE);
-        mTvSyncLabel.setText("转发到动弹");
+        mSyncToTweetView.setText(R.string.send_tweet);
     }
 
     public void showEmoji() {
-        mTvSyncLabel.setText(R.string.tweet_publish_title);
+        mSyncToTweetView.setText(R.string.tweet_publish_title);
         mFaceView.setVisibility(View.VISIBLE);
         mFaceView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,21 +218,8 @@ public class BottomSheetBar implements View.OnClickListener {
         return mBtnCommit;
     }
 
-    @Override
-    public void onClick(View v) {
-        ImageButton shareView = this.mSyncToTweetView;
-        Object tag = v.getTag();
-        if (tag == null) {
-            shareView.setBackgroundResource(R.mipmap.form_checkbox_checked);
-            shareView.setTag(true);
-        } else {
-            shareView.setBackgroundResource(R.mipmap.form_checkbox_normal);
-            shareView.setTag(null);
-        }
-    }
-
     public boolean isSyncToTweet() {
-        return mSyncToTweetView != null && mSyncToTweetView.getTag() != null;
+        return mSyncToTweetView != null && mSyncToTweetView.isChecked();
     }
 
 }

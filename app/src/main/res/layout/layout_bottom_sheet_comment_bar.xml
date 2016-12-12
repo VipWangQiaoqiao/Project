@@ -61,34 +61,32 @@
             tools:ignore="RtlHardcoded" />
 
 
-        <ImageButton
+        <CheckBox
             android:id="@+id/cb_sync"
-            android:layout_width="32dp"
+            android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:background="@drawable/ic_material"
+            android:button="@drawable/ic_selector_checkbox"
+            android:checked="false"
             android:contentDescription="@null"
-            android:scaleType="centerInside"
-            android:src="@mipmap/form_checkbox_normal"
+            android:text="@string/send_tweet"
+            android:textColor="@color/text_secondary_color"
+            android:textSize="@dimen/font_12"
             tools:visibility="visible" />
 
-        <TextView
-            android:id="@+id/tv_sync"
+        <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="1dp"
-            android:layout_weight="1"
-            android:text="@string/send_tweet"
-            android:textSize="@dimen/font_12"
-            android:visibility="visible"
-            tools:ignore="RtlHardcoded"
-            tools:visibility="visible" />
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/btn_comment"
             android:layout_width="60dp"
             android:layout_height="30dp"
             android:background="@drawable/selector_comment"
-            android:text="@string/send_hint" />
+            android:elevation="0dp"
+            android:outlineProvider="none"
+            android:text="@string/send_hint"
+            tools:targetApi="lollipop" />
     </LinearLayout>
 
     <View
