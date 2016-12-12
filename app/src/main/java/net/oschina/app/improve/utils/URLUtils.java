@@ -155,7 +155,6 @@ public class URLUtils {
                 if (matcher.find()) {
                     // TODO replace by new activity
                     //  https://www.oschina.net/tweet-topic/Navicat+for+Postgresql
-                    //  https://www.oschina.net/tweet-topic/Navicat+for+Postgresql
                     Bundle bundle = new Bundle();
                     bundle.putInt(TweetFragment.BUNDLE_KEY_REQUEST_CATALOG, TweetFragment.CATALOG_TAG);
                     bundle.putString(TweetFragment.BUNDLE_KEY_TAG, matcher.group(1));

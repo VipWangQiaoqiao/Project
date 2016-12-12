@@ -1,6 +1,7 @@
 package net.oschina.app.improve.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.$Gson$Types;
@@ -92,7 +93,7 @@ public final class CacheManager {
     }
 
     public static <T> T readListJson(Context context, String fileName, Class clx) {
-        if (clx == null) return null;
+        if (clx == null || TextUtils.isEmpty(fileName)) return null;
         Type type = getListType(clx);
         return readJson(context, fileName, type);
     }
