@@ -128,6 +128,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void onStart() {
             super.onStart();
+            if (mSolarSystem != null) mSolarSystem.accelerate();
             if (mIsUploadIcon) {
                 showWaitDialog(R.string.title_updating_user_avatar);
             }
@@ -167,7 +168,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void onFinish() {
             super.onFinish();
-            if (mSolarSystem != null) mSolarSystem.accelerate();
+            if (mSolarSystem != null) mSolarSystem.decelerate();
             if (mIsUploadIcon) mIsUploadIcon = false;
             if (mDialog != null && mDialog.isShowing()) mDialog.dismiss();
         }
@@ -244,8 +245,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
         NoticeManager.unBindNotify(this);
     }
 
