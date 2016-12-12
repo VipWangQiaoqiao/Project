@@ -25,6 +25,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
@@ -70,6 +71,10 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         mOnLikeClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!AccountHelper.isLogin()){
+                    UIHelper.showLoginActivity(mContext);
+                    return;
+                }
                 final int position = Integer.valueOf(v.getTag().toString());
                 Tweet tweet = getItem(position);
                 if (tweet == null) return;

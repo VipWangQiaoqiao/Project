@@ -24,6 +24,8 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.account.base.AccountBaseActivity;
+import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.bean.Tweet;
@@ -34,6 +36,7 @@ import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -57,31 +60,47 @@ import cz.msebera.android.httpclient.Header;
 public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         implements BaseRecyclerAdapter.OnItemLongClickListener {
 
-    public static final int CATALOG_NEW = 0X0001;
-    public static final int CATALOG_HOT = 0X0002;
-    public static final int CATALOG_MYSELF = 0X0003;
+    public static final int CATALOG_NEW     = 0X0001;
+    public static final int CATALOG_HOT     = 0X0002;
+    public static final int CATALOG_MYSELF  = 0X0003;
     public static final int CATALOG_FRIENDS = 0X0004;
-    public static final int CATALOG_TAG = 0X0005;
+    public static final int CATALOG_TAG     = 0X0005;
+    public static final int CATALOG_SOMEONE = 0X0006;
 
-    public static final String CACHE_NEW_TWEET = "cache_new_tweet";
-    public static final String CACHE_HOT_TWEET = "cache_hot_tweet";
-    public static final String CACHE_USER_TWEET = "cache_user_tweet";
-    public static final String CACHE_USER_FRIEND = "cache_user_friend";
-    public static final String CACHE_USER_TAG = "cache_user_tag";
+    public static final String CACHE_NEW_TWEET      = "cache_new_tweet";
+    public static final String CACHE_HOT_TWEET      = "cache_hot_tweet";
+    public static final String CACHE_USER_TWEET     = "cache_user_tweet";
+    public static final String CACHE_USER_FRIEND    = "cache_user_friend";
+    public static final String CACHE_USER_TAG       = "cache_user_tag";
 
-    public static final String BUNDLE_KEY_LOGIN_USER_ID = "BUNDLE_KEY_LOGIN_USER_ID";
-    public static final String BUNDLE_KEY_TAG = "BUNDLE_KEY_LOGIN_USER_TAG";
-    public static final String BUNDLE_KEY_REQUEST_CATALOG = "BUNDLE_KEY_REQUEST_CATALOG";
+    public static final String BUNDLE_KEY_USER_ID           = "BUNDLE_KEY_USER_ID";
+    public static final String BUNDLE_KEY_TAG               = "BUNDLE_KEY_LOGIN_USER_TAG";
+    public static final String BUNDLE_KEY_REQUEST_CATALOG   = "BUNDLE_KEY_REQUEST_CATALOG";
 
     public int mReqCatalog;//请求类型
-    public long mLoginUserId;
+    public long mUserId; // login user or another user
     public String tag;
     private LoginReceiver mReceiver;
 
     public static Fragment instantiate(long uid) {
         Bundle bundle = new Bundle();
-        bundle.putLong(BUNDLE_KEY_LOGIN_USER_ID, uid);
+        bundle.putLong(BUNDLE_KEY_USER_ID, uid);
         bundle.putInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_MYSELF);
+        Fragment fragment = new TweetFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    /**
+     *
+     * @param uid user id
+     * @param code 只是为了让方法指纹不一样而已，哈哈
+     * @return {@link Fragment}
+     */
+    public static Fragment instantiate(long uid, int code){
+        Bundle bundle = new Bundle();
+        bundle.putLong(BUNDLE_KEY_USER_ID, uid);
+        bundle.putInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_SOMEONE);
         Fragment fragment = new TweetFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -110,8 +129,9 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         mReqCatalog = bundle.getInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_NEW);
         switch (mReqCatalog) {
             case CATALOG_FRIENDS:
+            case CATALOG_SOMEONE:
             case CATALOG_MYSELF:
-                mLoginUserId = bundle.getLong(BUNDLE_KEY_LOGIN_USER_ID, AccountHelper.getUserId());
+                mUserId = bundle.getLong(BUNDLE_KEY_USER_ID, AccountHelper.getUserId());
                 break;
             case CATALOG_TAG:
                 tag = bundle.getString(BUNDLE_KEY_TAG);
@@ -129,7 +149,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     protected void onRestartInstance(Bundle bundle) {
         super.onRestartInstance(bundle);
         mReqCatalog = bundle.getInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_NEW);
-        mLoginUserId = bundle.getLong(BUNDLE_KEY_LOGIN_USER_ID, AccountHelper.getUserId());
+        mUserId = bundle.getLong(BUNDLE_KEY_USER_ID, AccountHelper.getUserId());
     }
 
     @Override
@@ -140,9 +160,6 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                 break;
             case CATALOG_HOT:
                 CACHE_NAME = CACHE_HOT_TWEET;
-                break;
-            case CATALOG_TAG:
-                CACHE_NAME = null; // don't cache data
                 break;
             case CATALOG_MYSELF:
             case CATALOG_FRIENDS:
@@ -155,13 +172,15 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(mReceiver, filter);
                 }
                 break;
+            default:
+                CACHE_NAME = null;
         }
 
         super.initData();
 
         mAdapter.setOnItemLongClickListener(this);
         // 某用户的动弹 or 登录用户的好友动弹
-        if (mLoginUserId == 0 && mReqCatalog == CATALOG_MYSELF ||
+        if (mUserId == 0 && mReqCatalog == CATALOG_MYSELF ||
                 (!AccountHelper.isLogin() && mReqCatalog == CATALOG_FRIENDS)) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mErrorLayout.setErrorMessage("未登录");
@@ -226,11 +245,11 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         @Override
         public void onReceive(Context context, Intent intent) {
             if (AccountHelper.isLogin()) {
-                mLoginUserId = AccountHelper.getUserId();
+                mUserId = AccountHelper.getUserId();
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                 onRefreshing();
             } else {
-                mLoginUserId = 0;
+                mUserId = 0;
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                 mErrorLayout.setErrorMessage("未登录");
             }
@@ -248,9 +267,10 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
             case CATALOG_HOT:
                 OSChinaApi.getTweetList(null, null, 1, 2, pageToken, mHandler);
                 break;
+            case CATALOG_SOMEONE:
             case CATALOG_MYSELF:
-                if (mLoginUserId == 0) break;
-                OSChinaApi.getTweetList(mLoginUserId, null, null, 1, pageToken, mHandler);
+                if (mUserId <= 0) break;
+                OSChinaApi.getTweetList(mUserId, null, null, 1, pageToken, mHandler);
                 break;
             case CATALOG_FRIENDS:
                 OSChinaApi.getTweetList(null, null, 2, 1, pageToken, mHandler);
@@ -262,13 +282,8 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     }
 
     @Override
-    protected boolean isNeedCache() {
-        return mReqCatalog != CATALOG_TAG;
-    }
-
-    @Override
     protected boolean isNeedEmptyView() {
-        return mReqCatalog != CATALOG_TAG;
+        return mReqCatalog != CATALOG_TAG  && mReqCatalog != CATALOG_SOMEONE;
     }
 
     @Override
@@ -297,6 +312,10 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         TweetDetailActivity.show(getContext(), tweet);
     }
 
+    /**
+     * 未登录时显示的图标，点击应该跳到的登录界面
+     * @param v {@link View}
+     */
     @Override
     public void onClick(View v) {
         if ((mReqCatalog == CATALOG_MYSELF || mReqCatalog == CATALOG_FRIENDS)
@@ -327,13 +346,48 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(BUNDLE_KEY_REQUEST_CATALOG, mReqCatalog);
-        outState.putLong(BUNDLE_KEY_LOGIN_USER_ID, mLoginUserId);
+        outState.putLong(BUNDLE_KEY_USER_ID, mUserId);
         super.onSaveInstanceState(outState);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void onResume() {
-        super.onResume();
+    protected void setListData(ResultBean<PageBean<Tweet>> resultBean) {
+        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
+        if (isRefreshing) {
+            //cache the time
+            mBean.setItems(resultBean.getResult().getItems());
+            mAdapter.clear();
+            // 主要是为了清理重复数据， stupid
+            ((BaseGeneralRecyclerAdapter) mAdapter).clearPreItems();
+            ((BaseGeneralRecyclerAdapter) mAdapter).addItems(mBean.getItems());
+
+            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
+            mRefreshLayout.setCanLoadMore(true);
+            if (isNeedCache()) {
+                AppOperator.runOnThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        CacheManager.saveToJson(getActivity(), CACHE_NAME, mBean.getItems());
+                    }
+                });
+            }
+        } else {
+            ((BaseGeneralRecyclerAdapter) mAdapter).addItems(resultBean.getResult().getItems());
+        }
+
+        mAdapter.setState(resultBean.getResult().getItems() == null
+                || resultBean.getResult().getItems().size() < 20
+                ? BaseRecyclerAdapter.STATE_NO_MORE
+                : BaseRecyclerAdapter.STATE_LOADING, true);
+
+        if (mAdapter.getItems().size() > 0) {
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            mRefreshLayout.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            mErrorLayout.setErrorType(isNeedEmptyView() ? EmptyLayout.NODATA : EmptyLayout.HIDE_LAYOUT);
+        }
     }
 
     /**
@@ -352,7 +406,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == AppCompatActivity.RESULT_OK && requestCode == 1) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-            mLoginUserId = AccountHelper.getUserId();
+            mUserId = AccountHelper.getUserId();
             onRefreshing();
         }
     }

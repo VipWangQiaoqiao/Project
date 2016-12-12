@@ -123,8 +123,9 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mRefreshLayout.setVisibility(View.GONE);
             mBean = new PageBean<>();
 
-            List<T> items = isNeedCache() ? (List<T>) CacheManager.readListJson(getActivity(), CACHE_NAME,
-                    getCacheClass()) : null;
+            List<T> items = isNeedCache()
+                    ? (List<T>) CacheManager.readListJson(getActivity(), CACHE_NAME, getCacheClass())
+                    : null;
 
             mBean.setItems(items);
             //if is the first loading
