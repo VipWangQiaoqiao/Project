@@ -1,6 +1,7 @@
 package net.oschina.app.improve.detail.sign;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.SignUpEventOptions;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SimplexToast;
 
 import java.util.List;
@@ -22,6 +24,7 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
     private SignUpContract.Presenter mPresenter;
     private LinearLayout mLayoutRoot;
     private long mSourceId;
+    private ProgressDialog mDialog;
 
     public static SignUpFragment newInstance(long sourceId) {
         SignUpFragment fragment = new SignUpFragment();
@@ -46,6 +49,7 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
     protected void initWidget(View root) {
         super.initWidget(root);
         mLayoutRoot = (LinearLayout) mRoot.findViewById(R.id.ll_root);
+        mDialog = DialogHelper.getProgressDialog(mContext);
     }
 
     @Override
@@ -61,6 +65,8 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
             @Override
             public void onClick(View v) {
                 mPresenter.signUpEvent(mSourceId);
+                mDialog.setMessage("正在提交报名...");
+                mDialog.show();
             }
         });
         mLayoutRoot.addView(view);
@@ -71,12 +77,14 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
         SimplexToast.show(mContext, "报名成功");
         Intent intent = new Intent();
         getActivity().setResult(Activity.RESULT_OK, intent);
+        mDialog.dismiss();
         getActivity().finish();
     }
 
     @Override
     public void showSignUpError(String message) {
         SimplexToast.show(mContext, message);
+        mDialog.dismiss();
     }
 
     @Override
