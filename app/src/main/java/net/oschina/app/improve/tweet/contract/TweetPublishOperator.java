@@ -42,10 +42,6 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         mDefaultContent = defaultContent;
         mDefaultImages = defaultImages;
         mAboutShare = share;
-
-        if (mAboutShare != null) {
-            Log.e("TAG", "setDataView: " + mAboutShare.toString());
-        }
     }
 
     @Override

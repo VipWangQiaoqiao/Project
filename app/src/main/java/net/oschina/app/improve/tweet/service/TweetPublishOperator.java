@@ -302,7 +302,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 String ext = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
                 String tempFile = String.format("%s/IMG_%s.%s", cacheDir, System.currentTimeMillis(), ext);
                 if (PicturesCompressor.compressImage(path, tempFile, MAX_UPLOAD_LENGTH,
-                        80, 280, 1280 * 6, buffer, options, true)) {
+                        80, 1280, 1280 * 6, buffer, options, true)) {
                     TweetPublishService.log("OPERATOR doImage " + tempFile + " " + new File(tempFile).length());
 
                     // verify the picture ext.

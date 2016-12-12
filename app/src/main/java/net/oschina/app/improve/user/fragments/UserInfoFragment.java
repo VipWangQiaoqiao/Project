@@ -205,6 +205,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     @Override
     protected void initData() {
         super.initData();
+        NoticeManager.bindNotify(this);
         requestUserCache();
     }
 
@@ -215,7 +216,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         if (AccountHelper.isLogin()) {
             User user = AccountHelper.getUser();
             updateView(user);
-            NoticeManager.bindNotify(this);
         } else {
             hideView();
         }
@@ -229,9 +229,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         if (AccountHelper.isLogin()) {
             User user = AccountHelper.getUser();
             updateView(user);
-            if (TDevice.hasInternet()) {
-                sendRequestData();
-            }
+            sendRequestData();
         } else {
             hideView();
         }
@@ -243,6 +241,11 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         if (!AccountHelper.isLogin()) {
             hideView();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
         NoticeManager.unBindNotify(this);
     }
 
@@ -321,7 +324,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * requestData
      */
     private void sendRequestData() {
-        OSChinaApi.getUserInfo(requestUserInfoHandler);
+        if (TDevice.hasInternet() && AccountHelper.isLogin())
+            OSChinaApi.getUserInfo(requestUserInfoHandler);
     }
 
     /**
@@ -597,9 +601,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onTabReselect() {
-        if (AccountHelper.isLogin() && TDevice.hasInternet()) {
-            sendRequestData();
-        }
+        sendRequestData();
     }
 
 }

@@ -18,7 +18,8 @@
         android:layout_marginBottom="46dp"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_scrollFlags="scroll|enterAlways">
+        app:layout_scrollFlags="scroll|enterAlways"
+        tools:ignore="RtlHardcoded">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,6 +71,7 @@
                     android:minLines="1"
                     android:textColor="#111111"
                     android:textSize="16sp"
+                    tools:ignore="RtlHardcoded"
                     tools:text="在Google IO大会中不仅仅带来了间的" />
 
             </LinearLayout>
@@ -105,9 +107,10 @@
                     android:paddingLeft="@dimen/lay_28"
                     android:paddingRight="@dimen/lay_28"
                     android:paddingTop="@dimen/lay_12"
-                    android:text="软件官网"
+                    android:text="@string/soft_detail_index"
                     android:textColor="#111111"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <TextView
                     android:id="@+id/bt_software_document"
@@ -126,9 +129,10 @@
                     android:paddingLeft="@dimen/lay_28"
                     android:paddingRight="@dimen/lay_28"
                     android:paddingTop="@dimen/lay_12"
-                    android:text="软件文档"
+                    android:text="@string/soft_detail_doc"
                     android:textColor="#111111"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded" />
             </LinearLayout>
 
             <FrameLayout
@@ -157,12 +161,12 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:minLines="1"
-                    android:text="软件作者:"
+                    android:text="@string/soft_detail_author"
                     android:textColor="#6a6a6a"
                     android:textSize="@dimen/font_14" />
 
                 <TextView
-                    android:id="@+id/tv_software_authorName"
+                    android:id="@+id/tv_software_author_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/lay_16"
@@ -170,6 +174,7 @@
                     android:minLines="1"
                     android:textColor="@color/ques_bt_text_color_light"
                     android:textSize="@dimen/font_14"
+                    tools:ignore="RtlHardcoded"
                     tools:text="so_white" />
             </LinearLayout>
 
@@ -187,7 +192,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="开源协议:"
+                    android:text="@string/soft_detail_license"
                     android:textColor="#6a6a6a"
                     android:textSize="@dimen/font_14" />
 
@@ -200,6 +205,7 @@
                     android:minLines="1"
                     android:textColor="#6a6a6a"
                     android:textSize="@dimen/font_14"
+                    tools:ignore="RtlHardcoded"
                     tools:text="Apache" />
             </LinearLayout>
 
@@ -217,7 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="开发语言:"
+                    android:text="@string/soft_detail_language"
                     android:textColor="#6a6a6a"
                     android:textSize="@dimen/font_14" />
 
@@ -231,6 +237,7 @@
                     android:minLines="1"
                     android:textColor="#6a6a6a"
                     android:textSize="@dimen/font_14"
+                    tools:ignore="RtlHardcoded"
                     tools:text="Java" />
             </LinearLayout>
 
@@ -247,7 +254,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="操作系统:"
+                    android:text="@string/soft_detail_platform"
                     android:textColor="#6a6a6a"
                     android:textSize="@dimen/font_14" />
 
@@ -258,6 +265,7 @@
                     android:layout_marginLeft="@dimen/lay_16"
                     android:textColor="#6a6a6a"
                     android:textSize="@dimen/font_14"
+                    tools:ignore="RtlHardcoded"
                     tools:text="Lin" />
             </LinearLayout>
 
@@ -274,7 +282,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="收录时间:"
+                    android:text="@string/soft_detail_pub_time"
                     android:textColor="#6a6a6a"
                     android:textSize="@dimen/font_14" />
 
@@ -288,6 +296,7 @@
                     android:minLines="1"
                     android:textColor="#6a6a6a"
                     android:textSize="@dimen/font_14"
+                    tools:ignore="RtlHardcoded"
                     tools:text="2015-01-12" />
             </LinearLayout>
 
