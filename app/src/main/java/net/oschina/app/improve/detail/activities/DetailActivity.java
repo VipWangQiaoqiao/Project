@@ -227,7 +227,7 @@ public abstract class DetailActivity<Data extends PrimaryBean, DataView extends 
             return false;
         }
 
-        if (result.isSuccess()) {
+        if (result.isSuccess() && result.getResult().getId() != 0) {
             mData = result.getResult();
             handleView();
             return true;
