@@ -123,7 +123,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
     private User mUserInfo;
 
-    private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
+    private TextHttpResponseHandler requestUserInfoHandler = new TextHttpResponseHandler() {
 
         @Override
         public void onStart() {
@@ -145,8 +145,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
             try {
-                if (mSolarSystem != null) mSolarSystem.decelerate();
-
                 Type type = new TypeToken<ResultBean<User>>() {
                 }.getType();
 
@@ -326,7 +324,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * requestData
      */
     private void sendRequestData() {
-        if (TDevice.hasInternet() && AccountHelper.isLogin()) OSChinaApi.getUserInfo(textHandler);
+        if (TDevice.hasInternet() && AccountHelper.isLogin())
+            OSChinaApi.getUserInfo(requestUserInfoHandler);
     }
 
     /**
@@ -558,7 +557,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         } else {
             mIsUploadIcon = true;
             this.mCacheFile = file;
-            OSChinaApi.updateUserIcon(file, textHandler);
+            OSChinaApi.updateUserIcon(file, requestUserInfoHandler);
         }
 
     }
