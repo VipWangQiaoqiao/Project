@@ -1,9 +1,7 @@
 package net.oschina.app.improve.detail.fragments;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,7 +9,6 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.Event;
@@ -20,7 +17,6 @@ import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.contract.EventDetailContract;
 import net.oschina.app.improve.detail.sign.SignUpActivity;
 import net.oschina.app.improve.dialog.EventDetailApplyDialog;
-import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -130,7 +126,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         tv_apply_status.setText(getResources().getString(getApplyStatusStrId(mDetail.getApplyStatus())));
 
         if (mDetail.getStatus() != EventDetail.STATUS_ING ||
-                mDetail.getApplyStatus() != EventDetail.APPLY_STATUS_UN_SIGN ) {
+                mDetail.getApplyStatus() != EventDetail.APPLY_STATUS_UN_SIGN) {
             setSignUnEnable();
         }
         setBodyContent(mDetail.getBody());
@@ -150,7 +146,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 break;
             case R.id.ll_sign:
                 if (!AccountHelper.isLogin()) {
-                    LoginActivity.show(getActivity(),0x02);
+                    LoginActivity.show(getActivity(), 0x02);
                     return;
                 }
                 SignUpActivity.show(this, mOperator.getData().getId());

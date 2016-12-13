@@ -1,17 +1,15 @@
 package net.oschina.app.improve.widget;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
 
-import net.oschina.app.R;
-
 /**
  * 自适应字体大小的TextView
+ *
  * @author thanatosx
  */
 public class AutoSizeTextView extends TextView {

@@ -88,7 +88,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
                 String author = mOperator.getData().getAuthor();
                 if (authorId <= 0 || TextUtils.isEmpty(author)) return;
 
-                OtherUserHomeActivity.show(getActivity(),authorId);
+                OtherUserHomeActivity.show(getActivity(), authorId);
 
                 break;
             default:

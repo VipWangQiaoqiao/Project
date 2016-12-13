@@ -64,21 +64,36 @@ public class OtherUserHomeActivity extends BaseActivity
     public static final String KEY_BUNDLE = "KEY_BUNDLE_IN_OTHER_USER_HOME";
 
     /* 谁格式化了我这里的代码我就打谁 */
-    @Bind(R.id.toolbar)             Toolbar mToolbar;
-    @Bind(R.id.iv_portrait)         CircleImageView mPortrait;
-    @Bind(R.id.tv_nick)             TextView mNick;
-    @Bind(R.id.tv_summary)          TextView mSummary;
-    @Bind(R.id.tv_score)            TextView mScore;
-    @Bind(R.id.tv_count_follow)     TextView mCountFollow;
-    @Bind(R.id.tv_count_fans)       TextView mCountFans;
-    @Bind(R.id.view_solar_system)   SolarSystemView mSolarSystem;
-    @Bind(R.id.layout_appbar)       AppBarLayout mLayoutAppBar;
-    @Bind(R.id.iv_logo_portrait)    CircleImageView mLogoPortrait;
-    @Bind(R.id.tv_logo_nick)        TextView mLogoNick;
-    @Bind(R.id.iv_gender)           ImageView mGenderImage;
-    @Bind(R.id.layout_tab)          TabLayout mTabLayout;
-    @Bind(R.id.view_pager)          ViewPager mViewPager;
-    @Bind(R.id.view_divider)        View mDivider;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.iv_portrait)
+    CircleImageView mPortrait;
+    @Bind(R.id.tv_nick)
+    TextView mNick;
+    @Bind(R.id.tv_summary)
+    TextView mSummary;
+    @Bind(R.id.tv_score)
+    TextView mScore;
+    @Bind(R.id.tv_count_follow)
+    TextView mCountFollow;
+    @Bind(R.id.tv_count_fans)
+    TextView mCountFans;
+    @Bind(R.id.view_solar_system)
+    SolarSystemView mSolarSystem;
+    @Bind(R.id.layout_appbar)
+    AppBarLayout mLayoutAppBar;
+    @Bind(R.id.iv_logo_portrait)
+    CircleImageView mLogoPortrait;
+    @Bind(R.id.tv_logo_nick)
+    TextView mLogoNick;
+    @Bind(R.id.iv_gender)
+    ImageView mGenderImage;
+    @Bind(R.id.layout_tab)
+    TabLayout mTabLayout;
+    @Bind(R.id.view_pager)
+    ViewPager mViewPager;
+    @Bind(R.id.view_divider)
+    View mDivider;
 
     private User user;
     private MenuItem mFollowMenu;

@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.google.gson.reflect.TypeToken;
 
-import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;

@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,13 +30,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RewardDialog extends Dialog implements View.OnClickListener {
 
-    @Bind(R.id.img_portrait) CircleImageView mPortrait;
-    @Bind(R.id.tv_nick) TextView mNick;
-    @Bind(R.id.tv_info) TextView mInfo;
-    @Bind(R.id.et_input) EditText mInput;
-    @Bind(R.id.tv_pay_choice) TextView mPayChoice;
-    @Bind(R.id.btn_reward) Button mBtnReward;
-    @Bind(R.id.layout_casts) LinearLayout mLayoutCasts;
+    @Bind(R.id.img_portrait)
+    CircleImageView mPortrait;
+    @Bind(R.id.tv_nick)
+    TextView mNick;
+    @Bind(R.id.tv_info)
+    TextView mInfo;
+    @Bind(R.id.et_input)
+    EditText mInput;
+    @Bind(R.id.tv_pay_choice)
+    TextView mPayChoice;
+    @Bind(R.id.btn_reward)
+    Button mBtnReward;
+    @Bind(R.id.layout_casts)
+    LinearLayout mLayoutCasts;
 
     private String portrait;
     private String nick;
@@ -47,7 +53,7 @@ public class RewardDialog extends Dialog implements View.OnClickListener {
         super(context);
     }
 
-    public interface OnClickRewardCallback{
+    public interface OnClickRewardCallback {
         void reward(float cast);
     }
 
@@ -75,11 +81,11 @@ public class RewardDialog extends Dialog implements View.OnClickListener {
         mNick.setText(nick);
 
         mBtnReward.setEnabled(false);
-        mInput.addTextChangedListener(new SimpleTextWatcher(){
+        mInput.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
-                if (TextUtils.isEmpty(s)){
+                if (TextUtils.isEmpty(s)) {
                     mBtnReward.setEnabled(false);
                     return;
                 }
@@ -87,7 +93,7 @@ public class RewardDialog extends Dialog implements View.OnClickListener {
                 float cast = 0;
                 try {
                     cast = Float.valueOf(mCastStr);
-                }catch (Exception e){
+                } catch (Exception e) {
                     cast = 0;
                     mInput.setText(null);
                 }
@@ -97,30 +103,30 @@ public class RewardDialog extends Dialog implements View.OnClickListener {
         });
 
         int count = mLayoutCasts.getChildCount();
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             View view = mLayoutCasts.getChildAt(i);
             view.setOnClickListener(this);
         }
         selectAt(null, count - 1);
     }
 
-    private void selectAt(View v, int index){
+    private void selectAt(View v, int index) {
         int count = mLayoutCasts.getChildCount();
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             mLayoutCasts.getChildAt(i).setSelected(false);
         }
-        if (v == null){
+        if (v == null) {
             mLayoutCasts.getChildAt(index).setSelected(true);
-        }else {
+        } else {
             v.setSelected(true);
         }
     }
 
-    public void setPortrait(String portrait){
+    public void setPortrait(String portrait) {
         this.portrait = portrait;
     }
 
-    public void setNick(String nick){
+    public void setNick(String nick) {
         this.nick = nick;
     }
 
@@ -133,11 +139,11 @@ public class RewardDialog extends Dialog implements View.OnClickListener {
         int cast;
         try {
             cast = Integer.valueOf(mCastStr);
-        }catch (Exception e){
+        } catch (Exception e) {
             cast = -1;
         }
         // 其他金额
-        if (cast == -1){
+        if (cast == -1) {
             mInput.setText(null);
             return;
         }
@@ -145,18 +151,19 @@ public class RewardDialog extends Dialog implements View.OnClickListener {
         mInput.setSelection(mCastStr.length());
     }
 
-    public void setOnClickRewardListener(OnClickRewardCallback callback){
+    public void setOnClickRewardListener(OnClickRewardCallback callback) {
         this.callback = callback;
     }
 
-    @OnClick(R.id.btn_reward) void onClickReward(){
+    @OnClick(R.id.btn_reward)
+    void onClickReward() {
         String mCastStr = mInput.getText().toString();
         float cast = Float.valueOf(mCastStr);
-        if (cast < 0.01){
+        if (cast < 0.01) {
             Toast.makeText(getContext(), "最低悬赏0.01元", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (cast > 9999999.99){
+        if (cast > 9999999.99) {
             Toast.makeText(getContext(), "最高悬赏9999999.99", Toast.LENGTH_SHORT).show();
             return;
         }

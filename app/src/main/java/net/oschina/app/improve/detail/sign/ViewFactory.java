@@ -194,7 +194,7 @@ final class ViewFactory {
                 final CheckBox button = new CheckBox(activity);
                 button.setLayoutParams(params);
                 button.setText(list[i]);
-                boolean enable ;
+                boolean enable;
                 if (status == null)
                     enable = true;
                 else if (status.length <= i)

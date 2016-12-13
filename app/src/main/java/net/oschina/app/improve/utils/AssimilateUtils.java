@@ -78,11 +78,12 @@ public class AssimilateUtils {
 
     /**
      * 通常使用的过滤逻辑
+     *
      * @param context {@link Context}
      * @param content Content String
      * @return String
      */
-    public static Spannable assimilate(Context context, String content){
+    public static Spannable assimilate(Context context, String content) {
         if (TextUtils.isEmpty(content)) return null;
         content = HTMLUtil.rollbackReplaceTag(content);
         Spannable spannable = assimilateOnlyAtUser(context, content);

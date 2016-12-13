@@ -15,8 +15,6 @@ import net.oschina.app.improve.media.SelectImageActivity;
 import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.tweet.adapter.TweetSelectImageAdapter;
 
-import java.util.Arrays;
-
 /**
  * Created by JuQiu
  * on 16/7/18.

@@ -26,14 +26,10 @@ import android.widget.TextView;
 import net.oschina.app.AppContext;
 import net.oschina.app.BuildConfig;
 import net.oschina.app.R;
-import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -693,8 +689,8 @@ public class TabPickerView extends FrameLayout {
                 }
 
                 // 将未加入的新项加入活动列表
-                for (SubTab item : mOriginalDataSet){
-                    if (item.isActived() && !mActiveList.contains(item)){
+                for (SubTab item : mOriginalDataSet) {
+                    if (item.isActived() && !mActiveList.contains(item)) {
                         mActiveList.add(item);
                     }
                 }

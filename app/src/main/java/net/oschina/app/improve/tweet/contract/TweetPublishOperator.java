@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.text.TextUtils;
-import android.util.Log;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;

@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 

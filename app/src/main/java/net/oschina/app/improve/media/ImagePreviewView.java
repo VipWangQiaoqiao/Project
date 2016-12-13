@@ -308,7 +308,7 @@ public class ImagePreviewView extends ImageView {
         adjustBounds(w, h);
     }
 
-    private void adjustBounds(int width, int height){
+    private void adjustBounds(int width, int height) {
         Drawable drawable = getDrawable();
         if (drawable == null) return;
         mBoundWidth = drawable.getBounds().width();

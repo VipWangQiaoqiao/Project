@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by thanatos on 16/10/11.
  */
 
-public class Order implements Serializable{
+public class Order implements Serializable {
 
     public static final String TYPE_ALIPAY = "alipay"; // 支付宝支付
     public static final String TYPE_WEPAY = "wepay"; // 微信支付

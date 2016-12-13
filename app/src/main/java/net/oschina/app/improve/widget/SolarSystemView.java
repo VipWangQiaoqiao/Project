@@ -74,11 +74,11 @@ public class SolarSystemView extends View implements Runnable {
         planets.add(planet);
     }
 
-    public void clear(){
+    public void clear() {
         planets.clear();
     }
 
-    public synchronized void prepare(){
+    public synchronized void prepare() {
         if (planets.size() == 0) return;
 
         if (mCacheBitmap != null) {
@@ -87,10 +87,10 @@ public class SolarSystemView extends View implements Runnable {
         }
         mCacheBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(mCacheBitmap);
-        if (getBackground() != null){
+        if (getBackground() != null) {
             getBackground().draw(canvas);
         }
-        if (mBackgroundPaint != null && mBackgroundPaint.getShader() != null){
+        if (mBackgroundPaint != null && mBackgroundPaint.getShader() != null) {
             canvas.drawRect(0, 0, getWidth(), getHeight(), mBackgroundPaint);
         }
         for (Planet planet : planets) {
@@ -104,13 +104,14 @@ public class SolarSystemView extends View implements Runnable {
     /**
      * 设置背景渐变
      * 设置中心点之后再做此事
-     * @param x pivot x
-     * @param y pivot y
-     * @param r radius of gradient
+     *
+     * @param x  pivot x
+     * @param y  pivot y
+     * @param r  radius of gradient
      * @param sc start color
      * @param ec end color
      */
-    public void setRadialGradient(float x, float y, float r, int sc, int ec){
+    public void setRadialGradient(float x, float y, float r, int sc, int ec) {
         mBackgroundPaint = new Paint();
         mBackgroundPaint.setStyle(Paint.Style.FILL);
         mBackgroundPaint.setAntiAlias(true);
@@ -149,7 +150,7 @@ public class SolarSystemView extends View implements Runnable {
         if (paintCount < 0) paintCount = 0;
     }
 
-    private void postRepaint(){
+    private void postRepaint() {
         removeCallbacks(this);
         postDelayed(this, mFlushRate);
     }
@@ -169,13 +170,13 @@ public class SolarSystemView extends View implements Runnable {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mCacheBitmap != null){
+        if (mCacheBitmap != null) {
             mCacheBitmap.recycle();
             mCacheBitmap = null;
         }
     }
 
-    private ValueAnimator getAccelerateAnimator(){
+    private ValueAnimator getAccelerateAnimator() {
         if (mAccelerateAnimator != null) return mAccelerateAnimator;
         mAccelerateAnimator = ValueAnimator.ofFloat(mFlushRate, FLUSH_RATE_LIMITATION);
         mAccelerateAnimator.setEvaluator(new FloatEvaluator());
@@ -190,7 +191,7 @@ public class SolarSystemView extends View implements Runnable {
         return mAccelerateAnimator;
     }
 
-    private ValueAnimator getDecelerateAnimator(){
+    private ValueAnimator getDecelerateAnimator() {
         if (mDecelerateAnimator != null) return mDecelerateAnimator;
         mDecelerateAnimator = ValueAnimator.ofFloat(mFlushRate, FLUSH_RATE);
         mDecelerateAnimator.setEvaluator(new FloatEvaluator());
@@ -207,7 +208,7 @@ public class SolarSystemView extends View implements Runnable {
 
     // 都是在主线程内操作,所以不会有生产者消费者问题
 
-    public void accelerate(){
+    public void accelerate() {
         if (mFlushRate == FLUSH_RATE_LIMITATION) return;
         mFlushRate = FLUSH_RATE; // reset flush rate
         ValueAnimator animator = getAccelerateAnimator();
@@ -216,7 +217,7 @@ public class SolarSystemView extends View implements Runnable {
         animator.start();
     }
 
-    public void decelerate(){
+    public void decelerate() {
         if (mAccelerateAnimator != null && mAccelerateAnimator.isRunning()) {
             mAccelerateAnimator.cancel();
         }

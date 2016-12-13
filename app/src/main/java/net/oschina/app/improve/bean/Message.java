@@ -1,7 +1,5 @@
 package net.oschina.app.improve.bean;
 
-import net.oschina.app.improve.bean.simple.Author;
-
 import java.io.Serializable;
 
 /**
@@ -9,7 +7,7 @@ import java.io.Serializable;
  * Created by huanghaibin_dev
  * on 2016/8/16.
  */
-public class Message implements Serializable{
+public class Message implements Serializable {
     public static final int TYPE_TEXT = 1;
     public static final int TYPE_IMAGE = 3;
     public static final int TYPE_FILE = 5;

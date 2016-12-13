@@ -3,7 +3,6 @@ package net.oschina.app.improve.pay.platform;
 import android.app.Activity;
 import android.support.v4.util.Pair;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * Created by thanatos on 16/10/11.
  */
 
@@ -35,20 +33,20 @@ public class WXPay implements IWXAPIEventHandler {
     private static String APP_ID = "";
     private IWXAPI iwxapi;
 
-    public WXPay(Activity context){
+    public WXPay(Activity context) {
         iwxapi = WXAPIFactory.createWXAPI(context, APP_ID, true);
         iwxapi.handleIntent(context.getIntent(), this);
     }
 
-    private void pay(Map<String, String> map){
+    private void pay(Map<String, String> map) {
         PayReq request = new PayReq();
         request.appId = APP_ID;
         request.partnerId = map.get("partnerId");
-        request.prepayId= map.get("prepayId");
+        request.prepayId = map.get("prepayId");
         request.packageValue = map.get("packageValue");
-        request.nonceStr= map.get("nonceStr");
-        request.timeStamp= map.get("timeStamp");
-        request.sign= map.get("sign");
+        request.nonceStr = map.get("nonceStr");
+        request.timeStamp = map.get("timeStamp");
+        request.sign = map.get("sign");
         iwxapi.sendReq(request);
     }
 
@@ -59,9 +57,9 @@ public class WXPay implements IWXAPIEventHandler {
 
     @Override
     public void onResp(BaseResp resp) {
-        if(resp.getType() != ConstantsAPI.COMMAND_PAY_BY_WX) return;
+        if (resp.getType() != ConstantsAPI.COMMAND_PAY_BY_WX) return;
         TLog.d("oschina", "微信支付成功");
-        switch (resp.errCode){
+        switch (resp.errCode) {
             case PAY_RESULT_CODE_SUCCESS:
                 break;
             case PAY_RESULT_CODE_ERROR:
@@ -71,12 +69,12 @@ public class WXPay implements IWXAPIEventHandler {
         }
     }
 
-    public static List<Pair<String, String>> decode(String info){
+    public static List<Pair<String, String>> decode(String info) {
         List<Pair<String, String>> list = new ArrayList<>();
         if (TextUtils.isEmpty(info)) return list;
         String[] kv = info.split("&");
         String[] k;
-        for (String v : kv){
+        for (String v : kv) {
             k = v.split("=");
             if (k.length != 2) continue;
             try {
@@ -89,15 +87,15 @@ public class WXPay implements IWXAPIEventHandler {
         return list;
     }
 
-    public void onSuccess(){
+    public void onSuccess() {
         // when success
     }
 
-    public void onError(){
+    public void onError() {
         // error
     }
 
-    public void onCancel(){
+    public void onCancel() {
         // user cancel pay the order
     }
 }

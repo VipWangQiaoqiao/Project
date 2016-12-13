@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.OSCApplication;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
@@ -26,6 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
     private OSCApplication.ReadState mReadState;
+
     public QuestionSubAdapter(Callback callback, int mode) {
         super(callback, mode);
         mReadState = OSCApplication.getReadState("sub_list");

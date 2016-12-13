@@ -21,7 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by thanatos on 16/8/17.
  */
-public class UserQuestionAdapter extends BaseRecyclerAdapter<Question>{
+public class UserQuestionAdapter extends BaseRecyclerAdapter<Question> {
 
     public UserQuestionAdapter(Context context, int mode) {
         super(context, mode);
@@ -51,13 +51,19 @@ public class UserQuestionAdapter extends BaseRecyclerAdapter<Question>{
         holder.mViewInfoVisual.setText(String.valueOf(item.getViewCount()));
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        @Bind(R.id.iv_ques_item_icon) CircleImageView mViewPortrait;
-        @Bind(R.id.tv_ques_item_title) TextView mViewTitle;
-        @Bind(R.id.tv_ques_item_content) TextView mViewContent;
-        @Bind(R.id.tv_ques_item_history) TextView mViewHistory;
-        @Bind(R.id.tv_info_view) TextView mViewInfoVisual;
-        @Bind(R.id.tv_info_comment) TextView mViewInfoCmm;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.iv_ques_item_icon)
+        CircleImageView mViewPortrait;
+        @Bind(R.id.tv_ques_item_title)
+        TextView mViewTitle;
+        @Bind(R.id.tv_ques_item_content)
+        TextView mViewContent;
+        @Bind(R.id.tv_ques_item_history)
+        TextView mViewHistory;
+        @Bind(R.id.tv_info_view)
+        TextView mViewInfoVisual;
+        @Bind(R.id.tv_info_comment)
+        TextView mViewInfoCmm;
 
         public ViewHolder(View itemView) {
             super(itemView);

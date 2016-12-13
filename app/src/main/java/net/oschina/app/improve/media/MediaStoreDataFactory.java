@@ -226,7 +226,7 @@ public class MediaStoreDataFactory implements LoaderManager.LoaderCallbacks<Curs
         mImageCallback.onPictureRemoved(items);
     }
 
-    public void selectFolder(ImageFolder folder){
+    public void selectFolder(ImageFolder folder) {
         this.mRegisterKey = folder.getPath().toLowerCase();
     }
 

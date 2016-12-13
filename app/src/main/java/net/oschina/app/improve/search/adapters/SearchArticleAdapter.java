@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 
 public class SearchArticleAdapter extends BaseRecyclerAdapter<News> {
 
-    public SearchArticleAdapter(Context context){
+    public SearchArticleAdapter(Context context) {
         this(context, ONLY_FOOTER);
     }
 
@@ -41,10 +41,12 @@ public class SearchArticleAdapter extends BaseRecyclerAdapter<News> {
         holder.mViewContent.setText(item.getBody());
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.tv_title) TextView mViewTitle;
-        @Bind(R.id.tv_content) TextView mViewContent;
+        @Bind(R.id.tv_title)
+        TextView mViewTitle;
+        @Bind(R.id.tv_content)
+        TextView mViewContent;
 
         public ViewHolder(View view) {
             super(view);

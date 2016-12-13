@@ -7,7 +7,7 @@ import java.io.Serializable;
  * on 2016/10/12.
  */
 
-public class ShakeNews implements Serializable{
+public class ShakeNews implements Serializable {
     private String name;
     private String detail;
     private String href;

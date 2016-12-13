@@ -247,7 +247,7 @@ public class Tweet implements Serializable {
         }
     }
 
-    public static class Statistics implements Serializable{
+    public static class Statistics implements Serializable {
         private int comment;
         private int transmit;
         private int like;

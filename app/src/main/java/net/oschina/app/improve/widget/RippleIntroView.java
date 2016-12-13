@@ -38,7 +38,7 @@ public class RippleIntroView extends RelativeLayout implements Runnable {
         init();
     }
 
-    private void init(){
+    private void init() {
         mRipplePaint = new Paint();
         mRipplePaint.setAntiAlias(true);
         mRipplePaint.setStyle(Paint.Style.STROKE);
@@ -56,7 +56,7 @@ public class RippleIntroView extends RelativeLayout implements Runnable {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (mCacheBitmap != null){
+        if (mCacheBitmap != null) {
             mCacheBitmap.recycle();
             mCacheBitmap = null;
         }
@@ -84,7 +84,7 @@ public class RippleIntroView extends RelativeLayout implements Runnable {
         final int rw = pw / 2;
         final int rh = ph / 2;
 
-        if (mCacheBitmap == null){
+        if (mCacheBitmap == null) {
             mCacheBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
             Canvas cv = new Canvas(mCacheBitmap);
             super.onDraw(cv);
@@ -100,7 +100,7 @@ public class RippleIntroView extends RelativeLayout implements Runnable {
         canvas.drawBitmap(mCacheBitmap, 0, 0, mCirclePaint);
 
         int save = canvas.save();
-        for (int step = count; step <= mMaxRadius; step += mInterval){
+        for (int step = count; step <= mMaxRadius; step += mInterval) {
             mRipplePaint.setAlpha(255 * (mMaxRadius - step) / mMaxRadius);
             canvas.drawCircle(px, py, (float) (rw + step), mRipplePaint);
         }
@@ -119,7 +119,7 @@ public class RippleIntroView extends RelativeLayout implements Runnable {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mCacheBitmap != null){
+        if (mCacheBitmap != null) {
             mCacheBitmap.recycle();
             mCacheBitmap = null;
         }
