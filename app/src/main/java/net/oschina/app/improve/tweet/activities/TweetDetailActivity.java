@@ -543,6 +543,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             content = AssimilateUtils.clearHtmlTag(content).toString();
         }
         share.commitTweetId = tweet.getId();
+        share.fromTweetId = tweet.getId();
         TweetPublishActivity.show(this, null, content, share);
     }
 

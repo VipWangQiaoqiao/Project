@@ -233,6 +233,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                                     content = AssimilateUtils.clearHtmlTag(content).toString();
                                 }
                                 share.commitTweetId = tweet.getId();
+                                share.fromTweetId = tweet.getId();
                                 TweetPublishActivity.show(getContext(), null, content, share);
                                 break;
                         }
