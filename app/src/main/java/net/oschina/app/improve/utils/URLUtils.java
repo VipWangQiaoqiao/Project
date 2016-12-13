@@ -168,9 +168,9 @@ public class URLUtils {
                     break;
                 }
                 matcher = PATTERN_PATH_EVENT.matcher(path);
-                if (matcher.find()){
+                if (matcher.find()) {
                     oid = StringUtils.toLong(matcher.group(1));
-                    if (oid > 0){
+                    if (oid > 0) {
                         UIHelper.showEventDetail(context, oid);
                         break;
                     }

@@ -63,7 +63,8 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<TweetLi
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<TweetLike>>>(){}.getType();
+        return new TypeToken<ResultBean<PageBean<TweetLike>>>() {
+        }.getType();
     }
 
     @Override

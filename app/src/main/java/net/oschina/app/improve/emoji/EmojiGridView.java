@@ -10,8 +10,6 @@ import net.oschina.app.emoji.DisplayRules;
 import net.oschina.app.emoji.EmojiGridAdapter;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.emoji.KJEmojiConfig;
-import net.oschina.app.emoji.KJEmojiFragment;
 import net.oschina.app.emoji.OnEmojiClickListener;
 
 import java.util.ArrayList;

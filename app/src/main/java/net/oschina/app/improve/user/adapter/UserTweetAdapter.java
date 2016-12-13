@@ -5,13 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +22,6 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
@@ -36,7 +33,6 @@ import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
-import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -55,7 +51,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by
  * thanatos on 16/8/17.
- *
+ * <p>
  * 突然间变成各个地方都在用的Adapter了...
  */
 public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implements View.OnClickListener {
@@ -71,7 +67,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         mOnLikeClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!AccountHelper.isLogin()){
+                if (!AccountHelper.isLogin()) {
                     UIHelper.showLoginActivity(mContext);
                     return;
                 }
@@ -148,23 +144,23 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         holder.mLayoutFlow.setImage(images);
 
         /* - statistics - */
-        if (item.getStatistics() != null){
+        if (item.getStatistics() != null) {
             holder.mViewLikeCount.setText(String.valueOf(item.getStatistics().getLike()));
             holder.mViewCmmCount.setText(String.valueOf(item.getStatistics().getComment()));
             int mDispatchCount = item.getStatistics().getTransmit();
             if (mDispatchCount <= 0) {
                 holder.mViewDispatchCount.setVisibility(View.GONE);
-            }else {
+            } else {
                 holder.mViewDispatchCount.setVisibility(View.VISIBLE);
                 holder.mViewDispatchCount.setText(String.valueOf(item.getStatistics().getTransmit()));
             }
-        }else {
+        } else {
             holder.mViewLikeCount.setText(String.valueOf(item.getLikeCount()));
             holder.mViewCmmCount.setText(String.valueOf(item.getCommentCount()));
             holder.mViewDispatchCount.setVisibility(View.GONE);
         }
 
-        if (item.getAbout() != null){
+        if (item.getAbout() != null) {
             holder.mLayoutRef.setVisibility(View.VISIBLE);
             holder.mLayoutRef.setTag(position);
             holder.mLayoutRef.setOnClickListener(this);
@@ -172,12 +168,12 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             About about = item.getAbout();
             holder.mLayoutRefImages.setImage(about.getImages());
 
-            if (!About.check(about)){
+            if (!About.check(about)) {
                 holder.mViewRefTitle.setVisibility(View.VISIBLE);
                 holder.mViewRefTitle.setText("不存在或已删除的内容");
                 holder.mViewRefContent.setText("抱歉，该内容不存在或已被删除");
-            }else {
-                if (about.getType() == OSChinaApi.COMMENT_TWEET){
+            } else {
+                if (about.getType() == OSChinaApi.COMMENT_TWEET) {
                     holder.mViewRefTitle.setVisibility(View.GONE);
                     String aname = "@" + about.getTitle();
                     String cnt = about.getContent();
@@ -189,19 +185,20 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
                             mContext.getResources().getColor(R.color.day_colorPrimary));
                     builder.setSpan(span, 0, aname.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                     holder.mViewRefContent.setText(builder);
-                }else {
+                } else {
                     holder.mViewRefTitle.setVisibility(View.VISIBLE);
                     holder.mViewRefTitle.setText(about.getTitle());
                     holder.mViewRefContent.setText(about.getContent());
                 }
             }
-        }else {
+        } else {
             holder.mLayoutRef.setVisibility(View.GONE);
         }
     }
 
     /**
      * 点击引用时触发
+     *
      * @param v Ref View
      */
     @Override
@@ -281,7 +278,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
                 if (tweet == null) return;
                 tweet.setLiked(resultBean.getResult().isLiked());
                 tweet.setLikeCount(resultBean.getResult().getLikeCount());
-                if (tweet.getStatistics() != null){
+                if (tweet.getStatistics() != null) {
                     tweet.getStatistics().setLike(resultBean.getResult().getLikeCount());
                 }
                 updateItem(position);

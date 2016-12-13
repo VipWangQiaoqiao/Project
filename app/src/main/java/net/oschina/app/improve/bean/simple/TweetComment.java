@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 动弹评论实体
  * Created by thanatos on 16/7/19.
  */
-public class TweetComment implements Serializable{
+public class TweetComment implements Serializable {
 
     private long id;
     private String content;

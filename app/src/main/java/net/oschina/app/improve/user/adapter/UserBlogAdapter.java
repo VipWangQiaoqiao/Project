@@ -46,7 +46,7 @@ public class UserBlogAdapter extends BaseRecyclerAdapter<Blog> {
             ImageSpan imageSpan = new ImageSpan(originate, ImageSpan.ALIGN_BOTTOM);
             builder.setSpan(imageSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
-        if (item.isRecommend()){
+        if (item.isRecommend()) {
             int start = builder.length();
             builder.append("[icon] ");
             Drawable originate = mContext.getResources().getDrawable(R.mipmap.ic_label_recommend);
@@ -66,11 +66,16 @@ public class UserBlogAdapter extends BaseRecyclerAdapter<Blog> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.tv_item_blog_title) TextView mViewTitle;
-        @Bind(R.id.tv_item_blog_body) TextView mViewContent;
-        @Bind(R.id.tv_item_blog_history) TextView mViewHistory;
-        @Bind(R.id.tv_info_view) TextView mViewInfoVisual;
-        @Bind(R.id.tv_info_comment) TextView mViewInfoCmm;
+        @Bind(R.id.tv_item_blog_title)
+        TextView mViewTitle;
+        @Bind(R.id.tv_item_blog_body)
+        TextView mViewContent;
+        @Bind(R.id.tv_item_blog_history)
+        TextView mViewHistory;
+        @Bind(R.id.tv_info_view)
+        TextView mViewInfoVisual;
+        @Bind(R.id.tv_info_comment)
+        TextView mViewInfoCmm;
 
         public ViewHolder(View itemView) {
             super(itemView);

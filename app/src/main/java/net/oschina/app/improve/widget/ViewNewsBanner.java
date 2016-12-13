@@ -41,7 +41,7 @@ public class ViewNewsBanner extends RelativeLayout implements View.OnClickListen
         if (banner != null) {
             int type = banner.getType();
             long id = banner.getId();
-            UIHelper.showDetail(getContext(), type, id,banner.getHref());
+            UIHelper.showDetail(getContext(), type, id, banner.getHref());
         }
     }
 

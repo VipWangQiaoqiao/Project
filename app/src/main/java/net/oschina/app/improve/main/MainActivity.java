@@ -5,7 +5,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -13,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -33,8 +31,6 @@ import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.util.TLog;
-import net.oschina.common.helper.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,13 +72,13 @@ public class MainActivity extends BaseActivity implements
         mNavBar = ((NavFragment) manager.findFragmentById(R.id.fag_nav));
         mNavBar.setup(this, manager, R.id.main_container, this);
 
-        if (AppContext.get("isFirstComing", true)){
+        if (AppContext.get("isFirstComing", true)) {
             View view = findViewById(R.id.layout_ripple);
             view.setVisibility(View.VISIBLE);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ViewGroup)v.getParent()).removeView(v);
+                    ((ViewGroup) v.getParent()).removeView(v);
                     AppContext.set("isFirstComing", false);
                 }
             });

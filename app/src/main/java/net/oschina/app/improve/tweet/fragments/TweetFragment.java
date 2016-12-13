@@ -60,22 +60,22 @@ import cz.msebera.android.httpclient.Header;
 public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         implements BaseRecyclerAdapter.OnItemLongClickListener {
 
-    public static final int CATALOG_NEW     = 0X0001;
-    public static final int CATALOG_HOT     = 0X0002;
-    public static final int CATALOG_MYSELF  = 0X0003;
+    public static final int CATALOG_NEW = 0X0001;
+    public static final int CATALOG_HOT = 0X0002;
+    public static final int CATALOG_MYSELF = 0X0003;
     public static final int CATALOG_FRIENDS = 0X0004;
-    public static final int CATALOG_TAG     = 0X0005;
+    public static final int CATALOG_TAG = 0X0005;
     public static final int CATALOG_SOMEONE = 0X0006;
 
-    public static final String CACHE_NEW_TWEET      = "cache_new_tweet";
-    public static final String CACHE_HOT_TWEET      = "cache_hot_tweet";
-    public static final String CACHE_USER_TWEET     = "cache_user_tweet";
-    public static final String CACHE_USER_FRIEND    = "cache_user_friend";
-    public static final String CACHE_USER_TAG       = "cache_user_tag";
+    public static final String CACHE_NEW_TWEET = "cache_new_tweet";
+    public static final String CACHE_HOT_TWEET = "cache_hot_tweet";
+    public static final String CACHE_USER_TWEET = "cache_user_tweet";
+    public static final String CACHE_USER_FRIEND = "cache_user_friend";
+    public static final String CACHE_USER_TAG = "cache_user_tag";
 
-    public static final String BUNDLE_KEY_USER_ID           = "BUNDLE_KEY_USER_ID";
-    public static final String BUNDLE_KEY_TAG               = "BUNDLE_KEY_LOGIN_USER_TAG";
-    public static final String BUNDLE_KEY_REQUEST_CATALOG   = "BUNDLE_KEY_REQUEST_CATALOG";
+    public static final String BUNDLE_KEY_USER_ID = "BUNDLE_KEY_USER_ID";
+    public static final String BUNDLE_KEY_TAG = "BUNDLE_KEY_LOGIN_USER_TAG";
+    public static final String BUNDLE_KEY_REQUEST_CATALOG = "BUNDLE_KEY_REQUEST_CATALOG";
 
     public int mReqCatalog;//请求类型
     public long mUserId; // login user or another user
@@ -92,12 +92,11 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     }
 
     /**
-     *
-     * @param uid user id
+     * @param uid  user id
      * @param code 只是为了让方法指纹不一样而已，哈哈
      * @return {@link Fragment}
      */
-    public static Fragment instantiate(long uid, int code){
+    public static Fragment instantiate(long uid, int code) {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_KEY_USER_ID, uid);
         bundle.putInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_SOMEONE);
@@ -283,7 +282,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
 
     @Override
     protected boolean isNeedEmptyView() {
-        return mReqCatalog != CATALOG_TAG  && mReqCatalog != CATALOG_SOMEONE;
+        return mReqCatalog != CATALOG_TAG && mReqCatalog != CATALOG_SOMEONE;
     }
 
     @Override
@@ -314,6 +313,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
 
     /**
      * 未登录时显示的图标，点击应该跳到的登录界面
+     *
      * @param v {@link View}
      */
     @Override

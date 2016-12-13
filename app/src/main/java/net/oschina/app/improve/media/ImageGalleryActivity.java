@@ -29,7 +29,6 @@ import com.bumptech.glide.request.target.Target;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
-import net.oschina.app.improve.utils.PicturesCompressor;
 import net.oschina.common.utils.BitmapUtil;
 import net.oschina.common.utils.StreamUtil;
 import net.qiujuer.genius.ui.widget.Loading;

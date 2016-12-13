@@ -139,10 +139,10 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         }
     }
 
-    public void setImage(String[] images){
+    public void setImage(String[] images) {
         if (images == null || images.length == 0) return;
         Tweet.Image[] ims = new Tweet.Image[images.length];
-        for (int i = 0; i < images.length; i++){
+        for (int i = 0; i < images.length; i++) {
             Tweet.Image image = new Tweet.Image();
             image.setThumb(images[i]);
             ims[i] = image;

@@ -4,16 +4,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import net.oschina.app.BuildConfig;
 import net.oschina.app.R;
-import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
 import net.oschina.app.improve.base.fragments.BaseViewPagerFragment;
 import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.main.subscription.SubFragment;
 import net.oschina.app.improve.search.activities.SearchActivity;
-import net.oschina.app.improve.tweet.fragments.TopicTweetFragment;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 

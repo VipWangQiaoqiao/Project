@@ -1,6 +1,5 @@
 package net.oschina.app.improve.detail.general;
 
-import android.view.View;
 import android.widget.TextView;
 
 import net.oschina.app.R;

@@ -1,5 +1,3 @@
-
-
 package net.oschina.app.improve.media;
 
 import android.Manifest;

@@ -2,8 +2,8 @@ package net.oschina.app.improve.bean;
 
 import com.google.gson.annotations.Expose;
 
-import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.UserRelation;
 
 import java.util.List;
