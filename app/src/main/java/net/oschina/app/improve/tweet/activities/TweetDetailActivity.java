@@ -51,7 +51,6 @@ import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.RecordButtonUtil;
@@ -75,42 +74,24 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     public static final String BUNDLE_KEY_TWEET = "BUNDLE_KEY_TWEET";
     public static final String BUNDLE_KEY_TWEET_ID = "BUNDLE_KEY_TWEET_ID";
 
-    @Bind(R.id.iv_portrait)
-    CircleImageView ivPortrait;
-    @Bind(R.id.tv_nick)
-    TextView tvNick;
-    @Bind(R.id.tv_time)
-    TextView tvTime;
-    @Bind(R.id.tv_client)
-    TextView tvClient;
-    @Bind(R.id.iv_thumbup)
-    ImageView ivThumbup;
-    @Bind(R.id.layout_coordinator)
-    CoordinatorLayout mCoordinatorLayout;
-    @Bind(R.id.fragment_container)
-    FrameLayout mFrameLayout;
-    @Bind(R.id.tweet_img_record)
-    ImageView mImgRecord;
-    @Bind(R.id.tweet_tv_record)
-    TextView mSecondRecord;
-    @Bind(R.id.tweet_bg_record)
-    RelativeLayout mRecordLayout;
-    @Bind(R.id.tv_content)
-    TextView mContent;
-    @Bind(R.id.tweet_pics_layout)
-    TweetPicturesLayout mLayoutGrid;
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
-    @Bind(R.id.tv_ref_title)
-    TextView mViewRefTitle;
-    @Bind(R.id.tv_ref_content)
-    TextView mViewRefContent;
-    @Bind(R.id.layout_ref_images)
-    TweetPicturesLayout mLayoutRefImages;
-    @Bind(R.id.iv_dispatch)
-    ImageView mViewDispatch;
-    @Bind(R.id.layout_ref)
-    LinearLayout mLayoutRef;
+    @Bind(R.id.iv_portrait)         CircleImageView ivPortrait;
+    @Bind(R.id.tv_nick)             TextView tvNick;
+    @Bind(R.id.tv_time)             TextView tvTime;
+    @Bind(R.id.tv_client)           TextView tvClient;
+    @Bind(R.id.iv_thumbup)          ImageView ivThumbup;
+    @Bind(R.id.layout_coordinator)  CoordinatorLayout mCoordinatorLayout;
+    @Bind(R.id.fragment_container)  FrameLayout mFrameLayout;
+    @Bind(R.id.tweet_img_record)    ImageView mImgRecord;
+    @Bind(R.id.tweet_tv_record)     TextView mSecondRecord;
+    @Bind(R.id.tweet_bg_record)     RelativeLayout mRecordLayout;
+    @Bind(R.id.tv_content)          TextView mContent;
+    @Bind(R.id.tweet_pics_layout)   TweetPicturesLayout mLayoutGrid;
+    @Bind(R.id.toolbar)             Toolbar mToolbar;
+    @Bind(R.id.tv_ref_title)        TextView mViewRefTitle;
+    @Bind(R.id.tv_ref_content)      TextView mViewRefContent;
+    @Bind(R.id.layout_ref_images)   TweetPicturesLayout mLayoutRefImages;
+    @Bind(R.id.iv_dispatch)         ImageView mViewDispatch;
+    @Bind(R.id.layout_ref)          LinearLayout mLayoutRef;
 
     EditText mViewInput;
 
@@ -503,34 +484,28 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         this.mDelegation.performClick();
     }
 
-    @Override
-    public void onScroll() {
+    @Override public void onScroll() {
         if (mDelegation != null) mDelegation.getBottomSheet().dismiss();
     }
 
-    @OnClick(R.id.iv_thumbup)
-    void onClickThumbUp() {
+    @OnClick(R.id.iv_thumbup) void onClickThumbUp() {
         if (checkLogin()) return;
         this.dialog = DialogHelper.getProgressDialog(this, "正在提交请求...");
         this.dialog.show();
         OSChinaApi.reverseTweetLike(tweet.getId(), publishAdmireHandler);
     }
 
-    @OnClick(R.id.layout_ref)
-    void onClickRef() {
+    @OnClick(R.id.layout_ref) void onClickRef() {
         if (tweet.getAbout() == null) return;
         UIHelper.showDetail(this, tweet.getAbout().getType(), tweet.getAbout().getId(), null);
     }
 
-    @OnClick(R.id.iv_comment)
-    void onClickComment() {
+    @OnClick(R.id.iv_comment) void onClickComment() {
         if (checkLogin()) return;
-        mDelegation.getBottomSheet().dismiss();
-        TDevice.showSoftKeyboard(mViewInput);
+        mDelegation.getBottomSheet().show("发表评论");
     }
 
-    @OnClick(R.id.iv_dispatch)
-    void onClickTransmit() {
+    @OnClick(R.id.iv_dispatch) void onClickTransmit() {
         if (tweet == null || tweet.getId() <= 0) return;
 
         String content = null;
