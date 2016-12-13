@@ -1009,7 +1009,8 @@ public class OSChinaApi {
      * @param content     内容
      * @param imagesToken 图片token
      * @param audioToken  语音token
-     * @param share       相关分享节点，仅仅关注 {@link About.Share#id}, {@link About.Share#type}
+     * @param share       相关分享节点，仅仅关注 {@link About.Share#id}, {@link About.Share#type},
+     *                    {@link About.Share#fromTweetId}
      * @param handler     回调
      */
     public static void pubTweet(String content, String imagesToken, String audioToken, About.Share share, AsyncHttpResponseHandler handler) {
@@ -1022,6 +1023,7 @@ public class OSChinaApi {
         if (About.check(share)) {
             params.put("aboutId", share.id);
             params.put("aboutType", share.type);
+            params.put("aboutFromTweetId", share.fromTweetId);
         }
         post("action/apiv2/tweet", params, handler);
     }

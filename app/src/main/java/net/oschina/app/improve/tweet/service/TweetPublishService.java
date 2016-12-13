@@ -69,7 +69,8 @@ public class TweetPublishService extends Service implements Contract.IService {
      * 发起动弹发布服务
      * <p>
      * 如果发布的动弹绑定到相关资讯等，则About节点不为NULL
-     * 仅仅关注：{@link About.Share#id}, {@link About.Share#type}} {@link About.Share#commitTweetId}
+     * 仅仅关注：{@link About.Share#id}, {@link About.Share#type}},
+     * {@link About.Share#commitTweetId}, {@link About.Share#fromTweetId}
      */
     public static void startActionPublish(Context context, String content, List<String> images, About.Share aboutShare) {
         Intent intent = new Intent(context, TweetPublishService.class);
@@ -206,8 +207,8 @@ public class TweetPublishService extends Service implements Contract.IService {
             if (ACTION_PUBLISH.equals(action)) {
                 final String content = intent.getStringExtra(EXTRA_CONTENT);
                 final String[] images = intent.getStringArrayExtra(EXTRA_IMAGES);
-                final About.Share about = (About.Share) intent.getSerializableExtra(EXTRA_ABOUT);
-                handleActionPublish(content, images, about, startId);
+                final About.Share share = (About.Share) intent.getSerializableExtra(EXTRA_ABOUT);
+                handleActionPublish(content, images, share, startId);
             } else {
                 if (ACTION_CONTINUE.equals(action)) {
                     final String id = intent.getStringExtra(EXTRA_ID);

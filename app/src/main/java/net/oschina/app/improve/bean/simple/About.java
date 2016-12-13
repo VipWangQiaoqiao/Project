@@ -194,6 +194,7 @@ public class About implements Serializable {
         public long commitTweetId;
         public String title;
         public String content;
+        public long fromTweetId;
 
         @Override
         public String toString() {
@@ -203,6 +204,7 @@ public class About implements Serializable {
                     ", commitTweetId=" + commitTweetId +
                     ", title='" + title + '\'' +
                     ", content='" + content + '\'' +
+                    ", fromTweetId=" + fromTweetId +
                     '}';
         }
     }

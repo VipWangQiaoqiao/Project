@@ -23,6 +23,7 @@ public class TweetPublishModel implements Serializable {
     private long aboutId;
     private int aboutType;
     private long aboutCommitId;
+    private long aboutFromTweetId;
 
     public TweetPublishModel() {
         id = UUID.randomUUID().toString();
@@ -37,6 +38,7 @@ public class TweetPublishModel implements Serializable {
             this.aboutId = share.id;
             this.aboutType = share.type;
             this.aboutCommitId = share.commitTweetId;
+            this.aboutFromTweetId = share.fromTweetId;
         }
     }
 
@@ -60,6 +62,7 @@ public class TweetPublishModel implements Serializable {
         About.Share share = About.buildShare(aboutId, aboutType);
         if (About.check(share)) {
             share.commitTweetId = aboutCommitId;
+            share.fromTweetId = aboutFromTweetId;
             return share;
         }
         return null;
