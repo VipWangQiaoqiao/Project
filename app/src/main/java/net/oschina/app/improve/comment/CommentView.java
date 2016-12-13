@@ -114,7 +114,8 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         }.getType();
     }
 
-    public void init(long id, final int type, int order, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    public void init(long id, final int type, int order, final int commentCount, final RequestManager imageLoader,
+                     final OnCommentClickListener onCommentClickListener) {
         this.mId = id;
         this.mType = type;
 
@@ -137,12 +138,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                     if (resultBean.isSuccess()) {
                         List<Comment> comments = resultBean.getResult().getItems();
                         int size = comments.size();
-
-                        if (size > 0) {
-                            mSeeMore.setVisibility(VISIBLE);
-                            mSeeMore.setOnClickListener(CommentView.this);
-                        }
-
                         if (type == OSChinaApi.COMMENT_NEWS) {
                             List<Comment> hotComments = new ArrayList<>();
                             //筛选出热门评论
@@ -153,11 +148,16 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                                 }
                             }
                             comments = hotComments;
-                            int len = hotComments.size();
+                            int len = comments.size();
                             if (len > 0) {
                                 //表示热门评论数目
                                 setTitle(String.format("%s", getResources().getString(R.string.hot_comment_hint)));
+                                mSeeMore.setVisibility(VISIBLE);
+                                mSeeMore.setOnClickListener(CommentView.this);
                             }
+                        } else if (commentCount > size) {
+                            mSeeMore.setVisibility(VISIBLE);
+                            mSeeMore.setOnClickListener(CommentView.this);
                         }
 
                         Comment[] array = CollectionUtil.toArray(comments, Comment.class);
@@ -172,16 +172,8 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     }
 
     private void initComment(final Comment[] comments, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
-
         if (mLayComments != null)
-
             if (comments != null && comments.length > 0) {
-
-                if (comments.length > 4) {
-                    mSeeMore.setVisibility(VISIBLE);
-                    mSeeMore.setOnClickListener(CommentView.this);
-                }
-
                 if (getVisibility() != VISIBLE) {
                     setVisibility(VISIBLE);
                 }
