@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -94,6 +95,13 @@ public class BottomSheetBar {
         mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+
+                mRootView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        TDevice.hideSoftKeyboard(mEditText);
+                    }
+                }, 10);
                 mFrameLayout.setVisibility(View.GONE);
             }
         });
