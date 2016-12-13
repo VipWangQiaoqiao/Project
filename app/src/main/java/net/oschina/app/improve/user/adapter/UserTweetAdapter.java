@@ -114,22 +114,6 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         holder.mViewTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         PlatfromUtil.setPlatFromString(holder.mViewPlatform, item.getAppClient());
 
-        /* - statistics - */
-        if (item.getStatistics() != null){
-            holder.mViewLikeCount.setText(String.valueOf(item.getStatistics().getLike()));
-            holder.mViewCmmCount.setText(String.valueOf(item.getStatistics().getComment()));
-            int mDispatchCount = item.getStatistics().getTransmit();
-            if (mDispatchCount <= 0) {
-                holder.mViewDispatchCount.setVisibility(View.GONE);
-            }else {
-                holder.mViewDispatchCount.setText(String.valueOf(item.getStatistics().getTransmit()));
-            }
-        }else {
-            holder.mViewLikeCount.setText(String.valueOf(item.getLikeCount()));
-            holder.mViewCmmCount.setText(String.valueOf(item.getCommentCount()));
-            holder.mViewDispatchCount.setVisibility(View.GONE);
-        }
-
         if (!TextUtils.isEmpty(item.getContent())) {
             String content = item.getContent().replaceAll("[\n\\s]+", " ");
             holder.mViewContent.setText(AssimilateUtils.assimilate(mContext, content));
@@ -153,19 +137,37 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewContent.setText(spannable);
         }*/
 
-        holder.mViewLikeState.setImageResource(item.isLiked() ? R.mipmap.ic_thumbup_actived : R.mipmap.ic_thumb_normal);
+        holder.mViewLikeState.setImageResource(
+                item.isLiked()
+                        ? R.mipmap.ic_thumbup_actived
+                        : R.mipmap.ic_thumb_normal);
         holder.mViewLikeState.setTag(position);
         holder.mViewLikeState.setOnClickListener(mOnLikeClickListener);
 
         Tweet.Image[] images = item.getImages();
         holder.mLayoutFlow.setImage(images);
 
+        /* - statistics - */
+        if (item.getStatistics() != null){
+            holder.mViewLikeCount.setText(String.valueOf(item.getStatistics().getLike()));
+            holder.mViewCmmCount.setText(String.valueOf(item.getStatistics().getComment()));
+            int mDispatchCount = item.getStatistics().getTransmit();
+            if (mDispatchCount <= 0) {
+                holder.mViewDispatchCount.setVisibility(View.GONE);
+            }else {
+                holder.mViewDispatchCount.setVisibility(View.VISIBLE);
+                holder.mViewDispatchCount.setText(String.valueOf(item.getStatistics().getTransmit()));
+            }
+        }else {
+            holder.mViewLikeCount.setText(String.valueOf(item.getLikeCount()));
+            holder.mViewCmmCount.setText(String.valueOf(item.getCommentCount()));
+            holder.mViewDispatchCount.setVisibility(View.GONE);
+        }
+
         if (item.getAbout() != null){
             holder.mLayoutRef.setVisibility(View.VISIBLE);
             holder.mLayoutRef.setTag(position);
             holder.mLayoutRef.setOnClickListener(this);
-            holder.mViewDispatch.setVisibility(View.VISIBLE);
-            holder.mViewDispatchCount.setVisibility(View.VISIBLE);
 
             About about = item.getAbout();
             holder.mLayoutRefImages.setImage(about.getImages());
