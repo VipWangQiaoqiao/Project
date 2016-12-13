@@ -221,31 +221,35 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back, R.id.icon_send})
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_picture:
-                mEmojiKeyboard.hideAllKeyBoard();
-                mLayImages.onLoadMoreClick();
-                break;
-            case R.id.iv_mention:
-                mEmojiKeyboard.hideAllKeyBoard();
-                toSelectFriends();
-                break;
-            case R.id.iv_tag:
-                insertTrendSoftware();
-                break;
-            case R.id.iv_emoji:
-                handleEmojiClick(v);
-                break;
-            case R.id.txt_indicator:
-                handleClearContentClick();
-                break;
-            case R.id.icon_back:
-                mOperator.onBack();
-                break;
-            case R.id.icon_send:
-                mOperator.publish();
-                break;
+        try {
+            switch (v.getId()) {
+                case R.id.iv_picture:
+                    mEmojiKeyboard.hideAllKeyBoard();
+                    mLayImages.onLoadMoreClick();
+                    break;
+                case R.id.iv_mention:
+                    mEmojiKeyboard.hideAllKeyBoard();
+                    toSelectFriends();
+                    break;
+                case R.id.iv_tag:
+                    insertTrendSoftware();
+                    break;
+                case R.id.iv_emoji:
+                    handleEmojiClick(v);
+                    break;
+                case R.id.txt_indicator:
+                    handleClearContentClick();
+                    break;
+                case R.id.icon_back:
+                    mOperator.onBack();
+                    break;
+                case R.id.icon_send:
+                    mOperator.publish();
+                    break;
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -274,7 +278,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             v.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mEmojiKeyboard.showEmojiKeyBoard();
+                    try {
+                        mEmojiKeyboard.showEmojiKeyBoard();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }, 280);
         } else {
