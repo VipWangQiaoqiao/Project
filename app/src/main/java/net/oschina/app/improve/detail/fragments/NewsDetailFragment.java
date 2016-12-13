@@ -186,7 +186,11 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mAbouts.setAbout(newsDetail.getAbouts(), 6);
 
         mComment.setTitle(String.format("%s", getResources().getString(R.string.hot_comment_hint)));
-        mComment.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, OSChinaApi.COMMENT_HOT_ORDER, getImgLoader(), this);
+        mComment.init(newsDetail.getId(),
+                OSChinaApi.COMMENT_NEWS,
+                OSChinaApi.COMMENT_HOT_ORDER,
+                newsDetail.getCommentCount(),
+                getImgLoader(), this);
     }
 
     private void handleKeyDel() {

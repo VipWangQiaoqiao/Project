@@ -99,6 +99,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
                     LoginActivity.show(SoftwareTweetActivity.this);
             }
         });
+        mDelegation.getBottomSheet().hideSyncAction();
     }
 
 

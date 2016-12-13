@@ -168,7 +168,11 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         mComments.setTitle(String.format("%s (%d)", getResources().getString(R.string.answer_hint), questionDetail.getCommentCount()));
         mComments.setCommentBar(mDelegation);
-        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, OSChinaApi.COMMENT_NEW_ORDER, getImgLoader(), this);
+        mComments.init(questionDetail.getId(),
+                OSChinaApi.COMMENT_QUESTION,
+                OSChinaApi.COMMENT_NEW_ORDER,
+                questionDetail.getCommentCount(),
+                getImgLoader(), this);
     }
 
     private boolean mInputDoubleEmpty = false;
