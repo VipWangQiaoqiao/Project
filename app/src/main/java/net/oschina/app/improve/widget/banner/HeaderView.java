@@ -206,7 +206,6 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mViewPager.removeAllViews();
         if (mHandler == null)
             return;
         mHandler.removeCallbacks(this);
