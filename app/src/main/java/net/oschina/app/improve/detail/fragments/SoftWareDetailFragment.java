@@ -79,8 +79,12 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
             case R.id.lay_option_comment:
                 // 评论列表
                 SoftwareDetail detail = mOperator.getData();
-                SoftwareTweetActivity.show(getContext(), TextUtils.isEmpty(detail.getIdentification()) ?
-                        detail.getName() : detail.getIdentification());
+                String tag = detail.getIdentification();
+                String name = detail.getName();
+                if (TextUtils.isEmpty(tag))
+                    tag = name;
+
+                SoftwareTweetActivity.show(getContext(), tag, name);
                 break;
             case R.id.tv_software_author_name:
 

@@ -191,4 +191,30 @@ public class SoftwareDetail extends Software {
     public void setIdentification(String identification) {
         this.identification = identification;
     }
+
+    @Override
+    public String toString() {
+        return "SoftwareDetail{" +
+                "extName='" + extName + '\'' +
+                ", logo='" + logo + '\'' +
+                ", body='" + body + '\'' +
+                ", author='" + author + '\'' +
+                ", authorId=" + authorId +
+                ", authorPortrait='" + authorPortrait + '\'' +
+                ", license='" + license + '\'' +
+                ", homePage='" + homePage + '\'' +
+                ", document='" + document + '\'' +
+                ", download='" + download + '\'' +
+                ", language='" + language + '\'' +
+                ", supportOS='" + supportOS + '\'' +
+                ", collectionDate='" + collectionDate + '\'' +
+                ", pubDate='" + pubDate + '\'' +
+                ", commentCount=" + commentCount +
+                ", viewCount=" + viewCount +
+                ", favorite=" + favorite +
+                ", recommend=" + recommend +
+                ", identification='" + identification + '\'' +
+                ", abouts=" + abouts +
+                '}';
+    }
 }
