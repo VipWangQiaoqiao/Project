@@ -421,12 +421,9 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                         handleData(mPageBean.getItems(), clearData);
                     }
 
-                    if (mPageBean.getItems().size() > 20) {
-                        mCommentAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_MORE, false);
-                    } else {
-                        mCommentAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, false);
-                    }
-
+                    mCommentAdapter.setState(
+                            mPageBean == null || mPageBean.getItems() == null || mPageBean.getItems().size() < 20 ?
+                                    BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, true);
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseString, e);

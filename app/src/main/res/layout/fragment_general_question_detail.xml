@@ -37,7 +37,6 @@
                 android:ellipsize="end"
                 android:gravity="center|left"
                 android:lineSpacingExtra="4dp"
-                android:maxLines="2"
                 android:minLines="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
