@@ -45,15 +45,18 @@ import static net.oschina.app.improve.base.adapter.BaseRecyclerAdapter.ONLY_FOOT
 
 public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     public static final String BUNDLE_KEY_NAME = "bundle_key_name";
+    public static final String BUNDLE_KEY_TAG = "bundle_key_tag";
+    private String softwareTag;
     private String softwareName;
     private ProgressDialog mDialog;
     private boolean mInputDoubleEmpty = false;
 
     private CommentBar mDelegation;
 
-    public static void show(Context context, String tag) {
+    public static void show(Context context, String tag, String name) {
         Intent intent = new Intent(context, SoftwareTweetActivity.class);
-        intent.putExtra(SoftwareTweetActivity.BUNDLE_KEY_NAME, tag);
+        intent.putExtra(SoftwareTweetActivity.BUNDLE_KEY_TAG, tag);
+        intent.putExtra(SoftwareTweetActivity.BUNDLE_KEY_NAME, name);
         context.startActivity(intent);
     }
 
@@ -64,8 +67,9 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
     @Override
     protected boolean initBundle(Bundle bundle) {
+        softwareTag = bundle.getString(BUNDLE_KEY_TAG);
         softwareName = bundle.getString(BUNDLE_KEY_NAME);
-        return super.initBundle(bundle);
+        return !(TextUtils.isEmpty(softwareTag) || TextUtils.isEmpty(softwareName));
     }
 
     @Override
@@ -106,7 +110,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getSoftwareTweetList(softwareName, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getSoftwareTweetList(softwareTag, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
     }
 
 
@@ -131,7 +135,6 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
 
     private void handleSendComment(String content) {
-
         long uid = requestCheck();
         if (uid == 0)
             return;
@@ -141,41 +144,41 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
             return;
         }
 
-        OSChinaApi.pubSoftwareTweet(content + " #" + softwareName + "#", new TextHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-                super.onStart();
-                showWaitDialog(R.string.progress_submit);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                AppContext.showToast("评论失败!");
-                hideWaitDialog();
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    Type type = new TypeToken<ResultBean<Tweet>>() {
-                    }.getType();
-
-                    ResultBean<Tweet> resultBean = AppOperator.createGson().fromJson(responseString, type);
-
-                    if (resultBean.isSuccess()) {
-                        onRefreshing();
-                        mDelegation.getBottomSheet().dismiss();
-                        mDelegation.getBottomSheet().getEditText().setText("");
+        OSChinaApi.pubSoftwareTweet(String.format("#%s# %s", softwareName, content),
+                new TextHttpResponseHandler() {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        showWaitDialog(R.string.progress_submit);
                     }
-                    hideWaitDialog();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(statusCode, headers, responseString, e);
-                }
-                hideWaitDialog();
-            }
-        });
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        AppContext.showToast("评论失败!");
+                        hideWaitDialog();
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        try {
+                            Type type = new TypeToken<ResultBean<Tweet>>() {
+                            }.getType();
+
+                            ResultBean<Tweet> resultBean = AppOperator.createGson().fromJson(responseString, type);
+
+                            if (resultBean.isSuccess()) {
+                                onRefreshing();
+                                mDelegation.getBottomSheet().dismiss();
+                                mDelegation.getBottomSheet().getEditText().setText("");
+                            }
+                            hideWaitDialog();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            onFailure(statusCode, headers, responseString, e);
+                        }
+                        hideWaitDialog();
+                    }
+                });
     }
 
     private void handleKeyDel() {
@@ -225,7 +228,6 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
     @Override
     protected BaseRecyclerAdapter<Tweet> getRecyclerAdapter() {
-
         SoftwareTweetAdapter tweetAdapter = new SoftwareTweetAdapter(this, ONLY_FOOTER);
         tweetAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
             @Override
@@ -237,7 +239,6 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
                 long id = tweet.getAuthor().getId();
                 long loginUid = AccountHelper.getUserId();
                 if (id == loginUid) {
-
                     DialogHelper.getConfirmDialog(SoftwareTweetActivity.this, "删除该动弹?", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -268,9 +269,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
                         }
                     }).create().show();
-
                 }
-
             }
         });
         return tweetAdapter;
