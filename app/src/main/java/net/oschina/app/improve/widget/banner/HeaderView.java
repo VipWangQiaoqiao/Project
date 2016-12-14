@@ -55,11 +55,13 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     }
 
     protected void init(Context context) {
-        mHandler = new Handler();
+        //mHandler = new Handler();
         mBanners = new ArrayList<>();
         List<Banner> banners = CacheManager.readListJson(context, mBannerCache, Banner.class);
         if (banners != null) {
             mBanners.addAll(banners);
+            if (mHandler == null)
+                mHandler = new Handler();
             mHandler.postDelayed(this, 5000);
         }
         LayoutInflater.from(context).inflate(getLayoutId(), this, true);
@@ -125,6 +127,8 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     }
 
     public void requestBanner() {
+        if (mHandler == null)
+            mHandler = new Handler();
         mHandler.removeCallbacks(this);
         OSChinaApi.getBanner(mUrl, mCallBack);
     }
@@ -189,5 +193,23 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
         public void destroyItem(ViewGroup container, int position, Object object) {
             HeaderView.this.destroyItem(container, position, object);
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mHandler == null)
+            mHandler = new Handler();
+        mHandler.postDelayed(this, 5000);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mViewPager.removeAllViews();
+        if (mHandler == null)
+            return;
+        mHandler.removeCallbacks(this);
+        mHandler = null;
     }
 }
