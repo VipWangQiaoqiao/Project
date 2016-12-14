@@ -45,7 +45,7 @@ public class NewsHeaderView extends HeaderView {
     @Override
     void setBanners(List<Banner> banners) {
         super.setBanners(banners);
-        if (banners.size() > 0) {
+        if (banners.size() > 0 && mCurrentItem ==0) {
             mTitleTextView.setText(banners.get(0).getName());
         }
     }
