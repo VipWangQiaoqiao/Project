@@ -18,6 +18,7 @@ import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         BaseRecyclerAdapter.OnItemClickListener,
         View.OnClickListener,
         BaseGeneralRecyclerAdapter.Callback {
+    private final String TAG = this.getClass().getSimpleName();
     protected BaseRecyclerAdapter<T> mAdapter;
     protected RecyclerView mRecyclerView;
     protected RecyclerRefreshLayout mRefreshLayout;
@@ -87,12 +89,20 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
 
         mHandler = new TextHttpResponseHandler() {
             @Override
+            public void onStart() {
+                super.onStart();
+                TLog.log(TAG, "HttpResponseHandler:onStart");
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 onRequestError();
+                TLog.log(TAG, "HttpResponseHandler:onFailure responseString:" + responseString);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                TLog.log(TAG, "HttpResponseHandler:onSuccess responseString:" + responseString);
                 try {
                     ResultBean<PageBean<T>> resultBean = AppOperator.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
@@ -114,6 +124,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             public void onFinish() {
                 super.onFinish();
                 onRequestFinish();
+                TLog.log(TAG, "HttpResponseHandler:onFinish");
             }
         };
 

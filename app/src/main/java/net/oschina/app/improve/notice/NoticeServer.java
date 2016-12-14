@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -98,7 +97,7 @@ public class NoticeServer extends Service {
         super.onCreate();
         log("onCreate");
         // First init the Client
-        ApiHttpClient.init((AppContext) getApplication());
+        ApiHttpClient.init(getApplication());
         mAlarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
     }
 

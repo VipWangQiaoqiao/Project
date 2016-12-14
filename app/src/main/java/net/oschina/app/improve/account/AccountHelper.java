@@ -15,6 +15,7 @@ import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
+import net.oschina.app.util.TLog;
 import net.oschina.common.helper.SharedPreferencesHelper;
 
 import cz.msebera.android.httpclient.Header;
@@ -51,6 +52,10 @@ public final class AccountHelper {
     }
 
     public synchronized static User getUser() {
+        if (instances == null) {
+            TLog.error("AccountHelper instances is null, you need call init() method.");
+            return new User();
+        }
         if (instances.user == null)
             instances.user = SharedPreferencesHelper.loadFormSource(instances.application, User.class);
         if (instances.user == null)
