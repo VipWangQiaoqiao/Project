@@ -1,6 +1,7 @@
 package net.oschina.app.improve.widget.banner;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -45,7 +46,7 @@ public class NewsHeaderView extends HeaderView {
     @Override
     void setBanners(List<Banner> banners) {
         super.setBanners(banners);
-        if (banners.size() > 0 && mCurrentItem ==0) {
+        if (banners.size() > 0 && mCurrentItem == 0) {
             mTitleTextView.setText(banners.get(0).getName());
         }
     }
@@ -55,6 +56,7 @@ public class NewsHeaderView extends HeaderView {
         ViewNewsBanner view = new ViewNewsBanner(getContext());
         if (mBanners.size() != 0) {
             int p = position % mBanners.size();
+            Log.e("p", " -- " + p);
             if (p >= 0 && p < mBanners.size()) {
                 view.initData(mImageLoader, mBanners.get(p));
 
