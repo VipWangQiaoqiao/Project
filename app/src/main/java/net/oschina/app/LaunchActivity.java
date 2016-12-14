@@ -33,14 +33,17 @@ public class LaunchActivity extends BaseActivity {
     }
 
     private void doMerge() {
-        // Cookie迁移
-        String cookie = OSCApplication.getInstance().getProperty("cookie");
-        if (!TextUtils.isEmpty(cookie)) {
-            OSCApplication.getInstance().removeProperty("cookie");
-            User user = AccountHelper.getUser();
-            user.setCookie(cookie);
-            AccountHelper.updateUserCache(user);
-            OSCApplication.reInit();
+        // 判断是否是新版本
+        if (Setting.checkIsNewVersion(this)) {
+            // Cookie迁移
+            String cookie = OSCApplication.getInstance().getProperty("cookie");
+            if (!TextUtils.isEmpty(cookie)) {
+                OSCApplication.getInstance().removeProperty("cookie");
+                User user = AccountHelper.getUser();
+                user.setCookie(cookie);
+                AccountHelper.updateUserCache(user);
+                OSCApplication.reInit();
+            }
         }
 
         // 栏目相关数据合并操作
