@@ -184,10 +184,13 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
                     ForegroundColorSpan span = new ForegroundColorSpan(
                             mContext.getResources().getColor(R.color.day_colorPrimary));
                     builder.setSpan(span, 0, aname.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    holder.mViewRefContent.setMaxLines(Integer.MAX_VALUE);
                     holder.mViewRefContent.setText(builder);
                 } else {
                     holder.mViewRefTitle.setVisibility(View.VISIBLE);
                     holder.mViewRefTitle.setText(about.getTitle());
+                    holder.mViewRefContent.setMaxLines(3);
+                    holder.mViewRefContent.setEllipsize(TextUtils.TruncateAt.END);
                     holder.mViewRefContent.setText(about.getContent());
                 }
             }
