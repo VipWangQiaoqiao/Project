@@ -45,7 +45,6 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     protected String mUrl;
     private boolean isScrolling;
     protected String mBannerCache;
-    private boolean isInit = false;
 
     public HeaderView(Context context, RequestManager loader, String api, String bannerCache) {
         super(context);
@@ -128,8 +127,6 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     }
 
     public void requestBanner() {
-        if (isInit)
-            return;
         if (mHandler == null)
             mHandler = new Handler();
         mHandler.removeCallbacks(this);
@@ -149,7 +146,6 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
                 mViewPager.setCurrentItem(mCurrentItem);
             }
             if (mBanners.size() > 1) {
-                isInit = true;
                 mHandler.postDelayed(this, 5000);
             }
         }
