@@ -14,7 +14,12 @@ public class OSCApplication extends AppContext {
     @Override
     public void onCreate() {
         super.onCreate();
+        // 初始化操作
         init();
+    }
+
+    public static void reInit() {
+        ((OSCApplication) OSCApplication.getInstance()).init();
     }
 
     private void init() {
