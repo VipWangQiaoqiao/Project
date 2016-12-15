@@ -7,7 +7,7 @@ import net.oschina.app.improve.base.activities.BaseActivity;
  * on 2016/11/4.
  */
 
-public class QRCodeActivity extends BaseActivity{
+public class QRCodeActivity extends BaseActivity {
     @Override
     protected int getContentView() {
         return 0;

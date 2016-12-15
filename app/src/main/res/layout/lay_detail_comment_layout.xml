@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
@@ -14,24 +15,29 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:text="相关评论"
+        android:text="@string/about_comment_hint"
         android:textColor="#6a6a6a"
         android:textSize="12sp" />
 
     <View
+        android:id="@+id/label_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/list_divider_color" />
 
     <LinearLayout
-        android:id="@+id/lay_blog_detail_comment"
+        android:id="@+id/lay_detail_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        tools:ignore="RtlSymmetry" />
+        android:paddingBottom="8dp" />
+
+    <View
+        android:id="@+id/label_line_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
 
     <TextView
         android:id="@+id/tv_see_more_comment"
@@ -41,12 +47,8 @@
         android:gravity="center_horizontal"
         android:paddingBottom="16dp"
         android:paddingTop="16dp"
-        android:text="查看更多"
+        android:text="@string/view_more_hint"
         android:textColor="#24cf5f"
         android:textSize="14sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/list_divider_color" />
 </merge>

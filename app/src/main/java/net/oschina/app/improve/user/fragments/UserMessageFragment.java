@@ -32,7 +32,7 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getUserMessageList(mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getUserMessageList(isRefreshing ? null : mBean.getNextPageToken(), mHandler);
     }
 
     @Override

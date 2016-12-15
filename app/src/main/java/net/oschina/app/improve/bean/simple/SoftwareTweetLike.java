@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public class SoftwareTweetLike implements Serializable {
 
-    private  Author author;
+    private Author author;
     private boolean isLike;
 
     public Author getAuthor() {

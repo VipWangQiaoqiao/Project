@@ -9,6 +9,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.bean.SoftwareDetail;
 import net.oschina.app.improve.detail.contract.SoftDetailContract;
 import net.oschina.app.improve.tweet.activities.SoftwareTweetActivity;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.UIHelper;
 
@@ -30,7 +31,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
     @Bind(R.id.tv_software_name)
     TextView tvName;
 
-    @Bind(R.id.tv_software_authorName)
+    @Bind(R.id.tv_software_author_name)
     TextView tvAuthor;
     @Bind(R.id.tv_software_law)
     TextView tvLicense;
@@ -55,7 +56,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
     }
 
     @OnClick({R.id.lay_option_share, R.id.lay_option_fav, R.id.bt_software_home, R.id.bt_software_document,
-            R.id.lay_option_comment})
+            R.id.lay_option_comment, R.id.tv_software_author_name})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -78,8 +79,21 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
             case R.id.lay_option_comment:
                 // 评论列表
                 SoftwareDetail detail = mOperator.getData();
-                SoftwareTweetActivity.show(getContext(), TextUtils.isEmpty(detail.getIdentification()) ?
-                        detail.getName() : detail.getIdentification());
+                String tag = detail.getIdentification();
+                String name = detail.getName();
+                if (TextUtils.isEmpty(tag))
+                    tag = name;
+
+                SoftwareTweetActivity.show(getContext(), tag, name);
+                break;
+            case R.id.tv_software_author_name:
+
+                long authorId = mOperator.getData().getAuthorId();
+                String author = mOperator.getData().getAuthor();
+                if (authorId <= 0 || TextUtils.isEmpty(author)) return;
+
+                OtherUserHomeActivity.show(getActivity(), authorId);
+
                 break;
             default:
                 break;
@@ -106,9 +120,9 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         tvName.setText(String.format("%s%s", TextUtils.isEmpty(name) ? "" : name, (TextUtils.isEmpty(extName)) ? "" : " " + extName.trim()));
 
         String author = softwareDetail.getAuthor();
-        tvAuthor.setText(TextUtils.isEmpty(author) ? "匿名" : author.trim());
+        tvAuthor.setText(TextUtils.isEmpty(author) ? getString(R.string.soft_detail_any_name) : author.trim());
         String license = softwareDetail.getLicense();
-        tvLicense.setText(TextUtils.isEmpty(license) ? "无" : license.trim());
+        tvLicense.setText(TextUtils.isEmpty(license) ? getString(R.string.soft_detail_no_license) : license.trim());
         tvLanguage.setText(softwareDetail.getLanguage());
         tvSystem.setText(softwareDetail.getSupportOS());
         tvRecordTime.setText(softwareDetail.getCollectionDate());
@@ -127,7 +141,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
 
     @Override
     void setCommentCount(int count) {
-        mCommentText.setText(String.format("评论 (%s)", count));
+        mCommentText.setText(String.format("%s (%s)", getString(R.string.comment_title_hint), count));
     }
 
     private void handleFavorite() {

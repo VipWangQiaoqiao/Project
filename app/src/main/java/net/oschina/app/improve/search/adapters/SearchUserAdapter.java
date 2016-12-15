@@ -23,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SearchUserAdapter extends BaseRecyclerAdapter<User> {
 
-    public SearchUserAdapter(Context context){
+    public SearchUserAdapter(Context context) {
         this(context, ONLY_FOOTER);
     }
 
@@ -55,12 +55,17 @@ public class SearchUserAdapter extends BaseRecyclerAdapter<User> {
         holder.mViewIntegral.setText(String.format("积分 %s   |   关注 %s   |   粉丝 %s",
                 item.getStatistics().getScore(), item.getStatistics().getFollow(), item.getStatistics().getFans()));
     }
-    public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        @Bind(R.id.iv_portrait) CircleImageView mViewPortrait;
-        @Bind(R.id.tv_nick) TextView mViewNick;
-        @Bind(R.id.tv_position) TextView mViewPosition;
-        @Bind(R.id.tv_integral) TextView mViewIntegral;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        @Bind(R.id.iv_portrait)
+        CircleImageView mViewPortrait;
+        @Bind(R.id.tv_nick)
+        TextView mViewNick;
+        @Bind(R.id.tv_position)
+        TextView mViewPosition;
+        @Bind(R.id.tv_integral)
+        TextView mViewIntegral;
 
         public ViewHolder(View view) {
             super(view);

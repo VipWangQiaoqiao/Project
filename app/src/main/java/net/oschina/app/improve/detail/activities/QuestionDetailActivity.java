@@ -16,12 +16,10 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.QuestionDetailFragment;
-import net.oschina.app.util.HTMLUtil;
-import net.oschina.app.util.StringUtils;
 
 import java.lang.reflect.Type;
 
@@ -43,6 +41,20 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
     int getOptionsMenuId() {
         return R.menu.menu_detail_report;
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        boolean createOptionsMenu = super.onCreateOptionsMenu(menu);
+//        if (createOptionsMenu) {
+//            mCommentCountView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    CommentsActivity.show(QuestionDetailActivity.this, mDataId, 2);
+//                }
+//            });
+//        }
+//        return createOptionsMenu;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -115,27 +127,15 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
 
     @Override
     public void toShare() {
-        if (getDataId() != 0 && getData() != null) {
-            String content;
-
-            String url = getData().getHref();
-            final QuestionDetail blogDetail = getData();
-            if (blogDetail.getBody().length() > 55) {
-                content = HTMLUtil.delHTMLTag(blogDetail.getBody().trim());
-                if (content.length() > 55)
-                    content = StringUtils.getSubString(0, 55, content);
-            } else {
-                content = HTMLUtil.delHTMLTag(blogDetail.getBody().trim());
-            }
-            String title = blogDetail.getTitle();
-
-            if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
-                AppContext.showToast("内容加载失败...");
-                return;
-            }
-            toShare(title, content, url);
+        if (getData() != null) {
+            final QuestionDetail detail = getData();
+            String title = detail.getTitle();
+            String content = detail.getBody();
+            String url = detail.getHref();
+            if (!toShare(title, content, url, 2))
+                AppContext.showToast("抱歉，内容无法分享！");
         } else {
-            AppContext.showToast("内容加载失败...");
+            AppContext.showToast("内容加载失败！");
         }
     }
 
@@ -168,12 +168,12 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<CommentEX>>() {
+                    Type type = new TypeToken<ResultBean<Comment>>() {
                     }.getType();
 
-                    ResultBean<CommentEX> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                    ResultBean<Comment> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
-                        CommentEX respComment = resultBean.getResult();
+                        Comment respComment = resultBean.getResult();
                         if (respComment != null) {
                             QuestionDetailContract.View view = mView;
                             if (view != null) {

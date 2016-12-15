@@ -30,7 +30,7 @@ public class UserCommentFragment extends BaseRecyclerViewFragment<Mention> {
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getMsgCommentList(mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getMsgCommentList(isRefreshing ? null : mBean.getNextPageToken(), mHandler);
     }
 
     @Override

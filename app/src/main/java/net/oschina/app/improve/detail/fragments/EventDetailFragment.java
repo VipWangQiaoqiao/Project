@@ -1,20 +1,22 @@
 package net.oschina.app.improve.detail.fragments;
 
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.EventApplyData;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
-import net.oschina.app.improve.comment.CommentExsActivity;
+import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.contract.EventDetailContract;
+import net.oschina.app.improve.detail.sign.SignUpActivity;
 import net.oschina.app.improve.dialog.EventDetailApplyDialog;
-import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -84,7 +86,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
     protected void initData() {
         final EventDetail mDetail = mOperator.getData();
         if (mDetail == null) return;
-        tv_comment.setText(String.format("评论(%s)",mDetail.getCommentCount() ));
+        tv_comment.setText(String.format("评论(%s)", mDetail.getCommentCount()));
         tv_event_title.setText(mDetail.getTitle());
         tv_event_author.setText(String.format("发起人：%s", mDetail.getAuthor()));
         tv_event_member.setText(String.format("%s人参与", mDetail.getApplyCount()));
@@ -123,7 +125,8 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         tv_event_type.setText(String.format("类型：%s", getResources().getString(typeStr)));
         tv_apply_status.setText(getResources().getString(getApplyStatusStrId(mDetail.getApplyStatus())));
 
-        if (mDetail.getApplyStatus() != EventDetail.APPLY_STATUS_UN_SIGN) {
+        if (mDetail.getStatus() != EventDetail.STATUS_ING ||
+                mDetail.getApplyStatus() != EventDetail.APPLY_STATUS_UN_SIGN) {
             setSignUnEnable();
         }
         setBodyContent(mDetail.getBody());
@@ -132,43 +135,24 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
     @OnClick({R.id.ll_fav, R.id.ll_sign, R.id.ll_comment})
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.ll_fav:
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(EventDetailFragment.this, 1);
+                    return;
+                }
                 mOperator.toFav();
                 break;
             case R.id.ll_sign:
-                final EventDetail mDetail = mOperator.getData();
-                if (mDetail.getApplyStatus() == EventDetail.APPLY_STATUS_UN_SIGN && mDetail.getStatus() == Event.STATUS_ING) {
-                    if (AccountHelper.isLogin()) {
-                        if (mEventApplyDialog == null) {
-                            mEventApplyDialog = new EventDetailApplyDialog(getActivity(), mDetail);
-                            mEventApplyDialog.setCanceledOnTouchOutside(true);
-                            mEventApplyDialog.setCancelable(true);
-                            mEventApplyDialog.setTitle("活动报名");
-                            mEventApplyDialog.setCanceledOnTouchOutside(true);
-                            mEventApplyDialog.setNegativeButton(R.string.cancle, null);
-                            mEventApplyDialog.setPositiveButton(R.string.ok,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface d, int which) {
-                                            EventApplyData data;
-                                            if ((data = mEventApplyDialog.getApplyData()) != null) {
-                                                data.setEvent(Integer.parseInt(String.valueOf(mDetail.getId())));
-                                                data.setUser((int) AccountHelper.getUserId());
-                                                mOperator.toSignUp(data);
-                                            }
-
-                                        }
-                                    });
-                        }
-                        mEventApplyDialog.show();
-                    } else {
-                        UIHelper.showLoginActivity(getActivity());
-                    }
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(getActivity(), 0x02);
+                    return;
                 }
+                SignUpActivity.show(this, mOperator.getData().getId());
                 break;
             case R.id.ll_comment:
-                CommentExsActivity.show(getActivity(),mOperator.getData().getId(),5);
+                CommentsActivity.show(getActivity(), mOperator.getData().getId(), OSChinaApi.COMMENT_EVENT, OSChinaApi.COMMENT_NEW_ORDER);
                 break;
         }
     }
@@ -223,6 +207,19 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 break;
         }
         return strId;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            switch (requestCode) {
+                case 0x01:
+                    tv_apply_status.setText(getResources().getString(getApplyStatusStrId(EventDetail.APPLY_STATUS_AUDIT)));
+                    setSignUnEnable();
+                    break;
+            }
+        }
     }
 
     private void setSignUnEnable() {

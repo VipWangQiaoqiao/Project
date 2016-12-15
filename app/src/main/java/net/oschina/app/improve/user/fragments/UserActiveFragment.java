@@ -61,13 +61,9 @@ public class UserActiveFragment extends BaseRecyclerViewFragment<Active> {
     }
 
     @Override
-    public void onLoadMore() {
-        OSChinaApi.getUserActives(uid, mBean.getNextPageToken(), mHandler);
-    }
-
-    @Override
     protected void requestData() {
-        OSChinaApi.getUserActives(uid, null, mHandler);
+        String token = isRefreshing ? null : mBean.getNextPageToken();
+        OSChinaApi.getUserActives(uid, token, mHandler);
     }
 
     @Override

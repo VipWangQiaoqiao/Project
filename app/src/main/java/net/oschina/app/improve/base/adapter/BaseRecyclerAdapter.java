@@ -213,7 +213,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         else return VIEW_TYPE_NORMAL;
     }
 
-    private int getIndex(int position) {
+    protected int getIndex(int position) {
         return BEHAVIOR_MODE == ONLY_HEADER || BEHAVIOR_MODE == BOTH_HEADER_FOOTER ? position - 1 : position;
     }
 

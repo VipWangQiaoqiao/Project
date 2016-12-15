@@ -4,10 +4,13 @@
     android:id="@+id/activity_blog_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_green"
+    android:fitsSystemWindows="true"
     tools:context="net.oschina.app.improve.detail.activities.DetailActivity">
 
     <FrameLayout
         android:id="@+id/lay_container"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -26,6 +26,7 @@ import net.oschina.app.bean.Report;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.bean.PrimaryBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
@@ -33,6 +34,8 @@ import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.HTMLUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
@@ -45,11 +48,10 @@ import cz.msebera.android.httpclient.Header;
  * on 16/6/20.
  */
 
-public abstract class DetailActivity<Data, DataView extends DetailContract.View> extends
+public abstract class DetailActivity<Data extends PrimaryBean, DataView extends DetailContract.View> extends
         BaseBackActivity
         implements DetailContract.Operator<Data, DataView> {
 
-    private static final String TAG = "DetailActivity";
     long mDataId;
     Data mData;
     DataView mView;
@@ -61,7 +63,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     private AlertDialog alertDialog;
 
     public long getDataId() {
-        return mDataId;
+        return mData != null ? mData.getId() : mDataId;
     }
 
     public Data getData() {
@@ -225,7 +227,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
             return false;
         }
 
-        if (result.isSuccess()) {
+        if (result.isSuccess() && result.getResult().getId() != 0) {
             mData = result.getResult();
             handleView();
             return true;
@@ -290,10 +292,33 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         return true;
     }
 
+    /**
+     * 分享传递原始数据进入，截取前55个文字
+     *
+     * @param title   标题
+     * @param content 分享内容
+     * @param url     分享地址
+     */
+    protected boolean toShare(String title, String content, String url, int type) {
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(url))
+            return false;
 
-    protected void toShare(String title, String content, String url) {
+        content = content.trim();
+        if (content.length() > 55) {
+            content = HTMLUtil.delHTMLTag(content);
+            if (content.length() > 55)
+                content = StringUtils.getSubString(0, 55, content);
+        } else {
+            content = HTMLUtil.delHTMLTag(content);
+        }
+        if (TextUtils.isEmpty(content))
+            return false;
+
+        // 分享
         if (mShareDialogBuilder == null) {
             mShareDialogBuilder = ShareDialogBuilder.with(this)
+                    .id(getDataId())
+                    .type(type)
                     .title(title)
                     .content(content)
                     .url(url)
@@ -302,6 +327,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         if (alertDialog == null)
             alertDialog = mShareDialogBuilder.create();
         alertDialog.show();
+        return true;
     }
 
 
@@ -360,7 +386,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
      * @return 返回当前登录用户, 未登录或者未通过检查返回0
      */
     public long requestCheck() {
-        if (mDataId == 0 || mData == null) {
+        if (mDataId == 0 && mData == null) {
             AppContext.showToast(getResources().getString(R.string.state_loading_error), Toast.LENGTH_SHORT);
             return 0;
         }

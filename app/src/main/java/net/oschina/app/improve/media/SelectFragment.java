@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.media.adapter.ImageAdapter;
@@ -27,7 +26,9 @@ import net.oschina.app.improve.media.adapter.ImageFolderAdapter;
 import net.oschina.app.improve.media.bean.Image;
 import net.oschina.app.improve.media.bean.ImageFolder;
 import net.oschina.app.improve.media.config.ImageLoaderListener;
+import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.media.contract.SelectImageContract;
+import net.oschina.app.improve.media.crop.CropActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.qiujuer.genius.ui.Ui;
 
@@ -74,6 +75,14 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
     private LoaderListener mCursorLoader = new LoaderListener();
 
     private SelectImageContract.Operator mOperator;
+
+    private static SelectOptions mOption;
+
+    public static SelectFragment newInstance(SelectOptions options) {
+        SelectFragment fragment = new SelectFragment();
+        mOption = options;
+        return fragment;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -130,11 +139,11 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
     @Override
     protected void initData() {
         mSelectedImage = new ArrayList<>();
-        SelectImageActivity.Config config = mOperator.getConfig();
-        if (config.getSelectCount() > 1 && config.getSelectedImages() != null) {
-            String[] images = config.getSelectedImages();
+
+        if (mOption.getSelectCount() > 1 && mOption.getSelectedImages() != null) {
+            List<String> images = mOption.getSelectedImages();
             for (String s : images) {
-                // check file exists
+                // checkShare file exists
                 if (s != null && new File(s).exists()) {
                     Image image = new Image();
                     image.setSelect(true);
@@ -149,15 +158,14 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
 
     @Override
     public void onItemClick(int position, long itemId) {
-        SelectImageActivity.Config config = mOperator.getConfig();
-        if (config.isHaveCamera()) {
+        if (mOption.isHasCam()) {
             if (position != 0) {
                 handleSelectChange(position);
             } else {
-                if (mSelectedImage.size() < config.getSelectCount()) {
+                if (mSelectedImage.size() < mOption.getSelectCount()) {
                     mOperator.requestCamera();
                 } else {
-                    Toast.makeText(getActivity(), "最多只能选择 " + config.getSelectCount() + " 张图片", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "最多只能选择 " + mOption.getSelectCount() + " 张图片", Toast.LENGTH_SHORT).show();
                 }
             }
         } else {
@@ -179,9 +187,8 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
 
     private void handleSelectChange(int position) {
         Image image = mImageAdapter.getItem(position);
-        SelectImageActivity.Config config = mOperator.getConfig();
         //如果是多选模式
-        final int selectCount = config.getSelectCount();
+        final int selectCount = mOption.getSelectCount();
         if (selectCount > 1) {
             if (image.isSelect()) {
                 image.setSelect(false);
@@ -204,9 +211,17 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
     }
 
     private void handleResult() {
-        if (mOperator != null && mSelectedImage.size() != 0) {
-            mOperator.getCallback().doSelectDone(Util.toArray(mSelectedImage));
-            getActivity().finish();
+        if (mSelectedImage.size() != 0) {
+            if (mOption.isCrop()) {
+                List<String> selectedImage = mOption.getSelectedImages();
+                selectedImage.clear();
+                selectedImage.add(mSelectedImage.get(0).getPath());
+                mSelectedImage.clear();
+                CropActivity.show(this, mOption);
+            } else {
+                mOption.getCallback().doSelected(Util.toArray(mSelectedImage));
+                getActivity().finish();
+            }
         }
     }
 
@@ -301,16 +316,25 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == AppCompatActivity.RESULT_OK && requestCode == 0x03 && mCamImageName != null) {
-            Uri localUri = Uri.fromFile(new File(Util.getCameraPath() + mCamImageName));
-            Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
-            getActivity().sendBroadcast(localIntent);
+        if (resultCode == AppCompatActivity.RESULT_OK) {
+            switch (requestCode) {
+                case 0x03:
+                    if (mCamImageName == null) return;
+                    Uri localUri = Uri.fromFile(new File(Util.getCameraPath() + mCamImageName));
+                    Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
+                    getActivity().sendBroadcast(localIntent);
+                    break;
+                case 0x04:
+                    if (data == null) return;
+                    mOption.getCallback().doSelected(new String[]{data.getStringExtra("crop_path")});
+                    getActivity().finish();
+                    break;
+            }
         }
     }
 
     @Override
     public void displayImage(final ImageView iv, final String path) {
-        // Load image
         getImgLoader().load(path)
                 .asBitmap()
                 .centerCrop()
@@ -341,106 +365,97 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
         @Override
         public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
             if (data != null) {
-                AppOperator.runOnThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final ArrayList<Image> images = new ArrayList<>();
-                        final List<ImageFolder> imageFolders = new ArrayList<>();
 
-                        final ImageFolder defaultFolder = new ImageFolder();
-                        defaultFolder.setName("全部照片");
-                        defaultFolder.setPath("");
-                        imageFolders.add(defaultFolder);
+                final ArrayList<Image> images = new ArrayList<>();
+                final List<ImageFolder> imageFolders = new ArrayList<>();
 
-                        int count = data.getCount();
-                        if (count > 0) {
-                            data.moveToFirst();
-                            do {
-                                String path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
-                                String name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
-                                long dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
-                                int id = data.getInt(data.getColumnIndexOrThrow(IMAGE_PROJECTION[3]));
-                                String thumbPath = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[4]));
-                                String bucket = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[5]));
+                final ImageFolder defaultFolder = new ImageFolder();
+                defaultFolder.setName("全部照片");
+                defaultFolder.setPath("");
+                imageFolders.add(defaultFolder);
 
-                                Image image = new Image();
-                                image.setPath(path);
-                                image.setName(name);
-                                image.setDate(dateTime);
-                                image.setId(id);
-                                image.setThumbPath(thumbPath);
-                                image.setFolderName(bucket);
+                int count = data.getCount();
+                if (count > 0) {
+                    data.moveToFirst();
+                    do {
+                        String path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
+                        String name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
+                        long dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
+                        int id = data.getInt(data.getColumnIndexOrThrow(IMAGE_PROJECTION[3]));
+                        String thumbPath = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[4]));
+                        String bucket = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[5]));
 
-                                images.add(image);
+                        Image image = new Image();
+                        image.setPath(path);
+                        image.setName(name);
+                        image.setDate(dateTime);
+                        image.setId(id);
+                        image.setThumbPath(thumbPath);
+                        image.setFolderName(bucket);
 
-                                //如果是新拍的照片
-                                if (mCamImageName != null && mCamImageName.equals(image.getName())) {
-                                    image.setSelect(true);
-                                    mSelectedImage.add(image);
-                                }
+                        images.add(image);
 
-                                //如果是被选中的图片
-                                if (mSelectedImage.size() > 0) {
-                                    for (Image i : mSelectedImage) {
-                                        if (i.getPath().equals(image.getPath())) {
-                                            image.setSelect(true);
-                                        }
-                                    }
-                                }
-
-                                File imageFile = new File(path);
-                                File folderFile = imageFile.getParentFile();
-                                ImageFolder folder = new ImageFolder();
-                                folder.setName(folderFile.getName());
-                                folder.setPath(folderFile.getAbsolutePath());
-                                if (!imageFolders.contains(folder)) {
-                                    folder.getImages().add(image);
-                                    folder.setAlbumPath(image.getPath());//默认相册封面
-                                    imageFolders.add(folder);
-                                } else {
-                                    // 更新
-                                    ImageFolder f = imageFolders.get(imageFolders.indexOf(folder));
-                                    f.getImages().add(image);
-                                }
-
-
-                            } while (data.moveToNext());
+                        //如果是新拍的照片
+                        if (mCamImageName != null && mCamImageName.equals(image.getName())) {
+                            image.setSelect(true);
+                            mSelectedImage.add(image);
                         }
-                        mRoot.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                addImagesToAdapter(images);
-                                defaultFolder.getImages().addAll(images);
-                                if (mOperator.getConfig().isHaveCamera()) {
-                                    defaultFolder.setAlbumPath(images.size() > 1 ? images.get(1).getPath() : null);
-                                } else {
-                                    defaultFolder.setAlbumPath(images.size() > 0 ? images.get(0).getPath() : null);
-                                }
-                                mImageFolderAdapter.resetItem(imageFolders);
 
-                                //删除掉不存在的，在于用户选择了相片，又去相册删除
-                                if (mSelectedImage.size() > 0) {
-                                    List<Image> rs = new ArrayList<>();
-                                    for (Image i : mSelectedImage) {
-                                        File f = new File(i.getPath());
-                                        if (!f.exists()) {
-                                            rs.add(i);
-                                        }
-                                    }
-                                    mSelectedImage.removeAll(rs);
+                        //如果是被选中的图片
+                        if (mSelectedImage.size() > 0) {
+                            for (Image i : mSelectedImage) {
+                                if (i.getPath().equals(image.getPath())) {
+                                    image.setSelect(true);
                                 }
-
-                                // If add new mCamera picture, and we only need one picture, we result it.
-                                if (mOperator.getConfig().getSelectCount() == 1 && mCamImageName != null) {
-                                    handleResult();
-                                }
-
-                                handleSelectSizeChange(mSelectedImage.size());
-                                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
                             }
-                        });
+                        }
+
+                        File imageFile = new File(path);
+                        File folderFile = imageFile.getParentFile();
+                        ImageFolder folder = new ImageFolder();
+                        folder.setName(folderFile.getName());
+                        folder.setPath(folderFile.getAbsolutePath());
+                        if (!imageFolders.contains(folder)) {
+                            folder.getImages().add(image);
+                            folder.setAlbumPath(image.getPath());//默认相册封面
+                            imageFolders.add(folder);
+                        } else {
+                            // 更新
+                            ImageFolder f = imageFolders.get(imageFolders.indexOf(folder));
+                            f.getImages().add(image);
+                        }
+
+
+                    } while (data.moveToNext());
+                }
+                addImagesToAdapter(images);
+                defaultFolder.getImages().addAll(images);
+                if (mOption.isHasCam()) {
+                    defaultFolder.setAlbumPath(images.size() > 1 ? images.get(1).getPath() : null);
+                } else {
+                    defaultFolder.setAlbumPath(images.size() > 0 ? images.get(0).getPath() : null);
+                }
+                mImageFolderAdapter.resetItem(imageFolders);
+
+                //删除掉不存在的，在于用户选择了相片，又去相册删除
+                if (mSelectedImage.size() > 0) {
+                    List<Image> rs = new ArrayList<>();
+                    for (Image i : mSelectedImage) {
+                        File f = new File(i.getPath());
+                        if (!f.exists()) {
+                            rs.add(i);
+                        }
                     }
-                });
+                    mSelectedImage.removeAll(rs);
+                }
+
+                // If add new mCamera picture, and we only need one picture, we result it.
+                if (mOption.getSelectCount() == 1 && mCamImageName != null) {
+                    handleResult();
+                }
+
+                handleSelectSizeChange(mSelectedImage.size());
+                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             }
         }
 
@@ -452,10 +467,16 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
 
     private void addImagesToAdapter(ArrayList<Image> images) {
         mImageAdapter.clear();
-        if (mOperator.getConfig().isHaveCamera()) {
+        if (mOption.isHasCam()) {
             Image cam = new Image();
             mImageAdapter.addItem(cam);
         }
         mImageAdapter.addAll(images);
+    }
+
+    @Override
+    public void onDestroy() {
+        mOption = null;
+        super.onDestroy();
     }
 }

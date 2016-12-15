@@ -7,15 +7,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
@@ -23,10 +26,12 @@ import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.ClipView;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
+import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.UIHelper;
 
@@ -68,8 +73,17 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     public void onAttach(Context context) {
         // init operator
         this.mOperator = new TweetPublishOperator();
-        this.mOperator.setDataView(this, getArguments() != null ?
-                getArguments().getString("defaultContent") : null);
+        String defaultContent = null;
+        String[] paths = null;
+        About.Share share = null;
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            defaultContent = bundle.getString("defaultContent");
+            paths = bundle.getStringArray("defaultImages");
+            share = (About.Share) bundle.getSerializable("aboutShare");
+        }
+        this.mOperator.setDataView(this, defaultContent, paths, share);
+
         super.onAttach(context);
     }
 
@@ -148,7 +162,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 final int surplusLen = MAX_TEXT_LENGTH - len;
                 // set the send icon state
                 setSendIconStatus(len > 0 && surplusLen >= 0, s.toString());
-                // check the indicator state
+                // checkShare the indicator state
                 if (surplusLen > 10) {
                     // hide
                     if (mIndicator.getVisibility() != View.INVISIBLE) {
@@ -201,38 +215,42 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void initData() {
         super.initData();
-        mOperator.loadXmlData();
+        mOperator.loadData();
     }
 
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
             R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back, R.id.icon_send})
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_picture:
-                mEmojiKeyboard.hideAllKeyBoard();
-                mLayImages.onLoadMoreClick();
-                break;
-            case R.id.iv_mention:
-                mEmojiKeyboard.hideAllKeyBoard();
-                toSelectFriends();
-                break;
-            case R.id.iv_tag:
-                insertTrendSoftware();
-                break;
-            case R.id.iv_emoji:
-                handleEmojiClick(v);
-                break;
-            case R.id.txt_indicator:
-                handleClearContentClick();
-                break;
-            case R.id.icon_back:
-                mOperator.onBack();
-                break;
-            case R.id.icon_send:
-                mOperator.publish();
-                break;
+        try {
+            switch (v.getId()) {
+                case R.id.iv_picture:
+                    mEmojiKeyboard.hideAllKeyBoard();
+                    mLayImages.onLoadMoreClick();
+                    break;
+                case R.id.iv_mention:
+                    mEmojiKeyboard.hideAllKeyBoard();
+                    toSelectFriends();
+                    break;
+                case R.id.iv_tag:
+                    insertTrendSoftware();
+                    break;
+                case R.id.iv_emoji:
+                    handleEmojiClick(v);
+                    break;
+                case R.id.txt_indicator:
+                    handleClearContentClick();
+                    break;
+                case R.id.icon_back:
+                    mOperator.onBack();
+                    break;
+                case R.id.icon_send:
+                    mOperator.publish();
+                    break;
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -261,7 +279,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             v.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mEmojiKeyboard.showEmojiKeyBoard();
+                    try {
+                        mEmojiKeyboard.showEmojiKeyBoard();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }, 280);
         } else {
@@ -346,9 +368,35 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void setContent(String content) {
-        mEditContent.setText(content);
-        mEditContent.setSelection(mEditContent.getText().length());
+    public void setContent(String content, boolean needSelectionEnd) {
+        Spannable span = InputHelper.displayEmoji(getResources(), content, (int) mEditContent.getTextSize());
+        mEditContent.setText(span);
+        if (needSelectionEnd)
+            mEditContent.setSelection(mEditContent.getText().length());
+    }
+
+    @Override
+    public void setAbout(About.Share share, boolean needCommit) {
+        if (TextUtils.isEmpty(share.title) && TextUtils.isEmpty(share.content))
+            return;
+        // Change the layout visibility
+        mLayImages.setVisibility(View.GONE);
+        setVisibility(R.id.lay_about);
+        // Set title and content
+        ((TextView) findView(R.id.txt_about_title)).setText(share.type == OSChinaApi.COMMENT_TWEET ?
+                "@" + share.title : share.title);
+        ((TextView) findView(R.id.txt_about_content)).setText(AssimilateUtils.clearHtmlTag(share.content));
+        findView(R.id.iv_picture).setEnabled(false);
+
+        if (needCommit)
+            setVisibility(R.id.cb_commit_control);
+        else
+            setGone(R.id.cb_commit_control);
+    }
+
+    @Override
+    public boolean needCommit() {
+        return ((CheckBox) findView(R.id.cb_commit_control)).isChecked();
     }
 
     @Override

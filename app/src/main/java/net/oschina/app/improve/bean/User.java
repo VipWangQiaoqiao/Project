@@ -11,9 +11,8 @@ public class User implements Serializable {
     public static final int RELATION_TYPE_ONLY_FANS_ME = 0x03;// 只有他关注我
     public static final int RELATION_TYPE_NULL = 0x04;// 互不关注
 
-    public static final int GENDER_UNKNOW = 0;
-    public static final int GENDER_MALE = 1;
-    public static final int GENDER_FEMALE = 2;
+    public static final int GENDER_MALE = 1; // 男
+    public static final int GENDER_FEMALE = 2; // 女
 
     // Base
     private long id;
@@ -27,6 +26,8 @@ public class User implements Serializable {
     private String suffix;
     private More more;
     private Statistics statistics;
+    // 本地缓存多余信息
+    private String cookie;
 
     public User() {
         more = new More();
@@ -103,6 +104,14 @@ public class User implements Serializable {
 
     public void setStatistics(Statistics statistics) {
         this.statistics = statistics;
+    }
+
+    public String getCookie() {
+        return cookie;
+    }
+
+    public void setCookie(String cookie) {
+        this.cookie = cookie;
     }
 
     @Override

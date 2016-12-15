@@ -3,6 +3,8 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -14,21 +16,19 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.UserRelation;
+import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.detail.fragments.BlogDetailFragment;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
-import net.oschina.app.util.HTMLUtil;
-import net.oschina.app.util.StringUtils;
 
 import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
-public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailContract.View> implements BlogDetailContract.Operator {
-
-    //private static final String TAG = "BlogDetailActivity";
+public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailContract.View>
+        implements BlogDetailContract.Operator {
 
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, BlogDetailActivity.class);
@@ -96,28 +96,30 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean createOptionsMenu = super.onCreateOptionsMenu(menu);
+        if (createOptionsMenu) {
+            mCommentCountView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommentsActivity.show(BlogDetailActivity.this, mDataId, OSChinaApi.COMMENT_BLOG, OSChinaApi.COMMENT_NEW_ORDER);
+                }
+            });
+        }
+        return createOptionsMenu;
+    }
+
+    @Override
     public void toShare() {
-        if (getDataId() != 0 && getData() != null) {
-            String content;
-
-            String url = getData().getHref();
-            final BlogDetail blogDetail = getData();
-            if (blogDetail.getBody().length() > 55) {
-                content = HTMLUtil.delHTMLTag(blogDetail.getBody().trim());
-                if (content.length() > 55)
-                    content = StringUtils.getSubString(0, 55, content);
-            } else {
-                content = HTMLUtil.delHTMLTag(blogDetail.getBody().trim());
-            }
-            String title = blogDetail.getTitle();
-
-            if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
-                AppContext.showToast("内容加载失败...");
-                return;
-            }
-            toShare(title, content, url);
+        if (getData() != null) {
+            final BlogDetail detail = getData();
+            String title = detail.getTitle();
+            String content = detail.getBody();
+            String url = detail.getHref();
+            if (!toShare(title, content, url, 3))
+                AppContext.showToast("抱歉，内容无法分享！");
         } else {
-            AppContext.showToast("内容加载失败...");
+            AppContext.showToast("内容加载失败！");
         }
     }
 
@@ -182,7 +184,7 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                AppContext.showToast("评论失败!");
+                AppContext.showToast(getResources().getString(R.string.pub_comment_failed));
                 hideWaitDialog();
             }
 
@@ -211,4 +213,5 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
             }
         });
     }
+
 }

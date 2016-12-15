@@ -22,21 +22,23 @@ public class TweetPublishModel implements Serializable {
     private String errorString;
     private long aboutId;
     private int aboutType;
-    private String aboutImage;
+    private long aboutCommitId;
+    private long aboutFromTweetId;
 
     public TweetPublishModel() {
         id = UUID.randomUUID().toString();
         date = System.currentTimeMillis();
     }
 
-    public TweetPublishModel(String content, String[] images, About about) {
+    public TweetPublishModel(String content, String[] images, About.Share share) {
         this();
         this.content = content;
         this.srcImages = images;
-        if (about != null) {
-            this.aboutId = about.getId();
-            this.aboutType = about.getType();
-            this.aboutImage = about.getImage();
+        if (About.check(share)) {
+            this.aboutId = share.id;
+            this.aboutType = share.type;
+            this.aboutCommitId = share.commitTweetId;
+            this.aboutFromTweetId = share.fromTweetId;
         }
     }
 
@@ -56,13 +58,12 @@ public class TweetPublishModel implements Serializable {
         return content;
     }
 
-    public About getAbout() {
-        if (aboutId > 0 && aboutType > 0) {
-            About about = new About();
-            about.setId(aboutId);
-            about.setType(aboutType);
-            about.setImage(aboutImage);
-            return about;
+    public About.Share getAboutShare() {
+        About.Share share = About.buildShare(aboutId, aboutType);
+        if (About.check(share)) {
+            share.commitTweetId = aboutCommitId;
+            share.fromTweetId = aboutFromTweetId;
+            return share;
         }
         return null;
     }

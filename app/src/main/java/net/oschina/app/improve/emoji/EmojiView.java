@@ -30,7 +30,7 @@ public class EmojiView extends LinearLayout {
     public EmojiView(Context context, EditText editText) {
         super(context);
         this.mEditText = editText;
-        LayoutInflater.from(context).inflate(R.layout.layout_emoji,this,true);
+        LayoutInflater.from(context).inflate(R.layout.layout_emoji, this, true);
     }
 
     public void setListener(OnEmojiClickListener listener) {
@@ -81,7 +81,7 @@ public class EmojiView extends LinearLayout {
                 EmojiGridView view = new EmojiGridView(getContext(), mEditText);
                 view.setListener(listener);
                 container.addView(view);
-                view.initData( position);
+                view.initData(position);
                 return view;
             }
 

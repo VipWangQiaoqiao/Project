@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -17,9 +15,6 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.fragment.TweetsFragment;
-import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
-import net.oschina.app.util.TDevice;
 
 import java.lang.ref.WeakReference;
 
@@ -66,13 +61,11 @@ public class SimpleBackActivity extends BaseActivity implements
 
     protected void initFromIntent(int pageValue, Intent data) {
         if (data == null) {
-            throw new RuntimeException(
-                    "you must provide a page info to display");
+            throw new RuntimeException("you must provide a page info to display");
         }
         SimpleBackPage page = SimpleBackPage.getPageByValue(pageValue);
         if (page == null) {
-            throw new IllegalArgumentException("can not find page by value:"
-                    + pageValue);
+            throw new IllegalArgumentException("can not find page by value:" + pageValue);
         }
 
         setActionBarTitle(page.getTitle());
@@ -96,42 +89,6 @@ public class SimpleBackActivity extends BaseActivity implements
             throw new IllegalArgumentException(
                     "generate fragment error. by value:" + pageValue);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mFragment.get() instanceof TweetsFragment) {
-            setActionBarTitle("话题");
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.public_menu_send:
-                if (mFragment.get() instanceof TweetsFragment) {
-                    String topic = String.format("#%s#", ((TweetsFragment) mFragment.get()).getTopic());
-                    // 硬编码呗, view得不到, 坐标也不好取, 简单粗暴的来!!
-                    TweetPublishActivity.show(this,
-                            new int[]{(int) (TDevice.getScreenWidth() - 30), 45},
-                            new int[]{0, 0}, topic);
-                } else {
-                    return super.onOptionsItemSelected(item);
-                }
-                break;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (mFragment.get() instanceof TweetsFragment) {
-            getMenuInflater().inflate(R.menu.pub_topic_menu, menu);
-        }
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

@@ -1,8 +1,10 @@
 package net.oschina.app.improve.bean;
 
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Author;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,6 +13,8 @@ import java.util.Map;
  */
 
 public class SubBean implements Serializable {
+    private String cacheKey;
+
     private long id;
     private String title;
     private String body;
@@ -22,6 +26,15 @@ public class SubBean implements Serializable {
     private Map<String, Object> extra;
     private String[] tags;
     private Statistics statistics;
+    private List<About> abouts;
+
+    public List<About> getAbouts() {
+        return abouts;
+    }
+
+    public void setAbouts(List<About> abouts) {
+        this.abouts = abouts;
+    }
 
     public boolean isOriginal() {
         if (tags != null) {
@@ -153,6 +166,12 @@ public class SubBean implements Serializable {
 
     public void setStatistics(Statistics statistics) {
         this.statistics = statistics;
+    }
+
+    public String getKey() {
+        if (cacheKey == null)
+            cacheKey = String.format("t:%s,id:%s", getType(), getId() == 0 ? getHref().hashCode() : getId());
+        return cacheKey;
     }
 
     public static class Image implements Serializable {

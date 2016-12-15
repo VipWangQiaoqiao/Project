@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.main.tabs.DynamicTabFragment;
 import net.oschina.app.improve.main.tabs.ExploreFragment;
@@ -20,6 +21,8 @@ import net.oschina.app.improve.main.tabs.TweetViewPagerFragment;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
+import net.oschina.app.improve.user.activities.UserFansActivity;
+import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.fragments.UserInfoFragment;
 import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 
@@ -117,6 +120,7 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
             doSelect(mNavMe);
     }
 
+    @SuppressWarnings("RestrictedApi")
     private void clearOldFragment() {
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         List<Fragment> fragments = mFragmentManager.getFragments();
@@ -134,6 +138,14 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
     }
 
     private void doSelect(NavigationButton newNavButton) {
+        // If the new navigation is me info fragment, we intercept it
+        /*
+        if (newNavButton == mNavMe) {
+            if (interceptMessageSkip())
+                return;
+        }
+        */
+
         NavigationButton oldNavButton = null;
         if (mCurrentNavButton != null) {
             oldNavButton = mCurrentNavButton;
@@ -146,7 +158,6 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
         newNavButton.setSelected(true);
         doTabChanged(oldNavButton, newNavButton);
         mCurrentNavButton = newNavButton;
-
     }
 
     private void doTabChanged(NavigationButton oldNavButton, NavigationButton newNavButton) {
@@ -167,6 +178,21 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
             }
         }
         ft.commit();
+    }
+
+    /**
+     * 拦截底部点击，当点击个人按钮时进行消息跳转
+     */
+    private boolean interceptMessageSkip() {
+        NoticeBean bean = NoticeManager.getNotice();
+        if (bean.getAllCount() > 0) {
+            if (bean.getLetter() + bean.getMention() + bean.getReview() > 0)
+                UserMessageActivity.show(getActivity());
+            else
+                UserFansActivity.show(getActivity(), AccountHelper.getUserId());
+            return true;
+        }
+        return false;
     }
 
     private void onReselect(NavigationButton navigationButton) {

@@ -139,6 +139,12 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        mViewSearch.clearFocus();
+    }
+
+    @Override
     protected void initWidget() {
         super.initWidget();
         setStatusBarDarkMode(true);
@@ -153,6 +159,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         mViewSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mViewSearch.clearFocus();
                 return doSearch(query, false);
             }
 

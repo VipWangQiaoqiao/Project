@@ -23,10 +23,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import net.oschina.app.AppContext;
+import net.oschina.app.BuildConfig;
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.SubTab;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -650,27 +656,73 @@ public class TabPickerView extends FrameLayout {
      */
     public abstract static class TabPickerDataManager {
 
-        List<SubTab> mActiveDataSet;
-        List<SubTab> mInactiveDataSet;
-        List<SubTab> mOriginalDataSet;
+        public List<SubTab> mActiveDataSet;
+        public List<SubTab> mInactiveDataSet;
+        public List<SubTab> mOriginalDataSet;
 
         public TabPickerDataManager() {
             mActiveDataSet = setupActiveDataSet();
             mOriginalDataSet = setupOriginalDataSet();
-
-            if (mActiveDataSet == null || mActiveDataSet.size() == 0) {
-                throw new RuntimeException("Active Data Set can't be null or empty");
-            }
+            mInactiveDataSet = new ArrayList<>();
 
             if (mOriginalDataSet == null || mOriginalDataSet.size() == 0) {
                 throw new RuntimeException("Original Data Set can't be null or empty");
             }
 
-            mInactiveDataSet = new ArrayList<>();
+            TLog.i("oschina", "Active Data Set: " + (mActiveDataSet == null ? "true" : "" + mActiveDataSet.size()));
+            if (mActiveDataSet == null) {
+                mActiveDataSet = new ArrayList<>();
+                for (SubTab item : mOriginalDataSet) {
+                    if (item.isActived() || item.isFixed()) {
+                        mActiveDataSet.add(item);
+                    }
+                }
+                restoreActiveDataSet(mActiveDataSet);
+            } else if (isUpdate()) {
+                List<SubTab> mActiveList = new ArrayList<>();
+
+                // 替换老列表项
+                for (SubTab item : mActiveDataSet) {
+                    int position = mOriginalDataSet.indexOf(item);
+                    if (position == -1) continue;
+                    mActiveList.add(mOriginalDataSet.get(position));
+                }
+
+                // 将未加入的新项加入活动列表
+                for (SubTab item : mOriginalDataSet) {
+                    if (item.isActived() && !mActiveList.contains(item)) {
+                        mActiveList.add(item);
+                    }
+                }
+
+                mActiveDataSet = mActiveList;
+                mActiveList = null;
+                restoreActiveDataSet(mActiveDataSet);
+            }
+
+            Collections.sort(mActiveDataSet, new Comparator<SubTab>() {
+                @Override
+                public int compare(SubTab o1, SubTab o2) {
+                    if (o1.isFixed() && !o2.isFixed()) return -1;
+                    if (!o1.isFixed() && o2.isFixed()) return 1;
+                    return 0;
+//                    return o1.getOrder() - o2.getOrder();
+                }
+            });
+
             for (SubTab item : mOriginalDataSet) {
                 if (mActiveDataSet.contains(item)) continue;
                 mInactiveDataSet.add(item);
             }
+        }
+
+
+        public static boolean isUpdate() {
+            int mVersionCode = TDevice.getVersionCode();
+            int mask = AppContext.get("TabsMask", -1);
+            TLog.i("oschina", "Current Version Code: " + mVersionCode + ", Mask Version Code: " + mask);
+            if (BuildConfig.DEBUG) return true;
+            return mVersionCode != mask;
         }
 
         public List<SubTab> getActiveDataSet() {
@@ -688,6 +740,8 @@ public class TabPickerView extends FrameLayout {
         public abstract List<SubTab> setupActiveDataSet();
 
         public abstract List<SubTab> setupOriginalDataSet();
+
+        public abstract void restoreActiveDataSet(List<SubTab> mActiveDataSet);
     }
 
 }

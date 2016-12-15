@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by huanghaibin_dev
  * on 2016/8/16.
  */
-public class Mention implements Serializable{
+public class Mention implements Serializable {
     private long id;
     private String content;
     private String pubDate;

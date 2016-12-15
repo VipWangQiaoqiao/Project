@@ -38,10 +38,10 @@ import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.UserRelation;
+import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.improve.user.fragments.UserActiveFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.improve.user.fragments.UserQuestionFragment;
-import net.oschina.app.improve.user.fragments.UserTweetFragment;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.util.UIHelper;
@@ -58,10 +58,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 别的用户的主页
  * Created by thanatos on 16/7/13.
  */
-public class OtherUserHomeActivity extends BaseActivity implements View.OnClickListener {
+public class OtherUserHomeActivity extends BaseActivity
+        implements View.OnClickListener, DialogInterface.OnClickListener {
 
     public static final String KEY_BUNDLE = "KEY_BUNDLE_IN_OTHER_USER_HOME";
 
+    /* 谁格式化了我这里的代码我就打谁 */
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.iv_portrait)
@@ -94,6 +96,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     View mDivider;
 
     private User user;
+    private MenuItem mFollowMenu;
     private List<Pair<String, Fragment>> fragments;
     private TabLayoutOffsetChangeListener mOffsetChangerListener;
 
@@ -229,7 +232,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             fragments = new ArrayList<>();
             fragments.add(new Pair<>(
                     String.format("%s\n动弹", 0),
-                    UserTweetFragment.instantiate(user.getId())));
+                    TweetFragment.instantiate(user.getId(), 0)));
             fragments.add(new Pair<>(
                     String.format("%s\n博客", 0),
                     UserBlogFragment.instantiate(user.getId())));
@@ -254,16 +257,6 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 @Override
                 public CharSequence getPageTitle(int position) {
                     return fragments.get(position).first;
-                }
-
-                @Override
-                public void destroyItem(ViewGroup container, int position, Object object) {
-
-                }
-
-                @Override
-                public void destroyItem(View container, int position, Object object) {
-
                 }
             });
 
@@ -328,7 +321,6 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 .into(mLogoPortrait);
         mLogoNick.setText(user.getName());
         mNick.setText(user.getName());
-        // TODO summary
         String desc = user.getDesc();
         mSummary.setText(TextUtils.isEmpty(desc) ? "这人很懒,什么都没写" : desc);
         if (user.getStatistics() != null) {
@@ -385,27 +377,30 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // TODO make the user bean same
-        net.oschina.app.bean.User mLoginUser = AppContext.getInstance().getLoginUser();
-        if (user.getId() > 0 && mLoginUser != null && mLoginUser.getId() != user.getId()) {
+        if (AccountHelper.isLogin() && user.getId() > 0 && AccountHelper.getUserId() != user.getId()) {
             getMenuInflater().inflate(R.menu.menu_other_user, menu);
-            MenuItem mFollowMenu = menu.getItem(1);
+            mFollowMenu = menu.getItem(1);
             if (mFollowMenu == null) return false;
             switch (user.getRelation()) {
                 case User.RELATION_TYPE_BOTH:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
+                    mFollowMenu.setIcon(getResources().getDrawable(
+                            R.drawable.selector_user_following_botn));
                     break;
                 case User.RELATION_TYPE_ONLY_FANS_HIM:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
+                    mFollowMenu.setIcon(getResources().getDrawable(
+                            R.drawable.selector_user_following));
                     break;
                 case User.RELATION_TYPE_ONLY_FANS_ME:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                    mFollowMenu.setIcon(getResources().getDrawable(
+                            R.drawable.selector_user_follow));
                     break;
                 case User.RELATION_TYPE_NULL:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                    mFollowMenu.setIcon(getResources().getDrawable(
+                            R.drawable.selector_user_follow));
                     break;
                 default:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                    mFollowMenu.setIcon(getResources().getDrawable(
+                            R.drawable.selector_user_follow));
             }
             return true;
         }
@@ -425,6 +420,16 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 Bundle userBundle = new Bundle();
                 userBundle.putSerializable("user_info", user);
                 UIHelper.showSimpleBack(this, SimpleBackPage.MY_INFORMATION_DETAIL, userBundle);
+                break;
+            case R.id.iv_portrait:
+                DialogHelper.getSelectDialog(this, "请选择操作", new String[]{"查看头像"}, "取消",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (user == null || TextUtils.isEmpty(user.getPortrait())) return;
+                                UIHelper.showUserAvatar(OtherUserHomeActivity.this, user.getPortrait());
+                            }
+                        }).show();
                 break;
         }
     }
@@ -466,47 +471,53 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                     default:
                         return false;
                 }
-                DialogHelper.getConfirmDialog(this, mDialogTitle, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        OSChinaApi.addUserRelationReverse(user.getId(), new TextHttpResponseHandler() {
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                Toast.makeText(OtherUserHomeActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                                ResultBean<UserRelation> result = AppOperator.createGson().fromJson(
-                                        responseString, new TypeToken<ResultBean<UserRelation>>() {
-                                        }.getType());
-                                if (result.isSuccess()) {
-                                    int relation = result.getResult().getRelation();
-                                    switch (relation) {
-                                        case User.RELATION_TYPE_BOTH:
-                                            item.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
-                                            break;
-                                        case User.RELATION_TYPE_ONLY_FANS_HIM:
-                                            item.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
-                                            break;
-                                        case User.RELATION_TYPE_ONLY_FANS_ME:
-                                            item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-                                            break;
-                                        case User.RELATION_TYPE_NULL:
-                                            item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-                                            break;
-                                    }
-                                    user.setRelation(relation);
-                                } else {
-                                    onFailure(statusCode, headers, responseString, null);
-                                }
-                            }
-                        });
-                    }
-                }).show();
+                DialogHelper.getConfirmDialog(this, mDialogTitle, this).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        if (mFollowMenu == null) return;
+        OSChinaApi.addUserRelationReverse(user.getId(), new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString
+                    , Throwable throwable) {
+                Toast.makeText(OtherUserHomeActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                ResultBean<UserRelation> result = AppOperator.createGson().fromJson(
+                        responseString, new TypeToken<ResultBean<UserRelation>>() {
+                        }.getType());
+                if (result.isSuccess()) {
+                    int relation = result.getResult().getRelation();
+                    switch (relation) {
+                        case User.RELATION_TYPE_BOTH:
+                            mFollowMenu.setIcon(getResources().getDrawable(
+                                    R.drawable.selector_user_following_botn));
+                            break;
+                        case User.RELATION_TYPE_ONLY_FANS_HIM:
+                            mFollowMenu.setIcon(getResources().getDrawable(
+                                    R.drawable.selector_user_following));
+                            break;
+                        case User.RELATION_TYPE_ONLY_FANS_ME:
+                            mFollowMenu.setIcon(getResources().getDrawable(
+                                    R.drawable.selector_user_follow));
+                            break;
+                        case User.RELATION_TYPE_NULL:
+                            mFollowMenu.setIcon(getResources().getDrawable(
+                                    R.drawable.selector_user_follow));
+                            break;
+                    }
+                    user.setRelation(relation);
+                } else {
+                    onFailure(statusCode, headers, responseString, null);
+                }
+            }
+        });
     }
 
     private static class TabViewHolder {

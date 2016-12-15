@@ -17,6 +17,7 @@ import net.oschina.app.ui.dialog.CommonDialog;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -124,6 +125,12 @@ public class EventDetailApplyDialog extends CommonDialog implements
 
         if (TextUtils.isEmpty(phone)) {
             AppContext.showToast("请填写电话");
+            return null;
+        }
+
+        Pattern pattern = Pattern.compile("^1(3[0-9]|4[57]|5[0-35-9]|7[01678]|8[0-9])[0-9]{7}[1-9]");
+        if (!pattern.matcher(phone).find()) {
+            AppContext.showToast("请填写正确的手机号码");
             return null;
         }
 

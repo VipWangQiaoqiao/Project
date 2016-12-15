@@ -3,10 +3,17 @@ package net.oschina.app.improve.app;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.BuildConfig;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.gson.DoubleJsonDeserializer;
+import net.oschina.app.improve.app.gson.FloatJsonDeserializer;
+import net.oschina.app.improve.app.gson.ImageJsonDeserializer;
+import net.oschina.app.improve.app.gson.IntegerJsonDeserializer;
+import net.oschina.app.improve.app.gson.StringJsonDeserializer;
+import net.oschina.app.improve.bean.Tweet;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -16,9 +23,9 @@ import java.util.concurrent.Executors;
  * Created by JuQiu
  * on 16/6/24.
  */
-
 public final class AppOperator {
     private static ExecutorService EXECUTORS_INSTANCE;
+    private static Gson GSON_INSTANCE;
 
     public static Executor getExecutor() {
         if (EXECUTORS_INSTANCE == null) {
@@ -40,8 +47,7 @@ public final class AppOperator {
             return new GlideUrl(url,
                     new LazyHeaders
                             .Builder()
-                            .addHeader("Cookie",
-                                    ApiHttpClient.getCookieString(AppContext.getInstance()))
+                            .addHeader("Cookie", AccountHelper.getCookie())
                             .build());
         } else {
             return new GlideUrl(url);
@@ -49,10 +55,36 @@ public final class AppOperator {
     }
 
     public static Gson createGson() {
-        com.google.gson.GsonBuilder gsonBuilder = new com.google.gson.GsonBuilder();
+        GsonBuilder gsonBuilder = new GsonBuilder();
         //gsonBuilder.setExclusionStrategies(new SpecificClassExclusionStrategy(null, Model.class));
         gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        JsonDeserializer deserializer = new IntegerJsonDeserializer();
+        gsonBuilder.registerTypeAdapter(int.class, deserializer);
+        gsonBuilder.registerTypeAdapter(Integer.class, deserializer);
+
+        deserializer = new FloatJsonDeserializer();
+        gsonBuilder.registerTypeAdapter(float.class, deserializer);
+        gsonBuilder.registerTypeAdapter(Float.class, deserializer);
+
+        deserializer = new DoubleJsonDeserializer();
+        gsonBuilder.registerTypeAdapter(double.class, deserializer);
+        gsonBuilder.registerTypeAdapter(Double.class, deserializer);
+
+        deserializer = new StringJsonDeserializer();
+        gsonBuilder.registerTypeAdapter(String.class, deserializer);
+
+        if (BuildConfig.DEBUG) {
+            gsonBuilder.registerTypeAdapter(Tweet.Image.class, new ImageJsonDeserializer());
+        }
+
         return gsonBuilder.create();
+    }
+
+    public synchronized static Gson getGson() {
+        if (GSON_INSTANCE == null)
+            GSON_INSTANCE = createGson();
+        return GSON_INSTANCE;
     }
 
 }

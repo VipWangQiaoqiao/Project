@@ -1,5 +1,6 @@
 package net.oschina.app.api;
 
+import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -19,7 +20,7 @@ class ApiClientHelper {
      * @param appContext
      * @return
      */
-    static String getUserAgent(AppContext appContext) {
+    static String getUserAgent(Application appContext) {
         // WebSettings.getDefaultUserAgent(appContext)
 
         int vCode = getPackageInfo(appContext).versionCode;
@@ -64,16 +65,20 @@ class ApiClientHelper {
         return result.toString();
     }
 
-    private static String getAppId(AppContext context) {
-        String uniqueID = context.getProperty(AppConfig.CONF_APP_UNIQUEID);
-        if (TextUtils.isEmpty(uniqueID)) {
-            uniqueID = UUID.randomUUID().toString();
-            context.setProperty(AppConfig.CONF_APP_UNIQUEID, uniqueID);
+    private static String getAppId(Application context) {
+        if (context instanceof AppContext) {
+            AppContext appContext = (AppContext) context;
+            String uniqueID = appContext.getProperty(AppConfig.CONF_APP_UNIQUEID);
+            if (TextUtils.isEmpty(uniqueID)) {
+                uniqueID = UUID.randomUUID().toString();
+                appContext.setProperty(AppConfig.CONF_APP_UNIQUEID, uniqueID);
+            }
+            return uniqueID;
         }
-        return uniqueID;
+        return UUID.randomUUID().toString();
     }
 
-    private static PackageInfo getPackageInfo(AppContext context) {
+    private static PackageInfo getPackageInfo(Application context) {
         PackageInfo info = null;
         try {
             info = context.getPackageManager()

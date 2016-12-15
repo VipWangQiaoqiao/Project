@@ -53,6 +53,7 @@ import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.detail.activities.EventSigninActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -238,11 +239,20 @@ public final class CaptureActivity extends BaseActivity implements
             showConfirmLogin(url);
             return;
         }
+
+        if (url.contains("www.oschina.net/event/signin?event")) {
+            long sourceId = Long.valueOf(url.substring(url.indexOf("=") + 1));//2192570;2193441
+            finish();
+            EventSigninActivity.show(this, sourceId);
+            return;
+        }
+
         if (url.contains("oschina.net")) {
             UIHelper.showUrlRedirect(CaptureActivity.this, url);
             finish();
             return;
         }
+
         DialogHelper.getConfirmDialog(this, "可能存在风险，是否打开链接?\n" + url, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -375,7 +385,7 @@ public final class CaptureActivity extends BaseActivity implements
                 hideWaitDialog();
             }
         };
-        OSChinaApi.singnIn(barCode.getUrl(), handler);
+        OSChinaApi.signin(barCode.getUrl(), handler);
     }
 
     private void showLogin() {

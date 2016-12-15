@@ -30,7 +30,7 @@ public class UserMentionFragment extends BaseRecyclerViewFragment<Mention> {
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getMsgMentionList(mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getMsgMentionList(isRefreshing ? null : mBean.getNextPageToken(), mHandler);
     }
 
     @Override

@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
-
 import java.util.Map;
 
 /**
@@ -23,7 +22,7 @@ public class Alipay {
     public static final int PAY_RESULT_CODE_INTERNET_ERROR = 6002;
     public static final int PAY_RESULT_CODE_UNKNOWN = 6004;
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             Map<String, String> result = (Map<String, String>) msg.obj;
@@ -31,7 +30,7 @@ public class Alipay {
             String status = result.get("resultStatus");
             if (TextUtils.isEmpty(status)) return;
             int code = Integer.valueOf(status);
-            switch (code){
+            switch (code) {
                 case PAY_RESULT_CODE_SUCCESS:
                     onSuccess();
                     break;
@@ -57,7 +56,7 @@ public class Alipay {
         }
     };
 
-    public void pay(final Activity activity, final String payinfo){
+    public void pay(final Activity activity, final String payinfo) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -71,31 +70,31 @@ public class Alipay {
         }).start();
     }
 
-    public void onSuccess(){
+    public void onSuccess() {
         // do when success
     }
 
-    public void onDealing(){
+    public void onDealing() {
         // pass
     }
 
-    public void onFailure(){
+    public void onFailure() {
         // pass
     }
 
-    public void onRepeatRequest(){
+    public void onRepeatRequest() {
         // repeat request result
     }
 
-    public void onCancel(){
+    public void onCancel() {
         // cancel pay
     }
 
-    public void onInternetError(){
+    public void onInternetError() {
         // internet error
     }
 
-    public void onUnknownError(){
+    public void onUnknownError() {
         // other error unknown
     }
 

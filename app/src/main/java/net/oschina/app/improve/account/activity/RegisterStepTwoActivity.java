@@ -240,9 +240,11 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
         mLlRegisterBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        hideKeyBoard(getCurrentFocus().getWindowToken());
         mLlRegisterBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 

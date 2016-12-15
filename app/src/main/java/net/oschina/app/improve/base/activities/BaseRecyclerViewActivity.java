@@ -14,6 +14,7 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
+import net.oschina.app.improve.widget.SimplexToast;
 
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -80,6 +81,9 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
                         onLoadingSuccess();
                         setListData(resultBean);
                     } else {
+                        if (resultBean.getCode() == ResultBean.RESULT_TOKEN_ERROR) {
+                            SimplexToast.show(BaseRecyclerViewActivity.this, resultBean.getMessage());
+                        }
                         onLoadingFailure();
                     }
                 } catch (Exception e) {

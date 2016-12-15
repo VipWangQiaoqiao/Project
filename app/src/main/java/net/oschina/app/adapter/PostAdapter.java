@@ -70,8 +70,7 @@ public class PostAdapter extends ListBaseAdapter<Post> {
             vh.description.setText(HTMLUtil.replaceTag(post.getBody()).trim());
         }
 
-        if (AppContext.isOnReadedPostList(PostList.PREF_READED_POST_LIST,
-                post.getId() + "")) {
+        if (false) {
             vh.title.setTextColor(parent.getContext().getResources()
                     .getColor(ThemeSwitchUtils.getTitleReadedColor()));
         } else {

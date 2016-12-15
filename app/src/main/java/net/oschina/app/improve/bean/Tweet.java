@@ -1,5 +1,6 @@
 package net.oschina.app.improve.bean;
 
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Author;
 
 import java.io.Serializable;
@@ -22,6 +23,8 @@ public class Tweet implements Serializable {
     private String href;
     private Audio[] audio;
     private Image[] images;
+    private Statistics statistics;
+    private About about;
 
     public long getId() {
         return id;
@@ -119,6 +122,22 @@ public class Tweet implements Serializable {
         this.images = images;
     }
 
+    public About getAbout() {
+        return about;
+    }
+
+    public void setAbout(About about) {
+        this.about = about;
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
+    }
+
     public static class Code implements Serializable {
         private String brush;
         private String content;
@@ -164,8 +183,26 @@ public class Tweet implements Serializable {
     public static class Image implements Serializable {
         private String thumb;
         private String href;
+        private String name;
+        private int type;
         private int w;
         private int h;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
 
         public String getThumb() {
             return thumb;
@@ -207,6 +244,36 @@ public class Tweet implements Serializable {
                 paths[i] = images[i].href;
             }
             return paths;
+        }
+    }
+
+    public static class Statistics implements Serializable {
+        private int comment;
+        private int transmit;
+        private int like;
+
+        public int getLike() {
+            return like;
+        }
+
+        public void setLike(int like) {
+            this.like = like;
+        }
+
+        public int getComment() {
+            return comment;
+        }
+
+        public void setComment(int comment) {
+            this.comment = comment;
+        }
+
+        public int getTransmit() {
+            return transmit;
+        }
+
+        public void setTransmit(int transmit) {
+            this.transmit = transmit;
         }
     }
 

@@ -117,6 +117,7 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
         }
     }
 
+
     @Override
     public void onResume() {
         super.onResume();

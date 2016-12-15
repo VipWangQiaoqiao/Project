@@ -23,4 +23,10 @@ public abstract class BaseBackActivity extends BaseActivity {
         finish();
         return super.onSupportNavigateUp();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

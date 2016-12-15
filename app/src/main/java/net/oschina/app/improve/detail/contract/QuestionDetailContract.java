@@ -1,7 +1,7 @@
 package net.oschina.app.improve.detail.contract;
 
 import net.oschina.app.improve.bean.QuestionDetail;
-import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.bean.comment.Comment;
 
 /**
  * Created by fei on 2016/6/13.
@@ -26,6 +26,6 @@ public interface QuestionDetailContract {
     interface View extends DetailContract.View {
         void toFavoriteOk(QuestionDetail questionDetail);
 
-        void toSendCommentOk(CommentEX commentEX);
+        void toSendCommentOk(Comment comment);
     }
 }

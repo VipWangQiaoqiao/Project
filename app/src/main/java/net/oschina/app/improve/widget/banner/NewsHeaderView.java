@@ -21,7 +21,7 @@ public class NewsHeaderView extends HeaderView {
     private TextView mTitleTextView;
 
     public NewsHeaderView(Context context, RequestManager loader, String api, String bannerCache) {
-        super(context, loader, api,bannerCache);
+        super(context, loader, api, bannerCache);
     }
 
     @Override
@@ -38,13 +38,14 @@ public class NewsHeaderView extends HeaderView {
     @Override
     public void onPageSelected(int position) {
         super.onPageSelected(position);
-        mTitleTextView.setText(mBanners.get(position).getName());
+        if (mBanners.size() != 0)
+            mTitleTextView.setText(mBanners.get(position % mBanners.size()).getName());
     }
 
     @Override
     void setBanners(List<Banner> banners) {
         super.setBanners(banners);
-        if (banners.size() > 0) {
+        if (banners.size() > 0 && mCurrentItem == 0) {
             mTitleTextView.setText(banners.get(0).getName());
         }
     }
@@ -52,7 +53,13 @@ public class NewsHeaderView extends HeaderView {
     @Override
     protected Object instantiateItem(ViewGroup container, int position) {
         ViewNewsBanner view = new ViewNewsBanner(getContext());
-        view.initData(mImageLoader, mBanners.get(position));
+        if (mBanners.size() != 0) {
+            int p = position % mBanners.size();
+            if (p >= 0 && p < mBanners.size()) {
+                view.initData(mImageLoader, mBanners.get(p));
+
+            }
+        }
         container.addView(view);
         return view;
     }
