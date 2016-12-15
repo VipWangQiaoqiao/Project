@@ -1,5 +1,7 @@
 package net.oschina.app.improve.user.fragments;
 
+import android.content.Context;
+
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.api.remote.OSChinaApi;
@@ -15,6 +17,7 @@ import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
+import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.adapter.UserMentionAdapter;
 import net.oschina.app.util.UIHelper;
 
@@ -26,6 +29,23 @@ import java.lang.reflect.Type;
  */
 
 public class UserCommentFragment extends BaseRecyclerViewFragment<Mention> {
+
+
+    private UserMessageActivity activity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context != null && context instanceof UserMessageActivity) {
+            activity = (UserMessageActivity) context;
+        }
+    }
+
+    @Override
+    protected void onRequestSuccess(int code) {
+        super.onRequestSuccess(code);
+        if (activity != null) activity.onRequestSuccess(1);
+    }
 
     @Override
     protected void requestData() {
