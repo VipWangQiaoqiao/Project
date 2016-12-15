@@ -242,8 +242,8 @@ public final class CaptureActivity extends BaseActivity implements
 
         if (url.contains("www.oschina.net/event/signin?event")) {
             long sourceId = Long.valueOf(url.substring(url.indexOf("=") + 1));//2192570;2193441
+            EventSigninActivity.show(CaptureActivity.this, sourceId);
             finish();
-            EventSigninActivity.show(this, sourceId);
             return;
         }
 
