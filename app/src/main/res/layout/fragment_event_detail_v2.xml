@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="184dp"
+                android:background="@color/main_green"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_event_img"
+                    android:layout_width="108dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/qr_scan_mask" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_toRightOf="@+id/iv_event_banner_img"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_event_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:layout_marginRight="16dp"
+                        android:ellipsize="end"
+                        android:lineSpacingExtra="4dp"
+                        android:maxLines="3"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        tools:text="PHPCon China 2016 技术峰会 —— 评论得赠票" />
+
+                    <TextView
+                        android:id="@+id/tv_event_author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/lay_4"
+                        android:layout_marginTop="@dimen/lay_4"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        tools:text="发起人：faker" />
+
+                    <TextView
+                        android:id="@+id/tv_event_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/lay_4"
+                        android:layout_marginTop="@dimen/lay_4"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        tools:text="类型：技术交流" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="@dimen/lay_4"
+                        android:layout_marginTop="@dimen/lay_4"
+                        android:layout_weight="1"
+                        android:gravity="bottom"
+                        android:minHeight="30dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_event_member"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:singleLine="true"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            tools:text="24人参与" />
+
+                        <TextView
+                            android:id="@+id/tv_event_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_event_detail_ing"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="@dimen/lay_4"
+                            android:paddingRight="@dimen/lay_4"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            tools:text="正在报名" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/ic_calendar" />
+
+                <TextView
+                    android:id="@+id/tv_event_start_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/lay_16"
+                    android:textColor="@color/text_dark"
+                    android:textSize="16sp"
+                    tools:text="2016-07-13:12:61" />
+            </LinearLayout>
+
+            <View
+                style="@style/h_line"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/lay_16" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/ic_ticket" />
+
+                <TextView
+                    android:id="@+id/tv_event_cost_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/lay_16"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    tools:text="免费" />
+            </LinearLayout>
+
+            <View
+                style="@style/h_line"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/lay_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="@dimen/lay_16"
+                    android:src="@mipmap/ic_location" />
+
+                <TextView
+                    android:id="@+id/tv_event_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="16sp"
+                    tools:text="大会地点：上海 - 闵行区莲花路1733号 - 华纳风格酒店" />
+            </LinearLayout>
+
+            <View
+                style="@style/h_line"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/lay_16" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="@dimen/lay_16"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
+                android:text="活动介绍:"
+                android:textColor="#111111"
+                android:textSize="18sp" />
+
+            <FrameLayout
+                android:id="@+id/lay_webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/lay_12"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="@dimen/lay_12">
+
+                <net.oschina.app.improve.widget.OWebView
+                    android:id="@+id/webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px"
+        app:layout_anchor="@+id/ll_operate"
+        app:layout_anchorGravity="top"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_scrollFlags="scroll|enterAlways" />
+
+    <LinearLayout
+        android:id="@+id/ll_operate"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        app:layout_anchor="@+id/nsv"
+        app:layout_anchorGravity="bottom"
+        app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
+        app:layout_scrollFlags="scroll|enterAlways">
+
+        <LinearLayout
+            android:id="@+id/ll_fav"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_event_fav"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp">
+
+            <ImageView
+                android:id="@+id/iv_fav"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_fav" />
+
+            <TextView
+                android:id="@+id/tv_fav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_16"
+                android:layout_marginRight="@dimen/lay_16"
+                android:text="收藏"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
+            style="@style/h_line"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="?attr/lineColor" />
+
+        <LinearLayout
+            android:id="@+id/ll_comment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_event_fav"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp">
+
+            <ImageView
+                android:id="@+id/iv_comment"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_comment_40_selector" />
+
+            <TextView
+                android:id="@+id/tv_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_8"
+                android:layout_marginRight="@dimen/lay_8"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="评论(4000)"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sign"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_event_sign"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_sign"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/selector_sign" />
+
+            <TextView
+                android:id="@+id/tv_apply_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_16"
+                android:layout_marginRight="@dimen/lay_16"
+                android:text="我要报名"
+                android:textColor="@color/text_sign_selector"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

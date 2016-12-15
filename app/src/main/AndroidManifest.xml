@@ -159,6 +159,30 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
+            android:name=".improve.detail.general.QuestionDetailActivity"
+            android:label="问答详情"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+
+        <activity
+            android:name=".improve.detail.general.EventDetailActivity"
+            android:label="活动详情"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+
+        <activity
+            android:name=".improve.detail.general.SoftwareDetailActivity"
+            android:label="软件详情"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+
+        <activity
             android:name=".improve.detail.activities.BlogDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="博客详情"

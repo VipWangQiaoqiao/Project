@@ -76,22 +76,28 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
             return;
         switch (sub.getType()) {
             case News.TYPE_SOFTWARE:
-                SoftwareDetailActivity.show(mContext, sub.getId());
+                //SoftwareDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.SoftwareDetailActivity.show(mContext,sub);
                 break;
             case News.TYPE_QUESTION:
-                QuestionDetailActivity.show(mContext, sub.getId());
+                //QuestionDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.QuestionDetailActivity.show(mContext,sub);
                 break;
             case News.TYPE_BLOG:
-                BlogDetailActivity.show(mContext, sub.getId());
+                //BlogDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.BlogDetailActivity.show(mContext,sub);
                 break;
             case News.TYPE_TRANSLATE:
-                TranslateDetailActivity.show(mContext, sub.getId());
+                //TranslateDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.NewsDetailActivity.show(mContext,sub);
                 break;
             case News.TYPE_EVENT:
-                EventDetailActivity.show(mContext, sub.getId());
+                //EventDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.EventDetailActivity.show(mContext,sub);
                 break;
             case News.TYPE_NEWS:
-                NewsDetailActivity.show(mContext, sub.getId());
+                //NewsDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.NewsDetailActivity.show(mContext,sub);
                 break;
             default:
                 UIHelper.showUrlRedirect(mContext, sub.getHref());

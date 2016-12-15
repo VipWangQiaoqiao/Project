@@ -9,12 +9,9 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.detail.general.AboutAdapter;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.improve.widget.SimplexToast;
-
-import java.util.ArrayList;
 
 /**
  * Created by haibin
@@ -42,6 +39,8 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
         super.initWidget(root);
         mWebView = (OWebView) mRoot.findViewById(R.id.webView);
         mRecyclerView = (RecyclerView) mRoot.findViewById(R.id.rv_about);
+        if (mRecyclerView == null)
+            return;
         mAdapter = new AboutAdapter(getActivity());
         mAdapter.setOnItemClickListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -63,9 +62,11 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
     @Override
     public void showGetDetailSuccess(SubBean bean) {
         if (mContext == null) return;
-        bean.setAbouts(new ArrayList<About>());
-        mAdapter.addAll(bean.getAbouts());
         mWebView.loadDetailDataAsync(bean.getBody(), (Runnable) mContext);
+        if (mAdapter == null)
+            return;
+        mAdapter.addAll(bean.getAbouts());
+
     }
 
     @Override
