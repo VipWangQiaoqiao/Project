@@ -4,30 +4,32 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.Notice;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.fragments.UserCommentFragment;
 import net.oschina.app.improve.user.fragments.UserMentionFragment;
 import net.oschina.app.improve.user.fragments.UserMessageFragment;
+import net.oschina.app.util.TLog;
 
 import butterknife.Bind;
 
 /**
  * Created by huanghaibin_dev
+ * Updated by Dominic Thanatosx
  * on 2016/8/16.
  */
-public class UserMessageActivity extends BaseBackActivity {
+public class UserMessageActivity extends BaseBackActivity implements NoticeManager.NoticeNotify {
 
-    @Bind(R.id.tabLayout)
-    TabLayout tabLayout;
-    @Bind(R.id.vp_user_message)
-    ViewPager vp_user_message;
+    @Bind(R.id.tabLayout)       TabLayout mLayoutTab;
+    @Bind(R.id.vp_user_message) ViewPager mViewPager;
 
     private UserMentionFragment mUserMentionFragment;
     private UserCommentFragment mUserCommentFragment;
@@ -49,60 +51,74 @@ public class UserMessageActivity extends BaseBackActivity {
     protected void initWidget() {
         super.initWidget();
         mNotice = NoticeManager.getNotice();
+
         mUserMentionFragment = new UserMentionFragment();
         mUserCommentFragment = new UserCommentFragment();
         mUserMessageFragment = new UserMessageFragment();
 
-        tabLayout.setupWithViewPager(vp_user_message);
-        vp_user_message.setAdapter(mAdapter);
-        vp_user_message.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        NoticeManager.bindNotify(this);
 
-            }
-
+        mLayoutTab.setupWithViewPager(mViewPager);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
             public void onPageSelected(int position) {
-                if (position == 0) {
-                    if (mNotice.getMention() > 0)
+                switch (position) {
+                    case 0:
+                        if (mNotice.getMention() <= 0) break;
                         NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
-                } else if (position == 1) {
-                    if (mNotice.getReview() > 0)
+                        break;
+                    case 1:
+                        if (mNotice.getReview() <= 0) break;
                         NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
-                } else {
-                    if (mNotice.getLetter() > 0)
-                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
+                        break;
+                    default:
+                        if (mNotice.getLetter() <= 0) break;
+//                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
+                        break;
                 }
             }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
         });
-        int currentView = 0;
-        if (mNotice.getMention() > 0) {
-            NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
-        }
-        if (mNotice.getReview() > 0) {
-            currentView = 1;
-        }
-        if (mNotice.getLetter() > 0) {
-            currentView = 2;
-        }
-        vp_user_message.setCurrentItem(currentView);
 
+        final int mCurrentViewIndex = mNotice.getMention() > 0
+                ? 0
+                : mNotice.getReview() > 0
+                ? 1
+                : mNotice.getLetter() > 0
+                ? 2
+                : 0;
+
+        mViewPager.setCurrentItem(mCurrentViewIndex);
     }
 
-    private FragmentStatePagerAdapter mAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+    private void postChangeTitle(final int position, int delay){
+        mViewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TabLayout.Tab tab = mLayoutTab.getTabAt(position);
+                if (tab == null) return;
+                tab.setText(mAdapter.getPageTitle(position));
+            }
+        }, delay);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NoticeManager.unBindNotify(this);
+    }
+
+    private FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
         @Override
         public Fragment getItem(int position) {
-            if (position == 0) {
-                return mUserMentionFragment;
-            } else if (position == 1) {
-                return mUserCommentFragment;
+            switch (position){
+                case 0:
+                    return mUserMentionFragment;
+                case 1:
+                    return mUserCommentFragment;
+                default:
+                    return mUserMessageFragment;
             }
-            return mUserMessageFragment;
         }
 
         @Override
@@ -112,23 +128,53 @@ public class UserMessageActivity extends BaseBackActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (position == 0) {
-                return formatMessageCount("@我", mNotice.getMention());
-            } else if (position == 1) {
-                return formatMessageCount("评论", mNotice.getReview());
+            switch (position){
+                case 0:
+                    return formatMessageCount("@我", mNotice.getMention());
+                case 1:
+                    return formatMessageCount("评论", mNotice.getReview());
+                default:
+                    return formatMessageCount("私信", mNotice.getLetter());
             }
-            return formatMessageCount("私信", mNotice.getLetter());
         }
-
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-
-        }
-
     };
 
     private String formatMessageCount(String title, int messageCount) {
         return messageCount == 0 ? title : String.format(title + "（%s）", messageCount);
+    }
+
+    @Override
+    public void onNoticeArrived(NoticeBean bean) {
+        NoticeBean nb = mNotice;
+        mNotice = bean;
+        if (nb.getMention() != bean.getMention()) {
+            if (mViewPager.getCurrentItem() == 0) {
+                if (bean.getMention() == 0){
+                    postChangeTitle(0, 2000);
+                }else {
+                    mUserMentionFragment.onRefreshing();
+                    NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
+                }
+            } else {
+                postChangeTitle(0, 0);
+            }
+        }
+
+        if (nb.getReview() != bean.getReview()) {
+            if (mViewPager.getCurrentItem() == 1) {
+                if (bean.getReview() == 0){
+                    postChangeTitle(1, 2000);
+                }else {
+                    mUserCommentFragment.onRefreshing();
+                    NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
+                }
+            } else {
+                postChangeTitle(1, 0);
+            }
+        }
+
+        if (nb.getLetter() != bean.getLetter()) {
+            postChangeTitle(2, 0);
+        }
     }
 }
