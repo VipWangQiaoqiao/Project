@@ -9,6 +9,12 @@ import net.oschina.app.improve.detail.v2.DetailFragment;
  */
 
 public class QuestionDetailFragment extends DetailFragment {
+
+    public static QuestionDetailFragment newInstance() {
+        QuestionDetailFragment fragment = new QuestionDetailFragment();
+        return fragment;
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_question_detail_v2;

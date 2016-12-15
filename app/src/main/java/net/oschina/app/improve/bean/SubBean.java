@@ -4,6 +4,8 @@ import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Author;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,18 +25,10 @@ public class SubBean implements Serializable {
     private int type;
     private Author author;
     private Image image;
-    private Map<String, Object> extra;
+    private HashMap<String, Object> extra;
     private String[] tags;
     private Statistics statistics;
-    private List<About> abouts;
-
-    public List<About> getAbouts() {
-        return abouts;
-    }
-
-    public void setAbouts(List<About> abouts) {
-        this.abouts = abouts;
-    }
+    private ArrayList<About> abouts;
 
     public boolean isOriginal() {
         if (tags != null) {
@@ -144,12 +138,20 @@ public class SubBean implements Serializable {
         this.image = image;
     }
 
-    public Map<String, Object> getExtra() {
+    public HashMap<String, Object> getExtra() {
         return extra;
     }
 
-    public void setExtra(Map<String, Object> extra) {
+    public void setExtra(HashMap<String, Object> extra) {
         this.extra = extra;
+    }
+
+    public ArrayList<About> getAbouts() {
+        return abouts;
+    }
+
+    public void setAbouts(ArrayList<About> abouts) {
+        this.abouts = abouts;
     }
 
     public String[] getTags() {
