@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
@@ -26,7 +27,7 @@ import butterknife.Bind;
  * Updated by Dominic Thanatosx
  * on 2016/8/16.
  */
-public class UserMessageActivity extends BaseBackActivity implements NoticeManager.NoticeNotify {
+public class UserMessageActivity extends BaseBackActivity implements NoticeManager.NoticeNotify{
 
     @Bind(R.id.tabLayout)       TabLayout mLayoutTab;
     @Bind(R.id.vp_user_message) ViewPager mViewPager;
@@ -63,6 +64,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
             public void onPageSelected(int position) {
+                TLog.i("oschina", "On Page Select: " + position);
                 switch (position) {
                     case 0:
                         if (mNotice.getMention() <= 0) break;
@@ -74,7 +76,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
                         break;
                     default:
                         if (mNotice.getLetter() <= 0) break;
-//                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
+                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
                         break;
                 }
             }
@@ -89,6 +91,18 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
                 : 0;
 
         mViewPager.setCurrentItem(mCurrentViewIndex);
+
+        switch (mCurrentViewIndex) {
+            case 0:
+                NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
+                break;
+            case 1:
+                NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
+                break;
+            default:
+                NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
+                break;
+        }
     }
 
     private void postChangeTitle(final int position, int delay){
@@ -106,6 +120,9 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
     protected void onDestroy() {
         super.onDestroy();
         NoticeManager.unBindNotify(this);
+        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
+        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
+        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
     }
 
     private FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -143,17 +160,37 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         return messageCount == 0 ? title : String.format(title + "（%s）", messageCount);
     }
 
+    public void onRequestSuccess(int position) {
+        if (mViewPager.getCurrentItem() != position) return;
+        switch (position) {
+            case 0:
+                if (mNotice.getMention() <= 0) break;
+                NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
+                break;
+            case 1:
+                if (mNotice.getReview() <= 0) break;
+                NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
+                break;
+            default:
+                if (mNotice.getLetter() <= 0) break;
+                NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
+                break;
+        }
+    }
+
     @Override
     public void onNoticeArrived(NoticeBean bean) {
+        TLog.i("oschina", "On Notice Arrived");
         NoticeBean nb = mNotice;
         mNotice = bean;
         if (nb.getMention() != bean.getMention()) {
             if (mViewPager.getCurrentItem() == 0) {
                 if (bean.getMention() == 0){
-                    postChangeTitle(0, 2000);
+                    postChangeTitle(0, 1500);
                 }else {
-                    mUserMentionFragment.onRefreshing();
-                    NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
+                    //mUserMentionFragment.onRefreshing();
+                    //NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
+                    postChangeTitle(0, 0);
                 }
             } else {
                 postChangeTitle(0, 0);
@@ -163,10 +200,11 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         if (nb.getReview() != bean.getReview()) {
             if (mViewPager.getCurrentItem() == 1) {
                 if (bean.getReview() == 0){
-                    postChangeTitle(1, 2000);
+                    postChangeTitle(1, 1500);
                 }else {
-                    mUserCommentFragment.onRefreshing();
-                    NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
+                    //mUserCommentFragment.onRefreshing();
+                    //NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
+                    postChangeTitle(1, 0);
                 }
             } else {
                 postChangeTitle(1, 0);
@@ -174,7 +212,17 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         }
 
         if (nb.getLetter() != bean.getLetter()) {
-            postChangeTitle(2, 0);
+            if (mViewPager.getCurrentItem() == 2) {
+                if (bean.getLetter() == 0){
+                    postChangeTitle(2, 1500);
+                }else {
+                    //mUserMessageFragment.onRefreshing();
+                    //NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
+                    postChangeTitle(2, 0);
+                }
+            } else {
+                postChangeTitle(2, 0);
+            }
         }
     }
 }
