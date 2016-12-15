@@ -91,7 +91,8 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
                 EventDetailActivity.show(mContext, sub.getId());
                 break;
             case News.TYPE_NEWS:
-                NewsDetailActivity.show(mContext, sub.getId());
+                //NewsDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.NewsDetailActivity.show(mContext,sub);
                 break;
             default:
                 UIHelper.showUrlRedirect(mContext, sub.getHref());

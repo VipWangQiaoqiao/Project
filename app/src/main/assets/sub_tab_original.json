@@ -5,7 +5,7 @@
             "href": "https://www.oschina.net/action/apiv2//banner?catalog=1"
         },
         "fixed": true,
-        "href": "https://www.oschina.net/action/apiv2/sub_list?token=d6112fa662bc4bf21084670a857fbd20",
+        "href": "http://192.168.1.10/action/apiv2/sub_list?token=d6112fa662bc4bf21084670a857fbd20",
         "name": "开源资讯",
         "needLogin": false,
         "isActived": true,
