@@ -91,18 +91,18 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             @Override
             public void onStart() {
                 super.onStart();
-                TLog.log(TAG, "HttpResponseHandler:onStart");
+                log("HttpResponseHandler:onStart");
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 onRequestError();
-                TLog.log(TAG, "HttpResponseHandler:onFailure responseString:" + responseString);
+                log("HttpResponseHandler:onFailure responseString:" + responseString);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                TLog.log(TAG, "HttpResponseHandler:onSuccess responseString:" + responseString);
+                log("HttpResponseHandler:onSuccess responseString:" + responseString);
                 try {
                     ResultBean<PageBean<T>> resultBean = AppOperator.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
@@ -124,7 +124,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             public void onFinish() {
                 super.onFinish();
                 onRequestFinish();
-                TLog.log(TAG, "HttpResponseHandler:onFinish");
+                log("HttpResponseHandler:onFinish");
             }
         };
 
@@ -284,5 +284,11 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
      */
     protected boolean isNeedEmptyView() {
         return true;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void log(String msg) {
+        if (false)
+            TLog.i(TAG, msg);
     }
 }

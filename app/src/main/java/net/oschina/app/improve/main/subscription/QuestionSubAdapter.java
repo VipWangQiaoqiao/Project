@@ -2,6 +2,7 @@ package net.oschina.app.improve.main.subscription;
 
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -71,10 +72,16 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impl
             vh.tv_question_content.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
         }
 
-        if (author != null) {
-            vh.tv_time.setText((author.getName().length() > 9 ? author.getName().substring(0, 9) :
-                    author.getName().trim()) + "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
+        String authorName;
+        if (author != null && !TextUtils.isEmpty(authorName = author.getName())) {
+            authorName = authorName.trim();
+            vh.tv_time.setText(String.format("@%s %s",
+                    (authorName.length() > 9 ? authorName.substring(0, 9) : authorName),
+                    StringUtils.formatSomeAgo(item.getPubDate().trim())));
+        } else {
+            vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate().trim()));
         }
+
         vh.tv_view.setText(String.valueOf(item.getStatistics().getView()));
         vh.tv_comment_count.setText(String.valueOf(item.getStatistics().getComment()));
     }
