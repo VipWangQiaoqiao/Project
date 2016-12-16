@@ -10,10 +10,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
-import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.behavior.CommentBar;
+import net.oschina.app.improve.comment.CommentsActivity;
+import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -36,6 +38,8 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
     protected CommentBar mDelegation;
     private LinearLayout mLayComment;
 
+    protected SubBean mBean;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_detail_v2;
@@ -55,18 +59,26 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
                 }
             }
         });
-        SubBean subBean = (SubBean) getIntent().getSerializableExtra("sub_bean");
-        if (subBean.getType() != News.TYPE_EVENT )
-            mDelegation = CommentBar.delegation(this, mLayComment);
+        mBean = (SubBean) getIntent().getSerializableExtra("sub_bean");
         mDetailFragment = getDetailFragment();
         addFragment(R.id.lay_container, mDetailFragment);
-        mPresenter = new DetailPresenter(mDetailFragment, this, subBean);
+        mPresenter = new DetailPresenter(mDetailFragment, this, mBean);
+        if (!mPresenter.isHideCommentBar())
+            mDelegation = CommentBar.delegation(this, mLayComment);
         mPresenter.getDetail();
     }
 
     @Override
     public void hideEmptyLayout() {
         mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+        if (mCommentCountView != null) {
+            mCommentCountView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommentsActivity.show(DetailActivity.this, mBean.getId(), OSChinaApi.COMMENT_NEWS, OSChinaApi.COMMENT_NEW_ORDER);
+                }
+            });
+        }
     }
 
     @Override
@@ -98,13 +110,16 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
                     @Override
                     public void onClick(View v) {
                         if (mDetailFragment != null) {
-                            mDetailFragment.scrollToBottom();
+
                         }
                     }
                 });
                 View tv = action.findViewById(R.id.tv_comment_count);
-                if (tv != null)
+                if (tv != null) {
                     mCommentCountView = (TextView) tv;
+                    mCommentCountView.setText(mBean.getStatistics().getComment() + "");
+                }
+
             }
         }
         return true;
@@ -137,6 +152,7 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
         if (mAlertDialog == null)
             mAlertDialog = mShareDialogBuilder.create();
         mAlertDialog.show();
+
         return true;
     }
 

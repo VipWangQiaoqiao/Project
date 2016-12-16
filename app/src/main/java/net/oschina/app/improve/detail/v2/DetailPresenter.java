@@ -7,6 +7,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Collection;
+import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
@@ -119,5 +120,9 @@ public class DetailPresenter implements DetailContract.Presenter {
                 }
             }
         });
+    }
+
+    boolean isHideCommentBar() {
+        return mBean.getType() == News.TYPE_SOFTWARE || mBean.getType() == News.TYPE_EVENT;
     }
 }
