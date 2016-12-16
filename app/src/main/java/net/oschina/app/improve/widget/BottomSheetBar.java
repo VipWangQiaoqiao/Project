@@ -100,7 +100,7 @@ public class BottomSheetBar {
                     public void run() {
                         TDevice.hideSoftKeyboard(mEditText);
                     }
-                }, 10);
+                }, 50);
                 mFrameLayout.setVisibility(View.GONE);
             }
         });

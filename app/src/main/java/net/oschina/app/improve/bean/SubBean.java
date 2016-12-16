@@ -23,13 +23,15 @@ public class SubBean implements Serializable {
     private String pubDate;
     private String href;
     private int type;
+    private boolean favorite;
+    private String summary;
     private Author author;
     private Image image;
     private HashMap<String, Object> extra;
     private String[] tags;
     private Statistics statistics;
     private ArrayList<About> abouts;
-
+    private Software software;
     public boolean isOriginal() {
         if (tags != null) {
             for (String tag : tags) {
@@ -52,6 +54,14 @@ public class SubBean implements Serializable {
         return false;
     }
 
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
     public boolean isStick() {
         if (tags != null) {
             for (String tag : tags) {
@@ -72,6 +82,14 @@ public class SubBean implements Serializable {
             }
         }
         return false;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     public long getId() {
@@ -168,6 +186,14 @@ public class SubBean implements Serializable {
 
     public void setStatistics(Statistics statistics) {
         this.statistics = statistics;
+    }
+
+    public Software getSoftware() {
+        return software;
+    }
+
+    public void setSoftware(Software software) {
+        this.software = software;
     }
 
     public String getKey() {

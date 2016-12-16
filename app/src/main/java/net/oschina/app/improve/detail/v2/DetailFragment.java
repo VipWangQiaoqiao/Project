@@ -18,15 +18,18 @@ import net.oschina.app.improve.widget.SimplexToast;
  * on 2016/11/30.
  */
 
-public class DetailFragment extends BaseFragment implements DetailContract.View, BaseRecyclerAdapter.OnItemClickListener {
+public class DetailFragment extends BaseFragment implements
+        DetailContract.View,
+        BaseRecyclerAdapter.OnItemClickListener,
+        View.OnClickListener {
     protected DetailContract.Presenter mPresenter;
     protected OWebView mWebView;
     protected RecyclerView mRecyclerView;
     protected AboutAdapter mAdapter;
+    protected SubBean mBean;
 
     public static DetailFragment newInstance() {
-        DetailFragment fragment = new DetailFragment();
-        return fragment;
+        return new DetailFragment();
     }
 
     @Override
@@ -49,6 +52,11 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
     }
 
     @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
     public void onItemClick(int position, long itemId) {
 
     }
@@ -61,6 +69,7 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
 
     @Override
     public void showGetDetailSuccess(SubBean bean) {
+        this.mBean = bean;
         if (mContext == null) return;
         mWebView.loadDetailDataAsync(bean.getBody(), (Runnable) mContext);
         if (mAdapter == null)
@@ -100,5 +109,13 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
 
     public void scrollToBottom() {
 
+    }
+
+    protected String getExtraString(Object object) {
+        return object == null ? "" : object.toString();
+    }
+
+    protected int getExtraInt(Object object) {
+        return object == null ? 0 : Double.valueOf(object.toString()).intValue();
     }
 }

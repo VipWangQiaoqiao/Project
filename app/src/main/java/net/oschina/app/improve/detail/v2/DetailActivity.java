@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
-import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
@@ -56,11 +55,11 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
             }
         });
         SubBean subBean = (SubBean) getIntent().getSerializableExtra("sub_bean");
-        if (subBean.getType() != News.TYPE_EVENT )
-            mDelegation = CommentBar.delegation(this, mLayComment);
         mDetailFragment = getDetailFragment();
         addFragment(R.id.lay_container, mDetailFragment);
         mPresenter = new DetailPresenter(mDetailFragment, this, subBean);
+        if (!mPresenter.isHideCommentBar())
+            mDelegation = CommentBar.delegation(this, mLayComment);
         mPresenter.getDetail();
     }
 

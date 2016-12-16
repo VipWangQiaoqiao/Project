@@ -5,11 +5,6 @@
     android:id="@+id/lay_nsv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_above="@+id/lay_option"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentTop="true"
-    android:layout_marginBottom="46dp"
     android:scrollbars="vertical">
 
     <LinearLayout
@@ -19,7 +14,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_ques_detail_title"
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -37,7 +32,7 @@
             tools:text="HDFS用于存储，请问它与FTP或者市面流行的存储系统的优缺点？" />
 
         <net.oschina.app.improve.widget.FlowLayout
-            android:id="@+id/ques_detail_flow"
+            android:id="@+id/fl_lab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="16dp"
@@ -71,7 +66,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_ques_detail_author"
+                android:id="@+id/tv_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -85,7 +80,7 @@
                 tools:text="风雨冲" />
 
             <TextView
-                android:id="@+id/tv_ques_detail_pub_date"
+                android:id="@+id/tv_pub_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -107,7 +102,7 @@
             android:visibility="visible" />
 
         <net.oschina.app.improve.comment.CommentView
-            android:id="@+id/lay_detail_comment"
+            android:id="@+id/cv_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/ques_detail_bg_color" />

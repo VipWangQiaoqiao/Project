@@ -69,7 +69,7 @@
                 android:padding="@dimen/lay_16">
 
                 <TextView
-                    android:id="@+id/bt_software_home"
+                    android:id="@+id/tv_home"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -89,7 +89,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/bt_software_document"
+                    android:id="@+id/tv_document"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -177,7 +177,7 @@
                     android:textSize="@dimen/font_14" />
 
                 <TextView
-                    android:id="@+id/tv_software_law"
+                    android:id="@+id/tv_software_protocol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/lay_16"
@@ -310,7 +310,7 @@
         tools:ignore="DisableBaselineAlignment">
 
         <LinearLayout
-            android:id="@+id/lay_option_comment"
+            android:id="@+id/ll_comment"
             android:layout_width="0dp"
             android:layout_height="@dimen/size_44"
             android:layout_weight="1"
@@ -325,7 +325,7 @@
                 android:src="@drawable/ic_comment_40_selector" />
 
             <TextView
-                android:id="@+id/lay_option_fav_text"
+                android:id="@+id/tv_comment_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/lay_8"
@@ -336,7 +336,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lay_option_fav"
+            android:id="@+id/ll_fav"
             android:layout_width="0dp"
             android:layout_height="@dimen/size_44"
             android:layout_weight="1"
@@ -345,7 +345,7 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:id="@+id/lay_option_fav_icon"
+                android:id="@+id/iv_fav"
                 android:layout_width="@dimen/size_20"
                 android:layout_height="@dimen/size_20"
                 android:contentDescription="@string/app_name"
@@ -362,7 +362,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lay_option_share"
+            android:id="@+id/ll_share"
             android:layout_width="0dp"
             android:layout_height="@dimen/size_44"
             android:layout_weight="1"

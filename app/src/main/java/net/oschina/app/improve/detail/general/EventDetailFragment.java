@@ -1,17 +1,26 @@
 package net.oschina.app.improve.detail.general;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.Event;
+import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.comment.CommentsActivity;
+import net.oschina.app.improve.detail.sign.SignUpActivity;
 import net.oschina.app.improve.detail.v2.DetailFragment;
-import net.qiujuer.genius.ui.compat.UiCompat;
 
 import java.util.HashMap;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * Created by haibin
@@ -20,11 +29,17 @@ import butterknife.Bind;
 
 public class EventDetailFragment extends DetailFragment {
 
+    @Bind(R.id.ll_sign)
+    LinearLayout mLinearSign;
+
     @Bind(R.id.iv_event_img)
     ImageView mImageEvent;
 
     @Bind(R.id.iv_fav)
     ImageView mImageFav;
+
+    @Bind(R.id.tv_fav)
+    TextView mTextFav;
 
     @Bind(R.id.iv_sign)
     ImageView mImageSign;
@@ -53,9 +68,6 @@ public class EventDetailFragment extends DetailFragment {
     @Bind(R.id.tv_event_location)
     TextView mTextLocation;
 
-    @Bind(R.id.tv_fav)
-    TextView mTextFav;
-
     @Bind(R.id.tv_apply_status)
     TextView mTextApplyStatus;
 
@@ -63,13 +75,32 @@ public class EventDetailFragment extends DetailFragment {
     TextView mTextComment;
 
     public static EventDetailFragment newInstance() {
-        EventDetailFragment fragment = new EventDetailFragment();
-        return fragment;
+        return new EventDetailFragment();
     }
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_event_detail_v2;
+    }
+
+    @OnClick({R.id.ll_fav, R.id.ll_comment, R.id.ll_sign})
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_fav:
+                mPresenter.favReverse();
+                break;
+            case R.id.ll_comment:
+                CommentsActivity.show(mContext, mBean.getId(), mBean.getType(), 2);
+                break;
+            case R.id.ll_sign:
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(getActivity(), 0x02);
+                    return;
+                }
+                SignUpActivity.show(this, mBean.getId());
+                break;
+        }
     }
 
     @Override
@@ -78,17 +109,20 @@ public class EventDetailFragment extends DetailFragment {
         mTextComment.setText(String.format("评论(%s)", bean.getStatistics().getComment()));
         mTextTitle.setText(bean.getTitle());
         mTextAuthor.setText(String.format("发起人：%s", bean.getAuthor().getName()));
-
-
+        mImageFav.setImageResource(bean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
+        mTextFav.setText(bean.isFavorite() ? getString(R.string.event_is_fav) : getString(R.string.event_un_fav));
         HashMap<String, Object> extra = bean.getExtra();
         if (extra != null) {
-            mTextLocation.setText(extra.get("eventSpot").toString());
-            mTextMember.setText(String.format("%s人参与", extra.get("eventApplyCount")));
-            mTextStartDate.setText(extra.get("eventStartDate").toString());
-            mTextCostDesc.setText(extra.get("eventCostDesc").toString());
+            mTextLocation.setText(getExtraString(extra.get("eventSpot")));
+            mTextMember.setText(String.format("%s人参与", getExtraInt(extra.get("eventApplyCount"))));
+            mTextStartDate.setText(getExtraString(extra.get("eventStartDate")));
+            mTextCostDesc.setText(getExtraString(extra.get("eventCostDesc")));
 
+            /**
+             * 活动类型判断
+             */
             int typeStr = R.string.oscsite;
-            switch (Double.valueOf(extra.get("eventType").toString()).intValue()) {
+            switch (getExtraInt(extra.get("eventType"))) {
                 case Event.EVENT_TYPE_OSC:
                     typeStr = R.string.event_type_osc;
                     break;
@@ -104,7 +138,11 @@ public class EventDetailFragment extends DetailFragment {
             }
             mTextType.setText(String.format("类型：%s", getResources().getString(typeStr)));
 
-            switch (Double.valueOf(extra.get("eventStatus").toString()).intValue()) {
+            /**
+             * 活动状态判断
+             */
+            int eventStatus = getExtraInt(extra.get("eventStatus"));
+            switch (eventStatus) {
                 case Event.STATUS_END:
                     mTextStatus.setText(getResources().getString(R.string.event_status_end));
                     break;
@@ -115,9 +153,68 @@ public class EventDetailFragment extends DetailFragment {
                     mTextStatus.setText(getResources().getString(R.string.event_status_sing_up));
                     break;
             }
+
+            /**
+             * 活动状态和出席状态判断
+             */
+            int eventApplyStatus = getExtraInt(extra.get("eventApplyStatus"));
+            mTextApplyStatus.setText(getString(getApplyStatusStrId(eventApplyStatus)));
+            if (eventStatus != EventDetail.STATUS_ING ||
+                    eventApplyStatus != EventDetail.APPLY_STATUS_UN_SIGN) {
+                setSignUnEnable();
+            }
         }
         getImgLoader().load(bean.getImage().getHref()).into(mImageEvent);
+    }
 
+    @Override
+    public void showFavReverseSuccess(boolean isFav, int strId) {
+        super.showFavReverseSuccess(isFav, strId);
+        mImageFav.setImageResource(isFav ? R.drawable.ic_faved : R.drawable.ic_fav);
+        mTextFav.setText(isFav ? getString(R.string.event_is_fav) : getString(R.string.event_un_fav));
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            switch (requestCode) {
+                case 0x01:
+                    mTextApplyStatus.setText(getResources().getString(getApplyStatusStrId(EventDetail.APPLY_STATUS_AUDIT)));
+                    setSignUnEnable();
+                    break;
+            }
+        }
+    }
+
+    public int getApplyStatusStrId(int status) {
+        int strId = R.string.event_status_ing;
+        switch (status) {
+            case EventDetail.APPLY_STATUS_UN_SIGN:
+                strId = R.string.event_apply_status_un_sign;
+                break;
+            case EventDetail.APPLY_STATUS_AUDIT:
+                strId = R.string.event_apply_status_audit;
+                break;
+            case EventDetail.APPLY_STATUS_CONFIRMED:
+                strId = R.string.event_apply_status_confirmed;
+                break;
+            case EventDetail.APPLY_STATUS_PRESENTED:
+                strId = R.string.event_apply_status_presented;
+                break;
+            case EventDetail.APPLY_STATUS_CANCELED:
+                strId = R.string.event_apply_status_canceled;
+                break;
+            case EventDetail.APPLY_STATUS_REFUSED:
+                strId = R.string.event_apply_status_refused;
+                break;
+        }
+        return strId;
+    }
+
+    private void setSignUnEnable() {
+        mTextApplyStatus.setEnabled(false);
+        mLinearSign.setEnabled(false);
+        mImageSign.setEnabled(false);
     }
 }
