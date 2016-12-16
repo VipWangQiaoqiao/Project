@@ -8,7 +8,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp">
+        android:layout_marginBottom="68dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                     android:id="@+id/iv_event_img"
                     android:layout_width="108dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="16dp"
@@ -162,6 +162,7 @@
                 android:id="@+id/lay_container_user_info"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical" />
 
             <TextView
@@ -179,10 +180,8 @@
                 tools:ignore="RtlHardcoded"
                 tools:text="未报名，不可签到！！！"
                 tools:visibility="visible" />
-
-
+            
         </LinearLayout>
-
 
     </ScrollView>
 
@@ -195,7 +194,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="@dimen/lay_16"
+            android:layout_marginBottom="@dimen/lay_8"
             android:layout_marginLeft="@dimen/lay_16"
             android:layout_marginRight="@dimen/lay_16"
             android:background="@drawable/bg_login_submit_lock"

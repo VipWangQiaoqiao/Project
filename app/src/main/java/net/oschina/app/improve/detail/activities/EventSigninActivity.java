@@ -8,7 +8,6 @@ import android.support.annotation.StringRes;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -44,19 +43,17 @@ import java.util.Set;
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
-import static net.oschina.app.R.id.tv_event_type;
-
 /**
  * Created by fei
  * on 2016/11/30.
+ * change by fei
+ * on 2016/12/15
  * desc:活动签到
  */
 
 public class EventSigninActivity extends BaseBackActivity {
 
-    private static final String TAG = "EventSigninActivity";
-
-    public static final String EVENT_KEY = "event_id_key";
+    public static final String EVENT_ID_KEY = "event_id_key";
 
     @Bind(R.id.iv_event_img)
     ImageView mIvImg;
@@ -64,7 +61,7 @@ public class EventSigninActivity extends BaseBackActivity {
     TextView mTvTitle;
     @Bind(R.id.tv_event_author)
     TextView mTvAuthor;
-    @Bind(tv_event_type)
+    @Bind(R.id.tv_event_type)
     TextView mTvType;
     @Bind(R.id.tv_event_counts)
     TextView mTvCounts;
@@ -106,7 +103,7 @@ public class EventSigninActivity extends BaseBackActivity {
      */
     public static void show(Context context, long sourceId) {
         Intent intent = new Intent(context, EventSigninActivity.class);
-        intent.putExtra(EVENT_KEY, sourceId);
+        intent.putExtra(EVENT_ID_KEY, sourceId);
         context.startActivity(intent);
     }
 
@@ -223,7 +220,7 @@ public class EventSigninActivity extends BaseBackActivity {
         Intent intent = getIntent();
         if (intent == null) return;
 
-        mId = intent.getLongExtra(EVENT_KEY, 0);
+        mId = intent.getLongExtra(EVENT_ID_KEY, 0);
 
         if (!netIsAvailable()) return;
 
@@ -247,6 +244,7 @@ public class EventSigninActivity extends BaseBackActivity {
                 showError(EmptyLayout.NETWORK_ERROR);
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
@@ -255,7 +253,6 @@ public class EventSigninActivity extends BaseBackActivity {
                 if (resultBean.isSuccess()) {
                     EventDetail eventDetail = resultBean.getResult();
 
-                    Log.e(TAG, "onSuccess: ----->" + eventDetail.toString() + " id=" + eventDetail.getId());
                     if (eventDetail.getId() <= 0) {
                         AppContext.showToastShort(getString(R.string.event_null_hint));
                         showError(EmptyLayout.NODATA);
@@ -291,38 +288,19 @@ public class EventSigninActivity extends BaseBackActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 showError(EmptyLayout.NETWORK_ERROR);
-                Log.e(TAG, "onFailure: ----->");
-
-                //onSuccess(statusCode, headers, responseString);
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
                 ResultBean<Map<String, String>> mapResultBean = AppOperator.createGson().fromJson(responseString, applyInfoToken());
-
-//                        new ResultBean<>();
-//
-//                mapResultBean.setCode(1);
-//                mapResultBean.setMessage("dddddd");
-//                Map<String, String> result = new HashMap<>();
-//                result.put("姓名", "uni7corn");
-//                result.put("性别", "男");
-//                result.put("公司", "OSC");
-//                result.put("会场", "移动分会场；Web分会场");
-//                result.put("备注", "给我留个好位置哦～");
-//                result.put("备注2", "给我留个好位置哦～");
-//                result.put("备注3", "给我留个好位置哦～");
-//                result.put("备注4", "给我留个好位置哦～");
-//                result.put("备注5", "给我留个好位置哦～");
-                //mapResultBean.setResult(result);
 
                 mRequestType = 0x03;
                 int code = mapResultBean.getCode();
 
                 switch (code) {
                     case 0:
-                        Log.e(TAG, "onSuccess: --------->0");
                         //code=0，请求不到相关数据，直接使用手机号报名（ps：有可能使用的是其他账户或者直接手机号报名的情况）
                         updateDetailView(eventDetail);
                         setTelVisible(View.VISIBLE);
@@ -333,7 +311,6 @@ public class EventSigninActivity extends BaseBackActivity {
                         hideLoading();
                         break;
                     case 1:
-                        Log.e(TAG, "onSuccess: ------>1");
                         //code=1，请求成功
                         Map<String, String> userInfoMap = mapResultBean.getResult();
                         if (userInfoMap != null && userInfoMap.size() > 0) {
@@ -356,7 +333,6 @@ public class EventSigninActivity extends BaseBackActivity {
                         }
                         break;
                     case 404:
-                        Log.e(TAG, "onSuccess: ------>404");
                         //code=404,当前登录的用户未报名该活动，返回相关数据为null
                         updateDetailView(eventDetail);
                         setTelVisible(View.VISIBLE);
@@ -368,7 +344,7 @@ public class EventSigninActivity extends BaseBackActivity {
                         AppContext.showToastShort(mapResultBean.getMessage());
                         break;
                     default:
-                        Log.e(TAG, "onSuccess: ------>default");
+                        AppContext.showToastShort(mapResultBean.getMessage());
                         showError(EmptyLayout.NODATA);
                         break;
                 }
@@ -452,25 +428,21 @@ public class EventSigninActivity extends BaseBackActivity {
 
     private void updateUserInfoView(Map<String, String> userInfo) {
 
-        Log.e(TAG, "updateView: ----->" + userInfo);
-
         Set<Map.Entry<String, String>> entries = userInfo.entrySet();
 
         for (Map.Entry<String, String> next : entries) {
 
             String key = next.getKey();
-
-            @SuppressLint("InflateParams") View rootView = getLayoutInflater().inflate(R.layout.lay_signin_user_info, null, false);
-
-            TextView tvKey = (TextView) rootView.findViewById(R.id.tv_key);
-            tvKey.setText(String.format("%s:", key));
-
             String value = next.getValue();
-            if (!TextUtils.isEmpty(value)) {
+
+            if (!TextUtils.isEmpty(value) && !TextUtils.isEmpty(key)) {
+                @SuppressLint("InflateParams") View rootView = getLayoutInflater().inflate(R.layout.lay_signin_user_info, null, false);
+                TextView tvKey = (TextView) rootView.findViewById(R.id.tv_key);
+                tvKey.setText(String.format("%s:", key));
                 TextView tvValue = (TextView) rootView.findViewById(R.id.tv_value);
                 tvValue.setText(value);
+                mLayUserInfo.addView(rootView);
             }
-            mLayUserInfo.addView(rootView);
         }
     }
 
@@ -498,7 +470,6 @@ public class EventSigninActivity extends BaseBackActivity {
             default:
                 break;
         }
-
 
     }
 
@@ -531,26 +502,6 @@ public class EventSigninActivity extends BaseBackActivity {
         if (layout != null) {
             layout.setErrorType(type);
         }
-    }
-
-
-    /**
-     * show WaitDialog
-     *
-     * @return progressDialog
-     */
-    private ProgressDialog showWaitDialog(@StringRes int messageId) {
-        if (mDialog == null) {
-            if (messageId <= 0) {
-                mDialog = DialogHelper.getProgressDialog(this, true);
-            } else {
-                String message = getResources().getString(messageId);
-                mDialog = DialogHelper.getProgressDialog(this, message, true);
-            }
-        }
-        mDialog.show();
-
-        return mDialog;
     }
 
     /**
