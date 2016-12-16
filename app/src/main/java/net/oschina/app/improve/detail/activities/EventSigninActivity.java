@@ -4,10 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -33,10 +33,10 @@ import net.oschina.app.improve.bean.EventSignin;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
 
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
 
@@ -112,22 +112,18 @@ public class EventSigninActivity extends BaseBackActivity {
         return R.layout.activity_main_signin;
     }
 
+    @Override
+    protected boolean initBundle(Bundle bundle) {
+        mId = bundle.getLong(EVENT_ID_KEY, 0);
+        return mId > 0;
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     protected void initWidget() {
         super.initWidget();
 
-        mEtSignin.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
+        mEtSignin.addTextChangedListener(new TextWatcherAdapter() {
             @SuppressWarnings("deprecation")
             @Override
             public void afterTextChanged(Editable s) {
@@ -148,7 +144,6 @@ public class EventSigninActivity extends BaseBackActivity {
                     mBtSubmit.setEnabled(false);
                     mBtSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
                     mBtSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
-
                 }
             }
         });
@@ -167,40 +162,7 @@ public class EventSigninActivity extends BaseBackActivity {
         mBtSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (!netIsAvailable()) return;
-
-                String phone = mEtSignin.getText().toString().trim();
-
-                OSChinaApi.eventSignin(mId, phone, new TextHttpResponseHandler() {
-                    @Override
-                    public void onStart() {
-                        super.onStart();
-                        showFocusWaitDialog(R.string.state_submit);
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
-                        hideWaitDialog();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        AppContext.showToastShort(R.string.state_network_error);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                        //签到成功更新数据
-                        ResultBean<EventSignin> signinResultBean = AppOperator.createGson().fromJson(responseString, eventSigninTypeToken());
-                        if (signinResultBean.isSuccess()) {
-                            EventSignin eventSignin = signinResultBean.getResult();
-                            updateSigninView(eventSignin);
-                        }
-                    }
-                });
+                submitToSignIn();
             }
         });
 
@@ -217,23 +179,71 @@ public class EventSigninActivity extends BaseBackActivity {
     protected void initData() {
         super.initData();
 
-        Intent intent = getIntent();
-        if (intent == null) return;
+        //检查网络
+        if (!checkNetIsAvailable()) {
+            showError(EmptyLayout.NETWORK_ERROR);
+            return;
+        }
 
-        mId = intent.getLongExtra(EVENT_ID_KEY, 0);
-
-        if (!netIsAvailable()) return;
-
-        requestEventDetail(mId);
+        requestData();
     }
 
-    private boolean netIsAvailable() {
+    private boolean checkNetIsAvailable() {
         if (!TDevice.hasInternet()) {
             AppContext.showToastShort(getString(R.string.tip_network_error));
+            showError(EmptyLayout.NETWORK_ERROR);
             return false;
-        } else {
-            return true;
         }
+        return true;
+    }
+
+    private void requestData() {
+        int requestType = mRequestType;
+        switch (requestType) {
+            case 0x01:
+                requestEventDetail(mId);
+                break;
+            case 0x02:
+                requestApplyInfo(mEventDetail, mId);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void submitToSignIn() {
+        if (!checkNetIsAvailable()) return;
+        String phone = mEtSignin.getText().toString().trim();
+        OSChinaApi.eventSignin(mId, phone, new TextHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                super.onStart();
+                showFocusWaitDialog(R.string.state_submit);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                hideWaitDialog();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                AppContext.showToastShort(R.string.state_network_error);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                //签到成功更新数据
+                ResultBean<EventSignin> signinResultBean = AppOperator.createGson().fromJson(responseString,
+                        new TypeToken<ResultBean<EventSignin>>() {
+                        }.getType());
+                if (signinResultBean.isSuccess()) {
+                    EventSignin eventSignin = signinResultBean.getResult();
+                    updateSigninView(eventSignin);
+                }
+            }
+        });
     }
 
     private void requestEventDetail(final long sourceId) {
@@ -247,8 +257,9 @@ public class EventSigninActivity extends BaseBackActivity {
             @SuppressWarnings("deprecation")
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                ResultBean<EventDetail> resultBean = AppOperator.createGson().fromJson(responseString, eventDetailToken());
+                ResultBean<EventDetail> resultBean = AppOperator.createGson().fromJson(responseString,
+                        new TypeToken<ResultBean<EventDetail>>() {
+                        }.getType());
 
                 if (resultBean.isSuccess()) {
                     EventDetail eventDetail = resultBean.getResult();
@@ -261,7 +272,12 @@ public class EventSigninActivity extends BaseBackActivity {
 
                     mEventDetail = eventDetail;
 
-                    if (!AccountHelper.isLogin()) {
+                    if (AccountHelper.isLogin()) {
+                        if (!checkNetIsAvailable()) return;
+                        mRequestType = 0x02;
+                        //2.如果是登录状态，需要匹配是否是该账户的报名信息
+                        requestApplyInfo(eventDetail, sourceId);
+                    } else {
                         mRequestType = 0x03;
                         updateDetailView(eventDetail);
                         mLayInputBg.setActivated(true);
@@ -269,13 +285,7 @@ public class EventSigninActivity extends BaseBackActivity {
                         mBtSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
                         mBtSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
                         hideLoading();
-                    } else {
-                        if (!netIsAvailable()) return;
-                        mRequestType = 0x02;
-                        //2.如果是登录状态，需要匹配是否是该账户的报名信息
-                        requestApplyInfo(eventDetail, sourceId);
                     }
-
                 } else {
                     showError(EmptyLayout.NODATA);
                 }
@@ -294,7 +304,9 @@ public class EventSigninActivity extends BaseBackActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
-                ResultBean<Map<String, String>> mapResultBean = AppOperator.createGson().fromJson(responseString, applyInfoToken());
+                ResultBean<Map<String, String>> mapResultBean = AppOperator.createGson().fromJson(responseString,
+                        new TypeToken<ResultBean<Map<String, String>>>() {
+                        }.getType());
 
                 mRequestType = 0x03;
                 int code = mapResultBean.getCode();
@@ -358,35 +370,6 @@ public class EventSigninActivity extends BaseBackActivity {
         mLayInputBg.setVisibility(visible);
     }
 
-    private void requestData() {
-        int requestType = mRequestType;
-        switch (requestType) {
-            case 0x01:
-                requestEventDetail(mId);
-                break;
-            case 0x02:
-                requestApplyInfo(mEventDetail, mId);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private Type eventDetailToken() {
-        return new TypeToken<ResultBean<EventDetail>>() {
-        }.getType();
-    }
-
-    private Type eventSigninTypeToken() {
-        return new TypeToken<ResultBean<EventSignin>>() {
-        }.getType();
-    }
-
-    private Type applyInfoToken() {
-        return new TypeToken<ResultBean<Map<String, String>>>() {
-        }.getType();
-    }
-
     @SuppressLint("DefaultLocale")
     private void updateDetailView(EventDetail eventDetail) {
 
@@ -435,14 +418,16 @@ public class EventSigninActivity extends BaseBackActivity {
             String key = next.getKey();
             String value = next.getValue();
 
-            if (!TextUtils.isEmpty(value) && !TextUtils.isEmpty(key)) {
-                @SuppressLint("InflateParams") View rootView = getLayoutInflater().inflate(R.layout.lay_signin_user_info, null, false);
-                TextView tvKey = (TextView) rootView.findViewById(R.id.tv_key);
-                tvKey.setText(String.format("%s:", key));
-                TextView tvValue = (TextView) rootView.findViewById(R.id.tv_value);
-                tvValue.setText(value);
-                mLayUserInfo.addView(rootView);
+            if (TextUtils.isEmpty(value) || TextUtils.isEmpty(key)) {
+                continue;
             }
+
+            @SuppressLint("InflateParams") View rootView = getLayoutInflater().inflate(R.layout.lay_signin_user_info, null, false);
+            TextView tvKey = (TextView) rootView.findViewById(R.id.tv_key);
+            tvKey.setText(String.format("%s:", key));
+            TextView tvValue = (TextView) rootView.findViewById(R.id.tv_value);
+            tvValue.setText(value);
+            mLayUserInfo.addView(rootView);
         }
     }
 
@@ -470,7 +455,6 @@ public class EventSigninActivity extends BaseBackActivity {
             default:
                 break;
         }
-
     }
 
     public void hideLoading() {
