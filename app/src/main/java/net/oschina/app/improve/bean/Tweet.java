@@ -1,5 +1,7 @@
 package net.oschina.app.improve.bean;
 
+import android.text.TextUtils;
+
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Author;
 
@@ -244,6 +246,12 @@ public class Tweet implements Serializable {
                 paths[i] = images[i].href;
             }
             return paths;
+        }
+
+        public static boolean check(Image image) {
+            return image != null
+                    && !TextUtils.isEmpty(image.getThumb())
+                    && !TextUtils.isEmpty(image.getHref());
         }
     }
 
