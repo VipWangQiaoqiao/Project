@@ -5,13 +5,9 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.view.ViewGroup;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.Notice;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
@@ -27,7 +23,7 @@ import butterknife.Bind;
  * Updated by Dominic Thanatosx
  * on 2016/8/16.
  */
-public class UserMessageActivity extends BaseBackActivity implements NoticeManager.NoticeNotify{
+public class UserMessageActivity extends BaseBackActivity implements NoticeManager.NoticeNotify {
 
     @Bind(R.id.tabLayout)       TabLayout mLayoutTab;
     @Bind(R.id.vp_user_message) ViewPager mViewPager;
@@ -38,18 +34,18 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
 
     private NoticeBean mNotice;
 
-    public static void show(Context context) {
+    public static void show (Context context) {
 
         context.startActivity(new Intent(context, UserMessageActivity.class));
     }
 
     @Override
-    protected int getContentView() {
+    protected int getContentView () {
         return R.layout.activity_user_message;
     }
 
     @Override
-    protected void initWidget() {
+    protected void initWidget () {
         super.initWidget();
         mNotice = NoticeManager.getNotice();
 
@@ -61,22 +57,25 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
 
         mLayoutTab.setupWithViewPager(mViewPager);
         mViewPager.setAdapter(mAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
-            public void onPageSelected(int position) {
+            public void onPageSelected (int position) {
                 TLog.i("oschina", "On Page Select: " + position);
                 switch (position) {
                     case 0:
                         if (mNotice.getMention() <= 0) break;
-                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
+                        NoticeManager
+                                .clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
                         break;
                     case 1:
                         if (mNotice.getReview() <= 0) break;
-                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
+                        NoticeManager
+                                .clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
                         break;
                     default:
                         if (mNotice.getLetter() <= 0) break;
-                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
+                        NoticeManager
+                                .clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
                         break;
                 }
             }
@@ -105,10 +104,10 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         }
     }
 
-    private void postChangeTitle(final int position, int delay){
+    private void postChangeTitle (final int position, int delay) {
         mViewPager.postDelayed(new Runnable() {
             @Override
-            public void run() {
+            public void run () {
                 TabLayout.Tab tab = mLayoutTab.getTabAt(position);
                 if (tab == null) return;
                 tab.setText(mAdapter.getPageTitle(position));
@@ -117,7 +116,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy () {
         super.onDestroy();
         NoticeManager.unBindNotify(this);
         NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
@@ -127,8 +126,8 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
 
     private FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
         @Override
-        public Fragment getItem(int position) {
-            switch (position){
+        public Fragment getItem (int position) {
+            switch (position) {
                 case 0:
                     return mUserMentionFragment;
                 case 1:
@@ -139,13 +138,13 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         }
 
         @Override
-        public int getCount() {
+        public int getCount () {
             return 3;
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position){
+        public CharSequence getPageTitle (int position) {
+            switch (position) {
                 case 0:
                     return formatMessageCount("@我", mNotice.getMention());
                 case 1:
@@ -156,11 +155,11 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         }
     };
 
-    private String formatMessageCount(String title, int messageCount) {
+    private String formatMessageCount (String title, int messageCount) {
         return messageCount == 0 ? title : String.format(title + "（%s）", messageCount);
     }
 
-    public void onRequestSuccess(int position) {
+    public void onRequestSuccess (int position) {
         if (mViewPager.getCurrentItem() != position) return;
         switch (position) {
             case 0:
@@ -179,15 +178,14 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
     }
 
     @Override
-    public void onNoticeArrived(NoticeBean bean) {
-        TLog.i("oschina", "On Notice Arrived");
+    public void onNoticeArrived (NoticeBean bean) {
         NoticeBean nb = mNotice;
         mNotice = bean;
         if (nb.getMention() != bean.getMention()) {
             if (mViewPager.getCurrentItem() == 0) {
-                if (bean.getMention() == 0){
+                if (bean.getMention() == 0) {
                     postChangeTitle(0, 1500);
-                }else {
+                } else {
                     //mUserMentionFragment.onRefreshing();
                     //NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
                     postChangeTitle(0, 0);
@@ -199,9 +197,9 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
 
         if (nb.getReview() != bean.getReview()) {
             if (mViewPager.getCurrentItem() == 1) {
-                if (bean.getReview() == 0){
+                if (bean.getReview() == 0) {
                     postChangeTitle(1, 1500);
-                }else {
+                } else {
                     //mUserCommentFragment.onRefreshing();
                     //NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
                     postChangeTitle(1, 0);
@@ -213,9 +211,9 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
 
         if (nb.getLetter() != bean.getLetter()) {
             if (mViewPager.getCurrentItem() == 2) {
-                if (bean.getLetter() == 0){
+                if (bean.getLetter() == 0) {
                     postChangeTitle(2, 1500);
-                }else {
+                } else {
                     //mUserMessageFragment.onRefreshing();
                     //NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
                     postChangeTitle(2, 0);
