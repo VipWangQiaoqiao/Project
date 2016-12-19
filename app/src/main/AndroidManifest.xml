@@ -170,7 +170,7 @@
             android:name=".improve.detail.general.EventDetailActivity"
             android:label="活动详情"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
+            android:theme="@style/Base.App.Theme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
 

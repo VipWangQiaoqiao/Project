@@ -15,7 +15,6 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentsActivity;
-import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -84,6 +83,11 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
     @Override
     public void showErrorLayout(int errorType) {
         mEmptyLayout.setErrorType(errorType);
+    }
+
+    @Override
+    public void showGetDetailSuccess(SubBean bean) {
+        this.mBean = bean;
     }
 
     @Override

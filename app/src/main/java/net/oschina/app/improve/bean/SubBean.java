@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by haibin
@@ -27,11 +26,13 @@ public class SubBean implements Serializable {
     private String summary;
     private Author author;
     private Image image;
+    private List<Image> images;
     private HashMap<String, Object> extra;
     private String[] tags;
     private Statistics statistics;
     private ArrayList<About> abouts;
     private Software software;
+
     public boolean isOriginal() {
         if (tags != null) {
             for (String tag : tags) {
@@ -82,6 +83,14 @@ public class SubBean implements Serializable {
             }
         }
         return false;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     public boolean isFavorite() {

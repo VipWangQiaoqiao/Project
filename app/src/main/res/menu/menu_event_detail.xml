@@ -3,6 +3,13 @@
     xmlns:osc="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_fav"
+        android:icon="@mipmap/btn_share_white_normal"
+        android:title="@string/favorite"
+        android:visible="true"
+        osc:showAsAction="always" />
+
+    <item
         android:id="@+id/menu_share"
         android:icon="@mipmap/btn_share_white_normal"
         android:title="@string/share_to"

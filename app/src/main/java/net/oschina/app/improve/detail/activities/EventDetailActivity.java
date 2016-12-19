@@ -65,7 +65,7 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
 
     @Override
     int getOptionsMenuId() {
-        return R.menu.menu_detail_share;
+        return R.menu.menu_event_detail;
     }
 
     @Override
