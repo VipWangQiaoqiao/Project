@@ -42,7 +42,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:navigationIcon="@drawable/selector_back"
                 app:layout_collapseMode="pin" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -53,7 +52,7 @@
         android:id="@+id/ll_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_anchor="@id/layout_appbar"
+        app:layout_anchor="@+id/layout_appbar"
         app:layout_anchorGravity="bottom"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -67,17 +66,26 @@
             <FrameLayout
                 android:id="@+id/lay_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@color/white" />
+                android:background="@color/white"
+                android:paddingBottom="46dp" />
         </LinearLayout>
 
         <net.oschina.app.ui.empty.EmptyLayout
             android:id="@+id/lay_error"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </RelativeLayout>
+
+    <View
+        android:id="@+id/line"
+        style="@style/h_line"
+        android:layout_height="1dp"
+        android:visibility="gone"
+        app:layout_anchor="@+id/ll_operate"
+        app:layout_anchorGravity="top" />
 
     <LinearLayout
         android:id="@+id/ll_operate"
@@ -85,43 +93,8 @@
         android:layout_height="46dp"
         android:layout_gravity="bottom"
         android:background="@color/white"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/ll_fav"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selector_event_fav"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp">
-
-            <ImageView
-                android:id="@+id/iv_fav"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_fav" />
-
-            <TextView
-                android:id="@+id/tv_fav"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/lay_16"
-                android:layout_marginRight="@dimen/lay_16"
-                android:text="收藏"
-                android:textColor="@color/text_dark"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <View
-            style="@style/h_line"
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="?attr/lineColor" />
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/ll_comment1"

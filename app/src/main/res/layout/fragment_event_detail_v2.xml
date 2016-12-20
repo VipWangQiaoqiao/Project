@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,13 +19,13 @@
             android:orientation="vertical">
 
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/iv_event_img"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/qr_scan_mask" />
+                android:src="@mipmap/qr_scan_mask"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_event_status"
@@ -69,6 +68,7 @@
                 android:paddingTop="@dimen/lay_8">
 
                 <net.oschina.app.widget.CircleImageView
+                    android:id="@+id/civ_author"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@mipmap/ic_launcher" />
@@ -218,114 +218,4 @@
             </FrameLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
-    <View
-        style="@style/h_line"
-        android:layout_height="1px"
-        app:layout_anchor="@+id/ll_operate" />
-
-    <LinearLayout
-        android:id="@+id/ll_operate"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/ll_fav"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selector_event_fav"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp">
-
-            <ImageView
-                android:id="@+id/iv_fav"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_fav" />
-
-            <TextView
-                android:id="@+id/tv_fav"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/lay_16"
-                android:layout_marginRight="@dimen/lay_16"
-                android:text="收藏"
-                android:textColor="@color/text_dark"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <View
-            style="@style/h_line"
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="?attr/lineColor" />
-
-        <LinearLayout
-            android:id="@+id/ll_comment"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selector_event_fav"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingLeft="8dp"
-            android:paddingTop="4dp">
-
-            <ImageView
-                android:id="@+id/iv_comment"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_comment_40_selector" />
-
-            <TextView
-                android:id="@+id/tv_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/lay_8"
-                android:layout_marginRight="@dimen/lay_8"
-                android:ellipsize="end"
-                android:lines="1"
-                android:text="评论(4000)"
-                android:textColor="@color/text_dark"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_sign"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selector_event_sign"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/iv_sign"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/selector_sign" />
-
-            <TextView
-                android:id="@+id/tv_apply_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/lay_16"
-                android:layout_marginRight="@dimen/lay_16"
-                android:text="我要报名"
-                android:textColor="@color/text_sign_selector"
-                android:textSize="14sp" />
-        </LinearLayout>
-    </LinearLayout>
 </LinearLayout>

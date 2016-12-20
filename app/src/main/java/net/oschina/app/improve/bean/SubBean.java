@@ -25,7 +25,6 @@ public class SubBean implements Serializable {
     private boolean favorite;
     private String summary;
     private Author author;
-    private Image image;
     private List<Image> images;
     private HashMap<String, Object> extra;
     private String[] tags;
@@ -157,14 +156,6 @@ public class SubBean implements Serializable {
         this.author = author;
     }
 
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
     public HashMap<String, Object> getExtra() {
         return extra;
     }
@@ -212,23 +203,59 @@ public class SubBean implements Serializable {
     }
 
     public static class Image implements Serializable {
-        private int type;
-        private String[] href;
+        private String href;
+        private String thumb;
+        private int w;
+        private int h;
+        private String type;
+        private String name;
 
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public String[] getHref() {
+        public String getHref() {
             return href;
         }
 
-        public void setHref(String[] href) {
+        public void setHref(String href) {
             this.href = href;
+        }
+
+        public String getThumb() {
+            return thumb;
+        }
+
+        public void setThumb(String thumb) {
+            this.thumb = thumb;
+        }
+
+        public int getW() {
+            return w;
+        }
+
+        public void setW(int w) {
+            this.w = w;
+        }
+
+        public int getH() {
+            return h;
+        }
+
+        public void setH(int h) {
+            this.h = h;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
     }
 
