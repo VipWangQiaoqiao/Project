@@ -50,7 +50,7 @@ public class AppCrashHandler implements Thread.UncaughtExceptionHandler {
             @Override
             public void run() {
                 Looper.prepare();
-                Toast.makeText(mContext, "OSC出现未知异常,即将退出.", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "你把我搞死了；我只能默默重启！！", Toast.LENGTH_LONG).show();
                 Looper.loop();
             }
         }.start();
