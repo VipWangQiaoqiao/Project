@@ -81,6 +81,7 @@ public class DetailPresenter implements DetailContract.Presenter {
                     if (resultBean != null && resultBean.isSuccess()) {
                         Collection collection = resultBean.getResult();
                         mView.showFavReverseSuccess(collection.isFavorite(), collection.isFavorite() ? R.string.add_favorite_success : R.string.del_favorite_success);
+                        mEmptyView.showFavReverseSuccess(collection.isFavorite(), collection.isFavorite() ? R.string.add_favorite_success : R.string.del_favorite_success);
                     } else {
                         mView.showFavError();
                     }

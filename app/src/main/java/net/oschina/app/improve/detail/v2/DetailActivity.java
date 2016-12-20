@@ -27,7 +27,7 @@ import net.oschina.app.util.StringUtils;
  */
 
 public abstract class DetailActivity extends BaseBackActivity implements DetailContract.EmptyView, Runnable {
-    private DetailPresenter mPresenter;
+    protected DetailPresenter mPresenter;
     protected EmptyLayout mEmptyLayout;
     protected DetailFragment mDetailFragment;
     private ShareDialogBuilder mShareDialogBuilder;
@@ -100,6 +100,11 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
     }
 
     @Override
+    public void showFavReverseSuccess(boolean isFav, int strId) {
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         int menuId = getOptionsMenuId();
         if (menuId <= 0)
@@ -158,6 +163,14 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
         mAlertDialog.show();
 
         return true;
+    }
+
+    protected String getExtraString(Object object) {
+        return object == null ? "" : object.toString();
+    }
+
+    protected int getExtraInt(Object object) {
+        return object == null ? 0 : Double.valueOf(object.toString()).intValue();
     }
 
     protected abstract DetailFragment getDetailFragment();
