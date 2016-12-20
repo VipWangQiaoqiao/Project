@@ -62,8 +62,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class QuesAnswerDetailActivity extends BaseBackActivity {
 
-    private static final String TAG = "QuesAnswerDetailActivity";
-
     public static final String BUNDLE_KEY = "BUNDLE_KEY";
     public static final String BUNDLE_ARTICLE_KEY = "BUNDLE_ARTICLE_KEY";
     public static final String BUNDLE_TYPE = "bundle_comment_type";
@@ -277,7 +275,6 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
                 public void onClick(View v) {
                     Reply reply = (Reply) v.getTag();
 
-                    mDelegation.getBottomSheet().getEditText().setText("回复 @" + reply.getAuthor().getName() + " : ");
                     mDelegation.setCommentHint("回复 @" + reply.getAuthor().getName() + " : ");
 
                     QuesAnswerDetailActivity.this.reply = reply;

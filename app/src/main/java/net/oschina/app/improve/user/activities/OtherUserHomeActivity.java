@@ -409,6 +409,7 @@ public class OtherUserHomeActivity extends BaseActivity
 
     @Override
     public void onClick(View v) {
+        if (user == null || user.getId() <= 0) return;
         switch (v.getId()) {
             case R.id.tv_count_follow:
                 UserFollowsActivity.show(this, user.getId());

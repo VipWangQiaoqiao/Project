@@ -11,6 +11,13 @@ import net.oschina.app.util.TDevice;
  * @version 1.0.0
  */
 public final class Setting {
+    public static final String KEY_VERSION_CODE = "versionCode";
+    public static final String KEY_APP_UNIQUE_ID = "appUniqueID";
+
+    public static SharedPreferences getSettingPreferences(Context context) {
+        return context.getSharedPreferences(Setting.class.getName(), Context.MODE_PRIVATE);
+    }
+
     public static boolean checkIsNewVersion(Context context) {
         int saveVersionCode = getSaveVersionCode(context);
         int currentVersionCode = TDevice.getVersionCode();
@@ -22,13 +29,13 @@ public final class Setting {
     }
 
     public static int getSaveVersionCode(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Setting.class.getName(), Context.MODE_PRIVATE);
-        return sp.getInt("versionCode", 0);
+        SharedPreferences sp = getSettingPreferences(context);
+        return sp.getInt(KEY_VERSION_CODE, 0);
     }
 
     private static int updateSaveVersionCode(Context context, int version) {
-        SharedPreferences sp = context.getSharedPreferences(Setting.class.getName(), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit().putInt("versionCode", version);
+        SharedPreferences sp = getSettingPreferences(context);
+        SharedPreferences.Editor editor = sp.edit().putInt(KEY_VERSION_CODE, version);
         SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
         return version;
     }
