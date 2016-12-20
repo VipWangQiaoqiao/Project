@@ -16,17 +16,6 @@
     },
     {
         "fixed": true,
-        "href": "https://www.oschina.net/action/apiv2/sub_list?token=98d04eb58a1d12b75d254deecbc83790",
-        "name": "技术问答",
-        "needLogin": false,
-        "isActived": true,
-        "order": 2,
-        "subtype": 3,
-        "token": "98d04eb58a1d12b75d254deecbc83790",
-        "type": 2
-    },
-    {
-        "fixed": true,
         "href": "https://www.oschina.net/action/apiv2/sub_list?token=df985be3c5d5449f8dfb47e06e098ef9",
         "name": "推荐博客",
         "needLogin": false,
@@ -35,6 +24,17 @@
         "subtype": 4,
         "token": "df985be3c5d5449f8dfb47e06e098ef9",
         "type": 3
+    },
+    {
+        "fixed": true,
+        "href": "https://www.oschina.net/action/apiv2/sub_list?token=98d04eb58a1d12b75d254deecbc83790",
+        "name": "技术问答",
+        "needLogin": false,
+        "isActived": true,
+        "order": 2,
+        "subtype": 3,
+        "token": "98d04eb58a1d12b75d254deecbc83790",
+        "type": 2
     },
     {
         "fixed": true,
