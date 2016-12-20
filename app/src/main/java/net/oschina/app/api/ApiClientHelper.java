@@ -1,13 +1,14 @@
 package net.oschina.app.api;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.text.TextUtils;
 
-import net.oschina.app.AppConfig;
-import net.oschina.app.AppContext;
+import net.oschina.app.Setting;
 
 import java.util.UUID;
 
@@ -66,12 +67,13 @@ class ApiClientHelper {
     }
 
     private static String getAppId(Application context) {
-        if (context instanceof AppContext) {
-            AppContext appContext = (AppContext) context;
-            String uniqueID = appContext.getProperty(AppConfig.CONF_APP_UNIQUEID);
+        if (context != null) {
+            SharedPreferences sp = Setting.getSettingPreferences(context);
+            String uniqueID = sp.getString(Setting.KEY_APP_UNIQUE_ID, null);
             if (TextUtils.isEmpty(uniqueID)) {
                 uniqueID = UUID.randomUUID().toString();
-                appContext.setProperty(AppConfig.CONF_APP_UNIQUEID, uniqueID);
+                SharedPreferences.Editor editor = sp.edit().putString(Setting.KEY_APP_UNIQUE_ID, uniqueID);
+                SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
             }
             return uniqueID;
         }
