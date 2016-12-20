@@ -1551,7 +1551,8 @@ public class OSChinaApi {
         if (sourceId <= 0) return;
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
-        params.put("phone", phone);
+        if (!TextUtils.isEmpty(phone))
+            params.put("phone", phone);
         ApiHttpClient.post("action/apiv2/event_signin", params, handler);
     }
 
@@ -1592,5 +1593,12 @@ public class OSChinaApi {
         params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/event_list", params, handler);
 
+    }
+
+    public static void syncSignUserInfo(long sourceId, TextHttpResponseHandler handler) {
+        if (sourceId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.post("action/apiv2/event_apply_info", params, handler);
     }
 }

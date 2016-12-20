@@ -5,6 +5,8 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
+import net.oschina.app.util.TLog;
+
 import java.lang.reflect.Type;
 
 /**
@@ -17,7 +19,7 @@ public class IntegerJsonDeserializer implements JsonDeserializer<Integer> {
         try {
             return json.getAsInt();
         } catch (Exception e) {
-            e.printStackTrace();
+            TLog.log("IntegerJsonDeserializer-deserialize-error:" + (json != null ? json.toString() : ""));
             return 0;
         }
     }

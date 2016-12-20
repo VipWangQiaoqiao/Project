@@ -17,6 +17,7 @@ import net.oschina.app.OSCApplication;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.util.StringUtils;
 import net.qiujuer.genius.ui.compat.UiCompat;
 
@@ -43,7 +44,6 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
 
     @Override
     public void onBindHeaderHolder(RecyclerView.ViewHolder holder, int position) {
-
     }
 
     @Override
@@ -57,7 +57,6 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
 
         TextView title = vh.tv_title;
         TextView content = vh.tv_description;
-        TextView history = vh.tv_time;
         TextView see = vh.tv_view;
         TextView answer = vh.tv_comment_count;
 
@@ -126,12 +125,17 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
             content.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
         }
 
-        String author = item.getAuthor().getName();
-        if (!TextUtils.isEmpty(author)) {
-            author = author.trim();
-            history.setText((author.length() > 9 ? author.substring(0, 9) : author) +
-                    "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
+        Author author = item.getAuthor();
+        String authorName;
+        if (author != null && !TextUtils.isEmpty(authorName = author.getName())) {
+            authorName = authorName.trim();
+            vh.tv_time.setText(String.format("@%s %s",
+                    (authorName.length() > 9 ? authorName.substring(0, 9) : authorName),
+                    StringUtils.formatSomeAgo(item.getPubDate().trim())));
+        } else {
+            vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate().trim()));
         }
+
 
         see.setText(String.valueOf(item.getStatistics().getView()));
         answer.setText(String.valueOf(item.getStatistics().getComment()));
