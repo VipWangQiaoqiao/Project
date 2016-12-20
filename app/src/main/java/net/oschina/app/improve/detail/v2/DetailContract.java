@@ -16,6 +16,8 @@ public interface DetailContract {
         void hideEmptyLayout();
 
         void showErrorLayout(int errorType);
+
+        void showGetDetailSuccess(SubBean bean);
     }
 
     interface View extends BaseView<Presenter> {

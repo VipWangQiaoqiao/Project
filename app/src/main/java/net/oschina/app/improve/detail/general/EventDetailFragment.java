@@ -50,9 +50,6 @@ public class EventDetailFragment extends DetailFragment {
     @Bind(R.id.tv_event_author)
     TextView mTextAuthor;
 
-    @Bind(R.id.tv_event_type)
-    TextView mTextType;
-
     @Bind(R.id.tv_event_cost_desc)
     TextView mTextCostDesc;
 
@@ -108,7 +105,7 @@ public class EventDetailFragment extends DetailFragment {
         super.showGetDetailSuccess(bean);
         mTextComment.setText(String.format("评论(%s)", bean.getStatistics().getComment()));
         mTextTitle.setText(bean.getTitle());
-        mTextAuthor.setText(String.format("发起人：%s", bean.getAuthor().getName()));
+        mTextAuthor.setText(bean.getAuthor().getName());
         mImageFav.setImageResource(bean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
         mTextFav.setText(bean.isFavorite() ? getString(R.string.event_is_fav) : getString(R.string.event_un_fav));
         HashMap<String, Object> extra = bean.getExtra();
@@ -117,26 +114,26 @@ public class EventDetailFragment extends DetailFragment {
             mTextMember.setText(String.format("%s人参与", getExtraInt(extra.get("eventApplyCount"))));
             mTextStartDate.setText(getExtraString(extra.get("eventStartDate")));
             mTextCostDesc.setText(getExtraString(extra.get("eventCostDesc")));
-
-            /**
-             * 活动类型判断
-             */
-            int typeStr = R.string.oscsite;
-            switch (getExtraInt(extra.get("eventType"))) {
-                case Event.EVENT_TYPE_OSC:
-                    typeStr = R.string.event_type_osc;
-                    break;
-                case Event.EVENT_TYPE_TEC:
-                    typeStr = R.string.event_type_tec;
-                    break;
-                case Event.EVENT_TYPE_OTHER:
-                    typeStr = R.string.event_type_other;
-                    break;
-                case Event.EVENT_TYPE_OUTSIDE:
-                    typeStr = R.string.event_type_outside;
-                    break;
-            }
-            mTextType.setText(String.format("类型：%s", getResources().getString(typeStr)));
+//
+//            /**
+//             * 活动类型判断
+//             */
+//            int typeStr = R.string.oscsite;
+//            switch (getExtraInt(extra.get("eventType"))) {
+//                case Event.EVENT_TYPE_OSC:
+//                    typeStr = R.string.event_type_osc;
+//                    break;
+//                case Event.EVENT_TYPE_TEC:
+//                    typeStr = R.string.event_type_tec;
+//                    break;
+//                case Event.EVENT_TYPE_OTHER:
+//                    typeStr = R.string.event_type_other;
+//                    break;
+//                case Event.EVENT_TYPE_OUTSIDE:
+//                    typeStr = R.string.event_type_outside;
+//                    break;
+//            }
+//            mTextType.setText(String.format("类型：%s", getResources().getString(typeStr)));
 
             /**
              * 活动状态判断
@@ -164,7 +161,7 @@ public class EventDetailFragment extends DetailFragment {
                 setSignUnEnable();
             }
         }
-        getImgLoader().load(bean.getImage().getHref()).into(mImageEvent);
+        getImgLoader().load(bean.getImage().getHref()[0]).into(mImageEvent);
     }
 
     @Override

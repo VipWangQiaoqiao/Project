@@ -19,106 +19,85 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/iv_event_img"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/qr_scan_mask" />
+
+            <TextView
+                android:id="@+id/tv_event_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_event_detail_ing"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:paddingLeft="@dimen/lay_4"
+                android:paddingRight="@dimen/lay_4"
+                android:paddingTop="2dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="gone"
+                tools:text="正在报名" />
+
+            <TextView
+                android:id="@+id/tv_event_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:ellipsize="end"
+                android:lineSpacingExtra="4dp"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/text_title_color"
+                android:textSize="18sp"
+                tools:text="PHPCon China 2016 技术峰会 —— 评论得赠票PHPCon China 2016 技术峰会 —— 评论得赠票" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="184dp"
-                android:background="@color/main_green"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8">
 
-                <ImageView
-                    android:id="@+id/iv_event_img"
-                    android:layout_width="108dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
-                    android:contentDescription="@string/app_name"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/qr_scan_mask" />
+                <net.oschina.app.widget.CircleImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/ic_launcher" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_toRightOf="@+id/iv_event_banner_img"
-                    android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_event_author"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/lay_16"
+                    android:paddingRight="@dimen/lay_16"
+                    android:textColor="@color/text_desc_color"
+                    android:textSize="16sp"
+                    tools:text="faker" />
 
-                    <TextView
-                        android:id="@+id/tv_event_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top"
-                        android:layout_marginRight="16dp"
-                        android:ellipsize="end"
-                        android:lineSpacingExtra="4dp"
-                        android:maxLines="3"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        tools:text="PHPCon China 2016 技术峰会 —— 评论得赠票" />
+                <TextView
+                    android:id="@+id/tv_event_member"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textColor="@color/text_title_color"
+                    android:textSize="16sp"
+                    tools:text="24人参与" />
 
-                    <TextView
-                        android:id="@+id/tv_event_author"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/lay_4"
-                        android:layout_marginTop="@dimen/lay_4"
-                        android:maxLines="1"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        tools:text="发起人：faker" />
-
-                    <TextView
-                        android:id="@+id/tv_event_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/lay_4"
-                        android:layout_marginTop="@dimen/lay_4"
-                        android:maxLines="1"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        tools:text="类型：技术交流" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_gravity="bottom"
-                        android:layout_marginBottom="@dimen/lay_4"
-                        android:layout_marginTop="@dimen/lay_4"
-                        android:layout_weight="1"
-                        android:gravity="bottom"
-                        android:minHeight="30dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tv_event_member"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:singleLine="true"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            tools:text="24人参与" />
-
-                        <TextView
-                            android:id="@+id/tv_event_status"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_event_detail_ing"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="@dimen/lay_4"
-                            android:paddingRight="@dimen/lay_4"
-                            android:paddingTop="2dp"
-                            android:singleLine="true"
-                            android:textColor="@color/white"
-                            android:textSize="12sp"
-                            tools:text="正在报名" />
-                    </LinearLayout>
-                </LinearLayout>
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -243,21 +222,15 @@
     <View
         style="@style/h_line"
         android:layout_height="1px"
-        app:layout_anchor="@+id/ll_operate"
-        app:layout_anchorGravity="top"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_scrollFlags="scroll|enterAlways" />
+        app:layout_anchor="@+id/ll_operate" />
 
     <LinearLayout
         android:id="@+id/ll_operate"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:background="@color/white"
-        android:orientation="horizontal"
-        app:layout_anchor="@+id/nsv"
-        app:layout_anchorGravity="bottom"
-        app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
-        app:layout_scrollFlags="scroll|enterAlways">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/ll_fav"
