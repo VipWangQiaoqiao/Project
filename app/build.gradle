@@ -14,8 +14,7 @@ android {
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        resValue("string", "releaseUrl", "http://www.baidu.com")
-        buildConfigField("String","API_SERVER_URL",'"http://www.baidu.com"')
+        buildConfigField("String","API_SERVER_URL",'"https://www.oschina.net/;http://192.168.1.10/"')
     }
 
     // rename the apk with the version name

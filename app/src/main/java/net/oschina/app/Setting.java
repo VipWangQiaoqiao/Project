@@ -3,6 +3,7 @@ package net.oschina.app;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.content.SharedPreferencesCompat;
+import android.text.TextUtils;
 
 import net.oschina.app.util.TDevice;
 
@@ -11,6 +12,7 @@ import net.oschina.app.util.TDevice;
  * @version 1.0.0
  */
 public final class Setting {
+    public static final String KEY_SEVER_URL = "serverUrl";
     public static final String KEY_VERSION_CODE = "versionCode";
     public static final String KEY_APP_UNIQUE_ID = "appUniqueID";
 
@@ -38,5 +40,21 @@ public final class Setting {
         SharedPreferences.Editor editor = sp.edit().putInt(KEY_VERSION_CODE, version);
         SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
         return version;
+    }
+
+    public static String getServerUrl(Context context) {
+        SharedPreferences sp = getSettingPreferences(context);
+        String url = sp.getString(KEY_SEVER_URL, null);
+        if (TextUtils.isEmpty(url)) {
+            String[] urls = BuildConfig.API_SERVER_URL.split(";");
+            if (urls.length > 0) {
+                url = urls[0];
+            } else {
+                url = "https://www.oschina.net/";
+            }
+            SharedPreferences.Editor editor = sp.edit().putString(KEY_SEVER_URL, url);
+            SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+        }
+        return url;
     }
 }
