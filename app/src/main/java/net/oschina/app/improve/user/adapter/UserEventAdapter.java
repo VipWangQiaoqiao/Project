@@ -17,6 +17,7 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.util.StringUtils;
 import net.qiujuer.genius.ui.compat.UiCompat;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,10 +56,10 @@ public class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implem
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, SubBean item, int position) {
         EventViewHolder vh = (EventViewHolder) holder;
         vh.tv_event_title.setText(item.getTitle());
-        SubBean.Image image = item.getImage();
-        if (image != null) {
+        List<SubBean.Image> images = item.getImages();
+        if (images != null && images.size() > 0) {
             mCallBack.getImgLoader()
-                    .load(image.getHref() != null && image.getHref().length > 0 ? image.getHref()[0] : null)
+                    .load(images.get(0).getHref())
                     .placeholder(R.drawable.bg_normal)
                     .into(vh.iv_event);
         } else {

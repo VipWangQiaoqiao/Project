@@ -18,6 +18,8 @@ public interface DetailContract {
         void showErrorLayout(int errorType);
 
         void showGetDetailSuccess(SubBean bean);
+
+        void showFavReverseSuccess(boolean isFav, int strId);
     }
 
     interface View extends BaseView<Presenter> {

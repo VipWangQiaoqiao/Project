@@ -10,6 +10,7 @@ import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.util.UIHelper;
 
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -81,7 +82,9 @@ public class SoftwareDetailFragment extends DetailFragment {
             return;
         mTextName.setText(bean.getTitle());
         mImageRecommend.setVisibility(bean.isRecommend() ? View.VISIBLE : View.INVISIBLE);
-        getImgLoader().load(bean.getImage().getHref()).asBitmap().into(mImageSoftware);
+        List<SubBean.Image> images = bean.getImages();
+        if (images == null || images.size() == 0)
+            getImgLoader().load(images.get(0).getHref()).asBitmap().into(mImageSoftware);
         mTextAuthor.setText(bean.getAuthor().getName());
         Map<String, Object> extras = bean.getExtra();
         if (extras != null) {
