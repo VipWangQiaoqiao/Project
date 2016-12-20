@@ -180,7 +180,7 @@
                 tools:ignore="RtlHardcoded"
                 tools:text="未报名，不可签到！！！"
                 tools:visibility="visible" />
-            
+
         </LinearLayout>
 
     </ScrollView>
@@ -197,11 +197,12 @@
             android:layout_marginBottom="@dimen/lay_8"
             android:layout_marginLeft="@dimen/lay_16"
             android:layout_marginRight="@dimen/lay_16"
-            android:background="@drawable/bg_login_submit_lock"
+            android:background="@drawable/bg_event_signin_submit"
             android:elevation="0dp"
+            android:enabled="false"
             android:outlineProvider="none"
             android:text="@string/signin_bt_hint"
-            android:textColor="@color/account_lock_font_color"
+            android:textColor="@color/signin_text_color"
             android:textSize="@dimen/font_18"
             tools:targetApi="lollipop" />
 

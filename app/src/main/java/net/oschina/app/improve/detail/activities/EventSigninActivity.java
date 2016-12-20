@@ -132,8 +132,6 @@ public class EventSigninActivity extends BaseBackActivity {
                 mLayInputBg.setActivated(true);
                 if (machPhoneNum) {
                     mBtSubmit.setEnabled(true);
-                    mBtSubmit.setTextColor(getResources().getColor(R.color.white));
-                    mBtSubmit.setBackgroundResource(R.drawable.bg_login_submit);
                     mLayInputBg.setBackgroundResource(R.drawable.bg_signin_input_ok);
                 } else {
                     if (s.length() <= 0) {
@@ -142,8 +140,6 @@ public class EventSigninActivity extends BaseBackActivity {
                         mLayInputBg.setBackgroundResource(R.drawable.bg_signin_input_error);
                     }
                     mBtSubmit.setEnabled(false);
-                    mBtSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
-                    mBtSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
                 }
             }
         });
@@ -282,8 +278,6 @@ public class EventSigninActivity extends BaseBackActivity {
                         updateDetailView(eventDetail);
                         mLayInputBg.setActivated(true);
                         mBtSubmit.setEnabled(false);
-                        mBtSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
-                        mBtSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
                         hideLoading();
                     }
                 } else {
@@ -318,8 +312,6 @@ public class EventSigninActivity extends BaseBackActivity {
                         setTelVisible(View.VISIBLE);
                         mLayInputBg.setActivated(true);
                         mBtSubmit.setEnabled(false);
-                        mBtSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
-                        mBtSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
                         hideLoading();
                         break;
                     case 1:
@@ -331,16 +323,12 @@ public class EventSigninActivity extends BaseBackActivity {
                             setTelVisible(View.GONE);
                             updateUserInfoView(userInfoMap);
                             mBtSubmit.setEnabled(true);
-                            mBtSubmit.setTextColor(getResources().getColor(R.color.white));
-                            mBtSubmit.setBackgroundResource(R.drawable.bg_login_submit);
                             hideLoading();
                         } else {
                             //报名所填相关用户数据全为null,但是却是报名了的
                             updateDetailView(eventDetail);
                             setTelVisible(View.GONE);
                             mBtSubmit.setEnabled(true);
-                            mBtSubmit.setTextColor(getResources().getColor(R.color.white));
-                            mBtSubmit.setBackgroundResource(R.drawable.bg_login_submit);
                             hideLoading();
                         }
                         break;
@@ -350,8 +338,6 @@ public class EventSigninActivity extends BaseBackActivity {
                         setTelVisible(View.VISIBLE);
                         mLayInputBg.setActivated(true);
                         mBtSubmit.setEnabled(false);
-                        mBtSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
-                        mBtSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
                         hideLoading();
                         AppContext.showToastShort(mapResultBean.getMessage());
                         break;
