@@ -352,7 +352,7 @@ public class EventSigninActivity extends BaseBackActivity {
 
     private void setTelVisible(int visible) {
         mCkLabel.setVisibility(visible);
-        mLine.setVisibility(visible);
+        mLine.setVisibility(View.INVISIBLE);
         mLayInputBg.setVisibility(visible);
     }
 
