@@ -6,10 +6,10 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +18,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.SubTab;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.util.StringUtils;
 import net.qiujuer.genius.ui.compat.UiCompat;
 
@@ -71,7 +72,17 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         }
 
         vh.tv_description.setText(item.getBody());
-        vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
+
+        Author author = item.getAuthor();
+        String authorName;
+        if (author != null && !TextUtils.isEmpty(authorName = author.getName())) {
+            authorName = authorName.trim();
+            vh.tv_time.setText(String.format("@%s %s",
+                    (authorName.length() > 9 ? authorName.substring(0, 9) : authorName),
+                    StringUtils.formatSomeAgo(item.getPubDate().trim())));
+        } else {
+            vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate().trim()));
+        }
 
         if (StringUtils.isSameDay(mSystemTime, item.getPubDate()) && mTab.getSubtype() != 2 && item.getType() != 7) {
 
@@ -90,13 +101,6 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         if (item.getType() == 0) {
             vh.ll_info.setVisibility(View.GONE);
         } else {
-            if (item.getType() == 6) {
-                vh.iv_view.setVisibility(View.GONE);
-                vh.tv_view_count.setVisibility(View.GONE);
-            } else {
-                vh.iv_view.setVisibility(View.VISIBLE);
-                vh.tv_view_count.setVisibility(View.VISIBLE);
-            }
             vh.ll_info.setVisibility(View.VISIBLE);
             vh.tv_comment_count.setText(String.valueOf(item.getStatistics().getComment()));
             vh.tv_view_count.setText(String.valueOf(item.getStatistics().getView()));
@@ -106,7 +110,6 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
     private static class NewsViewHolder extends RecyclerView.ViewHolder {
         TextView tv_title, tv_description, tv_time, tv_comment_count, tv_view_count;
         LinearLayout ll_title, ll_info;
-        ImageView iv_view;
 
         public NewsViewHolder(View itemView) {
             super(itemView);
@@ -118,7 +121,8 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
             ll_info = (LinearLayout) itemView.findViewById(R.id.lay_info);
             tv_comment_count = (TextView) ll_info.findViewById(R.id.tv_info_comment);
             tv_view_count = (TextView) ll_info.findViewById(R.id.tv_info_view);
-            iv_view = (ImageView) ll_info.findViewById(R.id.iv_info_view);
+            tv_view_count.setVisibility(View.GONE);
+            ll_info.findViewById(R.id.iv_info_view).setVisibility(View.GONE);
         }
     }
 }
