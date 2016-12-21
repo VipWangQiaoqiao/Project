@@ -4,9 +4,12 @@ import android.text.TextUtils;
 
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Author;
+import net.oschina.common.utils.CollectionUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by huanghaibin_dev
@@ -248,11 +251,14 @@ public class Tweet implements Serializable {
         public static String[] getImagePath(Image[] images) {
             if (images == null || images.length == 0)
                 return null;
-            String[] paths = new String[images.length];
-            for (int i = 0; i < images.length; i++) {
-                paths[i] = images[i].href;
+
+            List<String> paths = new ArrayList<>();
+            for (Image image : images) {
+                if (check(image))
+                    paths.add(image.href);
             }
-            return paths;
+
+            return CollectionUtil.toArray(paths, String.class);
         }
 
         public static boolean check(Image image) {
