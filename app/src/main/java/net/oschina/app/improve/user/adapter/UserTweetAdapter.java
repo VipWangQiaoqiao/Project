@@ -28,6 +28,7 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.TweetLikeReverse;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -93,20 +94,29 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder h, final Tweet item, int position) {
         ViewHolder holder = (ViewHolder) h;
-        mCallBack.getImgLoader()
-                .load(item.getAuthor().getPortrait())
-                .asBitmap()
-                .placeholder(R.mipmap.widget_dface)
-                .error(R.mipmap.widget_dface)
-                .into(holder.mViewPortrait);
-        holder.mViewPortrait.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OtherUserHomeActivity.show(mContext, item.getAuthor());
-            }
-        });
 
-        holder.mViewName.setText(item.getAuthor().getName());
+        final Author author = item.getAuthor();
+        if (author == null) {
+            holder.mViewPortrait.setImageResource(R.mipmap.widget_dface);
+            holder.mViewPortrait.setOnClickListener(null);
+            holder.mViewName.setText("匿名用户");
+        }else {
+            mCallBack.getImgLoader()
+                    .load(author.getPortrait())
+                    .asBitmap()
+                    .placeholder(R.mipmap.widget_dface)
+                    .error(R.mipmap.widget_dface)
+                    .into(holder.mViewPortrait);
+            holder.mViewPortrait.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OtherUserHomeActivity.show(mContext, author);
+                }
+            });
+
+            holder.mViewName.setText(author.getName());
+        }
+
         holder.mViewTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         PlatfromUtil.setPlatFromString(holder.mViewPlatform, item.getAppClient());
 
@@ -160,6 +170,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewDispatchCount.setVisibility(View.GONE);
         }
 
+        /* - about - */
         if (item.getAbout() != null) {
             holder.mLayoutRef.setVisibility(View.VISIBLE);
             holder.mLayoutRef.setTag(position);
