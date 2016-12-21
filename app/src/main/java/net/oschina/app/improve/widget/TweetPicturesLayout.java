@@ -109,19 +109,21 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         if (mImages == images)
             return;
 
+        // 移除布局
+        removeAllImage();
+
         // 过滤掉不合法的数据
-        List<Tweet.Image> isOkImages = new ArrayList<>();
-        for (Tweet.Image image : images) {
-            if (Tweet.Image.check(image))
-                isOkImages.add(image);
+        if (images != null) {
+            List<Tweet.Image> isOkImages = new ArrayList<>();
+            for (Tweet.Image image : images) {
+                if (Tweet.Image.check(image))
+                    isOkImages.add(image);
+            }
+            images = CollectionUtil.toArray(isOkImages, Tweet.Image.class);
         }
-        images = CollectionUtil.toArray(isOkImages, Tweet.Image.class);
 
         // 赋值
         mImages = images;
-
-        // 移除布局
-        removeAllImage();
 
         if (mImages != null && mImages.length > 0) {
             LayoutInflater inflater = LayoutInflater.from(this.getContext());
