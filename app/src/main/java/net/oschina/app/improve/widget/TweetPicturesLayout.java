@@ -317,6 +317,10 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         if (!Tweet.Image.check(image))
             return;
 
-        ImageGalleryActivity.show(getContext(), Tweet.Image.getImagePath(images), index);
+        String[] paths = Tweet.Image.getImagePath(images);
+        if (paths == null || paths.length <= 0)
+            return;
+
+        ImageGalleryActivity.show(getContext(), paths, index);
     }
 }
