@@ -238,6 +238,13 @@ public class Tweet implements Serializable {
             this.h = h;
         }
 
+        public static Image create(String href) {
+            Image image = new Image();
+            image.thumb = href;
+            image.href = href;
+            return image;
+        }
+
         public static String[] getImagePath(Image[] images) {
             if (images == null || images.length == 0)
                 return null;
