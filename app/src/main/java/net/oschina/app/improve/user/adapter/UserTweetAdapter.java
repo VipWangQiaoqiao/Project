@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -59,8 +60,8 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
     private Bitmap mRecordBitmap;
     private View.OnClickListener mOnLikeClickListener;
 
-    public UserTweetAdapter(Callback callback, int mode) {
-        super(callback, mode);
+    public UserTweetAdapter(Callback callback) {
+        super(callback, ONLY_FOOTER);
         initListener();
     }
 
@@ -101,7 +102,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewPortrait.setOnClickListener(null);
             holder.mViewName.setText("匿名用户");
         }else {
-            mCallBack.getImgLoader()
+            Glide.with(mContext)
                     .load(author.getPortrait())
                     .asBitmap()
                     .placeholder(R.mipmap.widget_dface)
