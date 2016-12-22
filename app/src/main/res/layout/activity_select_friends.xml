@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/layout_item_bg">
@@ -9,25 +10,25 @@
         android:id="@+id/lv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/transparent"
-        android:listSelector="@color/transparent"
         android:cacheColorHint="@color/transparent"
+        android:divider="@color/transparent"
         android:dividerHeight="1px"
+        android:listSelector="@color/transparent"
         android:scrollbars="none"
-        android:scrollingCache="true" />
+        android:scrollingCache="true"/>
 
     <net.oschina.app.ui.empty.EmptyLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
     <net.oschina.app.widget.IndexView
         android:id="@+id/indexview"
         android:layout_width="25dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/select_friend_header_height"
         android:layout_gravity="right"
+        android:layout_marginTop="@dimen/select_friend_header_height"
         android:textColor="?attr/textColor"
         android:textSize="12dp"/>
 
@@ -35,39 +36,41 @@
         android:id="@+id/float_text"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:visibility="gone"
-        android:gravity="center"
         android:layout_gravity="center"
-        android:typeface="monospace"
-        android:textSize="58dp"
+        android:background="@drawable/index_float_text_background"
+        android:gravity="center"
         android:textColor="@color/white"
-        android:background="@drawable/index_float_text_background"/>
+        android:textSize="58dp"
+        android:typeface="monospace"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
     <FrameLayout
         android:id="@+id/search_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/layout_item_bg"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/search_result_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/textColor"
             android:layout_gravity="center_horizontal"
-            android:textSize="@dimen/text_size_16"
+            android:layout_marginTop="@dimen/select_friend_header_height"
             android:text="@string/select_friends_no_result"
-            android:layout_marginTop="@dimen/select_friend_header_height"/>
+            android:textColor="?attr/textColor"
+            android:textSize="@dimen/text_size_16"/>
 
         <ListView
             android:id="@+id/search_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="?attr/lineColor"
-            android:listSelector="@color/transparent"
             android:cacheColorHint="@color/transparent"
+            android:divider="?attr/lineColor"
             android:dividerHeight="1px"
+            android:listSelector="@color/transparent"
             android:scrollbars="none"
             android:scrollingCache="true"/>
 
@@ -77,26 +80,28 @@
         android:id="@+id/select_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/select_friend_header_height"
-        android:clickable="true"
-        android:background="?attr/layout_item_bg">
+        android:background="?attr/layout_item_bg"
+        android:clickable="true">
 
         <LinearLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
+
             <HorizontalScrollView
                 android:id="@+id/hs_container"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="5dp"
-                android:scrollbars="none"
                 android:fadeScrollbars="false"
                 android:overScrollMode="never"
+                android:scrollbars="none"
                 android:visibility="gone">
+
                 <LinearLayout
                     android:id="@+id/select_container"
                     android:layout_width="wrap_content"
@@ -110,31 +115,31 @@
                 android:id="@+id/iv_search"
                 android:layout_width="32dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
                 android:src="@mipmap/search_icon"/>
 
             <EditText
                 android:id="@+id/et_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/text_size_16"
-                android:singleLine="true"
+                android:background="@color/transparent"
                 android:cursorVisible="false"
+                android:hint="@string/select_friends_search"
+                android:singleLine="true"
                 android:textColor="?attr/textColor"
                 android:textColorHint="@color/edittext_hint_color"
-                android:background="@color/transparent"
-                android:hint="@string/select_friends_search"/>
+                android:textSize="@dimen/text_size_16"/>
         </LinearLayout>
 
         <View
             android:id="@+id/divider1"
             android:layout_width="match_parent"
             android:layout_height="2px"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="bottom"
             android:background="?attr/lineColor"/>
 
         <View
@@ -142,7 +147,7 @@
             android:layout_width="match_parent"
             android:layout_height="2px"
             android:layout_gravity="bottom"
-            android:visibility="gone"
-            android:background="?attr/lineColor"/>
+            android:background="?attr/lineColor"
+            android:visibility="gone"/>
     </FrameLayout>
 </FrameLayout>

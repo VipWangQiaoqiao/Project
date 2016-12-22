@@ -341,7 +341,8 @@
 
 
     <string name="topic_list">话题列表</string>
-    <string name="title_updating_user_avatar">正在上传头像...</string>
+    <string name="title_updating_user_avatar">正在上传头像…</string>
+    <string name="search_man">找人</string>
 
 
 </resources>

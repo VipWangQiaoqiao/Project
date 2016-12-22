@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <SearchView
+                android:id="@+id/searcher_friends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_search_view"
+                app:commitIcon="@mipmap/actionbar_search_icon"
+                app:goIcon="@mipmap/actionbar_search_icon"
+                app:iconifiedByDefault="false"
+                app:queryBackground="@color/transparent"
+                app:queryHint="@string/search_man"
+                app:searchIcon="@mipmap/actionbar_search_icon"
+                app:voiceIcon="@mipmap/actionbar_search_icon"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_friends_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:visibility="gone"
+                tools:visibility="gone"/>
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_friends"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/tv_index_show"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:background="@drawable/index_shape"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_16"
+                tools:text="索引"/>
+
+            <LinearLayout
+                android:id="@+id/lay_index_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <net.oschina.app.ui.empty.EmptyLayout
+        android:id="@+id/lay_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone"/>
+
+
+</FrameLayout>
