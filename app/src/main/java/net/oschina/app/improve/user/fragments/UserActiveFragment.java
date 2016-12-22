@@ -51,7 +51,7 @@ public class UserActiveFragment extends BaseRecyclerViewFragment<Active> {
 
     @Override
     protected BaseRecyclerAdapter<Active> getRecyclerAdapter() {
-        return new UserActiveAdapter(getContext(), Glide.with(this));
+        return new UserActiveAdapter(getContext());
     }
 
     @Override
