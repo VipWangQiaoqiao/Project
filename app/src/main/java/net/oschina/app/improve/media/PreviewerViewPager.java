@@ -31,7 +31,7 @@ public class PreviewerViewPager extends ViewPager {
         }
 
         // 移动到边界改变拦截方式时
-        if (isTransition){
+        if (isTransition) {
             int action = ev.getAction();
             ev.setAction(MotionEvent.ACTION_DOWN);
             super.onInterceptTouchEvent(ev);
@@ -41,25 +41,25 @@ public class PreviewerViewPager extends ViewPager {
 
         boolean b = false;
 
-        int action  = ev.getAction();
+        int action = ev.getAction();
 
-        if (action == MotionEvent.ACTION_DOWN){
+        if (action == MotionEvent.ACTION_DOWN) {
             isInterceptable = false;
         }
 
-        if (action != MotionEvent.ACTION_MOVE || isInterceptable){
+        if (action != MotionEvent.ACTION_MOVE || isInterceptable) {
             b = super.onInterceptTouchEvent(ev);
         }
 
         return isInterceptable && b;
     }
 
-    public void isInterceptable(boolean b){
+    public void isInterceptable(boolean b) {
         if (!isInterceptable && b) isTransition = true;
         this.isInterceptable = b;
     }
 
-    private class PageChangeListener extends SimpleOnPageChangeListener{
+    private class PageChangeListener extends SimpleOnPageChangeListener {
 
         @Override
         public void onPageScrollStateChanged(int state) {

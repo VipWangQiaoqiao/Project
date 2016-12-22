@@ -1,7 +1,6 @@
 package net.oschina.app.improve.tweet.service;
 
 import android.content.Context;
-import android.util.Log;
 
 import net.oschina.app.util.TLog;
 
@@ -16,7 +15,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.oschina.app.improve.utils.StreamUtils.close;
+import static net.oschina.common.utils.StreamUtil.close;
+
 
 /**
  * Created by JuQiu

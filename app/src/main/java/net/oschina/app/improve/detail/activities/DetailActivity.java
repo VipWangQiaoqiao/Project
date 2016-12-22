@@ -52,7 +52,6 @@ public abstract class DetailActivity<Data extends PrimaryBean, DataView extends 
         BaseBackActivity
         implements DetailContract.Operator<Data, DataView> {
 
-    private static final String TAG = "DetailActivity";
     long mDataId;
     Data mData;
     DataView mView;
@@ -228,7 +227,7 @@ public abstract class DetailActivity<Data extends PrimaryBean, DataView extends 
             return false;
         }
 
-        if (result.isSuccess()) {
+        if (result.isSuccess() && result.getResult().getId() != 0) {
             mData = result.getResult();
             handleView();
             return true;
@@ -300,7 +299,7 @@ public abstract class DetailActivity<Data extends PrimaryBean, DataView extends 
      * @param content 分享内容
      * @param url     分享地址
      */
-    protected boolean toShare(String title, String content, String url) {
+    protected boolean toShare(String title, String content, String url, int type) {
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(url))
             return false;
 
@@ -318,6 +317,8 @@ public abstract class DetailActivity<Data extends PrimaryBean, DataView extends 
         // 分享
         if (mShareDialogBuilder == null) {
             mShareDialogBuilder = ShareDialogBuilder.with(this)
+                    .id(getDataId())
+                    .type(type)
                     .title(title)
                     .content(content)
                     .url(url)

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!-- suppress DeprecatedClassUsageInspection -->
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="net.oschina.app">
@@ -28,6 +28,8 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <uses-feature android:name="android.hardware.camera" />
@@ -86,6 +88,7 @@
             android:name="com.dtr.zxing.activity.CaptureActivity"
             android:label="@string/actionbar_title_qr_scan"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.SelectFriendsActivity"
             android:label="@string/actionbar_title_select_friends"
@@ -132,6 +135,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/App.Theme.Transparent" />
+
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
@@ -141,16 +145,32 @@
         <!-- ############ QQ空间和QQ  wechat SSO授权的Activity注册完 ############ -->
 
         <activity
+            android:name=".improve.detail.general.NewsDetailActivity"
+            android:label="资讯详情"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".improve.detail.general.BlogDetailActivity"
+            android:label="博客详情"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
             android:name=".improve.detail.activities.BlogDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="博客详情"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.detail.activities.QuestionDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="问答详情"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.tweet.activities.TweetDetailActivity"
@@ -164,18 +184,30 @@
             android:configChanges="keyboardHidden|orientation"
             android:label="活动详情"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".improve.detail.sign.SignUpActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="活动报名"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <activity
             android:name=".improve.detail.activities.NewsDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="资讯详情"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.detail.activities.SoftwareDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="软件详情"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.user.activities.UserTweetActivity"
@@ -202,7 +234,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".improve.comment.QuestionAnswerDetailActivity"
+            android:name=".improve.comment.QuesAnswerDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="问答答案详情"
             android:screenOrientation="portrait"
@@ -212,17 +244,12 @@
             android:configChanges="keyboardHidden|orientation"
             android:label="评论列表"
             android:screenOrientation="portrait"
+            android:theme="@style/Base.App.Theme.NoTitle"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.tweet.activities.SoftwareTweetActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="软件动态列表"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".improve.comment.CommentExsActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="评论列表"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
@@ -320,6 +347,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme" />
+
         <activity
             android:name=".improve.tweet.activities.TopicTweetActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -344,6 +372,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Account_Base.App.Theme.NoTitle"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <activity
             android:name=".improve.account.activity.RegisterStepTwoActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -393,6 +422,15 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
+
+        <activity
+            android:name=".improve.media.crop.CropActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="图片裁剪"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
+
         <activity
             android:name=".improve.tweet.activities.TweetPublishQueueActivity"
             android:label="动弹队列"
@@ -423,6 +461,22 @@
             android:label="意见反馈"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".improve.detail.activities.EventSigninActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="活动签到"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <activity
+            android:name=".improve.user.activities.UserEventActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="我的活动"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.App.Theme.NoTitle"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <service
             android:name=".improve.tweet.service.TweetPublishService"
             android:exported="false"
@@ -435,7 +489,11 @@
             android:name=".improve.main.update.DownloadService"
             android:exported="false" />
 
-        <activity android:name=".improve.main.BrowserActivity"></activity>
+        <activity android:name=".improve.main.BrowserActivity" />
+
+        <service
+            android:name=".improve.main.update.DownloadService"
+            android:exported="false" />
     </application>
 
 </manifest>

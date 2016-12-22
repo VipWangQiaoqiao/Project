@@ -2,11 +2,12 @@ package net.oschina.app.improve.main.subscription;
 
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.OSCApplication;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
@@ -24,9 +25,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
+    private OSCApplication.ReadState mReadState;
 
     public QuestionSubAdapter(Callback callback, int mode) {
         super(callback, mode);
+        mReadState = OSCApplication.getReadState("sub_list");
         setOnLoadingHeaderCallBack(this);
     }
 
@@ -61,7 +64,7 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impl
 
         Resources resources = mContext.getResources();
 
-        if (AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))) {
+        if (mReadState.already(item.getKey())) {
             vh.tv_question_title.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
             vh.tv_question_content.setTextColor(UiCompat.getColor(resources, R.color.text_secondary_color));
         } else {
@@ -69,12 +72,18 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impl
             vh.tv_question_content.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
         }
 
-        if (author != null) {
-            vh.tv_time.setText((author.getName().length() > 9 ? author.getName().substring(0, 9) :
-                    author.getName().trim()) + "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
+        String authorName;
+        if (author != null && !TextUtils.isEmpty(authorName = author.getName())) {
+            authorName = authorName.trim();
+            vh.tv_time.setText(String.format("@%s %s",
+                    (authorName.length() > 9 ? authorName.substring(0, 9) : authorName),
+                    StringUtils.formatSomeAgo(item.getPubDate().trim())));
+        } else {
+            vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate().trim()));
         }
+
         vh.tv_view.setText(String.valueOf(item.getStatistics().getView()));
-        vh.tv_view.setText(String.valueOf(item.getStatistics().getComment()));
+        vh.tv_comment_count.setText(String.valueOf(item.getStatistics().getComment()));
     }
 
     private static class QuestionViewHolder extends RecyclerView.ViewHolder {

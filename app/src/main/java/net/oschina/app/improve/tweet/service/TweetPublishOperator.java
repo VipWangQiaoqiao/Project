@@ -9,7 +9,9 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.resource.ImageResource;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.utils.PicturesCompressor;
+import net.oschina.common.utils.BitmapUtil;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -102,7 +104,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
         // call progress
         runnable.onUploadImage(index, token);
 
-        // check done
+        // checkShare done
         if (index < 0 || index >= paths.length) {
             runnable.onUploadImageDone();
             return;
@@ -174,7 +176,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
      * 发布动弹
      */
     private void publish() {
-        OSChinaApi.pubTweet(model.getContent(), model.getCacheImagesToken(), null, model.getAbout(), new LopperResponseHandler() {
+        OSChinaApi.pubTweet(model.getContent(), model.getCacheImagesToken(), null, model.getAboutShare(), new LopperResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 String error = "";
@@ -213,11 +215,6 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                     onFailure(statusCode, headers, responseString, null);
                 }
             }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
         });
     }
 
@@ -246,12 +243,39 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
             // hide the notify
             service.notifyCancel(notificationId);
         }
-        stop();
+
+        // Check the about commit id
+        if (!checkToCommit())
+            stop();
     }
 
     private void setError(int resId, Object... values) {
         notifyMsg(true, resId, values);
         stop();
+    }
+
+    private boolean checkToCommit() {
+        // 如果相关节点中定义了评论参数，那么将执行评论
+        About.Share share = model.getAboutShare();
+        if (About.check(share) && share.commitTweetId > 0) {
+            OSChinaApi.pubTweetComment(share.commitTweetId, model.getContent(), 0, new LopperResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                }
+
+                @Override
+                public void onFinish() {
+                    super.onFinish();
+                    stop();
+                }
+            });
+            return true;
+        }
+        return false;
     }
 
 
@@ -267,8 +291,8 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
      */
     private static String[] saveImageToCache(String cacheDir, String[] paths) {
         List<String> ret = new ArrayList<>();
-        byte[] buffer = new byte[PicturesCompressor.DEFAULT_BUFFER_SIZE];
-        BitmapFactory.Options options = PicturesCompressor.createOptions();
+        byte[] buffer = new byte[BitmapUtil.DEFAULT_BUFFER_SIZE];
+        BitmapFactory.Options options = BitmapUtil.createOptions();
         for (String path : paths) {
             File sourcePath = new File(path);
             if (!sourcePath.exists())
@@ -277,10 +301,8 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 String name = sourcePath.getName();
                 String ext = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
                 String tempFile = String.format("%s/IMG_%s.%s", cacheDir, System.currentTimeMillis(), ext);
-                if (PicturesCompressor.compressImage(path, tempFile,
-                        MAX_UPLOAD_LENGTH, 80,
-                        1280, 1280 * 6,
-                        buffer, options, true)) {
+                if (PicturesCompressor.compressImage(path, tempFile, MAX_UPLOAD_LENGTH,
+                        80, 1280, 1280 * 6, buffer, options, true)) {
                     TweetPublishService.log("OPERATOR doImage " + tempFile + " " + new File(tempFile).length());
 
                     // verify the picture ext.

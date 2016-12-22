@@ -15,8 +15,10 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,10 +38,11 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         BaseRecyclerAdapter.OnItemClickListener,
         View.OnClickListener,
         BaseGeneralRecyclerAdapter.Callback {
+    private final String TAG = this.getClass().getSimpleName();
     protected BaseRecyclerAdapter<T> mAdapter;
     protected RecyclerView mRecyclerView;
     protected RecyclerRefreshLayout mRefreshLayout;
-    protected boolean mIsRefresh;
+    protected boolean isRefreshing;
     protected TextHttpResponseHandler mHandler;
     protected PageBean<T> mBean;
     protected String CACHE_NAME = getClass().getName();
@@ -57,6 +60,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         mErrorLayout = (EmptyLayout) root.findViewById(R.id.error_layout);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initData() {
         mBean = new PageBean<>();
@@ -85,18 +89,29 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
 
         mHandler = new TextHttpResponseHandler() {
             @Override
+            public void onStart() {
+                super.onStart();
+                log("HttpResponseHandler:onStart");
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 onRequestError();
+                log("HttpResponseHandler:onFailure responseString:" + responseString);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                log("HttpResponseHandler:onSuccess responseString:" + responseString);
                 try {
                     ResultBean<PageBean<T>> resultBean = AppOperator.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
                         setListData(resultBean);
                         onRequestSuccess(resultBean.getCode());
                     } else {
+                        if (resultBean.getCode() == ResultBean.RESULT_TOKEN_ERROR) {
+                            SimplexToast.show(getActivity(), resultBean.getMessage());
+                        }
                         mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
                     }
                 } catch (Exception e) {
@@ -109,6 +124,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             public void onFinish() {
                 super.onFinish();
                 onRequestFinish();
+                log("HttpResponseHandler:onFinish");
             }
         };
 
@@ -117,7 +133,11 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             mRefreshLayout.setVisibility(View.GONE);
             mBean = new PageBean<>();
-            List<T> items = isNeedCache() ? (List<T>) CacheManager.readFromJson(getActivity(), CACHE_NAME, getCacheClass()) : null;
+
+            List<T> items = isNeedCache()
+                    ? (List<T>) CacheManager.readListJson(getActivity(), CACHE_NAME, getCacheClass())
+                    : null;
+
             mBean.setItems(items);
             //if is the first loading
             if (items == null) {
@@ -162,7 +182,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
 
     @Override
     public void onRefreshing() {
-        mIsRefresh = true;
+        isRefreshing = true;
         requestData();
     }
 
@@ -192,17 +212,17 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
 
     protected void onComplete() {
         mRefreshLayout.onComplete();
-        mIsRefresh = false;
+        isRefreshing = false;
     }
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
-        mBean.setNextPageToken((resultBean == null ? null : resultBean.getResult().getNextPageToken()));
-        if (mIsRefresh) {
+        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
+        if (isRefreshing) {
             AppConfig.getAppConfig(getActivity()).set("system_time", resultBean.getTime());
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
             mAdapter.addAll(mBean.getItems());
-            mBean.setPrevPageToken((resultBean == null ? null : resultBean.getResult().getPrevPageToken()));
+            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore(true);
             if (isNeedCache()) {
                 CacheManager.saveToJson(getActivity(), CACHE_NAME, mBean.getItems());
@@ -211,14 +231,20 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mAdapter.addAll(resultBean.getResult().getItems());
         }
 
-        mAdapter.setState(resultBean.getResult().getItems() == null || resultBean.getResult().getItems().size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOADING, true);
+        mAdapter.setState(resultBean.getResult().getItems() == null
+                || resultBean.getResult().getItems().size() < 20
+                ? BaseRecyclerAdapter.STATE_NO_MORE
+                : BaseRecyclerAdapter.STATE_LOADING, true);
 
         if (mAdapter.getItems().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.VISIBLE);
         } else {
-            mErrorLayout.setErrorType(isNeedEmptyView() ? EmptyLayout.NODATA : EmptyLayout.HIDE_LAYOUT);
+            mErrorLayout.setErrorType(
+                    isNeedEmptyView()
+                            ? EmptyLayout.NODATA
+                            : EmptyLayout.HIDE_LAYOUT);
         }
     }
 
@@ -258,5 +284,11 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
      */
     protected boolean isNeedEmptyView() {
         return true;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void log(String msg) {
+        if (false)
+            TLog.i(TAG, msg);
     }
 }

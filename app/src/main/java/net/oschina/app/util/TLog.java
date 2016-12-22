@@ -2,11 +2,12 @@ package net.oschina.app.util;
 
 import android.util.Log;
 
-import com.loopj.android.http.BuildConfig;
+import net.oschina.app.BuildConfig;
+
 
 public class TLog {
     private static final String LOG_TAG = "OSChinaLog";
-    public static boolean DEBUG = BuildConfig.DEBUG;
+    private static boolean DEBUG = BuildConfig.DEBUG;
 
     private TLog() {
     }
@@ -23,15 +24,15 @@ public class TLog {
         if (DEBUG) Log.i(tag, log);
     }
 
-    public static void d(String tag, String log){
+    public static void d(String tag, String log) {
         if (DEBUG) Log.d(tag, log);
     }
 
-    public static void e(String tag, String log){
+    public static void e(String tag, String log) {
         if (DEBUG) Log.e(tag, log);
     }
 
-    public static void i(String tag, String log){
+    public static void i(String tag, String log) {
         if (DEBUG) Log.i(tag, log);
     }
 }

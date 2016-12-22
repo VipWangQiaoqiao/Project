@@ -64,7 +64,7 @@ public class UserFavoriteFragment extends BaseRecyclerViewFragment<UserFavorites
             default:
                 break;
         }
-        OSChinaApi.getUserFavorites(catalog, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getUserFavorites(catalog, isRefreshing ? null : mBean.getNextPageToken(), mHandler);
     }
 
 

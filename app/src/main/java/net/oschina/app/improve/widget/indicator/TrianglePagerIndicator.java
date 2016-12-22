@@ -13,7 +13,7 @@ import java.util.List;
  * Created by huanghaibin
  * on 16-6-15.
  */
-public class TrianglePagerIndicator extends LinearLayout implements PagerIndicator{
+public class TrianglePagerIndicator extends LinearLayout implements PagerIndicator {
 
     private static final int MAX_TRIANGLE_WIDTH = 130;
     private static final int MAX_TRIANGLE_HEIGHT = 50;

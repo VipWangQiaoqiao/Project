@@ -9,7 +9,6 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
@@ -21,7 +20,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.interf.OnWebViewImageListener;
-import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
@@ -199,7 +197,7 @@ public class OWebView extends WebView {
             // 添加点击图片放大支持
             if (isShowImagePreview) {
                 // TODO 用一个正则就搞定??
-                content = content.replaceAll("<img[^>]+src=\"([^\"\'\\s]+)\"\\s*[/]?>",
+                content = content.replaceAll("<img[^>]+src=\"([^\"\'\\s]+)\"[^>]*>",
                         "<img src=\"$1\" onClick=\"javascript:mWebViewImageListener.showImagePreview('$1')\"/>");
                 content = content.replaceAll(
                         "<a\\s+[^<>]*href=[\"\']([^\"\']+)[\"\'][^<>]*>\\s*<img\\s+src=\"([^\"\']+)\"[^<>]*/>\\s*</a>",

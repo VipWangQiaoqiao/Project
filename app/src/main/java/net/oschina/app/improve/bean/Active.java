@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by thanatos on 16/8/16.
  */
-public class Active implements Serializable{
+public class Active implements Serializable {
 
     private long id;
     private String content;

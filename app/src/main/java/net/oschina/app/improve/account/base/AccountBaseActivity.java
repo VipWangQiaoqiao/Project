@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 
@@ -155,8 +154,6 @@ public class AccountBaseActivity extends BaseActivity {
         if (mManager != null) {
             Intent intent = new Intent();
             intent.setAction(ACTION_ACCOUNT_FINISH_ALL);
-
-            sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
             return mManager.sendBroadcast(intent);
         }
 

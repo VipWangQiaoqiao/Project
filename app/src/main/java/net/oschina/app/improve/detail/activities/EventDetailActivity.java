@@ -73,7 +73,7 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
         if (item.getItemId() == R.id.menu_share) {
             final EventDetail detail = getData();
             if (detail != null) {
-                toShare(detail.getTitle(), detail.getBody(), detail.getHref());
+                toShare(detail.getTitle(), detail.getBody(), detail.getHref(), 5);
             }
         }
         return super.onOptionsItemSelected(item);
@@ -152,5 +152,13 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            requestData();
+        }
     }
 }

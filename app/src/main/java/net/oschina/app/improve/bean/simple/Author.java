@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by huanghaibin_dev
  * on 2016/7/18.
  */
-public class Author implements Serializable{
+public class Author implements Serializable {
     protected long id;
     protected String name;
     protected String portrait;

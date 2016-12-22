@@ -6,11 +6,11 @@ import android.widget.Toast;
 
 /**
  * 以后请用这个吐司，谢谢！！！
- *
+ * <p>
  * <p>
  * {@link Toast}的创建都是要inflate一个layout, findViewById之类的
  * 将一个吐司单例化，并且作防止频繁点击的处理。
- *
+ * <p>
  * <p>
  * Created by thanatosx on 2016/11/15.
  */
@@ -21,11 +21,11 @@ public class SimplexToast {
     private static long nextTimeMillis;
     private static int yOffset;
 
-    private SimplexToast(Context context){
+    private SimplexToast(Context context) {
 
     }
 
-    public static Toast init(Context context){
+    public static Toast init(Context context) {
         if (context == null) {
             throw new IllegalArgumentException("Context should not be null!!!");
         }
@@ -39,23 +39,27 @@ public class SimplexToast {
         return mToast;
     }
 
-    public static void show(String content){
+    public static void show(String content) {
         show(content, Toast.LENGTH_SHORT);
     }
 
-    public static void show(String content, int duration){
+    public static void show(String content, int duration) {
         show(null, content, Gravity.BOTTOM, duration);
     }
 
-    public static void show(Context context, String content){
+    public static void show(Context context, int rid) {
+        show(context, context.getResources().getString(rid));
+    }
+
+    public static void show(Context context, String content) {
         show(context, content, Gravity.BOTTOM);
     }
 
-    public static void show(Context context, String content, int gravity){
+    public static void show(Context context, String content, int gravity) {
         show(context, content, gravity, Toast.LENGTH_SHORT);
     }
 
-    public static void show(Context context, String content, int gravity, int duration){
+    public static void show(Context context, String content, int gravity, int duration) {
         long current = System.currentTimeMillis();
         if (current < nextTimeMillis) return;
         if (mToast == null) init(context.getApplicationContext());

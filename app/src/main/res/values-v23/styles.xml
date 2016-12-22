@@ -10,4 +10,13 @@
         <item name="android:backgroundDimEnabled">true</item><!-- 模糊 -->
         <item name="windowActionBar">false</item>
     </style>
+
+    <!--状态栏一体式-->
+    <style name="ThemeTranslucent" parent="BaseTheme">
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>

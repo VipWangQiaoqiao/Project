@@ -1,5 +1,7 @@
 package net.oschina.app.improve.user.fragments;
 
+import android.content.Context;
+
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.api.remote.OSChinaApi;
@@ -10,6 +12,7 @@ import net.oschina.app.improve.bean.Message;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
 import net.oschina.app.improve.user.adapter.UserMessageAdapter;
 
@@ -21,7 +24,24 @@ import java.lang.reflect.Type;
  */
 
 public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
+
     public long authorId;
+
+    private UserMessageActivity activity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context != null && context instanceof UserMessageActivity) {
+            activity = (UserMessageActivity) context;
+        }
+    }
+
+    @Override
+    protected void onRequestSuccess(int code) {
+        super.onRequestSuccess(code);
+        if (activity != null) activity.onRequestSuccess(2);
+    }
 
     @Override
     public void initData() {
@@ -32,7 +52,7 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getUserMessageList(mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getUserMessageList(isRefreshing ? null : mBean.getNextPageToken(), mHandler);
     }
 
     @Override

@@ -40,9 +40,9 @@ import cz.msebera.android.httpclient.protocol.HttpContext;
 public class ApiHttpClient {
 
     public final static String HOST = "www.oschina.net";
+    //public final static String HOST = "www.oschina.tk";
     private static String API_URL = "https://www.oschina.net/%s";
-//    private static String API_URL = "http://192.168.1.10/%s";
-
+    //private static String API_URL = "http://192.168.1.10/%s";
     private static AsyncHttpClient CLIENT;
 
     private ApiHttpClient() {
@@ -53,7 +53,7 @@ public class ApiHttpClient {
      *
      * @param context AppContext
      */
-    public static void init(AppContext context) {
+    public static void init(Application context) {
         CLIENT = null;
         AsyncHttpClient client = new AsyncHttpClient();
         //client.setCookieStore(new PersistentCookieStore(context));
@@ -80,8 +80,7 @@ public class ApiHttpClient {
     public static void get(String partUrl, RequestParams params,
                            AsyncHttpResponseHandler handler) {
         CLIENT.get(getAbsoluteApiUrl(partUrl), params, handler);
-        log("GET " + partUrl + "&" +
-                params);
+        log("GET " + partUrl + "?" + params);
     }
 
     public static String getAbsoluteApiUrl(String partUrl) {
@@ -110,8 +109,7 @@ public class ApiHttpClient {
     public static void post(String partUrl, RequestParams params,
                             AsyncHttpResponseHandler handler) {
         CLIENT.post(getAbsoluteApiUrl(partUrl), params, handler);
-        log("POST " + partUrl + "&" +
-                params);
+        log("POST " + partUrl + "?" + params);
     }
 
     public static void put(String partUrl, AsyncHttpResponseHandler handler) {
@@ -122,8 +120,7 @@ public class ApiHttpClient {
     public static void put(String partUrl, RequestParams params,
                            AsyncHttpResponseHandler handler) {
         CLIENT.put(getAbsoluteApiUrl(partUrl), params, handler);
-        log("PUT " + partUrl + "&" +
-                params);
+        log("PUT " + partUrl + "?" + params);
     }
 
     public static void setHttpClient(AsyncHttpClient c, Application application) {
@@ -147,7 +144,12 @@ public class ApiHttpClient {
         log("setCookieHeader:" + cookie);
     }
 
-    public static void destroy(AppContext appContext) {
+    /**
+     * 销毁当前AsyncHttpClient 并重新初始化网络参数，初始化Cookie等信息
+     *
+     * @param appContext AppContext
+     */
+    public static void destroyAndRestore(Application appContext) {
         cleanCookie();
         CLIENT = null;
         init(appContext);

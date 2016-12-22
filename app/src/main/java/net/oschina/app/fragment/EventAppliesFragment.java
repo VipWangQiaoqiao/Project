@@ -63,7 +63,7 @@ public class EventAppliesFragment extends BaseListFragment<Apply> {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Apply item = (Apply) mAdapter.getItem(position);
+		Apply item = mAdapter.getItem(position);
 		if (item != null) {
 			if (AccountHelper.isLogin()) {
 				UIHelper.showMessageDetail(getActivity(), item.getId(), item.getName());

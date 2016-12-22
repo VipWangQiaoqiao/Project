@@ -66,8 +66,7 @@ public class BlogAdapter extends ListBaseAdapter<Blog> {
 
         vh.title.setText(blog.getTitle());
 
-        if (AppContext.isOnReadedPostList(BlogList.PREF_READED_BLOG_LIST,
-                blog.getId() + "")) {
+        if (false) {
             vh.title.setTextColor(parent.getContext().getResources()
                     .getColor(ThemeSwitchUtils.getTitleReadedColor()));
         } else {

@@ -18,6 +18,10 @@ import com.bumptech.glide.RequestManager;
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.media.ImageGalleryActivity;
+import net.oschina.common.utils.CollectionUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by JuQiu
@@ -104,16 +108,35 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
     public void setImage(Tweet.Image[] images) {
         if (mImages == images)
             return;
+
+        // 移除布局
         removeAllImage();
+
+        // 过滤掉不合法的数据
+        if (images != null) {
+            List<Tweet.Image> isOkImages = new ArrayList<>();
+            for (Tweet.Image image : images) {
+                if (Tweet.Image.check(image))
+                    isOkImages.add(image);
+            }
+            images = CollectionUtil.toArray(isOkImages, Tweet.Image.class);
+        }
+
+        // 赋值
         mImages = images;
-        if (images != null && images.length > 0) {
+
+        if (mImages != null && mImages.length > 0) {
             LayoutInflater inflater = LayoutInflater.from(this.getContext());
             RequestManager requestManager = Glide.with(getContext());
-            for (int i = 0; i < images.length; i++) {
+            for (int i = 0; i < mImages.length; i++) {
+                Tweet.Image image = mImages[i];
+                if (!Tweet.Image.check(image))
+                    continue;
+
                 View view = inflater.inflate(R.layout.lay_tweet_image_item, this, false);
                 view.setTag(i);
                 view.setOnClickListener(this);
-                String path = images[i].getThumb();
+                String path = image.getThumb();
                 BitmapRequestBuilder builder = requestManager.load(path)
                         .asBitmap()
                         .centerCrop()
@@ -137,6 +160,15 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         } else {
             setVisibility(View.GONE);
         }
+    }
+
+    public void setImage(String[] images) {
+        if (images == null || images.length == 0) return;
+        Tweet.Image[] ims = new Tweet.Image[images.length];
+        for (int i = 0; i < images.length; i++) {
+            ims[i] = Tweet.Image.create(images[i]);
+        }
+        setImage(ims);
     }
 
     public void removeAllImage() {
@@ -167,37 +199,43 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         if (childCount == 0) {
             // Not have child we can only need padding size
         } else if (childCount == 1) {
-            View child = getChildAt(0);
-            int imageW = mImages[0].getW();
-            int imageH = mImages[0].getH();
-            float density = getResources().getDisplayMetrics().density;
-            // Get max width and height
-            float maxContentW = Math.min(selfWidth - paddingRight - paddingLeft, density * SINGLE_MAX_W);
-            float maxContentH = density * SINGLE_MAX_H;
+            Tweet.Image image = mImages[0];
+            if (Tweet.Image.check(image)) {
+                int imageW = image.getW();
+                int imageH = image.getH();
+                imageW = imageW <= 0 ? 100 : imageW;
+                imageH = imageH <= 0 ? 100 : imageH;
 
-            int childW, childH;
+                float density = getResources().getDisplayMetrics().density;
+                // Get max width and height
+                float maxContentW = Math.min(selfWidth - paddingRight - paddingLeft, density * SINGLE_MAX_W);
+                float maxContentH = density * SINGLE_MAX_H;
 
-            float hToW = imageH / (float) imageW;
-            if (hToW > (maxContentH / maxContentW)) {
-                childH = (int) maxContentH;
-                childW = (int) (maxContentH / hToW);
-            } else {
-                childW = (int) maxContentW;
-                childH = (int) (maxContentW * hToW);
+                int childW, childH;
+
+                float hToW = imageH / (float) imageW;
+                if (hToW > (maxContentH / maxContentW)) {
+                    childH = (int) maxContentH;
+                    childW = (int) (maxContentH / hToW);
+                } else {
+                    childW = (int) maxContentW;
+                    childH = (int) (maxContentW * hToW);
+                }
+                // Check the width and height below Min values
+                int minW = (int) (SINGLE_MIN_W * density);
+                if (childW < minW)
+                    childW = minW;
+                int minH = (int) (SINGLE_MIN_H * density);
+                if (childH < minH)
+                    childH = minH;
+
+                View child = getChildAt(0);
+                if (child != null) {
+                    child.measure(MeasureSpec.makeMeasureSpec(childW, MeasureSpec.EXACTLY),
+                            MeasureSpec.makeMeasureSpec(childH, MeasureSpec.EXACTLY));
+                    wantedHeight += childH;
+                }
             }
-            // Check the width and height below Min values
-            int minW = (int) (SINGLE_MIN_W * density);
-            if (childW < minW)
-                childW = minW;
-            int minH = (int) (SINGLE_MIN_H * density);
-            if (childH < minH)
-                childH = minH;
-
-
-            child.measure(MeasureSpec.makeMeasureSpec(childW, MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(childH, MeasureSpec.EXACTLY));
-
-            wantedHeight += childH;
         } else {
             // Measure all child
             final float maxContentWidth = selfWidth - paddingRight - paddingLeft - mHorizontalSpacing * (mColumn - 1);
@@ -264,7 +302,7 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
     @Override
     public void onClick(View v) {
         Tweet.Image[] images = mImages;
-        if (images == null)
+        if (images == null || images.length <= 0)
             return;
 
         Object obj = v.getTag();
@@ -277,6 +315,14 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         if (index >= images.length)
             index = images.length - 1;
 
-        ImageGalleryActivity.show(getContext(), Tweet.Image.getImagePath(images), index);
+        Tweet.Image image = images[index];
+        if (!Tweet.Image.check(image))
+            return;
+
+        String[] paths = Tweet.Image.getImagePath(images);
+        if (paths == null || paths.length <= 0)
+            return;
+
+        ImageGalleryActivity.show(getContext(), paths, index);
     }
 }

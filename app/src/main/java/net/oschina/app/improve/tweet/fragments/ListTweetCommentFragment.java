@@ -91,22 +91,9 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
     }
 
     @Override
-    protected void onRequestFinish() {
-        super.onRequestFinish();
-    }
-
-    @Override
-    public void onLoadMore() {
-        OSChinaApi.getTweetCommentList(
-                mOperator.getTweetDetail().getId(),
-                mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(),
-                mHandler
-        );
-    }
-
-    @Override
     public void requestData() {
-        OSChinaApi.getTweetCommentList(mOperator.getTweetDetail().getId(), null, mHandler);
+        String token = isRefreshing ? null : mBean.getNextPageToken();
+        OSChinaApi.getTweetCommentList(mOperator.getTweetDetail().getId(), token, mHandler);
     }
 
     @Override

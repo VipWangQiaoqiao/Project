@@ -9,8 +9,11 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,25 +32,25 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.bean.simple.TweetLike;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.RecordButtonUtil;
@@ -96,6 +100,16 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     TweetPicturesLayout mLayoutGrid;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+    @Bind(R.id.tv_ref_title)
+    TextView mViewRefTitle;
+    @Bind(R.id.tv_ref_content)
+    TextView mViewRefContent;
+    @Bind(R.id.layout_ref_images)
+    TweetPicturesLayout mLayoutRefImages;
+    @Bind(R.id.iv_dispatch)
+    ImageView mViewDispatch;
+    @Bind(R.id.layout_ref)
+    LinearLayout mLayoutRef;
 
     EditText mViewInput;
 
@@ -187,6 +201,15 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 mCmnViewImp.onCommentSuccess(null);
                 replies.clear(); // 清除
+
+                if (mDelegation.getBottomSheet().isSyncToTweet()) {
+                    Tweet tempTweet = tweet;
+                    if (tempTweet == null) return;
+                    TweetPublishService.startActionPublish(TweetDetailActivity.this
+                            , mDelegation.getBottomSheet().getCommentText(), null,
+                            About.buildShare(tempTweet.getId(), OSChinaApi.COMMENT_TWEET));
+                }
+
                 mViewInput.setHint("添加评论");
                 mDelegation.setCommentHint("添加评论");
                 mDelegation.getBottomSheet().getEditText().setText("");
@@ -218,7 +241,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     tweet = result.getResult();
                     mAgencyViewImp.resetCmnCount(tweet.getCommentCount());
                     mAgencyViewImp.resetLikeCount(tweet.getLikeCount());
-                    fillDetailView();
+                    setupDetailView();
                 } else {
                     onFailure(500, headers, "妈的智障", null);
                 }
@@ -263,6 +286,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         });
 
         mDelegation.getBottomSheet().showEmoji();
+        mDelegation.getBottomSheet().hideSyncAction();
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -285,9 +309,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
         mViewInput = mDelegation.getBottomSheet().getEditText();
 
-        // TODO to select friends when input @ character
         resolveVoice();
-        fillDetailView();
+        setupDetailView();
 
         TweetDetailViewPagerFragment mPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
         mCmnViewImp = mPagerFrag.getCommentViewHandler();
@@ -368,7 +391,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         dialog = null;
     }
 
-    private void fillDetailView() {
+    /**
+     * 填充数据
+     */
+    private void setupDetailView() {
         // 有可能传入的tweet只有id这一个值
         if (tweet == null || isDestroy())
             return;
@@ -396,15 +422,44 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         }
         if (!TextUtils.isEmpty(tweet.getContent())) {
             String content = tweet.getContent().replaceAll("[\n\\s]+", " ");
-            Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(this, content);
-            spannable = AssimilateUtils.assimilateOnlyTag(this, spannable);
-            spannable = AssimilateUtils.assimilateOnlyLink(this, spannable);
-            spannable = InputHelper.displayEmoji(getResources(), spannable);
-            mContent.setText(spannable);
+            mContent.setText(AssimilateUtils.assimilate(this, content));
             mContent.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
         mLayoutGrid.setImage(tweet.getImages());
+
+        /* -- about reference -- */
+        if (tweet.getAbout() != null) {
+            mLayoutRef.setVisibility(View.VISIBLE);
+            About about = tweet.getAbout();
+            mLayoutRefImages.setImage(about.getImages());
+
+            if (!About.check(about)) {
+                mViewRefTitle.setVisibility(View.VISIBLE);
+                mViewRefTitle.setText("不存在或已删除的内容");
+                mViewRefContent.setText("抱歉，该内容不存在或已被删除");
+            } else {
+                if (about.getType() == OSChinaApi.COMMENT_TWEET) {
+                    mViewRefTitle.setVisibility(View.GONE);
+                    String aname = "@" + about.getTitle();
+                    String cnt = about.getContent();
+                    Spannable spannable = AssimilateUtils.assimilate(this, cnt);
+                    SpannableStringBuilder builder = new SpannableStringBuilder();
+                    builder.append(aname + ": ");
+                    builder.append(spannable);
+                    ForegroundColorSpan span = new ForegroundColorSpan(
+                            getResources().getColor(R.color.day_colorPrimary));
+                    builder.setSpan(span, 0, aname.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    mViewRefContent.setText(builder);
+                } else {
+                    mViewRefTitle.setVisibility(View.VISIBLE);
+                    mViewRefTitle.setText(about.getTitle());
+                    mViewRefContent.setText(about.getContent());
+                }
+            }
+        } else {
+            mLayoutRef.setVisibility(View.GONE);
+        }
     }
 
     private View.OnClickListener getOnPortraitClickListener() {
@@ -430,7 +485,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         if (checkLogin()) return;
         if (replies.size() < 5) {
             for (TweetComment cmm : replies) {
-                if (cmm.getAuthor().getId() == comment.getAuthor().getId()) return;
+                if (cmm.getAuthor().getId() == comment.getAuthor().getId()) {
+                    this.mDelegation.performClick();
+                    return;
+                }
             }
             if (replies.size() == 0) {
                 mViewInput.setHint("回复: @" + comment.getAuthor().getName());
@@ -457,11 +515,36 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         OSChinaApi.reverseTweetLike(tweet.getId(), publishAdmireHandler);
     }
 
+    @OnClick(R.id.layout_ref)
+    void onClickRef() {
+        if (tweet.getAbout() == null) return;
+        UIHelper.showDetail(this, tweet.getAbout().getType(), tweet.getAbout().getId(), null);
+    }
+
     @OnClick(R.id.iv_comment)
     void onClickComment() {
         if (checkLogin()) return;
-        mDelegation.getBottomSheet().dismiss();
-        TDevice.showSoftKeyboard(mViewInput);
+        mDelegation.getBottomSheet().show("发表评论");
+    }
+
+    @OnClick(R.id.iv_dispatch)
+    void onClickTransmit() {
+        if (tweet == null || tweet.getId() <= 0) return;
+
+        String content = null;
+        About.Share share;
+        if (tweet.getAbout() == null) {
+            share = About.buildShare(tweet.getId(), OSChinaApi.CATALOG_TWEET);
+            share.title = tweet.getAuthor().getName();
+            share.content = tweet.getContent();
+        } else {
+            share = About.buildShare(tweet.getAbout());
+            content = "//@" + tweet.getAuthor().getName() + " :" + tweet.getContent();
+            content = AssimilateUtils.clearHtmlTag(content).toString();
+        }
+        share.commitTweetId = tweet.getId();
+        share.fromTweetId = tweet.getId();
+        TweetPublishActivity.show(this, null, content, share);
     }
 
     private boolean checkLogin() {

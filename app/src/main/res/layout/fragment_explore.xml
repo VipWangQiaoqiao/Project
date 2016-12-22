@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="?attr/layout_item_bg"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/layout_item_bg"
+    android:orientation="vertical">
 
     <View
         style="@style/h_line"
         android:layout_height="1px"
-        android:layout_marginTop="25dp"/>
+        android:layout_marginTop="25dp" />
 
     <LinearLayout
         android:id="@+id/rl_soft"
@@ -21,40 +22,30 @@
             android:layout_marginRight="@dimen/space_10"
             android:contentDescription="@null"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_discover_softwares"/>
+            android:src="@mipmap/ic_discover_softwares"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             style="@style/option_item_text"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="@string/actionbar_title_softwarelist"/>
+            android:text="@string/actionbar_title_softwarelist" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/ic_arrow_right"/>
+            app:srcCompat="@mipmap/ic_arrow_right" />
     </LinearLayout>
 
     <View
         style="@style/h_line"
-        android:layout_height="1px"/>
+        android:layout_height="1px" />
 
     <View
         style="@style/h_line"
         android:layout_height="1px"
-        android:layout_marginTop="30dp"
-        android:visibility="gone"/>
-
-    <View
-        style="@style/h_line"
-        android:layout_height="1px"
-        android:visibility="gone"/>
-
-    <View
-        style="@style/h_line"
-        android:layout_height="1px"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp" />
 
     <LinearLayout
         android:id="@+id/rl_scan"
@@ -65,19 +56,19 @@
             style="@style/option_item_img"
             android:contentDescription="@null"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_discover_scan"/>
+            android:src="@mipmap/ic_discover_scan" />
 
         <TextView
             style="@style/option_item_text"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="@string/scan"/>
+            android:text="@string/scan" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/ic_arrow_right"/>
+            app:srcCompat="@mipmap/ic_arrow_right" />
     </LinearLayout>
 
     <LinearLayout
@@ -88,7 +79,8 @@
         <View
             style="@style/h_line"
             android:layout_height="1px"
-            android:layout_marginLeft="8dp"/>
+            android:layout_marginLeft="44dp"
+            tools:ignore="RtlHardcoded" />
 
     </LinearLayout>
 
@@ -101,22 +93,59 @@
             style="@style/option_item_img"
             android:contentDescription="@null"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_discover_shake"/>
+            android:src="@mipmap/ic_discover_shake" />
 
         <TextView
             style="@style/option_item_text"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="@string/shake"/>
+            android:text="@string/shake" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/ic_arrow_right"/>
+            app:srcCompat="@mipmap/ic_arrow_right" />
     </LinearLayout>
 
     <View
         style="@style/h_line"
-        android:layout_height="1px"/>
+        android:layout_height="1px" />
+
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px"
+        android:layout_marginTop="25dp" />
+
+    <LinearLayout
+        android:id="@+id/layout_events"
+        style="@style/option_item_rl"
+        android:background="@drawable/item_selector">
+
+        <ImageView
+            style="@style/option_item_img"
+            android:layout_marginRight="@dimen/space_10"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_my_event" />
+
+        <TextView
+            style="@style/option_item_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="线下活动" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            app:srcCompat="@mipmap/ic_arrow_right" />
+    </LinearLayout>
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px" />
+
+
 </LinearLayout>

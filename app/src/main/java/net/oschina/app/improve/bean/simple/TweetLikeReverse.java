@@ -9,6 +9,7 @@ public class TweetLikeReverse {
     private Author author;
     private boolean liked;
     private int likeCount;
+
     public Author getAuthor() {
         return author;
     }

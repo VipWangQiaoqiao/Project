@@ -16,7 +16,7 @@ import android.widget.RemoteViews;
 import net.oschina.app.AppConfig;
 import net.oschina.app.R;
 import net.oschina.app.improve.main.MainActivity;
-import net.oschina.app.improve.utils.StreamUtils;
+import net.oschina.common.utils.StreamUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -154,7 +154,7 @@ public class DownloadService extends Service {
             if (httpConnection != null) {
                 httpConnection.disconnect();
             }
-            StreamUtils.close(is, fos);
+            StreamUtil.close(is, fos);
             stopSelf();
         }
         return totalSize;

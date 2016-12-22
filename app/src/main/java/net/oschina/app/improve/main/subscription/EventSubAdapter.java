@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.OSCApplication;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
@@ -25,8 +25,11 @@ import java.util.Map;
  */
 
 public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
+    private OSCApplication.ReadState mReadState;
+
     public EventSubAdapter(Callback callback, int mode) {
         super(callback, mode);
+        mReadState = OSCApplication.getReadState("sub_list");
         setOnLoadingHeaderCallBack(this);
     }
 
@@ -98,7 +101,7 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
         }
 
         vh.tv_event_title.setTextColor(UiCompat.getColor(resources,
-                AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))
+                mReadState.already(item.getKey())
                         ? R.color.text_desc_color : R.color.text_title_color));
 
     }

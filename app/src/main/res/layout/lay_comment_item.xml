@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/item_blog_about_bg_selector"
     android:orientation="vertical"
-    android:paddingLeft="16dp">
+    android:paddingLeft="16dp"
+    tools:ignore="RtlHardcoded,RtlSymmetry">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +14,8 @@
         android:layout_marginBottom="4dp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        android:paddingRight="8dp">
+        android:paddingRight="8dp"
+        tools:ignore="RtlSymmetry">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_avatar"
@@ -35,33 +37,57 @@
 
             <TextView
                 android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="年轻的小蜜蜂"
                 android:textColor="#111111"
                 android:textSize="14sp"
                 tools:text="年轻的小蜜蜂" />
 
             <TextView
                 android:id="@+id/tv_pub_date"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="12楼  6分钟前"
                 android:textColor="#6a6a6a"
                 android:textSize="12sp"
                 tools:text="12楼  6分钟前" />
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/btn_comment"
+            android:id="@+id/btn_vote"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:contentDescription="@string/app_name"
             android:paddingBottom="18dp"
-            android:paddingLeft="16dp"
+            android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_comment_30" />
+            android:src="@mipmap/ic_thumb_normal"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/tv_vote_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:textColor="#9d9d9d"
+            android:textSize="12sp"
+            tools:ignore="RtlHardcoded"
+            tools:text="12" />
+
+        <ImageView
+            android:id="@+id/btn_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@string/app_name"
+            android:paddingBottom="18dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_comment_30"
+            tools:ignore="RtlHardcoded" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -77,7 +103,6 @@
         android:layout_marginBottom="4dp"
         android:layout_marginTop="8dp"
         android:paddingRight="16dp"
-        android:text="诺灬晓月 你好，想跟你请教个问题：就是你用Echart做的甘特图，那个矩形的颜色是怎么设置，能不能显示进度条啊"
         android:textColor="#111111"
         android:textSize="14sp"
         tools:ignore="RtlHardcoded,RtlSymmetry"

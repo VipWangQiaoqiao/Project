@@ -315,9 +315,11 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
         mLlRetrieveBar.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        hideKeyBoard(getCurrentFocus().getWindowToken());
         mLlRetrieveBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 

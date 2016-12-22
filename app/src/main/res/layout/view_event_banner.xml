@@ -12,6 +12,11 @@
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#60000000"/>
+
     <ImageView
         android:id="@+id/iv_event_banner_img"
         android:layout_width="108dp"

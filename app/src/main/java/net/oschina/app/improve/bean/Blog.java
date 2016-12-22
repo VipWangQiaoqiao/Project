@@ -1,7 +1,5 @@
 package net.oschina.app.improve.bean;
 
-import java.io.Serializable;
-
 /**
  * Created by fei on 2016/5/24.
  * desc:   blog bean
