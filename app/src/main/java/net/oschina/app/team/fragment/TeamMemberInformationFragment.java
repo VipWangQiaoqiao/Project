@@ -1,7 +1,18 @@
 package net.oschina.app.team.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -11,32 +22,18 @@ import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamMember;
-import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
-import org.kymjs.kjframe.utils.StringUtils;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.TextView;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 用户个人信息界面
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 public class TeamMemberInformationFragment extends BaseListFragment<TeamActive> {
 
@@ -105,12 +102,12 @@ public class TeamMemberInformationFragment extends BaseListFragment<TeamActive> 
         mTvUserName.setText(teamMember.getOscName());
 
         String email = teamMember.getTeamEmail();
-        if (StringUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(email)) {
             email = "未填写邮箱";
         }
         mTvEmail.setText(email);
         String tel = teamMember.getTeamTelephone();
-        if (StringUtils.isEmpty(tel)) {
+        if (TextUtils.isEmpty(tel)) {
             tel = "未填写手机号";
             mImgTel.setVisibility(View.GONE);
             // mTvToTel.setVisibility(View.GONE);
@@ -125,7 +122,7 @@ public class TeamMemberInformationFragment extends BaseListFragment<TeamActive> 
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
+                                    int position, long id) {
                 if (position == 0) {// 第一项是头部
                 } else {
                     Adapter adapter = parent.getAdapter();

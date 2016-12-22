@@ -330,7 +330,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
 
     @Override
     protected BaseRecyclerAdapter<Tweet> getRecyclerAdapter() {
-        return new UserTweetAdapter(this, BaseRecyclerAdapter.ONLY_FOOTER);
+        return new UserTweetAdapter(this);
     }
 
     @Override

@@ -16,7 +16,6 @@
     <string name="event_type_other">其他</string>
     <string name="event_type_outside">站外活动</string>
     <string name="event_type_outline">线下活动</string>
-    <string name="event_sign_hint">活动报名</string>
 
     <string name="event_apply_status_un_sign">我要报名</string>
     <string name="event_apply_status_audit">审核中</string>
@@ -48,7 +47,6 @@
 
     <string name="actionbar_title_question">帖子详情</string>
     <string name="actionbar_title_detail">详情</string>
-    <string name="actionbar_title_active">好友圈</string>
 
     <string name="share_to">分享</string>
     <string name="platform_sina">微博</string>
@@ -68,12 +66,10 @@
 
     <string name="actionbar_title_question_tag">%s相关</string>
     <string name="comment_empty">暂无评论</string>
-    <string name="post_answer">回复</string>
     <string name="comment_reply_count">---共有%s条回复---</string>
     <string name="tip_comment_content_empty">评论内容不能为空</string>
 
     <!-- notification messages -->
-    <string name="comment_publish_success">评论成功</string>
     <string name="comment_publish_faile">评论失败</string>
 
     <string name="progress_submit">正在提交…</string>
@@ -93,7 +89,6 @@
 
     <string name="tweet_detail_data_null">啊噢, 没有找到该动弹~ 可能被主人删除了呢!</string>
     <string name="record_sound_notfound">找不到录音</string>
-    <string name="record_sound_short">时间太短了</string>
 
     <string name="ok">确定</string>
     <string name="cancle">取消</string>
@@ -101,7 +96,6 @@
     <string name="tip_content_too_long">内容太长</string>
 
     <string name="actionbar_title_softwarelist">开源软件</string>
-    <string name="actionbar_title_comment">评论列表</string>
     <string name="actionbar_title_user_blog">用户博客列表</string>
     <string name="actionbar_title_my_information">我的资料</string>
     <string name="actionbar_title_setting">设置</string>
@@ -162,7 +156,6 @@
     <string name="footer_type_error">加载失败</string>
     <string name="footer_type_net_error">网络错误</string>
     <string name="footer_type_not_more">没有更多数据</string>
-    <string name="software_loading_error">内容加载失败&#8230;</string>
     <string name="software_about_hint">相关软件</string>
 
     <string name="you_have_unread_messages">你有%s条未读消息</string>
@@ -255,9 +248,7 @@
 
     <!-- 个人信息-->
     <string name="action_select">选择操作</string>
-    <string name="action_select_picture">选择图片</string>
     <string name="title_icon_null">图像不存在，上传失败</string>
-    <string name="title_update_success_status">个人信息更新成功&#8230;</string>
     <string name="title_update_fail_status">个人信息更新失败&#8230;</string>
 
     <!--新版登录专用-->
@@ -282,12 +273,10 @@
     <string name="register_username_error">用户名太长&#8230;</string>
     <string name="hint_password">密码</string>
     <string name="register_pwd_hint">请输入至少六位数密码</string>
-    <string name="hint_pwd_null">当前用户名或密码为空&#8230;</string>
     <string name="hint_username_ok">请输入正确的手机号码</string>
     <string name="user_hint_login">点击头像登录</string>
     <string name="reset_pwd_label">重置密码</string>
     <string name="retrieve_pwd_label">找回密码</string>
-    <string name="retrieve_pwd_sms_coe_error">请输入正确的验证码</string>
     <string name="reset_pwd_submit">确认</string>
     <string name="request_error_hint">网络请求失败,请重试&#8230;</string>
     <string name="login_success_hint">登录成功</string>
@@ -311,7 +300,6 @@
     <string name="send_hint">发送</string>
     <string name="comment_hint">请输入评论</string>
     <string name="hot_comment_hint">热门评论</string>
-    <string name="new_comment_hint">最新评论</string>
     <string name="pub_comment_hint">发表评论</string>
     <string name="pub_comment_success">评论成功</string>
     <string name="pub_comment_failed">评论失败</string>
@@ -323,10 +311,6 @@
     <string name="answer_hint">回答</string>
     <string name="pub_about">发布于</string>
     <string name="back_hint">返回</string>
-    <string name="vote_success_hint">点赞成功&#8230;</string>
-    <string name="vote_failed_hint">点赞失败&#8230;</string>
-    <string name="cancel_vote_success_hint">取消点赞成功&#8230;</string>
-    <string name="cancel_vote_failed_hint">取消点赞失败&#8230;</string>
     <string name="martian_hint">火星网友</string>
 
     <!--新版活动签到-->

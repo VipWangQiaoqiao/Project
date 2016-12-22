@@ -18,8 +18,6 @@ import net.oschina.app.improve.detail.sign.StringParams;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 
-import org.kymjs.kjframe.utils.KJLoger;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -574,7 +572,6 @@ public class OSChinaApi {
         params.put("type", "diary");
         params.put("pageIndex", 0);
         params.put("pageSize", "20");
-        KJLoger.debug(teamid + "==getDiaryComment接口=" + diaryid);
         ApiHttpClient.get("action/api/team_reply_list_by_type", params, handler);
     }
 
@@ -868,6 +865,28 @@ public class OSChinaApi {
         post("action/apiv2/comment_push", params, handler);
     }
 
+    /**
+     * 发布评论
+     */
+    public static void pubComment(long sourceId,
+                                  int type,
+                                  String content,
+                                  long referId,
+                                  long replyId,
+                                  long reAuthorId,
+                                  TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("type", type);
+        params.put("content", content);
+        if (referId > 0)
+            params.put("referId", referId);
+        if (replyId > 0)
+            params.put("replyId", replyId);
+        if (reAuthorId > 0)
+            params.put("reAuthorId", reAuthorId);
+        post("action/apiv2/comment_push", params, handler);
+    }
 
     /**
      * 发表资讯评论

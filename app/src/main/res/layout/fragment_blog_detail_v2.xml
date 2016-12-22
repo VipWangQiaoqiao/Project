@@ -140,6 +140,7 @@
                     android:orientation="vertical">
 
                     <View
+                        android:id="@+id/line1"
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_marginBottom="16dp"
@@ -147,7 +148,7 @@
                         android:background="@color/list_divider_color" />
 
                     <TextView
-                        android:id="@+id/tv_blog_detail_abstract"
+                        android:id="@+id/tv_detail_abstract"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="4dp"
@@ -157,6 +158,7 @@
                         tools:text="在Google IO大会中不仅仅带来了Android Studio 2.2预览版，同时带给我们一个依赖约束的库。 简单来说，她是相对布局的升级版本，但是区别与相对布局更加强调约束。何为约束，即控件之间的关系。" />
 
                     <View
+                        android:id="@+id/line"
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_marginTop="16dp"
@@ -185,6 +187,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <net.oschina.app.improve.comment.CommentView
+                android:id="@+id/cv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ques_detail_bg_color" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

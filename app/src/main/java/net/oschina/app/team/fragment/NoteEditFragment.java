@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
@@ -31,14 +30,13 @@ import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 便签编辑界面
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 public class NoteEditFragment extends BaseFragment implements OnTouchListener {
     @Bind(R.id.note_detail_edit)
@@ -77,26 +75,26 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
     public static final int NOTEBOOK_FRAGMENT = 1;
     public static final int NOTEBOOK_ITEM = 2;
 
-    public static final int[] sBackGrounds = { 0xffe5fce8,// 绿色
+    public static final int[] sBackGrounds = {0xffe5fce8,// 绿色
             0xfffffdd7,// 黄色
             0xffffddde,// 红色
             0xffccf2fd,// 蓝色
             0xfff7f5f6,// 紫色
     };
-    public static final int[] sTitleBackGrounds = { 0xffcef3d4,// 绿色
+    public static final int[] sTitleBackGrounds = {0xffcef3d4,// 绿色
             0xffebe5a9,// 黄色
             0xffecc4c3,// 红色
             0xffa9d5e2,// 蓝色
             0xffddd7d9,// 紫色
     };
 
-    public static final int[] sThumbtackImgs = { R.mipmap.green,
+    public static final int[] sThumbtackImgs = {R.mipmap.green,
             R.mipmap.yellow, R.mipmap.red, R.mipmap.blue,
-            R.mipmap.purple };
+            R.mipmap.purple};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_note_detail,
                 container, false);
@@ -109,21 +107,21 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.note_detail_img_green:
-            editData.setColor(0);
-            break;
-        case R.id.note_detail_img_blue:
-            editData.setColor(3);
-            break;
-        case R.id.note_detail_img_purple:
-            editData.setColor(4);
-            break;
-        case R.id.note_detail_img_yellow:
-            editData.setColor(1);
-            break;
-        case R.id.note_detail_img_red:
-            editData.setColor(2);
-            break;
+            case R.id.note_detail_img_green:
+                editData.setColor(0);
+                break;
+            case R.id.note_detail_img_blue:
+                editData.setColor(3);
+                break;
+            case R.id.note_detail_img_purple:
+                editData.setColor(4);
+                break;
+            case R.id.note_detail_img_yellow:
+                editData.setColor(1);
+                break;
+            case R.id.note_detail_img_red:
+                editData.setColor(2);
+                break;
         }
         mImgThumbtack.setImageResource(sThumbtackImgs[editData.getColor()]);
         mEtContent.setBackgroundColor(sBackGrounds[editData.getColor()]);
@@ -212,15 +210,15 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.public_menu_send:
-            if (!StringUtils.isEmpty(mEtContent.getText().toString())) {
-                save();
-                if (whereFrom == QUICK_DIALOG) {
-                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE);
+            case R.id.public_menu_send:
+                if (!StringUtils.isEmpty(mEtContent.getText().toString())) {
+                    save();
+                    if (whereFrom == QUICK_DIALOG) {
+                        UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE);
+                    }
                 }
-            }
-            getActivity().finish();
-            break;
+                getActivity().finish();
+                break;
         }
         return true;
     }
@@ -230,9 +228,12 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
      */
     private void save() {
         if (editData.getId() == 0) {
-            editData.setId(-1
-                    * org.kymjs.kjframe.utils.StringUtils.toInt(
-                            StringUtils.getDataTime("dddHHmmss"), 0));
+            try {
+                int id = Integer.valueOf(StringUtils.getDateString("dddHHmmss"));
+                editData.setId(-1 * id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         editData.setUnixTime(StringUtils.getDataTime("yyyy-MM-dd HH:mm:ss"));
         editData.setContent(mEtContent.getText().toString());

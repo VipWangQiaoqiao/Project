@@ -1,23 +1,20 @@
 package net.oschina.app.team.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.ui.OSCPhotosActivity;
-import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.kjframe.Core;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
 
 /**
  * Team动态界面ListView适配器 (kymjs123@gmail.com)
@@ -128,17 +125,9 @@ public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
     private void setTweetImage(final ImageView pic, final String url) {
         pic.setVisibility(View.VISIBLE);
 
-        Core.getKJBitmap().display(pic, url, R.drawable.pic_bg, 0, 0, new BitmapCallBack() {
-            @Override
-            public void onSuccess(Bitmap bitmap) {
-                super.onSuccess(bitmap);
-                if (bitmap != null) {
-                    bitmap = BitmapHelper.scaleWithXY(bitmap,
-                            360 / bitmap.getHeight());
-                    pic.setImageBitmap(bitmap);
-                }
-            }
-        });
+        Glide.with(context).load(url)
+                .placeholder(R.drawable.pic_bg)
+                .into(pic);
 
         pic.setOnClickListener(new View.OnClickListener() {
             @Override

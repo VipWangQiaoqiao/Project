@@ -1,5 +1,7 @@
 package net.oschina.app.improve.detail.general;
 
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -29,6 +31,9 @@ public class BlogDetailFragment extends DetailFragment {
     @Bind(R.id.tv_title)
     TextView mTextTitle;
 
+    @Bind(R.id.tv_detail_abstract)
+    TextView mTextAbstract;
+
     @Bind(R.id.tv_info_comment)
     TextView mTextComCount;
 
@@ -36,8 +41,7 @@ public class BlogDetailFragment extends DetailFragment {
     TextView mTextViewCount;
 
     public static BlogDetailFragment newInstance() {
-        BlogDetailFragment fragment = new BlogDetailFragment();
-        return fragment;
+        return new BlogDetailFragment();
     }
 
     @Override
@@ -55,5 +59,11 @@ public class BlogDetailFragment extends DetailFragment {
         mTextTitle.setText(bean.getTitle());
         mTextComCount.setText(String.valueOf(bean.getStatistics().getComment()));
         mTextViewCount.setText(String.valueOf(bean.getStatistics().getView()));
+        mTextAbstract.setText(bean.getSummary());
+        if (TextUtils.isEmpty(bean.getSummary())) {
+            mRoot.findViewById(R.id.line).setVisibility(View.GONE);
+            mRoot.findViewById(R.id.line1).setVisibility(View.GONE);
+            mTextAbstract.setVisibility(View.GONE);
+        }
     }
 }

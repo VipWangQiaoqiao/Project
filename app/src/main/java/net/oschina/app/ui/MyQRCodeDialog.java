@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -20,9 +21,10 @@ import com.google.zxing.WriterException;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.QrCodeUtils;
 
-import org.kymjs.kjframe.utils.FileUtils;
+import java.io.File;
 
 public class MyQRCodeDialog extends Dialog {
 
@@ -35,7 +37,7 @@ public class MyQRCodeDialog extends Dialog {
     }
 
     @SuppressLint("InflateParams")
-    private MyQRCodeDialog(Context context, int defStyle) {
+    private MyQRCodeDialog(final Context context, int defStyle) {
         super(context, defStyle);
         View contentView = getLayoutInflater().inflate(
                 R.layout.dialog_my_qr_code, null);
@@ -52,12 +54,20 @@ public class MyQRCodeDialog extends Dialog {
             @Override
             public boolean onLongClick(View v) {
                 dismiss();
-                if (FileUtils.bitmapToFile(bitmap,
-                        FileUtils.getSavePath("OSChina") + "/myqrcode.png")) {
+                try {
+                    String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    File file = new File(sdPath + File.separator + "OSChina"
+                            + File.separator);
+                    if (!file.exists()) file.mkdirs();
+                    file = new File(file.getAbsoluteFile(), "qrcode.png");
+                    if (file.exists()) file.delete();
+                    ImageUtils.saveImageToSD(context, file.getAbsolutePath(), bitmap, 100);
                     AppContext.showToast("二维码已保存到oschina文件夹下");
-                } else {
+                } catch (Exception e) {
+                    e.printStackTrace();
                     AppContext.showToast("SD卡不可写，二维码保存失败");
                 }
+
                 return false;
             }
         });

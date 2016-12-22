@@ -1,5 +1,11 @@
 package net.oschina.app.cache;
 
+import android.content.Context;
+import android.os.Environment;
+
+import net.oschina.app.util.TDevice;
+import net.oschina.common.utils.StreamUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,19 +14,11 @@ import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import net.oschina.app.util.TDevice;
-
-import org.kymjs.kjframe.utils.FileUtils;
-
-import android.content.Context;
-import android.os.Environment;
-
 /**
  * 缓存工具类
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2014年12月26日 下午4:53:13
- * 
  */
 
 public class DiskLruCacheUtil {
@@ -35,7 +33,7 @@ public class DiskLruCacheUtil {
 
     /**
      * 保存对象缓存
-     * 
+     *
      * @param context
      * @param ser
      * @param key
@@ -55,13 +53,13 @@ public class DiskLruCacheUtil {
 
             e.printStackTrace();
         } finally {
-            FileUtils.closeIO(oos);
+            StreamUtil.close(oos);
         }
     }
 
     /**
      * 读取对象缓存
-     * 
+     *
      * @param context
      * @param key
      * @return
@@ -78,14 +76,14 @@ public class DiskLruCacheUtil {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            FileUtils.closeIO(ois);
+            StreamUtil.close(ois);
         }
         return null;
     }
 
     /**
      * 获取DiskLruCache的editor
-     * 
+     *
      * @param context
      * @param key
      * @return
@@ -102,7 +100,7 @@ public class DiskLruCacheUtil {
 
     /**
      * 获取相应的缓存目录
-     * 
+     *
      * @param context
      * @param uniqueName
      * @return
@@ -121,7 +119,7 @@ public class DiskLruCacheUtil {
 
     /**
      * 传入缓存的key值，以得到相应的MD5值
-     * 
+     *
      * @param key
      * @return
      */
