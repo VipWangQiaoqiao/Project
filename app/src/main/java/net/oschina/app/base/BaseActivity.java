@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +17,6 @@ import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.ui.dialog.CommonToast;
 import net.oschina.app.ui.dialog.DialogControl;
 import net.oschina.app.util.TDevice;
-
-import org.kymjs.kjframe.utils.StringUtils;
 
 import butterknife.ButterKnife;
 
@@ -136,7 +135,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     }
 
     public void setActionBarTitle(String title) {
-        if (StringUtils.isEmpty(title)) {
+        if (TextUtils.isEmpty(title)) {
             title = getString(R.string.app_name);
         }
         if (hasActionBar() && mActionBar != null) {
