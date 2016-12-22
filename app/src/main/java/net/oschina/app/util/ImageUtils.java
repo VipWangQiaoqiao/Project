@@ -110,7 +110,7 @@ public class ImageUtils {
             }
             BufferedOutputStream bos = new BufferedOutputStream(
                     new FileOutputStream(filePath));
-            bitmap.compress(CompressFormat.JPEG, quality, bos);
+            bitmap.compress(CompressFormat.PNG, quality, bos);
             bos.flush();
             bos.close();
             if (ctx != null) {

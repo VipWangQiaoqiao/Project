@@ -39,8 +39,7 @@ import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.kjframe.utils.DensityUtils;
+import net.qiujuer.genius.ui.Ui;
 
 import java.lang.reflect.Type;
 
@@ -83,7 +82,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
     private void initRecordImg(Context cxt) {
         mRecordBitmap = BitmapFactory.decodeResource(cxt.getResources(), R.mipmap.audio3);
         mRecordBitmap = ImageUtils.zoomBitmap(mRecordBitmap,
-                DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
+                (int) Ui.dipToPx(cxt.getResources(), 20f), (int) Ui.dipToPx(cxt.getResources(), 20f));
     }
 
     @Override
@@ -100,7 +99,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewPortrait.setImageResource(R.mipmap.widget_dface);
             holder.mViewPortrait.setOnClickListener(null);
             holder.mViewName.setText("匿名用户");
-        }else {
+        } else {
             mCallBack.getImgLoader()
                     .load(author.getPortrait())
                     .asBitmap()
