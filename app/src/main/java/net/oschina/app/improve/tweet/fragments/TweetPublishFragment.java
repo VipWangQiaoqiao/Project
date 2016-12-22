@@ -31,8 +31,8 @@ import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.ClipView;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
-import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
@@ -44,7 +44,7 @@ import butterknife.OnClick;
 @SuppressWarnings("WeakerAccess")
 public class TweetPublishFragment extends BaseFragment implements View.OnClickListener, TweetPublishContract.View {
     public static final int MAX_TEXT_LENGTH = 160;
-    private static final int SELECT_FRIENDS_REQUEST_CODE = 100;
+    public static final int SELECT_FRIENDS_REQUEST_CODE = 100;
     private static final String TEXT_TAG = "#输入软件名#";
 
     @Bind(R.id.edit_content)
@@ -332,7 +332,10 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             UIHelper.showLoginActivity(context);
             return;
         }
-        Intent intent = new Intent(context, SelectFriendsActivity.class);
+        //Intent intent = new Intent(context, SelectFriendsActivity.class);
+        //startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
+
+        Intent intent = new Intent(context, UserSelectFriendsActivity.class);
         startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
     }
 
