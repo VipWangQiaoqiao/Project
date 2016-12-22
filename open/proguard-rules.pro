@@ -18,8 +18,3 @@
 
 -keep class com.tencent.mm.sdk.** {*;}
 -keep class com.sina.weibo.** {*;}
-
-# baidu map sdk
--keep class com.baidu.** {*;}
--keep class vi.com.** {*;}
--dontwarn com.baidu.**
