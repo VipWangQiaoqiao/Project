@@ -6,12 +6,11 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
+
 import net.oschina.app.R;
 import net.oschina.app.util.UIHelper;
 
-import org.kymjs.kjframe.Core;
-import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.utils.StringUtils;
 
 public class AvatarView extends CircleImageView {
     public static final String AVATAR_SIZE_REG = "_[0-9]{1,3}";
@@ -21,7 +20,6 @@ public class AvatarView extends CircleImageView {
     private int id;
     private String name;
     private Activity aty;
-    private static KJBitmap kjb = new KJBitmap();
 
     public AvatarView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -56,7 +54,7 @@ public class AvatarView extends CircleImageView {
     }
 
     public void setAvatarUrl(String url) {
-        if (StringUtils.isEmpty(url)) {
+        if (TextUtils.isEmpty(url)) {
             setImageResource(R.mipmap.widget_dface);
             return;
         }
@@ -69,8 +67,12 @@ public class AvatarView extends CircleImageView {
             headUrl = url;
         }
 
-        new Core.Builder().view(this).url(headUrl).errorBitmapRes(R.mipmap.widget_dface)
-                .loadBitmapRes(R.mipmap.widget_dface).doTask();
+        if (aty != null) {
+            Glide.with(aty).load(headUrl)
+                    .error(R.mipmap.widget_dface)
+                    .placeholder(R.mipmap.widget_dface)
+                    .into(this);
+        }
     }
 
     public static String getSmallAvatar(String source) {

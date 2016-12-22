@@ -33,8 +33,7 @@ import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.kjframe.utils.DensityUtils;
+import net.qiujuer.genius.ui.Ui;
 
 import java.lang.reflect.Type;
 
@@ -73,7 +72,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
                 R.mipmap.audio3);
         recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
-                DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
+                (int) Ui.dipToPx(cxt.getResources(), 20f), (int) Ui.dipToPx(cxt.getResources(), 20f));
     }
 
     @Override

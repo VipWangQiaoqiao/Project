@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +26,6 @@ import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.XmlUtils;
-
-import org.kymjs.kjframe.utils.PreferenceHelper;
-import org.kymjs.kjframe.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,9 +143,8 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
 
     private void requestTeamList() {
         // 初始化团队列表数据
-        String cache = PreferenceHelper.readString(this, TEAM_LIST_FILE,
-                TEAM_LIST_KEY, "");
-        if (!StringUtils.isEmpty(cache)) {
+        String cache = AppContext.get(TEAM_LIST_FILE, "");
+        if (!TextUtils.isEmpty(cache)) {
             // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             teamDatas = TeamList.toTeamList(cache);
             setTeamDataState();
@@ -170,8 +167,7 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
 
                 if (datas != null) {
                     // 保存新的团队列表
-                    PreferenceHelper.write(TeamMainActivity.this, TEAM_LIST_FILE,
-                            TEAM_LIST_KEY, datas.toCacheData());
+                    AppContext.set(datas.toCacheData(), TEAM_LIST_FILE);
                 }
             }
 

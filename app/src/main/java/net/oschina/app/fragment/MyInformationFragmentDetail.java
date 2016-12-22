@@ -7,13 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
-
-import org.kymjs.kjframe.Core;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -80,8 +80,9 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     @SuppressWarnings("deprecation")
     public void fillUI() {
-        Core.getKJBitmap().displayWithLoadBitmap(mUserFace, userInfo.getPortrait(),
-                R.mipmap.widget_dface);
+        Glide.with(getContext()).load(userInfo.getPortrait())
+                .placeholder(R.mipmap.widget_dface)
+                .into(mUserFace);
         mName.setText(userInfo.getName());
         mJoinTime.setText(StringUtils.formatYearMonthDayNew(userInfo.getMore().getJoinDate()));
         mFrom.setText(userInfo.getMore().getCity());

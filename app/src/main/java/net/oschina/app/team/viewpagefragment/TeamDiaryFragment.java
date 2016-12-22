@@ -17,13 +17,12 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.team.adapter.TeamDiaryPagerAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamDiaryList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.util.StringUtils;
-
-import org.kymjs.kjframe.http.KJAsyncTask;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -84,7 +83,7 @@ public class TeamDiaryFragment extends BaseFragment implements
         currentWeek = StringUtils.getWeekOfYear() - 1;
         dataBundleList = new HashMap<>(currentWeek + 5);
         // 异步读缓存
-        KJAsyncTask.execute(new Runnable() {
+        AppOperator.runOnThread(new Runnable() {
             @Override
             public void run() {
                 for (int i = 0; i < currentWeek; i++) {
