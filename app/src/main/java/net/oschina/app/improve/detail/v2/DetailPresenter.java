@@ -11,6 +11,7 @@ import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.ui.empty.EmptyLayout;
 
 import java.lang.reflect.Type;
@@ -124,6 +125,36 @@ public class DetailPresenter implements DetailContract.Presenter {
                     onFailure(statusCode, headers, responseString, e);
                     mView.showCommentError("评论失败");
                     mEmptyView.showCommentError("评论失败");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void addUserRelation(long authorId) {
+        OSChinaApi.addUserRelationReverse(authorId, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<UserRelation>>() {
+                    }.getType();
+
+                    ResultBean<UserRelation> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                    if (resultBean != null && resultBean.isSuccess()) {
+                        int relation = resultBean.getResult().getRelation();
+                        boolean isRelation = relation == UserRelation.RELETION_ALL
+                                || relation == UserRelation.RELETION_ONLY_YOU;
+                        mView.showAddRelationSuccess(isRelation,
+                                isRelation ? R.string.add_relation_success : R.string.cancel_relation_success);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
                 }
             }
         });

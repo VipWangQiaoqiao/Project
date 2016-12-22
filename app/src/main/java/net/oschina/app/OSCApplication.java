@@ -35,7 +35,7 @@ public class OSCApplication extends AppContext {
             handler.init(this);
 
         //初始化百度地图
-        SDKInitializer.initialize(getApplicationContext());
+//        SDKInitializer.initialize(getApplicationContext());
     }
 
     /**

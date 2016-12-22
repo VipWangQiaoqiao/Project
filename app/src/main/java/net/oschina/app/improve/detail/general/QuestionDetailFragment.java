@@ -7,8 +7,6 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
-import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.util.StringUtils;
@@ -20,7 +18,7 @@ import butterknife.Bind;
  * on 2016/12/15.
  */
 
-public class QuestionDetailFragment extends DetailFragment implements OnCommentClickListener {
+public class QuestionDetailFragment extends DetailFragment {
     @Bind(R.id.tv_title)
     TextView mTextTitle;
     @Bind(R.id.tv_author)
@@ -67,10 +65,7 @@ public class QuestionDetailFragment extends DetailFragment implements OnCommentC
     }
 
     @Override
-    public void onClick(View view, Comment comment) {
-//        mCommentId = comment.getId();
-//        mCommentAuthorId = comment.getAuthor().getId();
-//        mDelegation.getCommentText().setHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-//        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+    protected int getCommentOrder() {
+        return OSChinaApi.COMMENT_HOT_ORDER;
     }
 }
