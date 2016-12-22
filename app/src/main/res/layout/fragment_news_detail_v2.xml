@@ -69,11 +69,42 @@
                     android:layout_height="match_parent" />
             </FrameLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <View
+                    style="@style/h_line"
+                    android:layout_height="1dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/lay_8"
+                    android:paddingLeft="@dimen/lay_16"
+                    android:paddingRight="@dimen/lay_16"
+                    android:paddingTop="@dimen/lay_8"
+                    android:text="相关推荐"
+                    android:textColor="@color/text_title_color" />
+
+                <View
+                    style="@style/h_line"
+                    android:layout_height="1dp" />
+            </LinearLayout>
+
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <net.oschina.app.improve.comment.CommentView
+                android:id="@+id/cv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ques_detail_bg_color" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

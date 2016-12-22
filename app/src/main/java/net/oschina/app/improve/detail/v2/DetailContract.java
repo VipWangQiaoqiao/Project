@@ -20,6 +20,10 @@ public interface DetailContract {
         void showGetDetailSuccess(SubBean bean);
 
         void showFavReverseSuccess(boolean isFav, int strId);
+
+        void showCommentSuccess(Comment comment);
+
+        void showCommentError(String message);
     }
 
     interface View extends BaseView<Presenter> {
@@ -39,6 +43,13 @@ public interface DetailContract {
 
         void favReverse();
 
-        void addComment(String content, long sid, int type, long referId, long replyId, long oid);//添加评论
+        void addComment(
+                long sourceId,
+                int type,
+                String content,
+                long referId,
+                long replyId,
+                long reAuthorId
+        );//添加评论
     }
 }

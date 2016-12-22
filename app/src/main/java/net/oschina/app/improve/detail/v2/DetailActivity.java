@@ -1,21 +1,29 @@
 package net.oschina.app.improve.detail.v2;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentsActivity;
+import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
@@ -26,7 +34,10 @@ import net.oschina.app.util.StringUtils;
  * on 2016/11/30.
  */
 
-public abstract class DetailActivity extends BaseBackActivity implements DetailContract.EmptyView, Runnable {
+public abstract class DetailActivity extends BaseBackActivity implements
+        DetailContract.EmptyView, Runnable,
+        OnCommentClickListener {
+    protected ProgressDialog mProgressDialog;
     protected DetailPresenter mPresenter;
     protected EmptyLayout mEmptyLayout;
     protected DetailFragment mDetailFragment;
@@ -38,6 +49,10 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
     private LinearLayout mLayComment;
 
     protected SubBean mBean;
+
+    protected long mCommentId;
+    protected long mCommentAuthorId;
+    protected boolean mInputDoubleEmpty = false;
 
     @Override
     protected int getContentView() {
@@ -62,8 +77,11 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
         mDetailFragment = getDetailFragment();
         addFragment(R.id.lay_container, mDetailFragment);
         mPresenter = new DetailPresenter(mDetailFragment, this, mBean);
-        if (!mPresenter.isHideCommentBar())
+        if (!mPresenter.isHideCommentBar()) {
             mDelegation = CommentBar.delegation(this, mLayComment);
+            mDelegation.setFavDrawable(mBean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
+        }
+
         mPresenter.getDetail();
     }
 
@@ -77,6 +95,42 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
                     CommentsActivity.show(DetailActivity.this, mBean.getId(), OSChinaApi.COMMENT_NEWS, OSChinaApi.COMMENT_NEW_ORDER);
                 }
             });
+
+            mDelegation.setFavListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPresenter.favReverse();
+                }
+            });
+
+            mDelegation.setShareListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toShare(mBean.getTitle(), mBean.getBody(), mBean.getHref());
+                }
+            });
+
+            mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (keyCode == KeyEvent.KEYCODE_DEL) {
+                        handleKeyDel();
+                    }
+                    return false;
+                }
+            });
+            mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDialog("正在提交评论...");
+                    mPresenter.addComment(mBean.getId(),
+                            mBean.getType(),
+                            mDelegation.getBottomSheet().getCommentText(),
+                            0,
+                            0,
+                            0);
+                }
+            });
         }
     }
 
@@ -88,6 +142,8 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
     @Override
     public void showGetDetailSuccess(SubBean bean) {
         this.mBean = bean;
+        if (mDelegation != null)
+            mDelegation.setFavDrawable(mBean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
     }
 
     @Override
@@ -101,7 +157,31 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
 
     @Override
     public void showFavReverseSuccess(boolean isFav, int strId) {
+        if (mDelegation != null) {
+            mDelegation.setFavDrawable(isFav ? R.drawable.ic_faved : R.drawable.ic_fav);
+        }
+    }
 
+    @Override
+    public void showCommentSuccess(Comment comment) {
+        hideDialog();
+        if (mDelegation == null)
+            return;
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            TweetPublishService.startActionPublish(this,
+                    mDelegation.getBottomSheet().getCommentText(), null,
+                    About.buildShare(mBean.getId(), OSChinaApi.COMMENT_NEWS));
+        }
+        Toast.makeText(this, getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
+        mDelegation.getCommentText().setHint(getString(R.string.add_comment_hint));
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.add_comment_hint));
+        mDelegation.getBottomSheet().dismiss();
+    }
+
+    @Override
+    public void showCommentError(String message) {
+        hideDialog();
     }
 
     @Override
@@ -115,20 +195,12 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
         if (item != null) {
             View action = item.getActionView();
             if (action != null) {
-                action.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mDetailFragment != null) {
-
-                        }
-                    }
-                });
                 View tv = action.findViewById(R.id.tv_comment_count);
                 if (tv != null) {
                     mCommentCountView = (TextView) tv;
-                    mCommentCountView.setText(mBean.getStatistics().getComment() + "");
+                    if (mBean.getStatistics() != null)
+                        mCommentCountView.setText(mBean.getStatistics().getComment() + "");
                 }
-
             }
         }
         return true;
@@ -165,12 +237,47 @@ public abstract class DetailActivity extends BaseBackActivity implements DetailC
         return true;
     }
 
+    @Override
+    public void onClick(View view, Comment comment) {
+
+    }
+
+    protected void handleKeyDel() {
+        if (mCommentId != mBean.getId()) {
+            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
+                if (mInputDoubleEmpty) {
+                    mCommentId = mBean.getId();
+                    mCommentAuthorId = 0;
+                    mDelegation.setCommentHint(getString(R.string.pub_comment_hint));
+                    mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.pub_comment_hint));
+                } else {
+                    mInputDoubleEmpty = true;
+                }
+            } else {
+                mInputDoubleEmpty = false;
+            }
+        }
+    }
+
     protected String getExtraString(Object object) {
         return object == null ? "" : object.toString();
     }
 
     protected int getExtraInt(Object object) {
         return object == null ? 0 : Double.valueOf(object.toString()).intValue();
+    }
+
+    protected void showDialog(String message) {
+        if (mProgressDialog == null)
+            mProgressDialog = DialogHelper.getProgressDialog(this);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.show();
+    }
+
+    protected void hideDialog() {
+        if (mProgressDialog == null)
+            return;
+        mProgressDialog.dismiss();
     }
 
     protected abstract DetailFragment getDetailFragment();

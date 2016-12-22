@@ -8,7 +8,6 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.widget.FlowLayout;
@@ -21,7 +20,7 @@ import butterknife.Bind;
  * on 2016/12/15.
  */
 
-public class QuestionDetailFragment extends DetailFragment implements OnCommentClickListener{
+public class QuestionDetailFragment extends DetailFragment implements OnCommentClickListener {
     @Bind(R.id.tv_title)
     TextView mTextTitle;
     @Bind(R.id.tv_author)
@@ -34,9 +33,6 @@ public class QuestionDetailFragment extends DetailFragment implements OnCommentC
     TextView mTextCommentCount;
     @Bind(R.id.fl_lab)
     FlowLayout mFlowLayout;
-    @Bind(R.id.cv_comment)
-    CommentView mCommentView;
-
     private long mCommentId;
     private long mCommentAuthorId;
 
@@ -68,12 +64,6 @@ public class QuestionDetailFragment extends DetailFragment implements OnCommentC
                 tvTag.setText(tag);
             mFlowLayout.addView(tvTag);
         }
-        mCommentView.setTitle(String.format("%s (%d)", getResources().getString(R.string.answer_hint), bean.getStatistics().getComment()));
-        mCommentView.init(bean.getId(),
-                OSChinaApi.COMMENT_QUESTION,
-                OSChinaApi.COMMENT_NEW_ORDER,
-                bean.getStatistics().getComment(),
-                getImgLoader(), this);
     }
 
     @Override
