@@ -15,6 +15,7 @@ public final class Setting {
     public static final String KEY_SEVER_URL = "serverUrl";
     public static final String KEY_VERSION_CODE = "versionCode";
     public static final String KEY_APP_UNIQUE_ID = "appUniqueID";
+    public static final String KEY_SYSTEM_CONFIG_TIMESTAMP = "systemConfigTimeStamp";
 
     public static SharedPreferences getSettingPreferences(Context context) {
         return context.getSharedPreferences(Setting.class.getName(), Context.MODE_PRIVATE);
@@ -52,9 +53,26 @@ public final class Setting {
             } else {
                 url = "https://www.oschina.net/";
             }
-            SharedPreferences.Editor editor = sp.edit().putString(KEY_SEVER_URL, url);
-            SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+            updateServerUrl(context, url);
         }
         return url;
+    }
+
+    public static void updateServerUrl(Context context, String url) {
+        SharedPreferences sp = getSettingPreferences(context);
+        SharedPreferences.Editor editor = sp.edit().putString(KEY_SEVER_URL, url);
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+    }
+
+    public static void updateSystemConfigTimeStamp(Context context) {
+        SharedPreferences sp = getSettingPreferences(context);
+        SharedPreferences.Editor editor = sp.edit().putLong(KEY_SYSTEM_CONFIG_TIMESTAMP,
+                System.currentTimeMillis());
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+    }
+
+    public static long getSystemConfigTimeStamp(Context context) {
+        SharedPreferences sp = getSettingPreferences(context);
+        return sp.getLong(KEY_SYSTEM_CONFIG_TIMESTAMP, 0);
     }
 }
