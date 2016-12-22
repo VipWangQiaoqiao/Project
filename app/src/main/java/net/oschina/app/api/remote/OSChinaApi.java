@@ -865,6 +865,28 @@ public class OSChinaApi {
         post("action/apiv2/comment_push", params, handler);
     }
 
+    /**
+     * 发布评论
+     */
+    public static void pubComment(long sourceId,
+                                  int type,
+                                  String content,
+                                  long referId,
+                                  long replyId,
+                                  long reAuthorId,
+                                  TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("type", type);
+        params.put("content", content);
+        if (referId > 0)
+            params.put("referId", referId);
+        if (replyId > 0)
+            params.put("replyId", replyId);
+        if (reAuthorId > 0)
+            params.put("reAuthorId", reAuthorId);
+        post("action/apiv2/comment_push", params, handler);
+    }
 
     /**
      * 发表资讯评论

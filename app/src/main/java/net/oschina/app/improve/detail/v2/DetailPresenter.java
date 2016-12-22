@@ -94,11 +94,12 @@ public class DetailPresenter implements DetailContract.Presenter {
     }
 
     @Override
-    public void addComment(final String content, long sid, int type, long referId, long replyId, long oid) {
-        OSChinaApi.publishComment(sid, referId, replyId, oid, type, content, new TextHttpResponseHandler() {
+    public void addComment(long sourceId, int type, String content, long referId, long replyId, long reAuthorId) {
+        OSChinaApi.pubComment(sourceId, type, content, referId, replyId, reAuthorId, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 mView.showNetworkError(R.string.tip_network_error);
+                mEmptyView.showCommentError("");
             }
 
             @Override
@@ -112,13 +113,17 @@ public class DetailPresenter implements DetailContract.Presenter {
                         Comment respComment = resultBean.getResult();
                         if (respComment != null) {
                             mView.showCommentSuccess(respComment);
+                            mEmptyView.showCommentSuccess(respComment);
                         }
                     } else {
                         mView.showCommentError(resultBean.getMessage());
+                        mEmptyView.showCommentError(resultBean.getMessage());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseString, e);
+                    mView.showCommentError("评论失败");
+                    mEmptyView.showCommentError("评论失败");
                 }
             }
         });
