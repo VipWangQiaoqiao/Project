@@ -5,9 +5,12 @@ import android.view.View;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
 import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.main.discover.ShakePresentActivity;
+import net.oschina.app.improve.search.activities.NearbyActivity;
 import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.util.UIHelper;
 
@@ -52,22 +55,22 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
         return R.string.main_tab_name_explore;
     }
 
-    @OnClick({R.id.rl_soft, R.id.rl_scan, R.id.rl_shake, R.id.layout_events})
+    @OnClick({R.id.rl_soft, R.id.rl_scan, R.id.rl_shake, R.id.layout_events, R.id.layout_nearby})
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.rl_soft:
+            case R.id.rl_soft: //开源软件
                 UIHelper.showSimpleBack(getActivity(),
                         SimpleBackPage.OPEN_SOURCE_SOFTWARE);
                 break;
-            case R.id.rl_scan:
+            case R.id.rl_scan: //扫一扫
                 UIHelper.showScanActivity(getActivity());
                 break;
-            case R.id.rl_shake:
+            case R.id.rl_shake: //摇一摇
                 showShake();
                 break;
-            case R.id.layout_events:
+            case R.id.layout_events: //线下活动
                 SubTab tab = new SubTab();
 
                 SubTab.Banner banner = tab.new Banner();
@@ -88,6 +91,14 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
                 bundle.putSerializable("sub_tab", tab);
 
                 UIHelper.showSimpleBack(getContext(), SimpleBackPage.OUTLINE_EVENTS, bundle);
+                break;
+            case R.id.layout_nearby:
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(getContext());
+                    break;
+                }
+                NearbyActivity.show(getContext());
+                break;
             default:
                 break;
         }
