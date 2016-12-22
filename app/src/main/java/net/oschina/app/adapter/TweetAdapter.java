@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
@@ -34,9 +35,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.kjframe.Core;
-import org.kymjs.kjframe.utils.DensityUtils;
+import net.qiujuer.genius.ui.Ui;
 
 import java.util.List;
 
@@ -92,7 +91,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
                 R.mipmap.audio3);
         recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
-                DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
+                (int) Ui.dipToPx(cxt.getResources(), 20f), (int) Ui.dipToPx(cxt.getResources(), 20f));
     }
 
     @Override
@@ -154,8 +153,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             vh.image.setVisibility(View.GONE);
         } else {
             vh.image.setVisibility(View.VISIBLE);
-            new Core.Builder().view(vh.image).size(300, 300).url(tweet.getImgSmall() + "?300X300")
-                    .loadBitmapRes(R.drawable.pic_bg).doTask();
+            Glide.with(context).load(tweet.getImgSmall() + "?300X300")
+                    .placeholder(R.drawable.pic_bg)
+                    .into(vh.image);
             vh.image.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -202,9 +202,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         } else {
             //vh.tvLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
             List<User> likeUser = tweet.getLikeUser();
-            if (likeUser!=null)
-            //tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
-            OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
+            if (likeUser != null)
+                //tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
+                OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
 //            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .day_colorPrimary));
             vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_actived);

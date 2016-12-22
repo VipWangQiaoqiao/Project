@@ -32,8 +32,6 @@ import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.UIHelper;
 
-import org.kymjs.kjframe.http.HttpConfig;
-
 import java.io.File;
 import java.util.List;
 
@@ -158,9 +156,6 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
             File externalCacheDir = MethodsCompat
                     .getExternalCacheDir(getActivity());
             fileSize += FileUtil.getDirSize(externalCacheDir);
-            fileSize += FileUtil.getDirSize(new File(
-                    org.kymjs.kjframe.utils.FileUtils.getSDCardPath()
-                            + File.separator + HttpConfig.CACHEPATH));
         }
         if (fileSize > 0)
             cacheSize = FileUtil.formatFileSize(fileSize);

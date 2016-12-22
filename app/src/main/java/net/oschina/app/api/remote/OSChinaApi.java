@@ -18,8 +18,6 @@ import net.oschina.app.improve.detail.sign.StringParams;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 
-import org.kymjs.kjframe.utils.KJLoger;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -574,7 +572,6 @@ public class OSChinaApi {
         params.put("type", "diary");
         params.put("pageIndex", 0);
         params.put("pageSize", "20");
-        KJLoger.debug(teamid + "==getDiaryComment接口=" + diaryid);
         ApiHttpClient.get("action/api/team_reply_list_by_type", params, handler);
     }
 
