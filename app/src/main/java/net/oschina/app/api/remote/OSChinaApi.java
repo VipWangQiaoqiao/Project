@@ -842,26 +842,26 @@ public class OSChinaApi {
     /**
      * 发表评论
      *
-     * @param sid     文章id
-     * @param referId 引用的评论的id
+     * @param sourceId     文章id
+     * @param referId 引用的评论的id，问答评论详情
      * @param replyId 回复的评论的id
-     * @param oid     引用、回复的发布者id
+     * @param reAuthorId     引用、回复的发布者id
      * @param type    文章类型 1:软件推荐, 2:问答帖子, 3:博客, 4:翻译文章, 5:活动, 6:资讯
      * @param content 内容
      * @param handler 你懂得
      */
-    public static void publishComment(long sid, long referId, long replyId, long oid,
+    public static void publishComment(long sourceId, long referId, long replyId, long reAuthorId,
                                       int type, String content, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        params.put("sourceId", sid);
+        params.put("sourceId", sourceId);
         params.put("type", type);
         params.put("content", content);
         if (referId > 0)
             params.put("referId", referId);
         if (replyId > 0)
             params.put("replyId", replyId);
-        if (oid > 0)
-            params.put("reAuthorId", oid);
+        if (reAuthorId > 0)
+            params.put("reAuthorId", reAuthorId);
         post("action/apiv2/comment_push", params, handler);
     }
 

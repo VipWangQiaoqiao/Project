@@ -80,21 +80,6 @@ public abstract class DetailActivity extends BaseBackActivity implements
         if (!mPresenter.isHideCommentBar()) {
             mDelegation = CommentBar.delegation(this, mLayComment);
             mDelegation.setFavDrawable(mBean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
-        }
-
-        mPresenter.getDetail();
-    }
-
-    @Override
-    public void hideEmptyLayout() {
-        mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        if (mCommentCountView != null) {
-            mCommentCountView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CommentsActivity.show(DetailActivity.this, mBean.getId(), OSChinaApi.COMMENT_NEWS, OSChinaApi.COMMENT_NEW_ORDER);
-                }
-            });
 
             mDelegation.setFavListener(new View.OnClickListener() {
                 @Override
@@ -127,10 +112,26 @@ public abstract class DetailActivity extends BaseBackActivity implements
                             mBean.getType(),
                             mDelegation.getBottomSheet().getCommentText(),
                             0,
-                            0,
-                            0);
+                            mCommentId,
+                            mCommentAuthorId);
                 }
             });
+        }
+        mPresenter.getDetail();
+    }
+
+    @Override
+    public void hideEmptyLayout() {
+        mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+        if (mCommentCountView != null) {
+            mCommentCountView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommentsActivity.show(DetailActivity.this, mBean.getId(), mBean.getType(), OSChinaApi.COMMENT_NEW_ORDER);
+                }
+            });
+
+
         }
     }
 
@@ -239,7 +240,10 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
     @Override
     public void onClick(View view, Comment comment) {
-
+        mCommentId = comment.getId();
+        mCommentAuthorId = comment.getAuthor().getId();
+        mDelegation.getCommentText().setHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
     }
 
     protected void handleKeyDel() {

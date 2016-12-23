@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.v2.DetailFragment;
@@ -93,5 +94,10 @@ public class SoftwareDetailFragment extends DetailFragment {
             mTextSystem.setText(extras.get("softwareSupportOS").toString());
             mTextLanguage.setText(extras.get("softwareLanguage").toString());
         }
+    }
+
+    @Override
+    protected int getCommentOrder() {
+        return OSChinaApi.COMMENT_HOT_ORDER;
     }
 }

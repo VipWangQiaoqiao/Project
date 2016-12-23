@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.News;
@@ -24,7 +23,7 @@ import net.oschina.app.util.UIHelper;
  * on 2016/11/30.
  */
 
-public class DetailFragment extends BaseFragment implements
+public abstract class DetailFragment extends BaseFragment implements
         DetailContract.View,
         BaseRecyclerAdapter.OnItemClickListener,
         View.OnClickListener {
@@ -34,10 +33,6 @@ public class DetailFragment extends BaseFragment implements
     protected AboutAdapter mAdapter;
     protected SubBean mBean;
     protected CommentView mCommentView;
-
-    public static DetailFragment newInstance() {
-        return new DetailFragment();
-    }
 
     @Override
     protected int getLayoutId() {
@@ -118,7 +113,7 @@ public class DetailFragment extends BaseFragment implements
         mCommentView.setTitle(String.format("%s (%d)", getResources().getString(R.string.answer_hint), bean.getStatistics().getComment()));
         mCommentView.init(bean.getId(),
                 bean.getType(),
-                OSChinaApi.COMMENT_NEW_ORDER,
+                getCommentOrder(),
                 bean.getStatistics().getComment(),
                 getImgLoader(), (OnCommentClickListener) mContext);
     }
@@ -152,6 +147,16 @@ public class DetailFragment extends BaseFragment implements
 
     }
 
+    @Override
+    public void showAddRelationSuccess(boolean isRelation, int strId) {
+
+    }
+
+    @Override
+    public void showAddRelationError() {
+        SimplexToast.show(mContext, "关注失败");
+    }
+
     protected String getExtraString(Object object) {
         return object == null ? "" : object.toString();
     }
@@ -159,4 +164,6 @@ public class DetailFragment extends BaseFragment implements
     protected int getExtraInt(Object object) {
         return object == null ? 0 : Double.valueOf(object.toString()).intValue();
     }
+
+    protected abstract int getCommentOrder();
 }

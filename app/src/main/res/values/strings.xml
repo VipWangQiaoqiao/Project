@@ -328,5 +328,6 @@
     <string name="title_updating_user_avatar">正在上传头像…</string>
     <string name="search_man">找人</string>
 
-
+    <string name="add_relation_success">关注成功</string>
+    <string name="cancel_relation_success">关注失败</string>
 </resources>

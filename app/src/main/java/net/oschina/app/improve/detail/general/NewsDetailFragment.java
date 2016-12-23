@@ -3,6 +3,7 @@ package net.oschina.app.improve.detail.general;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 
@@ -39,5 +40,10 @@ public class NewsDetailFragment extends DetailFragment {
         mTextTitle.setText(bean.getTitle());
         mTextComCount.setText(String.valueOf(bean.getStatistics().getComment()));
         mTextViewCount.setText(String.valueOf(bean.getStatistics().getView()));
+    }
+
+    @Override
+    protected int getCommentOrder() {
+        return OSChinaApi.COMMENT_HOT_ORDER;
     }
 }
