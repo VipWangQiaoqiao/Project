@@ -5,6 +5,7 @@
     android:id="@+id/lay_nsv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#f9f9f9"
     android:scrollbars="vertical">
 
     <LinearLayout

@@ -10,6 +10,7 @@ public class Author implements Serializable {
     protected long id;
     protected String name;
     protected String portrait;
+    protected int relation;
 
     public long getId() {
         return id;
@@ -33,5 +34,13 @@ public class Author implements Serializable {
 
     public void setPortrait(String portrait) {
         this.portrait = portrait;
+    }
+
+    public int getRelation() {
+        return relation;
+    }
+
+    public void setRelation(int relation) {
+        this.relation = relation;
     }
 }

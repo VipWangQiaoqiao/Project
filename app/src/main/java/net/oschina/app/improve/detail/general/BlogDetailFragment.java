@@ -8,6 +8,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.StringUtils;
@@ -83,7 +84,8 @@ public class BlogDetailFragment extends DetailFragment {
             mRoot.findViewById(R.id.line1).setVisibility(View.GONE);
             mTextAbstract.setVisibility(View.GONE);
         }
-        mBtnRelation.setText(true ? "已关注" : "关注");
+        mBtnRelation.setText(bean.getAuthor().getRelation() < UserRelation.RELETION_ONLY_HER
+                ? "已关注" : "关注");
     }
 
     @Override

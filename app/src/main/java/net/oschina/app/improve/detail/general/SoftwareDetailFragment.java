@@ -45,8 +45,7 @@ public class SoftwareDetailFragment extends DetailFragment {
     TextView mTextCommentCount;
 
     public static SoftwareDetailFragment newInstance() {
-        SoftwareDetailFragment fragment = new SoftwareDetailFragment();
-        return fragment;
+        return new SoftwareDetailFragment();
     }
 
     @Override
@@ -84,7 +83,7 @@ public class SoftwareDetailFragment extends DetailFragment {
         mTextName.setText(bean.getTitle());
         mImageRecommend.setVisibility(bean.isRecommend() ? View.VISIBLE : View.INVISIBLE);
         List<SubBean.Image> images = bean.getImages();
-        if (images == null || images.size() == 0)
+        if (images != null && images.size() != 0)
             getImgLoader().load(images.get(0).getHref()).asBitmap().into(mImageSoftware);
         mTextAuthor.setText(bean.getAuthor().getName());
         Map<String, Object> extras = bean.getExtra();

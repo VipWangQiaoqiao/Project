@@ -3,16 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f9f9f9"
     android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/lay_nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/lay_option"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:scrollbars="vertical"
         tools:ignore="RtlHardcoded">
 
@@ -182,16 +179,15 @@
                     android:layout_height="match_parent" />
             </FrameLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_about"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
+
+            <net.oschina.app.improve.widget.DetailAboutView
+                android:id="@+id/lay_detail_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
-            <net.oschina.app.improve.comment.CommentView
-                android:id="@+id/cv_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/ques_detail_bg_color" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>
