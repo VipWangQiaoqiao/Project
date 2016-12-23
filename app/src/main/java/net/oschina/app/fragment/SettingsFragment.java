@@ -26,6 +26,7 @@ import net.oschina.app.improve.main.FeedBackActivity;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.SystemConfigView;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton.OnToggleChanged;
 import net.oschina.app.util.FileUtil;
@@ -107,6 +108,8 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
         //  if (!AppContext.getInstance().isLogin()) {
         //  mTvExit.setText("退出");
         //    }
+
+        SystemConfigView.show((ViewGroup) view.findViewById(R.id.lay_linear));
     }
 
     @Override

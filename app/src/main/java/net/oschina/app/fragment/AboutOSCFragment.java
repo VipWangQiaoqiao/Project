@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.Setting;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -75,6 +76,7 @@ public class AboutOSCFragment extends BaseFragment {
                 break;
             case R.id.img_portrait:
                 Boss.verifyApp(getContext());
+                Setting.updateSystemConfigTimeStamp(getContext());
                 break;
             default:
                 break;
