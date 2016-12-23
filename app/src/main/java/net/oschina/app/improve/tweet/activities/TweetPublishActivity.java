@@ -102,8 +102,10 @@ public class TweetPublishActivity extends BaseBackActivity {
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+
+        if (bundle == null) bundle = new Bundle();
         // Read other data
-        readFastShareByOther(bundle);
+        readFastShareByOther(bundle, intent);
 
         TweetPublishFragment fragment = new TweetPublishFragment();
         // init the args bounds
@@ -118,13 +120,12 @@ public class TweetPublishActivity extends BaseBackActivity {
     /**
      * 读取快速分享到当前界面的内容
      *
-     * @param bundle 需要写入源
+     * @param intent 需要写入源
      */
-    private void readFastShareByOther(Bundle bundle) {
+    private void readFastShareByOther(Bundle bundle, Intent intent) {
         // Check
-        if (bundle == null || getIntent() == null)
+        if (intent == null)
             return;
-        Intent intent = getIntent();
         String type = intent.getType();
         if (TextUtils.isEmpty(type))
             return;
@@ -133,7 +134,7 @@ public class TweetPublishActivity extends BaseBackActivity {
         if ("text/plain".equals(type)) {
             String text = intent.getStringExtra(Intent.EXTRA_TEXT);
             bundle.putString("defaultContent", text);
-        } else if ("image/*".equals(type)) {
+        } else if (type.startsWith("image/")) {
             ArrayList<String> uris = new ArrayList<>();
             Object obj = intent.getExtras().get(Intent.EXTRA_STREAM);
             if (obj instanceof Uri) {
@@ -177,27 +178,35 @@ public class TweetPublishActivity extends BaseBackActivity {
     private String decodePath(Uri uri) {
         String decodePath = null;
         String uriPath = uri.toString();
-        int id = Integer.parseInt(uriPath.substring(uriPath.lastIndexOf("/") + 1, uriPath.length()));
 
-        Uri tempUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {MediaStore.Images.Media.DATA};
-        String selection = MediaStore.Images.Media._ID + "=?";
-        String[] selectionArgs = {id + ""};
+        if (uriPath != null && uriPath.startsWith("content://")) {
 
-        Cursor cursor = getContentResolver().query(tempUri, projection, selection, selectionArgs, null);
-        try {
-            while (cursor != null && cursor.moveToNext()) {
-                String temp = cursor.getString(0);
-                File file = new File(temp);
-                if (file.exists()) {
-                    decodePath = temp;
+            int id = Integer.parseInt(uriPath.substring(uriPath.lastIndexOf("/") + 1, uriPath.length()));
+
+            Uri tempUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            String[] projection = {MediaStore.Images.Media.DATA};
+            String selection = MediaStore.Images.Media._ID + "=?";
+            String[] selectionArgs = {id + ""};
+
+            Cursor cursor = getContentResolver().query(tempUri, projection, selection, selectionArgs, null);
+            try {
+                while (cursor != null && cursor.moveToNext()) {
+                    String temp = cursor.getString(0);
+                    File file = new File(temp);
+                    if (file.exists()) {
+                        decodePath = temp;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (cursor != null && !cursor.isClosed()) {
+                    cursor.close();
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null && !cursor.isClosed())
-                cursor.close();
+
+        } else {
+            return uriPath;
         }
         return decodePath;
     }
@@ -207,6 +216,12 @@ public class TweetPublishActivity extends BaseBackActivity {
         super.initData();
         // before the fragment show
         registerPublishStateReceiver();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        //暂不处理已在当前界面下的分享
     }
 
     @Override
