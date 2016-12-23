@@ -3,8 +3,6 @@ package net.oschina.app.improve.search.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -12,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -297,10 +293,10 @@ public class NearbyActivity extends BaseActivity implements RadarSearchListener,
                             "\"portrait\":\"%s\"," +
                             "\"gender\":\"%s\"," +
                             "\"more\":{" +
-                            "\"company\":\"%s\"," +
-                            "\"position\":\"%s\"" +
+                                "\"company\":\"%s\"," +
+                                "\"position\":\"%s\"" +
                             "}" +
-                            "}"
+                    "}"
                     , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company, position);
             comments = URLEncoder.encode(comments, "UTF-8");
             TLog.i("oschina", comments);
