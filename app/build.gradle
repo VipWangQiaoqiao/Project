@@ -121,9 +121,9 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.google.code.gson:gson:2.8.0'
-    compile 'net.qiujuer.genius:graphics:latest.integration'
-    compile 'net.qiujuer.genius:res:latest.integration'
-    compile 'net.qiujuer.genius:ui:latest.integration'
+    compile 'net.qiujuer.genius:graphics:2.0.0-beta8'
+    compile 'net.qiujuer.genius:res:2.0.0-beta8'
+    compile 'net.qiujuer.genius:ui:2.0.0-beta8'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'net.oschina.common:common:0.1.0'
 
