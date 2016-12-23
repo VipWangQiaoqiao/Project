@@ -36,6 +36,10 @@ public interface DetailContract {
         void showCommentSuccess(Comment comment);
 
         void showCommentError(String message);
+
+        void showAddRelationSuccess(boolean isRelation, int strId);
+
+        void showAddRelationError();
     }
 
     interface Presenter extends BasePresenter {
@@ -51,5 +55,7 @@ public interface DetailContract {
                 long replyId,
                 long reAuthorId
         );//添加评论
+
+        void addUserRelation(long authorId);
     }
 }

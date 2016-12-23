@@ -14,7 +14,6 @@ import net.oschina.app.improve.detail.v2.DetailFragment;
  */
 
 public class QuestionDetailActivity extends DetailActivity {
-
     public static void show(Context context, SubBean bean) {
         Intent intent = new Intent(context, QuestionDetailActivity.class);
         Bundle bundle = new Bundle();

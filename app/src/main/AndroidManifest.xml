@@ -524,6 +524,10 @@
 
         <activity android:name=".improve.main.BrowserActivity"/>
 
+        <activity
+            android:name=".improve.search.activities.NearbyActivity"
+            android:label="附近的人"/>
+
         <service
             android:name=".improve.main.update.DownloadService"
             android:exported="false"/>
