@@ -125,7 +125,7 @@ dependencies {
     compile 'net.qiujuer.genius:res:2.0.0-beta8'
     compile 'net.qiujuer.genius:ui:2.0.0-beta8'
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile 'net.oschina.common:common:0.0.9'
+    compile 'net.oschina.common:common:0.1.0'
 
     if (propertyHaveDebugCompile) {
         compile propertyDebugCompile

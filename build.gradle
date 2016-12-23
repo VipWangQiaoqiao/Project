@@ -12,7 +12,7 @@ allprojects {
     repositories {
         jcenter()
         maven {
-            url 'https://dl.bintray.com/apposchina/maven/'
+            url 'https://dl.bintray.com/oschinaapp/maven/'
         }
     }
 }
@@ -25,5 +25,5 @@ ext {
     targetSdkVersion = 24
     versionCode = 271
     versionName = "v2.7.1(1612211352)"
-    supportVersion = '25.0.1'
+    supportVersion = '25.1.0'
 }

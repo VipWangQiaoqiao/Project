@@ -4,6 +4,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.detail.v2.DetailFragment;
@@ -75,5 +76,10 @@ public class EventDetailFragment extends DetailFragment {
             mTextStartDate.setText(getExtraString(extra.get("eventStartDate")));
             mTextCostDesc.setText(getExtraString(extra.get("eventCostDesc")));
         }
+    }
+
+    @Override
+    protected int getCommentOrder() {
+        return OSChinaApi.COMMENT_HOT_ORDER;
     }
 }
