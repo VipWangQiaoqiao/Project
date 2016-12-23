@@ -18,10 +18,10 @@
         android:background="@drawable/item_selector">
 
         <ImageView
-            style="@style/option_item_img"
-            android:layout_marginRight="@dimen/space_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:contentDescription="@null"
-            android:scaleType="fitCenter"
             android:src="@mipmap/ic_discover_softwares"
             tools:ignore="RtlHardcoded" />
 
@@ -53,9 +53,10 @@
         android:background="@drawable/item_selector">
 
         <ImageView
-            style="@style/option_item_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:contentDescription="@null"
-            android:scaleType="fitCenter"
             android:src="@mipmap/ic_discover_scan" />
 
         <TextView
@@ -90,9 +91,10 @@
         android:background="@drawable/item_selector">
 
         <ImageView
-            style="@style/option_item_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:contentDescription="@null"
-            android:scaleType="fitCenter"
             android:src="@mipmap/ic_discover_shake" />
 
         <TextView
@@ -124,10 +126,11 @@
         android:background="@drawable/item_selector">
 
         <ImageView
-            style="@style/option_item_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="@dimen/space_10"
             android:contentDescription="@null"
-            android:scaleType="centerCrop"
             android:src="@mipmap/ic_discover_nearby" />
 
         <TextView
@@ -158,10 +161,11 @@
         android:background="@drawable/item_selector">
 
         <ImageView
-            style="@style/option_item_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="@dimen/space_10"
             android:contentDescription="@null"
-            android:scaleType="fitCenter"
             android:src="@mipmap/ic_my_event" />
 
         <TextView
