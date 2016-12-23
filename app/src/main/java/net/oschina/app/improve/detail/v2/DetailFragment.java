@@ -1,22 +1,16 @@
 package net.oschina.app.improve.detail.v2;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseFragment;
-import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
-import net.oschina.app.improve.detail.general.AboutAdapter;
+import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.improve.widget.SimplexToast;
-import net.oschina.app.util.UIHelper;
 
 /**
  * Created by haibin
@@ -25,14 +19,12 @@ import net.oschina.app.util.UIHelper;
 
 public abstract class DetailFragment extends BaseFragment implements
         DetailContract.View,
-        BaseRecyclerAdapter.OnItemClickListener,
         View.OnClickListener {
     protected DetailContract.Presenter mPresenter;
     protected OWebView mWebView;
-    protected RecyclerView mRecyclerView;
-    protected AboutAdapter mAdapter;
     protected SubBean mBean;
     protected CommentView mCommentView;
+    protected DetailAboutView mDetailAboutView;
 
     @Override
     protected int getLayoutId() {
@@ -43,55 +35,14 @@ public abstract class DetailFragment extends BaseFragment implements
     protected void initWidget(View root) {
         super.initWidget(root);
         mWebView = (OWebView) mRoot.findViewById(R.id.webView);
-        mRecyclerView = (RecyclerView) mRoot.findViewById(R.id.rv_about);
-        if (mRecyclerView == null)
-            return;
-        mAdapter = new AboutAdapter(getActivity());
-        mAdapter.setOnItemClickListener(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mAdapter);
         mCommentView = (CommentView) mRoot.findViewById(R.id.cv_comment);
+        mDetailAboutView = (DetailAboutView) mRoot.findViewById(R.id.lay_detail_about);
+
     }
 
     @Override
     public void onClick(View v) {
 
-    }
-
-    @Override
-    public void onItemClick(int position, long itemId) {
-        About about = mAdapter.getItem(position);
-        if (about == null)
-            return;
-        SubBean sub = new SubBean();
-        sub.setId(about.getId());
-        sub.setType(about.getType());
-        sub.setStatistics(new SubBean.Statistics());
-        sub.getStatistics().setComment(about.getCommentCount());
-        sub.getStatistics().setView(about.getViewCount());
-        switch (about.getType()) {
-            case News.TYPE_SOFTWARE:
-                net.oschina.app.improve.detail.general.SoftwareDetailActivity.show(mContext, sub);
-                break;
-            case News.TYPE_QUESTION:
-                net.oschina.app.improve.detail.general.QuestionDetailActivity.show(mContext, sub);
-                break;
-            case News.TYPE_BLOG:
-                net.oschina.app.improve.detail.general.BlogDetailActivity.show(mContext, sub);
-                break;
-            case News.TYPE_TRANSLATE:
-                net.oschina.app.improve.detail.general.NewsDetailActivity.show(mContext, sub);
-                break;
-            case News.TYPE_EVENT:
-                net.oschina.app.improve.detail.general.EventDetailActivity.show(mContext, sub);
-                break;
-            case News.TYPE_NEWS:
-                net.oschina.app.improve.detail.general.NewsDetailActivity.show(mContext, sub);
-                break;
-            default:
-                UIHelper.showUrlRedirect(mContext, about.getHref());
-                break;
-        }
     }
 
     @Override
@@ -105,9 +56,11 @@ public abstract class DetailFragment extends BaseFragment implements
         this.mBean = bean;
         if (mContext == null) return;
         mWebView.loadDetailDataAsync(bean.getBody(), (Runnable) mContext);
-        if (mAdapter == null)
-            return;
-        mAdapter.addAll(bean.getAbouts());
+
+        if (mDetailAboutView != null) {
+            mDetailAboutView.setAbout(bean.getAbouts(), bean.getType());
+        }
+
         if (mCommentView == null)
             return;
         mCommentView.setTitle(String.format("%s (%d)", getResources().getString(R.string.answer_hint), bean.getStatistics().getComment()));

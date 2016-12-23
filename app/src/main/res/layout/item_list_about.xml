@@ -56,5 +56,7 @@
             android:src="@mipmap/ic_arrow_right" />
     </LinearLayout>
 
-    <View style="@style/h_line" />
+    <View
+        android:layout_marginLeft="@dimen/lay_16"
+        style="@style/h_line" />
 </LinearLayout>
