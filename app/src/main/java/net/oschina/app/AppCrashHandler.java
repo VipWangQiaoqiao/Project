@@ -31,12 +31,11 @@ public class AppCrashHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        if (!handleException(ex) && mDefaultHandler != null) {
+        if (mDefaultHandler != null && (BuildConfig.DEBUG || (!handleException(ex)))) {
             mDefaultHandler.uncaughtException(thread, ex);
         } else {
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
-            //ex.printStackTrace();
         }
     }
 
@@ -46,20 +45,25 @@ public class AppCrashHandler implements Thread.UncaughtExceptionHandler {
         }
         ex.printStackTrace();
 
+
         new Thread() {
             @Override
             public void run() {
                 Looper.prepare();
-                Toast.makeText(mContext, "你把我搞死了；我只能默默重启！！", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "OSC异常；正准备重启！！", Toast.LENGTH_LONG).show();
                 Looper.loop();
             }
         }.start();
 
+        AppContext.getInstance().clearAppCache();
+
+
         try {
-            Thread.sleep(5000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
 
         return true;
     }

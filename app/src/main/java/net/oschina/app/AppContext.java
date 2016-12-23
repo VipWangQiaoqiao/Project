@@ -91,7 +91,6 @@ public class AppContext extends BaseApplication {
             if (_key.startsWith("temp"))
                 removeProperty(_key);
         }
-        //Core.getKJBitmap().cleanCache();
     }
 
     public static void setLoadImage(boolean flag) {
