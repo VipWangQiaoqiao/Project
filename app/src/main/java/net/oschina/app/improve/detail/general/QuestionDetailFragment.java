@@ -31,8 +31,6 @@ public class QuestionDetailFragment extends DetailFragment {
     TextView mTextCommentCount;
     @Bind(R.id.fl_lab)
     FlowLayout mFlowLayout;
-    private long mCommentId;
-    private long mCommentAuthorId;
 
     public static QuestionDetailFragment newInstance() {
         return new QuestionDetailFragment();
@@ -66,6 +64,6 @@ public class QuestionDetailFragment extends DetailFragment {
 
     @Override
     protected int getCommentOrder() {
-        return OSChinaApi.COMMENT_HOT_ORDER;
+        return OSChinaApi.COMMENT_NEW_ORDER;
     }
 }
