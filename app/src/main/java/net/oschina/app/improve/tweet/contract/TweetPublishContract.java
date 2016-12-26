@@ -43,5 +43,7 @@ public interface TweetPublishContract {
         void finish();
 
         Operator getOperator();
+
+        boolean onBackPressed();
     }
 }
