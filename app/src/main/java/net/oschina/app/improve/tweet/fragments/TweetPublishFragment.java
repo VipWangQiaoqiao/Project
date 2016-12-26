@@ -218,10 +218,26 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         mOperator.loadData();
     }
 
+    // 用于拦截后续的点击事件
+    private boolean mInterceptClick;
+    private Runnable mInterceptClickRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mInterceptClick = false;
+        }
+    };
+
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
             R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back, R.id.icon_send})
     @Override
     public void onClick(View v) {
+        // 用来解决快速点击多个按钮弹出多个界面的情况
+        if (mInterceptClick)
+            return;
+        mInterceptClick = true;
+        v.removeCallbacks(mInterceptClickRunnable);
+        v.postDelayed(mInterceptClickRunnable, 1000);
+
         try {
             switch (v.getId()) {
                 case R.id.iv_picture:
