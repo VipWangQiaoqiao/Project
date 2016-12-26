@@ -1,5 +1,7 @@
 package net.oschina.app.improve.user.bean;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -8,27 +10,37 @@ import java.io.Serializable;
  * desc:
  */
 
-public class UserFriends implements Serializable {
+public class UserFriends implements Serializable, Comparable<UserFriends> {
 
-    private UserFansOrFollows userFansOrFollows;
-    private int showVIewType;
+    private long id;
+    private String portrait;
+    private String name;
+    private int showViewType;
     private String showLabel;
-    private boolean isCheck;
+    private transient boolean isCheck;
 
-    public UserFansOrFollows getUserFansOrFollows() {
-        return userFansOrFollows;
+    public String getPortrait() {
+        return portrait;
     }
 
-    public void setUserFansOrFollows(UserFansOrFollows userFansOrFollows) {
-        this.userFansOrFollows = userFansOrFollows;
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
     }
 
-    public int getShowVIewType() {
-        return showVIewType;
+    public String getName() {
+        return name;
     }
 
-    public void setShowVIewType(int showVIewType) {
-        this.showVIewType = showVIewType;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getShowViewType() {
+        return showViewType;
+    }
+
+    public void setShowViewType(int showViewType) {
+        this.showViewType = showViewType;
     }
 
     public String getShowLabel() {
@@ -50,10 +62,21 @@ public class UserFriends implements Serializable {
     @Override
     public String toString() {
         return "UserFriends{" +
-                "userFansOrFollows=" + userFansOrFollows +
-                ", showVIewType=" + showVIewType +
-                ", showLabel=" + showLabel +
+                "portrait='" + portrait + '\'' +
+                ", name='" + name + '\'' +
+                ", showViewType=" + showViewType +
+                ", showLabel='" + showLabel + '\'' +
                 ", isCheck=" + isCheck +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NonNull UserFriends o) {
+        String showLabel = o.getShowLabel();
+        String compLabel = showLabel == null ? "" : showLabel;
+
+        String tempCompLabel = this.showLabel == null ? "" : this.showLabel;
+
+        return tempCompLabel.compareTo(compLabel);
     }
 }
