@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.general;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -8,6 +9,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.detail.v2.DetailFragment;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.widget.CircleImageView;
 
 import java.util.HashMap;
@@ -61,13 +63,19 @@ public class EventDetailFragment extends DetailFragment {
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
         mTextTitle.setText(bean.getTitle());
-        Author author = bean.getAuthor();
+        final Author author = bean.getAuthor();
         if (author != null) {
             mTextAuthor.setText(author.getName());
             getImgLoader()
                     .load(author.getPortrait())
                     .asBitmap()
                     .into(mImageAuthor);
+            mImageAuthor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OtherUserHomeActivity.show(mContext,author);
+                }
+            });
         }
         HashMap<String, Object> extra = bean.getExtra();
         if (extra != null) {

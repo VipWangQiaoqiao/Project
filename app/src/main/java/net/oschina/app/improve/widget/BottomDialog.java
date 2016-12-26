@@ -1,22 +1,19 @@
 package net.oschina.app.improve.widget;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
 /**
- * Created by thanatosx on 2016/12/23.
+ * Created by thanatosx
+ * on 2016/12/23.
  */
 
 public class BottomDialog extends BottomSheetDialog {

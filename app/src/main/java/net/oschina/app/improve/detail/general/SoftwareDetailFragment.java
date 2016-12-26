@@ -7,8 +7,10 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.v2.DetailFragment;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.util.UIHelper;
 
 import java.util.List;
@@ -53,7 +55,8 @@ public class SoftwareDetailFragment extends DetailFragment {
         return R.layout.fragment_software_detail_v2;
     }
 
-    @OnClick({R.id.ll_comment, R.id.ll_fav, R.id.ll_share, R.id.tv_home, R.id.tv_document})
+    @OnClick({R.id.ll_comment, R.id.ll_fav, R.id.tv_software_author_name,
+            R.id.ll_share, R.id.tv_home, R.id.tv_document})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -71,6 +74,11 @@ public class SoftwareDetailFragment extends DetailFragment {
                 Map<String, Object> extras1 = mBean.getExtra();
                 if (extras1 != null)
                     UIHelper.showUrlRedirect(mContext, getExtraString(extras1.get("softwareHomePage")));
+                break;
+            case R.id.tv_software_author_name:
+                Author author = mBean.getAuthor();
+                if (author == null) return;
+                OtherUserHomeActivity.show(getActivity(), author);
                 break;
         }
     }
