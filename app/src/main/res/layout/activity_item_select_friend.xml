@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_material"
+        android:padding="@dimen/space_8">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_portrait"
+            style="@style/user_face_image"
+            android:layout_marginRight="@dimen/space_8"
+            android:src="@mipmap/widget_dface"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dip"
+            tools:ignore="RtlHardcoded"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/iv_portrait"
+            android:textColor="?attr/textColor"
+            android:textSize="@dimen/text_size_16"
+            tools:ignore="RelativeOverlap,RtlHardcoded"/>
+
+        <CheckBox
+            android:id="@+id/cb_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            tools:ignore="RtlHardcoded"/>
+
+    </RelativeLayout>
+
+    <View
+        style="@style/h_line"
+        android:layout_marginLeft="@dimen/lay_16"
+        tools:ignore="RtlHardcoded"/>
+</LinearLayout>

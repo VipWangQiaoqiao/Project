@@ -12,7 +12,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="@dimen/lay_8">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -24,22 +25,27 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_search_view"
+                    android:background="@drawable/shape_search_user_friends"
                     app:iconifiedByDefault="false"
                     app:queryBackground="@color/transparent"
                     app:queryHint="@string/search_man"
+                    app:searchHintIcon="@mipmap/actionbar_search_icon"
                     app:searchIcon="@mipmap/actionbar_search_icon"/>
 
                 <Button
                     android:id="@+id/bt_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cancle"/>
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/lay_8"
+                    android:text="@string/cancle"
+                    android:textColor="@color/day_colorPrimary"
+                    android:textSize="@dimen/font_12"
+                    tools:ignore="RtlHardcoded"/>
 
             </LinearLayout>
 
 
-            <android.support.v7.widget.RecyclerView
+            <HorizontalScrollView
                 android:id="@+id/recycler_friends_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -63,23 +69,25 @@
 
             <TextView
                 android:id="@+id/tv_index_show"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_gravity="center"
-                android:background="@drawable/index_shape"
+                android:background="@drawable/index_float_text_background"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/font_16"
+                android:textSize="58sp"
+                android:typeface="monospace"
                 android:visibility="gone"
                 tools:text="索引"/>
 
             <net.oschina.app.widget.IndexView
                 android:id="@+id/lay_index_container"
-                android:layout_width="25dp"
+                android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:textSize="@dimen/font_12"
-                tools:ignore="RtlHardcoded"/>
+                android:paddingLeft="@dimen/lay_8"
+                android:textSize="@dimen/font_14"
+                tools:ignore="RtlHardcoded,RtlSymmetry"/>
 
         </FrameLayout>
     </LinearLayout>

@@ -2,23 +2,26 @@ package net.oschina.app.improve.user.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.user.bean.UserFriends;
-import net.oschina.app.widget.AvatarView;
+import net.oschina.app.util.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by fei
@@ -41,13 +44,13 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.e(TAG, "onCreateViewHolder: ---->" + viewType);
+        //Log.e(TAG, "onCreateViewHolder: ---->" + viewType);
         LayoutInflater inflater = this.mInflater;
         switch (viewType) {
             case INDEX_TYPE:
                 return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
             case USER_TYPE:
-                return new UserInfoViewHolder(inflater.inflate(R.layout.list_cell_select_friend, parent, false));
+                return new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
             default:
                 return null;
         }
@@ -69,12 +72,14 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return mItems.get(position).getShowViewType();
+        List<UserFriends> item = this.mItems;
+        return item.get(position).getShowViewType();
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        List<UserFriends> item = this.mItems;
+        return item.size();
     }
 
     public void addItems(List<UserFriends> items) {
@@ -99,8 +104,8 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
     static class UserInfoViewHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener {
 
-        @Bind(R.id.iv_avatar)
-        AvatarView mAvatarView;
+        @Bind(R.id.iv_portrait)
+        CircleImageView mCirclePortrait;
         @Bind(R.id.tv_name)
         TextView mtvName;
         @Bind(R.id.cb_check)
@@ -112,15 +117,18 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
         }
 
         void onBindView(UserFriends item, int position) {
-            mAvatarView.setAvatarUrl(item.getPortrait());
+            setImageFromNet(mCirclePortrait, item.getPortrait(), R.mipmap.widget_dface);
             mtvName.setText(item.getName());
-            mCheckBox.setChecked(false);
             mCheckBox.setOnCheckedChangeListener(this);
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+        }
+
+        private void setImageFromNet(ImageView imageView, String imageUrl, int placeholder) {
+            ImageLoader.loadImage(Glide.with(imageView.getContext()), imageView, imageUrl, placeholder);
         }
     }
 }
