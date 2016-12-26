@@ -437,6 +437,15 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
+    public boolean onBackPressed() {
+        if (mEmojiKeyboard.isShow()) {
+            mEmojiKeyboard.hideEmojiKeyBoard();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mOperator.onSaveInstanceState(outState);
@@ -448,4 +457,5 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         if (savedInstanceState != null)
             mOperator.onRestoreInstanceState(savedInstanceState);
     }
+
 }
