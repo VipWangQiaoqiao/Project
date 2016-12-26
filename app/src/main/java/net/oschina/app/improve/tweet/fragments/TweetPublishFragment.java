@@ -336,8 +336,8 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         Intent intent = new Intent(context, SelectFriendsActivity.class);
         startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
 
-        //        Intent intent = new Intent(context, UserSelectFriendsActivity.class);
-        //        startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
+        //Intent intent = new Intent(context, UserSelectFriendsActivity.class);
+        //startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
     }
 
     /**
