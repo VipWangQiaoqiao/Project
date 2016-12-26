@@ -37,7 +37,7 @@ public class QuestionDetailActivity extends DetailActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_question_detail, menu);
-        MenuItem item = menu.findItem(R.id.menu_scroll_comment);
+        MenuItem item = menu.findItem(R.id.menu_comment);
         if (item != null) {
             View action = item.getActionView();
             if (action != null) {
