@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
@@ -84,7 +86,12 @@ public abstract class DetailActivity extends BaseBackActivity implements
             mDelegation.setFavListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (!AccountHelper.isLogin()) {
+                        LoginActivity.show(DetailActivity.this);
+                        return;
+                    }
                     mPresenter.favReverse();
+
                 }
             });
 
@@ -152,9 +159,6 @@ public abstract class DetailActivity extends BaseBackActivity implements
         hideEmptyLayout();
     }
 
-    int getOptionsMenuId() {
-        return R.menu.menu_detail;
-    }
 
     @Override
     public void showFavReverseSuccess(boolean isFav, int strId) {
@@ -187,11 +191,8 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        int menuId = getOptionsMenuId();
-        if (menuId <= 0)
-            return false;
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(menuId, menu);
+        inflater.inflate(R.menu.menu_detail, menu);
         MenuItem item = menu.findItem(R.id.menu_scroll_comment);
         if (item != null) {
             View action = item.getActionView();

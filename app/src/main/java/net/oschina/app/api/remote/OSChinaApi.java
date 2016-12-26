@@ -842,13 +842,13 @@ public class OSChinaApi {
     /**
      * 发表评论
      *
-     * @param sourceId     文章id
-     * @param referId 引用的评论的id，问答评论详情
-     * @param replyId 回复的评论的id
-     * @param reAuthorId     引用、回复的发布者id
-     * @param type    文章类型 1:软件推荐, 2:问答帖子, 3:博客, 4:翻译文章, 5:活动, 6:资讯
-     * @param content 内容
-     * @param handler 你懂得
+     * @param sourceId   文章id
+     * @param referId    引用的评论的id，问答评论详情
+     * @param replyId    回复的评论的id
+     * @param reAuthorId 引用、回复的发布者id
+     * @param type       文章类型 1:软件推荐, 2:问答帖子, 3:博客, 4:翻译文章, 5:活动, 6:资讯
+     * @param content    内容
+     * @param handler    你懂得
      */
     public static void publishComment(long sourceId, long referId, long replyId, long reAuthorId,
                                       int type, String content, TextHttpResponseHandler handler) {
@@ -1619,5 +1619,30 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
         ApiHttpClient.post("action/apiv2/event_apply_info", params, handler);
+    }
+
+    /**
+     * 举报
+     *
+     * @param sourceId 举报的内容数据Id
+     * @param type     举报资源的类型
+     * @param href     举报的文章地址
+     * @param reason   举报原因：
+     * @param memo     其他原因的描述字段
+     * @param handler
+     */
+    public static void report(long sourceId,
+                              int type,
+                              String href,
+                              int reason,
+                              String memo,
+                              TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("type", type);
+        params.put("href", href);
+        params.put("reason", reason);
+        params.put("memo", memo);
+        ApiHttpClient.post("action/apiv2/report", params, handler);
     }
 }
