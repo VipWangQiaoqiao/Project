@@ -33,6 +33,7 @@
             <!-- 不要删除它 -->
             <View
                 android:id="@+id/header_view"
+                android:visibility="invisible"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:background="@drawable/bg_event_tool_bar"
@@ -97,7 +98,7 @@
         android:visibility="gone">
 
         <LinearLayout
-            android:id="@+id/ll_comment1"
+            android:id="@+id/lay_comment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

@@ -116,7 +116,11 @@ public class StringUtils {
      */
     public static String getDateString(String sdate) {
         if (TextUtils.isEmpty(sdate)) return "";
-        return YYYYMMDDHHMM.get().format(toDate(sdate));
+        try {
+            return YYYYMMDDHHMM.get().format(toDate(sdate));
+        } catch (Exception e) {
+            return sdate;
+        }
     }
 
 
@@ -587,9 +591,9 @@ public class StringUtils {
     public static String formatDistance(int distance) {
         return distance < 1000
                 ? String.format("%s00米以内",
-                    distance % 100 == 0 ? distance / 100 : (distance + 100) / 100)
+                distance % 100 == 0 ? distance / 100 : (distance + 100) / 100)
                 : String.format("%s公里以内",
-                    distance % 1000 == 0 ? distance / 1000 : (distance + 1000) / 1000);
+                distance % 1000 == 0 ? distance / 1000 : (distance + 1000) / 1000);
     }
 
 }

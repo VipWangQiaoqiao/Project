@@ -17,6 +17,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
+import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.detail.sign.SignUpActivity;
@@ -72,6 +73,17 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
         context.startActivity(intent);
     }
 
+    public static void show(Context context,long id) {
+        Intent intent = new Intent(context, EventDetailActivity.class);
+        Bundle bundle = new Bundle();
+        SubBean bean = new SubBean();
+        bean.setType(News.TYPE_EVENT);
+        bean.setId(id);
+        bundle.putSerializable("sub_bean", bean);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int getContentView() {
         return R.layout.activity_event_detail_v2;
@@ -91,11 +103,11 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
         });
     }
 
-    @OnClick({R.id.ll_comment, R.id.ll_sign})
+    @OnClick({R.id.lay_comment, R.id.ll_sign})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ll_comment:
+            case R.id.lay_comment:
                 CommentsActivity.show(this, mBean.getId(), mBean.getType(), 2);
                 break;
             case R.id.ll_sign:
@@ -116,6 +128,7 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
     @Override
     public void hideEmptyLayout() {
         super.hideEmptyLayout();
+        mHeaderView.setVisibility(View.VISIBLE);
         mHeaderView.getLayoutParams().height = 400;
         List<SubBean.Image> images = mBean.getImages();
         if (images == null || images.size() == 0)

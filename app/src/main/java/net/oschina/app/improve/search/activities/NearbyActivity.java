@@ -27,7 +27,7 @@ import com.baidu.mapapi.radar.RadarUploadInfo;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
-import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.NearbyResult;
 import net.oschina.app.improve.bean.User;
@@ -52,7 +52,7 @@ import butterknife.Bind;
  * Created by thanatosx on 2016/12/22.
  */
 
-public class NearbyActivity extends BaseActivity implements RadarSearchListener, BDLocationListener,
+public class NearbyActivity extends BaseBackActivity implements RadarSearchListener, BDLocationListener,
         RecyclerRefreshLayout.SuperRefreshLayoutListener, BaseRecyclerAdapter.OnItemClickListener, View.OnClickListener {
 
     @Bind(R.id.recycler)
@@ -133,6 +133,7 @@ public class NearbyActivity extends BaseActivity implements RadarSearchListener,
             mSelectorDialog = new BottomDialog(this);
             View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null);
             view.findViewById(R.id.tv_clear_opt).setOnClickListener(this);
+            view.findViewById(R.id.tv_cancel_opt).setOnClickListener(this);
             mSelectorDialog.setContentView(view);
         }
         return mSelectorDialog;
@@ -298,6 +299,7 @@ public class NearbyActivity extends BaseActivity implements RadarSearchListener,
                             "}" +
                     "}"
                     , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company, position);
+            comments = comments.replaceAll("[\\s\n]+", "");
             comments = URLEncoder.encode(comments, "UTF-8");
             TLog.i("oschina", comments);
             info.comments = comments;
@@ -341,6 +343,9 @@ public class NearbyActivity extends BaseActivity implements RadarSearchListener,
             case R.id.tv_clear_opt:
                 //清除用户信息
                 mManager.clearUserInfo();
+                break;
+            case R.id.tv_cancel_opt:
+                mSelectorDialog.dismiss();
                 break;
         }
     }

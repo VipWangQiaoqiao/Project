@@ -10,7 +10,7 @@ import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Banner;
-import net.oschina.app.util.UIHelper;
+import net.oschina.app.improve.detail.general.EventDetailActivity;
 
 /**
  * Created by huanghaibin
@@ -38,6 +38,6 @@ public class ViewEventBanner extends RelativeLayout implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        UIHelper.showBannerDetail(getContext(), banner);
+        EventDetailActivity.show(getContext(), banner.getId());
     }
 }

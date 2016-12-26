@@ -8,12 +8,25 @@
     <TextView
         android:id="@+id/tv_clear_opt"
         android:text="清除位置并退出"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="?attr/infoTextColor"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:background="@drawable/selector_item_list"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="?attr/dividerHorizontal"/>
+
+    <TextView
+        android:id="@+id/tv_cancel_opt"
+        android:text="取消"
+        android:textSize="16sp"
+        android:textColor="?attr/infoTextColor"
+        android:background="@drawable/selector_item_list"
+        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

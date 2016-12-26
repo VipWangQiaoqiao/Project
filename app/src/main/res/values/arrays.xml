@@ -28,6 +28,14 @@
         <item>非IT话题</item>
     </string-array>
 
+    <string-array name="report">
+        <item>其它原因</item>
+        <item>广告</item>
+        <item>色情</item>
+        <item>翻墙</item>
+        <item>非IT话题</item>
+    </string-array>
+
     <string-array name="gender">
         <item>男</item>
         <item>女</item>

@@ -67,10 +67,10 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
 
         Map<String, Object> extras = item.getExtra();
         if (extras != null) {
-            vh.tv_event_pub_date.setText(StringUtils.getDateString(extras.get("eventStartDate").toString()));
-            vh.tv_event_member.setText(Double.valueOf(extras.get("eventApplyCount").toString()).intValue() + "人参与");
+            vh.tv_event_pub_date.setText(StringUtils.getDateString(getExtraString(extras.get("eventStartDate"))));
+            vh.tv_event_member.setText(getExtraInt(extras.get("eventApplyCount")) + "人参与");
 
-            switch (Double.valueOf(extras.get("eventStatus").toString()).intValue()) {
+            switch (getExtraInt(extras.get("eventStatus"))) {
                 case Event.STATUS_END:
                     setText(vh.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);
                     setTextColor(vh.tv_event_title, UiCompat.getColor(resources, R.color.light_gray));
@@ -84,7 +84,7 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
                     break;
             }
             int typeStr = R.string.oscsite;
-            switch (Double.valueOf(extras.get("eventType").toString()).intValue()) {
+            switch (getExtraInt(extras.get("eventType"))) {
                 case Event.EVENT_TYPE_OSC:
                     typeStr = R.string.event_type_osc;
                     break;
@@ -133,5 +133,13 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
             tv_event_member = (TextView) itemView.findViewById(R.id.tv_event_member);
             iv_event = (ImageView) itemView.findViewById(R.id.iv_event);
         }
+    }
+
+    protected String getExtraString(Object object) {
+        return object == null ? "" : object.toString();
+    }
+
+    protected int getExtraInt(Object object) {
+        return object == null ? 0 : Double.valueOf(object.toString()).intValue();
     }
 }

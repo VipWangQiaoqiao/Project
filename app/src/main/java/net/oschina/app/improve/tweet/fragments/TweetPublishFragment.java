@@ -218,10 +218,19 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         mOperator.loadData();
     }
 
+    // 用于拦截后续的点击事件
+    private long mLastClickTime;
+
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
             R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back, R.id.icon_send})
     @Override
     public void onClick(View v) {
+        // 用来解决快速点击多个按钮弹出多个界面的情况
+        long nowTime = System.currentTimeMillis();
+        if ((nowTime - mLastClickTime) < 1000)
+            return;
+        mLastClickTime = nowTime;
+
         try {
             switch (v.getId()) {
                 case R.id.iv_picture:
@@ -437,6 +446,15 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
+    public boolean onBackPressed() {
+        if (mEmojiKeyboard.isShow()) {
+            mEmojiKeyboard.hideEmojiKeyBoard();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mOperator.onSaveInstanceState(outState);
@@ -448,4 +466,5 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         if (savedInstanceState != null)
             mOperator.onRestoreInstanceState(savedInstanceState);
     }
+
 }
