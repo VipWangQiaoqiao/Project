@@ -584,4 +584,12 @@ public class StringUtils {
         return new SimpleDateFormat(format, Locale.getDefault()).format(new Date());
     }
 
+    public static String formatDistance(int distance) {
+        return distance < 1000
+                ? String.format("%s00米以内",
+                    distance % 100 == 0 ? distance / 100 : (distance + 100) / 100)
+                : String.format("%s公里以内",
+                    distance % 1000 == 0 ? distance / 1000 : (distance + 1000) / 1000);
+    }
+
 }
