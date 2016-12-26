@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/lay_8"
+    android:paddingLeft="@dimen/lay_16"
+    android:paddingRight="@dimen/lay_16"
+    android:paddingTop="@dimen/lay_8">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/lay_12"
+        android:layout_marginTop="@dimen/lay_12"
+        android:text="举报"
+        android:textSize="@dimen/font_20" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="链接地址"
+        android:textSize="@dimen/font_14" />
+
+    <TextView
+        android:id="@+id/tv_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/lay_8"
+        android:layout_marginTop="@dimen/lay_8"
+        android:text="https://www.oschina.net/question"
+        android:textColor="@color/text_title_color"
+        android:textSize="@dimen/font_16" />
+
+    <View style="@style/h_line" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/lay_8"
+        android:text="举报原因"
+        android:textSize="@dimen/font_14" />
+
+    <TextView
+        android:id="@+id/tv_report_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/lay_12"
+        android:paddingTop="@dimen/lay_12"
+        android:text="广告"
+        android:drawableRight="@mipmap/ic_arrow_right"
+        android:textColor="@color/text_title_color"
+        android:textSize="@dimen/font_16" />
+
+    <View style="@style/h_line" />
+
+    <EditText
+        android:id="@+id/et_report"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="@dimen/lay_8"
+        android:layout_marginTop="@dimen/lay_8"
+        android:background="@drawable/bg_comment"
+        android:gravity="top"
+        android:hint="其它原因"
+        android:padding="@dimen/lay_8"
+        android:textSize="@dimen/font_14" />
+</LinearLayout>

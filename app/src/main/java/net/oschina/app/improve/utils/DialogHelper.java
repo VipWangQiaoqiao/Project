@@ -68,6 +68,17 @@ public final class DialogHelper {
                 .setPositiveButton(positiveText, null);
     }
 
+    public static AlertDialog.Builder getConfirmDialog(Context context,
+                                                       String title,
+                                                       View view,
+                                                       DialogInterface.OnClickListener positiveListener) {
+        return getDialog(context)
+                .setTitle(title)
+                .setView(view)
+                .setPositiveButton("确定", positiveListener)
+                .setNegativeButton("取消", null);
+    }
+
     /**
      * 获取一个验证对话框
      */
