@@ -175,6 +175,12 @@
             android:theme="@style/Base.App.Theme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
+        <activity
+            android:name=".improve.detail.apply.ApplyActivity"
+            android:label="活动出席人"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.App.Theme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
             android:name=".improve.detail.general.SoftwareDetailActivity"

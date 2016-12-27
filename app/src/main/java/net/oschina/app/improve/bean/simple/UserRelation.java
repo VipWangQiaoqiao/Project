@@ -7,10 +7,10 @@ import java.io.Serializable;
  * on 16-6-16.
  */
 public class UserRelation implements Serializable {
-    public static final int RELETION_ALL = 1;
-    public static final int RELETION_ONLY_YOU = 2;
-    public static final int RELETION_ONLY_HER = 3;
-    public static final int RELETION_NONE = 4;
+    public static final int RELATION_ALL = 1;
+    public static final int RELATION_ONLY_YOU = 2;
+    public static final int RELATION_ONLY_HER = 3;
+    public static final int RELATION_NONE = 4;
     private int relation;
     private String author;
     private long authorId;
