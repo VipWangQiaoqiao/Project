@@ -20,7 +20,7 @@ public interface ApplyContract {
     }
 
     interface View extends BaseListView<Presenter, ApplyUser> {
-        void showAddRelationSuccess(boolean isRelation, int position);
+        void showAddRelationSuccess(int relation, int position);
 
         void showAddRelationError();
     }
