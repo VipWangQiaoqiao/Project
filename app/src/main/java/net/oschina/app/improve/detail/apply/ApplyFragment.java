@@ -29,6 +29,10 @@ public class ApplyFragment extends BaseRecyclerFragment<ApplyContract.Presenter,
                 int position = (int) v.getTag();
                 ApplyUser applyUser = mAdapter.getItem(position);
                 assert applyUser != null;
+                if (applyUser.getId() == 0) {
+                    SimplexToast.show(mContext, "不能关注匿名用户");
+                    return;
+                }
                 mPresenter.addRelation(applyUser.getId(), position);
             }
         };
