@@ -135,7 +135,8 @@ public class DetailPresenter implements DetailContract.Presenter {
         OSChinaApi.addUserRelationReverse(authorId, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                mView.showAddRelationError();
+                mView.showNetworkError(R.string.tip_network_error);
             }
 
             @Override
@@ -154,7 +155,7 @@ public class DetailPresenter implements DetailContract.Presenter {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    onFailure(statusCode, headers, responseString, e);
+                    mView.showAddRelationError();
                 }
             }
         });
