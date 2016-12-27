@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.general;
 
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.v2.DetailFragment;
+import net.oschina.app.improve.utils.ReadedIndexCacheManager;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.StringUtils;
 
@@ -46,6 +48,9 @@ public class BlogDetailFragment extends DetailFragment {
 
     @Bind(R.id.btn_relation)
     Button mBtnRelation;
+
+    @Bind(R.id.lay_nsv)
+    NestedScrollView mViewScroller;
 
     public static BlogDetailFragment newInstance() {
         return new BlogDetailFragment();
@@ -86,6 +91,22 @@ public class BlogDetailFragment extends DetailFragment {
         }
         mBtnRelation.setText(bean.getAuthor().getRelation() < UserRelation.RELETION_ONLY_HER
                 ? "已关注" : "关注");
+
+    }
+
+    @Override
+    public void onPageFinished() {
+        super.onPageFinished();
+        if (mBean == null || mBean.getId() <= 0) return;
+        final int index = ReadedIndexCacheManager.getIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_BLOG);
+        if (index != 0) {
+            mViewScroller.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mViewScroller.smoothScrollTo(0, index);
+                }
+            }, 500);
+        }
     }
 
     @Override
@@ -97,5 +118,11 @@ public class BlogDetailFragment extends DetailFragment {
     @Override
     protected int getCommentOrder() {
         return OSChinaApi.COMMENT_NEW_ORDER;
+    }
+
+    @Override
+    public void onDestroy() {
+        ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_BLOG, mViewScroller.getScrollY());
+        super.onDestroy();
     }
 }
