@@ -15,35 +15,16 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/lay_8">
 
-            <LinearLayout
+            <android.support.v7.widget.SearchView
+                android:id="@+id/searcher_friends"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/searcher_friends"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_search_user_friends"
-                    app:iconifiedByDefault="false"
-                    app:queryBackground="@color/transparent"
-                    app:queryHint="@string/search_man"
-                    app:searchHintIcon="@mipmap/actionbar_search_icon"
-                    app:searchIcon="@mipmap/actionbar_search_icon"/>
-
-                <Button
-                    android:id="@+id/bt_cancel"
-                    android:layout_width="48dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/lay_8"
-                    android:text="@string/cancle"
-                    android:textColor="@color/day_colorPrimary"
-                    android:textSize="@dimen/font_12"
-                    tools:ignore="RtlHardcoded"/>
-
-            </LinearLayout>
-
+                android:layout_height="32dp"
+                android:background="@drawable/shape_search_user_friends"
+                app:iconifiedByDefault="false"
+                app:queryBackground="@color/transparent"
+                app:queryHint="@string/search_man"
+                app:searchHintIcon="@mipmap/search_icon"
+                app:searchIcon="@mipmap/search_icon"/>
 
             <HorizontalScrollView
                 android:id="@+id/recycler_friends_icon"
@@ -55,6 +36,18 @@
 
         </FrameLayout>
 
+        <TextView
+            android:id="@+id/tv_label"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lay_32"
+            android:background="@color/white"
+            android:gravity="center|left"
+            android:paddingLeft="@dimen/lay_16"
+            android:paddingRight="@dimen/lay_16"
+            android:visibility="gone"
+            tools:text="23"
+            tools:visibility="visible"/>
+
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -64,8 +57,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_friends"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:visibility="visible"/>
+                android:layout_height="match_parent"/>
 
             <TextView
                 android:id="@+id/tv_index_show"
@@ -81,7 +73,7 @@
                 tools:text="索引"/>
 
             <net.oschina.app.widget.IndexView
-                android:id="@+id/lay_index_container"
+                android:id="@+id/lay_index"
                 android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
