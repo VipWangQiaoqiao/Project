@@ -19,25 +19,22 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <SearchView
+                <android.support.v7.widget.SearchView
                     android:id="@+id/searcher_friends"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/shape_search_view"
-                    app:commitIcon="@mipmap/actionbar_search_icon"
-                    app:goIcon="@mipmap/actionbar_search_icon"
                     app:iconifiedByDefault="false"
                     app:queryBackground="@color/transparent"
                     app:queryHint="@string/search_man"
-                    app:searchIcon="@mipmap/actionbar_search_icon"
-                    app:voiceIcon="@mipmap/actionbar_search_icon"/>
+                    app:searchIcon="@mipmap/actionbar_search_icon"/>
 
                 <Button
-                    android:id="@+id/button2"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:text=""/>
+                    android:id="@+id/bt_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancle"/>
 
             </LinearLayout>
 
@@ -73,13 +70,16 @@
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_16"
+                android:visibility="gone"
                 tools:text="索引"/>
 
-            <LinearLayout
+            <net.oschina.app.widget.IndexView
                 android:id="@+id/lay_index_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:layout_width="25dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:textSize="@dimen/font_12"
+                tools:ignore="RtlHardcoded"/>
 
         </FrameLayout>
     </LinearLayout>
@@ -88,10 +88,7 @@
         android:id="@+id/lay_error"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        tools:visibility="gone">
-
-    </net.oschina.app.ui.empty.EmptyLayout>
+        tools:visibility="visible"/>
 
 
 </FrameLayout>

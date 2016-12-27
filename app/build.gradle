@@ -126,6 +126,8 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'net.oschina.common:common:0.1.0'
 
+    compile 'com.belerweb:pinyin4j:2.5.1'
+
     if (propertyHaveDebugCompile) {
         compile propertyDebugCompile
     }
