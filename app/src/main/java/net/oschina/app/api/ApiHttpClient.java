@@ -41,7 +41,7 @@ import cz.msebera.android.httpclient.protocol.HttpContext;
 public class ApiHttpClient {
     public final static String HOST = "www.oschina.net";
     //public final static String HOST = "www.oschina.tk";
-    private static String API_URL = "https://www.oschina.net/%s";
+    public static String API_URL = "https://www.oschina.net/%s";
 
     private static AsyncHttpClient CLIENT;
 
