@@ -129,7 +129,7 @@ public class IndexView extends View {
     }
 
     public interface OnIndexTouchListener {
-        public void onIndexTouchMove(char indexLeter);
+        public void onIndexTouchMove(char indexLetter);
 
         public void onIndexTouchUp();
     }

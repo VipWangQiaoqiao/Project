@@ -73,10 +73,8 @@ public class UserFriends implements Serializable, Comparable<UserFriends> {
     @Override
     public int compareTo(@NonNull UserFriends o) {
         String showLabel = o.getShowLabel();
-        String compLabel = showLabel == null ? "" : showLabel;
+        String tempCompLabel = this.showLabel;
 
-        String tempCompLabel = this.showLabel == null ? "" : this.showLabel;
-
-        return tempCompLabel.compareTo(compLabel);
+        return tempCompLabel.compareTo(showLabel);
     }
 }

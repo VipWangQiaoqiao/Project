@@ -6,10 +6,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -52,9 +54,10 @@ import static net.oschina.app.api.remote.OSChinaApi.TYPE_USER_FOLOWS;
  * desc:
  */
 
-public class UserSelectFriendsActivity extends BaseBackActivity {
+public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener {
 
     private static final String TAG = "UserSelectFriendsActivity";
+
     private PageBean<UserFansOrFollows> mPageBean;
 
     @Bind(R.id.searcher_friends)
@@ -62,7 +65,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity {
     @Bind(R.id.bt_cancel)
     Button mBtCancel;
     @Bind(R.id.recycler_friends_icon)
-    RecyclerView mRecyclerFriendsIcon;
+    HorizontalScrollView mRecyclerFriendsIcon;
     @Bind(R.id.recycler_friends)
     RecyclerView mRecyclerFriends;
     @Bind(R.id.tv_index_show)
@@ -74,6 +77,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity {
     @Bind(R.id.lay_error)
     EmptyLayout mEmptyLayout;
     private UserSelectFriendsAdapter adapter;
+    private ArrayList<UserFriends> userFriendses;
 
 
     public static void show(Context context) {
@@ -104,6 +108,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity {
                 }
             }
         });
+
+        mLayIndexContainer.setOnIndexTouchListener(this);
     }
 
     @Override
@@ -180,8 +186,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity {
 
                     List<UserFansOrFollows> fansOrFollows = resultBean.getResult().getItems();
 
-                    //  Log.e(TAG, "updateView: ----->" + fansOrFollows.size() + "  ");
-
                     if (fansOrFollows.size() > 0) {
 
                         updateView(fansOrFollows);
@@ -205,49 +209,111 @@ public class UserSelectFriendsActivity extends BaseBackActivity {
 
     private void updateView(List<UserFansOrFollows> fansOrFollows) {
 
-        List<UserFriends> userFriendses = new ArrayList<>();
+        userFriendses = new ArrayList<>();
 
-        for (int i = 0; i < fansOrFollows.size(); i++) {
+        List<String> holdIndexs = new ArrayList<>();
 
-            UserFansOrFollows userFansOrFollows = fansOrFollows.get(i);
+        for (int i = fansOrFollows.size() - 1; i > 0; i--) {
+            UserFansOrFollows fansOrFollow = fansOrFollows.get(i);
 
-            UserFriends userFriends = new UserFriends();
+            //获得字符串
+            String name = fansOrFollow.getName().trim();
 
-            HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
-            format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
-            format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-            format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
-            String name = userFansOrFollows.getName().trim();
             if (!TextUtils.isEmpty(name)) {
-                char[] charArray = name.toLowerCase().toCharArray();
-                for (char c : charArray) {
-                    String tempC = Character.toString(c);
-                    if (tempC.matches("[\u4E00-\u9FA5]+")) {
-                        try {
-                            String[] temp = PinyinHelper.toHanyuPinyinStringArray(c, format);
-                            // Log.e(TAG, "updateView: ---->" + temp[0] + " " + "  tempC=" + tempC);
-                        } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
-                            badHanyuPinyinOutputFormatCombination.printStackTrace();
-                        }
-                    } else {
-                        // Log.e(TAG, "updateView: ---->" + tempC);
-                    }
+
+                //返回小写拼音
+                String pinyin = returnPinyin(name);
+                String label = pinyin.substring(0, 1);
+
+                //判断是否hold住相同字母开头的数据
+                if (!holdIndexs.contains(label)) {
+
+                    UserFriends userFriends = new UserFriends();
+                    userFriends.setShowLabel(label.matches("[a-zA-Z_]+") ? label : "#");
+                    userFriends.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
+
+                    userFriendses.add(userFriends);
+
+                    //加入hold
+                    holdIndexs.add(label);
                 }
+
+                UserFriends userFriends = new UserFriends();
+                userFriends.setShowLabel(pinyin);
+                userFriends.setName(fansOrFollow.getName());
+                userFriends.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
+                userFriends.setPortrait(fansOrFollow.getPortrait());
+
+                userFriendses.add(userFriends);
             }
-
-            userFriends.setCheck(false);
-            userFriends.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
-            userFriends.setName(userFansOrFollows.getName());
-            userFriends.setPortrait(userFansOrFollows.getPortrait());
-
-            userFriendses.add(userFriends);
         }
 
-        //  Log.e(TAG, "User Friends Size: ------->" + userFriendses.size());
+        holdIndexs.clear();
+
+        Log.e(TAG, "User Friends Size: ------->" + userFriendses.size());
+        //自然排序
         Collections.sort(userFriendses);
 
         adapter.addItems(userFriendses);
     }
 
+    public String returnPinyin(String input) {
 
+        StringBuilder sb = new StringBuilder(0);
+
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+
+        format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
+
+        char[] charArray = input.toLowerCase().toCharArray();
+
+        for (char c : charArray) {
+            String tempC = Character.toString(c);
+            if (tempC.matches("[\u4E00-\u9FA5]+")) {
+                try {
+                    String[] temp = PinyinHelper.toHanyuPinyinStringArray(c, format);
+                    sb.append(temp[0]);
+                } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+                    badHanyuPinyinOutputFormatCombination.printStackTrace();
+                }
+            } else {
+                sb.append(tempC);
+            }
+        }
+
+        Log.e(TAG, "returnPinyin: ---->" + sb.toString());
+
+        return sb.toString().toUpperCase();
+    }
+
+
+    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
+    @Override
+    public void onIndexTouchMove(char indexLetter) {
+        Log.e(TAG, "onIndexTouchMove: ------>" + indexLetter);
+
+        ArrayList<UserFriends> userFriends = this.userFriendses;
+        userFriends.trimToSize();
+        int position = 0;
+        for (int i = userFriends.size() - 1; i > 0; i--) {
+            UserFriends friend = userFriends.get(i);
+            if (friend.equals(Character.toString(indexLetter))) {
+                position = i;
+                break;
+            }
+
+        }
+
+        mRecyclerFriends.smoothScrollToPosition(position);
+
+        mTvIndexShow.setText(Character.toString(indexLetter));
+        mTvIndexShow.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onIndexTouchUp() {
+        mTvIndexShow.setVisibility(View.GONE);
+    }
 }
