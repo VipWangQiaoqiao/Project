@@ -141,9 +141,9 @@ class ApplyPresenter implements ApplyContract.Presenter {
                     ResultBean<UserRelation> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         int relation = resultBean.getResult().getRelation();
-                        boolean isRelation = relation == UserRelation.RELATION_ALL
-                                || relation == UserRelation.RELATION_ONLY_YOU;
-                        mView.showAddRelationSuccess(isRelation, position);
+                        mView.showAddRelationSuccess(relation, position);
+                    }else {
+                        mView.showAddRelationError();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

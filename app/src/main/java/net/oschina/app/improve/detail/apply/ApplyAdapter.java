@@ -18,9 +18,13 @@ import net.oschina.app.widget.CircleImageView;
  */
 
 class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
-    ApplyAdapter(Callback callback) {
+    private View.OnClickListener mRelationListener;
+
+    ApplyAdapter(Callback callback, View.OnClickListener mRelationListener) {
         super(callback, ONLY_FOOTER);
+        this.mRelationListener = mRelationListener;
     }
+
 
     @Override
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
@@ -46,6 +50,8 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
             h.mTextJob.setText("");
         }
         h.mBtnRelate.setText(item.getRelation() >= UserRelation.RELATION_ONLY_HER ? "关注" : "已关注");
+        h.mBtnRelate.setTag(position);
+        h.mBtnRelate.setOnClickListener(mRelationListener);
     }
 
     private static class ApplyViewHolder extends RecyclerView.ViewHolder {
