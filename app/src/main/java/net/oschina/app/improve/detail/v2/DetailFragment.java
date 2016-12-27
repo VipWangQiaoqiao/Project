@@ -71,6 +71,10 @@ public abstract class DetailFragment extends BaseFragment implements
                 getImgLoader(), (OnCommentClickListener) mContext);
     }
 
+    public void onPageFinished() {
+        // pass
+    }
+
     @Override
     public void showFavReverseSuccess(boolean isFav, int strId) {
         SimplexToast.show(mContext, mContext.getResources().getString(strId));

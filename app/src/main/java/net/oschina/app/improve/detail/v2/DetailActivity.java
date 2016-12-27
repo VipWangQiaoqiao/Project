@@ -157,6 +157,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
     @Override
     public void run() {
         hideEmptyLayout();
+        mDetailFragment.onPageFinished();
     }
 
 
