@@ -148,8 +148,8 @@ public class DetailPresenter implements DetailContract.Presenter {
                     ResultBean<UserRelation> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         int relation = resultBean.getResult().getRelation();
-                        boolean isRelation = relation == UserRelation.RELETION_ALL
-                                || relation == UserRelation.RELETION_ONLY_YOU;
+                        boolean isRelation = relation == UserRelation.RELATION_ALL
+                                || relation == UserRelation.RELATION_ONLY_YOU;
                         mView.showAddRelationSuccess(isRelation,
                                 isRelation ? R.string.add_relation_success : R.string.cancel_relation_success);
                     }

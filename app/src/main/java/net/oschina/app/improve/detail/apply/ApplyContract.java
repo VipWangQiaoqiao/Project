@@ -11,6 +11,14 @@ import net.oschina.app.improve.bean.ApplyUser;
 
 public interface ApplyContract {
 
+    interface EmptyView {
+        void showGetApplyUserSuccess();
+
+        void showGetApplyUserError(String message);
+
+        void showSearchError(String message);
+    }
+
     interface View extends BaseListView<Presenter, ApplyUser> {
         void showAddRelationSuccess(boolean isRelation, int position);
 

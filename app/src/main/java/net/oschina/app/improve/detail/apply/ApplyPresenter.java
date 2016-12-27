@@ -1,5 +1,7 @@
 package net.oschina.app.improve.detail.apply;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -24,14 +26,16 @@ import cz.msebera.android.httpclient.Header;
 
 class ApplyPresenter implements ApplyContract.Presenter {
     private final ApplyContract.View mView;
+    private final ApplyContract.EmptyView mEmptyView;
     private final long mSourceId;
     private final Type mGsonType;
     private String mPageToken;
     private String mFilter;
 
-    ApplyPresenter(ApplyContract.View mView, long sourceId) {
+    ApplyPresenter(ApplyContract.View mView, ApplyContract.EmptyView mEmptyView, long sourceId) {
         this.mView = mView;
         this.mSourceId = sourceId;
+        this.mEmptyView = mEmptyView;
         mGsonType = new TypeToken<ResultBean<PageBean<ApplyUser>>>() {
         }.getType();
         this.mView.setPresenter(this);
@@ -49,6 +53,8 @@ class ApplyPresenter implements ApplyContract.Presenter {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 mView.showNetworkError(R.string.tip_network_error);
+                if (TextUtils.isEmpty(mPageToken))
+                    mEmptyView.showGetApplyUserError("网络错误");
             }
 
             @Override
@@ -63,8 +69,14 @@ class ApplyPresenter implements ApplyContract.Presenter {
                             mView.onRefreshSuccess(items);
                             if (items.size() < 20)
                                 mView.showMoreMore();
+                            mEmptyView.showGetApplyUserSuccess();
                         } else {
                             mView.showNetworkError(R.string.tip_network_error);
+                            if (TextUtils.isEmpty(mPageToken))
+                                mEmptyView.showGetApplyUserError(resultBean.getMessage());
+                            if (!TextUtils.isEmpty(mFilter)) {
+                                mEmptyView.showSearchError(resultBean.getMessage());
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -129,8 +141,8 @@ class ApplyPresenter implements ApplyContract.Presenter {
                     ResultBean<UserRelation> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         int relation = resultBean.getResult().getRelation();
-                        boolean isRelation = relation == UserRelation.RELETION_ALL
-                                || relation == UserRelation.RELETION_ONLY_YOU;
+                        boolean isRelation = relation == UserRelation.RELATION_ALL
+                                || relation == UserRelation.RELATION_ONLY_YOU;
                         mView.showAddRelationSuccess(isRelation, position);
                     }
                 } catch (Exception e) {

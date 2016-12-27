@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,7 +22,8 @@ import java.util.List;
 public abstract class BaseRecyclerFragment<Presenter extends BaseListPresenter, Model> extends BaseFragment
         implements BaseListView<Presenter, Model>,
         BaseRecyclerAdapter.OnItemClickListener,
-        RecyclerRefreshLayout.SuperRefreshLayoutListener {
+        RecyclerRefreshLayout.SuperRefreshLayoutListener,
+        BaseGeneralRecyclerAdapter.Callback {
     protected RecyclerRefreshLayout mRefreshLayout;
     protected RecyclerView mRecyclerView;
     protected BaseRecyclerAdapter<Model> mAdapter;
@@ -106,6 +109,11 @@ public abstract class BaseRecyclerFragment<Presenter extends BaseListPresenter, 
 
     protected RecyclerView.LayoutManager getLayoutManager() {
         return new LinearLayoutManager(mContext);
+    }
+
+    @Override
+    public Date getSystemTime() {
+        return new Date();
     }
 
     protected abstract BaseRecyclerAdapter<Model> getAdapter();

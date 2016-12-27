@@ -12,6 +12,10 @@ import net.oschina.app.improve.bean.ApplyUser;
 public class ApplyFragment extends BaseRecyclerFragment<ApplyContract.Presenter, ApplyUser>
         implements ApplyContract.View {
 
+    public static ApplyFragment newInstance() {
+        return new ApplyFragment();
+    }
+
     @Override
     protected void onItemClick(ApplyUser applyUser, int position) {
 
@@ -29,6 +33,6 @@ public class ApplyFragment extends BaseRecyclerFragment<ApplyContract.Presenter,
 
     @Override
     protected BaseRecyclerAdapter<ApplyUser> getAdapter() {
-        return new ApplyAdapter(mContext);
+        return new ApplyAdapter(this);
     }
 }

@@ -7,23 +7,43 @@
     android:orientation="vertical">
 
     <FrameLayout
+        android:id="@+id/fl_tool"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#F6F6F6"
         android:paddingBottom="@dimen/lay_8"
         android:paddingLeft="@dimen/lay_16"
         android:paddingRight="@dimen/lay_16"
-        android:paddingTop="@dimen/lay_8">
+        android:paddingTop="@dimen/lay_8"
+        android:visibility="visible">
 
-        <android.support.v7.widget.SearchView
-            android:id="@+id/view_searcher"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/shape_search_view"
-            app:iconifiedByDefault="false"
-            app:queryBackground="@color/transparent"
-            app:queryHint="搜索博客、软件、资讯、问答、找人" />
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/shape_search_view"
+                app:iconifiedByDefault="false"
+                app:queryBackground="@color/transparent"
+                app:queryHint="搜索博客、软件、资讯、问答、找人" />
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:text="取消"
+                android:textColor="@color/day_colorPrimary"
+                android:textSize="16sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_search"
