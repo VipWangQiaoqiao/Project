@@ -7,6 +7,6 @@
         android:color="#C7C7CC"
         android:dashWidth="0dp"/>
 
-    <solid android:color="#FFF"/>
+    <solid android:color="#ffffffff"/>
 
 </shape>

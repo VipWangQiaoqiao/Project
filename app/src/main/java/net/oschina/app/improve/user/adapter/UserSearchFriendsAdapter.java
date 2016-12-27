@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,20 +25,22 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by fei
- * on 2016/12/23.
+ * on 2016/12/27.
  * desc:
  */
 
-public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
+public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
     public static final String TAG = "UserSelectFriendsAdapter";
 
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
+    public static final int SEARCH_TYPE = 0x03;
+
     private LayoutInflater mInflater;
     private List<UserFriends> mItems = new ArrayList<>();
 
-    public UserSelectFriendsAdapter(Context context) {
+    public UserSearchFriendsAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
@@ -49,6 +52,8 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
                 return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
             case USER_TYPE:
                 return new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
+            case SEARCH_TYPE:
+                return new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false));
             default:
                 return null;
         }
@@ -61,18 +66,17 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
         UserFriends item = mItems.get(position);
 
-        //        UserFriends nextItem = mItems.get(position < mItems.size() - 1 ? (position + 1) : mItems.size() - 1);
-        //
-        //        if (USER_TYPE == item.getShowViewType() && INDEX_TYPE == nextItem.getShowViewType()) {
-        //            mItems.get(position).setGoneLine(true);
-        //        }
-
-        if (holder instanceof IndexViewHolder) {
-            ((IndexViewHolder) holder).onBindView(item, position);
-        } else {
-            ((UserInfoViewHolder) holder).onBindView(item, position);
+        switch (item.getShowViewType()) {
+            case USER_TYPE:
+                ((UserInfoViewHolder) holder).onBindView(item, position);
+                break;
+            case INDEX_TYPE:
+                ((IndexViewHolder) holder).onBindView(item, position);
+                break;
+            case SEARCH_TYPE:
+                ((SearchViewHolder) (holder)).onBindView(item, position);
+                break;
         }
-
     }
 
     @Override
@@ -132,8 +136,6 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
             });
             mtvName.setText(item.getName());
 
-            //Log.e(TAG, "onBindView: ---->" + position);
-
             if (item.isGoneLine())
                 mline.setVisibility(View.GONE);
         }
@@ -142,5 +144,26 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
             ImageLoader.loadImage(Glide.with(imageView.getContext()), imageView, imageUrl, placeholder);
         }
 
+    }
+
+    static class SearchViewHolder extends RecyclerView.ViewHolder {
+
+        @Bind(R.id.bt_search)
+        Button mBtSearch;
+
+        SearchViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        void onBindView(UserFriends item, int position) {
+            mBtSearch.setText("在网络上搜索");
+            mBtSearch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
     }
 }

@@ -17,7 +17,15 @@ public class UserFriends implements Serializable, Comparable<UserFriends> {
     private String name;
     private int showViewType;
     private String showLabel;
-    private transient boolean isCheck;
+    private transient boolean isGoneLine;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getPortrait() {
         return portrait;
@@ -51,22 +59,23 @@ public class UserFriends implements Serializable, Comparable<UserFriends> {
         this.showLabel = showLabel;
     }
 
-    public boolean isCheck() {
-        return isCheck;
+    public boolean isGoneLine() {
+        return isGoneLine;
     }
 
-    public void setCheck(boolean check) {
-        isCheck = check;
+    public void setGoneLine(boolean goneLine) {
+        isGoneLine = goneLine;
     }
 
     @Override
     public String toString() {
         return "UserFriends{" +
-                "portrait='" + portrait + '\'' +
+                "id=" + id +
+                ", portrait='" + portrait + '\'' +
                 ", name='" + name + '\'' +
                 ", showViewType=" + showViewType +
                 ", showLabel='" + showLabel + '\'' +
-                ", isCheck=" + isCheck +
+                ", isGoneLine=" + isGoneLine +
                 '}';
     }
 
