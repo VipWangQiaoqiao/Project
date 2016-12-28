@@ -185,20 +185,18 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             mPageNum = --mPageNum > 0 ? mPageNum : 0;
             return;
         }
-        TLog.i("oschina", "Get Nearby Info List: Successful");
         List<RadarNearbyInfo> infos = result.infoList;
         List<NearbyResult> results = new ArrayList<>();
         for (RadarNearbyInfo info : infos) {
-            User user;
+            User user = null;
             try {
                 String comments = URLDecoder.decode(info.comments, "UTF-8");
                 TLog.i("oschina", "Nearby Info List: " + comments);
                 user = AppOperator.createGson().fromJson(comments, User.class);
             } catch (Exception e) {
                 e.printStackTrace();
-                user = new User();
-                user.setName("???");
             }
+            if (user == null) continue;
             NearbyResult.Nearby nearby = new NearbyResult.Nearby();
             nearby.setDistance(info.distance);
             nearby.setMobileName(info.mobileName);
@@ -223,7 +221,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             SimplexToast.show(this, "上传用户信息失败");
             return;
         }
-        TLog.i("oschina", "On Upload User Info: Successful");
         onRefreshing();
     }
 
@@ -240,7 +237,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             return;
         }
         supportFinishAfterTransition();
-        TLog.i("oschina", "On Clear Radar Search Info State: Successful");
     }
 
     /**
@@ -318,7 +314,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     @Override
     public void onLoadMore() {
-        TLog.i("oschina", "Nearby On Load More: " + mPageNum);
         requestData(++mPageNum);
     }
 
