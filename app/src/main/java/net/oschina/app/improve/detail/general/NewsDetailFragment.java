@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.general;
 
+import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.Software;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.detail.v2.DetailFragment;
+import net.oschina.app.improve.utils.ReadedIndexCacheManager;
 
 import butterknife.Bind;
 
@@ -32,6 +34,9 @@ public class NewsDetailFragment extends DetailFragment {
 
     @Bind(R.id.tv_about_software_title)
     TextView mTextSoftwareTitle;
+
+    @Bind(R.id.lay_nsv)
+    NestedScrollView mViewScroller;
 
     public static NewsDetailFragment newInstance() {
         NewsDetailFragment fragment = new NewsDetailFragment();
@@ -67,5 +72,28 @@ public class NewsDetailFragment extends DetailFragment {
     @Override
     protected int getCommentOrder() {
         return OSChinaApi.COMMENT_HOT_ORDER;
+    }
+
+    @Override
+    public void onPageFinished() {
+        super.onPageFinished();
+        if (mBean == null || mBean.getId() <= 0) return;
+        final int index = ReadedIndexCacheManager.getIndex(getContext(), mBean.getId(),
+                OSChinaApi.CATALOG_NEWS);
+        if (index != 0) {
+            mViewScroller.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mViewScroller.smoothScrollTo(0, index);
+                }
+            }, 250);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_NEWS,
+                mViewScroller.getScrollY());
+        super.onDestroy();
     }
 }
