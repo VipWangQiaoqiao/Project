@@ -21,7 +21,9 @@ import java.util.List;
 public class ReadedIndexCacheManager {
 
     public static final String FILE_NAME = ReadedIndexCacheManager.class.getSimpleName();
-    public static final int MIN_LIMIT_READED_INDEX = 30;
+    public static final int MIN_LIMIT_READED_POSITION = 30;
+    public static final int MAX_LIMIT_READED_COUNT = 50;
+    public static final int LIMIT_READED_CLEAR_COUNT = 30;
     public static List<Pair<String, Integer>> pairs;
 
     /**
@@ -61,11 +63,11 @@ public class ReadedIndexCacheManager {
      * @param id The Article Id
      * @param type The Article Type The Article Type {@link net.oschina.app.api.remote.OSChinaApi#CATALOG_NEWS}
      *             {@link net.oschina.app.api.remote.OSChinaApi#CATALOG_BLOG}
-     * @param index 已读位置， 已读位置小于等于{@link #MIN_LIMIT_READED_INDEX} 将会移除储存的已读位置
+     * @param index 已读位置， 已读位置小于等于{@link #MIN_LIMIT_READED_POSITION} 将会移除储存的已读位置
      */
     public static void saveIndex(Context context, long id, int type, int index) {
         String in = getIndexName(id, type);
-        if (index <= MIN_LIMIT_READED_INDEX) {
+        if (index <= MIN_LIMIT_READED_POSITION) {
             removeIndex(context, in);
             return;
         }
@@ -82,8 +84,11 @@ public class ReadedIndexCacheManager {
         }
 
         pairs.add(0, Pair.create(in, index));
-        while (pairs.size() > 50) {
-            pairs.remove(pairs.size() - 1);
+
+        if (pairs.size() > MAX_LIMIT_READED_COUNT) {
+            while (pairs.size() > LIMIT_READED_CLEAR_COUNT) {
+                pairs.remove(pairs.size() - 1);
+            }
         }
         save(context.getApplicationContext(), new ArrayList<>(pairs));
     }

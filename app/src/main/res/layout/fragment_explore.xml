@@ -148,12 +148,12 @@
 
     <View
         style="@style/h_line"
-        android:layout_height="1px"
-        android:layout_marginTop="25dp" />
+        android:layout_height="1px" />
 
     <View
         style="@style/h_line"
-        android:layout_height="1px" />
+        android:layout_height="1px"
+        android:layout_marginTop="25dp" />
 
     <LinearLayout
         android:id="@+id/layout_events"
