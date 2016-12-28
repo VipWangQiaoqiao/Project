@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -42,7 +41,7 @@ import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.bean.simple.TweetLike;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.dialog.ShareDialogBuilder;
+import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -128,8 +127,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     private boolean mInputDoubleEmpty = false;
 
     private View.OnClickListener onPortraitClickListener;
-    private ShareDialogBuilder mShareDialogBuilder;
-    private AlertDialog alertDialog;
+    private ShareDialog alertDialog;
 
     public static void show(Context context, Tweet tweet) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
@@ -363,14 +361,11 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 if (content.length() > 10)
                     content = content.substring(0, 10);
 
-                if (mShareDialogBuilder == null)
-                    mShareDialogBuilder = ShareDialogBuilder.with(this)
+                if (alertDialog == null)
+                    alertDialog = new ShareDialog(this)
                             .title(content + " - 开源中国社区 ")
                             .content(tweet.getContent())
-                            .url(tweet.getHref())
-                            .build();
-                if (alertDialog == null)
-                    alertDialog = mShareDialogBuilder.create();
+                            .url(tweet.getHref());
                 alertDialog.show();
 
                 break;
@@ -592,8 +587,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     @Override
     protected void onStop() {
         super.onStop();
-        if (mShareDialogBuilder != null) {
-            mShareDialogBuilder.cancelLoading();
+        if (alertDialog != null) {
+            alertDialog.cancelLoading();
         }
     }
 

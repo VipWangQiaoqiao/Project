@@ -241,15 +241,10 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
      */
     private ProgressDialog showWaitDialog(@StringRes int messageId) {
         if (mDialog == null) {
-            if (messageId <= 0) {
-                mDialog = DialogHelper.getProgressDialog(mActivity, true);
-            } else {
-                String message = mActivity.getResources().getString(messageId);
-                mDialog = DialogHelper.getProgressDialog(mActivity, message, true);
-            }
+            mDialog = DialogHelper.getProgressDialog(mActivity, true);
         }
+        mDialog.setMessage(mActivity.getResources().getString(messageId));
         mDialog.show();
-
         return mDialog;
     }
 
