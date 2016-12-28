@@ -38,6 +38,7 @@ public class ViewEventBanner extends RelativeLayout implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        EventDetailActivity.show(getContext(), banner.getId());
+        if (banner != null)
+            EventDetailActivity.show(getContext(), banner.getId());
     }
 }

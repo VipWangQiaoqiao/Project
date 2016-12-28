@@ -17,11 +17,23 @@
         android:paddingRight="@dimen/lay_16"
         android:paddingTop="@dimen/lay_12">
 
-        <net.oschina.app.widget.CircleImageView
-            android:id="@+id/civ_author"
+        <FrameLayout
             android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_height="46dp">
+
+            <net.oschina.app.widget.CircleImageView
+                android:id="@+id/civ_author"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:id="@+id/iv_gender"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_gravity="bottom|right"
+                android:src="@mipmap/ic_female" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,6 +95,7 @@
 
         <Button
             android:id="@+id/btn_relation"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:background="@drawable/ic_bg_btn_blue"

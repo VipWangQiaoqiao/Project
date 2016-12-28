@@ -93,11 +93,15 @@ public class ApplyActivity extends BackActivity implements
         switch (v.getId()) {
             case R.id.ll_search:
                 mLinearSearch.setVisibility(View.GONE);
+                mSearchView.setFocusable(true);
+                TDevice.openKeyboard(mSearchView);
                 break;
             case R.id.tv_cancel:
                 mLinearSearch.setVisibility(View.VISIBLE);
                 mViewSearchEditor.setText("");
                 mPresenter.setFilter("");
+                mSearchView.clearFocus();
+                TDevice.hideSoftKeyboard(mSearchView);
                 break;
         }
     }
@@ -118,6 +122,11 @@ public class ApplyActivity extends BackActivity implements
 
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        mSearchView.clearFocus();
+    }
 
     private Runnable mSearchRunnable = new Runnable() {
         @Override
@@ -131,6 +140,7 @@ public class ApplyActivity extends BackActivity implements
 
     private boolean doSearch(String query, boolean fromTextChange) {
         mSearchText = query.trim();
+        mPresenter.setFilter(mSearchText);
         mLinearSearch.removeCallbacks(mSearchRunnable);
         if (fromTextChange && !TDevice.isWifiOpen()) return false;
         mLinearSearch.postDelayed(mSearchRunnable, fromTextChange ? 2000 : 0);
