@@ -323,11 +323,13 @@
     <string name="user_event_hint">我的活动</string>
     <string name="event_null_hint">未找到该活动&#8230;</string>
 
-
     <string name="topic_list">话题列表</string>
     <string name="title_updating_user_avatar">正在上传头像…</string>
     <string name="search_man">找人</string>
 
     <string name="add_relation_success">关注成功</string>
     <string name="cancel_relation_success">关注失败</string>
+    <string name="search_net_label">在网络上搜索</string>
+    <string name="local_search_label">本地搜索结果</string>
+    <string name="net_search_label">网络搜索结果</string>
 </resources>

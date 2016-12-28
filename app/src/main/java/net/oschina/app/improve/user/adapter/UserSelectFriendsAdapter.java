@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
-import net.oschina.app.improve.user.bean.UserFriends;
+import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.util.ImageLoader;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
     private LayoutInflater mInflater;
-    private List<UserFriends> mItems = new ArrayList<>();
+    private List<UserFriend> mItems = new ArrayList<>();
 
     public UserSelectFriendsAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -59,9 +59,9 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        UserFriends item = mItems.get(position);
+        UserFriend item = mItems.get(position);
 
-        //        UserFriends nextItem = mItems.get(position < mItems.size() - 1 ? (position + 1) : mItems.size() - 1);
+        //        UserFriend nextItem = mItems.get(position < mItems.size() - 1 ? (position + 1) : mItems.size() - 1);
         //
         //        if (USER_TYPE == item.getShowViewType() && INDEX_TYPE == nextItem.getShowViewType()) {
         //            mItems.get(position).setGoneLine(true);
@@ -77,17 +77,17 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        List<UserFriends> item = this.mItems;
+        List<UserFriend> item = this.mItems;
         return item.get(position).getShowViewType();
     }
 
     @Override
     public int getItemCount() {
-        List<UserFriends> item = this.mItems;
+        List<UserFriend> item = this.mItems;
         return item.size();
     }
 
-    public void addItems(List<UserFriends> items) {
+    public void addItems(List<UserFriend> items) {
         this.mItems.addAll(items);
         notifyDataSetChanged();
     }
@@ -102,7 +102,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
             ButterKnife.bind(this, itemView);
         }
 
-        void onBindView(UserFriends item, int position) {
+        void onBindView(UserFriend item, int position) {
             mTvIndexLabel.setText(item.getShowLabel());
         }
     }
@@ -121,7 +121,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
             ButterKnife.bind(this, itemView);
         }
 
-        void onBindView(final UserFriends item, int position) {
+        void onBindView(final UserFriend item, int position) {
 
             setImageFromNet(mCirclePortrait, item.getPortrait(), R.mipmap.widget_dface);
             mCirclePortrait.setOnClickListener(new View.OnClickListener() {

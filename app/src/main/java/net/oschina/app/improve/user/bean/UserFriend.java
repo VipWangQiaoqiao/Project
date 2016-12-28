@@ -10,7 +10,7 @@ import java.io.Serializable;
  * desc:
  */
 
-public class UserFriends implements Serializable, Comparable<UserFriends> {
+public class UserFriend implements Serializable, Comparable<UserFriend> {
 
     private long id;
     private String portrait;
@@ -69,7 +69,7 @@ public class UserFriends implements Serializable, Comparable<UserFriends> {
 
     @Override
     public String toString() {
-        return "UserFriends{" +
+        return "UserFriend{" +
                 "id=" + id +
                 ", portrait='" + portrait + '\'' +
                 ", name='" + name + '\'' +
@@ -80,10 +80,30 @@ public class UserFriends implements Serializable, Comparable<UserFriends> {
     }
 
     @Override
-    public int compareTo(@NonNull UserFriends o) {
+    public int compareTo(@NonNull UserFriend o) {
         String showLabel = o.getShowLabel();
         String tempCompLabel = this.showLabel;
 
         return tempCompLabel.compareTo(showLabel);
     }
+
+    //    @Override
+    //    public int hashCode() {
+    //
+    //
+    //        return super.hashCode();
+    //    }
+    //
+    //    @Override
+    //    public boolean equals(Object obj) {
+    //        if (obj instanceof UserFriend) {
+    //            UserFriend userFriend = (UserFriend) obj;
+    //
+    //            return (userFriend.getId() == id && userFriend.getName().equals(name)
+    //                    && userFriend.getPortrait().equals(portrait) &&
+    //                    userFriend.getShowLabel().equals(showLabel) && userFriend.getShowViewType() == showViewType);
+    //        }
+    //
+    //        return super.equals(obj);
+    //    }
 }
