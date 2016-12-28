@@ -98,14 +98,15 @@ public class BlogDetailFragment extends DetailFragment {
     public void onPageFinished() {
         super.onPageFinished();
         if (mBean == null || mBean.getId() <= 0) return;
-        final int index = ReadedIndexCacheManager.getIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_BLOG);
+        final int index = ReadedIndexCacheManager.getIndex(getContext(), mBean.getId(),
+                OSChinaApi.CATALOG_BLOG);
         if (index != 0) {
             mViewScroller.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     mViewScroller.smoothScrollTo(0, index);
                 }
-            }, 500);
+            }, 250);
         }
     }
 
@@ -122,7 +123,8 @@ public class BlogDetailFragment extends DetailFragment {
 
     @Override
     public void onDestroy() {
-        ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_BLOG, mViewScroller.getScrollY());
+        ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_BLOG,
+                mViewScroller.getScrollY());
         super.onDestroy();
     }
 }
