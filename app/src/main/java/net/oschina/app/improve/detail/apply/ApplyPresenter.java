@@ -142,7 +142,7 @@ class ApplyPresenter implements ApplyContract.Presenter {
                     if (resultBean != null && resultBean.isSuccess()) {
                         int relation = resultBean.getResult().getRelation();
                         mView.showAddRelationSuccess(relation, position);
-                    }else {
+                    } else {
                         mView.showAddRelationError();
                     }
                 } catch (Exception e) {
@@ -153,7 +153,7 @@ class ApplyPresenter implements ApplyContract.Presenter {
         });
     }
 
-    public void setFilter(String mFilter) {
+    void setFilter(String mFilter) {
         this.mFilter = mFilter;
     }
 }

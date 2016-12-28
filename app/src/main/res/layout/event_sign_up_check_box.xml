@@ -10,10 +10,18 @@
     android:paddingTop="@dimen/lay_12"
     android:scrollbars="none">
 
+    <TextView
+        android:id="@+id/tv_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="真实姓名:"
+        android:textSize="@dimen/font_14" />
+
     <net.oschina.app.improve.widget.FlowLayout
         android:id="@+id/fl_check_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/lay_8"
         android:orientation="horizontal"
         app:horizontalSpace="@dimen/lay_16" />
 </LinearLayout>

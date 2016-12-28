@@ -32,7 +32,7 @@
                 android:background="@drawable/shape_search_view"
                 app:iconifiedByDefault="false"
                 app:queryBackground="@color/transparent"
-                app:queryHint="搜索博客、软件、资讯、问答、找人" />
+                app:queryHint="搜索活动出席者" />
 
             <TextView
                 android:id="@+id/tv_cancel"
@@ -58,7 +58,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@mipmap/btn_search_normal"
-                android:tint="#1f1f1f" />
+                android:tint="#cfcfcf" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <net.oschina.app.ui.empty.EmptyLayout
             android:id="@+id/emptyLayout"

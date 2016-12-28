@@ -1,11 +1,14 @@
 package net.oschina.app.improve.detail.apply;
 
+import android.app.ProgressDialog;
 import android.view.View;
 
 import net.oschina.app.improve.base.BaseRecyclerFragment;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.ApplyUser;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SimplexToast;
+import net.oschina.app.util.TDevice;
 
 /**
  * Created by haibin
@@ -16,6 +19,7 @@ public class ApplyFragment extends BaseRecyclerFragment<ApplyContract.Presenter,
         implements ApplyContract.View {
 
     private View.OnClickListener mRelationListener;
+    private ProgressDialog mProgressDialog;
 
     public static ApplyFragment newInstance() {
         return new ApplyFragment();
@@ -33,6 +37,7 @@ public class ApplyFragment extends BaseRecyclerFragment<ApplyContract.Presenter,
                     SimplexToast.show(mContext, "不能关注匿名用户");
                     return;
                 }
+                showDialog("正在添加关注...");
                 mPresenter.addRelation(applyUser.getId(), position);
             }
         };
@@ -49,15 +54,32 @@ public class ApplyFragment extends BaseRecyclerFragment<ApplyContract.Presenter,
         ApplyUser applyUser = mAdapter.getItem(position);
         applyUser.setRelation(relation);
         mAdapter.updateItem(position);
+        hideDialog();
+        TDevice.hideSoftKeyboard(mRoot);
     }
 
     @Override
     public void showAddRelationError() {
         SimplexToast.show(mContext, "关注失败");
+        hideDialog();
     }
 
     @Override
     protected BaseRecyclerAdapter<ApplyUser> getAdapter() {
         return new ApplyAdapter(this, mRelationListener);
+    }
+
+    private void showDialog(String message) {
+        if (mProgressDialog == null)
+            mProgressDialog = DialogHelper.getProgressDialog(mContext);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+    }
+
+    private void hideDialog() {
+        if (mProgressDialog == null)
+            return;
+        mProgressDialog.dismiss();
     }
 }
