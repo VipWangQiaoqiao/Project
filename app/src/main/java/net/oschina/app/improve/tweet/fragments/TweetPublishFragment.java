@@ -43,6 +43,7 @@ import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.ClipView;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.UIHelper;
@@ -358,11 +359,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
-        Intent intent = new Intent(context, SelectFriendsActivity.class);
-        startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
-
-        //Intent intent = new Intent(context, UserSelectFriendsActivity.class);
+        //Intent intent = new Intent(context, SelectFriendsActivity.class);
         //startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
+
+        Intent intent = new Intent(context, UserSelectFriendsActivity.class);
+        startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
     }
 
     /**

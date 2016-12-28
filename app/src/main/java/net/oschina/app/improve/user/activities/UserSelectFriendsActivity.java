@@ -28,16 +28,11 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapter;
 import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
 import net.oschina.app.improve.user.bean.UserFansOrFollows;
-import net.oschina.app.improve.user.bean.UserFriends;
+import net.oschina.app.improve.user.bean.UserFriend;
+import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.IndexView;
-import net.sourceforge.pinyin4j.PinyinHelper;
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
-import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -75,7 +70,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     TextView mTvIndexShow;
 
     @Bind(R.id.lay_index)
-    IndexView mLayIndexContainer;
+    IndexView mIndex;
 
     @Bind(R.id.lay_error)
     EmptyLayout mEmptyLayout;
@@ -84,13 +79,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     private UserSelectFriendsAdapter mLocalAdapter;
 
     //网络初始化的朋友数据
-    private ArrayList<UserFriends> mNetFriends;
+    private ArrayList<UserFriend> mCacheFriends;
 
     private UserSearchFriendsAdapter mSearchAdapter;
-
-    private ArrayList<UserFriends> mSearchFriends;
-
-    private UserFriends mUserFriend;
 
 
     public static void show(Context context) {
@@ -122,7 +113,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         });
 
-        mLayIndexContainer.setOnIndexTouchListener(this);
+        mIndex.setOnIndexTouchListener(this);
 
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -135,7 +126,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.e(TAG, "onQueryTextSubmit: ---->" + query);
-                return false;
+                return true;
             }
 
             @SuppressLint("SetTextI18n")
@@ -143,13 +134,39 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             public boolean onQueryTextChange(String newText) {
 
                 Log.e(TAG, "onQueryTextChange: -------->" + newText);
-                mTvLabel.setVisibility(TextUtils.isEmpty(newText) ? View.GONE : View.VISIBLE);
-                mTvLabel.setText("@" + newText);
 
-                queryUpdateView(newText);
+                if (TextUtils.isEmpty(newText)) {
+                    mTvLabel.setVisibility(View.GONE);
+                    mIndex.setVisibility(View.VISIBLE);
 
+                    mRecyclerFriends.setAdapter(mLocalAdapter);
 
+                    if (mSearchAdapter == null) {
+                        mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
+                    }
+                    mSearchAdapter.notifyDataSetChanged();
+                    mSearchAdapter.setSearchContent(newText);
+                    return false;
+                } else {
+                    if (mIndex.getVisibility() == View.VISIBLE) {
+                        mIndex.setVisibility(View.GONE);
+                    }
+                    mTvLabel.setText("@" + newText);
+                    mTvLabel.setVisibility(View.VISIBLE);
+
+                    if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
+                        if (mSearchAdapter == null) {
+                            mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
+                        }
+                        mRecyclerFriends.setAdapter(mSearchAdapter);
+                    }
+                    queryUpdateView(newText);
+
+                }
+
+                mSearchAdapter.setSearchContent(newText);
                 return true;
+
             }
         });
 
@@ -157,7 +174,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             @SuppressWarnings("RestrictedApi")
             @Override
             public void run() {
-                //                TDevice.showSoftKeyboard(mViewSearch);
                 mSearchView.clearFocus();
 
             }
@@ -261,44 +277,55 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     private void queryUpdateView(String queryText) {
 
-        if (mSearchFriends == null)
-            this.mSearchFriends = new ArrayList<>();
+        String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
 
-        ArrayList<UserFriends> userFriends = this.mNetFriends;
-        userFriends.trimToSize();
+        //缓存的搜索好友列表
+        ArrayList<UserFriend> searchFriends = new ArrayList<>();
 
-        if (mUserFriend == null) {
-            UserFriends userFriend = new UserFriends();
-            userFriend.setShowLabel("本地搜索结果");
-            userFriend.setShowViewType(UserSearchFriendsAdapter.INDEX_TYPE);
-            userFriends.set(0, userFriend);
-            this.mUserFriend = userFriend;
-        }
+        UserFriend LocalUserFriend = new UserFriend();
 
-        if (mSearchAdapter == null) {
-            this.mSearchAdapter = new UserSearchFriendsAdapter(this);
-            mRecyclerFriends.setAdapter(mSearchAdapter);
-        }
+        LocalUserFriend.setName(getString(R.string.local_search_label));
+        LocalUserFriend.setShowLabel(getString(R.string.local_search_label));
+        LocalUserFriend.setShowViewType(UserSearchFriendsAdapter.INDEX_TYPE);
+        searchFriends.add(LocalUserFriend);
+        //Log.e(TAG, "初始化本地数据集label: ---->");
 
-        for (UserFriends friend : userFriends) {
+        //Log.e(TAG, "初始化点击label ----->");
+        UserFriend NetUserFriend = new UserFriend();
+
+        NetUserFriend.setName(getString(R.string.net_search_label));
+        NetUserFriend.setShowLabel(getString(R.string.search_net_label));
+        NetUserFriend.setShowViewType(UserSearchFriendsAdapter.SEARCH_TYPE);
+        searchFriends.add(NetUserFriend);
+
+
+        //缓存的本地好友列表
+        ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
+
+        for (UserFriend friend : cacheFriends) {
+
             String name = friend.getName();
 
             if (TextUtils.isEmpty(name)) continue;
 
-            if (name.contains(queryText)) {
-                friend.setShowLabel("");
-                mSearchFriends.add(friend);
+            //搜索列表当中没有该条数据，进行添加
+
+            if (AssimilateUtils.returnPinyin(name, false).startsWith(pinyinQueryText)) {
+                friend.setShowLabel(name);
+                friend.setShowViewType(UserSearchFriendsAdapter.USER_TYPE);
+                searchFriends.add(1, friend);
             }
+
         }
-
-        mSearchAdapter.addItems(mSearchFriends);
-
+        mSearchAdapter.clear();
+        mSearchAdapter.addItems(searchFriends);
+        Log.e(TAG, "queryUpdateView: ----->size=" + searchFriends.size() + "  \r");
     }
 
     private void updateView(List<UserFansOrFollows> fansOrFollows) {
 
-        if (mNetFriends == null)
-            mNetFriends = new ArrayList<>();
+        if (mCacheFriends == null)
+            mCacheFriends = new ArrayList<>();
 
         ArrayList<String> holdIndexes = new ArrayList<>();
 
@@ -312,85 +339,51 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             if (TextUtils.isEmpty(name)) continue;
 
             //返回小写拼音
-            String pinyin = returnPinyin(name);
+            String pinyin = AssimilateUtils.returnPinyin(name, true);
             String label = pinyin.substring(0, 1);
 
             //判断是否hold住相同字母开头的数据
             if (!holdIndexes.contains(label)) {
 
-                UserFriends userFriends = new UserFriends();
-                userFriends.setShowLabel(label.matches("[a-zA-Z_]+") ? label : "#");
-                userFriends.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
+                UserFriend userFriend = new UserFriend();
+                userFriend.setShowLabel(label.matches("[a-zA-Z_]+") ? label : "#");
+                userFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
 
-                mNetFriends.add(userFriends);
+                mCacheFriends.add(userFriend);
 
                 //加入hold
                 holdIndexes.add(label);
             }
 
-            UserFriends userFriends = new UserFriends();
-            userFriends.setId(fansOrFollow.getId());
-            userFriends.setShowLabel(pinyin);
-            userFriends.setName(fansOrFollow.getName());
-            userFriends.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
-            userFriends.setPortrait(fansOrFollow.getPortrait());
+            UserFriend userFriend = new UserFriend();
+            userFriend.setId(fansOrFollow.getId());
+            userFriend.setShowLabel(pinyin);
+            userFriend.setName(fansOrFollow.getName());
+            userFriend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
+            userFriend.setPortrait(fansOrFollow.getPortrait());
 
-            mNetFriends.add(userFriends);
+            mCacheFriends.add(userFriend);
         }
 
         holdIndexes.clear();
 
-        Log.e(TAG, "User Friends Size: ------->" + mNetFriends.size());
+        Log.e(TAG, "User Friends Size: ------->" + mCacheFriends.size());
         //自然排序
-        Collections.sort(mNetFriends);
+        Collections.sort(mCacheFriends);
 
-        mLocalAdapter.addItems(mNetFriends);
+        mLocalAdapter.addItems(mCacheFriends);
     }
-
-    public String returnPinyin(String input) {
-
-        StringBuilder sb = new StringBuilder(0);
-
-        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
-
-        format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
-        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-        format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
-
-        char[] charArray = input.toLowerCase().toCharArray();
-
-        for (char c : charArray) {
-            String tempC = Character.toString(c);
-            if (tempC.matches("[\u4E00-\u9FA5]+")) {
-                try {
-                    String[] temp = PinyinHelper.toHanyuPinyinStringArray(c, format);
-                    sb.append(temp[0]);
-                    break;
-                } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
-                    badHanyuPinyinOutputFormatCombination.printStackTrace();
-                }
-            } else {
-                sb.append(tempC);
-                break;
-            }
-        }
-
-        //Log.e(TAG, "returnPinyin: ---->" + sb.toString());
-
-        return sb.toString().toUpperCase();
-    }
-
 
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     @Override
     public void onIndexTouchMove(char indexLetter) {
         Log.e(TAG, "onIndexTouchMove: ------>" + indexLetter);
 
-        ArrayList<UserFriends> userFriends = this.mNetFriends;
+        ArrayList<UserFriend> userFriends = this.mCacheFriends;
         userFriends.trimToSize();
         int position = 0;
         for (int i = userFriends.size() - 1; i > 0; i--) {
-            UserFriends friend = userFriends.get(i);
+            UserFriend friend = userFriends.get(i);
             if (friend.equals(Character.toString(indexLetter))) {
                 position = i;
                 break;
