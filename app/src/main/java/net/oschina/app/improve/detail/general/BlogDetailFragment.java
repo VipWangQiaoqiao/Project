@@ -127,8 +127,10 @@ public class BlogDetailFragment extends DetailFragment {
 
     @Override
     public void onDestroy() {
-        ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_BLOG,
-                mViewScroller.getScrollY());
+        if (mBean != null && mBean.getId() > 0) {
+            ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_BLOG,
+                    mViewScroller.getScrollY());
+        }
         super.onDestroy();
     }
 }
