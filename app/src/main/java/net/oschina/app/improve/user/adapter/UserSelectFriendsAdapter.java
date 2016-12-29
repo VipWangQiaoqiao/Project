@@ -31,7 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
-    public static final String TAG = "UserSelectFriendsAdapter";
+    //public static final String TAG = "UserSelectFriendsAdapter";
 
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
@@ -74,12 +74,6 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         UserFriend item = mItems.get(position);
-
-        //        UserFriend nextItem = mItems.get(position < mItems.size() - 1 ? (position + 1) : mItems.size() - 1);
-        //
-        //        if (USER_TYPE == item.getShowViewType() && INDEX_TYPE == nextItem.getShowViewType()) {
-        //            mItems.get(position).setGoneLine(true);
-        //        }
 
         if (holder instanceof IndexViewHolder) {
             ((IndexViewHolder) holder).onBindView(item, position);
@@ -149,8 +143,6 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
                 }
             });
             mtvName.setText(item.getName());
-
-            //Log.e(TAG, "onBindView: ---->" + position);
 
             if (item.isGoneLine())
                 mline.setVisibility(View.GONE);

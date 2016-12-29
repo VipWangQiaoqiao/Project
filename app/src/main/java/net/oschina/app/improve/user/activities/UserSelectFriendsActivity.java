@@ -1,22 +1,24 @@
 package net.oschina.app.improve.user.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -36,16 +38,20 @@ import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.IndexView;
+import net.oschina.common.utils.CollectionUtil;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static net.oschina.app.api.remote.OSChinaApi.TYPE_USER_FOLOWS;
 
@@ -58,11 +64,21 @@ import static net.oschina.app.api.remote.OSChinaApi.TYPE_USER_FOLOWS;
 public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "UserSelectFriendsActivity";
+    @Bind(R.id.tv_back)
+    TextView mTvBack;
 
-    private PageBean<UserFansOrFollows> mPageBean;
+    @Bind(R.id.bt_select_submit)
+    Button mBtSelectSubmit;
 
     @Bind(R.id.searcher_friends)
     SearchView mSearchView;
+
+    @Bind(R.id.search_mag_icon)
+    ImageView mSearchIcon;
+
+    @Bind(R.id.search_edit_frame)
+    LinearLayout mLayoutEditFrame;
+
     @Bind(R.id.recycler_friends_icon)
     HorizontalScrollView mHorizontalScrollView;
 
@@ -83,14 +99,23 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Bind(R.id.lay_error)
     EmptyLayout mEmptyLayout;
 
+    /**
+     * 最大可选择好友的数量
+     */
+    private static final int MAX_SELECTED_SIZE = 10;
+
+    private PageBean<UserFansOrFollows> mPageBean;
+
     //网络初始化的adapter
     private UserSelectFriendsAdapter mLocalAdapter;
 
     //网络初始化的朋友数据
     private ArrayList<UserFriend> mCacheFriends;
 
-    private UserSearchFriendsAdapter mSearchAdapter;
+    //选中icon缓存朋友数据
+    private HashMap<String, UserFriend> mCacheIconFriends = new HashMap<>();
 
+    private UserSearchFriendsAdapter mSearchAdapter;
 
     public static void show(Context context) {
         Intent intent = new Intent(context, UserSelectFriendsActivity.class);
@@ -107,13 +132,41 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     protected void initWidget() {
         super.initWidget();
 
+        mTvBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        if (mCacheIconFriends.size() <= 0) {
+            mBtSelectSubmit.setEnabled(false);
+        } else {
+            mBtSelectSubmit.setEnabled(true);
+        }
+        mBtSelectSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendSelectData(false);
+            }
+        });
+
+        //初始化searchview的搜索icon
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mSearchIcon.getLayoutParams();
+        params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        mSearchIcon.setLayoutParams(params);
+
+        LinearLayout.LayoutParams params1 = (LinearLayout.LayoutParams) mLayoutEditFrame.getLayoutParams();
+        params1.setMargins(0, 0, 0, 0);
+        mLayoutEditFrame.setLayoutParams(params1);
+
         mRecyclerFriends.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerFriends.setAdapter(mLocalAdapter = new UserSelectFriendsAdapter(this));
         mLocalAdapter.setOnFriendSelector(new OnFriendSelector() {
             @Override
             public void select(View view, UserFriend userFriend, int position) {
 
-                addHeaderSelectView(userFriend);
+                updateSelectIcon(userFriend);
 
             }
         });
@@ -134,15 +187,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mTvLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                sendSelectData(true);
             }
         });
 
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                Log.e(TAG, "onClose: ---->");
                 return false;
             }
         });
@@ -158,86 +209,96 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         });
     }
 
+
+    /**
+     * send select data
+     */
+    private void sendSelectData(boolean isLabel) {
+
+        String queryLabel = (String) mTvLabel.getText();
+
+        List<String> friendNames = new ArrayList<>();
+
+        if (isLabel) {
+            if (!TextUtils.isEmpty(queryLabel)) {
+                queryLabel = queryLabel.substring(1);
+                friendNames.add(queryLabel);
+            }
+        }
+
+        for (Map.Entry<String, UserFriend> friendEntry : mCacheIconFriends.entrySet()) {
+            UserFriend friend = friendEntry.getValue();
+            friendNames.add(friend.getName());
+        }
+
+        String[] names = CollectionUtil.toArray(friendNames, String.class);
+
+        Intent result = new Intent();
+        result.putExtra("names", names);
+
+        setResult(RESULT_OK, result);
+
+        finish();
+    }
+
     @Override
     protected void initData() {
         super.initData();
+
+        if (mSearchAdapter == null) {
+            mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
+        }
+
         requestData();
     }
 
-    /**
-     * 添加顶部选中的用户头像
-     */
-    private void addHeaderSelectView(UserFriend friend) {
-        mHorizontalScrollView.setVisibility(View.VISIBLE);
-        //mSearchIcon.setVisibility(View.GONE);
+    private void updateSelectIcon(UserFriend userFriend) {
 
-        final long userId = friend.getId();
+        HashMap<String, UserFriend> cacheIcons = this.mCacheIconFriends;
 
-        final AvatarView image = new AvatarView(this);
-        image.setDisplayCircle(false);
-        image.setImageResource(R.mipmap.widget_dface);
-        image.setAvatarUrl(friend.getPortrait());
-        image.setTag(userId);
-
-        //点击删除
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //removeCheckedFriend(userId);
+        final String name = userFriend.getName();
+        if (cacheIcons.containsKey(name)) {
+            cacheIcons.remove(name);
+        } else {
+            if (cacheIcons.size() > MAX_SELECTED_SIZE) {
+                AppContext.showToastShort(getString(R.string.check_count_hint));
+            } else {
+                cacheIcons.put(name, userFriend);
             }
-        });
-
-        int size = getResources().getDimensionPixelSize(R.dimen.select_friend_avatar_size);
-        int minSize = 40;
-
-
-        //修正HorizontalScrollView的大小
-        ViewGroup.LayoutParams layoutParams = mHorizontalScrollView.getLayoutParams();
-        if (size + 10 + mHorizontalScrollView.getWidth() > mSearchView.getWidth() - minSize
-                && layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            layoutParams.width = mHorizontalScrollView.getWidth();
-            mHorizontalScrollView.setLayoutParams(layoutParams);
         }
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(size, size);
-        lp.gravity = Gravity.CENTER_VERTICAL;
-        lp.leftMargin = 5;
-        lp.rightMargin = 5;
-        mSelectContainer.addView(image, lp);
+        if (cacheIcons.size() > 0) {
+            mBtSelectSubmit.setEnabled(true);
+            //mHorizontalScrollView.setVisibility(View.VISIBLE);
+        } else {
+            mBtSelectSubmit.setEnabled(false);
+            //mHorizontalScrollView.setVisibility(View.GONE);
+        }
 
-        //滚动到最后
-        image.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                image.getViewTreeObserver().removeOnPreDrawListener(this);
-                mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-                return false;
-            }
-        });
+        mSelectContainer.removeAllViews();
+        Set<Map.Entry<String, UserFriend>> entries = cacheIcons.entrySet();
+        for (Map.Entry<String, UserFriend> entry : entries) {
+
+            UserFriend friend = entry.getValue();
+
+            ImageView ivIcon = (ImageView) LayoutInflater.from(this)
+                    .inflate(R.layout.activity_main_select_friend_label_container_item, mSelectContainer, false);
+            ivIcon.setTag(R.id.iv_show_icon, friend);
+            ivIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UserFriend friend = (UserFriend) v.getTag(R.id.iv_show_icon);
+                    updateSelectIcon(friend);
+                }
+            });
+            mSelectContainer.addView(ivIcon);
+            Glide.with(this).load(friend.getPortrait())
+                    .error(R.mipmap.widget_dface)
+                    .into(ivIcon);
+        }
+
     }
 
-    //    /**
-    //     * 移除顶部选中的用户头像
-    //     */
-    //    private void removeHeaderSelectView(int userId) {
-    //        View view = mSelectContainer.findViewWithTag(userId);
-    //        if (view != null) {
-    //            //修正HorizontalScrollView的大小
-    //            ViewGroup.LayoutParams layoutParams = mHorizontalScrollView.getLayoutParams();
-    //            if (layoutParams.width != ViewGroup.LayoutParams.WRAP_CONTENT) {
-    //                int minSize = (int) mSearchEditText.getPaint().measureText("搜 索");
-    //                if (mSelectContainer.getWidth() - view.getWidth() <= topLayout.getWidth() - minSize)
-    //                    layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-    //                mHorizontalScrollView.setLayoutParams(layoutParams);
-    //            }
-    //
-    //            mSelectContainer.removeView(view);
-    //        }
-    //        if (mSelectContainer.getChildCount() == 0) {
-    //            mSearchIcon.setVisibility(View.VISIBLE);
-    //            mHorizontalScrollView.setVisibility(View.GONE);
-    //        }
-    //    }
 
     private boolean checkNetIsAvailable() {
         if (!TDevice.hasInternet()) {
@@ -278,6 +339,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             layout.setErrorType(type);
         }
     }
+
 
     private void requestData() {
 
@@ -341,9 +403,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         LocalUserFriend.setShowLabel(getString(R.string.local_search_label));
         LocalUserFriend.setShowViewType(UserSearchFriendsAdapter.INDEX_TYPE);
         searchFriends.add(LocalUserFriend);
-        //Log.e(TAG, "初始化本地数据集label: ---->");
 
-        //Log.e(TAG, "初始化点击label ----->");
         UserFriend NetUserFriend = new UserFriend();
 
         NetUserFriend.setName(getString(R.string.net_search_label));
@@ -372,7 +432,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         }
         mSearchAdapter.clear();
         mSearchAdapter.addItems(searchFriends);
-        Log.e(TAG, "queryUpdateView: ----->size=" + searchFriends.size() + "  \r");
     }
 
     private void updateView(List<UserFansOrFollows> fansOrFollows) {
@@ -420,7 +479,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         holdIndexes.clear();
 
-        Log.e(TAG, "User Friends Size: ------->" + mCacheFriends.size());
         //自然排序
         Collections.sort(mCacheFriends);
 
@@ -430,7 +488,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     @Override
     public void onIndexTouchMove(char indexLetter) {
-        Log.e(TAG, "onIndexTouchMove: ------>" + indexLetter);
 
         ArrayList<UserFriend> userFriends = this.mCacheFriends;
         userFriends.trimToSize();
@@ -463,36 +520,32 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Log.e(TAG, "onBackPressed: --->");
-    }
-
-    @Override
     public boolean onQueryTextSubmit(String query) {
-        Log.e(TAG, "onQueryTextSubmit: ---->" + query);
 
         return false;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public boolean onQueryTextChange(String newText) {
 
-        Log.e(TAG, "onQueryTextChange: -------->" + newText);
 
         if (TextUtils.isEmpty(newText)) {
+            mTvLabel.setText(null);
             mTvLabel.setVisibility(View.GONE);
             mIndex.setVisibility(View.VISIBLE);
 
             mRecyclerFriends.setAdapter(mLocalAdapter);
 
-            if (mSearchAdapter == null) {
-                mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
-            }
+
+            mBtSelectSubmit.setEnabled(false);
             mSearchAdapter.notifyDataSetChanged();
             mSearchAdapter.setSearchContent(newText);
             return false;
         } else {
+
+            mBtSelectSubmit.setEnabled(true);
+
             if (mIndex.getVisibility() == View.VISIBLE) {
                 mIndex.setVisibility(View.GONE);
             }
@@ -500,9 +553,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             mTvLabel.setVisibility(View.VISIBLE);
 
             if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
-                if (mSearchAdapter == null) {
-                    mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
-                }
                 mRecyclerFriends.setAdapter(mSearchAdapter);
             }
             queryUpdateView(newText);
@@ -511,6 +561,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mSearchAdapter.setOnOnFriendSelecter(new OnFriendSelector() {
             @Override
             public void select(View view, UserFriend userFriend, int position) {
+
+                updateSelectIcon(userFriend);
 
             }
         });
