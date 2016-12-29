@@ -43,6 +43,9 @@ public interface DetailContract {
     }
 
     interface Presenter extends BasePresenter {
+
+        void getCache();
+
         void getDetail();//获得详情
 
         void favReverse();

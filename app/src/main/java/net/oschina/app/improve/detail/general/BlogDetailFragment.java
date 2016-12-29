@@ -9,6 +9,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.utils.ReadedIndexCacheManager;
@@ -77,8 +78,11 @@ public class BlogDetailFragment extends DetailFragment {
     @Override
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
-        mTextName.setText(bean.getAuthor().getName());
-        getImgLoader().load(bean.getAuthor().getPortrait()).asBitmap().into(mImageAvatar);
+        Author author = bean.getAuthor();
+        if(author != null){
+            mTextName.setText(author.getName());
+            getImgLoader().load(author.getPortrait()).asBitmap().into(mImageAvatar);
+        }
         mTextPubDate.setText(StringUtils.formatSomeAgo(bean.getPubDate()));
         mTextTitle.setText(bean.getTitle());
         mTextComCount.setText(String.valueOf(bean.getStatistics().getComment()));

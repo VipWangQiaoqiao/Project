@@ -122,7 +122,13 @@ public abstract class DetailActivity extends BaseBackActivity implements
                 }
             });
         }
-        mPresenter.getDetail();
+        mEmptyLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mPresenter.getCache();
+                mPresenter.getDetail();
+            }
+        });
     }
 
     @Override
@@ -135,8 +141,6 @@ public abstract class DetailActivity extends BaseBackActivity implements
                     CommentsActivity.show(DetailActivity.this, mBean.getId(), mBean.getType(), OSChinaApi.COMMENT_NEW_ORDER);
                 }
             });
-
-
         }
     }
 

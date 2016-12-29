@@ -27,12 +27,22 @@ public class DetailPresenter implements DetailContract.Presenter {
     private final DetailContract.View mView;
     private final DetailContract.EmptyView mEmptyView;
     private SubBean mBean;
+    private SubBean mCacheBean;
 
-    public DetailPresenter(DetailContract.View mView, DetailContract.EmptyView mEmptyView, SubBean bean) {
+    DetailPresenter(DetailContract.View mView, DetailContract.EmptyView mEmptyView, SubBean bean) {
         this.mView = mView;
         this.mBean = bean;
         this.mEmptyView = mEmptyView;
         this.mView.setPresenter(this);
+    }
+
+    @Override
+    public void getCache() {
+        mCacheBean = DetailCache.readCache(mBean);
+        if (mCacheBean == null)
+            return;
+        mView.showGetDetailSuccess(mCacheBean);
+        mEmptyView.showGetDetailSuccess(mCacheBean);
     }
 
     @Override
@@ -41,6 +51,8 @@ public class DetailPresenter implements DetailContract.Presenter {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 //mView.showNetworkError(R.string.tip_network_error);
+                if(mCacheBean != null)
+                    return;
                 mEmptyView.showErrorLayout(EmptyLayout.NETWORK_ERROR);
             }
 
@@ -52,9 +64,12 @@ public class DetailPresenter implements DetailContract.Presenter {
                     ResultBean<SubBean> bean = AppOperator.createGson().fromJson(responseString, type);
                     if (bean.isSuccess()) {
                         mBean = bean.getResult();
+                        DetailCache.addCache(mBean);
                         mView.showGetDetailSuccess(mBean);
                         mEmptyView.showGetDetailSuccess(mBean);
                     } else {
+                        if(mCacheBean != null)
+                            return;
                         mEmptyView.showErrorLayout(EmptyLayout.NODATA);
                     }
                 } catch (Exception e) {
