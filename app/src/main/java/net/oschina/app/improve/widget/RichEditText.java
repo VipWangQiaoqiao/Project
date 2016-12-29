@@ -111,6 +111,7 @@ public class RichEditText extends android.support.v7.widget.AppCompatEditText {
 
         @Override
         public boolean sendKeyEvent(KeyEvent event) {
+            TLog.e(TAG, "ZanyInputConnection#sendKeyEvent:" + event.toString());
             if (event.getAction() == KeyEvent.ACTION_DOWN
                     && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
                 if (!RichEditText.this.tagSpanTextWatcher.checkKeyDel())
@@ -131,12 +132,26 @@ public class RichEditText extends android.support.v7.widget.AppCompatEditText {
             return super.deleteSurroundingText(beforeLength, afterLength);
         }
 
+        @Override
+        public boolean commitText(CharSequence text, int newCursorPosition) {
+            TLog.e(TAG, "ZanyInputConnection#commitText:" + text + " " + newCursorPosition);
+            text = checkCommitWithCacheTagSpan(text);
+            super.commitText(" ", 1);
+            return super.commitText(text, newCursorPosition);
+        }
     }
 
     private void replaceCacheTagSpan(Editable message, TagSpan span, boolean targetDelState) {
         if (tagSpanTextWatcher != null) {
             tagSpanTextWatcher.replaceSpan(message, span, targetDelState);
         }
+    }
+
+    private CharSequence checkCommitWithCacheTagSpan(CharSequence text) {
+        if (tagSpanTextWatcher != null) {
+            text = tagSpanTextWatcher.checkCommit(text);
+        }
+        return text;
     }
 
     private TagSpanTextWatcher tagSpanTextWatcher = new TagSpanTextWatcher();
@@ -192,21 +207,22 @@ public class RichEditText extends android.support.v7.widget.AppCompatEditText {
             return true;
         }
 
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            TLog.e(TAG, "TagSpanTextWatcher#beforeTextChanged: s:" + s + " " + start + " " + count + " " + after);
-            if (after > 0) {
-                if (willDelSpan != null) {
-                    willDelSpan.isPreDeleteState = false;
-                    willDelSpan = null;
+        CharSequence checkCommit(CharSequence s) {
+            if (willDelSpan != null) {
+                willDelSpan.isPreDeleteState = false;
+                willDelSpan = null;
+                if (!" ".equals(s.subSequence(0, 1))) {
+                    s = " " + s;
+                    TLog.e(TAG, "TagSpanTextWatcher#checkCommit#Sapce:" + s);
                 }
             }
+            return s;
         }
 
         @Override
         public void afterTextChanged(Editable s) {
             final TagSpan span = willDelSpan;
-            TLog.e(TAG, "TagSpanTextWatcher#afterTextChanged: span:" + (span == null ? "null" : span.toString()));
+            TLog.e(TAG, "TagSpanTextWatcher#afterTextChanged#span:" + (span == null ? "null" : span.toString()));
             if (span != null && span.isPreDeleteState) {
                 int start = s.getSpanStart(span);
                 int end = s.getSpanEnd(span);
@@ -219,6 +235,8 @@ public class RichEditText extends android.support.v7.widget.AppCompatEditText {
                     s.delete(start, end);
                 }
             }
+            // Set tag to null
+            willDelSpan = null;
         }
     }
 
@@ -280,7 +298,7 @@ public class RichEditText extends android.support.v7.widget.AppCompatEditText {
             int matcherStart = matcher.start();
             int matcherEnd = matcher.end();
             spannable.setSpan(new TagSpan(str), matcherStart, matcherEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            TLog.e(TAG, "matchMention: " + str + " " + matcherStart + " " + matcherEnd);
+            TLog.e(TAG, "matchMention:" + str + " " + matcherStart + " " + matcherEnd);
         }
 
         return spannable;
@@ -297,7 +315,7 @@ public class RichEditText extends android.support.v7.widget.AppCompatEditText {
             int matcherStart = matcher.start();
             int matcherEnd = matcher.end();
             spannable.setSpan(new TagSpan(str), matcherStart, matcherEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            TLog.e(TAG, "matchTopic: " + str + " " + matcherStart + " " + matcherEnd);
+            TLog.e(TAG, "matchTopic:" + str + " " + matcherStart + " " + matcherEnd);
         }
 
         return spannable;
