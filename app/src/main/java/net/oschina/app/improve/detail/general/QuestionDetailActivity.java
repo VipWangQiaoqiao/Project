@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Report;
+import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.detail.v2.DetailActivity;
 import net.oschina.app.improve.detail.v2.DetailFragment;
@@ -24,6 +25,17 @@ public class QuestionDetailActivity extends DetailActivity {
     public static void show(Context context, SubBean bean) {
         Intent intent = new Intent(context, QuestionDetailActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putSerializable("sub_bean", bean);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
+    public static void show(Context context, long id) {
+        Intent intent = new Intent(context, QuestionDetailActivity.class);
+        Bundle bundle = new Bundle();
+        SubBean bean = new SubBean();
+        bean.setType(News.TYPE_QUESTION);
+        bean.setId(id);
         bundle.putSerializable("sub_bean", bean);
         intent.putExtras(bundle);
         context.startActivity(intent);

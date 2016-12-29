@@ -3,6 +3,8 @@ package net.oschina.app.improve.search.fragments;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.animation.DecelerateInterpolator;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -29,6 +31,10 @@ public class SearchUserFragment extends BaseRecyclerViewFragment<User>
 
     private String content;
 
+    // fix: 直接点击找人Tab的时候，doSearch调用requestData方法, 异步网络过程中,
+    // 生命周期流程调用requestData, 前一次调用使isRefreshing致为false，导致数据重复
+    private boolean isRequesting = false;
+
     public static Fragment instantiate(Context context) {
         return new SearchUserFragment();
     }
@@ -47,22 +53,34 @@ public class SearchUserFragment extends BaseRecyclerViewFragment<User>
     @Override
     protected void requestData() {
         super.requestData();
+        Log.i("thanatosx", "Search User Fragment Request Data, Content: " + content);
         if (TextUtils.isEmpty(content)) {
             mRefreshLayout.setRefreshing(false);
             return;
         }
+        if (isRequesting) return;
+        isRequesting = true;
         String token = isRefreshing ? null : mBean.getNextPageToken();
         OSChinaApi.search(News.TYPE_FIND_PERSON, content, token, mHandler);
     }
 
     @Override
+    protected void onRequestFinish() {
+        super.onRequestFinish();
+        isRequesting = false;
+    }
+
+    @Override
     public void onItemClick(int position, long itemId) {
         super.onItemClick(position, itemId);
-        OtherUserHomeActivity.show(getContext(), mAdapter.getItem(position).getId());
+        User user = mAdapter.getItem(position);
+        if (user == null) return;
+        OtherUserHomeActivity.show(getContext(), user.getId());
     }
 
     @Override
     public void search(String content) {
+        Log.i("thanatosx", "Search User Fragment Do Search, Content: " + content);
         if (this.content != null && this.content.equals(content)) return;
         this.content = content;
         mAdapter.clear();
@@ -72,6 +90,11 @@ public class SearchUserFragment extends BaseRecyclerViewFragment<User>
 
     @Override
     protected boolean isNeedEmptyView() {
+        return false;
+    }
+
+    @Override
+    protected boolean isNeedCache() {
         return false;
     }
 }

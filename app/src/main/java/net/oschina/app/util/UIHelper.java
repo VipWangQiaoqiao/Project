@@ -137,7 +137,7 @@ public class UIHelper {
      * @param blogId
      */
     public static void showBlogDetail(Context context, long blogId) {
-        BlogDetailActivity.show(context, blogId);
+        net.oschina.app.improve.detail.general.BlogDetailActivity.show(context, blogId);
     }
 
     /**
@@ -157,7 +157,7 @@ public class UIHelper {
      * @param eventId
      */
     public static void showEventDetail(Context context, long eventId) {
-        EventDetailActivity.show(context, eventId);
+        net.oschina.app.improve.detail.general.EventDetailActivity.show(context, eventId);
     }
 
     /**
@@ -200,7 +200,7 @@ public class UIHelper {
                 break;
             case OSChinaApi.CATALOG_BLOG:
                 //博客
-                BlogDetailActivity.show(context, id);
+                net.oschina.app.improve.detail.general.BlogDetailActivity.show(context, id);
                 break;
             case OSChinaApi.CATALOG_TRANSLATION:
                 //4.翻译
@@ -208,7 +208,7 @@ public class UIHelper {
                 break;
             case OSChinaApi.CATALOG_EVENT:
                 //活动
-                EventDetailActivity.show(context, id);
+                net.oschina.app.improve.detail.general.EventDetailActivity.show(context, id);
                 break;
             case OSChinaApi.CATALOG_TWEET:
                 // 动弹
@@ -238,7 +238,7 @@ public class UIHelper {
                 showBlogDetail(context, StringUtils.toLong(String.valueOf(newsId)));
                 break;
             case Banner.BANNER_TYPE_EVENT:
-                EventDetailActivity.show(context, newsId);
+                net.oschina.app.improve.detail.general.EventDetailActivity.show(context, newsId);
                 break;
             case Banner.BANNER_TYPE_NEWS:
                 NewsDetailActivity.show(context, newsId);
@@ -347,7 +347,7 @@ public class UIHelper {
 
     private static void showUrlRedirect(Context context, long id, String url) {
         if (url == null && id > 0) {
-            NewsDetailActivity.show(context, id);
+            net.oschina.app.improve.detail.general.NewsDetailActivity.show(context, id);
             return;
         }
 

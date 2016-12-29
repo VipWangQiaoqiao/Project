@@ -12,7 +12,7 @@ import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.general.BlogDetailActivity;
 import net.oschina.app.improve.main.subscription.BlogSubAdapter;
 
 import java.lang.reflect.Type;

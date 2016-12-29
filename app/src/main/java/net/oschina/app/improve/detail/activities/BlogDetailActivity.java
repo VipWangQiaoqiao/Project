@@ -26,7 +26,7 @@ import net.oschina.app.improve.detail.fragments.DetailFragment;
 import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
-
+@Deprecated
 public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailContract.View>
         implements BlogDetailContract.Operator {
 
