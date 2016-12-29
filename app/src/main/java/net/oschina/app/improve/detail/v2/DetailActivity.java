@@ -1,7 +1,6 @@
 package net.oschina.app.improve.detail.v2;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -23,7 +22,7 @@ import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.comment.OnCommentClickListener;
-import net.oschina.app.improve.dialog.ShareDialogBuilder;
+import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -43,8 +42,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
     protected DetailPresenter mPresenter;
     protected EmptyLayout mEmptyLayout;
     protected DetailFragment mDetailFragment;
-    private ShareDialogBuilder mShareDialogBuilder;
-    protected AlertDialog mAlertDialog;
+    protected ShareDialog mAlertDialog;
     protected TextView mCommentCountView;
 
     protected CommentBar mDelegation;
@@ -226,15 +224,12 @@ public abstract class DetailActivity extends BaseBackActivity implements
             return false;
 
         // 分享
-        if (mShareDialogBuilder == null) {
-            mShareDialogBuilder = ShareDialogBuilder.with(this)
+        if (mAlertDialog == null) {
+            mAlertDialog = new ShareDialog(this)
                     .title(title)
                     .content(content)
-                    .url(url)
-                    .build();
+                    .url(url);
         }
-        if (mAlertDialog == null)
-            mAlertDialog = mShareDialogBuilder.create();
         mAlertDialog.show();
 
         return true;

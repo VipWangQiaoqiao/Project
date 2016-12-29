@@ -11,6 +11,7 @@ public class Author implements Serializable {
     protected String name;
     protected String portrait;
     protected int relation;
+    protected int gender;
 
     public long getId() {
         return id;
@@ -42,5 +43,13 @@ public class Author implements Serializable {
 
     public void setRelation(int relation) {
         this.relation = relation;
+    }
+
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
     }
 }

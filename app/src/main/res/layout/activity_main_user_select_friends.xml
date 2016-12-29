@@ -12,42 +12,49 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="@dimen/lay_8">
 
-            <LinearLayout
+            <android.support.v7.widget.SearchView
+                android:id="@+id/searcher_friends"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="32dp"
+                android:background="@drawable/shape_search_user_friends"
+                app:iconifiedByDefault="false"
+                app:queryBackground="@color/transparent"
+                app:queryHint="@string/search_man"
+                app:searchHintIcon="@mipmap/search_icon"
+                app:searchIcon="@mipmap/search_icon"/>
 
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/searcher_friends"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_search_view"
-                    app:iconifiedByDefault="false"
-                    app:queryBackground="@color/transparent"
-                    app:queryHint="@string/search_man"
-                    app:searchIcon="@mipmap/actionbar_search_icon"/>
-
-                <Button
-                    android:id="@+id/bt_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cancle"/>
-
-            </LinearLayout>
-
-
-            <android.support.v7.widget.RecyclerView
+            <HorizontalScrollView
                 android:id="@+id/recycler_friends_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/transparent"
                 android:visibility="gone"
-                tools:visibility="gone"/>
+                tools:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/select_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"/>
+
+            </HorizontalScrollView>
 
         </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_label"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lay_32"
+            android:background="@color/white"
+            android:gravity="center|left"
+            android:paddingLeft="@dimen/lay_16"
+            android:paddingRight="@dimen/lay_16"
+            android:visibility="gone"
+            tools:text="23"
+            tools:visibility="visible"/>
 
 
         <FrameLayout
@@ -58,28 +65,29 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_friends"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:visibility="visible"/>
+                android:layout_height="match_parent"/>
 
             <TextView
                 android:id="@+id/tv_index_show"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_gravity="center"
-                android:background="@drawable/index_shape"
+                android:background="@drawable/index_float_text_background"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/font_16"
+                android:textSize="58sp"
+                android:typeface="monospace"
                 android:visibility="gone"
                 tools:text="索引"/>
 
             <net.oschina.app.widget.IndexView
-                android:id="@+id/lay_index_container"
-                android:layout_width="25dp"
+                android:id="@+id/lay_index"
+                android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:textSize="@dimen/font_12"
-                tools:ignore="RtlHardcoded"/>
+                android:paddingLeft="@dimen/lay_8"
+                android:textSize="@dimen/font_14"
+                tools:ignore="RtlHardcoded,RtlSymmetry"/>
 
         </FrameLayout>
     </LinearLayout>

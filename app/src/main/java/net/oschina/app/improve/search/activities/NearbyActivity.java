@@ -130,7 +130,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     private Dialog getSelectorDialog() {
         if (mSelectorDialog == null) {
-            mSelectorDialog = new BottomDialog(this);
+            mSelectorDialog = new BottomDialog(this,true);
             View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null);
             view.findViewById(R.id.tv_clear_opt).setOnClickListener(this);
             view.findViewById(R.id.tv_cancel_opt).setOnClickListener(this);

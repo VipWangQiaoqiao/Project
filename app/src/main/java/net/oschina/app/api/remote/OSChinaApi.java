@@ -1645,4 +1645,18 @@ public class OSChinaApi {
         params.put("memo", memo);
         ApiHttpClient.post("action/apiv2/report", params, handler);
     }
+
+    /**
+     * 获取活动出席列表
+     */
+    public static void getApplyUsers(long sourceId, String pageToken, String filter, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        if (!TextUtils.isEmpty("filter")) {
+            params.put("filter", filter);
+        }
+        ApiHttpClient.post("action/apiv2/event_attendee_list", params, handler);
+    }
 }

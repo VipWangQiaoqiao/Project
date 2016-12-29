@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +32,8 @@ import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.ClipView;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.widget.RichEditText;
+import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.UIHelper;
 
@@ -43,6 +45,7 @@ import butterknife.OnClick;
  */
 @SuppressWarnings("WeakerAccess")
 public class TweetPublishFragment extends BaseFragment implements View.OnClickListener, TweetPublishContract.View {
+    private final static String TAG = TweetPublishFragment.class.getName();
     public static final int MAX_TEXT_LENGTH = 160;
     public static final int SELECT_FRIENDS_REQUEST_CODE = 100;
     private static final String TEXT_TAG = "#输入软件名#";
@@ -147,15 +150,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         });
 
         // add text change listener
-        mEditContent.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
+        mEditContent.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void afterTextChanged(Editable s) {
                 final int len = s.length();
@@ -361,7 +356,20 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             for (String n : names) {
                 text += "@" + n + " ";
             }
-            mEditContent.getText().insert(mEditContent.getSelectionStart(), text);
+
+            SpannableString spannable = new SpannableString(text);
+            RichEditText.matchMention(spannable);
+            RichEditText.matchTopic(spannable);
+            Editable msg = mEditContent.getText();
+            msg.insert(mEditContent.getSelectionStart(), spannable);
+
+            mEditContent.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mEditContent.requestFocus();
+                    mEmojiKeyboard.showSoftKeyboard(mEditContent);
+                }
+            }, 280);
         }
     }
 
@@ -383,6 +391,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void setContent(String content, boolean needSelectionEnd) {
         Spannable span = InputHelper.displayEmoji(getResources(), content, (int) mEditContent.getTextSize());
+        RichEditText.matchMention(span);
+        RichEditText.matchTopic(span);
+
         mEditContent.setText(span);
         if (needSelectionEnd)
             mEditContent.setSelection(mEditContent.getText().length());

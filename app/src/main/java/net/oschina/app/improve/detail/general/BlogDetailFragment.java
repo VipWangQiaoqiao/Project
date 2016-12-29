@@ -89,7 +89,7 @@ public class BlogDetailFragment extends DetailFragment {
             mRoot.findViewById(R.id.line1).setVisibility(View.GONE);
             mTextAbstract.setVisibility(View.GONE);
         }
-        mBtnRelation.setText(bean.getAuthor().getRelation() < UserRelation.RELETION_ONLY_HER
+        mBtnRelation.setText(bean.getAuthor().getRelation() < UserRelation.RELATION_ONLY_HER
                 ? "已关注" : "关注");
 
     }

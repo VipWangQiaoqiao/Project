@@ -6,10 +6,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -23,18 +28,16 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.user.OnFriendSelector;
+import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapter;
 import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
 import net.oschina.app.improve.user.bean.UserFansOrFollows;
-import net.oschina.app.improve.user.bean.UserFriends;
+import net.oschina.app.improve.user.bean.UserFriend;
+import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.IndexView;
-import net.sourceforge.pinyin4j.PinyinHelper;
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
-import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -52,28 +55,41 @@ import static net.oschina.app.api.remote.OSChinaApi.TYPE_USER_FOLOWS;
  * desc:
  */
 
-public class UserSelectFriendsActivity extends BaseBackActivity {
+public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "UserSelectFriendsActivity";
+
     private PageBean<UserFansOrFollows> mPageBean;
 
     @Bind(R.id.searcher_friends)
     SearchView mSearchView;
-    @Bind(R.id.bt_cancel)
-    Button mBtCancel;
     @Bind(R.id.recycler_friends_icon)
-    RecyclerView mRecyclerFriendsIcon;
+    HorizontalScrollView mHorizontalScrollView;
+
+    @Bind(R.id.select_container)
+    LinearLayout mSelectContainer;
+
+    @Bind(R.id.tv_label)
+    TextView mTvLabel;
+
     @Bind(R.id.recycler_friends)
     RecyclerView mRecyclerFriends;
     @Bind(R.id.tv_index_show)
     TextView mTvIndexShow;
 
-    @Bind(R.id.lay_index_container)
-    IndexView mLayIndexContainer;
+    @Bind(R.id.lay_index)
+    IndexView mIndex;
 
     @Bind(R.id.lay_error)
     EmptyLayout mEmptyLayout;
-    private UserSelectFriendsAdapter adapter;
+
+    //网络初始化的adapter
+    private UserSelectFriendsAdapter mLocalAdapter;
+
+    //网络初始化的朋友数据
+    private ArrayList<UserFriend> mCacheFriends;
+
+    private UserSearchFriendsAdapter mSearchAdapter;
 
 
     public static void show(Context context) {
@@ -92,7 +108,15 @@ public class UserSelectFriendsActivity extends BaseBackActivity {
         super.initWidget();
 
         mRecyclerFriends.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerFriends.setAdapter(adapter = new UserSelectFriendsAdapter(this));
+        mRecyclerFriends.setAdapter(mLocalAdapter = new UserSelectFriendsAdapter(this));
+        mLocalAdapter.setOnFriendSelector(new OnFriendSelector() {
+            @Override
+            public void select(View view, UserFriend userFriend, int position) {
+
+                addHeaderSelectView(userFriend);
+
+            }
+        });
 
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +128,34 @@ public class UserSelectFriendsActivity extends BaseBackActivity {
                 }
             }
         });
+
+        mIndex.setOnIndexTouchListener(this);
+
+        mTvLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                Log.e(TAG, "onClose: ---->");
+                return false;
+            }
+        });
+        mSearchView.setOnQueryTextListener(this);
+
+        mSearchView.post(new Runnable() {
+            @SuppressWarnings("RestrictedApi")
+            @Override
+            public void run() {
+                mSearchView.clearFocus();
+
+            }
+        });
     }
 
     @Override
@@ -111,6 +163,81 @@ public class UserSelectFriendsActivity extends BaseBackActivity {
         super.initData();
         requestData();
     }
+
+    /**
+     * 添加顶部选中的用户头像
+     */
+    private void addHeaderSelectView(UserFriend friend) {
+        mHorizontalScrollView.setVisibility(View.VISIBLE);
+        //mSearchIcon.setVisibility(View.GONE);
+
+        final long userId = friend.getId();
+
+        final AvatarView image = new AvatarView(this);
+        image.setDisplayCircle(false);
+        image.setImageResource(R.mipmap.widget_dface);
+        image.setAvatarUrl(friend.getPortrait());
+        image.setTag(userId);
+
+        //点击删除
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //removeCheckedFriend(userId);
+            }
+        });
+
+        int size = getResources().getDimensionPixelSize(R.dimen.select_friend_avatar_size);
+        int minSize = 40;
+
+
+        //修正HorizontalScrollView的大小
+        ViewGroup.LayoutParams layoutParams = mHorizontalScrollView.getLayoutParams();
+        if (size + 10 + mHorizontalScrollView.getWidth() > mSearchView.getWidth() - minSize
+                && layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            layoutParams.width = mHorizontalScrollView.getWidth();
+            mHorizontalScrollView.setLayoutParams(layoutParams);
+        }
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(size, size);
+        lp.gravity = Gravity.CENTER_VERTICAL;
+        lp.leftMargin = 5;
+        lp.rightMargin = 5;
+        mSelectContainer.addView(image, lp);
+
+        //滚动到最后
+        image.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                image.getViewTreeObserver().removeOnPreDrawListener(this);
+                mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                return false;
+            }
+        });
+    }
+
+    //    /**
+    //     * 移除顶部选中的用户头像
+    //     */
+    //    private void removeHeaderSelectView(int userId) {
+    //        View view = mSelectContainer.findViewWithTag(userId);
+    //        if (view != null) {
+    //            //修正HorizontalScrollView的大小
+    //            ViewGroup.LayoutParams layoutParams = mHorizontalScrollView.getLayoutParams();
+    //            if (layoutParams.width != ViewGroup.LayoutParams.WRAP_CONTENT) {
+    //                int minSize = (int) mSearchEditText.getPaint().measureText("搜 索");
+    //                if (mSelectContainer.getWidth() - view.getWidth() <= topLayout.getWidth() - minSize)
+    //                    layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+    //                mHorizontalScrollView.setLayoutParams(layoutParams);
+    //            }
+    //
+    //            mSelectContainer.removeView(view);
+    //        }
+    //        if (mSelectContainer.getChildCount() == 0) {
+    //            mSearchIcon.setVisibility(View.VISIBLE);
+    //            mHorizontalScrollView.setVisibility(View.GONE);
+    //        }
+    //    }
 
     private boolean checkNetIsAvailable() {
         if (!TDevice.hasInternet()) {
@@ -180,8 +307,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity {
 
                     List<UserFansOrFollows> fansOrFollows = resultBean.getResult().getItems();
 
-                    //  Log.e(TAG, "updateView: ----->" + fansOrFollows.size() + "  ");
-
                     if (fansOrFollows.size() > 0) {
 
                         updateView(fansOrFollows);
@@ -203,51 +328,195 @@ public class UserSelectFriendsActivity extends BaseBackActivity {
 
     }
 
-    private void updateView(List<UserFansOrFollows> fansOrFollows) {
+    private void queryUpdateView(String queryText) {
 
-        List<UserFriends> userFriendses = new ArrayList<>();
+        String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
 
-        for (int i = 0; i < fansOrFollows.size(); i++) {
+        //缓存的搜索好友列表
+        ArrayList<UserFriend> searchFriends = new ArrayList<>();
 
-            UserFansOrFollows userFansOrFollows = fansOrFollows.get(i);
+        UserFriend LocalUserFriend = new UserFriend();
 
-            UserFriends userFriends = new UserFriends();
+        LocalUserFriend.setName(getString(R.string.local_search_label));
+        LocalUserFriend.setShowLabel(getString(R.string.local_search_label));
+        LocalUserFriend.setShowViewType(UserSearchFriendsAdapter.INDEX_TYPE);
+        searchFriends.add(LocalUserFriend);
+        //Log.e(TAG, "初始化本地数据集label: ---->");
 
-            HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
-            format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
-            format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-            format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
-            String name = userFansOrFollows.getName().trim();
-            if (!TextUtils.isEmpty(name)) {
-                char[] charArray = name.toLowerCase().toCharArray();
-                for (char c : charArray) {
-                    String tempC = Character.toString(c);
-                    if (tempC.matches("[\u4E00-\u9FA5]+")) {
-                        try {
-                            String[] temp = PinyinHelper.toHanyuPinyinStringArray(c, format);
-                            // Log.e(TAG, "updateView: ---->" + temp[0] + " " + "  tempC=" + tempC);
-                        } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
-                            badHanyuPinyinOutputFormatCombination.printStackTrace();
-                        }
-                    } else {
-                        // Log.e(TAG, "updateView: ---->" + tempC);
-                    }
-                }
+        //Log.e(TAG, "初始化点击label ----->");
+        UserFriend NetUserFriend = new UserFriend();
+
+        NetUserFriend.setName(getString(R.string.net_search_label));
+        NetUserFriend.setShowLabel(getString(R.string.search_net_label));
+        NetUserFriend.setShowViewType(UserSearchFriendsAdapter.SEARCH_TYPE);
+        searchFriends.add(NetUserFriend);
+
+
+        //缓存的本地好友列表
+        ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
+
+        for (UserFriend friend : cacheFriends) {
+
+            String name = friend.getName();
+
+            if (TextUtils.isEmpty(name)) continue;
+
+            //搜索列表当中没有该条数据，进行添加
+
+            if (AssimilateUtils.returnPinyin(name, false).startsWith(pinyinQueryText)) {
+                friend.setShowLabel(name);
+                friend.setShowViewType(UserSearchFriendsAdapter.USER_TYPE);
+                searchFriends.add(1, friend);
             }
 
-            userFriends.setCheck(false);
-            userFriends.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
-            userFriends.setName(userFansOrFollows.getName());
-            userFriends.setPortrait(userFansOrFollows.getPortrait());
-
-            userFriendses.add(userFriends);
         }
-
-        //  Log.e(TAG, "User Friends Size: ------->" + userFriendses.size());
-        Collections.sort(userFriendses);
-
-        adapter.addItems(userFriendses);
+        mSearchAdapter.clear();
+        mSearchAdapter.addItems(searchFriends);
+        Log.e(TAG, "queryUpdateView: ----->size=" + searchFriends.size() + "  \r");
     }
 
+    private void updateView(List<UserFansOrFollows> fansOrFollows) {
+
+        if (mCacheFriends == null)
+            mCacheFriends = new ArrayList<>();
+
+        ArrayList<String> holdIndexes = new ArrayList<>();
+
+
+        for (int i = fansOrFollows.size() - 1; i > 0; i--) {
+            UserFansOrFollows fansOrFollow = fansOrFollows.get(i);
+
+            //获得字符串
+            String name = fansOrFollow.getName().trim();
+
+            if (TextUtils.isEmpty(name)) continue;
+
+            //返回小写拼音
+            String pinyin = AssimilateUtils.returnPinyin(name, true);
+            String label = pinyin.substring(0, 1);
+
+            //判断是否hold住相同字母开头的数据
+            if (!holdIndexes.contains(label)) {
+
+                UserFriend userFriend = new UserFriend();
+                userFriend.setShowLabel(label.matches("[a-zA-Z_]+") ? label : "#");
+                userFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
+
+                mCacheFriends.add(userFriend);
+
+                //加入hold
+                holdIndexes.add(label);
+            }
+
+            UserFriend userFriend = new UserFriend();
+            userFriend.setId(fansOrFollow.getId());
+            userFriend.setShowLabel(pinyin);
+            userFriend.setName(fansOrFollow.getName());
+            userFriend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
+            userFriend.setPortrait(fansOrFollow.getPortrait());
+
+            mCacheFriends.add(userFriend);
+        }
+
+        holdIndexes.clear();
+
+        Log.e(TAG, "User Friends Size: ------->" + mCacheFriends.size());
+        //自然排序
+        Collections.sort(mCacheFriends);
+
+        mLocalAdapter.addItems(mCacheFriends);
+    }
+
+    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
+    @Override
+    public void onIndexTouchMove(char indexLetter) {
+        Log.e(TAG, "onIndexTouchMove: ------>" + indexLetter);
+
+        ArrayList<UserFriend> userFriends = this.mCacheFriends;
+        userFriends.trimToSize();
+        int position = 0;
+        for (int i = userFriends.size() - 1; i > 0; i--) {
+            UserFriend friend = userFriends.get(i);
+            if (friend.equals(Character.toString(indexLetter))) {
+                position = i;
+                break;
+            }
+
+        }
+
+        mRecyclerFriends.smoothScrollToPosition(position);
+
+        mTvIndexShow.setText(Character.toString(indexLetter));
+        mTvIndexShow.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onIndexTouchUp() {
+        mTvIndexShow.setVisibility(View.GONE);
+    }
+
+    @SuppressWarnings("RestrictedApi")
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mSearchView.clearFocus();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.e(TAG, "onBackPressed: --->");
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Log.e(TAG, "onQueryTextSubmit: ---->" + query);
+
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        Log.e(TAG, "onQueryTextChange: -------->" + newText);
+
+        if (TextUtils.isEmpty(newText)) {
+            mTvLabel.setVisibility(View.GONE);
+            mIndex.setVisibility(View.VISIBLE);
+
+            mRecyclerFriends.setAdapter(mLocalAdapter);
+
+            if (mSearchAdapter == null) {
+                mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
+            }
+            mSearchAdapter.notifyDataSetChanged();
+            mSearchAdapter.setSearchContent(newText);
+            return false;
+        } else {
+            if (mIndex.getVisibility() == View.VISIBLE) {
+                mIndex.setVisibility(View.GONE);
+            }
+            mTvLabel.setText("@" + newText);
+            mTvLabel.setVisibility(View.VISIBLE);
+
+            if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
+                if (mSearchAdapter == null) {
+                    mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
+                }
+                mRecyclerFriends.setAdapter(mSearchAdapter);
+            }
+            queryUpdateView(newText);
+        }
+
+        mSearchAdapter.setOnOnFriendSelecter(new OnFriendSelector() {
+            @Override
+            public void select(View view, UserFriend userFriend, int position) {
+
+            }
+        });
+        mSearchAdapter.setSearchContent(newText);
+        return true;
+
+    }
 
 }

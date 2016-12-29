@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.comment.CommentsActivity;
+import net.oschina.app.improve.detail.apply.ApplyActivity;
 import net.oschina.app.improve.detail.sign.SignUpActivity;
 import net.oschina.app.improve.detail.v2.DetailActivity;
 import net.oschina.app.improve.detail.v2.DetailFragment;
@@ -73,7 +75,7 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
         context.startActivity(intent);
     }
 
-    public static void show(Context context,long id) {
+    public static void show(Context context, long id) {
         Intent intent = new Intent(context, EventDetailActivity.class);
         Bundle bundle = new Bundle();
         SubBean bean = new SubBean();
@@ -115,7 +117,16 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                     LoginActivity.show(this, 0x02);
                     return;
                 }
-                SignUpActivity.show(this, mBean.getId());
+                HashMap<String, Object> extra = mBean.getExtra();
+                if (extra != null) {
+                    int eventApplyStatus = getExtraInt(extra.get("eventApplyStatus"));
+                    if (eventApplyStatus == EventDetail.APPLY_STATUS_PRESENTED)
+                        ApplyActivity.show(this, mBean.getId());
+                    else
+                        SignUpActivity.show(this, mBean.getId());
+                } else {
+                    SignUpActivity.show(this, mBean.getId());
+                }
                 break;
         }
     }
@@ -148,20 +159,49 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
              * 出席状态判断
              */
             int eventApplyStatus = getExtraInt(extra.get("eventApplyStatus"));
+
+            int applyStr = 0;
+            switch (eventApplyStatus) {
+                case EventDetail.APPLY_STATUS_UN_SIGN:
+                    applyStr = R.string.event_apply_status_un_sign;
+                    break;
+                case EventDetail.APPLY_STATUS_AUDIT:
+                    applyStr = R.string.event_apply_status_audit;
+                    break;
+                case EventDetail.APPLY_STATUS_CONFIRMED:
+                    applyStr = R.string.event_apply_status_confirmed;
+                    break;
+                case EventDetail.APPLY_STATUS_PRESENTED:
+                    applyStr = R.string.event_apply_status_presented;
+                    break;
+                case EventDetail.APPLY_STATUS_CANCELED:
+                    applyStr = R.string.event_apply_status_canceled;
+                    break;
+                case EventDetail.APPLY_STATUS_REFUSED:
+                    applyStr = R.string.event_apply_status_refused;
+                    break;
+            }
+            mTextApplyStatus.setText(getResources().getString(applyStr));
+
             mTextApplyStatus.setText(getString(getApplyStatusStrId(eventApplyStatus)));
-            if (eventApplyStatus != EventDetail.APPLY_STATUS_UN_SIGN) {
-                //如果已经报名了
+            if (eventApplyStatus != EventDetail.APPLY_STATUS_UN_SIGN && eventApplyStatus != EventDetail.APPLY_STATUS_PRESENTED) {
+                //如果已经报名了,而且未出席
                 setSignUnEnable();
                 return;
             }
+
+
+            if (eventApplyStatus == EventDetail.APPLY_STATUS_PRESENTED)
+                return;
+
             /**
              * 活动状态判断
              */
             int eventStatus = getExtraInt(extra.get("eventStatus"));
-            if (eventStatus != EventDetail.STATUS_ING) {
+            if (eventStatus != EventDetail.STATUS_ING && eventApplyStatus != EventDetail.APPLY_STATUS_PRESENTED) {
                 setSignUnEnable();
             }
-
+            Log.e("eventStatus", " -- " + eventStatus);
             switch (eventStatus) {
                 case Event.STATUS_END:
                     mTextApplyStatus.setText(getResources().getString(R.string.event_status_end));

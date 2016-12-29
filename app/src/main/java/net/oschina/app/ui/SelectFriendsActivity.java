@@ -228,21 +228,21 @@ public class SelectFriendsActivity extends BaseActivity {
 
         mIndexView.setOnIndexTouchListener(new IndexView.OnIndexTouchListener() {
             @Override
-            public void onIndexTouchMove(char indexLeter) {
+            public void onIndexTouchMove(char indexLetter) {
                 //显示悬浮界面
                 if (mFloatTextView.getVisibility() != View.VISIBLE) {
                     mFloatTextView.setVisibility(View.VISIBLE);
                 }
-                mFloatTextView.setText(String.valueOf(indexLeter));
+                mFloatTextView.setText(String.valueOf(indexLetter));
                 //索引值对应的位置
                 int positoin;
-                if (indexLeter == '☆') {
+                if (indexLetter == '☆') {
                     positoin = 0;
                 } else {
-                    positoin = mAdapter.getPositionByIndex(indexLeter);
+                    positoin = mAdapter.getPositionByIndex(indexLetter);
                 }
                 if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "index:" + indexLeter + "  position:" + positoin);
+                    Log.d(TAG, "index:" + indexLetter + "  position:" + positoin);
                 }
                 if (positoin != -1) {
                     mListView.setSelection(positoin);
