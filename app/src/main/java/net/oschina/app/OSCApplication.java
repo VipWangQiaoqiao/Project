@@ -4,6 +4,7 @@ import com.baidu.mapapi.SDKInitializer;
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.detail.v2.DetailCache;
 import net.oschina.common.helper.ReadStateHelper;
 
 /**
@@ -17,6 +18,7 @@ public class OSCApplication extends AppContext {
     public void onCreate() {
         super.onCreate();
         // 初始化操作
+        DetailCache.init(getApplicationContext());
         init();
     }
 

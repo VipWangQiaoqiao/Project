@@ -165,7 +165,7 @@ public class EventSigninActivity extends BaseBackActivity {
         mIvImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventDetailActivity.show(EventSigninActivity.this, mId);
+                net.oschina.app.improve.detail.general.EventDetailActivity.show(EventSigninActivity.this, mId);
             }
         });
     }

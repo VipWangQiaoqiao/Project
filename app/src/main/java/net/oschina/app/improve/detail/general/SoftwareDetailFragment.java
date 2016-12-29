@@ -93,18 +93,30 @@ public class SoftwareDetailFragment extends DetailFragment {
         List<SubBean.Image> images = bean.getImages();
         if (images != null && images.size() != 0)
             getImgLoader().load(images.get(0).getHref()).asBitmap().into(mImageSoftware);
-        mTextAuthor.setText(bean.getAuthor().getName());
+
+        Author author = bean.getAuthor();
+        if (author != null) {
+            mTextAuthor.setText(author.getName());
+        } else {
+            mTextAuthor.setText("匿名");
+        }
         Map<String, Object> extras = bean.getExtra();
         if (extras != null) {
-            mTextProtocol.setText(extras.get("softwareLicense").toString());
-            mTextRecordTime.setText(extras.get("softwareCollectionDate").toString());
-            mTextSystem.setText(extras.get("softwareSupportOS").toString());
-            mTextLanguage.setText(extras.get("softwareLanguage").toString());
+            mTextProtocol.setText(getExtraString(extras.get("softwareLicense")));
+            mTextRecordTime.setText(getExtraString(extras.get("softwareCollectionDate")));
+            mTextSystem.setText(getExtraString(extras.get("softwareSupportOS")));
+            mTextLanguage.setText(getExtraString(extras.get("softwareLanguage")));
         }
     }
 
     @Override
     protected int getCommentOrder() {
         return OSChinaApi.COMMENT_HOT_ORDER;
+    }
+
+    @Override
+    public void showFavReverseSuccess(boolean isFav, int strId) {
+        super.showFavReverseSuccess(isFav, strId);
+        mImageFav.setImageResource(isFav ? R.drawable.ic_faved : R.drawable.ic_fav);
     }
 }

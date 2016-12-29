@@ -332,4 +332,6 @@
     <string name="search_net_label">在网络上搜索</string>
     <string name="local_search_label">本地搜索结果</string>
     <string name="net_search_label">网络搜索结果</string>
+    <string name="check_count_hint">只能选10位好友!!!</string>
+    <string name="friend_list_hint">好友列表</string>
 </resources>

@@ -73,13 +73,15 @@ public class EventDetailFragment extends DetailFragment {
             mImageAuthor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    OtherUserHomeActivity.show(mContext,author);
+                    OtherUserHomeActivity.show(mContext, author);
                 }
             });
         }
         HashMap<String, Object> extra = bean.getExtra();
         if (extra != null) {
-            mTextLocation.setText(getExtraString(extra.get("eventSpot")));
+            mTextLocation.setText(getExtraString(extra.get("eventProvince")) + " " +
+                    getExtraString(extra.get("eventCity")) + " " +
+                    getExtraString(extra.get("eventSpot")));
             mTextMember.setText(String.format("%s人参与", getExtraInt(extra.get("eventApplyCount"))));
             mTextStartDate.setText(getExtraString(extra.get("eventStartDate")));
             mTextCostDesc.setText(getExtraString(extra.get("eventCostDesc")));
