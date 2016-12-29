@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
-import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -35,11 +34,7 @@ import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
-<<<<<<< HEAD
-import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TLog;
-=======
->>>>>>> origin/v2.8.0
 import net.oschina.app.util.UIHelper;
 import net.oschina.common.widget.RichEditText;
 
@@ -383,11 +378,12 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             int selStart = mEditContent.getSelectionStart();
             int selEnd = mEditContent.getSelectionEnd();
 
-            TLog.e(TAG, "start:" + selStart + " end:" + selEnd + " " + msg.subSequence(selStart - 1, selEnd));
-            if (selStart == selEnd && selStart > 0 && msg.subSequence(selStart - 1, selEnd).equals("@")) {
-                selStart--;
+            TLog.e(TAG, "start:" + selStart + " end:" + selEnd + " A" + msg.subSequence(selStart - 1, selEnd) + "A");
+            if (selStart == selEnd && selStart > 0 && "@".equals(msg.subSequence(selStart - 1, selEnd).toString())) {
+                selStart = selStart - 1;
+                TLog.e(TAG, "start:" + selStart + " end:" + selEnd);
             }
-            TLog.e(TAG, "start:" + selStart + " end:" + selEnd);
+
             msg.replace(selStart, selEnd, spannable);
 
             mEditContent.postDelayed(new Runnable() {
