@@ -28,11 +28,20 @@ public class DetailPresenter implements DetailContract.Presenter {
     private final DetailContract.EmptyView mEmptyView;
     private SubBean mBean;
 
-    public DetailPresenter(DetailContract.View mView, DetailContract.EmptyView mEmptyView, SubBean bean) {
+    DetailPresenter(DetailContract.View mView, DetailContract.EmptyView mEmptyView, SubBean bean) {
         this.mView = mView;
         this.mBean = bean;
         this.mEmptyView = mEmptyView;
         this.mView.setPresenter(this);
+    }
+
+    @Override
+    public void getCache() {
+        SubBean cacheBean = DetailCache.readCache(mBean);
+        if (cacheBean == null)
+            return;
+        mView.showGetDetailSuccess(cacheBean);
+        mEmptyView.showGetDetailSuccess(cacheBean);
     }
 
     @Override
@@ -52,6 +61,7 @@ public class DetailPresenter implements DetailContract.Presenter {
                     ResultBean<SubBean> bean = AppOperator.createGson().fromJson(responseString, type);
                     if (bean.isSuccess()) {
                         mBean = bean.getResult();
+                        DetailCache.addCache(mBean);
                         mView.showGetDetailSuccess(mBean);
                         mEmptyView.showGetDetailSuccess(mBean);
                     } else {
