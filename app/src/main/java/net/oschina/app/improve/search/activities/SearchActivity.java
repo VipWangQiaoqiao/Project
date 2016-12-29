@@ -106,6 +106,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         String content = mSearchText;
         if (TextUtils.isEmpty(content)) return;
         doSearch(content, false);
+        mViewSearch.clearFocus();
     }
 
     @Override
