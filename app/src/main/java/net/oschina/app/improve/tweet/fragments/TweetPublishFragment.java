@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -32,10 +33,11 @@ import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.ClipView;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.improve.utils.AssimilateUtils;
-import net.oschina.app.improve.widget.RichEditText;
 import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
 import net.oschina.app.ui.SelectFriendsActivity;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
+import net.oschina.common.widget.RichEditText;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -51,7 +53,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     private static final String TEXT_TAG = "#输入软件名#";
 
     @Bind(R.id.edit_content)
-    EditText mEditContent;
+    RichEditText mEditContent;
 
     @Bind(R.id.recycler_images)
     TweetPicturesPreviewer mLayImages;
@@ -193,6 +195,18 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                             getResources().getColor(R.color.tweet_indicator_text_color) :
                             getResources().getColor(R.color.tweet_indicator_text_color_error));
                 }
+            }
+        });
+
+        mEditContent.setOnKeyArrivedListener(new RichEditText.OnKeyArrivedListener() {
+            @Override
+            public void onMentionKeyArrived() {
+                onClick(findView(R.id.iv_mention));
+            }
+
+            @Override
+            public void onTopicKeyArrived() {
+                onClick(findView(R.id.iv_tag));
             }
         });
     }
@@ -360,8 +374,17 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             SpannableString spannable = new SpannableString(text);
             RichEditText.matchMention(spannable);
             RichEditText.matchTopic(spannable);
+
             Editable msg = mEditContent.getText();
-            msg.insert(mEditContent.getSelectionStart(), spannable);
+            int selStart = mEditContent.getSelectionStart();
+            int selEnd = mEditContent.getSelectionEnd();
+
+            TLog.e(TAG, "start:" + selStart + " end:" + selEnd + " " + msg.subSequence(selStart - 1, selEnd));
+            if (selStart == selEnd && selStart > 0 && msg.subSequence(selStart - 1, selEnd).equals("@")) {
+                selStart--;
+            }
+            TLog.e(TAG, "start:" + selStart + " end:" + selEnd);
+            msg.replace(selStart, selEnd, spannable);
 
             mEditContent.postDelayed(new Runnable() {
                 @Override
@@ -391,9 +414,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void setContent(String content, boolean needSelectionEnd) {
         Spannable span = InputHelper.displayEmoji(getResources(), content, (int) mEditContent.getTextSize());
-        RichEditText.matchMention(span);
-        RichEditText.matchTopic(span);
-
         mEditContent.setText(span);
         if (needSelectionEnd)
             mEditContent.setSelection(mEditContent.getText().length());

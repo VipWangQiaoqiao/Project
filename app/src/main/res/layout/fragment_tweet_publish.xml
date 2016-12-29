@@ -33,7 +33,7 @@
                 android:padding="@dimen/lay_16"
                 app:layout_scrollFlags="scroll|enterAlways">
 
-                <net.oschina.app.improve.widget.RichEditText
+                <net.oschina.common.widget.RichEditText
                     android:id="@+id/edit_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
