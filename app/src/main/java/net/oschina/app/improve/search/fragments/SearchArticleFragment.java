@@ -36,6 +36,7 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
 
     private int catalog = News.TYPE_NEWS;
     private String content;
+    private boolean isRequesting;
 
     public static Fragment instantiate(Context context, int catalog) {
         Fragment fragment = new SearchArticleFragment();
@@ -75,8 +76,16 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
             mRefreshLayout.setRefreshing(false);
             return;
         }
+        if (isRequesting) return;
+        isRequesting = true;
         String token = isRefreshing ? null : mBean.getNextPageToken();
         OSChinaApi.search(catalog, content, token, mHandler);
+    }
+
+    @Override
+    protected void onRequestFinish() {
+        super.onRequestFinish();
+        isRequesting = false;
     }
 
     @Override
