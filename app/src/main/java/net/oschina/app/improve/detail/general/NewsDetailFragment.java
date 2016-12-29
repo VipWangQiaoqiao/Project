@@ -92,8 +92,10 @@ public class NewsDetailFragment extends DetailFragment {
 
     @Override
     public void onDestroy() {
-        ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_NEWS,
-                mViewScroller.getScrollY());
+        if (mBean != null && mBean.getId() > 0) {
+            ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_NEWS,
+                    mViewScroller.getScrollY());
+        }
         super.onDestroy();
     }
 }
