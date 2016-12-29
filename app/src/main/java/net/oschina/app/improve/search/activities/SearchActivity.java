@@ -229,9 +229,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
             return false;
         }
 
-        // Check network is wifi, by auto option
-        if (fromTextChange && !TDevice.isWifiOpen()) return false;
-
         mLayoutTab.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.VISIBLE);
 

@@ -1,7 +1,6 @@
 package net.oschina.app.improve.widget;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
@@ -19,19 +18,17 @@ import android.view.WindowManager;
 public class BottomDialog extends BottomSheetDialog {
 
     private BottomSheetBehavior behavior;
+    private boolean isTranslucentStatus;
 
-
-    public BottomDialog(@NonNull Context context) {
+    public BottomDialog(@NonNull Context context, boolean isTranslucentStatus) {
         super(context);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        this.isTranslucentStatus = isTranslucentStatus;
         Window window = getWindow();
         if (window != null) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            if (isTranslucentStatus)
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
 
@@ -51,5 +48,6 @@ public class BottomDialog extends BottomSheetDialog {
         ViewGroup parent = (ViewGroup) view.getParent();
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) parent.getLayoutParams();
         behavior = (BottomSheetBehavior) params.getBehavior();
+
     }
 }

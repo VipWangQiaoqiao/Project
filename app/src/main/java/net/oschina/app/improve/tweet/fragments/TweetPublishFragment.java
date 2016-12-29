@@ -1,33 +1,21 @@
 package net.oschina.app.improve.tweet.fragments;
 
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StrikethroughSpan;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -44,10 +32,10 @@ import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.ClipView;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.widget.RichEditText;
+import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.UIHelper;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -57,6 +45,7 @@ import butterknife.OnClick;
  */
 @SuppressWarnings("WeakerAccess")
 public class TweetPublishFragment extends BaseFragment implements View.OnClickListener, TweetPublishContract.View {
+    private final static String TAG = TweetPublishFragment.class.getName();
     public static final int MAX_TEXT_LENGTH = 160;
     public static final int SELECT_FRIENDS_REQUEST_CODE = 100;
     private static final String TEXT_TAG = "#输入软件名#";
@@ -161,15 +150,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         });
 
         // add text change listener
-        mEditContent.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
+        mEditContent.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void afterTextChanged(Editable s) {
                 final int len = s.length();
@@ -214,8 +195,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 }
             }
         });
-
-        new TagSpanHandler(mEditContent);
     }
 
     private void setSendIconStatus(boolean haveContent, String content) {
@@ -378,123 +357,19 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 text += "@" + n + " ";
             }
 
-            SpannableString ss = new SpannableString(text);
-            int index = 0;
-            for (String n : names) {
-                ss.setSpan(new TagSpan(n), index, index = index + n.length() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                index += 1;
-            }
+            SpannableString spannable = new SpannableString(text);
+            RichEditText.matchMention(spannable);
+            RichEditText.matchTopic(spannable);
+            Editable msg = mEditContent.getText();
+            msg.insert(mEditContent.getSelectionStart(), spannable);
 
-            mEditContent.getText().insert(mEditContent.getSelectionStart(), ss);
-
-        }
-    }
-
-    private static class TagSpanHandler implements TextWatcher {
-        private final EditText mEditor;
-        private final ArrayList<TagSpan> mTagsToRemove = new ArrayList<>();
-
-        public TagSpanHandler(EditText editor) {
-            // Attach the handler to listen for text changes.
-            mEditor = editor;
-            mEditor.addTextChangedListener(this);
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence text, int start, int count, int after) {
-            // Check if some text will be removed.
-            if (count > 0) {
-                int end = start + count;
-                Editable message = mEditor.getEditableText();
-                TagSpan[] list = message.getSpans(start, end, TagSpan.class);
-
-                for (TagSpan span : list) {
-                    // Get only the emoticons that are inside of the changed
-                    // region.
-                    int spanStart = message.getSpanStart(span);
-                    int spanEnd = message.getSpanEnd(span);
-                    if ((spanStart < end) && (spanEnd > start)) {
-                        // Add to remove list
-                        mTagsToRemove.add(span);
-                    }
+            mEditContent.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mEditContent.requestFocus();
+                    mEmojiKeyboard.showSoftKeyboard(mEditContent);
                 }
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable text) {
-            Editable message = mEditor.getEditableText();
-
-            // Commit the emoticons to be removed.
-            for (TagSpan span : mTagsToRemove) {
-                int start = message.getSpanStart(span);
-                int end = message.getSpanEnd(span);
-
-                // Remove the span
-                message.removeSpan(span);
-
-                // Remove the remaining emoticon text.
-                if (start != end) {
-                    message.delete(start, end);
-                }
-            }
-            mTagsToRemove.clear();
-        }
-
-        @Override
-        public void onTextChanged(CharSequence text, int start, int before, int count) {
-        }
-
-    }
-
-    private void setTestString(EditText spanEditText) {
-
-        // this is the text we'll be operating on
-        SpannableStringBuilder text = new SpannableStringBuilder("World Super Power God LOVE");
-
-        // make "World" (characters 0 to 5) red
-        text.setSpan(new ForegroundColorSpan(Color.RED), 0, 5, 0);
-
-        // make "Super" (characters 6 to 11) one and a half time bigger than the textbox
-        text.setSpan(new RelativeSizeSpan(1.5f), 6, 11, 0);
-
-        // make "Power" (characters 12 to 17) display a toast message when touched
-        final Context context = getActivity().getApplicationContext();
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "Power", Toast.LENGTH_LONG).show();
-            }
-        };
-        text.setSpan(clickableSpan, 12, 17, 0);
-
-        // make "God" (characters 18 to 21) struck through
-        text.setSpan(new StrikethroughSpan(), 18, 21, 0);
-
-        // make "LOVE" (characters 22 to 26) twice as big, green and a link to this site.
-        // it's important to set the color after the URLSpan or the standard
-        // link color will override it.
-        text.setSpan(new RelativeSizeSpan(2f), 22, 26, 0);
-        text.setSpan(new ForegroundColorSpan(Color.GREEN), 22, 26, 0);
-
-        // make our ClickableSpans and URLSpans work
-        spanEditText.setMovementMethod(LinkMovementMethod.getInstance());
-
-        // shove our styled text into the TextView
-        spanEditText.setText(text, TextView.BufferType.EDITABLE);
-    }
-
-    @SuppressLint("ParcelCreator")
-    private class TagSpan extends ForegroundColorSpan {
-        private String value;
-
-        public TagSpan(String value) {
-            super(0xff000000);
-            this.value = value;
-        }
-
-        public TagSpan(Parcel src) {
-            super(src);
+            }, 280);
         }
     }
 
@@ -516,6 +391,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void setContent(String content, boolean needSelectionEnd) {
         Spannable span = InputHelper.displayEmoji(getResources(), content, (int) mEditContent.getTextSize());
+        RichEditText.matchMention(span);
+        RichEditText.matchTopic(span);
+
         mEditContent.setText(span);
         if (needSelectionEnd)
             mEditContent.setSelection(mEditContent.getText().length());

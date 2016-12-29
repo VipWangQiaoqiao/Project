@@ -19,6 +19,7 @@ import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.adapter.UserMentionAdapter;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
@@ -55,7 +56,9 @@ public class UserMentionFragment extends BaseRecyclerViewFragment<Mention> {
     @Override
     public void onItemClick(int position, long itemId) {
         Mention mention = mAdapter.getItem(position);
+        if (mention == null) return;
         Origin origin = mention.getOrigin();
+        if (origin == null) return;
         switch (origin.getType()) {
             case Origin.ORIGIN_TYPE_LINK:
                 UIHelper.showUrlRedirect(getContext(), origin.getHref());
@@ -82,7 +85,7 @@ public class UserMentionFragment extends BaseRecyclerViewFragment<Mention> {
                 TweetDetailActivity.show(getContext(), origin.getId());
                 break;
             default:
-                // pass
+                SimplexToast.show(getContext(), "不支持该类型");
         }
     }
 
