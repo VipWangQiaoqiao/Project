@@ -27,6 +27,7 @@ public class DetailPresenter implements DetailContract.Presenter {
     private final DetailContract.View mView;
     private final DetailContract.EmptyView mEmptyView;
     private SubBean mBean;
+    private SubBean mCacheBean;
 
     DetailPresenter(DetailContract.View mView, DetailContract.EmptyView mEmptyView, SubBean bean) {
         this.mView = mView;
@@ -37,11 +38,11 @@ public class DetailPresenter implements DetailContract.Presenter {
 
     @Override
     public void getCache() {
-        SubBean cacheBean = DetailCache.readCache(mBean);
-        if (cacheBean == null)
+        mCacheBean = DetailCache.readCache(mBean);
+        if (mCacheBean == null)
             return;
-        mView.showGetDetailSuccess(cacheBean);
-        mEmptyView.showGetDetailSuccess(cacheBean);
+        mView.showGetDetailSuccess(mCacheBean);
+        mEmptyView.showGetDetailSuccess(mCacheBean);
     }
 
     @Override
@@ -50,6 +51,8 @@ public class DetailPresenter implements DetailContract.Presenter {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 //mView.showNetworkError(R.string.tip_network_error);
+                if(mCacheBean != null)
+                    return;
                 mEmptyView.showErrorLayout(EmptyLayout.NETWORK_ERROR);
             }
 
@@ -65,6 +68,8 @@ public class DetailPresenter implements DetailContract.Presenter {
                         mView.showGetDetailSuccess(mBean);
                         mEmptyView.showGetDetailSuccess(mBean);
                     } else {
+                        if(mCacheBean != null)
+                            return;
                         mEmptyView.showErrorLayout(EmptyLayout.NODATA);
                     }
                 } catch (Exception e) {

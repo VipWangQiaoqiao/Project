@@ -19,7 +19,7 @@ import java.util.Date;
  * Created by haibin
  * on 2016/12/29.
  */
-
+@SuppressWarnings("All")
 public final class DetailCache {
     private static final long ONE_DAY = 86400000;//1天毫秒
     private static String CUSTOM_CACHE;
@@ -56,9 +56,10 @@ public final class DetailCache {
     /**
      * 添加到缓存文件
      */
-    public static void addCache(SubBean bean) {
+    static void addCache(SubBean bean) {
+        String name = bean.getId() + String.valueOf(bean.getType());
         String path = (bean.isFavorite() ? COLLECTION_CACHE : CUSTOM_CACHE)
-                + bean.getId() + String.valueOf(bean.getType());
+                + name;
         File file = new File(path);
         FileOutputStream os = null;
         try {
@@ -78,7 +79,7 @@ public final class DetailCache {
     /**
      * 读取缓存
      */
-    public static SubBean readCache(SubBean bean) {
+    static SubBean readCache(SubBean bean) {
         String path = (bean.isFavorite() ? COLLECTION_CACHE : CUSTOM_CACHE)
                 + bean.getId() + String.valueOf(bean.getType());
         File file = new File(path);
