@@ -14,12 +14,11 @@ import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
-import net.oschina.app.improve.detail.activities.EventDetailActivity;
-import net.oschina.app.improve.detail.activities.NewsDetailActivity;
-import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
-import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
+import net.oschina.app.improve.detail.general.BlogDetailActivity;
+import net.oschina.app.improve.detail.general.EventDetailActivity;
+import net.oschina.app.improve.detail.general.QuestionDetailActivity;
+import net.oschina.app.improve.detail.general.SoftwareDetailActivity;
 import net.oschina.app.improve.user.adapter.CollectionAdapter;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.UIHelper;
@@ -64,7 +63,7 @@ public class UserCollectionActivity extends BaseRecyclerViewActivity<Collection>
                 EventDetailActivity.show(this, item.getId());
                 break;
             case News.TYPE_NEWS:
-                NewsDetailActivity.show(this, item.getId());
+                //NewsDetailActivity.show(this, item.getId());
                 break;
             default:
                 UIHelper.showUrlRedirect(this, item.getHref());
