@@ -1,6 +1,5 @@
 package net.oschina.app.improve.user.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,10 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -25,6 +28,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.user.OnFriendSelector;
 import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapter;
 import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
 import net.oschina.app.improve.user.bean.UserFansOrFollows;
@@ -32,6 +36,7 @@ import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.IndexView;
 
 import java.lang.reflect.Type;
@@ -50,7 +55,7 @@ import static net.oschina.app.api.remote.OSChinaApi.TYPE_USER_FOLOWS;
  * desc:
  */
 
-public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener {
+public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "UserSelectFriendsActivity";
 
@@ -59,7 +64,10 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Bind(R.id.searcher_friends)
     SearchView mSearchView;
     @Bind(R.id.recycler_friends_icon)
-    HorizontalScrollView mRecyclerFriendsIcon;
+    HorizontalScrollView mHorizontalScrollView;
+
+    @Bind(R.id.select_container)
+    LinearLayout mSelectContainer;
 
     @Bind(R.id.tv_label)
     TextView mTvLabel;
@@ -101,6 +109,14 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         mRecyclerFriends.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerFriends.setAdapter(mLocalAdapter = new UserSelectFriendsAdapter(this));
+        mLocalAdapter.setOnFriendSelector(new OnFriendSelector() {
+            @Override
+            public void select(View view, UserFriend userFriend, int position) {
+
+                addHeaderSelectView(userFriend);
+
+            }
+        });
 
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +131,14 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         mIndex.setOnIndexTouchListener(this);
 
+        mTvLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -122,53 +146,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                 return false;
             }
         });
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.e(TAG, "onQueryTextSubmit: ---->" + query);
-                return true;
-            }
-
-            @SuppressLint("SetTextI18n")
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                Log.e(TAG, "onQueryTextChange: -------->" + newText);
-
-                if (TextUtils.isEmpty(newText)) {
-                    mTvLabel.setVisibility(View.GONE);
-                    mIndex.setVisibility(View.VISIBLE);
-
-                    mRecyclerFriends.setAdapter(mLocalAdapter);
-
-                    if (mSearchAdapter == null) {
-                        mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
-                    }
-                    mSearchAdapter.notifyDataSetChanged();
-                    mSearchAdapter.setSearchContent(newText);
-                    return false;
-                } else {
-                    if (mIndex.getVisibility() == View.VISIBLE) {
-                        mIndex.setVisibility(View.GONE);
-                    }
-                    mTvLabel.setText("@" + newText);
-                    mTvLabel.setVisibility(View.VISIBLE);
-
-                    if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
-                        if (mSearchAdapter == null) {
-                            mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
-                        }
-                        mRecyclerFriends.setAdapter(mSearchAdapter);
-                    }
-                    queryUpdateView(newText);
-
-                }
-
-                mSearchAdapter.setSearchContent(newText);
-                return true;
-
-            }
-        });
+        mSearchView.setOnQueryTextListener(this);
 
         mSearchView.post(new Runnable() {
             @SuppressWarnings("RestrictedApi")
@@ -185,6 +163,81 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         super.initData();
         requestData();
     }
+
+    /**
+     * 添加顶部选中的用户头像
+     */
+    private void addHeaderSelectView(UserFriend friend) {
+        mHorizontalScrollView.setVisibility(View.VISIBLE);
+        //mSearchIcon.setVisibility(View.GONE);
+
+        final long userId = friend.getId();
+
+        final AvatarView image = new AvatarView(this);
+        image.setDisplayCircle(false);
+        image.setImageResource(R.mipmap.widget_dface);
+        image.setAvatarUrl(friend.getPortrait());
+        image.setTag(userId);
+
+        //点击删除
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //removeCheckedFriend(userId);
+            }
+        });
+
+        int size = getResources().getDimensionPixelSize(R.dimen.select_friend_avatar_size);
+        int minSize = 40;
+
+
+        //修正HorizontalScrollView的大小
+        ViewGroup.LayoutParams layoutParams = mHorizontalScrollView.getLayoutParams();
+        if (size + 10 + mHorizontalScrollView.getWidth() > mSearchView.getWidth() - minSize
+                && layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            layoutParams.width = mHorizontalScrollView.getWidth();
+            mHorizontalScrollView.setLayoutParams(layoutParams);
+        }
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(size, size);
+        lp.gravity = Gravity.CENTER_VERTICAL;
+        lp.leftMargin = 5;
+        lp.rightMargin = 5;
+        mSelectContainer.addView(image, lp);
+
+        //滚动到最后
+        image.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                image.getViewTreeObserver().removeOnPreDrawListener(this);
+                mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                return false;
+            }
+        });
+    }
+
+    //    /**
+    //     * 移除顶部选中的用户头像
+    //     */
+    //    private void removeHeaderSelectView(int userId) {
+    //        View view = mSelectContainer.findViewWithTag(userId);
+    //        if (view != null) {
+    //            //修正HorizontalScrollView的大小
+    //            ViewGroup.LayoutParams layoutParams = mHorizontalScrollView.getLayoutParams();
+    //            if (layoutParams.width != ViewGroup.LayoutParams.WRAP_CONTENT) {
+    //                int minSize = (int) mSearchEditText.getPaint().measureText("搜 索");
+    //                if (mSelectContainer.getWidth() - view.getWidth() <= topLayout.getWidth() - minSize)
+    //                    layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+    //                mHorizontalScrollView.setLayoutParams(layoutParams);
+    //            }
+    //
+    //            mSelectContainer.removeView(view);
+    //        }
+    //        if (mSelectContainer.getChildCount() == 0) {
+    //            mSearchIcon.setVisibility(View.VISIBLE);
+    //            mHorizontalScrollView.setVisibility(View.GONE);
+    //        }
+    //    }
 
     private boolean checkNetIsAvailable() {
         if (!TDevice.hasInternet()) {
@@ -414,4 +467,56 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         super.onBackPressed();
         Log.e(TAG, "onBackPressed: --->");
     }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Log.e(TAG, "onQueryTextSubmit: ---->" + query);
+
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        Log.e(TAG, "onQueryTextChange: -------->" + newText);
+
+        if (TextUtils.isEmpty(newText)) {
+            mTvLabel.setVisibility(View.GONE);
+            mIndex.setVisibility(View.VISIBLE);
+
+            mRecyclerFriends.setAdapter(mLocalAdapter);
+
+            if (mSearchAdapter == null) {
+                mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
+            }
+            mSearchAdapter.notifyDataSetChanged();
+            mSearchAdapter.setSearchContent(newText);
+            return false;
+        } else {
+            if (mIndex.getVisibility() == View.VISIBLE) {
+                mIndex.setVisibility(View.GONE);
+            }
+            mTvLabel.setText("@" + newText);
+            mTvLabel.setVisibility(View.VISIBLE);
+
+            if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
+                if (mSearchAdapter == null) {
+                    mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
+                }
+                mRecyclerFriends.setAdapter(mSearchAdapter);
+            }
+            queryUpdateView(newText);
+        }
+
+        mSearchAdapter.setOnOnFriendSelecter(new OnFriendSelector() {
+            @Override
+            public void select(View view, UserFriend userFriend, int position) {
+
+            }
+        });
+        mSearchAdapter.setSearchContent(newText);
+        return true;
+
+    }
+
 }

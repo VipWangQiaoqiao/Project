@@ -23,6 +23,7 @@ import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.user.OnFriendSelector;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -56,6 +57,8 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
     private List<UserFriend> mItems = new ArrayList<>();
     private String mSearchContent;
 
+    private OnFriendSelector mOnFriendSelector;
+
     public UserSearchFriendsAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
@@ -67,9 +70,21 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
             case INDEX_TYPE:
                 return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
             case USER_TYPE:
-                return new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
+                UserInfoViewHolder userInfoViewHolder = new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
+
+                userInfoViewHolder.itemView.setTag(userInfoViewHolder);
+                userInfoViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mOnFriendSelector == null) return;
+                        UserInfoViewHolder holder = (UserInfoViewHolder) v.getTag();
+                        mOnFriendSelector.select(v, mItems.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+                    }
+                });
+
+                return userInfoViewHolder;
             case SEARCH_TYPE:
-                return new SearchViewHolder(inflater.inflate(R.layout.recycler_footer_view, parent, false), this);
+                return new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false), this);
             default:
                 return null;
         }
@@ -122,6 +137,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         items.subList(0, position);
     }
 
+    public void setOnOnFriendSelecter(OnFriendSelector OnFriendSelector) {
+        mOnFriendSelector = OnFriendSelector;
+    }
+
     public void setSearchContent(String searchContent) {
         this.mSearchContent = searchContent;
     }
@@ -134,6 +153,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         this.mItems.add(index, userFriend);
         notifyDataSetChanged();
     }
+
 
     static class IndexViewHolder extends RecyclerView.ViewHolder {
 
@@ -157,7 +177,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         @Bind(R.id.tv_name)
         TextView mtvName;
         @Bind(R.id.line)
-        View mline;
+        View mLine;
 
         UserInfoViewHolder(View itemView) {
             super(itemView);
@@ -176,79 +196,100 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
             mtvName.setText(item.getName());
 
             if (item.isGoneLine())
-                mline.setVisibility(View.GONE);
+                mLine.setVisibility(View.GONE);
         }
 
         private void setImageFromNet(ImageView imageView, String imageUrl, int placeholder) {
             ImageLoader.loadImage(Glide.with(imageView.getContext()), imageView, imageUrl, placeholder);
         }
-
     }
+
 
     static class SearchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.pb_footer)
         ProgressBar mProgressBar;
-        @Bind(R.id.bt_search)
-        TextView mBtSearch;
-        private int position;
-        private UserFriend mNetLabelFriend;
+        @Bind(R.id.tv_footer)
+        TextView mTvSearch;
         private UserSearchFriendsAdapter mUserSearchFriendsAdapter;
 
         private String mNextPageToken;
         private String mSearchContent;
+
+        private int mStatus = 0x00;
 
         SearchViewHolder(View itemView, UserSearchFriendsAdapter searchFriendsAdapter) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.mUserSearchFriendsAdapter = searchFriendsAdapter;
             mProgressBar.setVisibility(View.GONE);
+            itemView.setOnClickListener(this);
         }
 
         void onBindView(UserFriend item, int position) {
-            mBtSearch.setText("在网络上搜索");
-            mBtSearch.setOnClickListener(this);
-            this.position = position;
+            mTvSearch.setText("在网络上搜索");
             Log.e(TAG, "onBindView: ---->" + position);
+            if (mStatus == 0x01) {
+                requestData(mTvSearch);
+            }
         }
 
         @Override
         public void onClick(final View v) {
 
             Log.e(TAG, "onClick: ------>进行网络搜索 " + mNextPageToken);
-            mSearchContent = mUserSearchFriendsAdapter.getSearchContent();
 
-            if (TextUtils.isEmpty(mSearchContent)) {
+            requestData(v);
+        }
+
+        private void requestData(final View v) {
+
+            String searchContent = mUserSearchFriendsAdapter.getSearchContent();
+
+            Log.e(TAG, "requestData: ------> " + searchContent);
+
+            if (TextUtils.isEmpty(searchContent)) {
+                mNextPageToken = null;
+                mStatus = 0x00;
                 AppContext.showToastShort("搜索内容不能为空！！！");
                 return;
+            } else {
+                if (!searchContent.equals(mSearchContent)) {
+                    mNextPageToken = null;
+                    mStatus = 0x00;
+                }
             }
+
+            mSearchContent = searchContent;
 
             if (!TDevice.hasInternet()) {
                 AppContext.showToastShort(R.string.error_view_network_error_click_to_refresh);
                 return;
             }
 
-            OSChinaApi.search(News.TYPE_FIND_PERSON, mSearchContent, TextUtils.isEmpty(mNextPageToken)
+            OSChinaApi.search(News.TYPE_FIND_PERSON, searchContent, TextUtils.isEmpty(mNextPageToken)
                     ? null : mNextPageToken, new TextHttpResponseHandler() {
 
                 @Override
                 public void onStart() {
                     super.onStart();
                     Log.e(TAG, "onStart: ---->");
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mTvSearch.setText("数据正在加载中...");
                 }
 
                 @Override
                 public void onFinish() {
                     super.onFinish();
                     Log.e(TAG, "onFinish: ----->");
+                    mProgressBar.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                    mTvSearch.setText("数据加载失败,请重试...");
                 }
 
-                @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
@@ -257,27 +298,23 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
                     ResultBean<PageBean<User>> resultBean = AppOperator.createGson().fromJson(responseString, type);
 
-
                     if (resultBean.isSuccess()) {
+
                         Log.e(TAG, "onSuccess: ---->");
 
                         PageBean<User> pageBean = resultBean.getResult();
 
                         List<User> users = pageBean.getItems();
 
+                        //为网络请求的数据加入label
+                        UserFriend netFriend = new UserFriend();
+                        netFriend.setName("");
+                        netFriend.setShowViewType(INDEX_TYPE);
+                        netFriend.setShowLabel(v.getResources().getString(R.string.net_search_label));
 
-                        if (mNetLabelFriend == null) {
-                            //为网络请求的数据加入label
-                            UserFriend netFriend = new UserFriend();
-                            netFriend.setName("");
-                            netFriend.setShowViewType(INDEX_TYPE);
-                            netFriend.setShowLabel(v.getResources().getString(R.string.net_search_label));
+                        mUserSearchFriendsAdapter.addItem(mUserSearchFriendsAdapter.getItemCount() - 1, netFriend);
 
-                            mUserSearchFriendsAdapter.clearNetSearchData(position);
-                            mUserSearchFriendsAdapter.addItem(position, netFriend);
-
-                            mNetLabelFriend = netFriend;
-                        }
+                        mTvSearch.setText("点击加载更多数据...");
 
                         for (User user : users) {
 
@@ -293,12 +330,18 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                         }
 
                         mNextPageToken = pageBean.getNextPageToken();
-                        Log.e(TAG, "onSuccess: ------>" + mNextPageToken + " " + pageBean.getTotalResults());
+
+                        int totalResults = pageBean.getTotalResults();
+
+                        mStatus = 0x01;
+
+                        Log.e(TAG, "onSuccess: ------>" + mNextPageToken + " " + totalResults);
+                    } else {
+                        mTvSearch.setText("没有更多数据...");
                     }
 
                 }
             });
-
         }
     }
 }

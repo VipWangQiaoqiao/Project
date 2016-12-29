@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.user.OnFriendSelector;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.util.ImageLoader;
@@ -37,6 +38,8 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
     private LayoutInflater mInflater;
     private List<UserFriend> mItems = new ArrayList<>();
 
+    private OnFriendSelector mOnFriendSelector;
+
     public UserSelectFriendsAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
@@ -48,7 +51,18 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
             case INDEX_TYPE:
                 return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
             case USER_TYPE:
-                return new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
+                UserInfoViewHolder userInfoViewHolder = new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
+
+                userInfoViewHolder.itemView.setTag(userInfoViewHolder);
+                userInfoViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mOnFriendSelector == null) return;
+                        UserInfoViewHolder holder = (UserInfoViewHolder) v.getTag();
+                        mOnFriendSelector.select(v, mItems.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+                    }
+                });
+                return userInfoViewHolder;
             default:
                 return null;
         }
@@ -85,6 +99,10 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         List<UserFriend> item = this.mItems;
         return item.size();
+    }
+
+    public void setOnFriendSelector(OnFriendSelector onFriendSelector) {
+        mOnFriendSelector = onFriendSelector;
     }
 
     public void addItems(List<UserFriend> items) {
