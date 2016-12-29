@@ -55,7 +55,7 @@ public class UserEventFragment extends BaseGeneralRecyclerFragment<SubBean> {
             return;
         switch (sub.getType()) {
             case News.TYPE_EVENT:
-                EventDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.EventDetailActivity.show(mContext, sub.getId());
                 break;
             default:
                 UIHelper.showUrlRedirect(mContext, sub.getHref());

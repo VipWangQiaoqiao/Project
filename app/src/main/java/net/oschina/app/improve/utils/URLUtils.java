@@ -136,7 +136,7 @@ public class URLUtils {
                 matcher = PATTERN_PATH_NEWS.matcher(path);
                 if (matcher.find()) {
                     oid = StringUtils.toLong(matcher.group(1));
-                    NewsDetailActivity.show(context, oid);
+                    net.oschina.app.improve.detail.general.NewsDetailActivity.show(context, oid);
                     break;
                 }
                 matcher = PATTERN_PATH_SOFTWARE.matcher(path);
@@ -164,7 +164,7 @@ public class URLUtils {
                 matcher = PATTERN_PATH_QUESTION.matcher(path);
                 if (matcher.find()) {
                     oid = StringUtils.toLong(matcher.group(1).split("_")[1]);
-                    QuestionDetailActivity.show(context, oid);
+                    net.oschina.app.improve.detail.general.QuestionDetailActivity.show(context, oid);
                     break;
                 }
                 matcher = PATTERN_PATH_EVENT.matcher(path);
@@ -189,7 +189,7 @@ public class URLUtils {
                 matcher = PATTERN_PATH_USER_BLOG.matcher(path);
                 if (matcher.find()) {
                     oid = StringUtils.toLong(matcher.group(2));
-                    BlogDetailActivity.show(context, oid);
+                    net.oschina.app.improve.detail.general.BlogDetailActivity.show(context, oid);
                     break;
                 }
                 matcher = PATTERN_PATH_USER_TWEET.matcher(path);
