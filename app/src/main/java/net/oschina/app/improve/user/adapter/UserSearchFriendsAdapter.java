@@ -3,7 +3,6 @@ package net.oschina.app.improve.user.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +45,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
-
-    public static final String TAG = "UserSelectFriendsAdapter";
 
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
@@ -228,7 +225,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
         void onBindView(UserFriend item, int position) {
             mTvSearch.setText("在网络上搜索");
-            Log.e(TAG, "onBindView: ---->" + position);
             if (mStatus == 0x01) {
                 requestData(mTvSearch);
             }
@@ -237,16 +233,12 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(final View v) {
 
-            Log.e(TAG, "onClick: ------>进行网络搜索 " + mNextPageToken);
-
             requestData(v);
         }
 
         private void requestData(final View v) {
 
             String searchContent = mUserSearchFriendsAdapter.getSearchContent();
-
-            Log.e(TAG, "requestData: ------> " + searchContent);
 
             if (TextUtils.isEmpty(searchContent)) {
                 mNextPageToken = null;
@@ -273,7 +265,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onStart() {
                     super.onStart();
-                    Log.e(TAG, "onStart: ---->");
                     mProgressBar.setVisibility(View.VISIBLE);
                     mTvSearch.setText("数据正在加载中...");
                 }
@@ -281,7 +272,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onFinish() {
                     super.onFinish();
-                    Log.e(TAG, "onFinish: ----->");
                     mProgressBar.setVisibility(View.GONE);
                 }
 
@@ -299,8 +289,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                     ResultBean<PageBean<User>> resultBean = AppOperator.createGson().fromJson(responseString, type);
 
                     if (resultBean.isSuccess()) {
-
-                        Log.e(TAG, "onSuccess: ---->");
 
                         PageBean<User> pageBean = resultBean.getResult();
 
@@ -335,7 +323,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
                         mStatus = 0x01;
 
-                        Log.e(TAG, "onSuccess: ------>" + mNextPageToken + " " + totalResults);
                     } else {
                         mTvSearch.setText("没有更多数据...");
                     }
