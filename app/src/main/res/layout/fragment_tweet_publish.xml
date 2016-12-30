@@ -157,11 +157,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
+
             <LinearLayout
                 android:id="@+id/lay_enter_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/grey_50"
                 android:gravity="center_vertical"
                 android:visibility="gone">
 
@@ -169,9 +173,8 @@
                     android:id="@+id/edit_enter_tag"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:background="@null"
-                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:background="#1624cf5f"
                     android:hint="@string/hint_enter_tag"
                     android:imeOptions="actionDone"
                     android:inputType="text"
@@ -182,30 +185,25 @@
                     android:paddingLeft="@dimen/lay_12"
                     android:paddingRight="@dimen/lay_12"
                     android:paddingTop="@dimen/lay_8"
+                    android:textColor="#ff24cf5f"
                     android:textSize="15sp" />
 
                 <net.qiujuer.genius.ui.widget.ImageView
                     android:id="@+id/btn_submit_enter_tag"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/lay_44"
-                    android:layout_weight="1"
+                    android:layout_width="@dimen/lay_56"
+                    android:layout_height="@dimen/lay_40"
+                    android:background="@color/main_green"
                     android:clickable="true"
                     android:contentDescription="@string/app_name"
                     android:paddingBottom="@dimen/lay_8"
                     android:paddingTop="@dimen/lay_8"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_tweet_ok_normal"
-                    android:visibility="gone"
                     app:gTouchColor="@color/main_touch"
                     app:gTouchCornerRadius="0dp"
                     app:gTouchEffect="ripple" />
 
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/list_divider_color" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -270,7 +268,6 @@
                     android:paddingTop="@dimen/lay_12"
                     android:scaleType="fitCenter"
                     android:src="@mipmap/ic_tweet_expression_normal"
-                    app:gInterceptEvent="none"
                     app:gTouchColor="@color/main_touch"
                     app:gTouchCornerRadius="0dp"
                     app:gTouchEffect="ripple" />
