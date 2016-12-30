@@ -51,7 +51,7 @@ public class DetailPresenter implements DetailContract.Presenter {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 //mView.showNetworkError(R.string.tip_network_error);
-                if(mCacheBean != null)
+                if (mCacheBean != null)
                     return;
                 mEmptyView.showErrorLayout(EmptyLayout.NETWORK_ERROR);
             }
@@ -64,11 +64,10 @@ public class DetailPresenter implements DetailContract.Presenter {
                     ResultBean<SubBean> bean = AppOperator.createGson().fromJson(responseString, type);
                     if (bean.isSuccess()) {
                         mBean = bean.getResult();
-                        DetailCache.addCache(mBean);
                         mView.showGetDetailSuccess(mBean);
                         mEmptyView.showGetDetailSuccess(mBean);
                     } else {
-                        if(mCacheBean != null)
+                        if (mCacheBean != null)
                             return;
                         mEmptyView.showErrorLayout(EmptyLayout.NODATA);
                     }
@@ -96,6 +95,7 @@ public class DetailPresenter implements DetailContract.Presenter {
                     ResultBean<Collection> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         Collection collection = resultBean.getResult();
+                        mBean.setFavorite(collection.isFavorite());
                         mView.showFavReverseSuccess(collection.isFavorite(), collection.isFavorite() ? R.string.add_favorite_success : R.string.del_favorite_success);
                         mEmptyView.showFavReverseSuccess(collection.isFavorite(), collection.isFavorite() ? R.string.add_favorite_success : R.string.del_favorite_success);
                     } else {
@@ -163,6 +163,7 @@ public class DetailPresenter implements DetailContract.Presenter {
                     ResultBean<UserRelation> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         int relation = resultBean.getResult().getRelation();
+                        mBean.getAuthor().setRelation(relation);
                         boolean isRelation = relation == UserRelation.RELATION_ALL
                                 || relation == UserRelation.RELATION_ONLY_YOU;
                         mView.showAddRelationSuccess(isRelation,

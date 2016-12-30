@@ -34,6 +34,18 @@ public class NewsDetailActivity extends DetailActivity {
         context.startActivity(intent);
     }
 
+    public static void show(Context context,long id, boolean isFav) {
+        Intent intent = new Intent(context, NewsDetailActivity.class);
+        Bundle bundle = new Bundle();
+        SubBean bean = new SubBean();
+        bean.setType(News.TYPE_NEWS);
+        bean.setId(id);
+        bean.setFavorite(isFav);
+        bundle.putSerializable("sub_bean", bean);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
     @Override
     protected DetailFragment getDetailFragment() {
         return NewsDetailFragment.newInstance();
