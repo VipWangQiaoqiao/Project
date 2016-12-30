@@ -13,6 +13,10 @@ public class Author implements Serializable {
     protected int relation;
     protected int gender;
 
+    public Author() {
+        relation = 4;
+    }
+
     public long getId() {
         return id;
     }

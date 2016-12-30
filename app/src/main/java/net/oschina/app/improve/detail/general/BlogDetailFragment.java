@@ -79,7 +79,7 @@ public class BlogDetailFragment extends DetailFragment {
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
         Author author = bean.getAuthor();
-        if(author != null){
+        if (author != null) {
             mTextName.setText(author.getName());
             getImgLoader().load(author.getPortrait()).asBitmap().into(mImageAvatar);
         }

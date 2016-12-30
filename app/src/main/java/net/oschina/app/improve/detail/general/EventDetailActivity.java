@@ -86,6 +86,18 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
         context.startActivity(intent);
     }
 
+    public static void show(Context context, long id, boolean isFav) {
+        Intent intent = new Intent(context, EventDetailActivity.class);
+        Bundle bundle = new Bundle();
+        SubBean bean = new SubBean();
+        bean.setType(News.TYPE_EVENT);
+        bean.setId(id);
+        bean.setFavorite(isFav);
+        bundle.putSerializable("sub_bean", bean);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int getContentView() {
         return R.layout.activity_event_detail_v2;

@@ -328,10 +328,14 @@
     <string name="search_man">找人</string>
 
     <string name="add_relation_success">关注成功</string>
-    <string name="cancel_relation_success">关注失败</string>
+    <string name="cancel_relation_success">取消关注成功</string>
     <string name="search_net_label">在网络上搜索</string>
     <string name="local_search_label">本地搜索结果</string>
     <string name="net_search_label">网络搜索结果</string>
     <string name="check_count_hint">只能选10位好友!!!</string>
     <string name="friend_list_hint">好友列表</string>
+
+    <string name="btn_ok">确定</string>
+    <string name="btn_cancel">取消</string>
+    <string name="hint_enter_tag">输入讨论话题/软件名</string>
 </resources>

@@ -337,15 +337,18 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
     protected abstract DetailFragment getDetailFragment();
 
+    @Override
+    public void finish() {
+        DetailCache.addCache(mBean);
+        super.finish();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
             mDelegation.getBottomSheet().handleSelectFriendsResult(data);
             mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
-
     }
 }
