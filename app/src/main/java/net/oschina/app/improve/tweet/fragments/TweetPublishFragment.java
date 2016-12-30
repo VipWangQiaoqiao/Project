@@ -1,6 +1,8 @@
 package net.oschina.app.improve.tweet.fragments;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +13,10 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,7 +38,7 @@ import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
-import net.oschina.app.util.TLog;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.common.widget.RichEditText;
 
@@ -45,7 +49,8 @@ import butterknife.OnClick;
  * 发布动弹界面实现
  */
 @SuppressWarnings("WeakerAccess")
-public class TweetPublishFragment extends BaseFragment implements View.OnClickListener, TweetPublishContract.View {
+public class TweetPublishFragment extends BaseFragment implements View.OnClickListener,
+        TweetPublishContract.View {
     private final static String TAG = TweetPublishFragment.class.getName();
     public static final int MAX_TEXT_LENGTH = 160;
     public static final int SELECT_FRIENDS_REQUEST_CODE = 100;
@@ -65,6 +70,12 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @Bind(R.id.icon_send)
     View mIconSend;
+
+    @Bind(R.id.lay_enter_tag)
+    View mLayTagEnter;
+
+    @Bind(R.id.edit_enter_tag)
+    EditText mEditTagEnter;
 
     private TweetPublishContract.Operator mOperator;
     private final EmojiKeyboardFragment mEmojiKeyboard = new EmojiKeyboardFragment();
@@ -101,13 +112,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         super.initWidget(root);
         if (root instanceof ClipView) {
             ClipView clipView = ((ClipView) root);
-
             if (mBundle != null) {
                 clipView.setup(mBundle.getIntArray("location"), mBundle.getIntArray("size"));
             } else {
                 clipView.setup(null, null);
             }
-
             clipView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -208,6 +217,39 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 onClick(findView(R.id.iv_tag));
             }
         });
+
+        mEditTagEnter.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mEditContent.clearFocus();
+                    TDevice.showSoftKeyboard(mEditTagEnter);
+                } else {
+                    mLayTagEnter.animate()
+                            .alphaBy(1)
+                            .alpha(0)
+                            .setDuration(100)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    mLayTagEnter.setVisibility(View.GONE);
+                                    mLayTagEnter.setAlpha(1);
+                                }
+                            }).start();
+                }
+            }
+        });
+
+        mEditTagEnter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    onClick(findView(R.id.btn_submit_enter_tag));
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void setSendIconStatus(boolean haveContent, String content) {
@@ -230,7 +272,8 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     private long mLastClickTime;
 
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
-            R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back, R.id.icon_send})
+            R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back,
+            R.id.icon_send, R.id.btn_submit_enter_tag})
     @Override
     public void onClick(View v) {
         // 用来解决快速点击多个按钮弹出多个界面的情况
@@ -263,6 +306,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                     break;
                 case R.id.icon_send:
                     mOperator.publish();
+                    break;
+                case R.id.btn_submit_enter_tag:
+                    insertTrendSoftwareDone();
                     break;
 
             }
@@ -308,34 +354,46 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
+    private void insertTrendSoftwareDone() {
+        String text = mEditTagEnter.getText().toString();
+        if (text.trim().length() > 0) {
+            Editable msg = mEditContent.getText();
+            int selStart = mEditContent.getSelectionStart();
+            int selEnd = mEditContent.getSelectionEnd();
+
+            text = String.format("#%s# ", text.replace("#", ""));
+
+            int selStartBefore = selStart - 1;
+            if (selStart == selEnd && selStart > 0
+                    && "#".equals(msg.subSequence(selStartBefore, selEnd).toString())
+                    && msg.getSpans(selStartBefore, selEnd, RichEditText.TagSpan.class).length == 0) {
+                selStart = selStartBefore;
+            }
+
+            Spannable spannable = RichEditText.matchMention(new SpannableString(text));
+            spannable = RichEditText.matchTopic(spannable);
+
+            msg.replace(selStart, selEnd, spannable);
+        }
+        insertTrendSoftware();
+    }
+
     /**
      * 插入 #软件名#
      */
     private void insertTrendSoftware() {
-        final EditText editText = mEditContent;
-        final int maxTextLen = MAX_TEXT_LENGTH;
-        int curTextLength = editText.getText().length();
-        if (curTextLength >= maxTextLen)
-            return;
-        String software = TEXT_TAG;
-        int start, end;
-        if ((maxTextLen - curTextLength) >= software.length()) {
-            start = editText.getSelectionStart() + 1;
-            end = start + software.length() - 2;
+        if (mLayTagEnter.getVisibility() == View.VISIBLE) {
+            mLayTagEnter.setVisibility(View.GONE);
+            mEditTagEnter.setText("");
+            mEditTagEnter.clearFocus();
+            mEditContent.requestFocus();
         } else {
-            int num = maxTextLen - curTextLength;
-            if (num < software.length()) {
-                software = software.substring(0, num);
-            }
-            start = editText.getSelectionStart() + 1;
-            end = start + software.length() - 1;
+            mLayTagEnter.setVisibility(View.VISIBLE);
+            mEditContent.clearFocus();
+            mEditTagEnter.requestFocus();
+
+
         }
-        if (start > maxTextLen || end > maxTextLen) {
-            start = maxTextLen;
-            end = maxTextLen;
-        }
-        editText.getText().insert(editText.getSelectionStart(), software);
-        editText.setSelection(start, end);
     }
 
     /**
@@ -349,9 +407,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             UIHelper.showLoginActivity(context);
             return;
         }
-
-        //Intent intent = new Intent(context, SelectFriendsActivity.class);
-        //startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
 
         Intent intent = new Intent(context, UserSelectFriendsActivity.class);
         startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
@@ -377,33 +432,33 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             Editable msg = mEditContent.getText();
             int selStart = mEditContent.getSelectionStart();
             int selEnd = mEditContent.getSelectionEnd();
-
-            TLog.e(TAG, "start:" + selStart + " end:" + selEnd + " A" + msg.subSequence(selStart - 1, selEnd) + "A");
-            if (selStart == selEnd && selStart > 0 && "@".equals(msg.subSequence(selStart - 1, selEnd).toString())) {
-                selStart = selStart - 1;
-                TLog.e(TAG, "start:" + selStart + " end:" + selEnd);
+            
+            int selStartBefore = selStart - 1;
+            if (selStart == selEnd && selStart > 0
+                    && "@".equals(msg.subSequence(selStartBefore, selEnd).toString())
+                    && msg.getSpans(selStartBefore, selEnd, RichEditText.TagSpan.class).length == 0) {
+                selStart = selStartBefore;
             }
 
             msg.replace(selStart, selEnd, spannable);
-
-            mEditContent.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mEditContent.requestFocus();
-                    mEmojiKeyboard.showSoftKeyboard(mEditContent);
-                }
-            }, 280);
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK)
-            return;
-        if (requestCode == SELECT_FRIENDS_REQUEST_CODE) {
+        if (resultCode == Activity.RESULT_OK
+                && requestCode == SELECT_FRIENDS_REQUEST_CODE) {
             handleSelectFriendsResult(data);
         }
+
+        mEditContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mEditContent.requestFocus();
+                mEmojiKeyboard.showSoftKeyboard(mEditContent);
+            }
+        }, 280);
     }
 
     @Override
@@ -497,5 +552,4 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         if (savedInstanceState != null)
             mOperator.onRestoreInstanceState(savedInstanceState);
     }
-
 }
