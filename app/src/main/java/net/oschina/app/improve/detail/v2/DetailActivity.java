@@ -246,7 +246,8 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
         // 分享
         if (mAlertDialog == null) {
-            mAlertDialog = new ShareDialog(this)
+            mAlertDialog = new ShareDialog(this,mBean.getId())
+                    .type(mBean.getType())
                     .title(title)
                     .content(content)
                     .url(url);
