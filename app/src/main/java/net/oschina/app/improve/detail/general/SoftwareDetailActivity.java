@@ -34,6 +34,18 @@ public class SoftwareDetailActivity extends DetailActivity {
         context.startActivity(intent);
     }
 
+    public static void show(Context context, long id, boolean isFav) {
+        Intent intent = new Intent(context, SoftwareDetailActivity.class);
+        Bundle bundle = new Bundle();
+        SubBean bean = new SubBean();
+        bean.setId(id);
+        bean.setType(1);
+        bean.setFavorite(isFav);
+        bundle.putSerializable("sub_bean", bean);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
     @Override
     protected DetailFragment getDetailFragment() {
         return SoftwareDetailFragment.newInstance();

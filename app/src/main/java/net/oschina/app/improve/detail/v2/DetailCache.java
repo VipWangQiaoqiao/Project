@@ -57,6 +57,8 @@ public final class DetailCache {
      * 添加到缓存文件
      */
     static void addCache(SubBean bean) {
+        if (bean == null)
+            return;
         String name = bean.getId() + String.valueOf(bean.getType());
         String path = (bean.isFavorite() ? COLLECTION_CACHE : CUSTOM_CACHE)
                 + name;
