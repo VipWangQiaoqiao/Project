@@ -44,7 +44,7 @@ public class UserMentionFragment extends BaseRecyclerViewFragment<Mention> {
     @Override
     protected void onRequestSuccess(int code) {
         super.onRequestSuccess(code);
-        if (activity != null) activity.onRequestSuccess(0);
+        if (activity != null && isRefreshing) activity.onRequestSuccess(0);
     }
 
     @Override
