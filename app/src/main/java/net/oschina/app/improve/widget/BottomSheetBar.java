@@ -32,7 +32,6 @@ import net.oschina.app.util.TDevice;
 @SuppressWarnings("unused")
 public class BottomSheetBar {
 
-    public static final String TAG = "BottomSheetBar";
     private View mRootView;
     private EditText mEditText;
     private ImageButton mAtView;
@@ -70,7 +69,7 @@ public class BottomSheetBar {
         mBtnCommit = (Button) mRootView.findViewById(R.id.btn_comment);
         mBtnCommit.setEnabled(false);
 
-        mDialog = new BottomDialog(mContext,false);
+        mDialog = new BottomDialog(mContext, false);
         mDialog.setContentView(mRootView);
 
         mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -158,7 +157,6 @@ public class BottomSheetBar {
         if (!"添加评论".equals(hint)) {
             mEditText.setHint(hint + " ");
         }
-        //Selection.setSelection(mEditText.getText(), mEditText.length());
         mRootView.postDelayed(new Runnable() {
             @Override
             public void run() {

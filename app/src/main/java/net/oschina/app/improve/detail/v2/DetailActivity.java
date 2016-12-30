@@ -1,6 +1,9 @@
 package net.oschina.app.improve.detail.v2;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -24,6 +27,7 @@ import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -38,6 +42,7 @@ import net.oschina.app.util.StringUtils;
 public abstract class DetailActivity extends BaseBackActivity implements
         DetailContract.EmptyView, Runnable,
         OnCommentClickListener {
+
     protected ProgressDialog mProgressDialog;
     protected DetailPresenter mPresenter;
     protected EmptyLayout mEmptyLayout;
@@ -46,7 +51,6 @@ public abstract class DetailActivity extends BaseBackActivity implements
     protected TextView mCommentCountView;
 
     protected CommentBar mDelegation;
-    private LinearLayout mLayComment;
 
     protected SubBean mBean;
 
@@ -62,7 +66,8 @@ public abstract class DetailActivity extends BaseBackActivity implements
     @Override
     protected void initWidget() {
         super.initWidget();
-        mLayComment = (LinearLayout) findViewById(R.id.ll_comment);
+
+        LinearLayout layComment = (LinearLayout) findViewById(R.id.ll_comment);
         mEmptyLayout = (EmptyLayout) findViewById(R.id.lay_error);
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +83,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
         addFragment(R.id.lay_container, mDetailFragment);
         mPresenter = new DetailPresenter(mDetailFragment, this, mBean);
         if (!mPresenter.isHideCommentBar()) {
-            mDelegation = CommentBar.delegation(this, mLayComment);
+            mDelegation = CommentBar.delegation(this, layComment);
             mDelegation.setFavDrawable(mBean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
 
             mDelegation.setFavListener(new View.OnClickListener() {
@@ -89,7 +94,17 @@ public abstract class DetailActivity extends BaseBackActivity implements
                         return;
                     }
                     mPresenter.favReverse();
+                }
+            });
 
+            mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ((AccountHelper.isLogin())) {
+                        UserSelectFriendsActivity.show(DetailActivity.this);
+                    } else {
+                        LoginActivity.show(DetailActivity.this, 1);
+                    }
                 }
             });
 
@@ -178,13 +193,14 @@ public abstract class DetailActivity extends BaseBackActivity implements
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
             TweetPublishService.startActionPublish(this,
                     mDelegation.getBottomSheet().getCommentText(), null,
-                    About.buildShare(mBean.getId(), OSChinaApi.COMMENT_NEWS));
+                    About.buildShare(mBean.getId(), mBean.getType()));
         }
         Toast.makeText(this, getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
         mDelegation.getCommentText().setHint(getString(R.string.add_comment_hint));
         mDelegation.getBottomSheet().getEditText().setText("");
         mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.add_comment_hint));
         mDelegation.getBottomSheet().dismiss();
+
     }
 
     @Override
@@ -192,6 +208,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
         hideDialog();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -286,4 +303,16 @@ public abstract class DetailActivity extends BaseBackActivity implements
     }
 
     protected abstract DetailFragment getDetailFragment();
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
+        }
+
+    }
 }
