@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +33,10 @@ import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 新版本详情页实现
@@ -229,9 +234,36 @@ public abstract class DetailActivity extends BaseBackActivity implements
     }
 
 
+    @SuppressWarnings("LoopStatementThatDoesntLoop")
     protected boolean toShare(String title, String content, String url) {
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(url))
             return false;
+
+        String imageUrl = null;
+
+        if (mBean != null && mBean.getType() == OSChinaApi.CATALOG_EVENT) {
+            List<SubBean.Image> images = mBean.getImages();
+            if (images != null && images.size() > 0) {
+                imageUrl = images.get(0).getThumb();
+
+                Log.e("TAG", "toShare: ----------->" + imageUrl + " " + images.get(0).getHref());
+            }
+        } else {
+            //"<\\s*img\\s+([^>]*)\\s*/>"
+            String regex = "<img src=\"([^\"]+)\"";
+
+            Pattern pattern = Pattern.compile(regex);
+
+            Matcher matcher = pattern.matcher(content);
+
+            while (matcher.find()) {
+                imageUrl = matcher.group(1);
+                Log.e("123", "toShare: ---->" + imageUrl);
+                break;
+            }
+        }
+
+        Log.e("123", "toShare: ----->分享搜索完毕");
 
         content = content.trim();
         if (content.length() > 55) {
@@ -249,6 +281,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
             mAlertDialog = new ShareDialog(this)
                     .title(title)
                     .content(content)
+                    .imageUrl(imageUrl)
                     .url(url);
         }
         mAlertDialog.show();

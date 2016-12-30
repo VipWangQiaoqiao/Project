@@ -5,12 +5,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
@@ -35,6 +39,7 @@ import net.oschina.open.factory.OpenBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -152,6 +157,35 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
         mShare.setBitmapResID(bitmapResID);
         return this;
     }
+
+    public ShareDialog imageUrl(final String imageUrl) {
+        mShare.setImageUrl(imageUrl);
+
+        if (!TextUtils.isEmpty(imageUrl)) {
+            AppOperator.runOnThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Bitmap thumbBitmap = Glide.with(getContext())
+                                .load(imageUrl)
+                                .asBitmap() //必须
+                                .centerCrop()
+                                .into(100, 100)
+                                .get();
+                        //为微博和微信加入分享的详情icon
+                        mShare.setThumbBitmap(thumbBitmap);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        return this;
+    }
+
 
     public ShareDialog id(int id) {
         this.id = id;

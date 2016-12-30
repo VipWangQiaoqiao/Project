@@ -1,5 +1,7 @@
 package net.oschina.open.bean;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 /**
@@ -16,6 +18,8 @@ public class Share implements Serializable {
     private String description;
     private String url;
     private int bitmapResID;
+    private String imageUrl;
+    private Bitmap thumbBitmap;
 
     public String getAppName() {
         return appName;
@@ -79,5 +83,21 @@ public class Share implements Serializable {
 
     public void setBitmapResID(int bitmapResID) {
         this.bitmapResID = bitmapResID;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Bitmap getThumbBitmap() {
+        return thumbBitmap;
+    }
+
+    public void setThumbBitmap(Bitmap thumbBitmap) {
+        this.thumbBitmap = thumbBitmap;
     }
 }
