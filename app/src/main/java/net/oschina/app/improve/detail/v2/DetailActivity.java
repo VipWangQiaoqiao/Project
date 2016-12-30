@@ -274,7 +274,8 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
         // 分享
         if (mAlertDialog == null) {
-            mAlertDialog = new ShareDialog(this)
+            mAlertDialog = new ShareDialog(this,mBean.getId())
+                    .type(mBean.getType())
                     .title(title)
                     .content(content)
                     .imageUrl(imageUrl)//如果没有图片，即url为null，直接加入app默认分享icon

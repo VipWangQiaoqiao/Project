@@ -35,6 +35,8 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
     private UserCommentFragment mUserCommentFragment;
     private UserMessageFragment mUserMessageFragment;
 
+    private int mStatusLoading = 0X000;
+
     private NoticeBean mNotice;
 
     public static void show (Context context) {
@@ -63,7 +65,8 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected (int position) {
-                clearSpecificNoticeIfNecessary(position);
+                int i = (mStatusLoading & 0X1 << 4 * (2 - position)) >>> 4 * (2 - position);
+                if (i == 1) clearSpecificNoticeIfNecessary(position);
             }
         });
 
@@ -76,7 +79,6 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
                 : INDEX_MENTION;
 
         mViewPager.setCurrentItem(mCurrentViewIndex);
-        clearSpecificNoticeIfNecessary(mCurrentViewIndex);
     }
 
     private void clearSpecificNoticeIfNecessary(int position) {
@@ -125,6 +127,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
     }
 
     public void onRequestSuccess (int position) {
+        mStatusLoading |= 0X1 << (2 - position) * 4;
         if (mViewPager.getCurrentItem() != position) return;
         clearSpecificNoticeIfNecessary(position);
     }
@@ -132,6 +135,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
     private void analyzeOldAndNew(int _old, int _new, int position) {
         if (_old == _new) return;
         if (mViewPager.getCurrentItem() != position || _new != 0) {
+            mStatusLoading &= 0X111 ^ 0X1 << (2 - position) * 4;
             postChangeTitle(position, 0);
         }else {
             postChangeTitle(position, 1500);

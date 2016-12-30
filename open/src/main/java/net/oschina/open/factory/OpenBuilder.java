@@ -73,10 +73,11 @@ public class OpenBuilder {
             params.putString(QQShare.SHARE_TO_QQ_SUMMARY, share.getSummary());
             params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, share.getUrl());
             String shareIconUrl = share.getImageUrl();
-            params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, TextUtils.isEmpty(shareIconUrl) ?
-                    String.valueOf(share.getAppShareIcon()) : shareIconUrl);
-            params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, TextUtils.isEmpty(shareIconUrl) ?
-                    String.valueOf(share.getAppShareIcon()) : shareIconUrl);
+            if (!TextUtils.isEmpty(shareIconUrl)) {
+                params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, shareIconUrl);
+            } else {
+                params.putInt(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, share.getAppShareIcon());
+            }
             params.putString(QQShare.SHARE_TO_QQ_APP_NAME, share.getAppName());
             if (callback != null) {
                 if (tencent != null) {
@@ -147,9 +148,11 @@ public class OpenBuilder {
             // 3. 发送请求消息到微博，唤起微博分享界面
             if ((!weiBoShareSDK.sendRequest(activity, request)) && callback != null) {
                 callback.onFailed();
+                bitmap.recycle();
             } else {
                 if (callback != null)
                     callback.onSuccess();
+                bitmap.recycle();
             }
         }
     }
@@ -234,9 +237,11 @@ public class OpenBuilder {
             //发送请求失败,回调
             if (!sendReq && callback != null) {
                 callback.onFailed();
+                bitmap.recycle();
             } else {
                 if (callback != null)
                     callback.onSuccess();
+                bitmap.recycle();
             }
         }
     }

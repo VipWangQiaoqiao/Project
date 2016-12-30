@@ -54,13 +54,37 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
     private Activity mActivity;
     private ProgressDialog mDialog;
     private About.Share mAboutShare;
-    private long id;
-    private int type;
     private Share mShare;
 
     public ShareDialog(@NonNull Activity activity) {
         super(activity, true);
         this.mActivity = activity;
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View contentView = inflater.inflate(R.layout.dialog_share_main, null, false);
+        RecyclerView shareRecycle = (RecyclerView) contentView.findViewById(R.id.share_recycler);
+        final ShareActionAdapter adapter = new ShareActionAdapter(activity);
+        adapter.addAll(getAdapterData());
+        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, long itemId) {
+                ShareDialog.this.onItemClick(position, adapter.getItem(position));
+            }
+        });
+        shareRecycle.setAdapter(adapter);
+        shareRecycle.setItemAnimator(new DefaultItemAnimator());
+        shareRecycle.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        setContentView(contentView);
+        setOnCancelListener(this);
+        setOnDismissListener(this);
+        mShare = new Share();
+        mShare.setAppName("开源中国");
+    }
+
+    public ShareDialog(@NonNull Activity activity, long id) {
+        this(activity);
+        this.mActivity = activity;
+        mAboutShare = new About.Share();
+        mAboutShare.id = id;
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View contentView = inflater.inflate(R.layout.dialog_share_main, null, false);
         RecyclerView shareRecycle = (RecyclerView) contentView.findViewById(R.id.share_recycler);
@@ -132,16 +156,21 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
 
     public ShareDialog title(String title) {
         mShare.setTitle(title);
+        mAboutShare.title = title;
         return this;
     }
 
     public ShareDialog summary(String summary) {
         mShare.setSummary(summary);
+        mAboutShare.content = summary;
         return this;
     }
 
     public ShareDialog content(String content) {
         mShare.setContent(content);
+        summary(content);
+        description(content);
+        mAboutShare.content = content;
         return this;
     }
 
@@ -170,11 +199,9 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
                     try {
                         Bitmap thumbBitmap = Glide.with(getContext())
                                 .load(imageUrl)
-                                .asBitmap()
-                                .centerCrop()
-                                .into(500, 500)
-                                .get();
+                                .asBitmap().into(100,100).get();
                         //为微博和微信加入分享的详情icon
+
                         mShare.setThumbBitmap(thumbBitmap);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -189,13 +216,13 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
     }
 
 
-    public ShareDialog id(int id) {
-        this.id = id;
+    public ShareDialog id(long id) {
+        mAboutShare.id = id;
         return this;
     }
 
     public ShareDialog type(int type) {
-        this.type = type;
+        mAboutShare.type = type;
         return this;
     }
 
