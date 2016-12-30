@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -241,14 +240,14 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
         String imageUrl = null;
 
+        //1.如果是活动直接在分享中加入活动icon
         if (mBean != null && mBean.getType() == OSChinaApi.CATALOG_EVENT) {
             List<SubBean.Image> images = mBean.getImages();
             if (images != null && images.size() > 0) {
                 imageUrl = images.get(0).getThumb();
-
-                Log.e("TAG", "toShare: ----------->" + imageUrl + " " + images.get(0).getHref());
             }
         } else {
+            //2.不是活动类型,匹配内容中是否有图片，有就返回第一张图片的url
             //"<\\s*img\\s+([^>]*)\\s*/>"
             String regex = "<img src=\"([^\"]+)\"";
 
@@ -258,12 +257,9 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
             while (matcher.find()) {
                 imageUrl = matcher.group(1);
-                Log.e("123", "toShare: ---->" + imageUrl);
                 break;
             }
         }
-
-        Log.e("123", "toShare: ----->分享搜索完毕");
 
         content = content.trim();
         if (content.length() > 55) {
@@ -281,8 +277,8 @@ public abstract class DetailActivity extends BaseBackActivity implements
             mAlertDialog = new ShareDialog(this)
                     .title(title)
                     .content(content)
-                    .imageUrl(imageUrl)
-                    .url(url);
+                    .imageUrl(imageUrl)//如果没有图片，即url为null，直接加入app默认分享icon
+                    .url(url).with();
         }
         mAlertDialog.show();
 

@@ -365,7 +365,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     alertDialog = new ShareDialog(this)
                             .title(content + " - 开源中国社区 ")
                             .content(tweet.getContent())
-                            .url(tweet.getHref());
+                            .url(tweet.getHref()).with();
                 alertDialog.show();
 
                 break;
@@ -554,7 +554,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-//                if (!mDelegation.onTurnBack()) return true;
+                //                if (!mDelegation.onTurnBack()) return true;
                 break;
         }
         return super.onKeyDown(keyCode, event);

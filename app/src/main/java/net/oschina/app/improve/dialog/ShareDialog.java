@@ -125,6 +125,8 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
     }
 
     public ShareDialog with() {
+        mShare.setAppShareIcon(R.mipmap.ic_share);
+        mShare.setBitmapResID(R.mipmap.ic_share);
         return this;
     }
 
@@ -168,9 +170,9 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
                     try {
                         Bitmap thumbBitmap = Glide.with(getContext())
                                 .load(imageUrl)
-                                .asBitmap() //必须
+                                .asBitmap()
                                 .centerCrop()
-                                .into(100, 100)
+                                .into(500, 500)
                                 .get();
                         //为微博和微信加入分享的详情icon
                         mShare.setThumbBitmap(thumbBitmap);
