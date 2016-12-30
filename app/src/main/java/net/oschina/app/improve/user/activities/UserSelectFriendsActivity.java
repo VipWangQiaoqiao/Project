@@ -1,7 +1,7 @@
 package net.oschina.app.improve.user.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,9 +51,9 @@ import java.util.Set;
 
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static net.oschina.app.api.remote.OSChinaApi.TYPE_USER_FOLOWS;
+import static net.oschina.app.improve.tweet.fragments.TweetPublishFragment.SELECT_FRIENDS_REQUEST_CODE;
 
 /**
  * Created by fei
@@ -117,9 +117,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     private UserSearchFriendsAdapter mSearchAdapter;
 
-    public static void show(Context context) {
-        Intent intent = new Intent(context, UserSelectFriendsActivity.class);
-        context.startActivity(intent);
+    public static void show(Activity activity) {
+        Intent intent = new Intent(activity, UserSelectFriendsActivity.class);
+        activity.startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
     }
 
 
