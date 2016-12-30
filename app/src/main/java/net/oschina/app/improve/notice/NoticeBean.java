@@ -63,6 +63,21 @@ public class NoticeBean implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NoticeBean that = (NoticeBean) o;
+
+        return mention == that.mention
+                && letter == that.letter
+                && review == that.review
+                && fans == that.fans
+                && like == that.like;
+
+    }
+
+    @Override
     public String toString() {
         return "NoticeBean{" +
                 "mention=" + mention +
