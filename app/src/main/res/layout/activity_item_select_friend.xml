@@ -24,14 +24,24 @@
             tools:src="@mipmap/widget_dface"/>
 
         <TextView
-            android:layout_marginLeft="@dimen/lay_8"
             android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/lay_8"
+            android:layout_weight="1"
             android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_16"
-            tools:text="Some"
-            tools:ignore="RelativeOverlap,RtlHardcoded"/>
+            tools:ignore="RelativeOverlap,RtlHardcoded"
+            tools:text="Some"/>
+
+        <View
+            android:id="@+id/view_select"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="@dimen/lay_8"
+            android:layout_marginRight="@dimen/lay_32"
+            android:background="@drawable/bg_friend_select"
+            tools:ignore="RtlHardcoded"/>
 
     </LinearLayout>
 

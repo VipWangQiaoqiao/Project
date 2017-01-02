@@ -28,7 +28,7 @@
 
     <!-- slide menu -->
 
-    <!-- qucik option -->
+    <!-- quick option -->
 
     <string name="loading">加载中…</string>
     <string name="loading_no_more">已加载全部</string>
@@ -327,12 +327,16 @@
     <string name="title_updating_user_avatar">正在上传头像…</string>
     <string name="search_man">找人</string>
 
+    <!--@联系人／好友-->
     <string name="add_relation_success">关注成功</string>
     <string name="cancel_relation_success">取消关注成功</string>
     <string name="search_net_label">在网络上搜索</string>
+    <string name="search_null_hint">搜索内容不能为空!!!</string>
+    <string name="search_error_hint">数据加载失败,请重试…</string>
+    <string name="search_load_more_hint">点击加载更多数据…</string>
     <string name="local_search_label">本地搜索结果</string>
     <string name="net_search_label">网络搜索结果</string>
-    <string name="check_count_hint">只能选10位好友!!!</string>
+    <string name="check_count_hint">只能选10位好友哦!!!</string>
     <string name="friend_list_hint">好友列表</string>
 
     <string name="btn_ok">确定</string>
