@@ -100,7 +100,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewPortrait.setImageResource(R.mipmap.widget_dface);
             holder.mViewPortrait.setOnClickListener(null);
             holder.mViewName.setText("匿名用户");
-        }else {
+        } else {
             Glide.with(mContext)
                     .load(author.getPortrait())
                     .asBitmap()
@@ -159,7 +159,8 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewCmmCount.setText(String.valueOf(item.getStatistics().getComment()));
             int mDispatchCount = item.getStatistics().getTransmit();
             if (mDispatchCount <= 0) {
-                holder.mViewDispatchCount.setVisibility(View.GONE);
+                //holder.mViewDispatchCount.setVisibility(View.GONE);
+                holder.mViewDispatchCount.setText("转发");
             } else {
                 holder.mViewDispatchCount.setVisibility(View.VISIBLE);
                 holder.mViewDispatchCount.setText(String.valueOf(item.getStatistics().getTransmit()));
@@ -169,6 +170,8 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewCmmCount.setText(String.valueOf(item.getCommentCount()));
             holder.mViewDispatchCount.setVisibility(View.GONE);
         }
+        String textCount = holder.mViewLikeCount.getText().toString();
+        holder.mViewLikeCount.setText("0".equals(textCount) ? "点赞" : textCount);
 
         /* - about - */
         if (item.getAbout() != null) {
