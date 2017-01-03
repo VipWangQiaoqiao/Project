@@ -1,7 +1,10 @@
 package net.oschina.app;
 
+import com.baidu.mapapi.SDKInitializer;
+
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.detail.v2.DetailCache;
 import net.oschina.common.helper.ReadStateHelper;
 
 /**
@@ -15,6 +18,7 @@ public class OSCApplication extends AppContext {
     public void onCreate() {
         super.onCreate();
         // 初始化操作
+        DetailCache.init(getApplicationContext());
         init();
     }
 
@@ -23,14 +27,14 @@ public class OSCApplication extends AppContext {
     }
 
     private void init() {
+        // 初始化异常捕获类
+        AppCrashHandler.getInstance().init(this);
         // 初始化账户基础信息
         AccountHelper.init(this);
         // 初始化网络请求
         ApiHttpClient.init(this);
-        // 初始化异常捕获类
-        AppCrashHandler handler = AppCrashHandler.getInstance();
-        if (!BuildConfig.DEBUG)
-            handler.init(this);
+        //初始化百度地图
+        SDKInitializer.initialize(this);
     }
 
     /**

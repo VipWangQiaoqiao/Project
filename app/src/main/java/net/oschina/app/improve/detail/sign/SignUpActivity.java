@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.sign;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -32,6 +33,12 @@ public class SignUpActivity extends BaseBackActivity implements SignUpContract.E
         Intent intent = new Intent(fragment.getActivity(), SignUpActivity.class);
         intent.putExtra("sourceId", sourceId);
         fragment.startActivityForResult(intent, 0x01);
+    }
+
+    public static void show(Activity activity, long sourceId) {
+        Intent intent = new Intent(activity, SignUpActivity.class);
+        intent.putExtra("sourceId", sourceId);
+        activity.startActivityForResult(intent, 0x01);
     }
 
     @Override

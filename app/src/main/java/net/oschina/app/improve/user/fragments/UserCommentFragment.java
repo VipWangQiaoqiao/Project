@@ -11,11 +11,11 @@ import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Origin;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
-import net.oschina.app.improve.detail.activities.EventDetailActivity;
-import net.oschina.app.improve.detail.activities.NewsDetailActivity;
-import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
-import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
+import net.oschina.app.improve.detail.general.BlogDetailActivity;
+import net.oschina.app.improve.detail.general.EventDetailActivity;
+import net.oschina.app.improve.detail.general.NewsDetailActivity;
+import net.oschina.app.improve.detail.general.QuestionDetailActivity;
+import net.oschina.app.improve.detail.general.SoftwareDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.adapter.UserMentionAdapter;
@@ -44,7 +44,7 @@ public class UserCommentFragment extends BaseRecyclerViewFragment<Mention> {
     @Override
     protected void onRequestSuccess(int code) {
         super.onRequestSuccess(code);
-        if (activity != null) activity.onRequestSuccess(1);
+        if (activity != null && isRefreshing) activity.onRequestSuccess(1);
     }
 
     @Override

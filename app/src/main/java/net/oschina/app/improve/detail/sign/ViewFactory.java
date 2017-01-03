@@ -132,6 +132,7 @@ final class ViewFactory {
 
     private static View getRadios(Activity activity, LayoutInflater inflater, final SignUpEventOptions options) {
         View view = inflater.inflate(R.layout.event_sign_up_radios, null);
+        ((TextView) view.findViewById(R.id.tv_label)).setText(options.getLabel() + (options.isRequired() ? "" : "（选填）") + ":");
         RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.rg_options);
         RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -179,6 +180,7 @@ final class ViewFactory {
     private static View getCheckBox(Activity activity, LayoutInflater inflater, final SignUpEventOptions options) {
         View view = inflater.inflate(R.layout.event_sign_up_check_box, null);
         FlowLayout ll_check_box = (FlowLayout) view.findViewById(R.id.fl_check_box);
+        ((TextView) view.findViewById(R.id.tv_label)).setText(options.getLabel() + (options.isRequired() ? "" : "（选填）") + ":");
         RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);

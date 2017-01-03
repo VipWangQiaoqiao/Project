@@ -18,10 +18,10 @@
         android:background="@drawable/item_selector">
 
         <ImageView
-            style="@style/option_item_img"
-            android:layout_marginRight="@dimen/space_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:contentDescription="@null"
-            android:scaleType="fitCenter"
             android:src="@mipmap/ic_discover_softwares"
             tools:ignore="RtlHardcoded" />
 
@@ -53,9 +53,10 @@
         android:background="@drawable/item_selector">
 
         <ImageView
-            style="@style/option_item_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:contentDescription="@null"
-            android:scaleType="fitCenter"
             android:src="@mipmap/ic_discover_scan" />
 
         <TextView
@@ -90,9 +91,10 @@
         android:background="@drawable/item_selector">
 
         <ImageView
-            style="@style/option_item_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:contentDescription="@null"
-            android:scaleType="fitCenter"
             android:src="@mipmap/ic_discover_shake" />
 
         <TextView
@@ -119,15 +121,51 @@
         android:layout_marginTop="25dp" />
 
     <LinearLayout
+        android:id="@+id/layout_nearby"
+        style="@style/option_item_rl"
+        android:background="@drawable/item_selector">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="@dimen/space_10"
+            android:contentDescription="@null"
+            android:src="@mipmap/ic_discover_nearby" />
+
+        <TextView
+            style="@style/option_item_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="附近的人" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            app:srcCompat="@mipmap/ic_arrow_right" />
+    </LinearLayout>
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px" />
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px"
+        android:layout_marginTop="25dp" />
+
+    <LinearLayout
         android:id="@+id/layout_events"
         style="@style/option_item_rl"
         android:background="@drawable/item_selector">
 
         <ImageView
-            style="@style/option_item_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="@dimen/space_10"
             android:contentDescription="@null"
-            android:scaleType="fitCenter"
             android:src="@mipmap/ic_my_event" />
 
         <TextView

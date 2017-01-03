@@ -3,6 +3,7 @@ package net.oschina.open.factory;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.sina.weibo.sdk.api.WebpageObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
@@ -71,7 +72,12 @@ public class OpenBuilder {
             params.putString(QQShare.SHARE_TO_QQ_TITLE, share.getTitle());
             params.putString(QQShare.SHARE_TO_QQ_SUMMARY, share.getSummary());
             params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, share.getUrl());
-            params.putInt(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, share.getAppShareIcon());
+            String shareIconUrl = share.getImageUrl();
+            if (!TextUtils.isEmpty(shareIconUrl)) {
+                params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, shareIconUrl);
+            } else {
+                params.putInt(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, share.getAppShareIcon());
+            }
             params.putString(QQShare.SHARE_TO_QQ_APP_NAME, share.getAppName());
             if (callback != null) {
                 if (tencent != null) {
@@ -120,7 +126,11 @@ public class OpenBuilder {
             webpageObject.title = share.getTitle();
             webpageObject.description = share.getTitle();
 
-            Bitmap bitmap = OpenUtils.getShareBitmap(activity.getApplicationContext(), share.getBitmapResID());
+            Bitmap bitmap = share.getThumbBitmap();
+            if (bitmap == null) {
+                bitmap = OpenUtils.getShareBitmap(activity.getApplicationContext(), share.getBitmapResID());
+            }
+
             // 设置 Bitmap 类型的图片到视频对象里         最好设置缩略图。 注意：最终压缩过的缩略图大小不得超过 32kb。
             webpageObject.setThumbImage(bitmap);
             webpageObject.actionUrl = share.getUrl();
@@ -138,9 +148,11 @@ public class OpenBuilder {
             // 3. 发送请求消息到微博，唤起微博分享界面
             if ((!weiBoShareSDK.sendRequest(activity, request)) && callback != null) {
                 callback.onFailed();
+                bitmap.recycle();
             } else {
                 if (callback != null)
                     callback.onSuccess();
+                bitmap.recycle();
             }
         }
     }
@@ -207,7 +219,10 @@ public class OpenBuilder {
             msg.mediaObject = wxWebpageObject;
             msg.description = share.getDescription();
 
-            Bitmap bitmap = OpenUtils.getShareBitmap(activity, share.getBitmapResID());
+            Bitmap bitmap = share.getThumbBitmap();
+            if (bitmap == null) {
+                bitmap = OpenUtils.getShareBitmap(activity, share.getBitmapResID());
+            }
             msg.setThumbImage(bitmap);
 
             //3.构造一个Req
@@ -222,9 +237,11 @@ public class OpenBuilder {
             //发送请求失败,回调
             if (!sendReq && callback != null) {
                 callback.onFailed();
+                bitmap.recycle();
             } else {
                 if (callback != null)
                     callback.onSuccess();
+                bitmap.recycle();
             }
         }
     }

@@ -84,9 +84,7 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
-        RequestManager manager = mImgLoader;
-        if (manager != null)
-            manager.onDestroy();
+        mImgLoader = null;
         mBundle = null;
     }
 

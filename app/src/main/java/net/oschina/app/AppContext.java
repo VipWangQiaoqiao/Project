@@ -4,8 +4,6 @@ import net.oschina.app.base.BaseApplication;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.util.MethodsCompat;
 
-import org.kymjs.kjframe.Core;
-
 import java.util.Properties;
 
 import static net.oschina.app.AppConfig.KEY_LOAD_IMAGE;
@@ -93,7 +91,6 @@ public class AppContext extends BaseApplication {
             if (_key.startsWith("temp"))
                 removeProperty(_key);
         }
-        Core.getKJBitmap().cleanCache();
     }
 
     public static void setLoadImage(boolean flag) {

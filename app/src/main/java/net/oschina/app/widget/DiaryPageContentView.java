@@ -1,22 +1,5 @@
 package net.oschina.app.widget;
 
-import java.util.List;
-
-import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseFragment;
-import net.oschina.app.cache.CacheManager;
-import net.oschina.app.team.adapter.TeamDiaryListAdapter;
-import net.oschina.app.team.bean.TeamDiary;
-import net.oschina.app.team.bean.TeamDiaryList;
-import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
-import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
-
-import cz.msebera.android.httpclient.Header;
-import org.kymjs.kjframe.http.KJAsyncTask;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -31,9 +14,26 @@ import android.widget.RelativeLayout;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.team.adapter.TeamDiaryListAdapter;
+import net.oschina.app.team.bean.TeamDiary;
+import net.oschina.app.team.bean.TeamDiaryList;
+import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
+import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
+
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
+
 /**
  * 周报每个Page,单独拿出来写
- * 
+ *
  * @author kymjs (http://www.kymjs.com)
  */
 public class DiaryPageContentView {
@@ -51,7 +51,9 @@ public class DiaryPageContentView {
     private TeamDiaryList datas;
     private final TeamDiaryListAdapter adapter;
 
-    /** 只允许new View的形式创建 */
+    /**
+     * 只允许new View的形式创建
+     */
     public DiaryPageContentView(Context context, int teamId, int year, int week) {
         this.teamId = teamId;
         this.year = year;
@@ -79,7 +81,7 @@ public class DiaryPageContentView {
         listview.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
+                                    int position, long id) {
                 Bundle args = new Bundle();
                 args.putInt(TeamDiaryFragment.TEAMID_KEY, teamId);
                 args.putSerializable(TeamDiaryFragment.DIARYDETAIL_KEY, datas
@@ -121,7 +123,7 @@ public class DiaryPageContentView {
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {
+                                          Throwable arg3) {
                         /* 网络异常 */
                         if (errorLayout != null) {
                             errorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
@@ -132,8 +134,9 @@ public class DiaryPageContentView {
 
                     @Override
                     public void onSuccess(int arg0, Header[] arg1,
-                            final byte[] arg2) {
-                        KJAsyncTask.execute(new Runnable() {
+                                          final byte[] arg2) {
+
+                        AppOperator.runOnThread(new Runnable() {
                             @Override
                             public void run() {
                                 datas = XmlUtils.toBean(TeamDiaryList.class,

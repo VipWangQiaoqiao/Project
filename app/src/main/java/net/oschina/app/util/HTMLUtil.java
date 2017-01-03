@@ -1,7 +1,6 @@
 package net.oschina.app.util;
 
 import android.text.TextUtils;
-import android.widget.Button;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,10 +66,11 @@ public class HTMLUtil {
 
     /**
      * 呵呵
+     *
      * @param input
      * @return
      */
-    public static String rollbackReplaceTag(String input){
+    public static String rollbackReplaceTag(String input) {
         if (TextUtils.isEmpty(input)) return input;
         return input.replace("&lt;", "<")
                 .replace("&gt;", ">")

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_material"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/lay_8">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_portrait"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            tools:src="@mipmap/widget_dface"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/lay_8"
+            android:layout_weight="1"
+            android:textColor="?attr/textColor"
+            android:textSize="@dimen/text_size_16"
+            tools:ignore="RelativeOverlap,RtlHardcoded"
+            tools:text="Some"/>
+
+        <View
+            android:id="@+id/view_select"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="@dimen/lay_8"
+            android:layout_marginRight="@dimen/lay_32"
+            android:background="@drawable/bg_friend_select"
+            tools:ignore="RtlHardcoded"/>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        style="@style/h_line"
+        android:layout_marginLeft="@dimen/lay_8"
+        tools:ignore="RtlHardcoded"/>
+</LinearLayout>

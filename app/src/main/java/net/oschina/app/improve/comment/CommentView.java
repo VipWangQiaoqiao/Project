@@ -116,6 +116,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
 
     public void init(long id, final int type, int order, final int commentCount, final RequestManager imageLoader,
                      final OnCommentClickListener onCommentClickListener) {
+
         this.mId = id;
         this.mType = type;
 
@@ -137,6 +138,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                     ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, getCommentType());
                     if (resultBean.isSuccess()) {
                         List<Comment> comments = resultBean.getResult().getItems();
+
                         int size = comments.size();
                         if (type == OSChinaApi.COMMENT_NEWS) {
                             List<Comment> hotComments = new ArrayList<>();
@@ -190,7 +192,8 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                                 }
                             }
                         });
-                        mLayComments.addView(lay, indexOfChild(mLabelBottomLine));
+
+                        addView(lay, indexOfChild(mLabelBottomLine));
                         if (i == len - 1) {
                             lay.findViewById(R.id.line).setVisibility(GONE);
                         } else {

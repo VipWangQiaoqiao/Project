@@ -40,7 +40,7 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     @Override
     protected void onRequestSuccess(int code) {
         super.onRequestSuccess(code);
-        if (activity != null) activity.onRequestSuccess(2);
+        if (activity != null && isRefreshing) activity.onRequestSuccess(2);
     }
 
     @Override
