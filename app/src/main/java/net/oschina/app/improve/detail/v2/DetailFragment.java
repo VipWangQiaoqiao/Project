@@ -65,6 +65,8 @@ public abstract class DetailFragment extends BaseFragment implements
 
         if (mCommentView == null)
             return;
+        SubBean.Statistics statistics = bean.getStatistics();
+        if(statistics == null)return;
         mCommentView.setTitle(String.format("%s (%d)", getResources().getString(R.string.answer_hint), bean.getStatistics().getComment()));
         mCommentView.init(bean.getId(),
                 bean.getType(),
