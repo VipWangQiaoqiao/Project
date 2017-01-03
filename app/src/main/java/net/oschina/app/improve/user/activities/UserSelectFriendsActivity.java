@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +37,7 @@ import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
 import net.oschina.app.improve.user.bean.UserFansOrFollows;
 import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.IndexView;
@@ -96,6 +96,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Bind(R.id.lay_error)
     EmptyLayout mEmptyLayout;
 
+    private String CACHE_NAME = getClass().getName();
+
     private PageBean<UserFansOrFollows> mPageBean;
 
     //网络初始化的adapter
@@ -143,7 +145,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         });
 
-        //初始化searchview的搜索icon
+        //初始化searchView的搜索icon
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mSearchIcon.getLayoutParams();
         params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         mSearchIcon.setLayoutParams(params);
@@ -164,10 +166,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
             @Override
             public void selectFull(int selectCount) {
-
-                Log.e(TAG, "selectFull: ----->");
                 AppContext.showToastShort(getString(R.string.check_count_hint));
-
             }
         });
 
@@ -247,7 +246,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
         }
 
-        requestData();
+        List<UserFansOrFollows> cacheUserFriends = CacheManager.readListJson(getApplicationContext(), CACHE_NAME, UserFansOrFollows.class);
+
+        if (cacheUserFriends != null && cacheUserFriends.size() > 0) {
+            updateView(cacheUserFriends);
+        } else {
+            requestData();
+        }
     }
 
     private void updateSelectIcon(UserFriend userFriend) {
@@ -506,6 +511,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         //自然排序
         Collections.sort(mCacheFriends);
 
+        CacheManager.saveToJson(getApplicationContext(), CACHE_NAME, fansOrFollows);
+
         mLocalAdapter.addItems(mCacheFriends);
     }
 
@@ -518,7 +525,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         int position = 0;
         for (int i = userFriends.size() - 1; i > 0; i--) {
             UserFriend friend = userFriends.get(i);
-            if (friend.getName().startsWith(Character.toString(indexLetter))) {
+            if (friend.getShowLabel().startsWith(Character.toString(indexLetter))) {
                 position = i;
                 break;
             }
@@ -591,7 +598,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
             @Override
             public void selectFull(int selectCount) {
-                Log.e(TAG, "selectFull: ----->");
                 AppContext.showToastShort(getString(R.string.check_count_hint));
 
             }
