@@ -6,16 +6,14 @@
     android:layout_height="@dimen/title_bar_warp_height"
     android:background="@color/tweet_publish_title_bg">
 
-    <net.qiujuer.genius.ui.widget.ImageView
+    <ImageView
         android:id="@+id/icon_back"
         android:layout_width="@dimen/title_bar_warp_height"
         android:layout_height="@dimen/title_bar_warp_height"
         android:layout_gravity="left"
         android:clickable="true"
         android:scaleType="centerInside"
-        android:src="@mipmap/btn_back_normal"
-        app:gTouchColor="@color/black_alpha_16"
-        app:gTouchEffect="press" />
+        android:src="@mipmap/btn_back_normal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,7 +24,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/font_18" />
 
-    <net.qiujuer.genius.ui.widget.Button
+    <Button
         android:id="@+id/icon_send"
         android:layout_width="@dimen/title_bar_warp_height"
         android:layout_height="@dimen/title_bar_warp_height"
@@ -36,7 +34,5 @@
         android:gravity="center"
         android:text="发送"
         android:textColor="@color/tweet_publish_send"
-        android:textSize="@dimen/font_16"
-        app:gTouchColor="@color/black_alpha_16"
-        app:gTouchEffect="press" />
+        android:textSize="@dimen/font_16"/>
 </FrameLayout>

@@ -188,7 +188,7 @@
                     android:textColor="#ff24cf5f"
                     android:textSize="15sp" />
 
-                <net.qiujuer.genius.ui.widget.ImageView
+                <ImageView
                     android:id="@+id/btn_submit_enter_tag"
                     android:layout_width="@dimen/lay_56"
                     android:layout_height="@dimen/lay_40"
@@ -198,10 +198,7 @@
                     android:paddingBottom="@dimen/lay_8"
                     android:paddingTop="@dimen/lay_8"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_tweet_ok_normal"
-                    app:gTouchColor="@color/main_touch"
-                    app:gTouchCornerRadius="0dp"
-                    app:gTouchEffect="ripple" />
+                    android:src="@drawable/ic_tweet_ok_normal" />
 
             </LinearLayout>
 
@@ -211,7 +208,7 @@
                 android:gravity="center_horizontal"
                 android:weightSum="4">
 
-                <net.qiujuer.genius.ui.widget.ImageView
+                <ImageView
                     android:id="@+id/iv_picture"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -221,12 +218,9 @@
                     android:paddingBottom="@dimen/lay_12"
                     android:paddingTop="@dimen/lay_12"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_tweet_picture_normal"
-                    app:gTouchColor="@color/main_touch"
-                    app:gTouchCornerRadius="0dp"
-                    app:gTouchEffect="ripple" />
+                    android:src="@mipmap/ic_tweet_picture_normal" />
 
-                <net.qiujuer.genius.ui.widget.ImageView
+                <ImageView
                     android:id="@+id/iv_mention"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -236,12 +230,9 @@
                     android:paddingBottom="@dimen/lay_12"
                     android:paddingTop="@dimen/lay_12"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_tweet_mention_normal"
-                    app:gTouchColor="@color/main_touch"
-                    app:gTouchCornerRadius="0dp"
-                    app:gTouchEffect="ripple" />
+                    android:src="@mipmap/ic_tweet_mention_normal"/>
 
-                <net.qiujuer.genius.ui.widget.ImageView
+                <ImageView
                     android:id="@+id/iv_tag"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -251,13 +242,9 @@
                     android:paddingBottom="@dimen/lay_12"
                     android:paddingTop="@dimen/lay_12"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_tweet_topic_normal"
-                    app:gInterceptEvent="none"
-                    app:gTouchColor="@color/main_touch"
-                    app:gTouchCornerRadius="0dp"
-                    app:gTouchEffect="ripple" />
+                    android:src="@mipmap/ic_tweet_topic_normal" />
 
-                <net.qiujuer.genius.ui.widget.ImageView
+                <ImageView
                     android:id="@+id/iv_emoji"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -267,10 +254,7 @@
                     android:paddingBottom="@dimen/lay_12"
                     android:paddingTop="@dimen/lay_12"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_tweet_expression_normal"
-                    app:gTouchColor="@color/main_touch"
-                    app:gTouchCornerRadius="0dp"
-                    app:gTouchEffect="ripple" />
+                    android:src="@mipmap/ic_tweet_expression_normal" />
             </LinearLayout>
         </LinearLayout>
 
