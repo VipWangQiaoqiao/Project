@@ -2,7 +2,6 @@ package net.oschina.app.team.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -15,6 +14,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
@@ -39,7 +39,6 @@ import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -49,9 +48,6 @@ import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.kjframe.Core;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -173,16 +169,10 @@ public class TeamTweetDetailFragment extends
                                final String realUrl) {
         pic.setVisibility(View.VISIBLE);
 
-        Core.getKJBitmap().display(pic, url, R.drawable.pic_bg, rectSize, rectSize,
-                new BitmapCallBack() {
-                    @Override
-                    public void onSuccess(Bitmap bitmap) {
-                        super.onSuccess(bitmap);
-                        bitmap = BitmapHelper.scaleWithXY(bitmap, rectSize
-                                / bitmap.getHeight());
-                        pic.setImageBitmap(bitmap);
-                    }
-                });
+        Glide.with(aty).load(url)
+                .placeholder(R.drawable.pic_bg)
+                .override(rectSize, rectSize)
+                .into(pic);
 
         pic.setOnClickListener(new View.OnClickListener() {
             @Override

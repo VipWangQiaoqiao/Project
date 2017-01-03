@@ -48,7 +48,7 @@ public class UserQuestionFragment extends BaseRecyclerViewFragment<Question> {
 
     @Override
     protected BaseRecyclerAdapter<Question> getRecyclerAdapter() {
-        return new UserQuestionAdapter(getContext(), BaseRecyclerAdapter.ONLY_FOOTER);
+        return new UserQuestionAdapter(getContext());
     }
 
     @Override

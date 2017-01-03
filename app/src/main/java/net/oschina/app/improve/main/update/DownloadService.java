@@ -161,14 +161,18 @@ public class DownloadService extends Service {
     }
 
     private void installApk() {
-        File file = new File(saveFileName + "osc.apk");
-        if (!file.exists())
-            return;
-        Intent intent = new Intent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-        startActivity(intent);
+        try {
+            File file = new File(saveFileName + "osc.apk");
+            if (!file.exists())
+                return;
+            Intent intent = new Intent();
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setUpNotification() {

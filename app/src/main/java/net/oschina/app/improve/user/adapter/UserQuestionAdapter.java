@@ -23,8 +23,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class UserQuestionAdapter extends BaseRecyclerAdapter<Question> {
 
-    public UserQuestionAdapter(Context context, int mode) {
-        super(context, mode);
+    public UserQuestionAdapter(Context context) {
+        super(context, ONLY_FOOTER);
     }
 
     @Override

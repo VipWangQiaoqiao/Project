@@ -1,36 +1,31 @@
 package net.oschina.app.improve.detail.v2;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.annotation.SuppressLint;
 import android.view.View;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
-import net.oschina.app.improve.bean.simple.About;
-import net.oschina.app.improve.detail.general.AboutAdapter;
+import net.oschina.app.improve.comment.CommentView;
+import net.oschina.app.improve.comment.OnCommentClickListener;
+import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.improve.widget.SimplexToast;
-
-import java.util.ArrayList;
 
 /**
  * Created by haibin
  * on 2016/11/30.
  */
 
-public class DetailFragment extends BaseFragment implements DetailContract.View, BaseRecyclerAdapter.OnItemClickListener {
+public abstract class DetailFragment extends BaseFragment implements
+        DetailContract.View,
+        View.OnClickListener {
     protected DetailContract.Presenter mPresenter;
     protected OWebView mWebView;
-    protected RecyclerView mRecyclerView;
-    protected AboutAdapter mAdapter;
-
-    public static DetailFragment newInstance() {
-        DetailFragment fragment = new DetailFragment();
-        return fragment;
-    }
+    protected SubBean mBean;
+    protected CommentView mCommentView;
+    protected DetailAboutView mDetailAboutView;
 
     @Override
     protected int getLayoutId() {
@@ -41,16 +36,13 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
     protected void initWidget(View root) {
         super.initWidget(root);
         mWebView = (OWebView) mRoot.findViewById(R.id.webView);
-        mRecyclerView = (RecyclerView) mRoot.findViewById(R.id.rv_about);
-        mAdapter = new AboutAdapter(getActivity());
-        mAdapter.setOnItemClickListener(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mAdapter);
+        mCommentView = (CommentView) mRoot.findViewById(R.id.cv_comment);
+        mDetailAboutView = (DetailAboutView) mRoot.findViewById(R.id.lay_detail_about);
 
     }
 
     @Override
-    public void onItemClick(int position, long itemId) {
+    public void onClick(View v) {
 
     }
 
@@ -60,12 +52,29 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
     }
 
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void showGetDetailSuccess(SubBean bean) {
+        this.mBean = bean;
         if (mContext == null) return;
-        bean.setAbouts(new ArrayList<About>());
-        mAdapter.addAll(bean.getAbouts());
         mWebView.loadDetailDataAsync(bean.getBody(), (Runnable) mContext);
+
+        if (mDetailAboutView != null) {
+            mDetailAboutView.setAbout(bean.getAbouts(), bean.getType());
+        }
+
+        if (mCommentView == null)
+            return;
+        mCommentView.setTitle(String.format("%s (%d)", getResources().getString(R.string.answer_hint), bean.getStatistics().getComment()));
+        mCommentView.init(bean.getId(),
+                bean.getType(),
+                getCommentOrder(),
+                bean.getStatistics().getComment(),
+                getImgLoader(), (OnCommentClickListener) mContext);
+    }
+
+    public void onPageFinished() {
+        // pass
     }
 
     @Override
@@ -97,7 +106,23 @@ public class DetailFragment extends BaseFragment implements DetailContract.View,
 
     }
 
-    public void scrollToBottom() {
+    @Override
+    public void showAddRelationSuccess(boolean isRelation, int strId) {
 
     }
+
+    @Override
+    public void showAddRelationError() {
+        SimplexToast.show(mContext, "关注失败");
+    }
+
+    protected String getExtraString(Object object) {
+        return object == null ? "" : object.toString();
+    }
+
+    protected int getExtraInt(Object object) {
+        return object == null ? 0 : Double.valueOf(object.toString()).intValue();
+    }
+
+    protected abstract int getCommentOrder();
 }

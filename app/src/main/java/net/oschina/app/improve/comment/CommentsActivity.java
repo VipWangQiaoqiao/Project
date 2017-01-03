@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,10 +76,9 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     TextView mTitle;
 
     private CommentAdapter mCommentAdapter;
-    private Comment reply;
     private CommentBar mDelegation;
     private ProgressDialog mDialog;
-    private boolean mInputDoubleEmpty;
+    private boolean mInputDoubleEmpty = true;
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
         public void onStart() {
@@ -110,8 +111,8 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                         mDelegation.setCommentHint(getString(mSourceId));
                         mDelegation.getBottomSheet().getEditText().setHint(getString(mSourceId));
                         Toast.makeText(CommentsActivity.this, getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
-                        mDelegation.getCommentText().setHint(getString(mSourceId));
                         mDelegation.getBottomSheet().getEditText().setText("");
+                        mDelegation.getBottomSheet().getBtnCommit().setTag(null);
                         mDelegation.getBottomSheet().dismiss();
                         getData(true, null);
                     }
@@ -184,12 +185,25 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         });
 
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
+
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                EditText view = (EditText) v;
                 if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (reply == null) return false;
-                    reply = null;
-                    handleKeyDel();
+                    Button mBtnView = mDelegation.getBottomSheet().getBtnCommit();
+                    Object o = mBtnView.getTag();
+                    if (o == null) return false;
+                    if (!TextUtils.isEmpty(view.getText().toString())) {
+                        mInputDoubleEmpty = false;
+                        return false;
+                    }
+                    if (TextUtils.isEmpty(view.getText().toString()) && !mInputDoubleEmpty) {
+                        mInputDoubleEmpty = true;
+                        return false;
+                    }
+                    mBtnView.setTag(null);
+                    view.setHint(mSourceId);
+                    return true;
                 }
                 return false;
             }
@@ -198,13 +212,7 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Comment comment = (Comment) v.getTag();
-                if (comment == null) {
-                    //当不引用回复的人时候，默认为commentId，authorId为0
-                    handleSendComment(mType, mId, 0, 0, mDelegation.getBottomSheet().getCommentText());
-                } else {
-                    handleSendComment(mType, mId, comment.getId(), comment.getAuthor().getId(), mDelegation.getBottomSheet().getCommentText());
-                }
+                sendComment(mType, mId, (Comment) v.getTag(), mDelegation.getBottomSheet().getCommentText());
             }
         });
 
@@ -225,7 +233,7 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
 
                 Comment comment = mCommentAdapter.getItem(position);
 
-                if (mType == OSChinaApi.COMMENT_EVENT || mType == OSChinaApi.COMMENT_QUESTION) {
+                if (mType == OSChinaApi.COMMENT_QUESTION) {
                     QuesAnswerDetailActivity.show(CommentsActivity.this, comment, mId, mType);
                 }
             }
@@ -306,9 +314,8 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     /**
      * handle send comment
      */
-    private void handleSendComment(int type, long id, final long commentId, long commentAuthorId, String content) {
-        long uid = requestCheck();
-        if (uid == 0)
+    private void sendComment(int type, long id, Comment comment, String content) {
+        if (requestCheck() == 0)
             return;
 
         if (TextUtils.isEmpty(content)) {
@@ -316,21 +323,28 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
             return;
         }
 
+        long uid = comment == null ? 0 : comment.getAuthor().getId();
+        long cid = comment == null ? 0 : comment.getId();
+
         switch (type) {
             case OSChinaApi.COMMENT_QUESTION:
-                OSChinaApi.pubQuestionComment(id, commentId, commentAuthorId, content, mHandler);
+                OSChinaApi.pubQuestionComment(id, cid, uid, content, mHandler);
                 break;
             case OSChinaApi.COMMENT_BLOG:
-                OSChinaApi.pubBlogComment(id, commentId, commentAuthorId, content, mHandler);
+                OSChinaApi.pubBlogComment(id, cid, uid, content, mHandler);
                 break;
             case OSChinaApi.COMMENT_TRANSLATION:
-                OSChinaApi.pubTranslateComment(id, commentId, commentAuthorId, content, mHandler);
+                OSChinaApi.pubTranslateComment(id, cid, uid, content, mHandler);
                 break;
             case OSChinaApi.COMMENT_EVENT:
-                OSChinaApi.pubEventComment(id, commentId, commentAuthorId, content, mHandler);
+//                OSChinaApi.pubEventComment(id, cid, uid, content, mHandler);
+                if (comment != null) {
+                    content = "回复@" + comment.getAuthor().getName() + " : " + content;
+                }
+                OSChinaApi.pubEventComment(id, 0, 0, content, mHandler);
                 break;
             case OSChinaApi.COMMENT_NEWS:
-                OSChinaApi.pubNewsComment(id, commentId, commentAuthorId, content, mHandler);
+                OSChinaApi.pubNewsComment(id, cid, uid, content, mHandler);
                 break;
             default:
                 break;
@@ -338,24 +352,6 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
 
     }
 
-
-    /**
-     * handle key del content
-     */
-    private void handleKeyDel() {
-        if (reply.getId() != mId) {
-            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
-                if (mInputDoubleEmpty) {
-                    mDelegation.setCommentHint(getString(R.string.pub_comment_hint));
-                    mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.pub_comment_hint));
-                } else {
-                    mInputDoubleEmpty = true;
-                }
-            } else {
-                mInputDoubleEmpty = false;
-            }
-        }
-    }
 
     /**
      * show waittDialog

@@ -178,7 +178,6 @@ public class BlogDetailFragment
         }
     }
 
-
     @SuppressWarnings("deprecation")
     @Override
     protected void initData() {

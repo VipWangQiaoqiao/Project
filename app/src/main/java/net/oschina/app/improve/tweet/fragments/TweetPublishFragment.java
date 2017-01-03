@@ -1,18 +1,23 @@
 package net.oschina.app.improve.tweet.fragments;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.RectF;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,9 +36,12 @@ import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.ClipView;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
-import net.oschina.app.ui.SelectFriendsActivity;
+import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
 import net.oschina.app.util.UIHelper;
+import net.oschina.common.widget.RichEditText;
+import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -42,13 +50,15 @@ import butterknife.OnClick;
  * 发布动弹界面实现
  */
 @SuppressWarnings("WeakerAccess")
-public class TweetPublishFragment extends BaseFragment implements View.OnClickListener, TweetPublishContract.View {
+public class TweetPublishFragment extends BaseFragment implements View.OnClickListener,
+        TweetPublishContract.View {
+    private final static String TAG = TweetPublishFragment.class.getName();
     public static final int MAX_TEXT_LENGTH = 160;
-    private static final int SELECT_FRIENDS_REQUEST_CODE = 100;
+    public static final int SELECT_FRIENDS_REQUEST_CODE = 100;
     private static final String TEXT_TAG = "#输入软件名#";
 
     @Bind(R.id.edit_content)
-    EditText mEditContent;
+    RichEditText mEditContent;
 
     @Bind(R.id.recycler_images)
     TweetPicturesPreviewer mLayImages;
@@ -61,6 +71,12 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @Bind(R.id.icon_send)
     View mIconSend;
+
+    @Bind(R.id.lay_enter_tag)
+    View mLayTagEnter;
+
+    @Bind(R.id.edit_enter_tag)
+    EditText mEditTagEnter;
 
     private TweetPublishContract.Operator mOperator;
     private final EmojiKeyboardFragment mEmojiKeyboard = new EmojiKeyboardFragment();
@@ -97,13 +113,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         super.initWidget(root);
         if (root instanceof ClipView) {
             ClipView clipView = ((ClipView) root);
-
             if (mBundle != null) {
                 clipView.setup(mBundle.getIntArray("location"), mBundle.getIntArray("size"));
             } else {
                 clipView.setup(null, null);
             }
-
             clipView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -147,15 +161,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         });
 
         // add text change listener
-        mEditContent.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
+        mEditContent.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void afterTextChanged(Editable s) {
                 final int len = s.length();
@@ -200,6 +206,41 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 }
             }
         });
+
+        mEditContent.setOnKeyArrivedListener(new RichEditText.OnKeyArrivedListener() {
+            @Override
+            public void onMentionKeyArrived() {
+                onClick(findView(R.id.iv_mention));
+            }
+
+            @Override
+            public void onTopicKeyArrived() {
+                //showInsertTag();
+            }
+        });
+
+        mEditTagEnter.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    mLayTagEnter.animate()
+                            .alphaBy(1)
+                            .alpha(0)
+                            .setDuration(100)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    mLayTagEnter.setVisibility(View.GONE);
+                                    mLayTagEnter.setAlpha(1);
+                                }
+                            }).start();
+                }
+            }
+        });
+
+        ShapeDrawable doubleLineDrawable = new ShapeDrawable(new BorderShape(new RectF(0, 1, 0, 1)));
+        doubleLineDrawable.getPaint().setColor(0xFF24cf5f);
+        mLayTagEnter.setBackground(doubleLineDrawable);
     }
 
     private void setSendIconStatus(boolean haveContent, String content) {
@@ -218,10 +259,20 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         mOperator.loadData();
     }
 
+    // 用于拦截后续的点击事件
+    private long mLastClickTime;
+
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
-            R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back, R.id.icon_send})
+            R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back,
+            R.id.icon_send, R.id.btn_submit_enter_tag})
     @Override
     public void onClick(View v) {
+        // 用来解决快速点击多个按钮弹出多个界面的情况
+        long nowTime = System.currentTimeMillis();
+        if ((nowTime - mLastClickTime) < 1000)
+            return;
+        mLastClickTime = nowTime;
+
         try {
             switch (v.getId()) {
                 case R.id.iv_picture:
@@ -246,6 +297,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                     break;
                 case R.id.icon_send:
                     mOperator.publish();
+                    break;
+                case R.id.btn_submit_enter_tag:
+                    handleInsertTag();
                     break;
 
             }
@@ -274,7 +328,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
      * @param v View
      */
     private void handleEmojiClick(View v) {
-        if (!mEmojiKeyboard.isShow()) {
+        hideInsertTag();
+        if (mEmojiKeyboard.isShow()) {
+            mEmojiKeyboard.hideEmojiKeyBoard();
+            showSoftKeyboard(mEditContent);
+        } else {
             mEmojiKeyboard.hideSoftKeyboard();
             v.postDelayed(new Runnable() {
                 @Override
@@ -285,10 +343,46 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                         e.printStackTrace();
                     }
                 }
-            }, 280);
-        } else {
-            mEmojiKeyboard.hideEmojiKeyBoard();
+            }, 200);
         }
+    }
+
+    private void handleInsertTag() {
+        String text = mEditTagEnter.getText().toString();
+        if (text.trim().length() > 0) {
+            Editable msg = mEditContent.getText();
+            int selStart = mEditContent.getSelectionStart();
+            int selEnd = mEditContent.getSelectionEnd();
+
+            text = String.format("#%s# ", text.replace("#", ""));
+
+            int selStartBefore = selStart - 1;
+            if (selStart == selEnd && selStart > 0
+                    && "#".equals(msg.subSequence(selStartBefore, selEnd).toString())
+                    && msg.getSpans(selStartBefore, selEnd, RichEditText.TagSpan.class).length == 0) {
+                selStart = selStartBefore;
+            }
+
+            Spannable spannable = RichEditText.matchMention(new SpannableString(text));
+            spannable = RichEditText.matchTopic(spannable);
+
+            msg.replace(selStart, selEnd, spannable);
+        }
+
+        hideInsertTag();
+    }
+
+    private void hideInsertTag() {
+        mLayTagEnter.setVisibility(View.GONE);
+        mEditTagEnter.clearFocus();
+        mEditContent.requestFocus();
+    }
+
+    private void showInsertTag() {
+        mEditTagEnter.setText("");
+        mLayTagEnter.setVisibility(View.VISIBLE);
+        mEditContent.clearFocus();
+        mEditTagEnter.requestFocus();
     }
 
     /**
@@ -316,9 +410,19 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         if (start > maxTextLen || end > maxTextLen) {
             start = maxTextLen;
             end = maxTextLen;
+            mLayTagEnter.setVisibility(View.VISIBLE);
+            mEditContent.clearFocus();
+            mEditTagEnter.requestFocus();
         }
         editText.getText().insert(editText.getSelectionStart(), software);
         editText.setSelection(start, end);
+        /*
+        if (mLayTagEnter.getVisibility() == View.VISIBLE) {
+            hideInsertTag();
+        } else {
+            showInsertTag();
+        }
+        */
     }
 
     /**
@@ -332,7 +436,8 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             UIHelper.showLoginActivity(context);
             return;
         }
-        Intent intent = new Intent(context, SelectFriendsActivity.class);
+
+        Intent intent = new Intent(context, UserSelectFriendsActivity.class);
         startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
     }
 
@@ -348,18 +453,48 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             for (String n : names) {
                 text += "@" + n + " ";
             }
-            mEditContent.getText().insert(mEditContent.getSelectionStart(), text);
+
+            SpannableString spannable = new SpannableString(text);
+            RichEditText.matchMention(spannable);
+            RichEditText.matchTopic(spannable);
+
+            Editable msg = mEditContent.getText();
+            int selStart = mEditContent.getSelectionStart();
+            int selEnd = mEditContent.getSelectionEnd();
+
+            int selStartBefore = selStart - 1;
+            if (selStart == selEnd && selStart > 0
+                    && "@".equals(msg.subSequence(selStartBefore, selEnd).toString())
+                    && msg.getSpans(selStartBefore, selEnd, RichEditText.TagSpan.class).length == 0) {
+                selStart = selStartBefore;
+            }
+
+            msg.replace(selStart, selEnd, spannable);
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK)
-            return;
-        if (requestCode == SELECT_FRIENDS_REQUEST_CODE) {
+        if (resultCode == Activity.RESULT_OK
+                && requestCode == SELECT_FRIENDS_REQUEST_CODE) {
             handleSelectFriendsResult(data);
         }
+        mEditContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showSoftKeyboard(mEditContent);
+            }
+        }, 200);
+    }
+
+    private void showSoftKeyboard(final EditText requestView) {
+        if (requestView == null)
+            return;
+        requestView.requestFocus();
+        ((InputMethodManager) getActivity().getSystemService(
+                Context.INPUT_METHOD_SERVICE)).showSoftInput(requestView,
+                InputMethodManager.SHOW_FORCED);
     }
 
     @Override
@@ -371,8 +506,8 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     public void setContent(String content, boolean needSelectionEnd) {
         Spannable span = InputHelper.displayEmoji(getResources(), content, (int) mEditContent.getTextSize());
         mEditContent.setText(span);
-        if (needSelectionEnd)
-            mEditContent.setSelection(mEditContent.getText().length());
+        //if (needSelectionEnd)
+        mEditContent.setSelection(mEditContent.getText().length());
     }
 
     @Override
@@ -430,6 +565,15 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     public TweetPublishContract.Operator getOperator() {
         return mOperator;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (mEmojiKeyboard.isShow()) {
+            mEmojiKeyboard.hideEmojiKeyBoard();
+            return false;
+        }
+        return true;
     }
 
     @Override

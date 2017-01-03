@@ -3,16 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f9f9f9"
     android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/lay_nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/lay_option"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:scrollbars="vertical"
         tools:ignore="RtlHardcoded">
 
@@ -140,6 +137,7 @@
                     android:orientation="vertical">
 
                     <View
+                        android:id="@+id/line1"
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_marginBottom="16dp"
@@ -147,7 +145,7 @@
                         android:background="@color/list_divider_color" />
 
                     <TextView
-                        android:id="@+id/tv_blog_detail_abstract"
+                        android:id="@+id/tv_detail_abstract"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="4dp"
@@ -157,6 +155,7 @@
                         tools:text="在Google IO大会中不仅仅带来了Android Studio 2.2预览版，同时带给我们一个依赖约束的库。 简单来说，她是相对布局的升级版本，但是区别与相对布局更加强调约束。何为约束，即控件之间的关系。" />
 
                     <View
+                        android:id="@+id/line"
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_marginTop="16dp"
@@ -180,11 +179,15 @@
                     android:layout_height="match_parent" />
             </FrameLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_about"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
+
+            <net.oschina.app.improve.widget.DetailAboutView
+                android:id="@+id/lay_detail_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

@@ -16,7 +16,6 @@ import java.util.Properties;
  */
 public class AppConfig {
     private final static String APP_CONFIG = "config";
-    public final static String CONF_APP_UNIQUEID = "APP_UNIQUEID";
     public static final String KEY_LOAD_IMAGE = "KEY_LOAD_IMAGE";
     public static final String KEY_NOTIFICATION_DISABLE_WHEN_EXIT = "KEY_NOTIFICATION_DISABLE_WHEN_EXIT";
     public static final String KEY_CHECK_UPDATE = "KEY_CHECK_UPDATE";
@@ -98,5 +97,11 @@ public class AppConfig {
         for (String k : key)
             props.remove(k);
         setProps(props);
+
+        //R.string.releaseUrl
+        //BuildConfig.API_SERVER_URL
+
+        //BuildConfig.API_SERVER_URL
     }
+
 }

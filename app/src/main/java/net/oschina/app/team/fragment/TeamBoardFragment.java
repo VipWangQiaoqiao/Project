@@ -16,12 +16,11 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.bean.MyIssueState;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.ui.TeamMainActivity;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
-
-import org.kymjs.kjframe.utils.SystemTool;
 
 import java.io.ByteArrayInputStream;
 import java.util.Calendar;
@@ -104,7 +103,7 @@ public class TeamBoardFragment extends BaseFragment {
                 + getGreetings());
         mIvAvatarView.setAvatarUrl(AccountHelper.getUser().getPortrait());
         mTvDate.setText("今天是 " + getWeekDay() + "，"
-                + SystemTool.getDataTime("yyyy年MM月dd日"));
+                + StringUtils.getDataTime("yyyy年MM月dd日"));
 
         TypefaceUtils.setTypeface((TextView) view
                 .findViewById(R.id.tv_team_active));

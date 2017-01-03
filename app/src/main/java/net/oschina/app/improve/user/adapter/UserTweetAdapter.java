@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -28,6 +29,7 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.TweetLikeReverse;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -38,8 +40,7 @@ import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.kjframe.utils.DensityUtils;
+import net.qiujuer.genius.ui.Ui;
 
 import java.lang.reflect.Type;
 
@@ -58,8 +59,8 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
     private Bitmap mRecordBitmap;
     private View.OnClickListener mOnLikeClickListener;
 
-    public UserTweetAdapter(Callback callback, int mode) {
-        super(callback, mode);
+    public UserTweetAdapter(Callback callback) {
+        super(callback, ONLY_FOOTER);
         initListener();
     }
 
@@ -82,7 +83,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
     private void initRecordImg(Context cxt) {
         mRecordBitmap = BitmapFactory.decodeResource(cxt.getResources(), R.mipmap.audio3);
         mRecordBitmap = ImageUtils.zoomBitmap(mRecordBitmap,
-                DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
+                (int) Ui.dipToPx(cxt.getResources(), 20f), (int) Ui.dipToPx(cxt.getResources(), 20f));
     }
 
     @Override
@@ -93,20 +94,29 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder h, final Tweet item, int position) {
         ViewHolder holder = (ViewHolder) h;
-        mCallBack.getImgLoader()
-                .load(item.getAuthor().getPortrait())
-                .asBitmap()
-                .placeholder(R.mipmap.widget_dface)
-                .error(R.mipmap.widget_dface)
-                .into(holder.mViewPortrait);
-        holder.mViewPortrait.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OtherUserHomeActivity.show(mContext, item.getAuthor());
-            }
-        });
 
-        holder.mViewName.setText(item.getAuthor().getName());
+        final Author author = item.getAuthor();
+        if (author == null) {
+            holder.mViewPortrait.setImageResource(R.mipmap.widget_dface);
+            holder.mViewPortrait.setOnClickListener(null);
+            holder.mViewName.setText("匿名用户");
+        } else {
+            Glide.with(mContext)
+                    .load(author.getPortrait())
+                    .asBitmap()
+                    .placeholder(R.mipmap.widget_dface)
+                    .error(R.mipmap.widget_dface)
+                    .into(holder.mViewPortrait);
+            holder.mViewPortrait.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OtherUserHomeActivity.show(mContext, author);
+                }
+            });
+
+            holder.mViewName.setText(author.getName());
+        }
+
         holder.mViewTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         PlatfromUtil.setPlatFromString(holder.mViewPlatform, item.getAppClient());
 
@@ -149,7 +159,8 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewCmmCount.setText(String.valueOf(item.getStatistics().getComment()));
             int mDispatchCount = item.getStatistics().getTransmit();
             if (mDispatchCount <= 0) {
-                holder.mViewDispatchCount.setVisibility(View.GONE);
+                //holder.mViewDispatchCount.setVisibility(View.GONE);
+                holder.mViewDispatchCount.setText("转发");
             } else {
                 holder.mViewDispatchCount.setVisibility(View.VISIBLE);
                 holder.mViewDispatchCount.setText(String.valueOf(item.getStatistics().getTransmit()));
@@ -159,7 +170,10 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewCmmCount.setText(String.valueOf(item.getCommentCount()));
             holder.mViewDispatchCount.setVisibility(View.GONE);
         }
+        String textCount = holder.mViewLikeCount.getText().toString();
+        holder.mViewLikeCount.setText("0".equals(textCount) ? "点赞" : textCount);
 
+        /* - about - */
         if (item.getAbout() != null) {
             holder.mLayoutRef.setVisibility(View.VISIBLE);
             holder.mLayoutRef.setTag(position);

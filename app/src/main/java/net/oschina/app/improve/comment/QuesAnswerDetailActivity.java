@@ -308,6 +308,8 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
                     reply = null;
                     mDelegation.setCommentHint("发表评论");
                     mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setText("");
+                    mDelegation.getBottomSheet().getBtnCommit().setTag(null);
                     appendComment(replies.size() - 1, result.getResult());
                     boolean syncToTweet = mDelegation.getBottomSheet().isSyncToTweet();
                     if (syncToTweet) {
