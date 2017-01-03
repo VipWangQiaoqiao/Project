@@ -248,6 +248,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         List<UserFansOrFollows> cacheUserFriends = CacheManager.readListJson(getApplicationContext(), CACHE_NAME, UserFansOrFollows.class);
 
+
         if (cacheUserFriends != null && cacheUserFriends.size() > 0) {
             updateView(cacheUserFriends);
         } else {
@@ -402,8 +403,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
                         updateView(fansOrFollows);
 
-                        hideLoading();
-
                         mPageBean = resultBean.getResult();
                     } else {
                         showError(EmptyLayout.NODATA);
@@ -463,7 +462,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mSearchAdapter.addItems(searchFriends);
     }
 
-    private void updateView(List<UserFansOrFollows> fansOrFollows) {
+    private void updateView(final List<UserFansOrFollows> fansOrFollows) {
 
         if (mCacheFriends == null)
             mCacheFriends = new ArrayList<>();
@@ -510,10 +509,16 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         //自然排序
         Collections.sort(mCacheFriends);
-
-        CacheManager.saveToJson(getApplicationContext(), CACHE_NAME, fansOrFollows);
-
         mLocalAdapter.addItems(mCacheFriends);
+
+        hideLoading();
+
+        AppOperator.getExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                CacheManager.saveToJson(getApplicationContext(), CACHE_NAME, fansOrFollows);
+            }
+        });
     }
 
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")
