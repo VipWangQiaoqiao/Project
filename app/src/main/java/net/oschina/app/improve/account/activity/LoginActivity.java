@@ -44,6 +44,7 @@ import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.user.helper.SyncFriendHelper;
 import net.oschina.app.util.TDevice;
 import net.oschina.open.constants.OpenConstant;
 import net.oschina.open.factory.OpenBuilder;
@@ -146,6 +147,10 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 AppContext.showToast(R.string.login_success_hint);
                 setResult(RESULT_OK);
                 sendLocalReceiver();
+
+                //后台异步同步数据
+                new SyncFriendHelper(getApplicationContext()).syncUserFriends(user.getId());
+
             } else {
                 showToastForKeyBord(resultBean.getMessage());
             }
@@ -172,7 +177,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      */
     private void holdAccount() {
         String username = mEtLoginUsername.getText().toString().trim();
-        //String inputPwd = mEtLoginPwd.getText().toString().trim();
 
         SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -312,21 +316,6 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
 
         mEtLoginUsername.setText(holdUsername);
 
-//        if (!TextUtils.isEmpty(holdPwd)) {
-//            byte[] bytes = holdPwd.getBytes();
-//            byte[] decode = Base64.decode(bytes, 0, bytes.length, Base64.DEFAULT);
-//            try {
-//                String tempPwd = new String(decode, 0, decode.length, "utf-8");
-//
-//                mEtLoginPwd.setText(tempPwd);
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            mEtLoginPwd.setText(null);
-//        }
-        // updateHoldPwd(holdStatus);
-        // mHoldPwd = holdStatus;
     }
 
     @Override
@@ -640,6 +629,9 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         AppContext.showToast(R.string.login_success_hint);
                         setResult(RESULT_OK);
                         sendLocalReceiver();
+
+                        //后台异步同步数据
+                        new SyncFriendHelper(getApplicationContext()).syncUserFriends(user.getId());
                     } else {
                         int code = resultBean.getCode();
                         String message = resultBean.getMessage();
@@ -680,6 +672,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -696,6 +689,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * @param resultCode  resultCode
      * @param data        data
      */
+
     private void weiBoOnActivityResult(int requestCode, int resultCode, Intent data) {
         if (openType == OpenConstant.SINA) {
             // SSO 授权回调

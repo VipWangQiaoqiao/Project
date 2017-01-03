@@ -19,6 +19,7 @@ public class UserFriend implements Serializable, Comparable<UserFriend> {
     private String showLabel;
     private transient boolean isGoneLine;
     private transient boolean isSelected;
+    private transient boolean isNetData;
     private transient int selectPosition;
 
     public long getId() {
@@ -77,6 +78,14 @@ public class UserFriend implements Serializable, Comparable<UserFriend> {
         isSelected = selected;
     }
 
+    public boolean isNetData() {
+        return isNetData;
+    }
+
+    public void setNetData(boolean netData) {
+        isNetData = netData;
+    }
+
     public int getSelectPosition() {
         return selectPosition;
     }
@@ -94,6 +103,9 @@ public class UserFriend implements Serializable, Comparable<UserFriend> {
                 ", showViewType=" + showViewType +
                 ", showLabel='" + showLabel + '\'' +
                 ", isGoneLine=" + isGoneLine +
+                ", isSelected=" + isSelected +
+                ", isNetData=" + isNetData +
+                ", selectPosition=" + selectPosition +
                 '}';
     }
 
@@ -105,23 +117,4 @@ public class UserFriend implements Serializable, Comparable<UserFriend> {
         return tempCompLabel.compareTo(showLabel);
     }
 
-    //    @Override
-    //    public int hashCode() {
-    //
-    //
-    //        return super.hashCode();
-    //    }
-    //
-    //    @Override
-    //    public boolean equals(Object obj) {
-    //        if (obj instanceof UserFriend) {
-    //            UserFriend userFriend = (UserFriend) obj;
-    //
-    //            return (userFriend.getId() == id && userFriend.getName().equals(name)
-    //                    && userFriend.getPortrait().equals(portrait) &&
-    //                    userFriend.getShowLabel().equals(showLabel) && userFriend.getShowViewType() == showViewType);
-    //        }
-    //
-    //        return super.equals(obj);
-    //    }
 }
