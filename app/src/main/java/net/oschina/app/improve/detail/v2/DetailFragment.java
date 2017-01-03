@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.v2;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 
 import net.oschina.app.R;
@@ -51,6 +52,7 @@ public abstract class DetailFragment extends BaseFragment implements
     }
 
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void showGetDetailSuccess(SubBean bean) {
         this.mBean = bean;

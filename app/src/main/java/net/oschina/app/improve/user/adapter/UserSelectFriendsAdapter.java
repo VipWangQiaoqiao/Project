@@ -35,8 +35,12 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
+
     private LayoutInflater mInflater;
     private List<UserFriend> mItems = new ArrayList<>();
+    private int selectCount = 0;
+    //最大可选择好友的数量
+    private static final int MAX_SELECTED_SIZE = 10;
 
     private OnFriendSelector mOnFriendSelector;
 
@@ -58,8 +62,31 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View v) {
                         if (mOnFriendSelector == null) return;
+                        List<UserFriend> items = mItems;
                         UserInfoViewHolder holder = (UserInfoViewHolder) v.getTag();
-                        mOnFriendSelector.select(v, mItems.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+                        int position = holder.getAdapterPosition();
+                        UserFriend userFriend = items.get(position);
+                        if (selectCount <= MAX_SELECTED_SIZE) {
+                            if (userFriend.isSelected()) {
+                                if (selectCount != 0) {
+                                    items.get(position).setSelected(false);
+                                    items.get(position).setSelectPosition(position);
+                                    selectCount--;
+                                    notifyItemChanged(position);
+                                    mOnFriendSelector.select(v, userFriend, position);
+                                }
+                            } else {
+                                if (selectCount == MAX_SELECTED_SIZE) {
+                                    mOnFriendSelector.selectFull(selectCount);
+                                } else {
+                                    items.get(position).setSelected(true);
+                                    items.get(position).setSelectPosition(position);
+                                    selectCount++;
+                                    notifyItemChanged(position);
+                                    mOnFriendSelector.select(v, userFriend, position);
+                                }
+                            }
+                        }
                     }
                 });
                 return userInfoViewHolder;
@@ -104,6 +131,14 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void updateSelectStatus(int position, boolean isSelected) {
+        this.mItems.get(position).setSelected(isSelected);
+        notifyItemChanged(position);
+        if (selectCount > 0) {
+            selectCount--;
+        }
+    }
+
     static class IndexViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.tv_index_label)
@@ -125,8 +160,10 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
         CircleImageView mCirclePortrait;
         @Bind(R.id.tv_name)
         TextView mtvName;
+        @Bind(R.id.view_select)
+        View mViewSelect;
         @Bind(R.id.line)
-        View mline;
+        View mLine;
 
         UserInfoViewHolder(View itemView) {
             super(itemView);
@@ -144,8 +181,14 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
             });
             mtvName.setText(item.getName());
 
+            if (item.isSelected()) {
+                mViewSelect.setVisibility(View.VISIBLE);
+            } else {
+                mViewSelect.setVisibility(View.INVISIBLE);
+            }
+
             if (item.isGoneLine())
-                mline.setVisibility(View.GONE);
+                mLine.setVisibility(View.GONE);
         }
 
         private void setImageFromNet(ImageView imageView, String imageUrl, int placeholder) {

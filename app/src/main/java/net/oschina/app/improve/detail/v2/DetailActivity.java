@@ -33,6 +33,10 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * 新版本详情页实现
  * Created by haibin
@@ -229,9 +233,33 @@ public abstract class DetailActivity extends BaseBackActivity implements
     }
 
 
+    @SuppressWarnings("LoopStatementThatDoesntLoop")
     protected boolean toShare(String title, String content, String url) {
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(url))
             return false;
+
+        String imageUrl = null;
+
+        //1.如果是活动直接在分享中加入活动icon
+        if (mBean != null && mBean.getType() == OSChinaApi.CATALOG_EVENT) {
+            List<SubBean.Image> images = mBean.getImages();
+            if (images != null && images.size() > 0) {
+                imageUrl = images.get(0).getThumb();
+            }
+        } else {
+            //2.不是活动类型,匹配内容中是否有图片，有就返回第一张图片的url
+            //"<\\s*img\\s+([^>]*)\\s*/>"
+            String regex = "<img src=\"([^\"]+)\"";
+
+            Pattern pattern = Pattern.compile(regex);
+
+            Matcher matcher = pattern.matcher(content);
+
+            while (matcher.find()) {
+                imageUrl = matcher.group(1);
+                break;
+            }
+        }
 
         content = content.trim();
         if (content.length() > 55) {
@@ -250,7 +278,8 @@ public abstract class DetailActivity extends BaseBackActivity implements
                     .type(mBean.getType())
                     .title(title)
                     .content(content)
-                    .url(url);
+                    .imageUrl(imageUrl)//如果没有图片，即url为null，直接加入app默认分享icon
+                    .url(url).with();
         }
         mAlertDialog.show();
 

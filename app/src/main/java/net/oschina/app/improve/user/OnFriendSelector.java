@@ -13,4 +13,6 @@ import net.oschina.app.improve.user.bean.UserFriend;
 public interface OnFriendSelector {
 
     void select(View view, UserFriend userFriend, int position);
+
+    void selectFull(int selectCount);
 }

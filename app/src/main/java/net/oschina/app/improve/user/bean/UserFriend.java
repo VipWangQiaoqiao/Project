@@ -18,6 +18,8 @@ public class UserFriend implements Serializable, Comparable<UserFriend> {
     private int showViewType;
     private String showLabel;
     private transient boolean isGoneLine;
+    private transient boolean isSelected;
+    private transient int selectPosition;
 
     public long getId() {
         return id;
@@ -65,6 +67,22 @@ public class UserFriend implements Serializable, Comparable<UserFriend> {
 
     public void setGoneLine(boolean goneLine) {
         isGoneLine = goneLine;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public int getSelectPosition() {
+        return selectPosition;
+    }
+
+    public void setSelectPosition(int selectPosition) {
+        this.selectPosition = selectPosition;
     }
 
     @Override

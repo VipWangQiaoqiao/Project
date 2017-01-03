@@ -55,6 +55,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
     private String mSearchContent;
 
     private OnFriendSelector mOnFriendSelector;
+    private int selectCount = 0;
+
+    //最大可选择好友的数量
+    private static final int MAX_SELECTED_SIZE = 10;
 
     public UserSearchFriendsAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -74,8 +78,32 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View v) {
                         if (mOnFriendSelector == null) return;
+
+                        List<UserFriend> items = mItems;
                         UserInfoViewHolder holder = (UserInfoViewHolder) v.getTag();
-                        mOnFriendSelector.select(v, mItems.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+                        int position = holder.getAdapterPosition();
+                        UserFriend userFriend = items.get(position);
+                        if (selectCount <= MAX_SELECTED_SIZE) {
+                            if (userFriend.isSelected()) {
+                                if (selectCount != 0) {
+                                    items.get(position).setSelected(false);
+                                    items.get(position).setSelectPosition(position);
+                                    selectCount--;
+                                    notifyItemChanged(position);
+                                    mOnFriendSelector.select(v, userFriend, position);
+                                }
+                            } else {
+                                if (selectCount == MAX_SELECTED_SIZE) {
+                                    mOnFriendSelector.selectFull(selectCount);
+                                } else {
+                                    items.get(position).setSelected(true);
+                                    items.get(position).setSelectPosition(position);
+                                    selectCount++;
+                                    notifyItemChanged(position);
+                                    mOnFriendSelector.select(v, userFriend, position);
+                                }
+                            }
+                        }
                     }
                 });
 
@@ -124,17 +152,25 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void addItem(int index, UserFriend userFriend) {
+        this.mItems.add(index, userFriend);
+        notifyDataSetChanged();
+    }
+
+    public void updateSelectStatus(int position, boolean isSelected) {
+        this.mItems.get(position).setSelected(isSelected);
+        notifyItemChanged(position);
+        if (selectCount > 0) {
+            selectCount--;
+        }
+    }
+
     public void clear() {
         List<UserFriend> items = this.mItems;
         items.clear();
     }
 
-    private void clearNetSearchData(int position) {
-        List<UserFriend> items = this.mItems;
-        items.subList(0, position);
-    }
-
-    public void setOnOnFriendSelecter(OnFriendSelector OnFriendSelector) {
+    public void setOnOnFriendSelector(OnFriendSelector OnFriendSelector) {
         mOnFriendSelector = OnFriendSelector;
     }
 
@@ -142,15 +178,9 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         this.mSearchContent = searchContent;
     }
 
-    public String getSearchContent() {
+    private String getSearchContent() {
         return mSearchContent;
     }
-
-    public void addItem(int index, UserFriend userFriend) {
-        this.mItems.add(index, userFriend);
-        notifyDataSetChanged();
-    }
-
 
     static class IndexViewHolder extends RecyclerView.ViewHolder {
 
@@ -173,6 +203,8 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         CircleImageView mCirclePortrait;
         @Bind(R.id.tv_name)
         TextView mtvName;
+        @Bind(R.id.view_select)
+        View mViewSelect;
         @Bind(R.id.line)
         View mLine;
 
@@ -192,8 +224,16 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
             });
             mtvName.setText(item.getName());
 
-            if (item.isGoneLine())
+            if (item.isSelected()) {
+                mViewSelect.setVisibility(View.VISIBLE);
+            } else {
+                mViewSelect.setVisibility(View.INVISIBLE);
+            }
+
+            if (item.isGoneLine()) {
                 mLine.setVisibility(View.GONE);
+            }
+
         }
 
         private void setImageFromNet(ImageView imageView, String imageUrl, int placeholder) {
@@ -224,7 +264,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         }
 
         void onBindView(UserFriend item, int position) {
-            mTvSearch.setText("在网络上搜索");
+            mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_net_label));
             if (mStatus == 0x01) {
                 requestData(mTvSearch);
             }
@@ -243,7 +283,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
             if (TextUtils.isEmpty(searchContent)) {
                 mNextPageToken = null;
                 mStatus = 0x00;
-                AppContext.showToastShort("搜索内容不能为空！！！");
+                AppContext.showToastShort(v.getResources().getString(R.string.search_null_hint));
                 return;
             } else {
                 if (!searchContent.equals(mSearchContent)) {
@@ -266,7 +306,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                 public void onStart() {
                     super.onStart();
                     mProgressBar.setVisibility(View.VISIBLE);
-                    mTvSearch.setText("数据正在加载中...");
+                    mTvSearch.setText(mTvSearch.getResources().getString(R.string.footer_type_loading));
                 }
 
                 @Override
@@ -277,7 +317,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    mTvSearch.setText("数据加载失败,请重试...");
+                    mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_error_hint));
                 }
 
                 @Override
@@ -302,7 +342,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
                         mUserSearchFriendsAdapter.addItem(mUserSearchFriendsAdapter.getItemCount() - 1, netFriend);
 
-                        mTvSearch.setText("点击加载更多数据...");
+                        mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_load_more_hint));
 
                         for (User user : users) {
 
@@ -319,12 +359,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
                         mNextPageToken = pageBean.getNextPageToken();
 
-                        int totalResults = pageBean.getTotalResults();
-
                         mStatus = 0x01;
 
                     } else {
-                        mTvSearch.setText("没有更多数据...");
+                        mTvSearch.setText(mTvSearch.getResources().getString(R.string.state_not_more));
                     }
 
                 }
