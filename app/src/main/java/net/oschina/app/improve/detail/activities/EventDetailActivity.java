@@ -33,6 +33,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by huanghaibin
  * on 16-6-13.
  */
+@Deprecated
 public class EventDetailActivity extends DetailActivity<EventDetail, EventDetailContract.View> implements EventDetailContract.Operator {
 
     public static void show(Context context, long id) {
@@ -65,7 +66,7 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
 
     @Override
     int getOptionsMenuId() {
-        return R.menu.menu_detail_share;
+        return R.menu.menu_event_detail;
     }
 
     @Override

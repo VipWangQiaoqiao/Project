@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.util.TLog;
 import net.oschina.common.BuildConfig;
 
 import java.io.Serializable;
@@ -36,6 +38,19 @@ public final class NoticeManager {
 
     private final List<NoticeNotify> mNotifies = new ArrayList<>();
     private NoticeBean mNotice;
+
+    public static void publish(ResultBean resultBean, NoticeBean noticeBean) {
+        if (resultBean != null && resultBean.isSuccess() && noticeBean != null) {
+            if (noticeBean.equals(INSTANCE.mNotice))
+                return;
+            try {
+                TLog.error("New message:" + noticeBean.toString());
+                INSTANCE.onNoticeChanged(noticeBean);
+            } catch (Exception e) {
+                e.fillInStackTrace();
+            }
+        }
+    }
 
     public static NoticeBean getNotice() {
         final NoticeBean bean = INSTANCE.mNotice;

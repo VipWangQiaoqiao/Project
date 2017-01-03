@@ -11,14 +11,15 @@ import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Origin;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
-import net.oschina.app.improve.detail.activities.EventDetailActivity;
-import net.oschina.app.improve.detail.activities.NewsDetailActivity;
-import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
-import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
+import net.oschina.app.improve.detail.general.BlogDetailActivity;
+import net.oschina.app.improve.detail.general.EventDetailActivity;
+import net.oschina.app.improve.detail.general.NewsDetailActivity;
+import net.oschina.app.improve.detail.general.QuestionDetailActivity;
+import net.oschina.app.improve.detail.general.SoftwareDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.adapter.UserMentionAdapter;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
@@ -43,7 +44,7 @@ public class UserMentionFragment extends BaseRecyclerViewFragment<Mention> {
     @Override
     protected void onRequestSuccess(int code) {
         super.onRequestSuccess(code);
-        if (activity != null) activity.onRequestSuccess(0);
+        if (activity != null && isRefreshing) activity.onRequestSuccess(0);
     }
 
     @Override
@@ -55,7 +56,9 @@ public class UserMentionFragment extends BaseRecyclerViewFragment<Mention> {
     @Override
     public void onItemClick(int position, long itemId) {
         Mention mention = mAdapter.getItem(position);
+        if (mention == null) return;
         Origin origin = mention.getOrigin();
+        if (origin == null) return;
         switch (origin.getType()) {
             case Origin.ORIGIN_TYPE_LINK:
                 UIHelper.showUrlRedirect(getContext(), origin.getHref());
@@ -82,7 +85,7 @@ public class UserMentionFragment extends BaseRecyclerViewFragment<Mention> {
                 TweetDetailActivity.show(getContext(), origin.getId());
                 break;
             default:
-                // pass
+                SimplexToast.show(getContext(), "不支持该类型");
         }
     }
 

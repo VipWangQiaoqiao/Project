@@ -10,9 +10,6 @@ import net.oschina.app.bean.NotebookData;
 import net.oschina.app.db.NoteDatabase;
 import net.oschina.app.improve.account.AccountHelper;
 
-import org.kymjs.kjframe.utils.KJLoger;
-import org.kymjs.kjframe.utils.SystemTool;
-
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -44,7 +41,7 @@ public class SynchronizeController {
         // 同步逻辑太麻烦，要么用二重循环由客户端判断差异文件，要么浪费流量把本地文件全部上传交由服务器判断。
         // 这里我采用两种逻辑：WiFi环境下客户端直接提交全部文件，交由服务器判断。
         // GPRS环境下客户端判断差异文件，并编辑服务器端文件达到同步
-        if (SystemTool.isWiFi(aty)) {
+        if (TDevice.isWifiOpen()) {
             doSynchronizeWithWIFI(cb);
         } else {
             doSynchronizeWithWIFI(cb);
@@ -120,7 +117,6 @@ public class SynchronizeController {
                     @Override
                     public void onSuccess(int arg0, Header[] arg1,
                                           byte[] arg2) {
-                        KJLoger.debug("获取便签:" + new String(arg2));
                         cb.onSuccess(arg2);
                     }
 

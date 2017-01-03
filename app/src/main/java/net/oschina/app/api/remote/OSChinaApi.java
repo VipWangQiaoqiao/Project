@@ -18,8 +18,6 @@ import net.oschina.app.improve.detail.sign.StringParams;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 
-import org.kymjs.kjframe.utils.KJLoger;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -574,7 +572,6 @@ public class OSChinaApi {
         params.put("type", "diary");
         params.put("pageIndex", 0);
         params.put("pageSize", "20");
-        KJLoger.debug(teamid + "==getDiaryComment接口=" + diaryid);
         ApiHttpClient.get("action/api/team_reply_list_by_type", params, handler);
     }
 
@@ -845,29 +842,51 @@ public class OSChinaApi {
     /**
      * 发表评论
      *
-     * @param sid     文章id
-     * @param referId 引用的评论的id
-     * @param replyId 回复的评论的id
-     * @param oid     引用、回复的发布者id
-     * @param type    文章类型 1:软件推荐, 2:问答帖子, 3:博客, 4:翻译文章, 5:活动, 6:资讯
-     * @param content 内容
-     * @param handler 你懂得
+     * @param sourceId   文章id
+     * @param referId    引用的评论的id，问答评论详情
+     * @param replyId    回复的评论的id
+     * @param reAuthorId 引用、回复的发布者id
+     * @param type       文章类型 1:软件推荐, 2:问答帖子, 3:博客, 4:翻译文章, 5:活动, 6:资讯
+     * @param content    内容
+     * @param handler    你懂得
      */
-    public static void publishComment(long sid, long referId, long replyId, long oid,
+    public static void publishComment(long sourceId, long referId, long replyId, long reAuthorId,
                                       int type, String content, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        params.put("sourceId", sid);
+        params.put("sourceId", sourceId);
         params.put("type", type);
         params.put("content", content);
         if (referId > 0)
             params.put("referId", referId);
         if (replyId > 0)
             params.put("replyId", replyId);
-        if (oid > 0)
-            params.put("reAuthorId", oid);
+        if (reAuthorId > 0)
+            params.put("reAuthorId", reAuthorId);
         post("action/apiv2/comment_push", params, handler);
     }
 
+    /**
+     * 发布评论
+     */
+    public static void pubComment(long sourceId,
+                                  int type,
+                                  String content,
+                                  long referId,
+                                  long replyId,
+                                  long reAuthorId,
+                                  TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("type", type);
+        params.put("content", content);
+        if (referId > 0)
+            params.put("referId", referId);
+        if (replyId > 0)
+            params.put("replyId", replyId);
+        if (reAuthorId > 0)
+            params.put("reAuthorId", reAuthorId);
+        post("action/apiv2/comment_push", params, handler);
+    }
 
     /**
      * 发表资讯评论
@@ -1600,5 +1619,44 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
         ApiHttpClient.post("action/apiv2/event_apply_info", params, handler);
+    }
+
+    /**
+     * 举报
+     *
+     * @param sourceId 举报的内容数据Id
+     * @param type     举报资源的类型
+     * @param href     举报的文章地址
+     * @param reason   举报原因：
+     * @param memo     其他原因的描述字段
+     * @param handler
+     */
+    public static void report(long sourceId,
+                              int type,
+                              String href,
+                              int reason,
+                              String memo,
+                              TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("type", type);
+        params.put("href", href);
+        params.put("reason", reason);
+        params.put("memo", memo);
+        ApiHttpClient.post("action/apiv2/report", params, handler);
+    }
+
+    /**
+     * 获取活动出席列表
+     */
+    public static void getApplyUsers(long sourceId, String pageToken, String filter, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        if (!TextUtils.isEmpty("filter")) {
+            params.put("filter", filter);
+        }
+        ApiHttpClient.post("action/apiv2/event_attendee_list", params, handler);
     }
 }

@@ -9,6 +9,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.Setting;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.TLog;
 import net.oschina.common.verify.Verifier;
@@ -38,11 +39,10 @@ import cz.msebera.android.httpclient.protocol.HttpContext;
 
 @SuppressWarnings("WeakerAccess")
 public class ApiHttpClient {
-
     public final static String HOST = "www.oschina.net";
     //public final static String HOST = "www.oschina.tk";
-    private static String API_URL = "https://www.oschina.net/%s";
-    //private static String API_URL = "http://192.168.1.10/%s";
+    public static String API_URL = "https://www.oschina.net/%s";
+
     private static AsyncHttpClient CLIENT;
 
     private ApiHttpClient() {
@@ -54,6 +54,7 @@ public class ApiHttpClient {
      * @param context AppContext
      */
     public static void init(Application context) {
+        API_URL = Setting.getServerUrl(context) + "%s";
         CLIENT = null;
         AsyncHttpClient client = new AsyncHttpClient();
         //client.setCookieStore(new PersistentCookieStore(context));
