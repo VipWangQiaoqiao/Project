@@ -52,8 +52,11 @@ public class NewsDetailFragment extends DetailFragment {
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
         mTextTitle.setText(bean.getTitle());
-        mTextComCount.setText(String.valueOf(bean.getStatistics().getComment()));
-        mTextViewCount.setText(String.valueOf(bean.getStatistics().getView()));
+        SubBean.Statistics statistics = bean.getStatistics();
+        if(statistics != null){
+            mTextComCount.setText(String.valueOf(bean.getStatistics().getComment()));
+            mTextViewCount.setText(String.valueOf(bean.getStatistics().getView()));
+        }
         final Software software = bean.getSoftware();
         if (software != null) {
             mLinearSoftware.setVisibility(View.VISIBLE);
