@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -23,10 +24,9 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
-import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.pay.bean.Order;
@@ -39,7 +39,6 @@ import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
-import net.oschina.app.util.UIHelper;
 
 import java.net.URLEncoder;
 import java.util.Map;
@@ -49,9 +48,13 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
+
 /**
  * Created by qiujuer
  * on 16/5/26.
+ * Change by fei
+ * on 16/11/17
+ * desc:blog detail
  */
 
 @SuppressWarnings("WeakerAccess")
@@ -84,8 +87,7 @@ public class BlogDetailFragment
 
     @Bind(R.id.lay_detail_about)
     DetailAboutView mAbouts;
-    @Bind(R.id.lay_detail_comment)
-    CommentsView mComments;
+
     @Bind(R.id.lay_blog_detail_abstract)
     LinearLayout mLayAbstract;
 
@@ -108,7 +110,6 @@ public class BlogDetailFragment
         super.initWidget(root);
 
         mAbouts.setTitle(getString(R.string.label_about_title));
-        registerScroller(mLayContent, mComments);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mBtnRelation.setElevation(0);
@@ -122,8 +123,6 @@ public class BlogDetailFragment
                 handleSendComment();
             }
         });
-
-        mDelegation.getBottomSheet().showSyncView();
 
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -157,6 +156,7 @@ public class BlogDetailFragment
                     LoginActivity.show(getActivity());
             }
         });
+
     }
 
     @OnClick({R.id.btn_relation, R.id.iv_avatar, R.id.btn_reward})
@@ -166,11 +166,6 @@ public class BlogDetailFragment
             // 关注按钮
             case R.id.btn_relation:
                 handleRelation();
-                break;
-            // 评论列表
-            case R.id.tv_see_more_comment:
-                UIHelper.showBlogComment(getActivity(), (int) mId,
-                        (int) mOperator.getData().getAuthorId());
                 break;
             case R.id.iv_avatar:
                 OtherUserHomeActivity.show(getActivity(), mOperator.getData().getAuthorId());
@@ -186,6 +181,7 @@ public class BlogDetailFragment
     @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
+        super.initData();
         BlogDetail blog = mOperator.getData();
         if (blog == null)
             return;
@@ -223,9 +219,6 @@ public class BlogDetailFragment
         setText(R.id.tv_info_comment, String.valueOf(blog.getCommentCount()));
 
         mAbouts.setAbout(blog.getAbouts(), 3);
-
-        mComments.setTitle(String.format("评论 (%s)", blog.getCommentCount()));
-        mComments.init(blog.getId(), OSChinaApi.COMMENT_BLOG, blog.getCommentCount(), getImgLoader(), this);
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -236,8 +229,8 @@ public class BlogDetailFragment
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mDelegation.setCommentHint("发表评论");
-                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.setCommentHint(getString(R.string.pub_comment_hint));
+                    mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.pub_comment_hint));
                 } else {
                     mInputDoubleEmpty = true;
                 }
@@ -261,13 +254,6 @@ public class BlogDetailFragment
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mDelegation.getBottomSheet().getCommentText());
-        if (mDelegation.getBottomSheet().isSyncToTweet()) {
-            About about = new About();
-            BlogDetail detail = mOperator.getData();
-            about.setId(detail.getId());
-            about.setType(detail.getType());
-            TweetPublishService.startActionPublish(getActivity(), mDelegation.getBottomSheet().getCommentText(), null, about);
-        }
     }
 
     private void handleReward() {
@@ -278,6 +264,7 @@ public class BlogDetailFragment
         dialog.setPortrait(detail.getAuthorPortrait());
         dialog.setNick(detail.getAuthor());
         dialog.setOnClickRewardListener(new RewardDialog.OnClickRewardCallback() {
+            @SuppressWarnings("deprecation")
             @Override
             public void reward(float cast) {
                 User user = AccountHelper.getUser();
@@ -312,8 +299,9 @@ public class BlogDetailFragment
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
-                        TLog.e("oschina", "onFailure");
-                        error.toString();
+                        Log.e("oschina", "onFailure");
+                        //error.toString();
+
                     }
 
                     @Override
@@ -339,36 +327,35 @@ public class BlogDetailFragment
     @Override
     public void toFollowOk(BlogDetail blogDetail) {
         if (blogDetail.getAuthorRelation() <= 2) {
-            mBtnRelation.setText("已关注");
+            mBtnRelation.setText(getString(R.string.follow_done));
         } else {
-            mBtnRelation.setText("关注");
+            mBtnRelation.setText(getString(R.string.following));
         }
     }
 
     @Override
     public void toSendCommentOk(Comment comment) {
-        (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
-        mDelegation.setCommentHint("添加评论");
+        if (mDelegation.getBottomSheet().isSyncToTweet()) {
+            BlogDetail detail = mOperator.getData();
+            if (detail == null) return;
+            TweetPublishService.startActionPublish(getActivity(),
+                    mDelegation.getBottomSheet().getCommentText(), null,
+                    About.buildShare(detail.getId(), OSChinaApi.COMMENT_BLOG));
+        }
+        Toast.makeText(getContext(), getResources().getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
+        mDelegation.setCommentHint(getResources().getString(R.string.add_comment_hint));
         mDelegation.getBottomSheet().getEditText().setText("");
-        mDelegation.getBottomSheet().getEditText().setHint("添加评论");
-        mComments.addComment(comment, getImgLoader(), this);
+        mDelegation.getBottomSheet().getEditText().setHint(getResources().getString(R.string.add_comment_hint));
+        // mComments.addComment(comment, getImgLoader(), this);
         mDelegation.getBottomSheet().dismiss();
     }
 
     @Override
     public void onClick(View view, Comment comment) {
         mCommentId = comment.getId();
-
-        mCommentAuthorId = comment.getAuthorId();
-        mDelegation.setCommentHint(String.format("回复: %s", comment.getAuthor()));
-        mDelegation.getBottomSheet().show(String.format("回复: %s", comment.getAuthor()));
-
-//
-//        mCommentAuthorId = comment.getAuthor().getId();
-//        mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-//
-//        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-
+        mCommentAuthorId = comment.getAuthor().getId();
+        mDelegation.setCommentHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
 
     }
 
@@ -380,4 +367,5 @@ public class BlogDetailFragment
             mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
         }
     }
+
 }

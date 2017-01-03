@@ -1,4 +1,3 @@
-
 package net.oschina.app.improve.widget.indicator;
 
 import android.content.Context;

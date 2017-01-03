@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:osc="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_fav"
+        android:icon="@mipmap/ic_fav_light_normal"
+        android:title="@string/favorite"
+        android:visible="true"
+        osc:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_share"
+        android:icon="@mipmap/btn_share_white_normal"
+        android:title="@string/share_to"
+        android:visible="true"
+        osc:showAsAction="always" />
+</menu>

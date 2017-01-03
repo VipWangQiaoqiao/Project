@@ -5,15 +5,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Event;
 import net.oschina.app.bean.EventList;
 
-import org.kymjs.kjframe.Core;
-
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 活动列表适配器
@@ -52,7 +52,7 @@ public class EventAdapter extends ListBaseAdapter<Event> {
         ViewHolder vh = null;
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
-                    R.layout.list_cell_event, null);
+                    R.layout.list_cell_event, parent, false);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
         } else {
@@ -62,8 +62,8 @@ public class EventAdapter extends ListBaseAdapter<Event> {
         Event item = mDatas.get(position);
 
         setEventStatus(item, vh);
-
-        new Core.Builder().view(vh.img).url(item.getCover()).doTask();
+        if (vh.img != null && vh.img.getContext() != null)
+            Glide.with(vh.img.getContext()).load(item.getCover()).into(vh.img);
         vh.title.setText(item.getTitle());
         vh.time.setText(item.getStartTime());
         vh.spot.setText(item.getSpot());
@@ -77,8 +77,7 @@ public class EventAdapter extends ListBaseAdapter<Event> {
             case EventList.EVENT_LIST_TYPE_NEW_EVENT:
                 if (event.getApplyStatus() == Event.APPLYSTATUS_CHECKING
                         || event.getApplyStatus() == Event.APPLYSTATUS_CHECKED) {
-                    vh.status
-                            .setImageResource(R.mipmap.icon_event_status_checked);
+                    vh.status.setImageResource(R.mipmap.icon_event_status_checked);
                     vh.status.setVisibility(View.VISIBLE);
                 } else {
                     vh.status.setVisibility(View.GONE);
@@ -88,8 +87,7 @@ public class EventAdapter extends ListBaseAdapter<Event> {
                 if (event.getApplyStatus() == Event.APPLYSTATUS_ATTEND) {
                     vh.status.setImageResource(R.mipmap.icon_event_status_attend);
                 } else if (event.getStatus() == Event.EVNET_STATUS_APPLYING) {
-                    vh.status
-                            .setImageResource(R.mipmap.icon_event_status_checked);
+                    vh.status.setImageResource(R.mipmap.icon_event_status_checked);
                 } else {
                     vh.status.setImageResource(R.mipmap.icon_event_status_over);
                 }

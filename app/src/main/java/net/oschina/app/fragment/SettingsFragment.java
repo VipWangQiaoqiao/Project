@@ -21,20 +21,17 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
-import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.Version;
 import net.oschina.app.improve.main.FeedBackActivity;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.SystemConfigView;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton.OnToggleChanged;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.UIHelper;
-import net.oschina.common.helper.SharedPreferencesHelper;
-
-import org.kymjs.kjframe.http.HttpConfig;
 
 import java.io.File;
 import java.util.List;
@@ -111,6 +108,8 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
         //  if (!AppContext.getInstance().isLogin()) {
         //  mTvExit.setText("退出");
         //    }
+
+        SystemConfigView.show((ViewGroup) view.findViewById(R.id.lay_linear));
     }
 
     @Override
@@ -160,9 +159,6 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
             File externalCacheDir = MethodsCompat
                     .getExternalCacheDir(getActivity());
             fileSize += FileUtil.getDirSize(externalCacheDir);
-            fileSize += FileUtil.getDirSize(new File(
-                    org.kymjs.kjframe.utils.FileUtils.getSDCardPath()
-                            + File.separator + HttpConfig.CACHEPATH));
         }
         if (fileSize > 0)
             cacheSize = FileUtil.formatFileSize(fileSize);
@@ -203,21 +199,14 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
                 // 清理所有缓存
                 UIHelper.clearAppCache(false);
                 // 注销操作
-                AccountHelper.logout();
-                // 等待成功清理完成
-                mCancel.postDelayed(new Runnable() {
+                AccountHelper.logout(mCancel, new Runnable() {
                     @Override
                     public void run() {
-                        mCancel.removeCallbacks(this);
-                        User user = SharedPreferencesHelper.load(getContext(), User.class);
-                        if (user == null || user.getId() <= 0) {
-                            getActivity().finish();
-                        } else {
-                            mCancel.postDelayed(this, 200);
-                        }
+                        //getActivity().finish();
+                        mTvCacheSize.setText("0KB");
+                        AppContext.showToastShort(getString(R.string.logout_success_hint));
                     }
-                }, 200);
-
+                });
                 break;
             default:
                 break;

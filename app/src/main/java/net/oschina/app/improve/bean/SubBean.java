@@ -1,9 +1,12 @@
 package net.oschina.app.improve.bean;
 
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Author;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by haibin
@@ -11,17 +14,23 @@ import java.util.Map;
  */
 
 public class SubBean implements Serializable {
+    private String cacheKey;
+
     private long id;
     private String title;
     private String body;
     private String pubDate;
     private String href;
     private int type;
+    private boolean favorite;
+    private String summary;
     private Author author;
-    private Image image;
-    private Map<String, Object> extra;
+    private List<Image> images;
+    private HashMap<String, Object> extra;
     private String[] tags;
     private Statistics statistics;
+    private ArrayList<About> abouts;
+    private Software software;
 
     public boolean isOriginal() {
         if (tags != null) {
@@ -45,6 +54,14 @@ public class SubBean implements Serializable {
         return false;
     }
 
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
     public boolean isStick() {
         if (tags != null) {
             for (String tag : tags) {
@@ -65,6 +82,22 @@ public class SubBean implements Serializable {
             }
         }
         return false;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     public long getId() {
@@ -123,20 +156,20 @@ public class SubBean implements Serializable {
         this.author = author;
     }
 
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
-    public Map<String, Object> getExtra() {
+    public HashMap<String, Object> getExtra() {
         return extra;
     }
 
-    public void setExtra(Map<String, Object> extra) {
+    public void setExtra(HashMap<String, Object> extra) {
         this.extra = extra;
+    }
+
+    public ArrayList<About> getAbouts() {
+        return abouts;
+    }
+
+    public void setAbouts(ArrayList<About> abouts) {
+        this.abouts = abouts;
     }
 
     public String[] getTags() {
@@ -155,24 +188,74 @@ public class SubBean implements Serializable {
         this.statistics = statistics;
     }
 
+    public Software getSoftware() {
+        return software;
+    }
+
+    public void setSoftware(Software software) {
+        this.software = software;
+    }
+
+    public String getKey() {
+        if (cacheKey == null)
+            cacheKey = String.format("t:%s,id:%s", getType(), getId() == 0 ? getHref().hashCode() : getId());
+        return cacheKey;
+    }
+
     public static class Image implements Serializable {
-        private int type;
-        private String[] href;
+        private String href;
+        private String thumb;
+        private int w;
+        private int h;
+        private String type;
+        private String name;
 
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public String[] getHref() {
+        public String getHref() {
             return href;
         }
 
-        public void setHref(String[] href) {
+        public void setHref(String href) {
             this.href = href;
+        }
+
+        public String getThumb() {
+            return thumb;
+        }
+
+        public void setThumb(String thumb) {
+            this.thumb = thumb;
+        }
+
+        public int getW() {
+            return w;
+        }
+
+        public void setW(int w) {
+            this.w = w;
+        }
+
+        public int getH() {
+            return h;
+        }
+
+        public void setH(int h) {
+            this.h = h;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
     }
 

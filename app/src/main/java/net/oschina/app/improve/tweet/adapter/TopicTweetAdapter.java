@@ -2,7 +2,6 @@ package net.oschina.app.improve.tweet.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ public class TopicTweetAdapter extends BaseRecyclerAdapter implements View.OnCli
 
     public TopicTweetAdapter(Context context) {
         super(context, ONLY_FOOTER);
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             addItem("");
         }
     }
@@ -58,16 +57,23 @@ public class TopicTweetAdapter extends BaseRecyclerAdapter implements View.OnCli
         TopicTweetActivity.show(v.getContext());
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.iv_wallpaper) ImageView mViewWallpaper;
-        @Bind(R.id.layout_item_1) LinearLayout mLayoutItem1;
-        @Bind(R.id.layout_item_2) LinearLayout mLayoutItem2;
-        @Bind(R.id.layout_item_3) LinearLayout mLayoutItem3;
-        @Bind(R.id.layout_bottom) RelativeLayout mLayoutBottom;
-        @Bind(R.id.tv_count) TextView mViewCount;
+        @Bind(R.id.iv_wallpaper)
+        ImageView mViewWallpaper;
+        @Bind(R.id.layout_item_1)
+        LinearLayout mLayoutItem1;
+        @Bind(R.id.layout_item_2)
+        LinearLayout mLayoutItem2;
+        @Bind(R.id.layout_item_3)
+        LinearLayout mLayoutItem3;
+        @Bind(R.id.layout_bottom)
+        RelativeLayout mLayoutBottom;
+        @Bind(R.id.tv_count)
+        TextView mViewCount;
 
-        @Bind(R.id.layout_wrapper) LinearLayout mLayoutWrapper;
+        @Bind(R.id.layout_wrapper)
+        LinearLayout mLayoutWrapper;
 
         public ViewHolder(View view) {
             super(view);

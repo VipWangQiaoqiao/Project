@@ -3,10 +3,7 @@ package net.oschina.app.improve.search.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -17,13 +14,13 @@ import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
-import net.oschina.app.improve.detail.activities.NewsDetailActivity;
-import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
-import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
+import net.oschina.app.improve.detail.general.BlogDetailActivity;
+import net.oschina.app.improve.detail.general.NewsDetailActivity;
+import net.oschina.app.improve.detail.general.QuestionDetailActivity;
+import net.oschina.app.improve.detail.general.SoftwareDetailActivity;
 import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.search.adapters.SearchArticleAdapter;
-import net.oschina.app.util.TDevice;
+import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
@@ -39,6 +36,7 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
 
     private int catalog = News.TYPE_NEWS;
     private String content;
+    private boolean isRequesting;
 
     public static Fragment instantiate(Context context, int catalog) {
         Fragment fragment = new SearchArticleFragment();
@@ -78,14 +76,23 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
             mRefreshLayout.setRefreshing(false);
             return;
         }
-        String token = mIsRefresh ? null : mBean.getNextPageToken();
+        if (isRequesting) return;
+        isRequesting = true;
+        String token = isRefreshing ? null : mBean.getNextPageToken();
         OSChinaApi.search(catalog, content, token, mHandler);
+    }
+
+    @Override
+    protected void onRequestFinish() {
+        super.onRequestFinish();
+        isRequesting = false;
     }
 
     @Override
     public void onItemClick(int position, long itemId) {
         super.onItemClick(position, itemId);
         News item = mAdapter.getItem(position);
+        if (item == null) return;
         switch (item.getType()) {
             case News.TYPE_BLOG:
                 BlogDetailActivity.show(getContext(), item.getId());
@@ -99,6 +106,8 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
             case News.TYPE_NEWS:
                 NewsDetailActivity.show(getContext(), item.getId());
                 break;
+            default:
+                UIHelper.openInternalBrowser(getContext(), item.getHref());
         }
     }
 

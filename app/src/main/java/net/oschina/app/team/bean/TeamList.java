@@ -1,20 +1,20 @@
 package net.oschina.app.team.bean;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.ListEntity;
-
-import org.kymjs.kjframe.utils.StringUtils;
+import android.text.TextUtils;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import net.oschina.app.bean.Entity;
+import net.oschina.app.bean.ListEntity;
+import net.oschina.app.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 团队信息集合
- * 
+ *
  * @author kymjs
- * 
  */
 @XStreamAlias("oschina")
 public class TeamList extends Entity implements ListEntity<Team> {
@@ -62,7 +62,7 @@ public class TeamList extends Entity implements ListEntity<Team> {
 
     public static Team toTeam(String cacheData) {
         Team team = new Team();
-        if (!StringUtils.isEmpty(cacheData)) {
+        if (!TextUtils.isEmpty(cacheData)) {
             String[] fields = cacheData.split(">->");
             if (fields.length >= 11 && fields[0] != null) { // 如果id都没有，表示是一个非法数据
                 team.setId(StringUtils.toInt(fields[0]));

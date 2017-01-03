@@ -1,35 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
+    android:descendantFocusability="afterDescendants"
     android:orientation="vertical">
 
     <LinearLayout
-        android:background="@drawable/ic_material"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/ic_material"
+        android:orientation="horizontal"
         android:paddingBottom="@dimen/lay_12"
         android:paddingLeft="@dimen/lay_16"
-        android:paddingRight="@dimen/lay_16"
-        android:paddingTop="@dimen/lay_16"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:paddingTop="@dimen/lay_16">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_tweet_face"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:clickable="true"
-            android:transitionName="transition_portrait"
-            android:src="@mipmap/widget_dface" />
+            android:src="@mipmap/widget_dface"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/lay_8"
             android:orientation="vertical"
             tools:ignore="RtlHardcoded">
 
@@ -37,17 +36,20 @@
                 android:id="@+id/tv_tweet_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:lines="1"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/text_title_color"
                 android:textSize="16sp"
-                android:transitionName="transition_name"
-                tools:text="Large Text" />
+                tools:text="Large Text"/>
 
             <net.oschina.app.widget.TweetTextView
                 android:id="@+id/tweet_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="@dimen/lay_8"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
@@ -55,23 +57,67 @@
                 android:lineSpacingExtra="@dimen/font_4"
                 android:textColor="?attr/textColor"
                 android:textSize="14sp"
-                android:transitionName="transition_content"
-                tools:text="最近研究了这个项目，学习rx系列,修复了楼主的bug 主要原因在mainActivity里面资讯fragment的构建" />
+                tools:text="最近研究了这个项目，学习rx系列,修复了楼主的bug 主要原因在mainActivity里面资讯fragment的构建"/>
+
+            <!--about reference-->
+            <LinearLayout
+                android:id="@+id/layout_ref"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@mipmap/bg_forward"
+                android:orientation="vertical"
+                android:paddingBottom="12dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="16dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tv_ref_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingMultiplier="1.1"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    tools:text="Python爬虫使用Selenium+PhantomJS抓取Ajax和动态HTML内容"/>
+
+                <TextView
+                    android:id="@+id/tv_ref_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:lineSpacingMultiplier="1.2"
+                    android:textSize="13sp"
+                    tools:text="生产环境MySQL快速备份工具XtraBackup使用案例MySQL 的备份有很多种方式，最常用的应该是MySQLdump了，将数据库导出一个 sql文件，还原的时候source db.sql 就欢快的执行了。小伙伴愉快的布上一个shell脚本，配上…"/>
+
+                <net.oschina.app.improve.widget.TweetPicturesLayout
+                    android:id="@+id/layout_ref_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    app:horizontalSpace="4dp"
+                    app:verticalSpace="4dp"/>
+            </LinearLayout>
 
             <net.oschina.app.improve.widget.TweetPicturesLayout
                 android:id="@+id/fl_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/lay_48"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="48dp"
                 android:layout_marginTop="@dimen/lay_8"
                 android:visibility="gone"
-                app:horizontalSpace="@dimen/lay_4"
-                android:transitionName="transition_pictures"
-                app:verticalSpace="@dimen/lay_4" />
+                app:horizontalSpace="4dp"
+                app:verticalSpace="4dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="@dimen/lay_8"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
@@ -93,8 +139,7 @@
                         android:singleLine="true"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_12"
-                        android:transitionName="transition_time"
-                        tools:text="6分钟" />
+                        tools:text="6分钟"/>
 
                     <TextView
                         android:id="@+id/tv_tweet_platform"
@@ -107,13 +152,13 @@
                         android:singleLine="true"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_12"
-                        android:transitionName="transition_platform"
-                        tools:text="iPhone" />
+                        tools:text="iPhone"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -125,10 +170,8 @@
                         android:clickable="true"
                         android:contentDescription="@string/app_name"
                         android:padding="@dimen/space_4"
-                        android:scaleType="fitCenter"
-                        android:transitionName="transition_like"
-                        android:src="@mipmap/ic_thumbup_normal"
-                        tools:ignore="RtlHardcoded" />
+                        android:src="@mipmap/ic_thumb_normal"
+                        tools:ignore="RtlHardcoded"/>
 
                     <TextView
                         android:id="@+id/tv_tweet_like_count"
@@ -137,7 +180,7 @@
                         android:gravity="center_vertical"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_12"
-                        tools:text="12" />
+                        tools:text="12"/>
 
                     <ImageView
                         android:id="@+id/iv_comment"
@@ -146,9 +189,7 @@
                         android:layout_marginLeft="@dimen/space_8"
                         android:contentDescription="@string/app_name"
                         android:padding="@dimen/space_4"
-                        android:scaleType="fitCenter"
-                        android:transitionName="transition_comment"
-                        android:src="@mipmap/ic_comment_30" />
+                        android:src="@mipmap/ic_comment_30"/>
 
                     <TextView
                         android:id="@+id/tv_tweet_comment_count"
@@ -157,13 +198,34 @@
                         android:gravity="center_vertical"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_12"
-                        tools:text="12" />
+                        tools:text="12"/>
+
+                    <ImageView
+                        android:id="@+id/iv_dispatch"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="@dimen/space_8"
+                        android:contentDescription="@string/app_name"
+                        android:padding="@dimen/space_4"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/ic_forward"/>
+
+                    <TextView
+                        android:id="@+id/tv_dispatch_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:textColor="#9d9d9d"
+                        android:textSize="@dimen/font_12"
+                        tools:text="12"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
     <View
-        style="@style/h_line"
-        android:layout_marginLeft="16dp" />
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="16dp"
+        android:background="?attr/dividerHorizontal"/>
 </LinearLayout>

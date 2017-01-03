@@ -1,12 +1,10 @@
 package net.oschina.app.improve.bean;
 
-import java.io.Serializable;
-
 /**
  * Created by huanghaibin
  * on 16-5-25.
  */
-public class Event implements Serializable {
+public class Event extends PrimaryBean {
     public static final int STATUS_END = 1;
     public static final int STATUS_ING = 2;
     public static final int STATUS_SING_UP = 3;
@@ -16,7 +14,6 @@ public class Event implements Serializable {
     public static final int EVENT_TYPE_OTHER = 3;
     public static final int EVENT_TYPE_OUTSIDE = 4;
 
-    protected long id;
     protected int applyCount;
     protected int status;
     protected int type;
@@ -27,14 +24,6 @@ public class Event implements Serializable {
     protected String endDate;
     protected String pubDate;
     protected String href;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public int getApplyCount() {
         return applyCount;

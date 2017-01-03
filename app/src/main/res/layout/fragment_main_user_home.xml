@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/ques_bt_text_color_light"
-              android:fitsSystemWindows="false"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ques_bt_text_color_light"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -281,9 +282,11 @@
                         style="@style/option_item_rl">
 
                         <ImageView
-                            style="@style/option_item_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
                             android:contentDescription="@null"
-                            android:src="@mipmap/ic_my_messege"/>
+                            android:src="@mipmap/ic_my_message"/>
 
                         <TextView
                             style="@style/option_item_text"
@@ -324,7 +327,7 @@
                     <View
                         style="@style/h_line"
                         android:layout_height="1px"
-                        android:layout_marginLeft="46dp"
+                        android:layout_marginStart="52dp"
                         android:background="@color/list_divider_color"/>
                 </LinearLayout>
 
@@ -339,7 +342,9 @@
                         style="@style/option_item_rl">
 
                         <ImageView
-                            style="@style/option_item_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
                             android:contentDescription="@null"
                             android:src="@mipmap/ic_my_blog"/>
 
@@ -359,7 +364,7 @@
                     <View
                         style="@style/h_line"
                         android:layout_height="1px"
-                        android:layout_marginLeft="46dp"
+                        android:layout_marginStart="52dp"
                         android:background="@color/list_divider_color"/>
                 </LinearLayout>
 
@@ -374,7 +379,9 @@
                         style="@style/option_item_rl">
 
                         <ImageView
-                            style="@style/option_item_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
                             android:contentDescription="@null"
                             android:src="@mipmap/ic_my_question"/>
 
@@ -394,7 +401,7 @@
                     <View
                         style="@style/h_line"
                         android:layout_height="1px"
-                        android:layout_marginLeft="46dp"
+                        android:layout_marginStart="52dp"
                         android:background="@color/list_divider_color"/>
 
                 </LinearLayout>
@@ -410,7 +417,9 @@
                         style="@style/option_item_rl">
 
                         <ImageView
-                            style="@style/option_item_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
                             android:contentDescription="@null"
                             android:src="@mipmap/ic_my_event"/>
 
@@ -430,7 +439,7 @@
                     <View
                         style="@style/h_line"
                         android:layout_height="1px"
-                        android:layout_marginLeft="46dp"
+                        android:layout_marginStart="52dp"
                         android:background="@color/list_divider_color"/>
 
                 </LinearLayout>
@@ -446,7 +455,9 @@
                         style="@style/option_item_rl">
 
                         <ImageView
-                            style="@style/option_item_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
                             android:contentDescription="@null"
                             android:src="@mipmap/ic_my_team"/>
 

@@ -1,22 +1,12 @@
 package net.oschina.app;
 
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
-import net.oschina.app.bean.User;
 import net.oschina.app.cache.DataCleanManager;
-import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.MethodsCompat;
-import net.oschina.app.util.TLog;
-
-import org.kymjs.kjframe.Core;
-import org.kymjs.kjframe.http.HttpConfig;
-import org.kymjs.kjframe.utils.KJLoger;
 
 import java.util.Properties;
 
-import static net.oschina.app.AppConfig.KEY_FRITST_START;
 import static net.oschina.app.AppConfig.KEY_LOAD_IMAGE;
-import static net.oschina.app.AppConfig.KEY_TWEET_DRAFT;
 
 /**
  * 全局应用程序类
@@ -30,30 +20,12 @@ public class AppContext extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-
-        init();
-    }
-
-    private void init() {
-        AppCrashHandler handler = AppCrashHandler.getInstance();
-        if (!BuildConfig.DEBUG)
-            handler.init(this);
-
-        // 初始化网络请求
-        ApiHttpClient.init(this);
-
-        // Log控制器
-        KJLoger.openDebutLog(BuildConfig.DEBUG);
-        TLog.DEBUG = BuildConfig.DEBUG;
-
-        // Bitmap缓存地址
-        HttpConfig.CACHEPATH = "OSChina/ImageCache";
     }
 
     /**
      * 获得当前app运行的AppContext
      *
-     * @return
+     * @return AppContext
      */
     public static AppContext getInstance() {
         return instance;
@@ -82,15 +54,6 @@ public class AppContext extends BaseApplication {
     }
 
     /**
-     * 获得登录用户的信息
-     *
-     * @deprecated
-     */
-    public User getLoginUser() {
-        return new User();
-    }
-
-    /**
      * 清除app缓存
      */
     public void clearAppCache() {
@@ -102,6 +65,25 @@ public class AppContext extends BaseApplication {
             DataCleanManager.cleanCustomCache(MethodsCompat
                     .getExternalCacheDir(this));
         }
+
+        /*
+        Run.onUiSync(new Action() {
+            @Override
+            public void call() {
+                // Glide 清理内存必须在主线程
+                Glide.get(OSCApplication.getInstance()).clearMemory();
+            }
+        });
+
+        AppOperator.runOnThread(new Runnable() {
+            @Override
+            public void run() {
+                // Glide 清理磁盘必须在子线程
+                Glide.get(OSCApplication.getInstance()).clearDiskCache();
+            }
+        });
+        */
+
         // 清除编辑器保存的临时内容
         Properties props = getProperties();
         for (Object key : props.keySet()) {
@@ -109,7 +91,6 @@ public class AppContext extends BaseApplication {
             if (_key.startsWith("temp"))
                 removeProperty(_key);
         }
-        Core.getKJBitmap().cleanCache();
     }
 
     public static void setLoadImage(boolean flag) {
@@ -125,44 +106,5 @@ public class AppContext extends BaseApplication {
     public static boolean isMethodsCompat(int VersionCode) {
         int currentVersion = android.os.Build.VERSION.SDK_INT;
         return currentVersion >= VersionCode;
-    }
-
-    public static void setTweetDraft(String draft) {
-        set(KEY_TWEET_DRAFT + AccountHelper.getUserId(), draft);
-    }
-
-    public static String getNoteDraft() {
-        return getPreferences().getString(
-                AppConfig.KEY_NOTE_DRAFT + AccountHelper.getUserId(), "");
-    }
-
-    public static void setNoteDraft(String draft) {
-        set(AppConfig.KEY_NOTE_DRAFT + AccountHelper.getUserId(), draft);
-    }
-
-    public static boolean isFirstStart() {
-        return getPreferences().getBoolean(KEY_FRITST_START, true);
-    }
-
-    public static void setFirstStart(boolean frist) {
-        set(KEY_FRITST_START, frist);
-    }
-
-    /**
-     * 夜间模式
-     *
-     * @deprecated
-     */
-    public static boolean getNightModeSwitch() {
-        return false;
-    }
-
-    /**
-     * 设置夜间模式
-     *
-     * @deprecated
-     */
-    public static void setNightModeSwitch(boolean on) {
-        // Con't do thing
     }
 }

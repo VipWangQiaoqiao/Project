@@ -1,14 +1,10 @@
 package net.oschina.app.improve.bean;
 
-import java.io.Serializable;
-
 /**
  * Created by fei on 2016/5/24.
  * desc:  question bean
  */
-public class Question implements Serializable {
-
-    private long id;
+public class Question extends PrimaryBean {
     private String title;
     private String body;
     private String author;
@@ -17,14 +13,6 @@ public class Question implements Serializable {
     private String pubDate;  //发布时间
     private int commentCount; //评论次数
     private int viewCount; //浏览次数
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;

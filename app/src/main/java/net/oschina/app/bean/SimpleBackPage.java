@@ -2,15 +2,14 @@ package net.oschina.app.bean;
 
 import net.oschina.app.R;
 import net.oschina.app.fragment.AboutOSCFragment;
-import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.BrowserFragment;
-import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.EventAppliesFragment;
 import net.oschina.app.fragment.EventFragment;
 import net.oschina.app.fragment.MyInformationFragmentDetail;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SettingsFragment;
-import net.oschina.app.fragment.TweetsFragment;
+import net.oschina.app.improve.main.subscription.SubFragment;
+import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
@@ -31,11 +30,7 @@ import net.oschina.app.viewpagerfragment.OpenSoftwareFragment;
 
 public enum SimpleBackPage {
 
-    COMMENT(1, R.string.actionbar_title_comment, CommentFrament.class),
-
     USER_BLOG(6, R.string.actionbar_title_user_blog, UserBlogFragment.class),
-
-    MY_ACTIVE(8, R.string.actionbar_title_active, ActiveFragment.class),
 
     OPEN_SOURCE_SOFTWARE(10, R.string.actionbar_title_softwarelist,
             OpenSoftwareFragment.class),
@@ -86,11 +81,13 @@ public enum SimpleBackPage {
 
     TEAM_PROJECT(40, R.string.team_project, TeamProjectFragment.class),
 
-    TWEET_TOPIC_LIST(42, 0, TweetsFragment.class),
+    TWEET_TOPIC_LIST(42, R.string.topic_list, TweetFragment.class),
 
     MY_EVENT(43, R.string.actionbar_title_my_event, EventViewPagerFragment.class),
 
-    MY_QUESTION(44, R.string.question, UserQuestionFragment.class);
+    MY_QUESTION(44, R.string.question, UserQuestionFragment.class),
+
+    OUTLINE_EVENTS(45, R.string.event_type_outline, SubFragment.class);
 
     private int title;
     private Class<?> clz;

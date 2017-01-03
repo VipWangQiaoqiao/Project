@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.OSCApplication;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
@@ -16,6 +16,7 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.util.StringUtils;
 import net.qiujuer.genius.ui.compat.UiCompat;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,8 +26,11 @@ import java.util.Map;
  */
 
 public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
+    private OSCApplication.ReadState mReadState;
+
     public EventSubAdapter(Callback callback, int mode) {
         super(callback, mode);
+        mReadState = OSCApplication.getReadState("sub_list");
         setOnLoadingHeaderCallBack(this);
     }
 
@@ -49,10 +53,10 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, SubBean item, int position) {
         EventViewHolder vh = (EventViewHolder) holder;
         vh.tv_event_title.setText(item.getTitle());
-        SubBean.Image image = item.getImage();
-        if (image != null) {
+        List<SubBean.Image> images = item.getImages();
+        if (images != null && images.size() > 0) {
             mCallBack.getImgLoader()
-                    .load(image.getHref() != null && image.getHref().length > 0 ? image.getHref()[0] : null)
+                    .load(images.get(0).getHref())
                     .placeholder(R.drawable.bg_normal)
                     .into(vh.iv_event);
         } else {
@@ -63,10 +67,10 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
 
         Map<String, Object> extras = item.getExtra();
         if (extras != null) {
-            vh.tv_event_pub_date.setText(StringUtils.getDateString(extras.get("eventStartDate").toString()));
-            vh.tv_event_member.setText(Double.valueOf(extras.get("eventApplyCount").toString()).intValue() + "人参与");
+            vh.tv_event_pub_date.setText(StringUtils.getDateString(getExtraString(extras.get("eventStartDate"))));
+            vh.tv_event_member.setText(getExtraInt(extras.get("eventApplyCount")) + "人参与");
 
-            switch (Double.valueOf(extras.get("eventStatus").toString()).intValue()) {
+            switch (getExtraInt(extras.get("eventStatus"))) {
                 case Event.STATUS_END:
                     setText(vh.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);
                     setTextColor(vh.tv_event_title, UiCompat.getColor(resources, R.color.light_gray));
@@ -80,7 +84,7 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
                     break;
             }
             int typeStr = R.string.oscsite;
-            switch (Double.valueOf(extras.get("eventType").toString()).intValue()) {
+            switch (getExtraInt(extras.get("eventType"))) {
                 case Event.EVENT_TYPE_OSC:
                     typeStr = R.string.event_type_osc;
                     break;
@@ -98,7 +102,7 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
         }
 
         vh.tv_event_title.setTextColor(UiCompat.getColor(resources,
-                AppContext.isOnReadedPostList("sub_list", String.valueOf(item.getId()))
+                mReadState.already(item.getKey())
                         ? R.color.text_desc_color : R.color.text_title_color));
 
     }
@@ -129,5 +133,13 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
             tv_event_member = (TextView) itemView.findViewById(R.id.tv_event_member);
             iv_event = (ImageView) itemView.findViewById(R.id.iv_event);
         }
+    }
+
+    protected String getExtraString(Object object) {
+        return object == null ? "" : object.toString();
+    }
+
+    protected int getExtraInt(Object object) {
+        return object == null ? 0 : Double.valueOf(object.toString()).intValue();
     }
 }

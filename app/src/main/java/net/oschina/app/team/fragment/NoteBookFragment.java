@@ -50,7 +50,7 @@ import cz.msebera.android.httpclient.Header;
 
 /**
  * 便签列表界面
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  */
 public class NoteBookFragment extends BaseFragment implements
@@ -95,7 +95,7 @@ public class NoteBookFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_note, container,
                 false);
@@ -127,20 +127,20 @@ public class NoteBookFragment extends BaseFragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.public_menu_send:
-            Bundle bundle = new Bundle();
-            bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
-                    NoteEditFragment.NOTEBOOK_FRAGMENT);
-            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE_EDIT,
-                    bundle);
-            break;
+            case R.id.public_menu_send:
+                Bundle bundle = new Bundle();
+                bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
+                        NoteEditFragment.NOTEBOOK_FRAGMENT);
+                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE_EDIT,
+                        bundle);
+                break;
         }
         return true;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         Bundle bundle = new Bundle();
         bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
                 NoteEditFragment.NOTEBOOK_ITEM);
@@ -152,7 +152,7 @@ public class NoteBookFragment extends BaseFragment implements
 
     @Override
     public void initData() {
-        user = AppContext.getInstance().getLoginUser();
+        user = new User();
         controller = new SynchronizeController();
         noteDb = new NoteDatabase(aty);
         datas = noteDb.query();// 查询操作，忽略耗时
@@ -200,7 +200,8 @@ public class NoteBookFragment extends BaseFragment implements
             }
 
             @Override
-            public void cancleMove() {}
+            public void cancleMove() {
+            }
         });
         mSwipeRefreshLayout.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -332,7 +333,7 @@ public class NoteBookFragment extends BaseFragment implements
 
     /**
      * 删除数据
-     * 
+     *
      * @param index
      */
     private void delete(int index) {
@@ -343,11 +344,12 @@ public class NoteBookFragment extends BaseFragment implements
                     new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int arg0, Header[] arg1,
-                                byte[] arg2) {}
+                                              byte[] arg2) {
+                        }
 
                         @Override
                         public void onFailure(int arg0, Header[] arg1,
-                                byte[] arg2, Throwable arg3) {
+                                              byte[] arg2, Throwable arg3) {
                             AppContext.showToast("网络异常,云端文件暂未删除");
                         }
                     });

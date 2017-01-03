@@ -42,12 +42,13 @@ public class UserQuestionFragment extends BaseRecyclerViewFragment<Question> {
 
     @Override
     protected void requestData() {
-        OSChinaApi.getUserQuestionList(null, userId, mHandler);
+        String token = isRefreshing ? null : mBean.getNextPageToken();
+        OSChinaApi.getUserQuestionList(token, userId, mHandler);
     }
 
     @Override
     protected BaseRecyclerAdapter<Question> getRecyclerAdapter() {
-        return new UserQuestionAdapter(getContext(), BaseRecyclerAdapter.ONLY_FOOTER);
+        return new UserQuestionAdapter(getContext());
     }
 
     @Override
@@ -72,10 +73,5 @@ public class UserQuestionFragment extends BaseRecyclerViewFragment<Question> {
         if (question == null)
             return;
         QuestionDetailActivity.show(getActivity(), question.getId());
-    }
-
-    @Override
-    public void onLoadMore() {
-        OSChinaApi.getUserQuestionList(mBean.getNextPageToken(), userId, mHandler);
     }
 }

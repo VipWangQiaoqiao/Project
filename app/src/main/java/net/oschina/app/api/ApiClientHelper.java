@@ -1,12 +1,14 @@
 package net.oschina.app.api;
 
+import android.app.Application;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.text.TextUtils;
 
-import net.oschina.app.AppConfig;
-import net.oschina.app.AppContext;
+import net.oschina.app.Setting;
 
 import java.util.UUID;
 
@@ -19,7 +21,7 @@ class ApiClientHelper {
      * @param appContext
      * @return
      */
-    static String getUserAgent(AppContext appContext) {
+    static String getUserAgent(Application appContext) {
         // WebSettings.getDefaultUserAgent(appContext)
 
         int vCode = getPackageInfo(appContext).versionCode;
@@ -64,16 +66,21 @@ class ApiClientHelper {
         return result.toString();
     }
 
-    private static String getAppId(AppContext context) {
-        String uniqueID = context.getProperty(AppConfig.CONF_APP_UNIQUEID);
-        if (TextUtils.isEmpty(uniqueID)) {
-            uniqueID = UUID.randomUUID().toString();
-            context.setProperty(AppConfig.CONF_APP_UNIQUEID, uniqueID);
+    private static String getAppId(Application context) {
+        if (context != null) {
+            SharedPreferences sp = Setting.getSettingPreferences(context);
+            String uniqueID = sp.getString(Setting.KEY_APP_UNIQUE_ID, null);
+            if (TextUtils.isEmpty(uniqueID)) {
+                uniqueID = UUID.randomUUID().toString();
+                SharedPreferences.Editor editor = sp.edit().putString(Setting.KEY_APP_UNIQUE_ID, uniqueID);
+                SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+            }
+            return uniqueID;
         }
-        return uniqueID;
+        return UUID.randomUUID().toString();
     }
 
-    private static PackageInfo getPackageInfo(AppContext context) {
+    private static PackageInfo getPackageInfo(Application context) {
         PackageInfo info = null;
         try {
             info = context.getPackageManager()

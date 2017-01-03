@@ -20,7 +20,7 @@ import android.view.View;
  */
 public class IndexView extends View {
 
-    private static final String DEFAULT_INDEX = "☆ABCDEFGHIJKLMNOPQRSTUVWXYZ#";
+    private static final String DEFAULT_INDEX = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ☆";
 
     private static final int[] ATTRS = new int[]{
             android.R.attr.textSize,
@@ -129,7 +129,7 @@ public class IndexView extends View {
     }
 
     public interface OnIndexTouchListener {
-        public void onIndexTouchMove(char indexLeter);
+        public void onIndexTouchMove(char indexLetter);
 
         public void onIndexTouchUp();
     }

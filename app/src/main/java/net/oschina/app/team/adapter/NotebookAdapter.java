@@ -1,16 +1,5 @@
 package net.oschina.app.team.adapter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import net.oschina.app.R;
-import net.oschina.app.bean.NotebookData;
-import net.oschina.app.team.fragment.NoteEditFragment;
-import net.oschina.app.widget.KJDragGridView.DragGridBaseAdapter;
-
-import org.kymjs.kjframe.utils.DensityUtils;
-
 import android.app.Activity;
 import android.text.Html;
 import android.view.View;
@@ -21,11 +10,20 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
+import net.oschina.app.R;
+import net.oschina.app.bean.NotebookData;
+import net.oschina.app.team.fragment.NoteEditFragment;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.widget.KJDragGridView.DragGridBaseAdapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * 便签列表适配器
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter {
     private List<NotebookData> datas;
@@ -40,7 +38,7 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
         Collections.sort(datas);
         this.datas = datas;
         this.aty = aty;
-        width = DensityUtils.getScreenW(aty) / 2;
+        width = (int) (TDevice.getScreenWidth() / 2);
         height = (int) aty.getResources().getDimension(R.dimen.space_35);
     }
 
@@ -74,7 +72,7 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
 
     /**
      * 数据是否发生了改变
-     * 
+     *
      * @return
      */
     public boolean getDataChange() {

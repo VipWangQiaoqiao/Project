@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.Setting;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -34,8 +35,8 @@ public class AboutOSCFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        view.findViewById(R.id.rl_grade).setOnClickListener(this);
-        view.findViewById(R.id.rl_gitapp).setOnClickListener(this);
+        view.findViewById(R.id.tv_grade).setOnClickListener(this);
+        view.findViewById(R.id.tv_gitapp).setOnClickListener(this);
         view.findViewById(R.id.tv_oscsite).setOnClickListener(this);
         view.findViewById(R.id.tv_knowmore).setOnClickListener(this);
     }
@@ -50,10 +51,10 @@ public class AboutOSCFragment extends BaseFragment {
     public void onClick(View v) {
         final int id = v.getId();
         switch (id) {
-            case R.id.rl_grade:
+            case R.id.tv_grade:
                 TDevice.openAppInMarket(getActivity());
                 break;
-            case R.id.rl_gitapp:
+            case R.id.tv_gitapp:
                 boolean res = TDevice.openAppActivity(getActivity(),
                         "net.oschina.gitapp", "net.oschina.gitapp.WelcomePage");
 
@@ -75,6 +76,7 @@ public class AboutOSCFragment extends BaseFragment {
                 break;
             case R.id.img_portrait:
                 Boss.verifyApp(getContext());
+                Setting.updateSystemConfigTimeStamp(getContext());
                 break;
             default:
                 break;

@@ -3,7 +3,6 @@ package net.oschina.app.improve.user.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.api.remote.OSChinaApi;
@@ -13,11 +12,11 @@ import net.oschina.app.improve.bean.Active;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Origin;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
-import net.oschina.app.improve.detail.activities.EventDetailActivity;
-import net.oschina.app.improve.detail.activities.NewsDetailActivity;
-import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
-import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
+import net.oschina.app.improve.detail.general.BlogDetailActivity;
+import net.oschina.app.improve.detail.general.EventDetailActivity;
+import net.oschina.app.improve.detail.general.NewsDetailActivity;
+import net.oschina.app.improve.detail.general.QuestionDetailActivity;
+import net.oschina.app.improve.detail.general.SoftwareDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserActiveAdapter;
 import net.oschina.app.util.UIHelper;
@@ -51,7 +50,7 @@ public class UserActiveFragment extends BaseRecyclerViewFragment<Active> {
 
     @Override
     protected BaseRecyclerAdapter<Active> getRecyclerAdapter() {
-        return new UserActiveAdapter(getContext(), Glide.with(this));
+        return new UserActiveAdapter(getContext());
     }
 
     @Override
@@ -61,13 +60,9 @@ public class UserActiveFragment extends BaseRecyclerViewFragment<Active> {
     }
 
     @Override
-    public void onLoadMore() {
-        OSChinaApi.getUserActives(uid, mBean.getNextPageToken(), mHandler);
-    }
-
-    @Override
     protected void requestData() {
-        OSChinaApi.getUserActives(uid, null, mHandler);
+        String token = isRefreshing ? null : mBean.getNextPageToken();
+        OSChinaApi.getUserActives(uid, token, mHandler);
     }
 
     @Override

@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
@@ -17,12 +16,11 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.team.bean.MyIssueState;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.ui.TeamMainActivity;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
-
-import org.kymjs.kjframe.utils.SystemTool;
 
 import java.io.ByteArrayInputStream;
 import java.util.Calendar;
@@ -101,12 +99,11 @@ public class TeamBoardFragment extends BaseFragment {
         mRlIng.setOnClickListener(this);
         mRlAll.setOnClickListener(this);
 
-        mTvName.setText(AppContext.getInstance().getLoginUser().getName() + "，"
+        mTvName.setText(AccountHelper.getUser().getName() + "，"
                 + getGreetings());
-        mIvAvatarView.setAvatarUrl(AppContext.getInstance().getLoginUser()
-                .getPortrait());
+        mIvAvatarView.setAvatarUrl(AccountHelper.getUser().getPortrait());
         mTvDate.setText("今天是 " + getWeekDay() + "，"
-                + SystemTool.getDataTime("yyyy年MM月dd日"));
+                + StringUtils.getDataTime("yyyy年MM月dd日"));
 
         TypefaceUtils.setTypeface((TextView) view
                 .findViewById(R.id.tv_team_active));

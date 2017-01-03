@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.util.TLog;
+import net.oschina.common.BuildConfig;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,6 +39,19 @@ public final class NoticeManager {
     private final List<NoticeNotify> mNotifies = new ArrayList<>();
     private NoticeBean mNotice;
 
+    public static void publish(ResultBean resultBean, NoticeBean noticeBean) {
+        if (resultBean != null && resultBean.isSuccess() && noticeBean != null) {
+            if (noticeBean.equals(INSTANCE.mNotice))
+                return;
+            try {
+                TLog.error("New message:" + noticeBean.toString());
+                INSTANCE.onNoticeChanged(noticeBean);
+            } catch (Exception e) {
+                e.fillInStackTrace();
+            }
+        }
+    }
+
     public static NoticeBean getNotice() {
         final NoticeBean bean = INSTANCE.mNotice;
         if (bean == null) {
@@ -64,8 +80,9 @@ public final class NoticeManager {
         if (!AccountHelper.isLogin()) {
             return;
         }
-
+        // 启动服务
         NoticeServer.startAction(context);
+        // 注册广播
         IntentFilter filter = new IntentFilter(NoticeServer.FLAG_BROADCAST_REFRESH);
         context.registerReceiver(INSTANCE.mReceiver, filter);
     }
@@ -74,7 +91,8 @@ public final class NoticeManager {
         try {
             context.unregisterReceiver(INSTANCE.mReceiver);
         } catch (IllegalArgumentException e) {
-
+            if (BuildConfig.DEBUG)
+                e.printStackTrace();
         }
     }
 
@@ -117,6 +135,7 @@ public final class NoticeManager {
 
     private void onNoticeChanged(NoticeBean bean) {
         mNotice = bean;
+        //  Notify all
         for (NoticeNotify notify : mNotifies) {
             notify.onNoticeArrived(mNotice);
         }

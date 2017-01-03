@@ -8,9 +8,7 @@ import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.TextView;
 
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.URLUtils;
-import net.oschina.app.util.URLsUtils;
+import net.oschina.app.improve.utils.URLUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

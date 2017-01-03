@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_event_img"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/qr_scan_mask"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_event_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_event_detail_ing"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:paddingLeft="@dimen/lay_4"
+                android:paddingRight="@dimen/lay_4"
+                android:paddingTop="2dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="gone"
+                tools:text="正在报名" />
+
+            <TextView
+                android:id="@+id/tv_event_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:ellipsize="end"
+                android:lineSpacingExtra="4dp"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/text_title_color"
+                android:textSize="18sp"
+                tools:text="PHPCon China 2016 技术峰会 —— 评论得赠票PHPCon China 2016 技术峰会 —— 评论得赠票" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8">
+
+                <net.oschina.app.widget.CircleImageView
+                    android:id="@+id/civ_author"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/tv_event_author"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/lay_16"
+                    android:paddingRight="@dimen/lay_16"
+                    android:textColor="@color/text_desc_color"
+                    android:textSize="16sp"
+                    tools:text="faker" />
+
+                <TextView
+                    android:id="@+id/tv_event_member"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textColor="@color/text_title_color"
+                    android:textSize="16sp"
+                    tools:text="24人参与" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/ic_calendar" />
+
+                <TextView
+                    android:id="@+id/tv_event_start_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/lay_16"
+                    android:textColor="@color/text_dark"
+                    android:textSize="16sp"
+                    tools:text="2016-07-13:12:61" />
+            </LinearLayout>
+
+            <View
+                style="@style/h_line"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/lay_16" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/ic_ticket" />
+
+                <TextView
+                    android:id="@+id/tv_event_cost_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/lay_16"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    tools:text="免费" />
+            </LinearLayout>
+
+            <View
+                style="@style/h_line"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/lay_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="@dimen/lay_16"
+                    android:src="@mipmap/ic_location" />
+
+                <TextView
+                    android:id="@+id/tv_event_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="16sp"
+                    tools:text="大会地点：上海 - 闵行区莲花路1733号 - 华纳风格酒店" />
+            </LinearLayout>
+
+            <View
+                style="@style/h_line"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/lay_16" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="@dimen/lay_16"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
+                android:text="活动介绍:"
+                android:textColor="#111111"
+                android:textSize="18sp" />
+
+            <FrameLayout
+                android:id="@+id/lay_webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/lay_12"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="@dimen/lay_12">
+
+                <net.oschina.app.improve.widget.OWebView
+                    android:id="@+id/webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

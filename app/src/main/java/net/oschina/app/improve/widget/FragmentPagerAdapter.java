@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,7 +16,7 @@ import net.oschina.app.util.TLog;
  * 状态由{@link Fragment}自己维护，也不能用{@link android.support.v4.app.FragmentStatePagerAdapter}, 因为
  * 它通过{@link FragmentTransaction#add(Fragment, String)}和{@link FragmentTransaction#remove(Fragment)}
  * 的方式，有两个集合保存加入的{@link Fragment}以及它们的状态
- *
+ * <p>
  * <p> Created by thanatosx on 2016/11/9.
  */
 @SuppressWarnings("all")
@@ -27,12 +26,13 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
     private FragmentTransaction mCurTransaction;
     private Fragment mCurrentPrimaryItem;
 
-    public FragmentPagerAdapter(FragmentManager fm){
+    public FragmentPagerAdapter(FragmentManager fm) {
         mFragmentManager = fm;
     }
 
     /**
      * Return the fragment associated with a specified position
+     *
      * @param position the position
      * @return {@link Fragment}
      */
@@ -48,10 +48,10 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        if (mCurTransaction == null){
+        if (mCurTransaction == null) {
             mCurTransaction = mFragmentManager.beginTransaction();
         }
-        
+
         Fragment fragment = getItem(position);
         TLog.i("oschina", "Adding fragment item #" + position + ": f=" + fragment);
         fragment.setMenuVisibility(false);
@@ -64,8 +64,8 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         Fragment fragment = (Fragment) object;
-        
-        if (mCurTransaction == null){
+
+        if (mCurTransaction == null) {
             mCurTransaction = mFragmentManager.beginTransaction();
         }
         TLog.i("oschina", "Removing fragment #" + position + ": f=" + fragment
@@ -76,12 +76,12 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         Fragment fragment = (Fragment) object;
-        if (fragment != mCurrentPrimaryItem){
-            if (mCurrentPrimaryItem != null){
+        if (fragment != mCurrentPrimaryItem) {
+            if (mCurrentPrimaryItem != null) {
                 mCurrentPrimaryItem.setMenuVisibility(false);
                 mCurrentPrimaryItem.setUserVisibleHint(false);
             }
-            if (fragment != null){
+            if (fragment != null) {
                 fragment.setMenuVisibility(true);
                 fragment.setUserVisibleHint(true);
             }
@@ -97,7 +97,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
         }*/
     }
 
-    public void commitUpdate(){
+    public void commitUpdate() {
         if (mCurTransaction != null) {
             mCurTransaction.commitNowAllowingStateLoss();
             mCurTransaction = null;
@@ -106,7 +106,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return ((Fragment)object).getView() == view;
+        return ((Fragment) object).getView() == view;
     }
 
     protected String makeFragmentName(int viewId, long id) {

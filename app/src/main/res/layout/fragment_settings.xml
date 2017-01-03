@@ -9,7 +9,8 @@
 
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:id="@+id/lay_linear"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -163,7 +164,7 @@
 
             <TextView
                 style="@style/option_item_text_parent"
-                android:text="@string/setting_cancle"
+                android:text="@string/setting_cancel"
                 android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>

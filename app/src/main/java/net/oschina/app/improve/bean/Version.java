@@ -7,7 +7,7 @@ import java.io.Serializable;
  * on 2016/10/19.
  */
 
-public class Version implements Serializable{
+public class Version implements Serializable {
     private String code;
     private String name;
     private String release;

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.AppConfig;
-import net.oschina.app.AppContext;
+import net.oschina.app.OSCApplication;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
@@ -36,6 +36,7 @@ import java.lang.reflect.Type;
 public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
     private SubTab mTab;
     private HeaderView mHeaderView;
+    private OSCApplication.ReadState mReadState;
 
     public static SubFragment newInstance(Context context, SubTab subTab) {
         SubFragment fragment = new SubFragment();
@@ -54,6 +55,7 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
 
     @Override
     public void initData() {
+        mReadState = OSCApplication.getReadState("sub_list");
         if (mTab.getBanner() != null) {
             mHeaderView = mTab.getBanner().getCatalog() == SubTab.BANNER_CATEGORY_NEWS ?
                     new NewsHeaderView(mContext, getImgLoader(), mTab.getBanner().getHref(), mTab.getToken() + "banner" + mTab.getType()) :
@@ -74,28 +76,35 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
             return;
         switch (sub.getType()) {
             case News.TYPE_SOFTWARE:
-                SoftwareDetailActivity.show(mContext, sub.getId());
+                //SoftwareDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.SoftwareDetailActivity.show(mContext,sub);
                 break;
             case News.TYPE_QUESTION:
-                QuestionDetailActivity.show(mContext, sub.getId());
+                //QuestionDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.QuestionDetailActivity.show(mContext,sub);
                 break;
             case News.TYPE_BLOG:
-                BlogDetailActivity.show(mContext, sub.getId());
+                //BlogDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.BlogDetailActivity.show(mContext,sub);
                 break;
             case News.TYPE_TRANSLATE:
-                TranslateDetailActivity.show(mContext, sub.getId());
+                //TranslateDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.NewsDetailActivity.show(mContext,sub);
                 break;
             case News.TYPE_EVENT:
-                EventDetailActivity.show(mContext, sub.getId());
+                //EventDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.EventDetailActivity.show(mContext,sub);
                 break;
             case News.TYPE_NEWS:
-                NewsDetailActivity.show(mContext, sub.getId());
+                //NewsDetailActivity.show(mContext, sub.getId());
+                net.oschina.app.improve.detail.general.NewsDetailActivity.show(mContext,sub);
                 break;
             default:
                 UIHelper.showUrlRedirect(mContext, sub.getHref());
                 break;
         }
-        AppContext.putReadedPostList("sub_list", String.valueOf(sub.getId()), "true");
+
+        mReadState.put(sub.getKey());
         mAdapter.updateItem(position);
     }
 
@@ -108,7 +117,7 @@ public class SubFragment extends BaseGeneralRecyclerFragment<SubBean> {
 
     @Override
     protected void requestData() {
-        OSChinaApi.getSubscription(mTab.getHref(), mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getSubscription(mTab.getHref(), isRefreshing ? null : mBean.getNextPageToken(), mHandler);
     }
 
     @Override

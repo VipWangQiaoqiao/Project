@@ -36,8 +36,8 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
             @Override
             public void onClick(View v, int position) {
                 Author author = getItem(position).getAuthor();
-                if(author != null)
-                OtherUserHomeActivity.show(mCallBack.getContext(), author.getId());
+                if (author != null)
+                    OtherUserHomeActivity.show(mCallBack.getContext(), author.getId());
             }
         };
     }

@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Active;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.Origin;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.StringUtils;
@@ -30,16 +32,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
 
-    private RequestManager mImageLoader;
-
     /**
-     *
      * @param context Context
-     * @param rm Glide RequestManager should be related with fragment's liftcycle rather than Activity Context
      */
-    public UserActiveAdapter(Context context, RequestManager rm) {
+    public UserActiveAdapter(Context context) {
         super(context, ONLY_FOOTER);
-        mImageLoader = rm;
     }
 
     @Override
@@ -51,13 +48,19 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder vh, Active item, int position) {
         ViewHolder holder = (ViewHolder) vh;
 
-        mImageLoader.load(item.getAuthor().getPortrait())
-                .asBitmap()
-                .placeholder(R.mipmap.widget_dface)
-                .error(R.mipmap.widget_dface)
-                .into(holder.mViewPortrait);
+        Author author = item.getAuthor();
+        if (author == null) {
+            holder.mViewNick.setText("匿名用户");
+            holder.mViewPortrait.setImageResource(R.mipmap.widget_dface);
+        }else {
+            Glide.with(mContext).load(item.getAuthor().getPortrait())
+                    .asBitmap()
+                    .placeholder(R.mipmap.widget_dface)
+                    .error(R.mipmap.widget_dface)
+                    .into(holder.mViewPortrait);
+            holder.mViewNick.setText(item.getAuthor().getName());
+        }
 
-        holder.mViewNick.setText(item.getAuthor().getName());
         holder.mViewTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
 
         Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mContext, item.getContent());
@@ -68,10 +71,10 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
 
         holder.mViewTitle.setText(getWhichTitle(item.getOrigin()));
 
-        if (item.getOrigin().getType() == Origin.ORIGIN_TYPE_TWEETS){
+        if (item.getOrigin().getType() == Origin.ORIGIN_TYPE_TWEETS) {
             holder.mViewReply.setVisibility(View.VISIBLE);
             holder.mViewReply.setText(item.getOrigin().getDesc());
-        }else {
+        } else {
             holder.mViewReply.setVisibility(View.GONE);
         }
 
@@ -82,7 +85,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
         String desc = "评论了%s%s:";
         String which;
         String title = "“" + origin.getDesc() + "”";
-        switch (origin.getType()){
+        switch (origin.getType()) {
             case Origin.ORIGIN_TYPE_LINK:
                 which = "新闻";
                 break;
@@ -123,12 +126,18 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.tv_nick) TextView mViewNick;
-        @Bind(R.id.tv_time) TextView mViewTime;
-        @Bind(R.id.tv_title) TextView mViewTitle;
-        @Bind(R.id.tv_reply) TextView mViewReply;
-        @Bind(R.id.tv_content) TextView mViewContent;
-        @Bind(R.id.iv_portrait) CircleImageView mViewPortrait;
+        @Bind(R.id.tv_nick)
+        TextView mViewNick;
+        @Bind(R.id.tv_time)
+        TextView mViewTime;
+        @Bind(R.id.tv_title)
+        TextView mViewTitle;
+        @Bind(R.id.tv_reply)
+        TextView mViewReply;
+        @Bind(R.id.tv_content)
+        TextView mViewContent;
+        @Bind(R.id.iv_portrait)
+        CircleImageView mViewPortrait;
 
         public ViewHolder(View view) {
             super(view);

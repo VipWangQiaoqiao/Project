@@ -21,10 +21,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by thanatos on 16/8/17.
  */
-public class UserQuestionAdapter extends BaseRecyclerAdapter<Question>{
+public class UserQuestionAdapter extends BaseRecyclerAdapter<Question> {
 
-    public UserQuestionAdapter(Context context, int mode) {
-        super(context, mode);
+    public UserQuestionAdapter(Context context) {
+        super(context, ONLY_FOOTER);
     }
 
     @Override
@@ -44,18 +44,26 @@ public class UserQuestionAdapter extends BaseRecyclerAdapter<Question>{
         holder.mViewTitle.setText(item.getTitle());
         holder.mViewContent.setText(item.getBody());
         String nick = item.getAuthor();
-        holder.mViewHistory.setText(nick.length() > 9 ? nick.substring(0, 9) : nick + " " + StringUtils.formatSomeAgo(item.getPubDate()));
+        holder.mViewHistory.setText(nick.length() > 9
+                ? nick.substring(0, 9)
+                : nick + " " + StringUtils.formatSomeAgo(item.getPubDate()));
         holder.mViewInfoCmm.setText(String.valueOf(item.getCommentCount()));
         holder.mViewInfoVisual.setText(String.valueOf(item.getViewCount()));
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        @Bind(R.id.iv_ques_item_icon) CircleImageView mViewPortrait;
-        @Bind(R.id.tv_ques_item_title) TextView mViewTitle;
-        @Bind(R.id.tv_ques_item_content) TextView mViewContent;
-        @Bind(R.id.tv_ques_item_history) TextView mViewHistory;
-        @Bind(R.id.tv_info_view) TextView mViewInfoVisual;
-        @Bind(R.id.tv_info_comment) TextView mViewInfoCmm;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.iv_ques_item_icon)
+        CircleImageView mViewPortrait;
+        @Bind(R.id.tv_ques_item_title)
+        TextView mViewTitle;
+        @Bind(R.id.tv_ques_item_content)
+        TextView mViewContent;
+        @Bind(R.id.tv_ques_item_history)
+        TextView mViewHistory;
+        @Bind(R.id.tv_info_view)
+        TextView mViewInfoVisual;
+        @Bind(R.id.tv_info_comment)
+        TextView mViewInfoCmm;
 
         public ViewHolder(View itemView) {
             super(itemView);

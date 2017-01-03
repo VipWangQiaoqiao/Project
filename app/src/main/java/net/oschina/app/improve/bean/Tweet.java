@@ -1,9 +1,15 @@
 package net.oschina.app.improve.bean;
 
+import android.text.TextUtils;
+
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Author;
+import net.oschina.common.utils.CollectionUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by huanghaibin_dev
@@ -22,6 +28,8 @@ public class Tweet implements Serializable {
     private String href;
     private Audio[] audio;
     private Image[] images;
+    private Statistics statistics;
+    private About about;
 
     public long getId() {
         return id;
@@ -119,6 +127,22 @@ public class Tweet implements Serializable {
         this.images = images;
     }
 
+    public About getAbout() {
+        return about;
+    }
+
+    public void setAbout(About about) {
+        this.about = about;
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
+    }
+
     public static class Code implements Serializable {
         private String brush;
         private String content;
@@ -164,8 +188,26 @@ public class Tweet implements Serializable {
     public static class Image implements Serializable {
         private String thumb;
         private String href;
+        private String name;
+        private int type;
         private int w;
         private int h;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
 
         public String getThumb() {
             return thumb;
@@ -199,14 +241,60 @@ public class Tweet implements Serializable {
             this.h = h;
         }
 
+        public static Image create(String href) {
+            Image image = new Image();
+            image.thumb = href;
+            image.href = href;
+            return image;
+        }
+
         public static String[] getImagePath(Image[] images) {
             if (images == null || images.length == 0)
                 return null;
-            String[] paths = new String[images.length];
-            for (int i = 0; i < images.length; i++) {
-                paths[i] = images[i].href;
+
+            List<String> paths = new ArrayList<>();
+            for (Image image : images) {
+                if (check(image))
+                    paths.add(image.href);
             }
-            return paths;
+
+            return CollectionUtil.toArray(paths, String.class);
+        }
+
+        public static boolean check(Image image) {
+            return image != null
+                    && !TextUtils.isEmpty(image.getThumb())
+                    && !TextUtils.isEmpty(image.getHref());
+        }
+    }
+
+    public static class Statistics implements Serializable {
+        private int comment;
+        private int transmit;
+        private int like;
+
+        public int getLike() {
+            return like;
+        }
+
+        public void setLike(int like) {
+            this.like = like;
+        }
+
+        public int getComment() {
+            return comment;
+        }
+
+        public void setComment(int comment) {
+            this.comment = comment;
+        }
+
+        public int getTransmit() {
+            return transmit;
+        }
+
+        public void setTransmit(int transmit) {
+            this.transmit = transmit;
         }
     }
 

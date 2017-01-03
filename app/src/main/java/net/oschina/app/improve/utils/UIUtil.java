@@ -1,9 +1,6 @@
 package net.oschina.app.improve.utils;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
 
 /**
  * Created by huanghaibin_dev

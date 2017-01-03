@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<net.oschina.app.improve.widget.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<net.oschina.common.widget.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:oscAccordTo="width">
 
     <ImageView
         android:id="@+id/iv_image"
@@ -44,4 +46,4 @@
         android:scaleType="centerInside"
         android:src="@mipmap/gif"
         android:visibility="gone" />
-</net.oschina.app.improve.widget.SquareLayout>
+</net.oschina.common.widget.SquareLayout>

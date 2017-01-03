@@ -56,9 +56,18 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     @Bind(R.id.search_src_text)
     EditText mViewSearchEditor;
 
-    private List<Pair<String, Fragment>> mPagerItems;
-
     private static boolean isMiUi = false;
+    private List<Pair<String, Fragment>> mPagerItems;
+    private String mSearchText;
+    private Runnable mSearchRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (TextUtils.isEmpty(mSearchText))
+                return;
+            SearchAction f = (SearchAction) mPagerItems.get(mViewPager.getCurrentItem()).second;
+            f.search(mSearchText);
+        }
+    };
 
     public static void show(Context context) {
         Intent intent = new Intent(context, SearchActivity.class);
@@ -106,6 +115,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         String content = mSearchText;
         if (TextUtils.isEmpty(content)) return;
         doSearch(content, false);
+        mViewSearch.clearFocus();
     }
 
     @Override
@@ -139,6 +149,12 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        mViewSearch.clearFocus();
+    }
+
+    @Override
     protected void initWidget() {
         super.initWidget();
         setStatusBarDarkMode(true);
@@ -153,6 +169,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         mViewSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mViewSearch.clearFocus();
                 return doSearch(query, false);
             }
 
@@ -200,17 +217,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     }
 
 
-    private String mSearchText;
-    private Runnable mSearchRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (TextUtils.isEmpty(mSearchText))
-                return;
-            SearchAction f = (SearchAction) mPagerItems.get(mViewPager.getCurrentItem()).second;
-            f.search(mSearchText);
-        }
-    };
-
     private boolean doSearch(String query, boolean fromTextChange) {
         mSearchText = query.trim();
         // Always cancel all request
@@ -221,9 +227,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
             mViewPager.setVisibility(View.GONE);
             return false;
         }
-
-        // Check network is wifi, by auto option
-        if (fromTextChange && !TDevice.isWifiOpen()) return false;
 
         mLayoutTab.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.VISIBLE);

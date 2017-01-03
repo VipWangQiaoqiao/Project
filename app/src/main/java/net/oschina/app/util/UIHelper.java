@@ -27,13 +27,11 @@ import com.dtr.zxing.activity.CaptureActivity;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Banner;
-import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.BrowserFragment;
-import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
@@ -49,6 +47,7 @@ import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.improve.user.fragments.UserQuestionFragment;
+import net.oschina.app.improve.utils.URLUtils;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.Team;
@@ -138,7 +137,7 @@ public class UIHelper {
      * @param blogId
      */
     public static void showBlogDetail(Context context, long blogId) {
-        BlogDetailActivity.show(context, blogId);
+        net.oschina.app.improve.detail.general.BlogDetailActivity.show(context, blogId);
     }
 
     /**
@@ -158,7 +157,7 @@ public class UIHelper {
      * @param eventId
      */
     public static void showEventDetail(Context context, long eventId) {
-        EventDetailActivity.show(context, eventId);
+        net.oschina.app.improve.detail.general.EventDetailActivity.show(context, eventId);
     }
 
     /**
@@ -186,30 +185,34 @@ public class UIHelper {
      */
     public static void showDetail(Context context, int type, long id, String href) {
         switch (type) {
-            case 0:
+            case OSChinaApi.CATALOG_ALL:
                 //新闻链接
                 showUrlRedirect(context, id, href);
                 break;
-            case 1:
+            case OSChinaApi.CATALOG_SOFTWARE:
                 //软件推荐
                 SoftwareDetailActivity.show(context, id);
                 //UIUtil.showSoftwareDetailById(context, (int) id);
                 break;
-            case 2:
+            case OSChinaApi.CATALOG_QUESTION:
                 //问答
                 QuestionDetailActivity.show(context, id);
                 break;
-            case 3:
+            case OSChinaApi.CATALOG_BLOG:
                 //博客
-                BlogDetailActivity.show(context, id);
+                net.oschina.app.improve.detail.general.BlogDetailActivity.show(context, id);
                 break;
-            case 4:
+            case OSChinaApi.CATALOG_TRANSLATION:
                 //4.翻译
                 TranslateDetailActivity.show(context, id);
                 break;
-            case 5:
+            case OSChinaApi.CATALOG_EVENT:
                 //活动
-                EventDetailActivity.show(context, id);
+                net.oschina.app.improve.detail.general.EventDetailActivity.show(context, id);
+                break;
+            case OSChinaApi.CATALOG_TWEET:
+                // 动弹
+                TweetDetailActivity.show(context, id);
                 break;
             default:
                 //6.资讯
@@ -235,7 +238,7 @@ public class UIHelper {
                 showBlogDetail(context, StringUtils.toLong(String.valueOf(newsId)));
                 break;
             case Banner.BANNER_TYPE_EVENT:
-                EventDetailActivity.show(context, newsId);
+                net.oschina.app.improve.detail.general.EventDetailActivity.show(context, newsId);
                 break;
             case Banner.BANNER_TYPE_NEWS:
                 NewsDetailActivity.show(context, newsId);
@@ -344,7 +347,7 @@ public class UIHelper {
 
     private static void showUrlRedirect(Context context, long id, String url) {
         if (url == null && id > 0) {
-            NewsDetailActivity.show(context, id);
+            net.oschina.app.improve.detail.general.NewsDetailActivity.show(context, id);
             return;
         }
 
@@ -401,16 +404,6 @@ public class UIHelper {
         Intent intent = new Intent(context, SimpleBackActivity.class);
         intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
         intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
-        context.startActivity(intent);
-    }
-
-    public static void showBlogComment(Context context, int id, int ownerId) {
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_ID, id);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_OWNER_ID, ownerId);
-        intent.putExtra(CommentFrament.BUNDLE_KEY_BLOG, true);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_COMMENT);
         context.startActivity(intent);
     }
 
@@ -618,31 +611,6 @@ public class UIHelper {
                     handler.sendMessage(msg);
             }
         });
-    }
-
-    /**
-     * 发送广播告知评论发生变化
-     *
-     * @param context
-     * @param isBlog
-     * @param id
-     * @param catalog
-     * @param operation
-     * @param replyComment
-     */
-    public static void sendBroadCastCommentChanged(Context context,
-                                                   boolean isBlog, int id, int catalog, int
-                                                           operation,
-                                                   Comment replyComment) {
-        Intent intent = new Intent(Constants.INTENT_ACTION_COMMENT_CHANGED);
-        Bundle args = new Bundle();
-        args.putInt(Comment.BUNDLE_KEY_ID, id);
-        args.putInt(Comment.BUNDLE_KEY_CATALOG, catalog);
-        args.putBoolean(Comment.BUNDLE_KEY_BLOG, isBlog);
-        args.putInt(Comment.BUNDLE_KEY_OPERATION, operation);
-        args.putParcelable(Comment.BUNDLE_KEY_COMMENT, replyComment);
-        intent.putExtras(args);
-        context.sendBroadcast(intent);
     }
 
     public static void showCreateNewIssue(Context context, Team team,

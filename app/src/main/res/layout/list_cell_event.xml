@@ -5,8 +5,8 @@
     android:background="?attr/layout_item_bg"
     android:paddingBottom="@dimen/space_10"
     android:orientation="vertical" >
-    
-    <ImageView 
+
+    <ImageView
         android:id="@+id/iv_event_status"
         android:layout_width="36dp"
         android:layout_height="36dp"

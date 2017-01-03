@@ -59,4 +59,16 @@
         <attr name="aTitle" format="string" />
         <attr name="aIcon" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="CircleBannerIndicator">
+        <attr name="circle_banner_indicator_centerHorizontal" format="boolean" />
+        <attr name="circle_banner_indicator_orientation" format="reference" />
+        <attr name="circle_banner_indicator_color" format="color" />
+        <attr name="circle_banner_indicator_stroke_color" format="color" />
+        <attr name="circle_banner_indicator_stroke_width" format="dimension" />
+        <attr name="circle_banner_indicator_fill_color" format="color" />
+        <attr name="circle_banner_indicator_radius" format="dimension" />
+        <attr name="circle_banner_indicator_space" format="dimension" />
+        <attr name="circle_banner_indicator_indicator_radius" format="dimension" />
+    </declare-styleable>
 </resources>

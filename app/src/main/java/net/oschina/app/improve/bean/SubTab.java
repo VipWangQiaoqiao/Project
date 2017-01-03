@@ -1,5 +1,10 @@
 package net.oschina.app.improve.bean;
 
+import android.text.TextUtils;
+
+import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.util.TLog;
+
 import java.io.Serializable;
 
 /**
@@ -25,6 +30,7 @@ public class SubTab implements Serializable {
     private int order;
     private String href;
     private Banner banner;
+    private boolean isActived;
 
 
     public class Banner implements Serializable {
@@ -70,6 +76,14 @@ public class SubTab implements Serializable {
             return tab.getToken().equals(this.token);
         }
         return false;
+    }
+
+    public boolean isActived() {
+        return isActived;
+    }
+
+    public void setActived(boolean actived) {
+        isActived = actived;
     }
 
     public String getToken() {
@@ -137,7 +151,10 @@ public class SubTab implements Serializable {
     }
 
     public String getHref() {
-        return href;
+        String url = String.format("action/apiv2/sub_list?token=%s", TextUtils.isEmpty(token) ? "" : token);
+        url = String.format(ApiHttpClient.API_URL, url);
+        TLog.log("SubTab getHref:" + url);
+        return url;
     }
 
     public void setHref(String href) {

@@ -33,6 +33,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by huanghaibin
  * on 16-6-13.
  */
+@Deprecated
 public class EventDetailActivity extends DetailActivity<EventDetail, EventDetailContract.View> implements EventDetailContract.Operator {
 
     public static void show(Context context, long id) {
@@ -65,7 +66,7 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
 
     @Override
     int getOptionsMenuId() {
-        return R.menu.menu_detail_share;
+        return R.menu.menu_event_detail;
     }
 
     @Override
@@ -73,7 +74,7 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
         if (item.getItemId() == R.id.menu_share) {
             final EventDetail detail = getData();
             if (detail != null) {
-                toShare(detail.getTitle(), detail.getBody(), detail.getHref());
+                toShare(detail.getTitle(), detail.getBody(), detail.getHref(), 5);
             }
         }
         return super.onOptionsItemSelected(item);
@@ -152,5 +153,13 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            requestData();
+        }
     }
 }

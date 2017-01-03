@@ -7,7 +7,7 @@ import java.io.Serializable;
  * on 2016/10/18.
  */
 
-public class Collection implements Serializable{
+public class Collection implements Serializable {
     private long id;
     private int type;
     private String title;
@@ -18,6 +18,7 @@ public class Collection implements Serializable{
     private String body;
     private int commentCount;
     private boolean favorite;
+
     public long getId() {
         return id;
     }

@@ -15,11 +15,12 @@
     <string name="event_type_tec">技术交流</string>
     <string name="event_type_other">其他</string>
     <string name="event_type_outside">站外活动</string>
+    <string name="event_type_outline">线下活动</string>
 
     <string name="event_apply_status_un_sign">我要报名</string>
     <string name="event_apply_status_audit">审核中</string>
     <string name="event_apply_status_confirmed">已确认</string>
-    <string name="event_apply_status_presented">已出席</string>
+    <string name="event_apply_status_presented">查看活动出席人</string>
     <string name="event_apply_status_canceled">已取消</string>
     <string name="event_apply_status_refused">已拒绝</string>
     <string name="event_is_fav">已收藏</string>
@@ -27,7 +28,7 @@
 
     <!-- slide menu -->
 
-    <!-- qucik option -->
+    <!-- quick option -->
 
     <string name="loading">加载中…</string>
     <string name="loading_no_more">已加载全部</string>
@@ -46,7 +47,6 @@
 
     <string name="actionbar_title_question">帖子详情</string>
     <string name="actionbar_title_detail">详情</string>
-    <string name="actionbar_title_active">好友圈</string>
 
     <string name="share_to">分享</string>
     <string name="platform_sina">微博</string>
@@ -66,12 +66,10 @@
 
     <string name="actionbar_title_question_tag">%s相关</string>
     <string name="comment_empty">暂无评论</string>
-    <string name="post_answer">回复</string>
     <string name="comment_reply_count">---共有%s条回复---</string>
     <string name="tip_comment_content_empty">评论内容不能为空</string>
 
     <!-- notification messages -->
-    <string name="comment_publish_success">评论成功</string>
     <string name="comment_publish_faile">评论失败</string>
 
     <string name="progress_submit">正在提交…</string>
@@ -91,7 +89,6 @@
 
     <string name="tweet_detail_data_null">啊噢, 没有找到该动弹~ 可能被主人删除了呢!</string>
     <string name="record_sound_notfound">找不到录音</string>
-    <string name="record_sound_short">时间太短了</string>
 
     <string name="ok">确定</string>
     <string name="cancle">取消</string>
@@ -99,7 +96,6 @@
     <string name="tip_content_too_long">内容太长</string>
 
     <string name="actionbar_title_softwarelist">开源软件</string>
-    <string name="actionbar_title_comment">评论列表</string>
     <string name="actionbar_title_user_blog">用户博客列表</string>
     <string name="actionbar_title_my_information">我的资料</string>
     <string name="actionbar_title_setting">设置</string>
@@ -116,6 +112,7 @@
 
     <string name="favorite">收藏</string>
     <string name="following">关注</string>
+    <string name="follow_done">已关注</string>
     <string name="follower">粉丝</string>
     <string name="join_time">加入于 :</string>
     <string name="location">所在地区:</string>
@@ -137,6 +134,7 @@
 
     <string name="copy">复制</string>
     <string name="delete">删除</string>
+    <string name="transmit">转发</string>
     <string name="copy_success">复制成功</string>
     <string name="deleting">正在删除…</string>
     <string name="delete_success">删除成功</string>
@@ -144,11 +142,21 @@
 
     <!-- software detail -->
 
+    <string name="soft_detail_doc">软件文档</string>
+    <string name="soft_detail_index">软件官网</string>
+    <string name="soft_detail_author">软件作者:</string>
+    <string name="soft_detail_license">开源协议:</string>
+    <string name="soft_detail_language">开发语言:</string>
+    <string name="soft_detail_platform">操作系统:</string>
+    <string name="soft_detail_pub_time">收录时间:</string>
+    <string name="soft_detail_any_name">匿名</string>
+    <string name="soft_detail_no_license">无</string>
+
     <string name="footer_type_loading">正在加载中…</string>
     <string name="footer_type_error">加载失败</string>
     <string name="footer_type_net_error">网络错误</string>
     <string name="footer_type_not_more">没有更多数据</string>
-    <string name="software_loading_error">内容加载失败&#8230;</string>
+    <string name="software_about_hint">相关软件</string>
 
     <string name="you_have_unread_messages">你有%s条未读消息</string>
     <string name="mention_count">\@我[%s] </string>
@@ -169,6 +177,7 @@
     <string name="add_notebook">新建便签</string>
     <string name="submit_notebook">保存便签</string>
 
+    <!--设置中心-->
     <string name="loading_img">加载图片</string>
     <string name="clean_cache">清理缓存</string>
     <string name="double_click_exit">双击退出</string>
@@ -176,7 +185,8 @@
     <string name="update">检查更新</string>
     <string name="about" translatable="false">关于我们</string>
     <string name="feedback">意见反馈</string>
-    <string name="setting_cancle">注销</string>
+    <string name="setting_cancel">注销</string>
+    <string name="logout_success_hint">注销成功</string>
     <string name="grade">去评分</string>
 
     <string name="oscsite">官网</string>
@@ -223,6 +233,7 @@
     <string name="state_load_error">加载失败</string>
     <string name="state_refreshing">正在刷新</string>
     <string name="state_loading_error">数据加载中&#8230;</string>
+    <string name="state_submit">正在提交中&#8230;</string>
 
     <string name="label_about_title">相关文章</string>
 
@@ -237,12 +248,8 @@
 
     <!-- 个人信息-->
     <string name="action_select">选择操作</string>
-    <string name="action_select_picture">选择图片</string>
     <string name="title_icon_null">图像不存在，上传失败</string>
-    <string name="title_update_success_status">个人信息更新成功&#8230;</string>
     <string name="title_update_fail_status">个人信息更新失败&#8230;</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
 
     <!--新版登录专用-->
     <string name="login_input_username_hint">手机号或邮箱</string>
@@ -266,12 +273,10 @@
     <string name="register_username_error">用户名太长&#8230;</string>
     <string name="hint_password">密码</string>
     <string name="register_pwd_hint">请输入至少六位数密码</string>
-    <string name="hint_pwd_null">当前用户名或密码为空&#8230;</string>
     <string name="hint_username_ok">请输入正确的手机号码</string>
     <string name="user_hint_login">点击头像登录</string>
     <string name="reset_pwd_label">重置密码</string>
     <string name="retrieve_pwd_label">找回密码</string>
-    <string name="retrieve_pwd_sms_coe_error">请输入正确的验证码</string>
     <string name="reset_pwd_submit">确认</string>
     <string name="request_error_hint">网络请求失败,请重试&#8230;</string>
     <string name="login_success_hint">登录成功</string>
@@ -284,7 +289,57 @@
     <string name="login_tencent_hint">正在启动QQ中&#8230;</string>
     <string name="login_webo_hint">正在启动微博中&#8230;</string>
     <string name="message_pwd_error">密码错误</string>
+    <string name="message_username_null">用户名未填写！！！</string>
     <string name="tv_my_score">积分 0</string>
     <string name="zero">0</string>
 
+    <!--新版评论专用-->
+    <string name="about_comment_hint">相关评论</string>
+    <string name="view_more_hint">更多评论</string>
+    <string name="send_tweet">转发到动弹</string>
+    <string name="send_hint">发送</string>
+    <string name="comment_hint">请输入评论</string>
+    <string name="hot_comment_hint">热门评论</string>
+    <string name="pub_comment_hint">发表评论</string>
+    <string name="pub_comment_success">评论成功</string>
+    <string name="pub_comment_failed">评论失败</string>
+    <string name="add_comment_hint">添加评论</string>
+    <string name="comment_title_hint">评论</string>
+    <string name="item_hint">条</string>
+    <string name="floor_hint">楼</string>
+    <string name="reply_hint">回复:</string>
+    <string name="answer_hint">回答</string>
+    <string name="pub_about">发布于</string>
+    <string name="back_hint">返回</string>
+    <string name="martian_hint">火星网友</string>
+
+    <!--新版活动签到-->
+    <string name="signin_phone_hint">使用手机号签到</string>
+    <string name="signin_input_hint">请输入手机号码</string>
+    <string name="signin_bt_hint">立即签到</string>
+    <string name="signin_event_type_hint">类型</string>
+    <string name="signin_event_author">发起人:</string>
+    <string name="signin_event_counts_hint">人参与</string>
+    <string name="user_event_hint">我的活动</string>
+    <string name="event_null_hint">未找到该活动&#8230;</string>
+
+    <string name="topic_list">话题列表</string>
+    <string name="title_updating_user_avatar">正在上传头像…</string>
+    <string name="search_man">找人</string>
+
+    <!--@联系人／好友-->
+    <string name="add_relation_success">关注成功</string>
+    <string name="cancel_relation_success">取消关注成功</string>
+    <string name="search_net_label">在网络上搜索</string>
+    <string name="search_null_hint">搜索内容不能为空!!!</string>
+    <string name="search_error_hint">数据加载失败,请重试…</string>
+    <string name="search_load_more_hint">点击加载更多数据…</string>
+    <string name="local_search_label">本地搜索结果</string>
+    <string name="net_search_label">网络搜索结果</string>
+    <string name="check_count_hint">只能选10位好友哦!!!</string>
+    <string name="friend_list_hint">好友列表</string>
+
+    <string name="btn_ok">确定</string>
+    <string name="btn_cancel">取消</string>
+    <string name="hint_enter_tag">输入讨论话题/软件名</string>
 </resources>

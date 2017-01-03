@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
@@ -34,9 +35,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.kjframe.Core;
-import org.kymjs.kjframe.utils.DensityUtils;
+import net.qiujuer.genius.ui.Ui;
 
 import java.util.List;
 
@@ -63,8 +62,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         ImageView image;
         @Bind(R.id.iv_like_state)
         ImageView ivLikeState;
-//        @Bind(R.id.tv_del)
-//        TextView del;
         @Bind(R.id.tv_likeusers)
         TextView likeUsers;
         @Bind(R.id.tv_tweet_like_count)
@@ -94,7 +91,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
                 R.mipmap.audio3);
         recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
-                DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
+                (int) Ui.dipToPx(cxt.getResources(), 20f), (int) Ui.dipToPx(cxt.getResources(), 20f));
     }
 
     @Override
@@ -156,8 +153,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             vh.image.setVisibility(View.GONE);
         } else {
             vh.image.setVisibility(View.VISIBLE);
-            new Core.Builder().view(vh.image).size(300, 300).url(tweet.getImgSmall() + "?300X300")
-                    .loadBitmapRes(R.drawable.pic_bg).doTask();
+            Glide.with(context).load(tweet.getImgSmall() + "?300X300")
+                    .placeholder(R.drawable.pic_bg)
+                    .into(vh.image);
             vh.image.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -184,7 +182,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         if (tweet.getIsLike() == 1) {
             vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_actived);
         } else {
-            vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_normal);
+            vh.ivLikeState.setImageResource(R.mipmap.ic_thumb_normal);
         }
         PlatfromUtil.setPlatFromString(vh.platform, tweet.getAppclient());
         return convertView;
@@ -197,17 +195,16 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             if (!tweet.getLikeUser().isEmpty()) {
                 tweet.getLikeUser().remove(0);
             }
-            OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
-                    handler,mContext);
+            OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
 //            vh.ivLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .gray));
-            vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_normal);
+            vh.ivLikeState.setImageResource(R.mipmap.ic_thumb_normal);
         } else {
             //vh.tvLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
             List<User> likeUser = tweet.getLikeUser();
-            if (likeUser!=null)
-            tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
-            OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler,mContext);
+            if (likeUser != null)
+                //tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
+                OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
 //            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .day_colorPrimary));
             vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_actived);

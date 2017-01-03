@@ -228,21 +228,21 @@ public class SelectFriendsActivity extends BaseActivity {
 
         mIndexView.setOnIndexTouchListener(new IndexView.OnIndexTouchListener() {
             @Override
-            public void onIndexTouchMove(char indexLeter) {
+            public void onIndexTouchMove(char indexLetter) {
                 //显示悬浮界面
                 if (mFloatTextView.getVisibility() != View.VISIBLE) {
                     mFloatTextView.setVisibility(View.VISIBLE);
                 }
-                mFloatTextView.setText(String.valueOf(indexLeter));
+                mFloatTextView.setText(String.valueOf(indexLetter));
                 //索引值对应的位置
                 int positoin;
-                if (indexLeter == '☆') {
+                if (indexLetter == '☆') {
                     positoin = 0;
                 } else {
-                    positoin = mAdapter.getPositionByIndex(indexLeter);
+                    positoin = mAdapter.getPositionByIndex(indexLetter);
                 }
                 if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "index:" + indexLeter + "  position:" + positoin);
+                    Log.d(TAG, "index:" + indexLetter + "  position:" + positoin);
                 }
                 if (positoin != -1) {
                     mListView.setSelection(positoin);
@@ -867,7 +867,7 @@ public class SelectFriendsActivity extends BaseActivity {
         }
 
         if (fromCache) {
-            String lastRefreshTime = AppContext.getLastRefreshTime(cacheKey);
+            String lastRefreshTime = "0";// AppContext.getLastRefreshTime(cacheKey);
             String currTime = StringUtils.getCurrentTimeStr();
             long diff = StringUtils.calDateDifferent(lastRefreshTime, currTime);
             if (diff > CACHE_TIME) { //缓存超过有效时间，则重新请求数据
@@ -1013,7 +1013,7 @@ public class SelectFriendsActivity extends BaseActivity {
                         //保存缓存结果
                         CacheManager.saveObject(applicationContext, newList, cacheKey);
                         //记录保存时间
-                        AppContext.putToLastRefreshTime(cacheKey, StringUtils.getCurrentTimeStr());
+                        //AppContext.putToLastRefreshTime(cacheKey, StringUtils.getCurrentTimeStr());
                         return newList;
                     } catch (Exception e) {
                         e.printStackTrace();

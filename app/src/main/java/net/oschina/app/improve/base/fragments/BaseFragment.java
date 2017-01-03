@@ -84,9 +84,7 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
-        RequestManager manager = mImgLoader;
-        if (manager != null)
-            manager.onDestroy();
+        mImgLoader = null;
         mBundle = null;
     }
 
@@ -196,12 +194,16 @@ public abstract class BaseFragment extends Fragment {
         textView.setText(text);
     }
 
-    protected void setGone(int id) {
-        findView(id).setVisibility(View.GONE);
+    protected <T extends View> T setGone(int id) {
+        T view = findView(id);
+        view.setVisibility(View.GONE);
+        return view;
     }
 
-    protected void setVisibility(int id) {
-        findView(id).setVisibility(View.VISIBLE);
+    protected <T extends View> T setVisibility(int id) {
+        T view = findView(id);
+        view.setVisibility(View.VISIBLE);
+        return view;
     }
 
     protected void setInVisibility(int id) {

@@ -3,10 +3,11 @@ package net.oschina.app.improve.user.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
-import net.oschina.app.improve.user.fragments.UserTweetFragment;
+import net.oschina.app.improve.tweet.fragments.TweetFragment;
 
 /**
  * Created by fei on 2016/8/18.
@@ -16,7 +17,7 @@ import net.oschina.app.improve.user.fragments.UserTweetFragment;
 public class UserTweetActivity extends BaseBackActivity {
 
     private long uid;
-    private UserTweetFragment userTweetFragment;
+    private Fragment userTweetFragment;
 
     /**
      * show activity
@@ -33,10 +34,7 @@ public class UserTweetActivity extends BaseBackActivity {
     @Override
     protected boolean initBundle(Bundle bundle) {
         uid = bundle.getLong("uid", 0);
-        if (uid > 0) {
-            return true;
-        }
-        return super.initBundle(bundle);
+        return uid > 0 || super.initBundle(bundle);
     }
 
     @Override
@@ -48,7 +46,7 @@ public class UserTweetActivity extends BaseBackActivity {
     protected void initWidget() {
         super.initWidget();
         if (userTweetFragment == null)
-            userTweetFragment = (UserTweetFragment) UserTweetFragment.instantiate(uid);
+            userTweetFragment = TweetFragment.instantiate(uid, 0);
         getSupportFragmentManager().beginTransaction().add(R.id.user_tweet_container, userTweetFragment).commit();
     }
 

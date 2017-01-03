@@ -14,8 +14,16 @@ import android.util.Pair;
 import android.view.View;
 
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.UIHelper;
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +80,23 @@ public class AssimilateUtils {
 
     private interface Action1 {
         void call(String str);
+    }
+
+    /**
+     * 通常使用的过滤逻辑
+     *
+     * @param context {@link Context}
+     * @param content Content String
+     * @return String
+     */
+    public static Spannable assimilate(Context context, String content) {
+        if (TextUtils.isEmpty(content)) return null;
+        content = HTMLUtil.rollbackReplaceTag(content);
+        Spannable spannable = assimilateOnlyAtUser(context, content);
+        spannable = assimilateOnlyTag(context, spannable);
+        spannable = assimilateOnlyLink(context, spannable);
+        spannable = InputHelper.displayEmoji(context.getResources(), spannable);
+        return spannable;
     }
 
     /**
@@ -188,7 +213,7 @@ public class AssimilateUtils {
         });
     }
 
-    public static Spannable assimilateClearHtmlTag(final Context context, CharSequence content) {
+    public static Spannable clearHtmlTag(CharSequence content) {
         SpannableStringBuilder builder = new SpannableStringBuilder(content);
         Matcher matcher;
         while (true) {
@@ -377,10 +402,50 @@ public class AssimilateUtils {
     }
 
     public static boolean machEmail(CharSequence email) {
-        //String regex = "^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$";
-        String regex="([a-zA-Z0-9_\\-.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})";
-        //String  regex="\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";后台现在是这种规则，当前面多个子域会出问题。并且不支持连接线。已提示后台修改
+        String regex = "[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?";
         return Pattern.matches(regex, email);
+    }
+
+    /**
+     * string 2 pinyin
+     *
+     * @param input   string
+     * @param isLabel isLable
+     * @return pinyin
+     */
+    public static String returnPinyin(String input, boolean isLabel) {
+
+        StringBuilder sb = new StringBuilder(0);
+
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+
+        format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
+
+        char[] charArray = input.toLowerCase().toCharArray();
+
+        for (char c : charArray) {
+            String tempC = Character.toString(c);
+            if (tempC.matches("[\u4E00-\u9FA5]+")) {
+                try {
+                    String[] temp = PinyinHelper.toHanyuPinyinStringArray(c, format);
+                    sb.append(temp[0]);
+                    if (isLabel)
+                        break;
+                } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+                    badHanyuPinyinOutputFormatCombination.printStackTrace();
+                }
+            } else {
+                sb.append(tempC);
+                if (isLabel)
+                    break;
+            }
+        }
+
+        //Log.e(TAG, "returnPinyin: ---->" + sb.toString());
+
+        return sb.toString().toUpperCase();
     }
 
 }
