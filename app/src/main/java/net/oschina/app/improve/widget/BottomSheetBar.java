@@ -75,13 +75,7 @@ public class BottomSheetBar {
         mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-
-                mRootView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        TDevice.hideSoftKeyboard(mEditText);
-                    }
-                }, 50);
+                TDevice.closeKeyboard(mEditText);
                 mFrameLayout.setVisibility(View.GONE);
             }
         });
