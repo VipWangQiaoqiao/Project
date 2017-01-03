@@ -57,7 +57,7 @@
             android:layout_gravity="right"
             android:orientation="horizontal">
 
-            <net.qiujuer.genius.ui.widget.Button
+            <Button
                 android:id="@+id/btn_continue"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/size_36"
@@ -67,12 +67,9 @@
                 android:paddingRight="@dimen/lay_8"
                 android:text="继续发送"
                 android:textColor="#111"
-                android:textSize="@dimen/font_12"
-                app:gTouchColor="@color/black_alpha_32"
-                app:gTouchCornerRadius="@dimen/lay_4"
-                app:gTouchEffect="ease" />
+                android:textSize="@dimen/font_12"/>
 
-            <net.qiujuer.genius.ui.widget.Button
+            <Button
                 android:id="@+id/btn_delete"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/size_36"
@@ -83,10 +80,7 @@
                 android:paddingRight="@dimen/lay_16"
                 android:text="放弃"
                 android:textColor="@color/red_400"
-                android:textSize="@dimen/font_12"
-                app:gTouchColor="@color/black_alpha_32"
-                app:gTouchCornerRadius="@dimen/lay_4"
-                app:gTouchEffect="ease" />
+                android:textSize="@dimen/font_12" />
         </LinearLayout>
 
     </LinearLayout>

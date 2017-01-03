@@ -22,7 +22,7 @@
             android:background="@color/actionbar_background"
             android:paddingTop="1dp">
 
-            <net.qiujuer.genius.ui.widget.ImageView
+            <ImageView
                 android:id="@+id/icon_back"
                 android:layout_width="63dp"
                 android:layout_height="63dp"
@@ -30,9 +30,7 @@
                 android:layout_marginLeft="-4dp"
                 android:clickable="true"
                 android:scaleType="centerInside"
-                android:src="@mipmap/btn_back_normal"
-                app:gTouchColor="@color/black_alpha_16"
-                app:gTouchEffect="press" />
+                android:src="@mipmap/btn_back_normal" />
 
             <TextView
                 android:id="@+id/txt_title"
