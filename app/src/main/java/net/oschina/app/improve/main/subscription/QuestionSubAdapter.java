@@ -14,7 +14,7 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.util.StringUtils;
-import net.qiujuer.genius.ui.compat.UiCompat;
+import net.oschina.app.util.TDevice;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -65,11 +65,11 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impl
         Resources resources = mContext.getResources();
 
         if (mReadState.already(item.getKey())) {
-            vh.tv_question_title.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
-            vh.tv_question_content.setTextColor(UiCompat.getColor(resources, R.color.text_secondary_color));
+            vh.tv_question_title.setTextColor(TDevice.getColor(resources, R.color.text_desc_color));
+            vh.tv_question_content.setTextColor(TDevice.getColor(resources, R.color.text_secondary_color));
         } else {
-            vh.tv_question_title.setTextColor(UiCompat.getColor(resources, R.color.text_title_color));
-            vh.tv_question_content.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
+            vh.tv_question_title.setTextColor(TDevice.getColor(resources, R.color.text_title_color));
+            vh.tv_question_content.setTextColor(TDevice.getColor(resources, R.color.text_desc_color));
         }
 
         String authorName;

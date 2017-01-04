@@ -122,9 +122,8 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.google.code.gson:gson:2.8.0'
-    compile 'net.qiujuer.genius:ui:2.0.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile 'net.oschina.common:common:0.1.1'
+    compile 'net.oschina.common:common:0.1.2'
 
     compile 'com.belerweb:pinyin4j:2.5.1'
 

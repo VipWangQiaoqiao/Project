@@ -17,7 +17,7 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
-    <net.qiujuer.genius.ui.widget.Loading
+    <net.oschina.common.widget.Loading
         android:id="@+id/animProgress"
         android:layout_width="26dip"
         android:layout_height="26dip"

@@ -24,7 +24,7 @@ import android.text.style.ImageSpan;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
-import net.qiujuer.genius.ui.Ui;
+import net.oschina.app.util.TDevice;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 public class InputHelper {
     /**
      * 删除Emoji表情
+     *
      * @param editText
      */
     public static void backspace(EditText editText) {
@@ -63,7 +64,7 @@ public class InputHelper {
      * (I'm drunk, I go home)
      */
     public static Spannable displayEmoji(Resources res, CharSequence s) {
-        return displayEmoji(res, s, (int) Ui.spToPx(res, 20));
+        return displayEmoji(res, s, (int) TDevice.spToPx(res, 20));
     }
 
     public static Spannable displayEmoji(Resources res, CharSequence s, int size) {
@@ -71,7 +72,7 @@ public class InputHelper {
     }
 
     public static Spannable displayEmoji(Resources res, Spannable spannable) {
-        return displayEmoji(res, spannable, (int) Ui.spToPx(res, 20));
+        return displayEmoji(res, spannable, (int) TDevice.spToPx(res, 20));
     }
 
     public static Spannable displayEmoji(Resources res, Spannable spannable, int size) {
@@ -82,7 +83,7 @@ public class InputHelper {
         }
 
         if (size == 0)
-            size = (int) Ui.spToPx(res, 20);
+            size = (int) TDevice.spToPx(res, 20);
 
         Pattern pattern = Pattern.compile("(\\[[^\\[\\]:\\s\\n]+\\])|(:[^:\\[\\]\\s\\n]+:)");
         Matcher matcher = pattern.matcher(str);
@@ -104,6 +105,7 @@ public class InputHelper {
 
     /**
      * 输入Emoji表情到 EditText
+     *
      * @param editText EditText
      * @param emojicon Emojicon
      */

@@ -129,6 +129,10 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        this.mItems.clear();
+    }
+
     public void updateSelectStatus(int position, boolean isSelected) {
         this.mItems.get(position).setSelected(isSelected);
         notifyItemChanged(position);

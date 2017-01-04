@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.user.OnFriendSelector;
@@ -31,7 +30,6 @@ import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
 import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.user.helper.SyncFriendHelper;
 import net.oschina.app.improve.utils.AssimilateUtils;
-import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.IndexView;
@@ -49,7 +47,7 @@ import butterknife.Bind;
  */
 
 public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener,
-        SearchView.OnQueryTextListener, SyncFriendHelper.onSyncFriendsListener {
+        SearchView.OnQueryTextListener {
 
     private static final String TAG = "UserSelectFriendsActivity";
 
@@ -102,8 +100,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     private UserSearchFriendsAdapter mSearchAdapter;
 
     private UserFriend mLocalSelectFriend;
-
-    private SyncFriendHelper mSyncFriendHelper;
 
     public static void show(Activity activity) {
         Intent intent = new Intent(activity, UserSelectFriendsActivity.class);
@@ -244,12 +240,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mEmptyLayout.post(new Runnable() {
             @Override
             public void run() {
-                ArrayList<UserFriend> UserFriends = CacheManager.readListJson(getApplicationContext(), CACHE_NAME, UserFriend.class);
-                if (UserFriends != null && UserFriends.size() > 0) {
-                    updateView(UserFriends);
-                } else {
-                    requestData();
-                }
+                requestData();
             }
         });
 
@@ -262,18 +253,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         int index = containsUserFriend(userFriend);
 
         if (index != -1) {
-
-            UserFriend tempFriend = cacheIcons.get(index);
-
-            if (tempFriend.isNetData() == userFriend.isNetData()) {
-                cacheIcons.remove(tempFriend);
-                //Log.e(TAG, "updateSelectIcon: ----->移除相同的");
-            } else {
-                cacheIcons.set(index, tempFriend);
-                mLocalSelectFriend = tempFriend;
-                //Log.e(TAG, "updateSelectIcon: -------->替换相同的");
-            }
-
+            cacheIcons.remove(index);
         } else {
             cacheIcons.add(userFriend);
             mLocalSelectFriend = userFriend;
@@ -291,29 +271,21 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
             ImageView ivIcon = (ImageView) LayoutInflater.from(this)
                     .inflate(R.layout.activity_main_select_friend_label_container_item, mSelectContainer, false);
+
             ivIcon.setTag(R.id.iv_show_icon, friend);
             ivIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     UserFriend friend = (UserFriend) v.getTag(R.id.iv_show_icon);
 
-
                     int selectPosition = friend.getSelectPosition();
 
                     RecyclerView.Adapter recyclerFriendsAdapter = mRecyclerFriends.getAdapter();
+
                     if (recyclerFriendsAdapter instanceof UserSelectFriendsAdapter) {
                         ((UserSelectFriendsAdapter) recyclerFriendsAdapter).updateSelectStatus(selectPosition, false);
                     } else {
-
                         ((UserSearchFriendsAdapter) recyclerFriendsAdapter).updateSelectStatus(selectPosition, false);
-
-                        // Log.e(TAG, "onClick: ----》hello");
-                        if (mLocalSelectFriend != null) {
-                            // Log.e(TAG, "onClick: ----->有yi t一条本地数据");
-                            friend = mLocalSelectFriend;
-                            selectPosition = friend.getSelectPosition();
-                            ((UserSearchFriendsAdapter) recyclerFriendsAdapter).updateSelectStatus(selectPosition, false);
-                        }
                     }
 
                     mRecyclerFriends.smoothScrollToPosition(selectPosition);
@@ -397,14 +369,28 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         //检查网络
         if (!checkNetIsAvailable()) {
             showError(EmptyLayout.NETWORK_ERROR);
-            return;
-        }
+        } else {
 
-        if (mSyncFriendHelper == null) {
-            mSyncFriendHelper = new SyncFriendHelper(getApplicationContext()).syncUserFriends(AccountHelper.getUserId());
-            mSyncFriendHelper.setOnSyncFriendsListener(this);
-        }
+            final ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
+            if (friends != null && friends.size() > 0) {
+                updateView(friends);
+            } else {
+                SyncFriendHelper.load(new Runnable() {
+                    @Override
+                    public void run() {
+                        mEmptyLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
+                                updateView(friends);
+                            }
+                        });
 
+                    }
+                });
+            }
+
+        }
 
     }
 
@@ -455,12 +441,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     private void updateView(ArrayList<UserFriend> friends) {
 
         if (friends != null && friends.size() > 0) {
+            mLocalAdapter.clear();
             mLocalAdapter.addItems(friends);
+            hideLoading();
         } else {
             showError(EmptyLayout.NODATA);
         }
 
-        hideLoading();
 
         this.mCacheFriends = friends;
     }
@@ -552,28 +539,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         });
         mSearchAdapter.setSearchContent(newText);
         return true;
-
-    }
-
-    @Override
-    public void syncSuccess(final ArrayList<UserFriend> friends) {
-
-        mEmptyLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                updateView(friends);
-            }
-        });
-    }
-
-    @Override
-    public void syncFailure() {
-        mEmptyLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                updateView(null);
-            }
-        });
 
     }
 }

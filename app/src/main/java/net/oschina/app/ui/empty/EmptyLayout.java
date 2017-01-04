@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.util.TDevice;
-import net.qiujuer.genius.ui.widget.Loading;
+import net.oschina.common.widget.Loading;
 
 public class EmptyLayout extends LinearLayout implements
         android.view.View.OnClickListener {// , ISkinUIObserver {

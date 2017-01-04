@@ -20,7 +20,7 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.util.StringUtils;
-import net.qiujuer.genius.ui.compat.UiCompat;
+import net.oschina.app.util.TDevice;
 
 /**
  * 新版新闻订阅栏目
@@ -64,11 +64,11 @@ public class NewsSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         Resources resources = mContext.getResources();
 
         if (mReadState.already(item.getKey())) {
-            vh.tv_title.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
-            vh.tv_description.setTextColor(UiCompat.getColor(resources, R.color.text_secondary_color));
+            vh.tv_title.setTextColor(TDevice.getColor(resources, R.color.text_desc_color));
+            vh.tv_description.setTextColor(TDevice.getColor(resources, R.color.text_secondary_color));
         } else {
-            vh.tv_title.setTextColor(UiCompat.getColor(resources, R.color.text_title_color));
-            vh.tv_description.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
+            vh.tv_title.setTextColor(TDevice.getColor(resources, R.color.text_title_color));
+            vh.tv_description.setTextColor(TDevice.getColor(resources, R.color.text_desc_color));
         }
 
         vh.tv_description.setText(item.getBody());

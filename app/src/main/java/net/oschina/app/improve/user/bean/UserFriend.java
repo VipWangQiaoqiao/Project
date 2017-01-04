@@ -19,7 +19,6 @@ public class UserFriend implements Serializable, Comparable<UserFriend> {
     private String showLabel;
     private transient boolean isGoneLine;
     private transient boolean isSelected;
-    private transient boolean isNetData;
     private transient int selectPosition;
 
     public long getId() {
@@ -78,13 +77,6 @@ public class UserFriend implements Serializable, Comparable<UserFriend> {
         isSelected = selected;
     }
 
-    public boolean isNetData() {
-        return isNetData;
-    }
-
-    public void setNetData(boolean netData) {
-        isNetData = netData;
-    }
 
     public int getSelectPosition() {
         return selectPosition;
@@ -104,7 +96,6 @@ public class UserFriend implements Serializable, Comparable<UserFriend> {
                 ", showLabel='" + showLabel + '\'' +
                 ", isGoneLine=" + isGoneLine +
                 ", isSelected=" + isSelected +
-                ", isNetData=" + isNetData +
                 ", selectPosition=" + selectPosition +
                 '}';
     }
