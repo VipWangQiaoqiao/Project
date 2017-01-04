@@ -187,7 +187,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
     }
 
     private boolean checkTime(String firstTime, String secondTime) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             long first = format.parse(firstTime).getTime();
             long second = format.parse(secondTime).getTime();
@@ -210,7 +210,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
 
     private void formatTime(TextView tv_time, String time) {
         if (TextUtils.isEmpty(time)) return;
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         Date date = StringUtils.toDate(time);
         tv_time.setText(formatWeek(date) + ", " + formatDate(date) + ", " + timeFormat.format(date));
     }

@@ -127,6 +127,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
 
     @Override
     public void onLoadMore() {
+        mAdapter.setState(mRefreshLayout.isRefreshing() ? BaseRecyclerAdapter.STATE_HIDE : BaseRecyclerAdapter.STATE_LOADING, true);
         requestData();
     }
 
