@@ -20,7 +20,7 @@ import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 import net.oschina.app.util.TDevice;
-import net.qiujuer.genius.ui.drawable.shape.BorderShape;
+import net.oschina.common.widget.drawable.shape.BorderShape;
 
 /**
  * Created by JuQiu

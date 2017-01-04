@@ -37,7 +37,7 @@
             android:minWidth="64dp"
             android:scaleType="centerInside" />
 
-        <net.qiujuer.genius.ui.widget.Loading
+        <net.oschina.common.widget.Loading
             android:id="@+id/loading"
             android:layout_width="@dimen/size_32"
             android:layout_height="@dimen/size_32"

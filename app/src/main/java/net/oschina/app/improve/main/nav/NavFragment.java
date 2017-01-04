@@ -24,7 +24,7 @@ import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.improve.user.activities.UserFansActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.fragments.UserInfoFragment;
-import net.qiujuer.genius.ui.drawable.shape.BorderShape;
+import net.oschina.common.widget.drawable.shape.BorderShape;
 
 import java.util.List;
 

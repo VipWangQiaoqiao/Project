@@ -40,7 +40,7 @@
         </FrameLayout>
 
 
-        <net.qiujuer.genius.ui.widget.Loading
+        <net.oschina.common.widget.Loading
             android:id="@+id/loading"
             android:layout_width="22dp"
             android:layout_height="22dp"
