@@ -265,6 +265,9 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
         CommentsUtil.formatHtml(getResources(), holder.tvContent, reply.getContent());
         holder.btnReply.setTag(reply);
         holder.btnReply.setOnClickListener(getOnReplyButtonClickListener());
+        if (i == replies.size() - 1) {
+            holder.tvNoMore.setVisibility(View.VISIBLE);
+        }
         mLayoutContainer.addView(view, 0);
     }
 

@@ -149,7 +149,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 sendLocalReceiver();
 
                 //后台异步同步数据
-                new SyncFriendHelper(getApplicationContext()).syncUserFriends(user.getId());
+                SyncFriendHelper.load(null);
 
             } else {
                 showToastForKeyBord(resultBean.getMessage());
@@ -631,7 +631,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         sendLocalReceiver();
 
                         //后台异步同步数据
-                        new SyncFriendHelper(getApplicationContext()).syncUserFriends(user.getId());
+                        SyncFriendHelper.load(null);
                     } else {
                         int code = resultBean.getCode();
                         String message = resultBean.getMessage();

@@ -63,6 +63,7 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
         h.tvName.setText(item.getAuthor().getName());
         h.tvContent.setText(InputHelper.displayEmoji(mContext.getResources(), item.getContent()));
         h.tvTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
+
     }
 
     private View.OnClickListener getOnPortraitClickListener() {
@@ -89,6 +90,8 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
         public ImageView btnReply;
         @Bind(R.id.tv_content)
         public TweetTextView tvContent;
+        @Bind(R.id.tv_answer_no_more)
+       public TextView tvNoMore;
 
         public TweetCommentHolderView(View view) {
             super(view);
