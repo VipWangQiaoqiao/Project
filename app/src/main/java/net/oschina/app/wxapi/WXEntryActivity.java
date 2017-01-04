@@ -176,7 +176,7 @@ public class WXEntryActivity extends Activity {
                                 intent.setAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
                                 LocalBroadcastManager.getInstance(WXEntryActivity.this).sendBroadcast(intent);
 
-                                new SyncFriendHelper(getApplicationContext()).syncUserFriends(user.getId());
+                                 SyncFriendHelper.load(null);
 
                             } else {
                                 AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);

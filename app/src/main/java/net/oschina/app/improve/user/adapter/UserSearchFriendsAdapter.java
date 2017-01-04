@@ -157,6 +157,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public List<UserFriend> getItems() {
+        return mItems;
+    }
+
     public void updateSelectStatus(int position, boolean isSelected) {
         this.mItems.get(position).setSelected(isSelected);
         notifyItemChanged(position);
@@ -336,26 +340,31 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
                         //为网络请求的数据加入label
                         UserFriend netFriend = new UserFriend();
+
                         netFriend.setName("");
                         netFriend.setShowViewType(INDEX_TYPE);
                         netFriend.setShowLabel(v.getResources().getString(R.string.net_search_label));
 
-                        mUserSearchFriendsAdapter.addItem(mUserSearchFriendsAdapter.getItemCount() - 1, netFriend);
+                        UserSearchFriendsAdapter searchAdapter = mUserSearchFriendsAdapter;
+
+                        searchAdapter.addItem(searchAdapter.getItemCount() - 1, netFriend);
 
                         mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_load_more_hint));
 
                         for (User user : users) {
 
-                            UserFriend friend = new UserFriend();
+                            if (isLocalData(user.getId(), searchAdapter)) {
+                                continue;
+                            }
 
+                            UserFriend friend = new UserFriend();
                             friend.setId(user.getId());
                             friend.setPortrait(user.getPortrait());
                             friend.setName(user.getName());
-                            friend.setNetData(true);
                             friend.setShowLabel(AssimilateUtils.returnPinyin(user.getName(), true));
                             friend.setShowViewType(UserSearchFriendsAdapter.USER_TYPE);
 
-                            mUserSearchFriendsAdapter.addItem(mUserSearchFriendsAdapter.getItemCount() - 1, friend);
+                            searchAdapter.addItem(searchAdapter.getItemCount() - 1, friend);
                         }
 
                         mNextPageToken = pageBean.getNextPageToken();
@@ -368,6 +377,16 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
                 }
             });
+        }
+
+        private boolean isLocalData(long id, UserSearchFriendsAdapter searchAdapter) {
+
+            for (UserFriend f : searchAdapter.getItems()) {
+                if (f.getId() == id) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

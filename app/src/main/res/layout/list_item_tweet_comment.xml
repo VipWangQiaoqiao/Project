@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:clickable="true"
-    android:orientation="vertical">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:clickable="true"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/lay_12"
         android:background="@drawable/ic_material"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/lay_12">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_gravity="center_vertical"
-                android:src="@mipmap/widget_dface" />
+                android:src="@mipmap/widget_dface"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#111111"
                     android:textSize="14sp"
-                    tools:text="年轻的小蜜蜂" />
+                    tools:text="年轻的小蜜蜂"/>
 
                 <TextView
                     android:id="@+id/tv_pub_date"
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#6a6a6a"
                     android:textSize="12sp"
-                    tools:text="12楼  6分钟前" />
+                    tools:text="12楼  6分钟前"/>
             </LinearLayout>
 
             <ImageView
@@ -67,7 +67,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="8dp"
                 android:paddingStart="8dp"
-                android:src="@mipmap/ic_comment_30" />
+                android:src="@mipmap/ic_comment_30"/>
         </LinearLayout>
 
         <net.oschina.app.widget.TweetTextView
@@ -83,12 +83,22 @@
             android:textColor="#111111"
             android:textSize="14sp"
             tools:ignore="RtlHardcoded,RtlSymmetry"
-            tools:text="诺灬晓月 你好，想跟你请教个问题：就是你用Echart做的甘特图，那个矩形的颜色是怎么设置，能不能显示进度条啊" />
+            tools:text="诺灬晓月 你好，想跟你请教个问题：就是你用Echart做的甘特图，那个矩形的颜色是怎么设置，能不能显示进度条啊"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="16dp"
-        android:background="@color/list_divider_color" />
+        android:background="@color/list_divider_color"/>
+
+    <TextView
+        android:id="@+id/tv_answer_no_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/lay_8"
+        android:gravity="center"
+        android:text="@string/footer_type_not_more"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
 </LinearLayout>

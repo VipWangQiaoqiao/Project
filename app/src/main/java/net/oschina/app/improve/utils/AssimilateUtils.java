@@ -410,7 +410,7 @@ public class AssimilateUtils {
      * string 2 pinyin
      *
      * @param input   string
-     * @param isLabel isLable
+     * @param isLabel isLabel
      * @return pinyin
      */
     public static String returnPinyin(String input, boolean isLabel) {
@@ -442,8 +442,6 @@ public class AssimilateUtils {
                     break;
             }
         }
-
-        //Log.e(TAG, "returnPinyin: ---->" + sb.toString());
 
         return sb.toString().toUpperCase();
     }
