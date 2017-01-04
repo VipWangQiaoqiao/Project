@@ -21,7 +21,7 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
-import net.qiujuer.genius.ui.widget.Loading;
+import net.oschina.common.widget.Loading;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

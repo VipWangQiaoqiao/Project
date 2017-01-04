@@ -15,7 +15,7 @@ import net.oschina.app.improve.tweet.adapter.TweetQueueAdapter;
 import net.oschina.app.improve.tweet.service.TweetPublishCache;
 import net.oschina.app.improve.tweet.service.TweetPublishModel;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
-import net.qiujuer.genius.ui.widget.Loading;
+import net.oschina.common.widget.Loading;
 
 import java.util.ArrayList;
 import java.util.List;

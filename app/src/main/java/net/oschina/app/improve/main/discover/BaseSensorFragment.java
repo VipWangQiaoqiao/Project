@@ -21,7 +21,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.qiujuer.genius.ui.widget.Loading;
+import net.oschina.common.widget.Loading;
 
 import java.lang.reflect.Type;
 

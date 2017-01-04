@@ -15,7 +15,7 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.util.StringUtils;
-import net.qiujuer.genius.ui.compat.UiCompat;
+import net.oschina.app.util.TDevice;
 
 import java.util.List;
 import java.util.Map;
@@ -76,14 +76,14 @@ public class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implem
             switch (Double.valueOf(extras.get("eventStatus").toString()).intValue()) {
                 case Event.STATUS_END:
                     setText(vh.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);
-                    setTextColor(vh.tv_event_title, UiCompat.getColor(resources, R.color.light_gray));
+                    setTextColor(vh.tv_event_title, TDevice.getColor(resources, R.color.light_gray));
                     break;
                 case Event.STATUS_ING:
                     setText(vh.tv_event_state, R.string.event_status_ing, R.drawable.bg_event_ing, 0xFF24cf5f);
                     break;
                 case Event.STATUS_SING_UP:
                     setText(vh.tv_event_state, R.string.event_status_sing_up, R.drawable.bg_event_end, 0x1a000000);
-                    setTextColor(vh.tv_event_title, UiCompat.getColor(resources, R.color.light_gray));
+                    setTextColor(vh.tv_event_title, TDevice.getColor(resources, R.color.light_gray));
                     break;
             }
             int typeStr = R.string.oscsite;
@@ -104,7 +104,7 @@ public class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implem
             vh.tv_event_type.setText(typeStr);
         }
 
-        vh.tv_event_title.setTextColor(UiCompat.getColor(resources,
+        vh.tv_event_title.setTextColor(TDevice.getColor(resources,
                 mReadState.already(item.getKey())
                         ? R.color.text_desc_color : R.color.text_title_color));
 

@@ -41,7 +41,7 @@ import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
 import net.oschina.app.util.UIHelper;
 import net.oschina.common.widget.RichEditText;
-import net.qiujuer.genius.ui.drawable.shape.BorderShape;
+import net.oschina.common.widget.drawable.shape.BorderShape;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -209,13 +209,15 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
         mEditContent.setOnKeyArrivedListener(new RichEditText.OnKeyArrivedListener() {
             @Override
-            public void onMentionKeyArrived() {
+            public boolean onMentionKeyArrived() {
                 onClick(findView(R.id.iv_mention));
+                return true;
             }
 
             @Override
-            public void onTopicKeyArrived() {
+            public boolean onTopicKeyArrived() {
                 //showInsertTag();
+                return true;
             }
         });
 

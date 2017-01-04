@@ -32,10 +32,10 @@ import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.TweetTextView;
-import net.qiujuer.genius.ui.Ui;
 
 import java.util.List;
 
@@ -91,7 +91,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
                 R.mipmap.audio3);
         recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
-                (int) Ui.dipToPx(cxt.getResources(), 20f), (int) Ui.dipToPx(cxt.getResources(), 20f));
+                (int) TDevice.dipToPx(cxt.getResources(), 20f), (int) TDevice.dipToPx(cxt.getResources(), 20f));
     }
 
     @Override

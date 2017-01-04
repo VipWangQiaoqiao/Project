@@ -19,8 +19,8 @@ import net.oschina.app.improve.bean.comment.Reply;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
-import net.qiujuer.genius.ui.Ui;
-import net.qiujuer.genius.ui.drawable.shape.BorderShape;
+import net.oschina.app.util.TDevice;
+import net.oschina.common.widget.drawable.shape.BorderShape;
 
 /**
  * Created by JuQiu
@@ -34,7 +34,7 @@ public final class CommentsUtil {
         Context context = inflater.getContext();
         @SuppressLint("InflateParams")
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
-        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(context.getResources(), 1), 0, 0, 0)));
+        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(TDevice.dipToPx(context.getResources(), 1), 0, 0, 0)));
         drawable.getPaint().setColor(0xffd7d6da);
         lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);
 
@@ -57,7 +57,7 @@ public final class CommentsUtil {
         Context context = inflater.getContext();
         @SuppressLint("InflateParams")
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
-        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(context.getResources(), 1), 0, 0, 0)));
+        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(TDevice.dipToPx(context.getResources(), 1), 0, 0, 0)));
         drawable.getPaint().setColor(0xffd7d6da);
         lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);
 

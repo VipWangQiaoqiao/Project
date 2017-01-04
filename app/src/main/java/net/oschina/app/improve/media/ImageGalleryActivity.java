@@ -31,7 +31,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.common.utils.BitmapUtil;
 import net.oschina.common.utils.StreamUtil;
-import net.qiujuer.genius.ui.widget.Loading;
+import net.oschina.common.widget.Loading;
 
 import java.io.File;
 import java.util.concurrent.Future;
