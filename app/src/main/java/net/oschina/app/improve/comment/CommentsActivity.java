@@ -57,11 +57,6 @@ import static net.oschina.app.R.id.tv_back_label;
  */
 public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAdapter.OnItemLongClickListener {
 
-    private long mId;
-    private int mType;
-
-    private PageBean<Comment> mPageBean;
-
     @Bind(R.id.lay_refreshLayout)
     RecyclerRefreshLayout mRefreshLayout;
 
@@ -69,16 +64,18 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     RecyclerView mLayComments;
 
     @Bind(R.id.activity_comments)
-    CoordinatorLayout mCoordLayout;
+    CoordinatorLayout mCoordinatorLayout;
+
     @Bind(tv_back_label)
     TextView mBack_label;
     @Bind(R.id.tv_title)
     TextView mTitle;
-
     private CommentAdapter mCommentAdapter;
+
     private CommentBar mDelegation;
     private ProgressDialog mDialog;
     private boolean mInputDoubleEmpty = true;
+
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
         public void onStart() {
@@ -126,9 +123,13 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         }
     };
 
-
     private int mOrder;
     private int mSourceId;
+
+    private long mId;
+    private int mType;
+
+    private PageBean<Comment> mPageBean;
 
     public static void show(Context context, long id, int type, int order) {
         Intent intent = new Intent(context, CommentsActivity.class);
@@ -162,7 +163,7 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
             }
         });
 
-        mDelegation = CommentBar.delegation(this, mCoordLayout);
+        mDelegation = CommentBar.delegation(this, mCoordinatorLayout);
         mSourceId = R.string.pub_comment_hint;
         if (mType == OSChinaApi.COMMENT_QUESTION) {
             mSourceId = R.string.answer_hint;
@@ -337,7 +338,6 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                 OSChinaApi.pubTranslateComment(id, cid, uid, content, mHandler);
                 break;
             case OSChinaApi.COMMENT_EVENT:
-//                OSChinaApi.pubEventComment(id, cid, uid, content, mHandler);
                 if (comment != null) {
                     content = "回复@" + comment.getAuthor().getName() + " : " + content;
                 }
@@ -345,6 +345,9 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                 break;
             case OSChinaApi.COMMENT_NEWS:
                 OSChinaApi.pubNewsComment(id, cid, uid, content, mHandler);
+                break;
+            case OSChinaApi.COMMENT_SOFT:
+                OSChinaApi.pubSoftComment(id, 0, 0, content, mHandler);
                 break;
             default:
                 break;

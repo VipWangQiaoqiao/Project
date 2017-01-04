@@ -61,7 +61,7 @@ public class SoftwareDetailFragment extends DetailFragment {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_comment:
-                CommentsActivity.show(mContext, mBean.getId(), mBean.getType(), 2);
+                CommentsActivity.show(mContext, mBean.getId(), mBean.getType(), OSChinaApi.COMMENT_NEW_ORDER);
                 break;
             case R.id.ll_fav:
                 mPresenter.favReverse();

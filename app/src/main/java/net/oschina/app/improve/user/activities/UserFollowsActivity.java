@@ -29,7 +29,7 @@ public class UserFollowsActivity extends BaseRecyclerViewActivity<UserFansOrFoll
 
 
     private int getRequestType() {
-        return OSChinaApi.TYPE_USER_FOLOWS;
+        return OSChinaApi.TYPE_USER_FLOWS;
     }
 
     /**

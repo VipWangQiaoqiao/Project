@@ -291,10 +291,10 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
     @Override
     public void onSuccess() {
         //调起第三方客户端
-//        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-//            mAlertDialog.cancel();
-//            //mAlertDialog.dismiss();
-//        }
+        //        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+        //            mAlertDialog.cancel();
+        //            //mAlertDialog.dismiss();
+        //        }
     }
 
     /**
@@ -318,6 +318,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
         private int bitmapResID = R.mipmap.ic_share;
         private long id;
         private int type;
+        private String imageUrl;
 
         public ShareBuilder(Activity activity, int themeResId) {
             this.activity = activity;
@@ -364,6 +365,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
             share.setDescription(description);
             share.setUrl(url);
             share.setBitmapResID(bitmapResID);
+            share.setImageUrl(imageUrl);
 
             share.setAppName("开源中国");
             share.setAppShareIcon(R.mipmap.ic_share);
@@ -380,6 +382,11 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
 
             builder.setView(R.layout.dialog_share_main);
             return builder;
+        }
+
+        public ShareBuilder imageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
         }
     }
 
