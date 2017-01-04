@@ -17,7 +17,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 
-import net.qiujuer.genius.ui.Ui;
+import net.oschina.app.util.TDevice;
 
 /**
  * Created by JuQiu
@@ -131,7 +131,7 @@ public class ClipView extends FrameLayout implements ValueAnimator.AnimatorUpdat
 
 
     private void doUpdate(float progress) {
-        mColor = Ui.changeColorAlpha(0x24cf5f, (int) (240 - (240 * progress)));
+        mColor = 0;//Ui.changeColorAlpha(0x24cf5f, (int) (240 - (240 * progress)));
 
         Path path = mPath;
         path.reset();

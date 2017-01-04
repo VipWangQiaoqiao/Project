@@ -30,7 +30,7 @@ import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.media.contract.SelectImageContract;
 import net.oschina.app.improve.media.crop.CropActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.qiujuer.genius.ui.Ui;
+import net.oschina.app.util.TDevice;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -120,7 +120,7 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
     @Override
     protected void initWidget(View view) {
         mContentView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-        mContentView.addItemDecoration(new SpaceGridItemDecoration((int) Ui.dipToPx(getResources(), 1)));
+        mContentView.addItemDecoration(new SpaceGridItemDecoration((int) TDevice.dipToPx(getResources(), 1)));
         mImageAdapter = new ImageAdapter(getContext(), this);
         mImageFolderAdapter = new ImageFolderAdapter(getActivity());
         mImageFolderAdapter.setLoader(this);

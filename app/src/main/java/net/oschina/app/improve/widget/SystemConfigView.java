@@ -12,7 +12,7 @@ import net.oschina.app.BuildConfig;
 import net.oschina.app.R;
 import net.oschina.app.Setting;
 import net.oschina.app.api.ApiHttpClient;
-import net.qiujuer.genius.ui.Ui;
+import net.oschina.app.util.TDevice;
 
 /**
  * @author qiujuer Email:qiujuer@live.cn
@@ -48,8 +48,8 @@ public class SystemConfigView extends LinearLayout {
             RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, (int) Ui.dipToPx(getResources(), 4),
-                    0, (int) Ui.dipToPx(getResources(), 4));
+            params.setMargins(0, (int) TDevice.dipToPx(getResources(), 4),
+                    0, (int) TDevice.dipToPx(getResources(), 4));
 
 
             RadioButton button = new RadioButton(getContext());

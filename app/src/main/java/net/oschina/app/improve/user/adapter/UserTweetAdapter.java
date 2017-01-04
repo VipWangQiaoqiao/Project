@@ -40,7 +40,7 @@ import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
-import net.qiujuer.genius.ui.Ui;
+import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
 
@@ -83,7 +83,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
     private void initRecordImg(Context cxt) {
         mRecordBitmap = BitmapFactory.decodeResource(cxt.getResources(), R.mipmap.audio3);
         mRecordBitmap = ImageUtils.zoomBitmap(mRecordBitmap,
-                (int) Ui.dipToPx(cxt.getResources(), 20f), (int) Ui.dipToPx(cxt.getResources(), 20f));
+                (int) TDevice.dipToPx(cxt.getResources(), 20f), (int) TDevice.dipToPx(cxt.getResources(), 20f));
     }
 
     @Override

@@ -19,7 +19,7 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.util.StringUtils;
-import net.qiujuer.genius.ui.compat.UiCompat;
+import net.oschina.app.util.TDevice;
 
 /**
  * 新板博客栏目
@@ -118,11 +118,11 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
         }
 
         if (mReadState.already(item.getKey())) {
-            title.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
-            content.setTextColor(UiCompat.getColor(resources, R.color.text_secondary_color));
+            title.setTextColor(TDevice.getColor(resources, R.color.text_desc_color));
+            content.setTextColor(TDevice.getColor(resources, R.color.text_secondary_color));
         } else {
-            title.setTextColor(UiCompat.getColor(resources, R.color.text_title_color));
-            content.setTextColor(UiCompat.getColor(resources, R.color.text_desc_color));
+            title.setTextColor(TDevice.getColor(resources, R.color.text_title_color));
+            content.setTextColor(TDevice.getColor(resources, R.color.text_desc_color));
         }
 
         Author author = item.getAuthor();
