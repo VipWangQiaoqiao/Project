@@ -59,6 +59,7 @@ public class DetailAboutView extends LinearLayout {
     }
 
     public void setAbout(List<About> abouts, int defaultType) {
+        mLayAbouts.removeAllViews();
         this.mDefaultType = defaultType;
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         if (abouts != null && abouts.size() > 0) {
