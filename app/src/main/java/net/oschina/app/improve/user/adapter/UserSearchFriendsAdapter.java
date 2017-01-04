@@ -203,8 +203,8 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         CircleImageView mCirclePortrait;
         @Bind(R.id.tv_name)
         TextView mtvName;
-        @Bind(R.id.view_select)
-        View mViewSelect;
+        @Bind(R.id.iv_select)
+        ImageView mViewSelect;
         @Bind(R.id.line)
         View mLine;
 
@@ -351,6 +351,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                             friend.setId(user.getId());
                             friend.setPortrait(user.getPortrait());
                             friend.setName(user.getName());
+                            friend.setNetData(true);
                             friend.setShowLabel(AssimilateUtils.returnPinyin(user.getName(), true));
                             friend.setShowViewType(UserSearchFriendsAdapter.USER_TYPE);
 

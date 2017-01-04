@@ -31,8 +31,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
-    //public static final String TAG = "UserSelectFriendsAdapter";
-
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
 
@@ -160,8 +158,8 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
         CircleImageView mCirclePortrait;
         @Bind(R.id.tv_name)
         TextView mtvName;
-        @Bind(R.id.view_select)
-        View mViewSelect;
+        @Bind(R.id.iv_select)
+        ImageView mViewSelect;
         @Bind(R.id.line)
         View mLine;
 

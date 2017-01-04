@@ -299,7 +299,7 @@ public class StringUtils {
         } else if (mCurrentDate.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)) {
             formatter.applyPattern("MM-dd " + s);
         } else {
-            formatter.applyPattern("YYYY-MM-dd " + s);
+            formatter.applyPattern("yyyy-MM-dd " + s);
         }
         return formatter.format(calendar.getTime());
     }

@@ -69,6 +69,8 @@ public class OSChinaApi {
     public static final int REGISTER_INTENT = 1;
     public static final int RESET_PWD_INTENT = 2;
 
+    public static final int REQUEST_COUNT = 0x50;//请求分页大小
+
 
     /* =============================================================================================
      * =============================================================================================
@@ -1658,5 +1660,16 @@ public class OSChinaApi {
             params.put("filter", filter);
         }
         ApiHttpClient.post("action/apiv2/event_attendee_list", params, handler);
+    }
+
+    public static void getUserFriends(long userId, String pageToken, int requestCount, TextHttpResponseHandler handler) {
+
+        if (userId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("id", userId);
+        params.put("pageToken", pageToken);
+        params.put("count", requestCount);
+        ApiHttpClient.get("action/apiv2/user_follows", params, handler);
+
     }
 }

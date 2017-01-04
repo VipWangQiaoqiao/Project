@@ -13,15 +13,13 @@
         android:background="@color/actionbar_background"
         android:paddingTop="1dp">
 
-        <net.qiujuer.genius.ui.widget.ImageView
+        <ImageView
             android:id="@+id/icon_back"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
             android:clickable="true"
             android:scaleType="centerInside"
-            android:src="@mipmap/btn_back_normal"
-            app:gTouchColor="@color/black_alpha_16"
-            app:gTouchEffect="press" />
+            android:src="@mipmap/btn_back_normal" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -40,7 +38,7 @@
                 android:scaleType="centerInside"
                 android:src="@mipmap/ic_arrow_bottom" />
 
-            <net.qiujuer.genius.ui.widget.Button
+            <Button
                 android:id="@+id/btn_title_select"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,9 +54,7 @@
                 android:paddingTop="@dimen/lay_2"
                 android:text="选择图片"
                 android:textColor="@color/white"
-                android:textSize="@dimen/font_18"
-                app:gTouchColor="@color/black_alpha_16"
-                app:gTouchEffect="ease" />
+                android:textSize="@dimen/font_18"/>
 
         </FrameLayout>
     </RelativeLayout>
@@ -99,7 +95,7 @@
             android:paddingRight="@dimen/lay_16"
             android:paddingTop="@dimen/lay_8">
 
-            <net.qiujuer.genius.ui.widget.Button
+            <Button
                 android:id="@+id/btn_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/size_28"
@@ -113,12 +109,9 @@
                 android:paddingTop="@dimen/lay_4"
                 android:text="@string/image_select_opt_preview"
                 android:textColor="@color/btn_select_image_preview_bg_selector"
-                android:textSize="14sp"
-                app:gBorderColor="@color/black_alpha_16"
-                app:gTouchCornerRadius="2dp"
-                app:gTouchEffect="ripple" />
+                android:textSize="14sp"/>
 
-            <net.qiujuer.genius.ui.widget.Button
+            <Button
                 android:id="@+id/btn_done"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/size_28"
@@ -132,10 +125,7 @@
                 android:paddingTop="@dimen/lay_4"
                 android:text="@string/image_select_opt_done"
                 android:textColor="@color/btn_select_image_done_bg_selector"
-                android:textSize="14sp"
-                app:gBorderColor="@color/black_alpha_16"
-                app:gTouchCornerRadius="2dp"
-                app:gTouchEffect="ripple" />
+                android:textSize="14sp" />
 
         </FrameLayout>
     </LinearLayout>
