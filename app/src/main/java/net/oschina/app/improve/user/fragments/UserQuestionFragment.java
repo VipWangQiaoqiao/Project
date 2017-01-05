@@ -12,7 +12,7 @@ import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Question;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
+import net.oschina.app.improve.detail.general.QuestionDetailActivity;
 import net.oschina.app.improve.user.adapter.UserQuestionAdapter;
 
 import java.lang.reflect.Type;

@@ -11,6 +11,7 @@ import net.oschina.app.improve.bean.Software;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.utils.ReadedIndexCacheManager;
+import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
 
@@ -23,11 +24,9 @@ public class NewsDetailFragment extends DetailFragment {
     @Bind(R.id.tv_title)
     TextView mTextTitle;
 
-    @Bind(R.id.tv_info_comment)
-    TextView mTextComCount;
+    @Bind(R.id.tv_pub_date)
+    TextView mTextPubDate;
 
-    @Bind(R.id.tv_info_view)
-    TextView mTextViewCount;
 
     @Bind(R.id.lay_about_software)
     LinearLayout mLinearSoftware;
@@ -52,11 +51,7 @@ public class NewsDetailFragment extends DetailFragment {
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
         mTextTitle.setText(bean.getTitle());
-        SubBean.Statistics statistics = bean.getStatistics();
-        if (statistics != null) {
-            mTextComCount.setText(String.valueOf(bean.getStatistics().getComment()));
-            mTextViewCount.setText(String.valueOf(bean.getStatistics().getView()));
-        }
+        mTextPubDate.setText(bean.getPubDate());
         final Software software = bean.getSoftware();
         if (software != null) {
             mLinearSoftware.setVisibility(View.VISIBLE);

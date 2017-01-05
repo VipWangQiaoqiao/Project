@@ -189,32 +189,11 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".improve.detail.activities.BlogDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="博客详情"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".improve.detail.activities.QuestionDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="问答详情"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".improve.tweet.activities.TweetDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="动弹详情"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".improve.detail.activities.EventDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="活动详情"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
@@ -225,20 +204,6 @@
             android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".improve.detail.activities.NewsDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="资讯详情"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".improve.detail.activities.SoftwareDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="软件详情"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.user.activities.UserTweetActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -283,7 +248,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".improve.detail.activities.SchemeUrlActivity"
+            android:name=".improve.main.SchemeUrlActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
