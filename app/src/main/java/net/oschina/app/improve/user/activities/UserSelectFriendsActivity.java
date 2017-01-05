@@ -49,8 +49,6 @@ import butterknife.Bind;
 public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener,
         SearchView.OnQueryTextListener {
 
-    private static final String TAG = "UserSelectFriendsActivity";
-
     @Bind(R.id.tv_back)
     TextView mTvBack;
 
@@ -154,9 +152,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mLocalAdapter.setOnFriendSelector(new OnFriendSelector() {
             @Override
             public void select(View view, UserFriend userFriend, int position) {
-
                 updateSelectIcon(userFriend);
-
             }
 
             @Override
@@ -405,14 +401,14 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         LocalUserFriend.setName(getString(R.string.local_search_label));
         LocalUserFriend.setShowLabel(getString(R.string.local_search_label));
-        LocalUserFriend.setShowViewType(UserSearchFriendsAdapter.INDEX_TYPE);
+        LocalUserFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
         searchFriends.add(LocalUserFriend);
 
         UserFriend NetUserFriend = new UserFriend();
 
         NetUserFriend.setName(getString(R.string.net_search_label));
         NetUserFriend.setShowLabel(getString(R.string.search_net_label));
-        NetUserFriend.setShowViewType(UserSearchFriendsAdapter.SEARCH_TYPE);
+        NetUserFriend.setShowViewType(UserSelectFriendsAdapter.SEARCH_TYPE);
         searchFriends.add(NetUserFriend);
 
 
@@ -420,16 +416,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
 
         for (UserFriend friend : cacheFriends) {
-
             String name = friend.getName();
-
             if (TextUtils.isEmpty(name)) continue;
 
             //搜索列表当中没有该条数据，进行添加
-
             if (AssimilateUtils.returnPinyin(name, false).startsWith(pinyinQueryText)) {
                 friend.setShowLabel(name);
-                friend.setShowViewType(UserSearchFriendsAdapter.USER_TYPE);
+                friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
                 searchFriends.add(1, friend);
             }
 
@@ -494,15 +487,12 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @SuppressLint("SetTextI18n")
     @Override
     public boolean onQueryTextChange(String newText) {
-
-
         if (TextUtils.isEmpty(newText)) {
             mTvLabel.setText(null);
             mTvLabel.setVisibility(View.GONE);
             mIndex.setVisibility(View.VISIBLE);
 
             mRecyclerFriends.setAdapter(mLocalAdapter);
-
 
             mBtSelectSubmit.setEnabled(false);
             mSearchAdapter.notifyDataSetChanged();
@@ -529,9 +519,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mSearchAdapter.setOnOnFriendSelector(new OnFriendSelector() {
             @Override
             public void select(View view, UserFriend userFriend, int position) {
-
                 updateSelectIcon(userFriend);
-
             }
 
             @Override

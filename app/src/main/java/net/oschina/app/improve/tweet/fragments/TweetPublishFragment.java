@@ -113,7 +113,8 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         // EmojiKeyboardFragment
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.lay_emoji_keyboard, mEmojiKeyboard)
-                .commit();
+                .commitNowAllowingStateLoss();
+
         mEmojiKeyboard.setOnEmojiClickListener(new OnEmojiClickListener() {
             @Override
             public void onEmojiClick(Emojicon v) {
