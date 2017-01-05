@@ -45,11 +45,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
-
-    public static final int INDEX_TYPE = 0x01;
-    public static final int USER_TYPE = 0x02;
-    public static final int SEARCH_TYPE = 0x03;
-
     private LayoutInflater mInflater;
     private List<UserFriend> mItems = new ArrayList<>();
     private String mSearchContent;
@@ -68,11 +63,13 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = this.mInflater;
         switch (viewType) {
-            case INDEX_TYPE:
+            case UserSelectFriendsAdapter.INDEX_TYPE:
                 return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
-            case USER_TYPE:
+            case UserSelectFriendsAdapter.SEARCH_TYPE:
+                return new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false), this);
+            case UserSelectFriendsAdapter.USER_TYPE:
+            default:
                 UserInfoViewHolder userInfoViewHolder = new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
-
                 userInfoViewHolder.itemView.setTag(userInfoViewHolder);
                 userInfoViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -106,14 +103,8 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                         }
                     }
                 });
-
                 return userInfoViewHolder;
-            case SEARCH_TYPE:
-                return new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false), this);
-            default:
-                return null;
         }
-
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -123,13 +114,13 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         UserFriend item = mItems.get(position);
 
         switch (item.getShowViewType()) {
-            case USER_TYPE:
+            case UserSelectFriendsAdapter.USER_TYPE:
                 ((UserInfoViewHolder) holder).onBindView(item, position);
                 break;
-            case INDEX_TYPE:
+            case UserSelectFriendsAdapter.INDEX_TYPE:
                 ((IndexViewHolder) holder).onBindView(item, position);
                 break;
-            case SEARCH_TYPE:
+            case UserSelectFriendsAdapter.SEARCH_TYPE:
                 ((SearchViewHolder) (holder)).onBindView(item, position);
                 break;
         }
@@ -347,7 +338,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                             UserFriend netFriend = new UserFriend();
 
                             netFriend.setName("");
-                            netFriend.setShowViewType(INDEX_TYPE);
+                            netFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
                             netFriend.setShowLabel(v.getResources().getString(R.string.net_search_label));
 
                             searchAdapter.addItem(searchAdapter.getItemCount() - 1, netFriend);
@@ -366,7 +357,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                             friend.setPortrait(user.getPortrait());
                             friend.setName(user.getName());
                             friend.setShowLabel(AssimilateUtils.returnPinyin(user.getName(), true));
-                            friend.setShowViewType(UserSearchFriendsAdapter.USER_TYPE);
+                            friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
 
                             searchAdapter.addItem(searchAdapter.getItemCount() - 1, friend);
                         }
