@@ -11,7 +11,6 @@ import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.SoftwareDec;
 import net.oschina.app.bean.SoftwareList;
-import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.InputStream;
@@ -70,7 +69,7 @@ public class SoftwareListFragment extends BaseListFragment<SoftwareDec> {
             // String ident = softwaredec.getUrl().substring(softwaredec.getUrl().lastIndexOf("/") + 1);
             int softwareDecId = softwaredec.getId();
             //SoftwareDetailActivity.show(getActivity(), ident);
-            SoftwareDetailActivity.show(getActivity(), softwareDecId);
+            net.oschina.app.improve.detail.general.SoftwareDetailActivity.show(getActivity(), softwareDecId);
             // 放入已读列表
             saveToReadedList(view, SoftwareList.PREF_READED_SOFTWARE_LIST,
                     softwaredec.getName());

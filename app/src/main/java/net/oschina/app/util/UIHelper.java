@@ -36,10 +36,12 @@ import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
-import net.oschina.app.improve.detail.activities.NewsDetailActivity;
-import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
-import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
+import net.oschina.app.improve.detail.general.BlogDetailActivity;
+import net.oschina.app.improve.detail.general.EventDetailActivity;
+import net.oschina.app.improve.detail.general.NewsDetailActivity;
+import net.oschina.app.improve.detail.general.QuestionDetailActivity;
+import net.oschina.app.improve.detail.general.SoftwareDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
@@ -124,7 +126,7 @@ public class UIHelper {
      */
     public static void showNewsDetail(Context context, long newsId,
                                       int commentCount) {
-        NewsDetailActivity.show(context, newsId);
+        net.oschina.app.improve.detail.general.NewsDetailActivity.show(context, newsId);
     }
 
 
@@ -145,7 +147,7 @@ public class UIHelper {
      * @param postId
      */
     public static void showPostDetail(Context context, long postId, int count) {
-        QuestionDetailActivity.show(context, postId);
+        net.oschina.app.improve.detail.general.QuestionDetailActivity.show(context, postId);
     }
 
     /**
@@ -171,7 +173,7 @@ public class UIHelper {
     }
 
     public static void showSoftwareDetailById(Context context, int id) {
-        SoftwareDetailActivity.show(context, id);
+        net.oschina.app.improve.detail.general.SoftwareDetailActivity.show(context, id);
     }
 
     /**
@@ -198,7 +200,7 @@ public class UIHelper {
                 break;
             case OSChinaApi.CATALOG_BLOG:
                 //博客
-                net.oschina.app.improve.detail.general.BlogDetailActivity.show(context, id);
+                BlogDetailActivity.show(context, id);
                 break;
             case OSChinaApi.CATALOG_TRANSLATION:
                 //4.翻译
@@ -206,7 +208,7 @@ public class UIHelper {
                 break;
             case OSChinaApi.CATALOG_EVENT:
                 //活动
-                net.oschina.app.improve.detail.general.EventDetailActivity.show(context, id);
+                EventDetailActivity.show(context, id);
                 break;
             case OSChinaApi.CATALOG_TWEET:
                 // 动弹
