@@ -1,18 +1,18 @@
 package net.oschina.app.widget;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.util.StringUtils;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.widget.TextView;
 
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.util.StringUtils;
+
 /**
  * {@link #RecordButton}需要的工具类
- * 
+ *
  * @author kymjs(kymjs123@gmail.com)
- * 
  */
 public class RecordButtonUtil {
     private final static String TAG = "AudioUtil";
@@ -34,7 +34,7 @@ public class RecordButtonUtil {
 
     /**
      * 设置要播放的声音的路径
-     * 
+     *
      * @param path
      */
     public void setAudioPath(String path) {
@@ -43,7 +43,7 @@ public class RecordButtonUtil {
 
     /**
      * 播放声音结束时调用
-     * 
+     *
      * @param l
      */
     public void setOnPlayListener(OnPlayListener l) {
@@ -75,7 +75,7 @@ public class RecordButtonUtil {
 
     /**
      * 获取音量值，只是针对录音音量
-     * 
+     *
      * @return
      */
     public int getVolumn() {

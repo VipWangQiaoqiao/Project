@@ -1,229 +1,228 @@
 package net.oschina.app.bean;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * 帖子实体类
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年10月9日 下午6:02:47
- * 
  */
 @SuppressWarnings("serial")
 @XStreamAlias("post")
 public class Post extends Entity {
 
-	public final static int CATALOG_ASK = 1;
-	public final static int CATALOG_SHARE = 2;
-	public final static int CATALOG_OTHER = 3;
-	public final static int CATALOG_JOB = 4;
-	public final static int CATALOG_SITE = 5;
+    public final static int CATALOG_ASK = 1;
+    public final static int CATALOG_SHARE = 2;
+    public final static int CATALOG_OTHER = 3;
+    public final static int CATALOG_JOB = 4;
+    public final static int CATALOG_SITE = 5;
 
-	@XStreamAlias("title")
-	private String title;
-	
-	@XStreamAlias("portrait")
-	private String portrait;
+    @XStreamAlias("title")
+    private String title;
 
-	@XStreamAlias("url")
-	private String url;
+    @XStreamAlias("portrait")
+    private String portrait;
 
-	@XStreamAlias("body")
-	private String body;
+    @XStreamAlias("url")
+    private String url;
 
-	@XStreamAlias("author")
-	private String author;
+    @XStreamAlias("body")
+    private String body;
 
-	@XStreamAlias("authorid")
-	private int authorId;
+    @XStreamAlias("author")
+    private String author;
 
-	@XStreamAlias("answerCount")
-	private int answerCount;
+    @XStreamAlias("authorid")
+    private int authorId;
 
-	@XStreamAlias("viewCount")
-	private int viewCount;
+    @XStreamAlias("answerCount")
+    private int answerCount;
 
-	@XStreamAlias("pubDate")
-	private String pubDate;
+    @XStreamAlias("viewCount")
+    private int viewCount;
 
-	@XStreamAlias("catalog")
-	private int catalog;
+    @XStreamAlias("pubDate")
+    private String pubDate;
 
-	@XStreamAlias("isnoticeme")
-	private int isNoticeMe;
+    @XStreamAlias("catalog")
+    private int catalog;
 
-	@XStreamAlias("favorite")
-	private int favorite;
+    @XStreamAlias("isnoticeme")
+    private int isNoticeMe;
 
-	@XStreamAlias("tags")
-	private Tags tags;
-	
-	@XStreamAlias("answer")
-	private Answer answer;
-	
-	@XStreamAlias("event")
-	private Event event;
+    @XStreamAlias("favorite")
+    private int favorite;
 
-	public Event getEvent() {
-		return event;
-	}
+    @XStreamAlias("tags")
+    private Tags tags;
 
-	public void setEvent(Event event) {
-		this.event = event;
-	}
+    @XStreamAlias("answer")
+    private Answer answer;
 
-	public String getTitle() {
-		return title;
-	}
+    @XStreamAlias("event")
+    private Event event;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public Event getEvent() {
+        return event;
+    }
 
-	public String getPortrait() {
-		return portrait;
-	}
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 
-	public void setPortrait(String portrait) {
-		this.portrait = portrait;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public String getPortrait() {
+        return portrait;
+    }
 
-	public String getBody() {
-		return body;
-	}
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
+    }
 
-	public void setBody(String body) {
-		this.body = body;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public String getAuthor() {
-		return author;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
+    public String getBody() {
+        return body;
+    }
 
-	public int getAuthorId() {
-		return authorId;
-	}
+    public void setBody(String body) {
+        this.body = body;
+    }
 
-	public void setAuthorId(int authorId) {
-		this.authorId = authorId;
-	}
+    public String getAuthor() {
+        return author;
+    }
 
-	public int getAnswerCount() {
-		return answerCount;
-	}
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
-	public void setAnswerCount(int answerCount) {
-		this.answerCount = answerCount;
-	}
+    public int getAuthorId() {
+        return authorId;
+    }
 
-	public int getViewCount() {
-		return viewCount;
-	}
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
 
-	public void setViewCount(int viewCount) {
-		this.viewCount = viewCount;
-	}
+    public int getAnswerCount() {
+        return answerCount;
+    }
 
-	public String getPubDate() {
-		return pubDate;
-	}
+    public void setAnswerCount(int answerCount) {
+        this.answerCount = answerCount;
+    }
 
-	public void setPubDate(String pubDate) {
-		this.pubDate = pubDate;
-	}
+    public int getViewCount() {
+        return viewCount;
+    }
 
-	public int getCatalog() {
-		return catalog;
-	}
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
+    }
 
-	public void setCatalog(int catalog) {
-		this.catalog = catalog;
-	}
+    public String getPubDate() {
+        return pubDate;
+    }
 
-	public int getIsNoticeMe() {
-		return isNoticeMe;
-	}
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
+    }
 
-	public void setIsNoticeMe(int isNoticeMe) {
-		this.isNoticeMe = isNoticeMe;
-	}
+    public int getCatalog() {
+        return catalog;
+    }
 
-	public int getFavorite() {
-		return favorite;
-	}
+    public void setCatalog(int catalog) {
+        this.catalog = catalog;
+    }
 
-	public void setFavorite(int favorite) {
-		this.favorite = favorite;
-	}
+    public int getIsNoticeMe() {
+        return isNoticeMe;
+    }
 
-	public Post.Tags getTags() {
-		return tags;
-	}
+    public void setIsNoticeMe(int isNoticeMe) {
+        this.isNoticeMe = isNoticeMe;
+    }
 
-	public void setTags(Tags tags) {
-		this.tags = tags;
-	}
+    public int getFavorite() {
+        return favorite;
+    }
 
-	public Answer getAnswer() {
-		return answer;
-	}
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
+    }
 
-	public void setAnswer(Answer answer) {
-		this.answer = answer;
-	}
-	
-	@XStreamAlias("answer")
-	public class Answer implements Serializable {
-		
-		@XStreamAlias("name")
-		private String name;
-		
-		@XStreamAlias("time")
-		private String time;
+    public Post.Tags getTags() {
+        return tags;
+    }
 
-		public String getName() {
-			return name;
-		}
+    public void setTags(Tags tags) {
+        this.tags = tags;
+    }
 
-		public void setName(String name) {
-			this.name = name;
-		}
+    public Answer getAnswer() {
+        return answer;
+    }
 
-		public String getTime() {
-			return time;
-		}
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
+    }
 
-		public void setTime(String time) {
-			this.time = time;
-		}
-	}
-	
-	public class Tags implements Serializable {
-		@XStreamImplicit(itemFieldName="tag")
-		private List<String> tags;
+    @XStreamAlias("answer")
+    public class Answer implements Serializable {
 
-		public List<String> getTags() {
-			return tags;
-		}
-		
-		public void setTags(List<String> tags) {
-			this.tags = tags;
-		}
-	}
+        @XStreamAlias("name")
+        private String name;
+
+        @XStreamAlias("time")
+        private String time;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time = time;
+        }
+    }
+
+    public class Tags implements Serializable {
+        @XStreamImplicit(itemFieldName = "tag")
+        private List<String> tags;
+
+        public List<String> getTags() {
+            return tags;
+        }
+
+        public void setTags(List<String> tags) {
+            this.tags = tags;
+        }
+    }
 }

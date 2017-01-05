@@ -6,11 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * 创建便签的数据库
- * 
+ *
  * @author kymjs
- * 
+ *         <p>
  *         update:2014-01-12 updateor: fireant 内容：修改为全应用数据库
- * 
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -40,6 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
 
 }

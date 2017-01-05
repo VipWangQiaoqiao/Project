@@ -38,9 +38,8 @@ import cz.msebera.android.httpclient.Header;
 
 /**
  * TeamDiscussDetailFragment.java
- * 
+ *
  * @author 火蚁(http://my.oschina.net/u/253900)
- * 
  * @data 2015-2-2 下午6:14:15
  */
 public class TeamDiscussDetailFragment extends
@@ -83,7 +82,7 @@ public class TeamDiscussDetailFragment extends
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+                              Throwable arg3) {
             // TODO Auto-generated method stub
             AppContext.showToast(new String(arg2));
         }
@@ -193,7 +192,7 @@ public class TeamDiscussDetailFragment extends
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         // TODO Auto-generated method stub
         TeamReply reply = mAdapter.getItem(position - 1);
         if (reply == null)

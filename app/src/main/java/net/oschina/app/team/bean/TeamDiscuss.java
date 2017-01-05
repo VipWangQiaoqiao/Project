@@ -30,58 +30,58 @@ public class TeamDiscuss extends Entity {
     private Author author;
 
     public String getType() {
-	return type;
+        return type;
     }
 
     public void setType(String type) {
-	this.type = type;
+        this.type = type;
     }
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     public String getBody() {
-	return body;
+        return body;
     }
 
     public void setBody(String body) {
-	this.body = body;
+        this.body = body;
     }
 
     public String getCreateTime() {
-	return createTime;
+        return createTime;
     }
 
     public void setCreateTime(String createTime) {
-	this.createTime = createTime;
+        this.createTime = createTime;
     }
 
     public int getAnswerCount() {
-	return answerCount;
+        return answerCount;
     }
 
     public void setAnswerCount(int answerCount) {
-	this.answerCount = answerCount;
+        this.answerCount = answerCount;
     }
 
     public int getVoteUp() {
-	return voteUp;
+        return voteUp;
     }
 
     public void setVoteUp(int voteUp) {
-	this.voteUp = voteUp;
+        this.voteUp = voteUp;
     }
 
     public Author getAuthor() {
-	return author;
+        return author;
     }
 
     public void setAuthor(Author author) {
-	this.author = author;
+        this.author = author;
     }
 }

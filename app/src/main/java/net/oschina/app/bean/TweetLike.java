@@ -5,24 +5,23 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 /**
  * 点赞消息实体类
  * LikeTweet.java
- * 
- * @author 火蚁(http://my.oschina.net/u/253900)
  *
+ * @author 火蚁(http://my.oschina.net/u/253900)
  * @data 2015-4-10 上午10:09:15
  */
 @SuppressWarnings("serial")
 @XStreamAlias("mytweet")
 public class TweetLike extends Entity {
-    
+
     @XStreamAlias("user")
     private User user;
-    
+
     @XStreamAlias("tweet")
     private Tweet tweet;
-    
+
     @XStreamAlias("datatime")
     private String datatime;
-    
+
     @XStreamAlias("appclient")
     private int appClient;
 

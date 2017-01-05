@@ -13,15 +13,14 @@ import net.oschina.app.util.TypefaceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 团队项目适配器
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月19日 下午6:00:33
- * 
  */
 
 public class TeamProjectListAdapter extends BaseAdapter {

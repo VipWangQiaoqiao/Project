@@ -15,10 +15,6 @@
  */
 package net.oschina.app.emoji;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.R;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +22,15 @@ import android.widget.AbsListView.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import net.oschina.app.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 表情适配器
- * 
+ *
  * @author kymjs (http://www.kymjs.com)
- * 
  */
 public class EmojiGridAdapter extends BaseAdapter {
 

@@ -16,17 +16,16 @@ import butterknife.ButterKnife;
 
 /**
  * 活动参会人员适配器
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年12月12日 下午8:10:43
- * 
  */
 public class EventApplyAdapter extends ListBaseAdapter<Apply> {
 
     @SuppressLint("InflateParams")
     @Override
     protected View getRealView(int position, View convertView,
-            final ViewGroup parent) {
+                               final ViewGroup parent) {
         ViewHolder vh = null;
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -54,7 +53,8 @@ public class EventApplyAdapter extends ListBaseAdapter<Apply> {
         TextView name;
         @Bind(R.id.tv_desc)
         TextView desc;
-        @Bind(R.id.tv_from) TextView from;
+        @Bind(R.id.tv_from)
+        TextView from;
         @Bind(R.id.iv_gender)
         ImageView gender;
         @Bind(R.id.iv_avatar)

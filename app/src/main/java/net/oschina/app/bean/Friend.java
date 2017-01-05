@@ -4,30 +4,29 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * 好友实体类
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年11月6日 上午11:37:31
- * 
  */
 @SuppressWarnings("serial")
 @XStreamAlias("friend")
 public class Friend extends Entity {
-	
+
     @XStreamAlias("userid")
     private int userid;
-    
+
     @XStreamAlias("name")
     private String name;
-    
+
     @XStreamAlias("from")
     private String from;
-    
+
     @XStreamAlias("portrait")
     private String portrait;
-    
+
     @XStreamAlias("expertise")
     private String expertise;
-    
+
     @XStreamAlias("gender")
     private int gender;
 
@@ -48,14 +47,14 @@ public class Friend extends Entity {
     }
 
     public String getFrom() {
-		return from;
-	}
+        return from;
+    }
 
-	public void setFrom(String from) {
-		this.from = from;
-	}
+    public void setFrom(String from) {
+        this.from = from;
+    }
 
-	public String getPortrait() {
+    public String getPortrait() {
         return portrait;
     }
 

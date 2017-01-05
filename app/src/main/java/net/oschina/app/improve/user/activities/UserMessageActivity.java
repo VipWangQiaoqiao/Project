@@ -24,8 +24,10 @@ import butterknife.Bind;
  */
 public class UserMessageActivity extends BaseBackActivity implements NoticeManager.NoticeNotify {
 
-    @Bind(R.id.tabLayout)       TabLayout mLayoutTab;
-    @Bind(R.id.vp_user_message) ViewPager mViewPager;
+    @Bind(R.id.tabLayout)
+    TabLayout mLayoutTab;
+    @Bind(R.id.vp_user_message)
+    ViewPager mViewPager;
 
     private static final int INDEX_MENTION = 0;
     private static final int INDEX_COMMENT = 1;
@@ -39,18 +41,18 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
 
     private NoticeBean mNotice;
 
-    public static void show (Context context) {
+    public static void show(Context context) {
 
         context.startActivity(new Intent(context, UserMessageActivity.class));
     }
 
     @Override
-    protected int getContentView () {
+    protected int getContentView() {
         return R.layout.activity_user_message;
     }
 
     @Override
-    protected void initWidget () {
+    protected void initWidget() {
         super.initWidget();
         mNotice = NoticeManager.getNotice();
 
@@ -64,7 +66,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
-            public void onPageSelected (int position) {
+            public void onPageSelected(int position) {
                 int i = (mStatusLoading & 0X1 << 4 * (2 - position)) >>> 4 * (2 - position);
                 if (i == 1) clearSpecificNoticeIfNecessary(position);
             }
@@ -115,10 +117,10 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         }
     }
 
-    private void postChangeTitle (final int position, int delay) {
+    private void postChangeTitle(final int position, int delay) {
         mViewPager.postDelayed(new Runnable() {
             @Override
-            public void run () {
+            public void run() {
                 TabLayout.Tab tab = mLayoutTab.getTabAt(position);
                 if (tab == null) return;
                 tab.setText(mAdapter.getPageTitle(position));
@@ -126,7 +128,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         }, delay);
     }
 
-    public void onRequestSuccess (int position) {
+    public void onRequestSuccess(int position) {
         mStatusLoading |= 0X1 << (2 - position) * 4;
         if (mViewPager.getCurrentItem() != position) return;
         clearSpecificNoticeIfNecessary(position);
@@ -137,13 +139,13 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         if (mViewPager.getCurrentItem() != position || _new != 0) {
             mStatusLoading &= 0X111 ^ 0X1 << (2 - position) * 4;
             postChangeTitle(position, 0);
-        }else {
+        } else {
             postChangeTitle(position, 1500);
         }
     }
 
     @Override
-    public void onNoticeArrived (NoticeBean bean) {
+    public void onNoticeArrived(NoticeBean bean) {
         NoticeBean nb = mNotice;
         mNotice = bean;
         analyzeOldAndNew(nb.getMention(), bean.getMention(), INDEX_MENTION);
@@ -152,7 +154,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
     }
 
     @Override
-    protected void onDestroy () {
+    protected void onDestroy() {
         super.onDestroy();
         NoticeManager.unBindNotify(this);
         clearSpecificNotice(INDEX_MENTION);
@@ -162,7 +164,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
 
     private FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
         @Override
-        public Fragment getItem (int position) {
+        public Fragment getItem(int position) {
             switch (position) {
                 case INDEX_MENTION:
                     return mUserMentionFragment;
@@ -174,12 +176,12 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         }
 
         @Override
-        public int getCount () {
+        public int getCount() {
             return 3;
         }
 
         @Override
-        public CharSequence getPageTitle (int position) {
+        public CharSequence getPageTitle(int position) {
             switch (position) {
                 case INDEX_MENTION:
                     return formatMessageCount("@我", mNotice.getMention());
@@ -191,7 +193,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         }
     };
 
-    private String formatMessageCount (String title, int messageCount) {
+    private String formatMessageCount(String title, int messageCount) {
         return messageCount == 0 ? title : String.format(title + "（%s）", messageCount);
     }
 }

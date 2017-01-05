@@ -18,7 +18,6 @@ package net.oschina.app.emoji;
 import android.text.Editable;
 
 /**
- * 
  * @author kymjs (http://www.kymjs.com)
  */
 public interface OnSendClickListener {

@@ -66,10 +66,10 @@ public class NearbyUserAdapter extends BaseRecyclerAdapter<NearbyResult> {
             User.More more = item.getUser().getMore();
             if (more != null) {
                 holder.mViewPosition.setText(more.getCompany() + " " + more.getPosition());
-            }else {
+            } else {
                 holder.mViewPosition.setText("??? ???");
             }
-        }else {
+        } else {
             holder.mViewPortrait.setImageResource(R.mipmap.widget_dface);
             holder.mViewNick.setText("???");
             holder.mViewGender.setVisibility(View.GONE);
@@ -78,7 +78,7 @@ public class NearbyUserAdapter extends BaseRecyclerAdapter<NearbyResult> {
 
         if (item.getNearby() != null) {
             holder.mViewDistance.setText(StringUtils.formatDistance(item.getNearby().getDistance()));
-        }else {
+        } else {
             holder.mViewDistance.setText("未知距离");
         }
 
@@ -86,11 +86,16 @@ public class NearbyUserAdapter extends BaseRecyclerAdapter<NearbyResult> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.iv_portrait) CircleImageView mViewPortrait;
-        @Bind(R.id.tv_nick)     TextView mViewNick;
-        @Bind(R.id.tv_position) TextView mViewPosition;
-        @Bind(R.id.tv_distance) TextView mViewDistance;
-        @Bind(R.id.iv_gender)   ImageView mViewGender;
+        @Bind(R.id.iv_portrait)
+        CircleImageView mViewPortrait;
+        @Bind(R.id.tv_nick)
+        TextView mViewNick;
+        @Bind(R.id.tv_position)
+        TextView mViewPosition;
+        @Bind(R.id.tv_distance)
+        TextView mViewDistance;
+        @Bind(R.id.iv_gender)
+        ImageView mViewGender;
 
         public ViewHolder(View view) {
             super(view);

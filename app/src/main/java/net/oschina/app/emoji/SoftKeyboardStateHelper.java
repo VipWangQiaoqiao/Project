@@ -15,15 +15,14 @@
  */
 package net.oschina.app.emoji;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
- * 
  * @author kymjs (http://www.kymjs.com)
  */
 public class SoftKeyboardStateHelper implements
@@ -45,7 +44,7 @@ public class SoftKeyboardStateHelper implements
     }
 
     public SoftKeyboardStateHelper(View activityRootView,
-            boolean isSoftKeyboardOpened) {
+                                   boolean isSoftKeyboardOpened) {
         this.activityRootView = activityRootView;
         this.isSoftKeyboardOpened = isSoftKeyboardOpened;
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(this);
@@ -61,8 +60,8 @@ public class SoftKeyboardStateHelper implements
         final int heightDiff = activityRootView.getRootView().getHeight()
                 - (r.bottom - r.top);
         if (!isSoftKeyboardOpened && heightDiff > 100) { // if more than 100
-                                                         // pixels, its probably
-                                                         // a keyboard...
+            // pixels, its probably
+            // a keyboard...
             isSoftKeyboardOpened = true;
             notifyOnSoftKeyboardOpened(heightDiff);
         } else if (isSoftKeyboardOpened && heightDiff < 100) {
@@ -81,7 +80,7 @@ public class SoftKeyboardStateHelper implements
 
     /**
      * Default value is zero (0)
-     * 
+     *
      * @return last saved keyboard height in px
      */
     public int getLastSoftKeyboardHeightInPx() {

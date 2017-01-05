@@ -36,14 +36,14 @@ public class ToolbarFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null != mRootView) {
             ViewGroup parent = (ViewGroup) mRootView.getParent();
             if (null != parent) {
                 parent.removeView(mRootView);
             }
-        }else {
-            mRootView = inflater.inflate(R.layout.fragment_detail_tool_bar, container,false);
+        } else {
+            mRootView = inflater.inflate(R.layout.fragment_detail_tool_bar, container, false);
             initView(mRootView);
         }
         return mRootView;
@@ -127,5 +127,6 @@ public class ToolbarFragment extends BaseFragment {
     }
 
     @Override
-    public void initData() {}
+    public void initData() {
+    }
 }

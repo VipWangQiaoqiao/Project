@@ -19,9 +19,8 @@ import java.io.Serializable;
 
 /**
  * 标签相关帖子
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
- * 
  */
 public class QuestionTagFragment extends BaseListFragment<Post> {
 
@@ -69,7 +68,7 @@ public class QuestionTagFragment extends BaseListFragment<Post> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         Post post = mAdapter.getItem(position);
         if (post != null)
             UIHelper.showPostDetail(view.getContext(), post.getId(),

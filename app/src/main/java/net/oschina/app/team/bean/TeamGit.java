@@ -7,7 +7,6 @@ import net.oschina.app.bean.Entity;
 /**
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月20日 上午10:49:39
- * 
  */
 
 @SuppressWarnings("serial")
@@ -27,42 +26,42 @@ public class TeamGit extends Entity {
     private String ownerUserName;
 
     public int getId() {
-	return id;
+        return id;
     }
 
     public void setId(int id) {
-	this.id = id;
+        this.id = id;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 
     public String getPath() {
-	return path;
+        return path;
     }
 
     public void setPath(String path) {
-	this.path = path;
+        this.path = path;
     }
 
     public String getOwnerName() {
-	return ownerName;
+        return ownerName;
     }
 
     public void setOwnerName(String ownerName) {
-	this.ownerName = ownerName;
+        this.ownerName = ownerName;
     }
 
     public String getOwnerUserName() {
-	return ownerUserName;
+        return ownerUserName;
     }
 
     public void setOwnerUserName(String ownerUserName) {
-	this.ownerUserName = ownerUserName;
+        this.ownerUserName = ownerUserName;
     }
 }

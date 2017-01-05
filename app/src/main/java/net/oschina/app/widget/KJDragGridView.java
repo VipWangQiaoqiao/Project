@@ -1,8 +1,5 @@
 package net.oschina.app.widget;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -28,11 +25,14 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * 感谢这篇博客的作者，http://blog.csdn.net/xiaanming/article/details/17718579<br>
  * 在这个基础上解决了原作者的问题:Adapter无法使用ViewHolder优化的问题，优化了手势识别率，并添加了trashView功能，
  * 优化自定义控件对外扩展性，解决在上下拉环境下手势冲突问题<br>
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  */
 public class KJDragGridView extends GridView {
@@ -110,7 +110,7 @@ public class KJDragGridView extends GridView {
 
     /**
      * 获取状态栏的高度
-     * 
+     *
      * @param context
      * @return
      */
@@ -149,7 +149,9 @@ public class KJDragGridView extends GridView {
                     moveListener.cancleMove();
                 }
             }
-        };
+        }
+
+        ;
     };
 
     // 用来处理是否为长按的Runnable
@@ -259,7 +261,7 @@ public class KJDragGridView extends GridView {
 
     /**
      * 设置响应拖拽的毫秒数，默认是700毫秒
-     * 
+     *
      * @param dragResponseMS
      */
     public void setDragResponseMS(long dragResponseMS) {
@@ -287,63 +289,63 @@ public class KJDragGridView extends GridView {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (canDrag) {
             switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mDownX = (int) ev.getX();
-                mDownY = (int) ev.getY();
-                moveRect.left = mDownX - MOVE_OFFSET;
-                moveRect.right = mDownX + MOVE_OFFSET;
-                moveRect.top = mDownY - MOVE_OFFSET;
-                moveRect.bottom = mDownY + MOVE_OFFSET;
+                case MotionEvent.ACTION_DOWN:
+                    mDownX = (int) ev.getX();
+                    mDownY = (int) ev.getY();
+                    moveRect.left = mDownX - MOVE_OFFSET;
+                    moveRect.right = mDownX + MOVE_OFFSET;
+                    moveRect.top = mDownY - MOVE_OFFSET;
+                    moveRect.bottom = mDownY + MOVE_OFFSET;
 
-                // 根据按下的X,Y坐标获取所点击item的position
-                mDragPosition = pointToPosition(mDownX, mDownY);
+                    // 根据按下的X,Y坐标获取所点击item的position
+                    mDragPosition = pointToPosition(mDownX, mDownY);
 
-                if (mDragPosition == AdapterView.INVALID_POSITION) {
-                    return super.dispatchTouchEvent(ev);
-                }
+                    if (mDragPosition == AdapterView.INVALID_POSITION) {
+                        return super.dispatchTouchEvent(ev);
+                    }
 
-                // 使用Handler延迟dragResponseMS执行mLongClickRunnable
-                mHandler.postDelayed(mLongClickRunnable, dragResponseMS);
+                    // 使用Handler延迟dragResponseMS执行mLongClickRunnable
+                    mHandler.postDelayed(mLongClickRunnable, dragResponseMS);
 
-                // 根据position获取该item所对应的View
-                mStartDragItemView = getChildAt(mDragPosition
-                        - getFirstVisiblePosition());
+                    // 根据position获取该item所对应的View
+                    mStartDragItemView = getChildAt(mDragPosition
+                            - getFirstVisiblePosition());
 
-                mPoint2ItemTop = mDownY - mStartDragItemView.getTop();
-                mPoint2ItemLeft = mDownX - mStartDragItemView.getLeft();
+                    mPoint2ItemTop = mDownY - mStartDragItemView.getTop();
+                    mPoint2ItemLeft = mDownX - mStartDragItemView.getLeft();
 
-                mOffset2Top = (int) (ev.getRawY() - mDownY);
-                mOffset2Left = (int) (ev.getRawX() - mDownX);
+                    mOffset2Top = (int) (ev.getRawY() - mDownY);
+                    mOffset2Left = (int) (ev.getRawX() - mDownX);
 
-                // 获取DragGridView自动向上滚动的偏移量，小于这个值，DragGridView向下滚动
-                mDownScrollBorder = getHeight() / 5;
-                // 大于这个值，DragGridView向上滚动
-                mUpScrollBorder = getHeight() * 4 / 5;
+                    // 获取DragGridView自动向上滚动的偏移量，小于这个值，DragGridView向下滚动
+                    mDownScrollBorder = getHeight() / 5;
+                    // 大于这个值，DragGridView向上滚动
+                    mUpScrollBorder = getHeight() * 4 / 5;
 
-                // 开启mDragItemView绘图缓存
-                mStartDragItemView.setDrawingCacheEnabled(true);
-                // 获取mDragItemView在缓存中的Bitmap对象
-                mDragBitmap = Bitmap.createBitmap(mStartDragItemView
-                        .getDrawingCache());
-                // 这一步很关键，释放绘图缓存，避免出现重复的镜像
-                mStartDragItemView.destroyDrawingCache();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                // 如果我们在按下的item上面移动，只要不超过item的边界我们就不移除mRunnable
-                if (!isTouchInItem(moveRect, ev.getX(), ev.getY())) {
+                    // 开启mDragItemView绘图缓存
+                    mStartDragItemView.setDrawingCacheEnabled(true);
+                    // 获取mDragItemView在缓存中的Bitmap对象
+                    mDragBitmap = Bitmap.createBitmap(mStartDragItemView
+                            .getDrawingCache());
+                    // 这一步很关键，释放绘图缓存，避免出现重复的镜像
+                    mStartDragItemView.destroyDrawingCache();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    // 如果我们在按下的item上面移动，只要不超过item的边界我们就不移除mRunnable
+                    if (!isTouchInItem(moveRect, ev.getX(), ev.getY())) {
+                        mHandler.removeCallbacks(mLongClickRunnable);
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    mHandler.removeCallbacks(mScrollRunnable);
                     mHandler.removeCallbacks(mLongClickRunnable);
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                mHandler.removeCallbacks(mScrollRunnable);
-                mHandler.removeCallbacks(mLongClickRunnable);
-                if (moved && getAdapter().getCount() > 0) {
-                    mHandler.sendEmptyMessage(HANDLE_FINISH);
-                } else {
-                    mHandler.sendEmptyMessage(HANDLE_CANCLE);
-                }
-                moved = false;
-                break;
+                    if (moved && getAdapter().getCount() > 0) {
+                        mHandler.sendEmptyMessage(HANDLE_FINISH);
+                    } else {
+                        mHandler.sendEmptyMessage(HANDLE_CANCLE);
+                    }
+                    moved = false;
+                    break;
             }
         }
         return super.dispatchTouchEvent(ev);
@@ -353,32 +355,32 @@ public class KJDragGridView extends GridView {
     public boolean onTouchEvent(MotionEvent ev) {
         if (isDrag && canDrag && mDragImageView != null) {
             switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                initRecord();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                moveX = (int) ev.getX();
-                moveY = (int) ev.getY();
+                case MotionEvent.ACTION_DOWN:
+                    initRecord();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    moveX = (int) ev.getX();
+                    moveY = (int) ev.getY();
 
-                onDragItem(moveX, moveY);// 拖动item
+                    onDragItem(moveX, moveY);// 拖动item
 
-                if (mTrashView != null) {
-                    if (inTrash(moveX, moveY)) {
-                        mTrashView.setScaleX(1.7f);
-                        mTrashView.setScaleY(1.7f);
-                    } else {
-                        mTrashView.setScaleX(1f);
-                        mTrashView.setScaleY(1f);
+                    if (mTrashView != null) {
+                        if (inTrash(moveX, moveY)) {
+                            mTrashView.setScaleX(1.7f);
+                            mTrashView.setScaleY(1.7f);
+                        } else {
+                            mTrashView.setScaleX(1f);
+                            mTrashView.setScaleY(1f);
+                        }
                     }
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                onStopDrag();
-                isDrag = false;
-                if (deleteListener != null && inTrash(ev.getX(), ev.getY())) {
-                    deleteListener.onDelete(mDragPosition);
-                }
-                break;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    onStopDrag();
+                    isDrag = false;
+                    if (deleteListener != null && inTrash(ev.getX(), ev.getY())) {
+                        deleteListener.onDelete(mDragPosition);
+                    }
+                    break;
             }
             return true;
         }
@@ -387,7 +389,7 @@ public class KJDragGridView extends GridView {
 
     /**
      * 是否点击在GridView的item上面
-     * 
+     *
      * @param itemView
      * @param x
      * @param y
@@ -406,12 +408,10 @@ public class KJDragGridView extends GridView {
 
     /**
      * 创建拖动的镜像
-     * 
+     *
      * @param bitmap
-     * @param downX
-     *            按下的点相对父控件的X坐标
-     * @param downY
-     *            按下的点相对父控件的X坐标
+     * @param downX  按下的点相对父控件的X坐标
+     * @param downY  按下的点相对父控件的X坐标
      */
     private void createDragImage(Bitmap bitmap, int downX, int downY) {
         mWindowLayoutParams = new WindowManager.LayoutParams();
@@ -445,7 +445,7 @@ public class KJDragGridView extends GridView {
 
     /**
      * 拖动item，在里面实现了item镜像的位置更新，item的相互交换以及GridView的自行滚动
-     * 
+     *
      * @param x
      * @param y
      */
@@ -461,7 +461,7 @@ public class KJDragGridView extends GridView {
 
     /**
      * 手指当前处于垃圾桶图标上
-     * 
+     *
      * @param x
      * @param y
      * @return
@@ -519,7 +519,7 @@ public class KJDragGridView extends GridView {
 
     /**
      * 交换item,并且控制item之间的显示与隐藏效果
-     * 
+     *
      * @param moveX
      * @param moveY
      */
@@ -553,7 +553,7 @@ public class KJDragGridView extends GridView {
 
     /**
      * 创建移动动画
-     * 
+     *
      * @param view
      * @param startX
      * @param endX
@@ -562,7 +562,7 @@ public class KJDragGridView extends GridView {
      * @return
      */
     private AnimatorSet createTranslationAnimations(View view, float startX,
-            float endX, float startY, float endY) {
+                                                    float endX, float startY, float endY) {
         ObjectAnimator animX = ObjectAnimator.ofFloat(view, "translationX",
                 startX, endX);
         ObjectAnimator animY = ObjectAnimator.ofFloat(view, "translationY",
@@ -574,7 +574,7 @@ public class KJDragGridView extends GridView {
 
     /**
      * item的交换动画效果
-     * 
+     *
      * @param oldPosition
      * @param newPosition
      */

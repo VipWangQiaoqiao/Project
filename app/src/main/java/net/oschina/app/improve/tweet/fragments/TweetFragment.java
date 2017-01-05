@@ -377,9 +377,9 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
             ((BaseGeneralRecyclerAdapter) mAdapter).addItems(resultBean.getResult().getItems());
         }
 
-        if(resultBean.getResult().getItems() == null
+        if (resultBean.getResult().getItems() == null
                 || resultBean.getResult().getItems().size() < 20)
-            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE,true);
+            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
 //        mAdapter.setState(resultBean.getResult().getItems() == null
 //                || resultBean.getResult().getItems().size() < 20
 //                ? BaseRecyclerAdapter.STATE_NO_MORE

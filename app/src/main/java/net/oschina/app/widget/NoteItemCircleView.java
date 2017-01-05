@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 
 /**
  * 圆形ImageView组件 点击事件不会穿透
- * 
+ *
  * @author kymjs(kymjs123@gmail.com)
  */
 public class NoteItemCircleView extends CircleImageView {

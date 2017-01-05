@@ -16,7 +16,6 @@
 package net.oschina.app.emoji;
 
 /**
- * 
  * @author kymjs (http://www.kymjs.com)
  */
 public class Emojicon {

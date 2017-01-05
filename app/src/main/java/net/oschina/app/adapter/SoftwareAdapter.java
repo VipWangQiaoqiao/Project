@@ -4,15 +4,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.SoftwareDec;
-import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.util.ThemeSwitchUtils;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class SoftwareAdapter extends ListBaseAdapter<SoftwareDec> {
 

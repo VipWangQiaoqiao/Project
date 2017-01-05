@@ -1,9 +1,5 @@
 package com.fourmob.datetimepicker.date;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.R;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.StateListDrawable;
@@ -14,11 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import net.oschina.app.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 摘取自https://github.com/flavienlaurent/datetimepicker
- * 
+ *
  * @author kymjs
- * 
  */
 public class YearPickerView extends ListView implements
         AdapterView.OnItemClickListener, DatePickerDialog.OnDateChangedListener {
@@ -30,7 +30,7 @@ public class YearPickerView extends ListView implements
     private final int mViewSize;
 
     public YearPickerView(Context context,
-            DatePickerController datePickerController) {
+                          DatePickerController datePickerController) {
         super(context);
         mController = datePickerController;
         mController.registerOnDateChangedListener(this);
@@ -85,7 +85,7 @@ public class YearPickerView extends ListView implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         mController.tryVibrate();
         TextViewWithCircularIndicator clickedView = (TextViewWithCircularIndicator) view;
         if (clickedView != null) {

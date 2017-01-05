@@ -13,7 +13,6 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.user.adapter.UserEventAdapter;
 import net.oschina.app.util.UIHelper;
 

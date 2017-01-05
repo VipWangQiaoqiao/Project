@@ -1,12 +1,13 @@
 package net.oschina.app.db;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.bean.NotebookData;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import net.oschina.app.bean.NotebookData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NoteDatabase {
     private final DatabaseHelper dbHelper;
@@ -18,7 +19,7 @@ public class NoteDatabase {
 
     /**
      * 增
-     * 
+     *
      * @param data
      */
     public void insert(NotebookData data) {
@@ -27,36 +28,36 @@ public class NoteDatabase {
         sql += "(_id, iid, time, date, content, color) values(?, ?, ?, ?, ?, ?)";
 
         SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
-        sqlite.execSQL(sql, new String[] { data.getId() + "",
+        sqlite.execSQL(sql, new String[]{data.getId() + "",
                 data.getIid() + "", data.getUnixTime() + "", data.getDate(),
-                data.getContent(), data.getColor() + "" });
+                data.getContent(), data.getColor() + ""});
         sqlite.close();
     }
 
     /**
      * 删
-     * 
+     *
      * @param id
      */
     public void delete(int id) {
         SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
         String sql = ("delete from " + DatabaseHelper.NOTE_TABLE_NAME + " where _id=?");
-        sqlite.execSQL(sql, new Integer[] { id });
+        sqlite.execSQL(sql, new Integer[]{id});
         sqlite.close();
     }
 
     /**
      * 改
-     * 
+     *
      * @param data
      */
     public void update(NotebookData data) {
         SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
         String sql = ("update " + DatabaseHelper.NOTE_TABLE_NAME + " set iid=?, time=?, date=?, content=?, color=? where _id=?");
         sqlite.execSQL(sql,
-                new String[] { data.getIid() + "", data.getUnixTime() + "",
+                new String[]{data.getIid() + "", data.getUnixTime() + "",
                         data.getDate(), data.getContent(),
-                        data.getColor() + "", data.getId() + "" });
+                        data.getColor() + "", data.getId() + ""});
         sqlite.close();
     }
 
@@ -66,7 +67,7 @@ public class NoteDatabase {
 
     /**
      * 查
-     * 
+     *
      * @param where
      * @return
      */
@@ -96,7 +97,7 @@ public class NoteDatabase {
 
     /**
      * 重置
-     * 
+     *
      * @param datas
      */
     public void reset(List<NotebookData> datas) {
@@ -114,7 +115,7 @@ public class NoteDatabase {
 
     /**
      * 保存一条数据到本地(若已存在则直接覆盖)
-     * 
+     *
      * @param data
      */
     public void save(NotebookData data) {

@@ -4,123 +4,122 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * @author HuangWenwei
- * 
  * @date 2014年9月29日
  */
 @SuppressWarnings("serial")
 @XStreamAlias("blog")
 public class Blog extends Entity {
-	
-	public final static int DOC_TYPE_REPASTE = 0;//转帖
-	public final static int DOC_TYPE_ORIGINAL = 1;//原创
-	
-	@XStreamAlias("title")
-	private String title;
 
-	@XStreamAlias("url")
-	private String url;
+    public final static int DOC_TYPE_REPASTE = 0;//转帖
+    public final static int DOC_TYPE_ORIGINAL = 1;//原创
 
-	@XStreamAlias("where")
-	private String where;
+    @XStreamAlias("title")
+    private String title;
 
-	@XStreamAlias("commentCount")
-	private int commentCount;
+    @XStreamAlias("url")
+    private String url;
 
-	@XStreamAlias("body")
-	private String body;
+    @XStreamAlias("where")
+    private String where;
 
-	@XStreamAlias("author")
-	private String authorname;
+    @XStreamAlias("commentCount")
+    private int commentCount;
 
-	@XStreamAlias("authorid")
-	private int authoruid;
+    @XStreamAlias("body")
+    private String body;
 
-	@XStreamAlias("documentType")
-	private int documentType;
+    @XStreamAlias("author")
+    private String authorname;
 
-	@XStreamAlias("pubDate")
-	private String pubDate;
+    @XStreamAlias("authorid")
+    private int authoruid;
 
-	@XStreamAlias("favorite")
-	private int favorite;
+    @XStreamAlias("documentType")
+    private int documentType;
 
-	public String getTitle() {
-		return title;
-	}
+    @XStreamAlias("pubDate")
+    private String pubDate;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    @XStreamAlias("favorite")
+    private int favorite;
 
-	public String getUrl() {
-		return url;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getWhere() {
-		return where;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setWhere(String where) {
-		this.where = where;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public int getCommentCount() {
-		return commentCount;
-	}
+    public String getWhere() {
+        return where;
+    }
 
-	public void setCommentCount(int commentCount) {
-		this.commentCount = commentCount;
-	}
+    public void setWhere(String where) {
+        this.where = where;
+    }
 
-	public String getBody() {
-		return body;
-	}
+    public int getCommentCount() {
+        return commentCount;
+    }
 
-	public void setBody(String body) {
-		this.body = body;
-	}
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
 
-	public String getAuthor() {
-		return authorname;
-	}
+    public String getBody() {
+        return body;
+    }
 
-	public void setAuthor(String author) {
-		this.authorname = author;
-	}
+    public void setBody(String body) {
+        this.body = body;
+    }
 
-	public int getAuthorId() {
-		return authoruid;
-	}
+    public String getAuthor() {
+        return authorname;
+    }
 
-	public void setAuthorId(int authorId) {
-		this.authoruid = authorId;
-	}
+    public void setAuthor(String author) {
+        this.authorname = author;
+    }
 
-	public int getDocumenttype() {
-		return documentType;
-	}
+    public int getAuthorId() {
+        return authoruid;
+    }
 
-	public void setDocumenttype(int documenttype) {
-		this.documentType = documenttype;
-	}
+    public void setAuthorId(int authorId) {
+        this.authoruid = authorId;
+    }
 
-	public String getPubDate() {
-		return pubDate;
-	}
+    public int getDocumenttype() {
+        return documentType;
+    }
 
-	public void setPubDate(String pubDate) {
-		this.pubDate = pubDate;
-	}
+    public void setDocumenttype(int documenttype) {
+        this.documentType = documenttype;
+    }
 
-	public int getFavorite() {
-		return favorite;
-	}
+    public String getPubDate() {
+        return pubDate;
+    }
 
-	public void setFavorite(int favorite) {
-		this.favorite = favorite;
-	}
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
+    }
+
+    public int getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
+    }
 }

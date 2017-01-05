@@ -16,8 +16,8 @@ import net.oschina.app.widget.AvatarView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * <p>Created 15/8/26 下午2:09.</p>
@@ -59,18 +59,18 @@ public class SelectFriendAdapter extends BaseAdapter {
         List<ItemData> otherList = null;
 
         char lastIndex = '0';
-        for(SelectFriendsActivity.FriendItem item : list) {
+        for (SelectFriendsActivity.FriendItem item : list) {
             char indexLetter;
             char c = item.getFirstLetter();
-            if(c >= 'A' && c <= 'Z') {
+            if (c >= 'A' && c <= 'Z') {
                 indexLetter = c;
-            } else if(c >= 'a' && c <= 'z') {
-                indexLetter = (char)(c - 'a' + 'A');
+            } else if (c >= 'a' && c <= 'z') {
+                indexLetter = (char) (c - 'a' + 'A');
             } else {
                 indexLetter = DEFAULT_OTHER_LETTER;
             }
-            if(indexLetter == DEFAULT_OTHER_LETTER) {
-                if(otherList == null) {
+            if (indexLetter == DEFAULT_OTHER_LETTER) {
+                if (otherList == null) {
                     otherList = new ArrayList<>();
                 }
                 otherList.add(new NormalItemData(item));
@@ -84,7 +84,7 @@ public class SelectFriendAdapter extends BaseAdapter {
             }
         }
         //将没有索引的数据列表放到最后
-        if(otherList != null && !otherList.isEmpty()) {
+        if (otherList != null && !otherList.isEmpty()) {
             mPositionArray.append(DEFAULT_OTHER_LETTER, mList.size());
             mList.add(new HeaderItemData(String.valueOf(DEFAULT_OTHER_LETTER)));
             mList.addAll(otherList);
@@ -93,10 +93,12 @@ public class SelectFriendAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    /** 根据索引获取位置*/
+    /**
+     * 根据索引获取位置
+     */
     public int getPositionByIndex(char indexLetter) {
         Integer value = mPositionArray.get(indexLetter);
-        if(value == null) {
+        if (value == null) {
             return -1;
         }
         return value;
@@ -104,8 +106,8 @@ public class SelectFriendAdapter extends BaseAdapter {
 
     public SelectFriendsActivity.FriendItem getFriendItem(int position) {
         ItemData data = getItem(position);
-        if(data instanceof NormalItemData) {
-            return ((NormalItemData)data).friendItem;
+        if (data instanceof NormalItemData) {
+            return ((NormalItemData) data).friendItem;
         }
         return null;
     }
@@ -138,9 +140,9 @@ public class SelectFriendAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ItemData itemData = getItem(position);
-        if(itemData instanceof HeaderItemData) {
+        if (itemData instanceof HeaderItemData) {
             final HeaderViewHolder holder;
-            if(convertView == null) {
+            if (convertView == null) {
                 convertView = getLayoutInflater(parent.getContext()).inflate(R.layout.list_index_header, parent, false);
                 holder = new HeaderViewHolder(convertView);
                 convertView.setTag(holder);
@@ -148,26 +150,28 @@ public class SelectFriendAdapter extends BaseAdapter {
             } else {
                 holder = (HeaderViewHolder) convertView.getTag();
             }
-            holder.bind(((HeaderItemData)itemData).index);
+            holder.bind(((HeaderItemData) itemData).index);
         } else {
             final NormalViewHolder holder;
-            if(convertView == null) {
+            if (convertView == null) {
                 convertView = getLayoutInflater(parent.getContext()).inflate(R.layout.list_cell_select_friend, parent, false);
                 holder = new NormalViewHolder(convertView);
                 convertView.setTag(holder);
             } else {
                 holder = (NormalViewHolder) convertView.getTag();
             }
-            holder.bind(((NormalItemData)itemData).friendItem);
+            holder.bind(((NormalItemData) itemData).friendItem);
         }
 
         return convertView;
     }
 
-    private interface ItemData {}
+    private interface ItemData {
+    }
 
     static class HeaderItemData implements ItemData {
         String index;
+
         public HeaderItemData(String index) {
             this.index = index;
         }

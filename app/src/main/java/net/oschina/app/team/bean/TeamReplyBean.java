@@ -6,15 +6,14 @@ import net.oschina.app.bean.Entity;
 
 /**
  * TeamReplyBean.java
- * 
- * @author 火蚁(http://my.oschina.net/u/253900)
  *
+ * @author 火蚁(http://my.oschina.net/u/253900)
  * @data 2015-3-13 下午6:32:23
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
 public class TeamReplyBean extends Entity {
-    
+
     @XStreamAlias("reply")
     private TeamReply teamReply;
 
@@ -25,6 +24,6 @@ public class TeamReplyBean extends Entity {
     public void setTeamReply(TeamReply teamReply) {
         this.teamReply = teamReply;
     }
-    
+
 }
 

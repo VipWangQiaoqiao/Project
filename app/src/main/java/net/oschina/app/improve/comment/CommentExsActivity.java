@@ -226,7 +226,7 @@ public class CommentExsActivity extends BaseBackActivity {
                             getData(true, null);
                             mDelegation.getBottomSheet().dismiss();
                         }
-                    }else {
+                    } else {
                         Toast.makeText(CommentExsActivity.this, resultBean.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     hideWaitDialog();
