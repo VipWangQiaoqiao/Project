@@ -518,6 +518,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             mTvLabel.setText("@" + newText);
             mTvLabel.setVisibility(View.VISIBLE);
 
+            mSearchAdapter.clear();
+            mSearchAdapter.setSearchContent(newText);
             if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
                 mRecyclerFriends.setAdapter(mSearchAdapter);
             }
@@ -537,7 +539,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                 AppContext.showToastShort(getString(R.string.check_count_hint));
             }
         });
-        mSearchAdapter.setSearchContent(newText);
         return true;
 
     }
