@@ -8,9 +8,8 @@ import android.widget.ViewAnimator;
 
 /**
  * 摘取自https://github.com/flavienlaurent/datetimepicker
- * 
+ *
  * @author kymjs
- * 
  */
 public class AccessibleDateAnimator extends ViewAnimator {
     private long mDateMillis;

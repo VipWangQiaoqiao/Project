@@ -7,24 +7,24 @@ import android.view.View;
 
 public class EmailSpan extends ClickableSpan {
 
-	private String email;
+    private String email;
 
-	public EmailSpan(String email) {
-		this.email = email;
-	}
+    public EmailSpan(String email) {
+        this.email = email;
+    }
 
-	@Override
-	public void onClick(View widget) {
-		try {
-			ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder
-					.from((Activity)widget.getContext());
-			builder.setType("message/rfc822");
-			builder.addEmailTo(email);
-			builder.setSubject("");
-			builder.setChooserTitle("");
-			builder.startChooser();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void onClick(View widget) {
+        try {
+            ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder
+                    .from((Activity) widget.getContext());
+            builder.setType("message/rfc822");
+            builder.addEmailTo(email);
+            builder.setSubject("");
+            builder.setChooserTitle("");
+            builder.startChooser();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -18,7 +18,6 @@ package net.oschina.app.emoji;
 import net.oschina.app.R;
 
 /**
- * 
  * @author kymjs (http://www.kymjs.com)
  */
 public class KJEmojiConfig {

@@ -21,7 +21,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,15 +32,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 
 /**
- *
  * @author kymjs (http://www.kymjs.com)
- *
  */
 public class KJEmojiFragment extends Fragment implements
         SoftKeyboardStateListener {
@@ -66,14 +62,14 @@ public class KJEmojiFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null != mRootView) {
             ViewGroup parent = (ViewGroup) mRootView.getParent();
             if (null != parent) {
                 parent.removeView(mRootView);
             }
-        }else {
-            mRootView = (LinearLayout) inflater.inflate(R.layout.frag_main, container,false);
+        } else {
+            mRootView = (LinearLayout) inflater.inflate(R.layout.frag_main, container, false);
             initWidget(mRootView);
         }
         return mRootView;
@@ -101,7 +97,7 @@ public class KJEmojiFragment extends Fragment implements
         mCBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,
-                    boolean isChecked) {
+                                         boolean isChecked) {
                 if (isChecked) {
                     showEmojiKeyBoard();
                     hideSoftKeyboard();
@@ -266,7 +262,8 @@ public class KJEmojiFragment extends Fragment implements
     }
 
     @Override
-    public void onSoftKeyboardClosed() {}
+    public void onSoftKeyboardClosed() {
+    }
 
     @Override
     public void onStop() {

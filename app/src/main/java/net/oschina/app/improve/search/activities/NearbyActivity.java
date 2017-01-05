@@ -130,7 +130,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     private Dialog getSelectorDialog() {
         if (mSelectorDialog == null) {
-            mSelectorDialog = new BottomDialog(this,true);
+            mSelectorDialog = new BottomDialog(this, true);
             View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null);
             view.findViewById(R.id.tv_clear_opt).setOnClickListener(this);
             view.findViewById(R.id.tv_cancel_opt).setOnClickListener(this);
@@ -290,10 +290,10 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                             "\"portrait\":\"%s\"," +
                             "\"gender\":\"%s\"," +
                             "\"more\":{" +
-                                "\"company\":\"%s\"," +
-                                "\"position\":\"%s\"" +
+                            "\"company\":\"%s\"," +
+                            "\"position\":\"%s\"" +
                             "}" +
-                    "}"
+                            "}"
                     , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company, position);
             comments = comments.replaceAll("[\\s\n]+", "");
             comments = URLEncoder.encode(comments, "UTF-8");

@@ -1,15 +1,14 @@
 package net.oschina.app.team.bean;
 
-import net.oschina.app.bean.Entity;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import net.oschina.app.bean.Entity;
 
 /**
  * 项目任务列表实体类 即指定项目下的任务列表
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月15日 上午10:40:09
- * 
  */
 
 @SuppressWarnings("serial")
@@ -21,7 +20,7 @@ public class TeamIssueCatalog extends Entity {
 
     @XStreamAlias("archive")
     private int archive;// 1:归档;0:未归档
-    
+
     @XStreamAlias("description")
     private String description;// 描述
 
@@ -35,19 +34,19 @@ public class TeamIssueCatalog extends Entity {
     private int allIssueCount;// 所有任务数量
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     public int getArchive() {
-	return archive;
+        return archive;
     }
 
     public void setArchive(int archive) {
-	this.archive = archive;
+        this.archive = archive;
     }
 
     public String getDescription() {
@@ -59,26 +58,26 @@ public class TeamIssueCatalog extends Entity {
     }
 
     public int getOpenedIssueCount() {
-	return openedIssueCount;
+        return openedIssueCount;
     }
 
     public void setOpenedIssueCount(int openedIssueCount) {
-	this.openedIssueCount = openedIssueCount;
+        this.openedIssueCount = openedIssueCount;
     }
 
     public int getClosedIssueCount() {
-	return closedIssueCount;
+        return closedIssueCount;
     }
 
     public void setClosedIssueCount(int closedIssueCount) {
-	this.closedIssueCount = closedIssueCount;
+        this.closedIssueCount = closedIssueCount;
     }
 
     public int getAllIssueCount() {
-	return allIssueCount;
+        return allIssueCount;
     }
 
     public void setAllIssueCount(int allIssueCount) {
-	this.allIssueCount = allIssueCount;
+        this.allIssueCount = allIssueCount;
     }
 }

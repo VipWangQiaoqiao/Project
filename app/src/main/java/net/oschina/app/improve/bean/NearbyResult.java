@@ -1,14 +1,12 @@
 package net.oschina.app.improve.bean;
 
-import net.oschina.app.improve.bean.simple.Author;
-
 import java.io.Serializable;
 
 /**
  * Created by thanatosx on 2016/12/23.
  */
 
-public class NearbyResult implements Serializable{
+public class NearbyResult implements Serializable {
 
     private User user;
     private Nearby nearby;

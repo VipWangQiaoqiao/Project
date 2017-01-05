@@ -1,12 +1,12 @@
 package net.oschina.app.bean;
 
-import java.io.Serializable;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import java.io.Serializable;
 
 /**
  * 通知信息实体类
- * 
+ *
  * @author liux (http://my.oschina.net/liux)
  * @version 1.0
  * @created 2012-3-21
@@ -40,35 +40,35 @@ public class Notice implements Serializable {
     private int newLikeCount;
 
     public int getAtmeCount() {
-	return atmeCount;
+        return atmeCount;
     }
 
     public void setAtmeCount(int atmeCount) {
-	this.atmeCount = atmeCount;
+        this.atmeCount = atmeCount;
     }
 
     public int getMsgCount() {
-	return msgCount;
+        return msgCount;
     }
 
     public void setMsgCount(int msgCount) {
-	this.msgCount = msgCount;
+        this.msgCount = msgCount;
     }
 
     public int getReviewCount() {
-	return reviewCount;
+        return reviewCount;
     }
 
     public void setReviewCount(int reviewCount) {
-	this.reviewCount = reviewCount;
+        this.reviewCount = reviewCount;
     }
 
     public int getNewFansCount() {
-	return newFansCount;
+        return newFansCount;
     }
 
     public void setNewFansCount(int newFansCount) {
-	this.newFansCount = newFansCount;
+        this.newFansCount = newFansCount;
     }
 
     public int getNewLikeCount() {

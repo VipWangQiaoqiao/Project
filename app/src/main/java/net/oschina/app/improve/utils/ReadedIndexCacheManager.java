@@ -28,13 +28,15 @@ public class ReadedIndexCacheManager {
 
     /**
      * 得到缓存的已读位置Key-Value
+     *
      * @param context Context
      * @return {@link List<Pair<String, Integer>>}
      */
     public static List<Pair<String, Integer>> getPairs(Context context) {
         if (pairs == null) {
             pairs = CacheManager.readJson(context, FILE_NAME
-                    , new TypeToken<List<Pair<String, Integer>>>(){}.getType());
+                    , new TypeToken<List<Pair<String, Integer>>>() {
+                    }.getType());
             if (pairs == null) pairs = new ArrayList<>();
         }
         return pairs;
@@ -42,10 +44,11 @@ public class ReadedIndexCacheManager {
 
     /**
      * 得到某篇文章的已读位置
+     *
      * @param context {@link Context}
-     * @param id The Article Id
-     * @param type The Article Type {@link net.oschina.app.api.remote.OSChinaApi#CATALOG_NEWS}
-     *             {@link net.oschina.app.api.remote.OSChinaApi#CATALOG_BLOG}
+     * @param id      The Article Id
+     * @param type    The Article Type {@link net.oschina.app.api.remote.OSChinaApi#CATALOG_NEWS}
+     *                {@link net.oschina.app.api.remote.OSChinaApi#CATALOG_BLOG}
      * @return 已读位置
      */
     public static int getIndex(Context context, long id, int type) {
@@ -59,11 +62,12 @@ public class ReadedIndexCacheManager {
 
     /**
      * 保存文章的已读位置
+     *
      * @param context Context
-     * @param id The Article Id
-     * @param type The Article Type The Article Type {@link net.oschina.app.api.remote.OSChinaApi#CATALOG_NEWS}
-     *             {@link net.oschina.app.api.remote.OSChinaApi#CATALOG_BLOG}
-     * @param index 已读位置， 已读位置小于等于{@link #MIN_LIMIT_READED_POSITION} 将会移除储存的已读位置
+     * @param id      The Article Id
+     * @param type    The Article Type The Article Type {@link net.oschina.app.api.remote.OSChinaApi#CATALOG_NEWS}
+     *                {@link net.oschina.app.api.remote.OSChinaApi#CATALOG_BLOG}
+     * @param index   已读位置， 已读位置小于等于{@link #MIN_LIMIT_READED_POSITION} 将会移除储存的已读位置
      */
     public static void saveIndex(Context context, long id, int type, int index) {
         String in = getIndexName(id, type);
@@ -95,8 +99,9 @@ public class ReadedIndexCacheManager {
 
     /**
      * 移除指定文章的已读位置
+     *
      * @param context Context
-     * @param in Create By {@link #getIndexName(long, int)}
+     * @param in      Create By {@link #getIndexName(long, int)}
      */
     public static void removeIndex(Context context, String in) {
         List<Pair<String, Integer>> pairs = getPairs(context);
@@ -113,8 +118,9 @@ public class ReadedIndexCacheManager {
 
     /**
      * 保存已读位置
+     *
      * @param context Context
-     * @param pairs {@link #pairs}
+     * @param pairs   {@link #pairs}
      */
     private static void save(final Context context, final List<Pair<String, Integer>> pairs) {
         AppOperator.getExecutor().execute(new Runnable() {
@@ -127,7 +133,8 @@ public class ReadedIndexCacheManager {
 
     /**
      * Key Name Scheme
-     * @param id The Article id
+     *
+     * @param id   The Article id
      * @param type The Article Type
      * @return Key Name Scheme
      */

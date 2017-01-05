@@ -1,7 +1,6 @@
 package net.oschina.app.bean;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.SpannableString;
@@ -15,8 +14,6 @@ import android.widget.TextView.BufferType;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.util.UIHelper;
 

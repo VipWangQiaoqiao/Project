@@ -1,14 +1,13 @@
 package net.oschina.app.team.bean;
 
-import net.oschina.app.bean.Entity;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import net.oschina.app.bean.Entity;
 
 /**
  * 我的任务中要显示的状态
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
@@ -27,7 +26,7 @@ public class MyIssueState extends Entity {
     private String accepted; // 已验收
     @XStreamAlias("all")
     private String all;
-    
+
     @XStreamAlias("member")
     private TeamMember user;
 

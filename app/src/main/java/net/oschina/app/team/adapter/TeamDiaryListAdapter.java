@@ -17,9 +17,8 @@ import java.util.List;
 
 /**
  * 周报的ListView适配器
- * 
+ *
  * @author kymjs (http://www.kymjs.com)
- * 
  */
 public class TeamDiaryListAdapter extends BaseAdapter {
     private final Context cxt;

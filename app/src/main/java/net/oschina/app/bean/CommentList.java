@@ -1,18 +1,17 @@
 package net.oschina.app.bean;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 /**
  * 评论列表实体类
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年10月14日 下午3:32:39
- * 
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")

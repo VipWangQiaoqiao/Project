@@ -1,12 +1,12 @@
 package net.oschina.app.team.bean;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")

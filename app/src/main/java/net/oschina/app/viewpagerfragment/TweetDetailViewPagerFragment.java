@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.User;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
@@ -22,26 +21,26 @@ import net.oschina.app.improve.tweet.fragments.ListTweetLikeUsersFragment;
 /**
  * 赞 | 评论
  * Created by thanatos on 16/6/12.
- *
+ * <p>
  * TweetDetailActivity    TweetDetailViewPagerFragment   ListTweetCommentFragment    ListTweetLikeUsersFragment
- *           |                         |                            |                            |
- *           |   on comment successful |    on comment successful   |                            |
- *           | ----------------------> | -------------------------->|                            |
- *           |                         |                            |                            |
- *           |   on admire successful  |                 on admire successful                    |
- *           | ----------------------> | ----------------------------------------------------->  |
- *           |                         |                            |                            |
- *           | to reset comment count  |  to reset comment count    |                            |
- *           | ----------------------> | <------------------------- |                            |
- *           |                         |                            |                            |
- *           | to admire comment count |              to admire comment count                    |
- *           | ----------------------> | <-------------------------------------------------------|
- *           |                         |                            |                            |
- *           |                onScroll, getTweetDetail...           |                            |
- *           | <----------------------------------------------------|                            |
- *           |                         |                            |                            |
- *           |                                  onScroll                                         |
- *           |<----------------------------------------------------------------------------------|
+ * |                         |                            |                            |
+ * |   on comment successful |    on comment successful   |                            |
+ * | ----------------------> | -------------------------->|                            |
+ * |                         |                            |                            |
+ * |   on admire successful  |                 on admire successful                    |
+ * | ----------------------> | ----------------------------------------------------->  |
+ * |                         |                            |                            |
+ * | to reset comment count  |  to reset comment count    |                            |
+ * | ----------------------> | <------------------------- |                            |
+ * |                         |                            |                            |
+ * | to admire comment count |              to admire comment count                    |
+ * | ----------------------> | <-------------------------------------------------------|
+ * |                         |                            |                            |
+ * |                onScroll, getTweetDetail...           |                            |
+ * | <----------------------------------------------------|                            |
+ * |                         |                            |                            |
+ * |                                  onScroll                                         |
+ * |<----------------------------------------------------------------------------------|
  */
 public class TweetDetailViewPagerFragment extends Fragment
         implements TweetDetailContract.ICmnView, TweetDetailContract.IThumbupView, TweetDetailContract.IAgencyView {
@@ -53,7 +52,7 @@ public class TweetDetailViewPagerFragment extends Fragment
     private TweetDetailContract.IThumbupView mThumbupViewImp;
     private TweetDetailContract.Operator mOperator;
 
-    public static TweetDetailViewPagerFragment instantiate(TweetDetailContract.Operator operator){
+    public static TweetDetailViewPagerFragment instantiate(TweetDetailContract.Operator operator) {
         return new TweetDetailViewPagerFragment();
     }
 
@@ -76,7 +75,7 @@ public class TweetDetailViewPagerFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (mAdapter == null){
+        if (mAdapter == null) {
             final ListTweetLikeUsersFragment mCmnFrag;
             mThumbupViewImp = mCmnFrag = ListTweetLikeUsersFragment.instantiate(mOperator, this);
 
@@ -86,7 +85,7 @@ public class TweetDetailViewPagerFragment extends Fragment
             mViewPager.setAdapter(mAdapter = new FragmentStatePagerAdapter(getChildFragmentManager()) {
                 @Override
                 public Fragment getItem(int position) {
-                    switch (position){
+                    switch (position) {
                         case 0:
                             return mCmnFrag;
 
@@ -104,7 +103,7 @@ public class TweetDetailViewPagerFragment extends Fragment
 
                 @Override
                 public CharSequence getPageTitle(int position) {
-                    switch (position){
+                    switch (position) {
                         case 0:
                             return String.format("赞(%s)", mOperator.getTweetDetail().getLikeCount());
                         case 1:
@@ -115,7 +114,7 @@ public class TweetDetailViewPagerFragment extends Fragment
             });
             mTabLayout.setupWithViewPager(mViewPager);
             mViewPager.setCurrentItem(1);
-        }else{
+        } else {
             mViewPager.setAdapter(mAdapter);
         }
     }
@@ -125,7 +124,8 @@ public class TweetDetailViewPagerFragment extends Fragment
         mOperator.getTweetDetail().setCommentCount(mOperator.getTweetDetail().getCommentCount() + 1); // Bean的事,真不是我想这样干
         if (mCmnViewImp != null) mCmnViewImp.onCommentSuccess(comment);
         TabLayout.Tab tab = mTabLayout.getTabAt(1);
-        if (tab != null) tab.setText(String.format("评论(%s)", mOperator.getTweetDetail().getCommentCount()));
+        if (tab != null)
+            tab.setText(String.format("评论(%s)", mOperator.getTweetDetail().getCommentCount()));
     }
 
     @Override
@@ -133,7 +133,8 @@ public class TweetDetailViewPagerFragment extends Fragment
         mOperator.getTweetDetail().setLikeCount(mOperator.getTweetDetail().getLikeCount() + (isUp ? 1 : -1));
         if (mThumbupViewImp != null) mThumbupViewImp.onLikeSuccess(isUp, user);
         TabLayout.Tab tab = mTabLayout.getTabAt(0);
-        if (tab != null) tab.setText(String.format("赞(%s)", mOperator.getTweetDetail().getLikeCount()));
+        if (tab != null)
+            tab.setText(String.format("赞(%s)", mOperator.getTweetDetail().getLikeCount()));
     }
 
     @Override
@@ -150,15 +151,15 @@ public class TweetDetailViewPagerFragment extends Fragment
         if (tab != null) tab.setText(String.format("评论(%s)", count));
     }
 
-    public TweetDetailContract.ICmnView getCommentViewHandler(){
+    public TweetDetailContract.ICmnView getCommentViewHandler() {
         return this;
     }
 
-    public TweetDetailContract.IThumbupView getThumbupViewHandler(){
+    public TweetDetailContract.IThumbupView getThumbupViewHandler() {
         return this;
     }
 
-    public TweetDetailContract.IAgencyView getAgencyViewHandler(){
+    public TweetDetailContract.IAgencyView getAgencyViewHandler() {
         return this;
     }
 }

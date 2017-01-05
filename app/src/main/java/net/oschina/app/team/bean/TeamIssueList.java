@@ -1,20 +1,19 @@
 package net.oschina.app.team.bean;
 
-import java.util.ArrayList;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 
+import java.util.ArrayList;
+
 /**
  * 团队任务列表实体类
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月14日 下午5:09:11
- * 
  */
-@SuppressWarnings({ "serial" })
+@SuppressWarnings({"serial"})
 @XStreamAlias("oschina")
 public class TeamIssueList extends Entity implements ListEntity<TeamIssue> {
 
@@ -28,27 +27,27 @@ public class TeamIssueList extends Entity implements ListEntity<TeamIssue> {
     private ArrayList<TeamIssue> list = new ArrayList<TeamIssue>();
 
     public int getPageSize() {
-	return pageSize;
+        return pageSize;
     }
 
     public void setPageSize(int pageSize) {
-	this.pageSize = pageSize;
+        this.pageSize = pageSize;
     }
 
     public int getTotalCount() {
-	return totalCount;
+        return totalCount;
     }
 
     public void setTotalCount(int totalCount) {
-	this.totalCount = totalCount;
+        this.totalCount = totalCount;
     }
 
     @Override
     public ArrayList<TeamIssue> getList() {
-	return list;
+        return list;
     }
 
     public void setList(ArrayList<TeamIssue> list) {
-	this.list = list;
+        this.list = list;
     }
 }

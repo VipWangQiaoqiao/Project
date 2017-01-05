@@ -2,9 +2,8 @@ package com.fourmob.datetimepicker.date;
 
 /**
  * 摘取自https://github.com/flavienlaurent/datetimepicker
- * 
+ *
  * @author kymjs
- * 
  */
 abstract interface DatePickerController {
     public abstract int getFirstDayOfWeek();

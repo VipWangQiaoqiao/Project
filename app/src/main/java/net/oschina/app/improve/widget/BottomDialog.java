@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import net.oschina.app.util.TDevice;
-
 /**
  * Created by thanatosx
  * on 2016/12/23.

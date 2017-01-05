@@ -14,9 +14,8 @@ import net.oschina.app.R;
 
 /**
  * 分享界面dialog
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 public class ImageMenuDialog extends Dialog implements
         android.view.View.OnClickListener {
@@ -28,7 +27,7 @@ public class ImageMenuDialog extends Dialog implements
     private OnMenuClickListener mListener;
 
     private ImageMenuDialog(Context context, boolean flag,
-            OnCancelListener listener) {
+                            OnCancelListener listener) {
         super(context, flag, listener);
     }
 

@@ -91,7 +91,7 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
         @Bind(R.id.tv_content)
         public TweetTextView tvContent;
         @Bind(R.id.tv_answer_no_more)
-       public TextView tvNoMore;
+        public TextView tvNoMore;
 
         public TweetCommentHolderView(View view) {
             super(view);

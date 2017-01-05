@@ -1,8 +1,5 @@
 package com.fourmob.datetimepicker.date;
 
-import java.util.Calendar;
-import java.util.HashMap;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +7,13 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 
+import java.util.Calendar;
+import java.util.HashMap;
+
 /**
  * 摘取自https://github.com/flavienlaurent/datetimepicker
- * 
+ *
  * @author kymjs
- * 
  */
 public class SimpleMonthAdapter extends BaseAdapter implements
         SimpleMonthView.OnDayClickListener {
@@ -28,7 +27,7 @@ public class SimpleMonthAdapter extends BaseAdapter implements
     private CalendarDay mSelectedDay;
 
     public SimpleMonthAdapter(Context context,
-            DatePickerController datePickerController) {
+                              DatePickerController datePickerController) {
         mContext = context;
         mController = datePickerController;
         init();
@@ -102,7 +101,7 @@ public class SimpleMonthAdapter extends BaseAdapter implements
 
     @Override
     public void onDayClick(SimpleMonthView simpleMonthView,
-            CalendarDay calendarDay) {
+                           CalendarDay calendarDay) {
         if (calendarDay != null) {
             onDayTapped(calendarDay);
         }

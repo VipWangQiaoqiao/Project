@@ -1,7 +1,5 @@
 package com.fourmob.datetimepicker.date;
 
-import java.util.Calendar;
-
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.view.View;
@@ -11,11 +9,12 @@ import com.nineoldandroids.animation.Keyframe;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.PropertyValuesHolder;
 
+import java.util.Calendar;
+
 /**
  * 摘取自https://github.com/flavienlaurent/datetimepicker
- * 
+ *
  * @author kymjs
- * 
  */
 public class Utils {
 
@@ -23,28 +22,28 @@ public class Utils {
 
     public static int getDaysInMonth(int month, int year) {
         switch (month) {
-        case Calendar.JANUARY:
-        case Calendar.MARCH:
-        case Calendar.MAY:
-        case Calendar.JULY:
-        case Calendar.AUGUST:
-        case Calendar.OCTOBER:
-        case Calendar.DECEMBER:
-            return 31;
-        case Calendar.APRIL:
-        case Calendar.JUNE:
-        case Calendar.SEPTEMBER:
-        case Calendar.NOVEMBER:
-            return 30;
-        case Calendar.FEBRUARY:
-            return (year % 4 == 0) ? 29 : 28;
-        default:
-            throw new IllegalArgumentException("Invalid Month");
+            case Calendar.JANUARY:
+            case Calendar.MARCH:
+            case Calendar.MAY:
+            case Calendar.JULY:
+            case Calendar.AUGUST:
+            case Calendar.OCTOBER:
+            case Calendar.DECEMBER:
+                return 31;
+            case Calendar.APRIL:
+            case Calendar.JUNE:
+            case Calendar.SEPTEMBER:
+            case Calendar.NOVEMBER:
+                return 30;
+            case Calendar.FEBRUARY:
+                return (year % 4 == 0) ? 29 : 28;
+            default:
+                throw new IllegalArgumentException("Invalid Month");
         }
     }
 
     public static ObjectAnimator getPulseAnimator(View labelToAnimate,
-            float decreaseRatio, float increaseRatio) {
+                                                  float decreaseRatio, float increaseRatio) {
         Keyframe k0 = Keyframe.ofFloat(0f, 1f);
         Keyframe k1 = Keyframe.ofFloat(0.275f, decreaseRatio);
         Keyframe k2 = Keyframe.ofFloat(0.69f, increaseRatio);
@@ -68,9 +67,8 @@ public class Utils {
     /**
      * Try to speak the specified text, for accessibility. Only available on JB
      * or later.
-     * 
-     * @param text
-     *            Text to announce.
+     *
+     * @param text Text to announce.
      */
     @SuppressLint("NewApi")
     public static void tryAccessibilityAnnounce(View view, CharSequence text) {

@@ -32,7 +32,6 @@ import java.io.File;
 import java.util.List;
 
 /**
- *
  * @updator thanatosx
  */
 public class TDevice {
@@ -236,7 +235,7 @@ public class TDevice {
         try {
             context.startActivity(intent);
             return true;
-        }catch (ActivityNotFoundException e){
+        } catch (ActivityNotFoundException e) {
             return false;
         }
     }

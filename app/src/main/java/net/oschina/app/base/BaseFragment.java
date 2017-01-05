@@ -18,7 +18,6 @@ import net.oschina.app.ui.dialog.DialogControl;
  *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年9月25日 上午11:18:46
- *
  */
 public class BaseFragment extends Fragment implements
         android.view.View.OnClickListener, BaseFragmentInterface {
@@ -42,7 +41,7 @@ public class BaseFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         this.mInflater = inflater;
         View view = super.onCreateView(inflater, container, savedInstanceState);
         return view;

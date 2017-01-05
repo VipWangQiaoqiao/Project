@@ -1,6 +1,5 @@
 package com.fourmob.datetimepicker.date;
 
-import net.oschina.app.R;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -8,11 +7,12 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import net.oschina.app.R;
+
 /**
  * 摘取自https://github.com/flavienlaurent/datetimepicker
- * 
+ *
  * @author kymjs
- * 
  */
 public class TextViewWithCircularIndicator extends TextView {
 
@@ -22,7 +22,7 @@ public class TextViewWithCircularIndicator extends TextView {
     private final String mItemIsSelectedText;
 
     public TextViewWithCircularIndicator(Context context,
-            AttributeSet attributeSet) {
+                                         AttributeSet attributeSet) {
         super(context, attributeSet);
 
         Resources res = context.getResources();

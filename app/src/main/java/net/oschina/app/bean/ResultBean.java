@@ -7,7 +7,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2014年10月14日 下午2:59:27
- *
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
@@ -64,7 +63,7 @@ public class ResultBean extends Base {
     public MessageDetail getMessage() {
         //现在pub_message接口返回的是comment对象。所以要转成message
         message = new MessageDetail();
-        if(comment!=null) {
+        if (comment != null) {
             message.setId(comment.getId());
             message.setPortrait(comment.getPortrait());
             message.setAuthor(comment.getAuthor());

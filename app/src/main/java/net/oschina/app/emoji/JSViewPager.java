@@ -22,9 +22,8 @@ import android.view.MotionEvent;
 
 /**
  * 重写ViewPager触屏操作，修正了系统ViewPager与Activity触摸屏事件冲突
- * 
+ *
  * @author kymjs (http://www.kymjs.com)
- * 
  */
 public class JSViewPager extends ViewPager {
 

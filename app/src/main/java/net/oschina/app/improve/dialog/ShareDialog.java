@@ -156,7 +156,7 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
 
     public ShareDialog title(String title) {
         mShare.setTitle(title);
-        if(mAboutShare == null)
+        if (mAboutShare == null)
             mAboutShare = new About.Share();
         mAboutShare.title = title;
         return this;
@@ -201,7 +201,7 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
                     try {
                         Bitmap thumbBitmap = Glide.with(getContext())
                                 .load(imageUrl)
-                                .asBitmap().into(100,100).get();
+                                .asBitmap().into(100, 100).get();
                         //为微博和微信加入分享的详情icon
 
                         mShare.setThumbBitmap(thumbBitmap);

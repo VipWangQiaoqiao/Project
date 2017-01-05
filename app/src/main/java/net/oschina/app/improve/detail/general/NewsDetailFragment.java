@@ -53,7 +53,7 @@ public class NewsDetailFragment extends DetailFragment {
         super.showGetDetailSuccess(bean);
         mTextTitle.setText(bean.getTitle());
         SubBean.Statistics statistics = bean.getStatistics();
-        if(statistics != null){
+        if (statistics != null) {
             mTextComCount.setText(String.valueOf(bean.getStatistics().getComment()));
             mTextViewCount.setText(String.valueOf(bean.getStatistics().getView()));
         }
