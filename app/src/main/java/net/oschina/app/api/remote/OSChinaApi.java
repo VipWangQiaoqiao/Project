@@ -71,6 +71,9 @@ public class OSChinaApi {
 
     public static final int REQUEST_COUNT = 0x50;//请求分页大小
 
+    public static final int TYPE_USER_FLOWS = 1;//你关注的人
+    public static final int TYPE_USER_FANS = 2;//关注你的人
+
 
     /* =============================================================================================
      * =============================================================================================
@@ -870,11 +873,7 @@ public class OSChinaApi {
     /**
      * 发布评论
      */
-    public static void pubComment(long sourceId,
-                                  int type,
-                                  String content,
-                                  long referId,
-                                  long replyId,
+    public static void pubComment(long sourceId, int type, String content, long referId, long replyId,
                                   long reAuthorId,
                                   TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
@@ -963,6 +962,20 @@ public class OSChinaApi {
             commentAuthorId = 0;
         }
         publishComment(sid, 0, commentId, commentAuthorId, 5, comment, handler);
+    }
+
+    /**
+     * 发布软件评论
+     *
+     * @param sid             sourceId
+     * @param commentId       commentId
+     * @param commentAuthorId commentAuthorId
+     * @param comment         comment
+     * @param handler         handler
+     */
+    public static void pubSoftComment(long sid, long commentId, long commentAuthorId
+            , String comment, TextHttpResponseHandler handler) {
+        publishComment(sid, 0, commentId, commentAuthorId, 1, comment, handler);
     }
 
     /**
@@ -1100,7 +1113,6 @@ public class OSChinaApi {
         params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/tweet_likes", params, handler);
     }
-
 
     /**
      * 发表动弹评论列表
@@ -1318,11 +1330,8 @@ public class OSChinaApi {
 
     }
 
-    public static final int TYPE_USER_FOLOWS = 1;
-    public static final int TYPE_USER_FANS = 2;
-
     /**
-     * @param type      {@link #TYPE_USER_FOLOWS ,#TYPE_USER_FANS}
+     * @param type      {@link #TYPE_USER_FLOWS ,#TYPE_USER_FANS}
      * @param userId    userId
      * @param pageToken pageToken
      * @param handler   handler
@@ -1633,11 +1642,7 @@ public class OSChinaApi {
      * @param memo     其他原因的描述字段
      * @param handler
      */
-    public static void report(long sourceId,
-                              int type,
-                              String href,
-                              int reason,
-                              String memo,
+    public static void report(long sourceId, int type, String href, int reason, String memo,
                               TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
@@ -1662,6 +1667,14 @@ public class OSChinaApi {
         ApiHttpClient.post("action/apiv2/event_attendee_list", params, handler);
     }
 
+    /**
+     * 拉取用户好友（联系人）
+     *
+     * @param userId       userId
+     * @param pageToken    pageToken
+     * @param requestCount requestCount
+     * @param handler      handler
+     */
     public static void getUserFriends(long userId, String pageToken, int requestCount, TextHttpResponseHandler handler) {
 
         if (userId <= 0) return;
@@ -1672,4 +1685,5 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/user_follows", params, handler);
 
     }
+
 }
