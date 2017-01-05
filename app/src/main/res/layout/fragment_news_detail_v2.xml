@@ -38,9 +38,13 @@
                     android:textSize="18sp"
                     tools:text="Webpack从零开始" />
 
-                <include
-                    android:id="@+id/lay_info_view_comment"
-                    layout="@layout/item_info_view_comment" />
+                <TextView
+                    android:id="@+id/tv_pub_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#6a6a6a"
+                    android:textSize="12sp"
+                    tools:text="2016-06-24 20:12" />
 
             </LinearLayout>
 
@@ -51,8 +55,7 @@
                 android:background="@color/white"
                 android:paddingBottom="@dimen/lay_12"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="@dimen/lay_12">
+                android:paddingRight="16dp">
 
                 <net.oschina.app.improve.widget.OWebView
                     android:id="@+id/webView"

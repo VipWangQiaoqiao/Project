@@ -1,4 +1,4 @@
-package net.oschina.app.improve.detail.activities;
+package net.oschina.app.improve.main;
 
 import android.content.Intent;
 import android.os.Bundle;
