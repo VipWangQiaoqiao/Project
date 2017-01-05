@@ -97,8 +97,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     private UserSearchFriendsAdapter mSearchAdapter;
 
-    private UserFriend mLocalSelectFriend;
-
     public static void show(Activity activity) {
         Intent intent = new Intent(activity, UserSelectFriendsActivity.class);
         activity.startActivityForResult(intent, TweetPublishFragment.SELECT_FRIENDS_REQUEST_CODE);
@@ -252,7 +250,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             cacheIcons.remove(index);
         } else {
             cacheIcons.add(userFriend);
-            mLocalSelectFriend = userFriend;
         }
 
         if (cacheIcons.size() > 0) {
@@ -288,7 +285,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
                     //更新icons
                     updateSelectIcon(friend);
-
                 }
             });
             mSelectContainer.addView(ivIcon);
