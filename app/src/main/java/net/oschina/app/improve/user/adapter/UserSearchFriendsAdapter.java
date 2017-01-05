@@ -172,6 +172,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
     public void clear() {
         List<UserFriend> items = this.mItems;
         items.clear();
+        notifyDataSetChanged();
     }
 
     public void setOnOnFriendSelector(OnFriendSelector OnFriendSelector) {
@@ -270,7 +271,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         void onBindView(UserFriend item, int position) {
             mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_net_label));
             if (mStatus == 0x01) {
-                requestData(mTvSearch);
+                //requestData(mTvSearch);
             }
         }
 
@@ -338,16 +339,19 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
                         List<User> users = pageBean.getItems();
 
-                        //为网络请求的数据加入label
-                        UserFriend netFriend = new UserFriend();
-
-                        netFriend.setName("");
-                        netFriend.setShowViewType(INDEX_TYPE);
-                        netFriend.setShowLabel(v.getResources().getString(R.string.net_search_label));
-
                         UserSearchFriendsAdapter searchAdapter = mUserSearchFriendsAdapter;
 
-                        searchAdapter.addItem(searchAdapter.getItemCount() - 1, netFriend);
+                        //未变化搜索内容
+                        if (mStatus == 0x00) {
+                            //为网络请求的数据加入label
+                            UserFriend netFriend = new UserFriend();
+
+                            netFriend.setName("");
+                            netFriend.setShowViewType(INDEX_TYPE);
+                            netFriend.setShowLabel(v.getResources().getString(R.string.net_search_label));
+
+                            searchAdapter.addItem(searchAdapter.getItemCount() - 1, netFriend);
+                        }
 
                         mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_load_more_hint));
 
