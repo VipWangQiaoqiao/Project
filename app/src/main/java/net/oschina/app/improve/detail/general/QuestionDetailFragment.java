@@ -51,7 +51,7 @@ public class QuestionDetailFragment extends DetailFragment {
         super.showGetDetailSuccess(bean);
         mTextTitle.setText(bean.getTitle());
         mTextAuthor.setText(bean.getAuthor().getName());
-        mTextPubDate.setText(StringUtils.friendly_time3(bean.getPubDate()));
+        mTextPubDate.setText(bean.getPubDate());
         mTextCommentCount.setText(String.valueOf(bean.getStatistics().getComment()));
         mTextViewCount.setText(String.valueOf(bean.getStatistics().getView()));
         for (String tag : bean.getTags()) {

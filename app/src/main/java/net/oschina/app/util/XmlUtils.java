@@ -1,11 +1,5 @@
 package net.oschina.app.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import net.oschina.app.AppException;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.basic.DoubleConverter;
 import com.thoughtworks.xstream.converters.basic.FloatConverter;
@@ -13,12 +7,17 @@ import com.thoughtworks.xstream.converters.basic.IntConverter;
 import com.thoughtworks.xstream.converters.basic.LongConverter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
+import net.oschina.app.AppException;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * xml解析工具类
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2014年9月27日 下午2:04:19
- * 
  */
 
 public class XmlUtils {
@@ -27,7 +26,7 @@ public class XmlUtils {
 
     /**
      * 将一个xml流转换为bean实体类
-     * 
+     *
      * @param type
      * @param is
      * @return
@@ -59,7 +58,7 @@ public class XmlUtils {
         }
         return obj;
     }
-    
+
     public static <T> T toBean(Class<T> type, byte[] bytes) {
         if (bytes == null) return null;
         return toBean(type, new ByteArrayInputStream(bytes));

@@ -24,7 +24,6 @@ import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.search.fragments.SearchArticleFragment;
 import net.oschina.app.improve.search.fragments.SearchUserFragment;
-import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

@@ -21,13 +21,11 @@ import cz.msebera.android.httpclient.Header;
 
 /**
  * 需要加入header的BaseListFragment
- * 
- * @desc 应用场景：如动弹详情、团队任务详情这些， 即是头部显示详情，然后下面显示评论列表的
- * 
- *       BeseHaveHeaderListFragment.java
- * 
+ *
  * @author 火蚁(http://my.oschina.net/u/253900)
- * 
+ * @desc 应用场景：如动弹详情、团队任务详情这些， 即是头部显示详情，然后下面显示评论列表的
+ * <p>
+ * BeseHaveHeaderListFragment.java
  * @data 2015-1-27 下午3:02:42
  */
 public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends Serializable>
@@ -63,7 +61,7 @@ public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends S
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+                              Throwable arg3) {
             readDetailCacheData(getDetailCacheKey());
         }
     };

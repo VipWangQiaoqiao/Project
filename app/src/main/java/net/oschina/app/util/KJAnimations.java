@@ -21,7 +21,7 @@ public class KJAnimations {
      * 旋转 Rotate
      */
     public static Animation getRotateAnimation(float fromDegrees,
-            float toDegrees, long durationMillis) {
+                                               float toDegrees, long durationMillis) {
         RotateAnimation rotate = new RotateAnimation(fromDegrees, toDegrees,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                 0.5f);
@@ -34,7 +34,7 @@ public class KJAnimations {
      * 透明度 Alpha
      */
     public static Animation getAlphaAnimation(float fromAlpha, float toAlpha,
-            long durationMillis) {
+                                              long durationMillis) {
         AlphaAnimation alpha = new AlphaAnimation(fromAlpha, toAlpha);
         alpha.setDuration(durationMillis);
         alpha.setFillAfter(true);
@@ -56,8 +56,8 @@ public class KJAnimations {
      * 位移 Translate
      */
     public static Animation getTranslateAnimation(float fromXDelta,
-            float toXDelta, float fromYDelta, float toYDelta,
-            long durationMillis) {
+                                                  float toXDelta, float fromYDelta, float toYDelta,
+                                                  long durationMillis) {
         TranslateAnimation translate = new TranslateAnimation(fromXDelta,
                 toXDelta, fromYDelta, toYDelta);
         translate.setDuration(durationMillis);
@@ -93,18 +93,14 @@ public class KJAnimations {
 
     /**
      * 打开的动画
-     * 
-     * @param relativeLayout
-     *            子菜单容器
-     * @param background
-     *            子菜单背景
-     * @param menu
-     *            菜单按钮
-     * @param durationMillis
-     *            动画时间
+     *
+     * @param relativeLayout 子菜单容器
+     * @param background     子菜单背景
+     * @param menu           菜单按钮
+     * @param durationMillis 动画时间
      */
     public static void openAnimation(RelativeLayout relativeLayout,
-            ImageView menu, long durationMillis) {
+                                     ImageView menu, long durationMillis) {
         relativeLayout.setVisibility(View.VISIBLE);
         for (int i = 1; i < relativeLayout.getChildCount(); i++) {
             ImageView imageView = null;
@@ -138,18 +134,14 @@ public class KJAnimations {
 
     /**
      * 关闭的动画
-     * 
-     * @param relativeLayout
-     *            子菜单容器
-     * @param background
-     *            子菜单背景
-     * @param menu
-     *            菜单按钮
-     * @param durationMillis
-     *            动画时间
+     *
+     * @param relativeLayout 子菜单容器
+     * @param background     子菜单背景
+     * @param menu           菜单按钮
+     * @param durationMillis 动画时间
      */
     public static void closeAnimation(final RelativeLayout relativeLayout,
-            final ImageView menu, long durationMillis) {
+                                      final ImageView menu, long durationMillis) {
         for (int i = 1; i < relativeLayout.getChildCount(); i++) {
             ImageView imageView = null;
             if (relativeLayout.getChildAt(i) instanceof ImageView) {
@@ -162,7 +154,7 @@ public class KJAnimations {
             set.addAnimation(getRotateAnimation(0, -360, durationMillis));
             set.addAnimation(getAlphaAnimation(1.0f, 0.5f, durationMillis));
             set.addAnimation(getTranslateAnimation(0, menu.getLeft()
-                    - imageView.getLeft(), 0,
+                            - imageView.getLeft(), 0,
                     menu.getTop() - imageView.getTop() + 30, durationMillis));// 加30是由于图片上部有一些透明高度
             set.setFillAfter(true);
             set.setDuration(durationMillis);
@@ -171,10 +163,12 @@ public class KJAnimations {
             set.setInterpolator(new AnticipateInterpolator(1f));
             set.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                public void onAnimationStart(Animation arg0) {}
+                public void onAnimationStart(Animation arg0) {
+                }
 
                 @Override
-                public void onAnimationRepeat(Animation arg0) {}
+                public void onAnimationRepeat(Animation arg0) {
+                }
 
                 @Override
                 public void onAnimationEnd(Animation arg0) {

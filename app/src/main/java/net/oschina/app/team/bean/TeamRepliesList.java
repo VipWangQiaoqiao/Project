@@ -1,17 +1,16 @@
 package net.oschina.app.team.bean;
 
-import java.util.List;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 
+import java.util.List;
+
 /**
  * Replies.java
- * 
- * @author 火蚁(http://my.oschina.net/u/253900)
  *
+ * @author 火蚁(http://my.oschina.net/u/253900)
  * @data 2015-1-30 下午4:01:42
  */
 @SuppressWarnings("serial")
@@ -20,16 +19,16 @@ public class TeamRepliesList extends Entity implements ListEntity<TeamReply> {
 
     @XStreamAlias("pagesize")
     private int pagesize;
-    
+
     @XStreamAlias("totalCount")
     private int totalCount;
-    
+
     @XStreamAlias("replies")
     private List<TeamReply> list;
-    
+
     @Override
     public List<TeamReply> getList() {
-	return list;
+        return list;
     }
 
     public int getPagesize() {
@@ -51,7 +50,7 @@ public class TeamRepliesList extends Entity implements ListEntity<TeamReply> {
     public void setList(List<TeamReply> list) {
         this.list = list;
     }
-    
+
 
 }
 

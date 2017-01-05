@@ -1,15 +1,16 @@
 package net.oschina.app.team.adapter;
 
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.widget.DiaryPageContentView;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.widget.DiaryPageContentView;
+
 /**
  * 周报ViewPager适配器
- * 
+ *
  * @author kymjs (http://www.kymjs.com)
  */
 public class TeamDiaryPagerAdapter extends PagerAdapter {

@@ -1,12 +1,5 @@
 package com.fourmob.datetimepicker.date;
 
-import java.security.InvalidParameterException;
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Locale;
-
-import net.oschina.app.R;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -19,11 +12,18 @@ import android.text.format.Time;
 import android.view.MotionEvent;
 import android.view.View;
 
+import net.oschina.app.R;
+
+import java.security.InvalidParameterException;
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+
 /**
  * 摘取自https://github.com/flavienlaurent/datetimepicker
- * 
+ *
  * @author kymjs
- * 
  */
 public class SimpleMonthView extends View {
 
@@ -354,6 +354,6 @@ public class SimpleMonthView extends View {
 
     public static abstract interface OnDayClickListener {
         public abstract void onDayClick(SimpleMonthView simpleMonthView,
-                SimpleMonthAdapter.CalendarDay calendarDay);
+                                        SimpleMonthAdapter.CalendarDay calendarDay);
     }
 }

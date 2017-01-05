@@ -20,16 +20,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 /**
  * 表情页适配器（FragmentPagerAdapter的好处是fragment常驻内存，对于要求效率而页卡很少的表情控件最合适）
- * 
+ *
  * @author kymjs (http://www.kymjs.com)
- * 
  */
 public class EmojiPagerAdapter extends FragmentPagerAdapter {
 
     private OnEmojiClickListener listener;
 
     public EmojiPagerAdapter(FragmentManager fm, int tabCount,
-            OnEmojiClickListener l) {
+                             OnEmojiClickListener l) {
         super(fm);
         KJEmojiFragment.EMOJI_TAB_CONTENT = tabCount;
         listener = l;

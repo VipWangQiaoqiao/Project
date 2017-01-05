@@ -1,14 +1,13 @@
 package net.oschina.app.bean;
 
-import java.io.Serializable;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import java.io.Serializable;
 
 /**
  * 便签数据bean（有重载equals()方法）
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 @XStreamAlias("sticky")
 public class NotebookData extends Entity implements Serializable,
@@ -131,24 +130,24 @@ public class NotebookData extends Entity implements Serializable,
 
     public void setColor(int color) {
         switch (color) {
-        case 0:
-            colorText = "green";
-            break;
-        case 1:
-            colorText = "yellow";
-            break;
-        case 2:
-            colorText = "red";
-            break;
-        case 3:
-            colorText = "blue";
-            break;
-        case 4:
-            colorText = "purple";
-            break;
-        default:
-            this.color = color;
-            break;
+            case 0:
+                colorText = "green";
+                break;
+            case 1:
+                colorText = "yellow";
+                break;
+            case 2:
+                colorText = "red";
+                break;
+            case 3:
+                colorText = "blue";
+                break;
+            case 4:
+                colorText = "purple";
+                break;
+            default:
+                this.color = color;
+                break;
         }
     }
 

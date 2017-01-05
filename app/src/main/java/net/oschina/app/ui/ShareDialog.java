@@ -21,7 +21,7 @@ import net.oschina.app.util.TDevice;
  * @author kymjs
  */
 public class ShareDialog extends CommonDialog implements
-                                              android.view.View.OnClickListener {
+        android.view.View.OnClickListener {
 
     private Context context;
     private String title;

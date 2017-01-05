@@ -30,9 +30,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
-
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
+    public static final int SEARCH_TYPE = 0x03;
+    private static final int USER_TYPE_UN_LINE = 0x04;
 
     private LayoutInflater mInflater;
     private List<UserFriend> mItems = new ArrayList<>();
@@ -46,52 +47,52 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
         mInflater = LayoutInflater.from(context);
     }
 
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = this.mInflater;
-        switch (viewType) {
-            case INDEX_TYPE:
-                return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
-            case USER_TYPE:
-                UserInfoViewHolder userInfoViewHolder = new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
-
-                userInfoViewHolder.itemView.setTag(userInfoViewHolder);
-                userInfoViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mOnFriendSelector == null) return;
-                        List<UserFriend> items = mItems;
-                        UserInfoViewHolder holder = (UserInfoViewHolder) v.getTag();
-                        int position = holder.getAdapterPosition();
-                        UserFriend userFriend = items.get(position);
-                        if (selectCount <= MAX_SELECTED_SIZE) {
-                            if (userFriend.isSelected()) {
-                                if (selectCount != 0) {
-                                    items.get(position).setSelected(false);
-                                    items.get(position).setSelectPosition(position);
-                                    selectCount--;
-                                    notifyItemChanged(position);
-                                    mOnFriendSelector.select(v, userFriend, position);
-                                }
+        if (viewType == INDEX_TYPE) {
+            return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
+        } else {
+            UserInfoViewHolder userInfoViewHolder = new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
+            userInfoViewHolder.itemView.setTag(userInfoViewHolder);
+            userInfoViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnFriendSelector == null) return;
+                    List<UserFriend> items = mItems;
+                    UserInfoViewHolder holder = (UserInfoViewHolder) v.getTag();
+                    int position = holder.getAdapterPosition();
+                    UserFriend userFriend = items.get(position);
+                    if (selectCount <= MAX_SELECTED_SIZE) {
+                        if (userFriend.isSelected()) {
+                            if (selectCount != 0) {
+                                items.get(position).setSelected(false);
+                                items.get(position).setSelectPosition(position);
+                                selectCount--;
+                                notifyItemChanged(position);
+                                mOnFriendSelector.select(v, userFriend, position);
+                            }
+                        } else {
+                            if (selectCount == MAX_SELECTED_SIZE) {
+                                mOnFriendSelector.selectFull(selectCount);
                             } else {
-                                if (selectCount == MAX_SELECTED_SIZE) {
-                                    mOnFriendSelector.selectFull(selectCount);
-                                } else {
-                                    items.get(position).setSelected(true);
-                                    items.get(position).setSelectPosition(position);
-                                    selectCount++;
-                                    notifyItemChanged(position);
-                                    mOnFriendSelector.select(v, userFriend, position);
-                                }
+                                items.get(position).setSelected(true);
+                                items.get(position).setSelectPosition(position);
+                                selectCount++;
+                                notifyItemChanged(position);
+                                mOnFriendSelector.select(v, userFriend, position);
                             }
                         }
                     }
-                });
-                return userInfoViewHolder;
-            default:
-                return null;
-        }
+                }
+            });
 
+            if (viewType == USER_TYPE_UN_LINE)
+                userInfoViewHolder.mLine.setVisibility(View.GONE);
+            return userInfoViewHolder;
+
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -110,8 +111,20 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        List<UserFriend> item = this.mItems;
-        return item.get(position).getShowViewType();
+        UserFriend item = this.mItems.get(position);
+        switch (item.getShowViewType()) {
+            case INDEX_TYPE:
+                return INDEX_TYPE;
+            default: {
+                int maxPos = getItemCount() - 1;
+                if ((position == maxPos)
+                        || (position < maxPos && mItems.get(position + 1).getShowViewType() == INDEX_TYPE)) {
+                    return USER_TYPE_UN_LINE;
+                } else {
+                    return USER_TYPE;
+                }
+            }
+        }
     }
 
     @Override

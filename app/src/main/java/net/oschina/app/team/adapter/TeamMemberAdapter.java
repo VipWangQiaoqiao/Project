@@ -1,13 +1,5 @@
 package net.oschina.app.team.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.R;
-import net.oschina.app.team.bean.Team;
-import net.oschina.app.team.bean.TeamMember;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.AvatarView;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
@@ -17,11 +9,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.oschina.app.R;
+import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamMember;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.AvatarView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 团队成员GridView适配器
- * 
+ *
  * @author kymjs (kymjs123@gmail.com)
- * 
  */
 public class TeamMemberAdapter extends BaseAdapter {
     private final Context cxt;

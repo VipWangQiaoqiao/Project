@@ -56,12 +56,12 @@ public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
         }
 
         if (!TextUtils.isEmpty(info.title)) {
-        // 加入tab title
-        View v = LayoutInflater.from(mContext).inflate(
-                R.layout.base_viewpage_fragment_tab_item, null, false);
-        TextView title = (TextView) v.findViewById(R.id.tab_title);
-        title.setText(info.title);
-        mPagerStrip.addTab(v);
+            // 加入tab title
+            View v = LayoutInflater.from(mContext).inflate(
+                    R.layout.base_viewpage_fragment_tab_item, null, false);
+            TextView title = (TextView) v.findViewById(R.id.tab_title);
+            title.setText(info.title);
+            mPagerStrip.addTab(v);
         }
 
         mTabs.add(info);

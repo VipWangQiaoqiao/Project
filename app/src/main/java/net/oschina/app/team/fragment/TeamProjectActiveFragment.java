@@ -1,8 +1,9 @@
 package net.oschina.app.team.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.List;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaTeamApi;
@@ -17,16 +18,15 @@ import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 团队动态列表 TeamProjectFragment.java
- * 
+ *
  * @author 火蚁(http://my.oschina.net/u/253900)
- * 
  * @data 2015-2-28 下午4:08:58
  */
 public class TeamProjectActiveFragment extends BaseListFragment<TeamActive> {
@@ -109,7 +109,7 @@ public class TeamProjectActiveFragment extends BaseListFragment<TeamActive> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         // TODO Auto-generated method stub
         TeamActive active = mAdapter.getItem(position);
         if (active != null) {

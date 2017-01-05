@@ -16,10 +16,10 @@ import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.bean.comment.Reply;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
-import net.oschina.app.util.TDevice;
 import net.oschina.common.widget.drawable.shape.BorderShape;
 
 /**

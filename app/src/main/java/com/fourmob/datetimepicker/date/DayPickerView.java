@@ -11,9 +11,8 @@ import android.widget.ListView;
 
 /**
  * 摘取自https://github.com/flavienlaurent/datetimepicker
- * 
+ *
  * @author kymjs
- * 
  */
 public class DayPickerView extends ListView implements
         AbsListView.OnScrollListener, DatePickerDialog.OnDateChangedListener {
@@ -46,7 +45,7 @@ public class DayPickerView extends ListView implements
     protected float mFriction = 1.0F;
 
     public DayPickerView(Context context,
-            DatePickerController datePickerController) {
+                         DatePickerController datePickerController) {
         super(context);
         mController = datePickerController;
         mController.registerOnDateChangedListener(this);
@@ -83,7 +82,7 @@ public class DayPickerView extends ListView implements
     }
 
     public boolean goTo(SimpleMonthAdapter.CalendarDay day, boolean animate,
-            boolean setSelected, boolean forceScroll) {
+                        boolean setSelected, boolean forceScroll) {
         // Set the selected day
         if (setSelected) {
             mSelectedDay.set(day);
@@ -162,7 +161,7 @@ public class DayPickerView extends ListView implements
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
-            int visibleItemCount, int totalItemCount) {
+                         int visibleItemCount, int totalItemCount) {
         SimpleMonthView child = (SimpleMonthView) view.getChildAt(0);
         if (child == null) {
             return;
@@ -229,11 +228,9 @@ public class DayPickerView extends ListView implements
         /**
          * Sets up the runnable with a short delay in case the scroll state
          * immediately changes again.
-         * 
-         * @param view
-         *            The list view that changed state
-         * @param scrollState
-         *            The new state it changed to
+         *
+         * @param view        The list view that changed state
+         * @param scrollState The new state it changed to
          */
         public void doScrollStateChange(AbsListView view, int scrollState) {
             mHandler.removeCallbacks(this);

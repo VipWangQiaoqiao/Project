@@ -1,8 +1,8 @@
 package net.oschina.app.team.bean;
 
-import net.oschina.app.bean.Entity;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import net.oschina.app.bean.Entity;
 
 @XStreamAlias("oschina")
 public class TeamDiaryDetailBean extends Entity {

@@ -38,9 +38,9 @@ import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
-import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
 

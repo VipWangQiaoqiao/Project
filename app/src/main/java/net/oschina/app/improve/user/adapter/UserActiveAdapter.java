@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
@@ -52,7 +51,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
         if (author == null) {
             holder.mViewNick.setText("匿名用户");
             holder.mViewPortrait.setImageResource(R.mipmap.widget_dface);
-        }else {
+        } else {
             Glide.with(mContext).load(item.getAuthor().getPortrait())
                     .asBitmap()
                     .placeholder(R.mipmap.widget_dface)

@@ -6,11 +6,10 @@ import net.oschina.app.bean.Entity;
 
 /**
  * 团队任务实体类
- * 
+ * <p>
  * TeamIssueDetail.java
- * 
+ *
  * @author 火蚁(http://my.oschina.net/u/253900)
- * 
  * @data 2015-1-27 下午7:44:38
  */
 @SuppressWarnings("serial")

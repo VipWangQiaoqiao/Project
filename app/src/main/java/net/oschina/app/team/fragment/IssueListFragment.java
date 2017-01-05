@@ -1,8 +1,5 @@
 package net.oschina.app.team.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
-
 import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
@@ -12,12 +9,14 @@ import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueList;
 import net.oschina.app.util.XmlUtils;
 
+import java.io.InputStream;
+import java.io.Serializable;
+
 /**
  * 任务列表界面
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月14日 下午5:15:46
- * 
  */
 
 public class IssueListFragment extends BaseListFragment<TeamIssue> {

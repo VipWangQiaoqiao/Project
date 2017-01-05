@@ -1,17 +1,15 @@
 package net.oschina.app.team.bean;
 
-import java.io.Serializable;
-import java.util.List;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import net.oschina.app.bean.Entity;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.List;
 
 /**
  * Reply.java
- * 
+ *
  * @author 火蚁(http://my.oschina.net/u/253900)
- * 
  * @data 2015-1-30 下午3:58:27
  */
 @SuppressWarnings("serial")
@@ -46,7 +44,7 @@ public class TeamReply extends Entity {
 
     @XStreamAlias("appName")
     private String appName;
-    
+
     @XStreamAlias("replies")
     private List<TeamReply> replies;
 
@@ -89,7 +87,7 @@ public class TeamReply extends Entity {
     public void setAuthor(Author author) {
         this.author = author;
     }
-    
+
     public List<TeamReply> getReplies() {
         return replies;
     }

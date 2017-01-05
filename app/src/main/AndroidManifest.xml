@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="net.oschina.app">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="net.oschina.app">
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- suppress DeprecatedClassUsageInspection -->
-    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
 
-    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true"
-        android:xlargeScreens="true"/>
+        android:xlargeScreens="true" />
 
     <application
         android:name=".OSCApplication"
@@ -57,58 +57,58 @@
             android:screenOrientation="portrait"
             android:theme="@style/App.Theme.Launch">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.DetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.SimpleBackActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity
             android:name=".team.ui.TeamMainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".team.ui.TeamNewActiveActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".team.ui.TeamNewIssueActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="新团队任务"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.dtr.zxing.activity.CaptureActivity"
             android:label="@string/actionbar_title_qr_scan"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.SelectFriendsActivity"
             android:label="@string/actionbar_title_select_friends"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.OSCPhotosActivity"
             android:label=""
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemePhotoBrowse"/>
+            android:theme="@style/ThemePhotoBrowse" />
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="53cb520c56240bbd7d076ce5"/>
+            android:value="53cb520c56240bbd7d076ce5" />
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL}"/>
+            android:value="${UMENG_CHANNEL}" />
 
         <!-- ############ QQ空间和QQ  wechat SSO授权的Activity注册 ############ -->
         <activity
@@ -118,31 +118,31 @@
             android:noHistory="true"
             android:theme="@style/App.Theme.Tweet.Main">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <!-- 100424468，如果你使用的公用账号，则不需要修改；否则修改成你在QQ开放平台申请的 APP ID -->
-                <data android:scheme="100942993"/>
+                <data android:scheme="100942993" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/App.Theme.Transparent"/>
+            android:theme="@style/App.Theme.Transparent" />
 
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- ############ QQ空间和QQ  wechat SSO授权的Activity注册完 ############ -->
 
@@ -151,21 +151,21 @@
             android:label="资讯详情"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".improve.detail.general.BlogDetailActivity"
             android:label="博客详情"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".improve.detail.general.QuestionDetailActivity"
             android:label="问答详情"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
 
         <activity
@@ -173,49 +173,28 @@
             android:label="活动详情"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".improve.detail.apply.ApplyActivity"
             android:label="活动出席人"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".improve.detail.general.SoftwareDetailActivity"
             android:label="软件详情"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".improve.detail.activities.BlogDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="博客详情"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
-            android:name=".improve.detail.activities.QuestionDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="问答详情"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".improve.tweet.activities.TweetDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="动弹详情"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
-            android:name=".improve.detail.activities.EventDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="活动详情"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".improve.detail.sign.SignUpActivity"
@@ -223,67 +202,53 @@
             android:label="活动报名"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".improve.detail.activities.NewsDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="资讯详情"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
-            android:name=".improve.detail.activities.SoftwareDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="软件详情"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
-            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".improve.user.activities.UserTweetActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="动弹列表"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.user.activities.UserFollowsActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="关注列表"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.user.activities.UserFansActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="粉丝列表"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.detail.activities.TranslateDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="翻译详情"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.comment.QuesAnswerDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="问答答案详情"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.comment.CommentsActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="评论列表"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.tweet.activities.SoftwareTweetActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="软件动态列表"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".improve.detail.activities.SchemeUrlActivity"
+            android:name=".improve.main.SchemeUrlActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -292,53 +257,53 @@
                 <data
                     android:host="www.oschina.net"
                     android:path="/launch/app"
-                    android:scheme="oscapp"/>
+                    android:scheme="oscapp" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
 
                 <data
                     android:host="www.oschina.net"
-                    android:scheme="http"/>
+                    android:scheme="http" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
 
                 <data
                     android:host="www.oschina.net"
-                    android:scheme="https"/>
+                    android:scheme="https" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
 
                 <data
                     android:host="my.oschina.net"
-                    android:scheme="http"/>
+                    android:scheme="http" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
 
                 <data
                     android:host="my.oschina.net"
-                    android:scheme="https"/>
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity
@@ -349,25 +314,25 @@
             android:theme="@style/App.Theme.Tweet.Publish"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
+                <action android:name="android.intent.action.SEND" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="image/*"/>
+                <data android:mimeType="image/*" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
+                <action android:name="android.intent.action.SEND" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="text/plain"/>
+                <data android:mimeType="text/plain" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.SEND_MULTIPLE"/>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="image/*"/>
+                <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
         <activity
@@ -376,14 +341,14 @@
             android:label="用户主页"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/Base.App.Theme"/>
+            android:theme="@style/Base.App.Theme" />
 
         <activity
             android:name=".improve.tweet.activities.TopicTweetActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="话题动弹"
             android:screenOrientation="portrait"
-            android:theme="@style/Base.App.Theme"/>
+            android:theme="@style/Base.App.Theme" />
 
         <!-- 新账户中心模块 -->
         <activity
@@ -393,7 +358,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Account_Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.account.activity.RegisterStepOneActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -401,7 +366,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Account_Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
             android:name=".improve.account.activity.RegisterStepTwoActivity"
@@ -410,7 +375,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Account_Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.account.activity.RetrieveActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -418,7 +383,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Account_Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.account.activity.ResetPwdActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -426,32 +391,32 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Account_Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- 新账户中心模块完 -->
         <activity
             android:name=".improve.user.activities.UserMessageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="消息中心"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".improve.user.activities.UserSendMessageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="聊天界面"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".improve.media.SelectImageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="选择图片"
             android:screenOrientation="portrait"
-            android:theme="@style/Base.App.Theme.NoTitle"/>
+            android:theme="@style/Base.App.Theme.NoTitle" />
         <activity
             android:name=".improve.media.ImageGalleryActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="图片预览"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Dialog.NoTitle.Translucent"/>
+            android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
 
         <activity
             android:name=".improve.media.crop.CropActivity"
@@ -459,44 +424,44 @@
             android:label="图片裁剪"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Dialog.NoTitle.Translucent"/>
+            android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
 
         <activity
             android:name=".improve.tweet.activities.TweetPublishQueueActivity"
             android:label="动弹队列"
             android:screenOrientation="portrait"
-            android:theme="@style/Base.App.Theme.NoTitle"/>
+            android:theme="@style/Base.App.Theme.NoTitle" />
         <activity
             android:name=".improve.main.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/App.Theme.Tweet.Main"/>
+            android:theme="@style/App.Theme.Tweet.Main" />
         <activity
             android:name=".improve.search.activities.SearchActivity"
             android:label="搜索"
             android:screenOrientation="portrait"
             android:theme="@style/App.Theme.Search"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".improve.main.discover.ShakePresentActivity"
             android:label="摇一摇"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".improve.user.collection.UserCollectionActivity"
             android:label="收藏"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".improve.main.FeedBackActivity"
             android:label="意见反馈"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".improve.detail.activities.EventSigninActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="活动签到"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity
             android:name=".improve.user.activities.UserEventActivity"
@@ -505,7 +470,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
             android:name=".improve.user.activities.UserSelectFriendsActivity"
@@ -513,29 +478,29 @@
             android:label="选择好友"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
             android:exported="false"
-            android:process="net.oschina.app.tweet.TweetPublishService"/>
+            android:process="net.oschina.app.tweet.TweetPublishService" />
         <service
             android:name=".improve.notice.NoticeServer"
             android:exported="false"
-            android:process="net.oschina.app.notice.NoticeServer"/>
+            android:process="net.oschina.app.notice.NoticeServer" />
         <service
             android:name=".improve.main.update.DownloadService"
-            android:exported="false"/>
+            android:exported="false" />
 
-        <activity android:name=".improve.main.BrowserActivity"/>
+        <activity android:name=".improve.main.BrowserActivity" />
 
         <activity
             android:name=".improve.search.activities.NearbyActivity"
-            android:label="附近的人"/>
+            android:label="附近的人" />
 
         <service
             android:name=".improve.main.update.DownloadService"
-            android:exported="false"/>
+            android:exported="false" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -544,7 +509,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
     </application>
 

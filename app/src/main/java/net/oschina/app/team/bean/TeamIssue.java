@@ -1,5 +1,12 @@
 package net.oschina.app.team.bean;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import net.oschina.app.R;
+import net.oschina.app.bean.Entity;
+import net.oschina.app.util.StringUtils;
+
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -7,19 +14,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import net.oschina.app.R;
-import net.oschina.app.bean.Entity;
-import net.oschina.app.util.StringUtils;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
 /**
  * 任务实体类
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月14日 下午4:26:28
- * 
  */
 
 @SuppressWarnings("serial")
@@ -101,484 +100,484 @@ public class TeamIssue extends Entity {
     private Attachments attachments;// 附件数量
 
     public String getState() {
-	return state;
+        return state;
     }
 
     public void setState(String state) {
-	this.state = state;
+        this.state = state;
     }
 
     public int getStateLevel() {
-	return stateLevel;
+        return stateLevel;
     }
 
     public void setStateLevel(int stateLevel) {
-	this.stateLevel = stateLevel;
+        this.stateLevel = stateLevel;
     }
 
     public String getPriority() {
-	return priority;
+        return priority;
     }
 
     public void setPriority(String priority) {
-	this.priority = priority;
+        this.priority = priority;
     }
 
     public int getGitpush() {
-	return gitpush;
+        return gitpush;
     }
 
     public void setGitpush(int gitpush) {
-	this.gitpush = gitpush;
+        this.gitpush = gitpush;
     }
 
     public TeamProject getProject() {
-	return project;
+        return project;
     }
 
     public void setProject(TeamProject project) {
-	this.project = project;
+        this.project = project;
     }
 
     public TeamIssueChild getChildIssues() {
-	return childIssues;
+        return childIssues;
     }
 
     public void setChildIssues(TeamIssueChild childIssues) {
-	this.childIssues = childIssues;
+        this.childIssues = childIssues;
     }
 
     public Relations getRelations() {
-	return relations;
+        return relations;
     }
 
     public void setRelations(Relations relations) {
-	this.relations = relations;
+        this.relations = relations;
     }
 
     public Attachments getAttachments() {
-	return attachments;
+        return attachments;
     }
 
     public void setAttachments(Attachments attachments) {
-	this.attachments = attachments;
+        this.attachments = attachments;
     }
 
     public String getSource() {
-	return source;
+        return source;
     }
 
     public void setSource(String source) {
-	this.source = source;
+        this.source = source;
     }
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     public String getDescription() {
-	return description;
+        return description;
     }
 
     public void setDescription(String description) {
-	this.description = description;
+        this.description = description;
     }
 
     public String getCreateTime() {
-	return createTime;
+        return createTime;
     }
 
     public void setCreateTime(String createTime) {
-	this.createTime = createTime;
+        this.createTime = createTime;
     }
 
     public String getUpdateTime() {
-	return updateTime;
+        return updateTime;
     }
 
     public void setUpdateTime(String updateTime) {
-	this.updateTime = updateTime;
+        this.updateTime = updateTime;
     }
 
     public String getAcceptTime() {
-	return acceptTime;
+        return acceptTime;
     }
 
     public void setAcceptTime(String acceptTime) {
-	this.acceptTime = acceptTime;
+        this.acceptTime = acceptTime;
     }
 
     public String getDeadlineTime() {
-	return deadlineTime;
+        return deadlineTime;
     }
 
     public void setDeadlineTime(String deadlineTime) {
-	this.deadlineTime = deadlineTime;
+        this.deadlineTime = deadlineTime;
     }
 
     public Author getAuthor() {
-	return author;
+        return author;
     }
 
     public void setAuthor(Author author) {
-	this.author = author;
+        this.author = author;
     }
 
     public ToUser getToUser() {
-	return toUser;
+        return toUser;
     }
 
     public void setToUser(ToUser toUser) {
-	this.toUser = toUser;
+        this.toUser = toUser;
     }
 
     public List<Label> getLabels() {
-	return labels;
+        return labels;
     }
 
     public void setLabels(List<Label> labels) {
-	this.labels = labels;
+        this.labels = labels;
     }
 
     public int getReplyCount() {
-	return replyCount;
+        return replyCount;
     }
 
     public void setReplyCount(int replyCount) {
-	this.replyCount = replyCount;
+        this.replyCount = replyCount;
     }
 
     public Authority getAuthority() {
-	return authority;
+        return authority;
     }
 
     public void setAuthority(Authority authority) {
-	this.authority = authority;
+        this.authority = authority;
     }
 
     public List<TeamIssueCollaborator> getCollaborators() {
-	return collaborators;
+        return collaborators;
     }
 
     public void setCollaborators(List<TeamIssueCollaborator> collaborators) {
-	this.collaborators = collaborators;
+        this.collaborators = collaborators;
     }
 
     @XStreamAlias("label")
     public class Label implements Serializable {
 
-	@XStreamAlias("name")
-	private String name;
+        @XStreamAlias("name")
+        private String name;
 
-	@XStreamAlias("color")
-	private String color;
+        @XStreamAlias("color")
+        private String color;
 
-	public String getName() {
-	    return name;
-	}
+        public String getName() {
+            return name;
+        }
 
-	public void setName(String name) {
-	    this.name = name;
-	}
+        public void setName(String name) {
+            this.name = name;
+        }
 
-	public String getColor() {
-	    return color;
-	}
+        public String getColor() {
+            return color;
+        }
 
-	public void setColor(String color) {
-	    this.color = color;
-	}
+        public void setColor(String color) {
+            this.color = color;
+        }
 
     }
 
     @XStreamAlias("toUser")
     public class ToUser implements Serializable {
 
-	@XStreamAlias("id")
-	private int id;
+        @XStreamAlias("id")
+        private int id;
 
-	@XStreamAlias("name")
-	private String name;
+        @XStreamAlias("name")
+        private String name;
 
-	@XStreamAlias("portrait")
-	private String portrait;
+        @XStreamAlias("portrait")
+        private String portrait;
 
-	public int getId() {
-	    return id;
-	}
+        public int getId() {
+            return id;
+        }
 
-	public void setId(int id) {
-	    this.id = id;
-	}
+        public void setId(int id) {
+            this.id = id;
+        }
 
-	public String getName() {
-	    return name;
-	}
+        public String getName() {
+            return name;
+        }
 
-	public void setName(String name) {
-	    this.name = name;
-	}
+        public void setName(String name) {
+            this.name = name;
+        }
 
-	public String getPortrait() {
-	    return portrait;
-	}
+        public String getPortrait() {
+            return portrait;
+        }
 
-	public void setPortrait(String portrait) {
-	    this.portrait = portrait;
-	}
+        public void setPortrait(String portrait) {
+            this.portrait = portrait;
+        }
     }
 
     // 任务的操作权限
     public class Authority implements Serializable {
 
-	@XStreamAlias("delete")
-	private boolean delete;
+        @XStreamAlias("delete")
+        private boolean delete;
 
-	@XStreamAlias("updateState")
-	private boolean updateState;
+        @XStreamAlias("updateState")
+        private boolean updateState;
 
-	@XStreamAlias("updateAssignee")
-	private boolean updateAssignee;
+        @XStreamAlias("updateAssignee")
+        private boolean updateAssignee;
 
-	@XStreamAlias("updateDeadlineTime")
-	private boolean updateDeadlineTime;
+        @XStreamAlias("updateDeadlineTime")
+        private boolean updateDeadlineTime;
 
-	@XStreamAlias("updatePriority")
-	private boolean updatePriority;
+        @XStreamAlias("updatePriority")
+        private boolean updatePriority;
 
-	@XStreamAlias("updateLabels")
-	private boolean updateLabels;
+        @XStreamAlias("updateLabels")
+        private boolean updateLabels;
 
-	public boolean isDelete() {
-	    return delete;
-	}
+        public boolean isDelete() {
+            return delete;
+        }
 
-	public void setDelete(boolean delete) {
-	    this.delete = delete;
-	}
+        public void setDelete(boolean delete) {
+            this.delete = delete;
+        }
 
-	public boolean isUpdateState() {
-	    return updateState;
-	}
+        public boolean isUpdateState() {
+            return updateState;
+        }
 
-	public void setUpdateState(boolean updateState) {
-	    this.updateState = updateState;
-	}
+        public void setUpdateState(boolean updateState) {
+            this.updateState = updateState;
+        }
 
-	public boolean isUpdateAssignee() {
-	    return updateAssignee;
-	}
+        public boolean isUpdateAssignee() {
+            return updateAssignee;
+        }
 
-	public void setUpdateAssignee(boolean updateAssignee) {
-	    this.updateAssignee = updateAssignee;
-	}
+        public void setUpdateAssignee(boolean updateAssignee) {
+            this.updateAssignee = updateAssignee;
+        }
 
-	public boolean isUpdateDeadlineTime() {
-	    return updateDeadlineTime;
-	}
+        public boolean isUpdateDeadlineTime() {
+            return updateDeadlineTime;
+        }
 
-	public void setUpdateDeadlineTime(boolean updateDeadlineTime) {
-	    this.updateDeadlineTime = updateDeadlineTime;
-	}
+        public void setUpdateDeadlineTime(boolean updateDeadlineTime) {
+            this.updateDeadlineTime = updateDeadlineTime;
+        }
 
-	public boolean isUpdatePriority() {
-	    return updatePriority;
-	}
+        public boolean isUpdatePriority() {
+            return updatePriority;
+        }
 
-	public void setUpdatePriority(boolean updatePriority) {
-	    this.updatePriority = updatePriority;
-	}
+        public void setUpdatePriority(boolean updatePriority) {
+            this.updatePriority = updatePriority;
+        }
 
-	public boolean isUpdateLabels() {
-	    return updateLabels;
-	}
+        public boolean isUpdateLabels() {
+            return updateLabels;
+        }
 
-	public void setUpdateLabels(boolean updateLabels) {
-	    this.updateLabels = updateLabels;
-	}
+        public void setUpdateLabels(boolean updateLabels) {
+            this.updateLabels = updateLabels;
+        }
 
     }
 
     @XStreamAlias("collaborator")
     public class TeamIssueCollaborator implements Serializable {
 
-	@XStreamAlias("id")
-	private int id;
-	@XStreamAlias("name")
-	private String name;
-	@XStreamAlias("portrait")
-	private String portrait;
+        @XStreamAlias("id")
+        private int id;
+        @XStreamAlias("name")
+        private String name;
+        @XStreamAlias("portrait")
+        private String portrait;
 
-	public int getId() {
-	    return id;
-	}
+        public int getId() {
+            return id;
+        }
 
-	public void setId(int id) {
-	    this.id = id;
-	}
+        public void setId(int id) {
+            this.id = id;
+        }
 
-	public String getName() {
-	    return name;
-	}
+        public String getName() {
+            return name;
+        }
 
-	public void setName(String name) {
-	    this.name = name;
-	}
+        public void setName(String name) {
+            this.name = name;
+        }
 
-	public String getPortrait() {
-	    return portrait;
-	}
+        public String getPortrait() {
+            return portrait;
+        }
 
-	public void setPortrait(String portrait) {
-	    this.portrait = portrait;
-	}
+        public void setPortrait(String portrait) {
+            this.portrait = portrait;
+        }
 
     }
 
     @XStreamAlias("project")
     public class TeamProject implements Serializable {
-	@XStreamAlias("source")
-	private String source;
+        @XStreamAlias("source")
+        private String source;
 
-	@XStreamAlias("team")
-	private String team;
+        @XStreamAlias("team")
+        private String team;
 
-	@XStreamAlias("git")
-	private TeamGit git;
+        @XStreamAlias("git")
+        private TeamGit git;
 
-	public String getSource() {
-	    return source;
-	}
+        public String getSource() {
+            return source;
+        }
 
-	public void setSource(String source) {
-	    this.source = source;
-	}
+        public void setSource(String source) {
+            this.source = source;
+        }
 
-	public String getTeam() {
-	    return team;
-	}
+        public String getTeam() {
+            return team;
+        }
 
-	public void setTeam(String team) {
-	    this.team = team;
-	}
+        public void setTeam(String team) {
+            this.team = team;
+        }
 
-	public TeamGit getGit() {
-	    return git;
-	}
+        public TeamGit getGit() {
+            return git;
+        }
 
-	public void setGit(TeamGit git) {
-	    this.git = git;
-	}
+        public void setGit(TeamGit git) {
+            this.git = git;
+        }
     }
 
     // 子任务
     @XStreamAlias("childIssues")
     public class TeamIssueChild implements Serializable {
 
-	@XStreamAlias("totalCount")
-	private int totalCount;
+        @XStreamAlias("totalCount")
+        private int totalCount;
 
-	@XStreamAlias("closedCount")
-	private int closedCount;
+        @XStreamAlias("closedCount")
+        private int closedCount;
 
-	@XStreamImplicit(itemFieldName = "issue")
-	private List<TeamIssue> childIssues;
+        @XStreamImplicit(itemFieldName = "issue")
+        private List<TeamIssue> childIssues;
 
-	public int getTotalCount() {
-	    return totalCount;
-	}
+        public int getTotalCount() {
+            return totalCount;
+        }
 
-	public void setTotalCount(int totalCount) {
-	    this.totalCount = totalCount;
-	}
+        public void setTotalCount(int totalCount) {
+            this.totalCount = totalCount;
+        }
 
-	public int getClosedCount() {
-	    return closedCount;
-	}
+        public int getClosedCount() {
+            return closedCount;
+        }
 
-	public void setClosedCount(int closedCount) {
-	    this.closedCount = closedCount;
-	}
+        public void setClosedCount(int closedCount) {
+            this.closedCount = closedCount;
+        }
 
-	public List<TeamIssue> getChildIssues() {
-	    return childIssues;
-	}
+        public List<TeamIssue> getChildIssues() {
+            return childIssues;
+        }
 
-	public void setChildIssues(List<TeamIssue> childIssues) {
-	    this.childIssues = childIssues;
-	}
+        public void setChildIssues(List<TeamIssue> childIssues) {
+            this.childIssues = childIssues;
+        }
     }
 
     // 关联任务
     @XStreamAlias("relations")
     public class Relations implements Serializable {
-	@XStreamAlias("totalCount")
-	private int totalCount;
+        @XStreamAlias("totalCount")
+        private int totalCount;
 
-	public int getTotalCount() {
-	    return totalCount;
-	}
+        public int getTotalCount() {
+            return totalCount;
+        }
 
-	public void setTotalCount(int totalCount) {
-	    this.totalCount = totalCount;
-	}
+        public void setTotalCount(int totalCount) {
+            this.totalCount = totalCount;
+        }
     }
 
     // 任务附件
     @XStreamAlias("attachments")
     public class Attachments implements Serializable {
-	@XStreamAlias("totalCount")
-	private int totalCount;
+        @XStreamAlias("totalCount")
+        private int totalCount;
 
-	public int getTotalCount() {
-	    return totalCount;
-	}
+        public int getTotalCount() {
+            return totalCount;
+        }
 
-	public void setTotalCount(int totalCount) {
-	    this.totalCount = totalCount;
-	}
+        public void setTotalCount(int totalCount) {
+            this.totalCount = totalCount;
+        }
     }
 
     public String getIssueStateText() {
-	String res = "待办中";
-	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
-	    res = "待办中";
-	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
-	    res = "进行中";
-	} else if (this.state.equals(TEAM_ISSUE_STATE_CLOSED)) {
-	    res = "已完成";
-	} else {
-	    res = "已验收";
-	}
+        String res = "待办中";
+        if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
+            res = "待办中";
+        } else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
+            res = "进行中";
+        } else if (this.state.equals(TEAM_ISSUE_STATE_CLOSED)) {
+            res = "已完成";
+        } else {
+            res = "已验收";
+        }
 
-	return res;
+        return res;
     }
 
     public int getIssueStateFaTextId() {
-	int res = R.string.fa_circle_o;
-	
-	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
-	    res = R.string.fa_circle_o;
-	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
-	    res = R.string.fa_dot_circle_o;
-	} else if (this.state.equals(TEAM_ISSUE_STATE_CLOSED)) {
-	    res = R.string.fa_check_circle_o;
-	} else {
-	    res = R.string.fa_lock_use;
-	}
-	return res;
+        int res = R.string.fa_circle_o;
+
+        if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
+            res = R.string.fa_circle_o;
+        } else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
+            res = R.string.fa_dot_circle_o;
+        } else if (this.state.equals(TEAM_ISSUE_STATE_CLOSED)) {
+            res = R.string.fa_check_circle_o;
+        } else {
+            res = R.string.fa_lock_use;
+        }
+        return res;
     }
 
     public String getDeadlineTimeText() {
-	SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
-	Date date = StringUtils.toDate(getDeadlineTime(), dataFormat);
-	Calendar calendar = Calendar.getInstance();
-	calendar.setTime(date);
-	return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
+        SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = StringUtils.toDate(getDeadlineTime(), dataFormat);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
     }
 
 }

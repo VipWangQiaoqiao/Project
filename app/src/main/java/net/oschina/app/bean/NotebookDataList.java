@@ -1,9 +1,9 @@
 package net.oschina.app.bean;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("oschina")
 public class NotebookDataList extends Entity implements

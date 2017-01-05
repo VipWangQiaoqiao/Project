@@ -4,12 +4,13 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * 聊天详细信息实体类
+ *
  * @author 铂金小鸟（http://my.oschina.net/fants）
  * @Created 2015年9月16日 上午4:20:01
  */
 @SuppressWarnings("serial")
 @XStreamAlias("message")
-public class MessageDetail extends Entity  {
+public class MessageDetail extends Entity {
 
     //是否显示时间
     private boolean showDate;
@@ -37,8 +38,8 @@ public class MessageDetail extends Entity  {
     @XStreamAlias("pubDate")
     private String pubDate;
 
-    public enum MessageStatus{
-        NORMAL,SENDING,ERROR
+    public enum MessageStatus {
+        NORMAL, SENDING, ERROR
     }
 
     public String getPortrait() {

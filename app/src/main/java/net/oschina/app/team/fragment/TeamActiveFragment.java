@@ -1,8 +1,13 @@
 package net.oschina.app.team.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
+import android.app.Activity;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
@@ -14,20 +19,15 @@ import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.app.Activity;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Team动态界面
- * 
+ *
  * @author kymjs (kymjs123@gmail.com)
- * 
  */
 public class TeamActiveFragment extends BaseListFragment<TeamActive> {
 
@@ -58,7 +58,7 @@ public class TeamActiveFragment extends BaseListFragment<TeamActive> {
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         aty = getActivity();
         return view;
@@ -103,7 +103,7 @@ public class TeamActiveFragment extends BaseListFragment<TeamActive> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         try {
             TeamActive active = mAdapter.getItem(position);
             if (active != null) {

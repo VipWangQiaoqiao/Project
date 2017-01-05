@@ -1,30 +1,28 @@
 package net.oschina.app.team.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.api.remote.OSChinaTeamApi;
-import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamDiscussAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamDiscussList;
-import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * team讨论区列表界面
- * 
+ *
  * @author fireant(http://my.oschina.net/u/253900)
- * 
  */
 public class TeamDiscussFragment extends BaseListFragment<TeamDiscuss> {
 
@@ -84,11 +82,11 @@ public class TeamDiscussFragment extends BaseListFragment<TeamDiscuss> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
-	TeamDiscuss item = (TeamDiscuss) mAdapter.getItem(position);
-	if (item != null) {
-	    UIHelper.showTeamDiscussDetail(getActivity(), mTeam, item);
-	}
+                            long id) {
+        TeamDiscuss item = (TeamDiscuss) mAdapter.getItem(position);
+        if (item != null) {
+            UIHelper.showTeamDiscussDetail(getActivity(), mTeam, item);
+        }
 
     }
 

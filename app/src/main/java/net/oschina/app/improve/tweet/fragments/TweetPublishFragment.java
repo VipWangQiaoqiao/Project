@@ -34,7 +34,6 @@ import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
-import net.oschina.app.improve.tweet.widget.ClipView;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -111,34 +110,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-        if (root instanceof ClipView) {
-            ClipView clipView = ((ClipView) root);
-            if (mBundle != null) {
-                clipView.setup(mBundle.getIntArray("location"), mBundle.getIntArray("size"));
-            } else {
-                clipView.setup(null, null);
-            }
-            clipView.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mRoot instanceof ClipView) {
-                        ((ClipView) mRoot).start(new Runnable() {
-                            @Override
-                            public void run() {
-                                mEmojiKeyboard.showSoftKeyboard(mEditContent);
-                            }
-                        });
-                    } else {
-                        mEmojiKeyboard.showSoftKeyboard(mEditContent);
-                    }
-                }
-            });
-        }
-
         // EmojiKeyboardFragment
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.lay_emoji_keyboard, mEmojiKeyboard)
-                .commit();
+                .commitNowAllowingStateLoss();
+
         mEmojiKeyboard.setOnEmojiClickListener(new OnEmojiClickListener() {
             @Override
             public void onEmojiClick(Emojicon v) {
@@ -243,6 +219,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         ShapeDrawable doubleLineDrawable = new ShapeDrawable(new BorderShape(new RectF(0, 1, 0, 1)));
         doubleLineDrawable.getPaint().setColor(0xFF24cf5f);
         mLayTagEnter.setBackground(doubleLineDrawable);
+
+        // Show keyboard
+        mEmojiKeyboard.showSoftKeyboard(mEditContent);
     }
 
     private void setSendIconStatus(boolean haveContent, String content) {
@@ -550,17 +529,10 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     public void finish() {
         // hide key board before finish
         mEmojiKeyboard.hideAllKeyBoard();
-        // do animation to finish
-        if (mRoot instanceof ClipView) {
-            ((ClipView) mRoot).exit(new Runnable() {
-                @Override
-                public void run() {
-                    Activity activity = getActivity();
-                    if (activity != null && activity instanceof BaseBackActivity) {
-                        ((BaseBackActivity) activity).onSupportNavigateUp();
-                    }
-                }
-            });
+        // finish
+        Activity activity = getActivity();
+        if (activity != null && activity instanceof BaseBackActivity) {
+            ((BaseBackActivity) activity).onSupportNavigateUp();
         }
     }
 

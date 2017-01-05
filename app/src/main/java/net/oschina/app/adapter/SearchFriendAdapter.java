@@ -17,8 +17,8 @@ import net.oschina.app.widget.AvatarView;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * <p>Created 15/8/27 下午9:29.</p>
@@ -26,8 +26,8 @@ import butterknife.Bind;
  * <p><a href="http://www.happycodeboy.com">LeonLee Blog</a></p>
  *
  * @author 李文龙(LeonLee
- *
- * 搜索好友结果适配器
+ *         <p>
+ *         搜索好友结果适配器
  */
 public class SearchFriendAdapter extends BaseAdapter {
 
@@ -64,7 +64,7 @@ public class SearchFriendAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final NormalViewHolder holder;
-        if(convertView == null) {
+        if (convertView == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(R.layout.list_cell_select_friend, parent, false);
             holder = new NormalViewHolder(convertView);
             convertView.setTag(holder);
@@ -96,7 +96,7 @@ public class SearchFriendAdapter extends BaseAdapter {
             avatar.setDisplayCircle(false);
 
             int start = item.getStartIndex();
-            if(start != -1) {
+            if (start != -1) {
                 SpannableString ss = new SpannableString(friendItem.getFriend().getName());
                 ss.setSpan(new ForegroundColorSpan(item.getHightLightColor()), start,
                         start + item.getKeyLength(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);

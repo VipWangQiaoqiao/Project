@@ -183,7 +183,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
     @Override
     public void onRefreshing() {
         isRefreshing = true;
-        mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE,true);
+        mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, true);
         requestData();
     }
 
@@ -232,9 +232,9 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mAdapter.addAll(resultBean.getResult().getItems());
         }
 
-        if(resultBean.getResult().getItems() == null
-               || resultBean.getResult().getItems().size() < 20)
-            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE,true);
+        if (resultBean.getResult().getItems() == null
+                || resultBean.getResult().getItems().size() < 20)
+            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
 //        mAdapter.setState(resultBean.getResult().getItems() == null
 //                || resultBean.getResult().getItems().size() < 20
 //                ? BaseRecyclerAdapter.STATE_NO_MORE

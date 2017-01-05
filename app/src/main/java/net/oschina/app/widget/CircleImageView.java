@@ -1,6 +1,5 @@
 package net.oschina.app.widget;
 
-import net.oschina.app.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -17,10 +16,11 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import net.oschina.app.R;
+
 
 /**
  * 圆形ImageView组件
- *
  */
 public class CircleImageView extends ImageView {
 
@@ -97,7 +97,7 @@ public class CircleImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if(!isDisplayCircle) {
+        if (!isDisplayCircle) {
             super.onDraw(canvas);
             return;
         }
@@ -106,8 +106,8 @@ public class CircleImageView extends ImageView {
         }
 
         canvas.drawCircle(getWidth() / 2, getHeight() / 2, mDrawableRadius, mBitmapPaint);
-        if(mBorderWidth != 0){
-          canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, mBorderPaint);
+        if (mBorderWidth != 0) {
+            canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, mBorderPaint);
         }
     }
 
@@ -138,7 +138,7 @@ public class CircleImageView extends ImageView {
     public int getBorderWidth() {
         return mBorderWidth;
     }
-    
+
     public void setBorderWidth(int borderWidth) {
         if (borderWidth == mBorderWidth) {
             return;

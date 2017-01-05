@@ -10,8 +10,8 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.util.TypefaceUtils;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 团队项目适配器

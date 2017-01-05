@@ -1,14 +1,13 @@
 package net.oschina.app.team.bean;
 
-import net.oschina.app.bean.Entity;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import net.oschina.app.bean.Entity;
 
 /**
  * Team成员
- * 
+ *
  * @author kymjs
- * 
  */
 @XStreamAlias("member")
 public class TeamMember extends Entity {

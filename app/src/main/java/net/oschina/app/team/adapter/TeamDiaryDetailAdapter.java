@@ -136,10 +136,10 @@ public class TeamDiaryDetailAdapter extends BaseAdapter {
 
     /**
      * 移除字符串中的Html标签
-     * 
-     * @author kymjs (https://github.com/kymjs)
+     *
      * @param pHTMLString
      * @return
+     * @author kymjs (https://github.com/kymjs)
      */
     public static Spanned stripTags(final String pHTMLString) {
         // String str = pHTMLString.replaceAll("\\<.*?>", "");

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.animation.DecelerateInterpolator;
 
 import com.google.gson.reflect.TypeToken;
 

@@ -10,7 +10,7 @@ import java.util.List;
  * Created by haibin
  * on 2016/12/5.
  */
- interface SignUpContract {
+interface SignUpContract {
 
     interface EmptyView {
         void hideEmptyLayout();

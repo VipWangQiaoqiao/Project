@@ -125,10 +125,6 @@
                     android:textSize="18sp"
                     tools:text="Webpack从零开始" />
 
-                <include
-                    android:id="@+id/lay_info_view_comment"
-                    layout="@layout/item_info_view_comment" />
-
                 <!--摘要-->
                 <LinearLayout
                     android:id="@+id/lay_blog_detail_abstract"

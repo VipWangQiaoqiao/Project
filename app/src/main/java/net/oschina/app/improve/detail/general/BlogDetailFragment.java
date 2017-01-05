@@ -41,12 +41,6 @@ public class BlogDetailFragment extends DetailFragment {
     @Bind(R.id.tv_detail_abstract)
     TextView mTextAbstract;
 
-    @Bind(R.id.tv_info_comment)
-    TextView mTextComCount;
-
-    @Bind(R.id.tv_info_view)
-    TextView mTextViewCount;
-
     @Bind(R.id.btn_relation)
     Button mBtnRelation;
 
@@ -73,6 +67,7 @@ public class BlogDetailFragment extends DetailFragment {
                 }
             }
         });
+        mDetailAboutView.setTitle("相关文章");
     }
 
     @Override
@@ -83,10 +78,8 @@ public class BlogDetailFragment extends DetailFragment {
             mTextName.setText(author.getName());
             getImgLoader().load(author.getPortrait()).asBitmap().into(mImageAvatar);
         }
-        mTextPubDate.setText(StringUtils.formatSomeAgo(bean.getPubDate()));
+        mTextPubDate.setText(bean.getPubDate());
         mTextTitle.setText(bean.getTitle());
-        mTextComCount.setText(String.valueOf(bean.getStatistics().getComment()));
-        mTextViewCount.setText(String.valueOf(bean.getStatistics().getView()));
         mTextAbstract.setText(bean.getSummary());
         if (TextUtils.isEmpty(bean.getSummary())) {
             mRoot.findViewById(R.id.line).setVisibility(View.GONE);
