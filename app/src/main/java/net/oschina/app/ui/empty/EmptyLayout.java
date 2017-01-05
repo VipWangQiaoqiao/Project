@@ -30,6 +30,7 @@ public class EmptyLayout extends LinearLayout implements
     private int mErrorState;
     private String strNoDataContent = "";
     private TextView tv;
+    private boolean mLoadingFriend;
 
     public EmptyLayout(Context context) {
         super(context);
@@ -120,6 +121,12 @@ public class EmptyLayout extends LinearLayout implements
         tv.setText(msg);
     }
 
+
+    public void setLoadingFriend(boolean loadingFriend) {
+        this.mLoadingFriend = loadingFriend;
+        tv.setText(R.string.error_view_loading_friend);
+    }
+
     /**
      * 新添设置背景
      *
@@ -156,7 +163,11 @@ public class EmptyLayout extends LinearLayout implements
                 mLoading.setVisibility(View.VISIBLE);
                 mLoading.start();
                 img.setVisibility(View.GONE);
-                tv.setText(R.string.error_view_loading);
+                if (mLoadingFriend) {
+                    tv.setText(R.string.error_view_loading_friend);
+                } else {
+                    tv.setText(R.string.error_view_loading);
+                }
                 clickEnable = false;
                 break;
             case NODATA:

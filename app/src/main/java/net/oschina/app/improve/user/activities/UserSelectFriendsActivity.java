@@ -140,6 +140,34 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         params1.setMargins(0, 0, 0, 0);
         mLayoutEditFrame.setLayoutParams(params1);
 
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                return false;
+            }
+        });
+        mSearchView.setOnQueryTextListener(this);
+
+        mSearchView.post(new Runnable() {
+            @SuppressWarnings("RestrictedApi")
+            @Override
+            public void run() {
+                mSearchView.clearFocus();
+            }
+        });
+
+        mEmptyLayout.setLoadingFriend(true);
+        mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EmptyLayout emptyLayout = mEmptyLayout;
+                if (emptyLayout != null && emptyLayout.getErrorState() != EmptyLayout.HIDE_LAYOUT) {
+                    emptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                    requestData();
+                }
+            }
+        });
+
         mRecyclerFriends.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerFriends.setAdapter(mLocalAdapter = new UserSelectFriendsAdapter(this));
 
@@ -159,17 +187,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         });
 
-        mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EmptyLayout emptyLayout = mEmptyLayout;
-                if (emptyLayout != null && emptyLayout.getErrorState() != EmptyLayout.HIDE_LAYOUT) {
-                    emptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                    requestData();
-                }
-            }
-        });
-
         mIndex.setOnIndexTouchListener(this);
 
         mTvLabel.setOnClickListener(new View.OnClickListener() {
@@ -179,21 +196,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         });
 
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                return false;
-            }
-        });
-        mSearchView.setOnQueryTextListener(this);
 
-        mSearchView.post(new Runnable() {
-            @SuppressWarnings("RestrictedApi")
-            @Override
-            public void run() {
-                mSearchView.clearFocus();
-            }
-        });
     }
 
 
@@ -436,7 +439,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         } else {
             showError(EmptyLayout.NODATA);
         }
-
 
         this.mCacheFriends = friends;
     }
