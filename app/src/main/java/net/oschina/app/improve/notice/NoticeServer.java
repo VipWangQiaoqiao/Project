@@ -9,10 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
-import android.view.animation.AccelerateInterpolator;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -37,11 +37,13 @@ public class NoticeServer extends Service {
     private static final String TAG = NoticeServer.class.getName();
 
     static final String FLAG_BROADCAST_REFRESH = TAG + "_BROADCAST_REFRESH";
+    static final String FLAG_BROADCAST_REQUEST = TAG + "_BROADCAST_REQUEST";
 
     private static final String FLAG_ACTION_FIRST = TAG + "_FIRST";
     private static final String FLAG_ACTION_REFRESH = TAG + "_REFRESH";
     private static final String FLAG_ACTION_CLEAR = TAG + "_CLEAR";
     private static final String FLAG_ACTION_EXIT = TAG + "_EXIT";
+    private static final String FLAG_ACTION_ARRIVED = TAG + "_ARRIVED";
 
     private static final String EXTRA_TYPE = "type";
     static final String EXTRA_BEAN = "bean";
@@ -55,19 +57,35 @@ public class NoticeServer extends Service {
         log("startAction");
     }
 
-    static void startActionClear(Context context, int type) {
+    static void clearAction(Context context, int type) {
         Intent intent = new Intent(context, NoticeServer.class);
         intent.setAction(FLAG_ACTION_CLEAR);
         intent.putExtra(EXTRA_TYPE, type);
         context.startService(intent);
-        log("startActionClear");
+        log("clearAction");
     }
 
-    static void startActionExit(Context context) {
+    static void exitAction(Context context) {
         Intent intent = new Intent(context, NoticeServer.class);
         intent.setAction(FLAG_ACTION_EXIT);
         context.startService(intent);
-        log("startActionExit");
+        log("exitAction");
+    }
+
+    static void arrivedMsgAction(Context context, NoticeBean bean) {
+        int serviceUid = android.os.Process.getUidForName("net.oschina.app.notice.NoticeServer");
+        int mUid = android.os.Process.myUid();
+
+        log("arrivedMsgAction: serviceUid:" + serviceUid + " mUid:" + mUid);
+
+        if (mUid == serviceUid)
+            return;
+
+        Intent intent = new Intent(context, NoticeServer.class);
+        intent.setAction(FLAG_ACTION_ARRIVED);
+        intent.putExtra(EXTRA_BEAN, bean);
+        context.startService(intent);
+        log("arrivedMsgAction");
     }
 
     public NoticeServer() {
@@ -107,51 +125,13 @@ public class NoticeServer extends Service {
         super.onDestroy();
     }
 
-    private final static int ALARM_INTERVAL_MIN = 0;
-    private final static int ALARM_INTERVAL_MAX = 15;
+    private final static int ALARM_INTERVAL_SECOND = 60;
 
-    private final static int ALARM_INTERVAL_MIN_SECOND = 15;
-    private final static int ALARM_INTERVAL_MAX_SECOND = 15 * 60;
-    // The count 0~15, 20s->15*60s
-    private static int mAlarmCount = ALARM_INTERVAL_MIN;
-
-    private void registerFirstAlarm() {
-        long interval = getAlarmInterval(0);
-        registerAlarmByInterval(interval);
-    }
-
-    private void registerCurrentAlarm(boolean increase) {
-        if (increase) {
-            mAlarmCount++;
-            if (mAlarmCount > ALARM_INTERVAL_MAX)
-                mAlarmCount = ALARM_INTERVAL_MAX;
-        } else {
-            mAlarmCount--;
-            if (mAlarmCount < ALARM_INTERVAL_MIN)
-                mAlarmCount = ALARM_INTERVAL_MIN;
-        }
-        log("registerCurrentAlarm:increase:" + increase);
-        long interval = getAlarmInterval(mAlarmCount);
-        registerAlarmByInterval(interval);
-    }
-
-    private void registerAlarmByInterval(long interval) {
+    private void registerNextAlarm() {
         cancelRequestAlarm();
         mAlarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + interval, interval, getOperationIntent());
-        log("registerAlarmByInterval interval:" + interval);
-    }
-
-
-    private long getAlarmInterval(int count) {
-        mAlarmCount = count;
-
-        float progress = mAlarmCount / (float) ALARM_INTERVAL_MAX;
-        progress = new AccelerateInterpolator(2.2f).getInterpolation(progress);
-
-        int millisecond = (int) (1000 * (ALARM_INTERVAL_MIN_SECOND + ((ALARM_INTERVAL_MAX_SECOND - ALARM_INTERVAL_MIN_SECOND) * progress)));
-        log("getAlarmInterval:mAlarmCount:" + mAlarmCount + " progress:" + progress + " millisecond:" + millisecond);
-        return millisecond;
+                SystemClock.elapsedRealtime() + ALARM_INTERVAL_SECOND, 60000, getOperationIntent());
+        log("registerAlarmByInterval interval:" + ALARM_INTERVAL_SECOND);
     }
 
     private void cancelRequestAlarm() {
@@ -167,106 +147,48 @@ public class NoticeServer extends Service {
 
     private void handleAction(String action, Intent intent) {
         if (FLAG_ACTION_REFRESH.equals(action)) {
-            refreshNotice();
+            refreshNoticeForNet();
         } else if (FLAG_ACTION_CLEAR.equals(action)) {
-            clearNotice(intent.getIntExtra(EXTRA_TYPE, 0));
+            clearNoticeForNet(intent.getIntExtra(EXTRA_TYPE, 0));
         } else if (FLAG_ACTION_EXIT.equals(action)) {
             cancelRequestAlarm();
             stopSelf();
         } else if (FLAG_ACTION_FIRST.equals(action)) {
-            registerFirstAlarm();
+            registerNextAlarm();
             // First notify
             sendBroadcastToManager(NoticeBean.getInstance(this));
+        } else if (FLAG_ACTION_ARRIVED.equals(action)) {
+            // Arrived new message
+            NoticeBean bean = (NoticeBean) intent.getSerializableExtra(EXTRA_BEAN);
+            if (bean == null)
+                return;
+            doNewMessage(bean);
         }
     }
 
-    private boolean mRunning;
-
-    private synchronized void refreshNotice() {
-        log("refreshNotice: mRunning:" + mRunning);
-        if (mRunning)
-            return;
-
-        mRunning = true;
-        OSChinaApi.getNotice(new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                log("onFailure:" + statusCode + " " + responseString);
-                doNetFinish(null);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                log("onSuccess:" + statusCode + " " + responseString);
-                if (!TextUtils.isEmpty(responseString)) {
-                    try {
-                        Type type = new TypeToken<ResultBean<NoticeBean>>() {
-                        }.getType();
-                        ResultBean<NoticeBean> bean = new Gson().fromJson(responseString, type);
-                        doNetFinish(bean);
-                    } catch (Exception e) {
-                        onFailure(statusCode, headers, responseString, e.fillInStackTrace());
-                    }
-                } else {
-                    onFailure(statusCode, headers, responseString, null);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                mRunning = false;
-            }
-        });
-    }
-
-    private void doNetFinish(ResultBean<NoticeBean> bean) {
+    private void doNetFinish(ResultBean bean) {
         log("doNetFinish:" + (bean == null ? "null" : bean.toString()));
-        if (bean != null && bean.isSuccess()
-                && bean.getResult() != null
-                && bean.getResult().getAllCount() > 0) {
-            NoticeBean request = bean.getResult();
-            NoticeBean notice = NoticeBean.getInstance(this)
-                    .add(request)
-                    .save(this);
-            // To register alarm
-            registerCurrentAlarm(false);
-            // Send to manager
-            sendBroadcastToManager(notice);
-            // Send to notification
-            sendNotification(notice);
+        if (bean != null && bean.isOk()
+                && bean.getNotice() != null) {
+            doNewMessage(bean.getNotice());
         } else {
             // To register alarm
-            registerCurrentAlarm(true);
+            registerNextAlarm();
         }
     }
 
-    private void clearNotice(int type) {
-        log("clearNotice:" + type);
+    private void doNewMessage(@NonNull NoticeBean bean) {
+        log("doNewMessage:" + (bean.toString()));
         NoticeBean notice = NoticeBean.getInstance(this);
-        switch (type) {
-            case NoticeManager.FLAG_CLEAR_MENTION:
-                notice.setMention(0);
-                break;
-            case NoticeManager.FLAG_CLEAR_LETTER:
-                notice.setLetter(0);
-                break;
-            case NoticeManager.FLAG_CLEAR_REVIEW:
-                notice.setReview(0);
-                break;
-            case NoticeManager.FLAG_CLEAR_FANS:
-                notice.setFans(0);
-                break;
-            case NoticeManager.FLAG_CLEAR_LIKE:
-                notice.setLike(0);
-                break;
-            case NoticeManager.FLAG_CLEAR_ALL:
-                notice.clear();
-                break;
-        }
-        notice.save(this);
+        if (bean.equals(notice))
+            return;
+        notice.set(bean).save(this);
+        // Send to manager
         sendBroadcastToManager(notice);
+        // Send to notification
         sendNotification(notice);
+        // To register alarm
+        registerNextAlarm();
     }
 
     private void sendBroadcastToManager(NoticeBean bean) {
@@ -328,6 +250,93 @@ public class NoticeServer extends Service {
     private void clearNotification() {
         log("clearNotification");
         NotificationManagerCompat.from(this).cancel(NOTIFY_ID);
+    }
+
+
+    private boolean mRunning;
+
+    private synchronized void refreshNoticeForNet() {
+        log("refreshNoticeForNet: mRunning:" + mRunning);
+        if (true)// (mRunning)
+            return;
+
+        mRunning = true;
+        OSChinaApi.getNotice(new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                log("onFailure:" + statusCode + " " + responseString);
+                doNetFinish(null);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                log("onSuccess:" + statusCode + " " + responseString);
+                if (!TextUtils.isEmpty(responseString)) {
+                    try {
+                        Type type = new TypeToken<ResultBean>() {
+                        }.getType();
+                        ResultBean bean = new Gson().fromJson(responseString, type);
+                        doNetFinish(bean);
+                    } catch (Exception e) {
+                        onFailure(statusCode, headers, responseString, e.fillInStackTrace());
+                    }
+                } else {
+                    onFailure(statusCode, headers, responseString, null);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mRunning = false;
+            }
+        });
+    }
+
+    private synchronized void clearNoticeForNet(int flag) {
+        log("clearNoticeForNet: flag:" + flag);
+
+        if (flag == 0 || NoticeBean.getInstance(this).getAllCount() <= 0)
+            return;
+
+        if ((flag & NoticeManager.FLAG_CLEAR_MENTION) == NoticeManager.FLAG_CLEAR_MENTION
+                || (flag & NoticeManager.FLAG_CLEAR_LETTER) == NoticeManager.FLAG_CLEAR_LETTER
+                || (flag & NoticeManager.FLAG_CLEAR_REVIEW) == NoticeManager.FLAG_CLEAR_REVIEW
+                || (flag & NoticeManager.FLAG_CLEAR_FANS) == NoticeManager.FLAG_CLEAR_FANS
+                || (flag & NoticeManager.FLAG_CLEAR_LIKE) == NoticeManager.FLAG_CLEAR_LIKE) {
+            mRunning = true;
+            OSChinaApi.clearNotice(flag, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    log("onFailure:" + statusCode + " " + responseString);
+                    doNetFinish(null);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    log("onSuccess:" + statusCode + " " + responseString);
+                    if (!TextUtils.isEmpty(responseString)) {
+                        try {
+                            Type type = new TypeToken<ResultBean>() {
+                            }.getType();
+                            ResultBean bean = new Gson().fromJson(responseString, type);
+                            doNetFinish(bean);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            onFailure(statusCode, headers, responseString, e.fillInStackTrace());
+                        }
+                    } else {
+                        onFailure(statusCode, headers, responseString, null);
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+                    super.onFinish();
+                    mRunning = false;
+                }
+            });
+        }
     }
 
     static void log(String str) {
