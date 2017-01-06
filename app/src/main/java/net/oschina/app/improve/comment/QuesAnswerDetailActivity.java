@@ -85,7 +85,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
     @Bind(R.id.layout_container)
     LinearLayout mLayoutContainer;
     @Bind(R.id.layout_coordinator)
-    CoordinatorLayout mCoorLayout;
+    CoordinatorLayout mCoordinatorLayout;
     @Bind(R.id.layout_scroll)
     NestedScrollView mScrollView;
 
@@ -173,7 +173,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
 
         tvCmnCount.setText("评论 (" + (comment.getReply() == null ? 0 : comment.getReply().length) + ")");
 
-        mDelegation = CommentBar.delegation(this, mCoorLayout);
+        mDelegation = CommentBar.delegation(this, mCoordinatorLayout);
 
         mDelegation.hideFav();
         mDelegation.hideShare();
@@ -265,9 +265,6 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
         CommentsUtil.formatHtml(getResources(), holder.tvContent, reply.getContent());
         holder.btnReply.setTag(reply);
         holder.btnReply.setOnClickListener(getOnReplyButtonClickListener());
-        if (i == replies.size() - 1) {
-            holder.tvNoMore.setVisibility(View.VISIBLE);
-        }
         mLayoutContainer.addView(view, 0);
     }
 
