@@ -21,6 +21,8 @@ import butterknife.Bind;
  * Created by huanghaibin_dev
  * Updated by Dominic Thanatosx
  * on 2016/8/16.
+ * updated by fei
+ * on 2017/1/06
  */
 public class UserMessageActivity extends BaseBackActivity implements NoticeManager.NoticeNotify {
 
@@ -40,9 +42,9 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
     private int mStatusLoading = 0X000;
 
     private NoticeBean mNotice;
+    private Runnable mNotifyAction;
 
     public static void show(Context context) {
-
         context.startActivity(new Intent(context, UserMessageActivity.class));
     }
 
@@ -64,6 +66,7 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
 
         mLayoutTab.setupWithViewPager(mViewPager);
         mViewPager.setAdapter(mAdapter);
+
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -72,11 +75,11 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
             }
         });
 
-        final int mCurrentViewIndex = mNotice.getMention() > 0
+        final int mCurrentViewIndex = getNotice().getMention() > 0
                 ? INDEX_MENTION
-                : mNotice.getReview() > 0
+                : getNotice().getReview() > 0
                 ? INDEX_COMMENT
-                : mNotice.getLetter() > 0
+                : getNotice().getLetter() > 0
                 ? INDEX_MESSAGE
                 : INDEX_MENTION;
 
@@ -86,46 +89,40 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
     private void clearSpecificNoticeIfNecessary(int position) {
         switch (position) {
             case INDEX_MENTION:
-                if (mNotice.getMention() <= 0) break;
+                if (getNotice().getMention() <= 0) break;
                 clearSpecificNotice(position);
                 break;
             case INDEX_COMMENT:
-                if (mNotice.getReview() <= 0) break;
+                if (getNotice().getReview() <= 0) break;
                 clearSpecificNotice(position);
                 break;
             case INDEX_MESSAGE:
-                if (mNotice.getLetter() <= 0) break;
+                if (getNotice().getLetter() <= 0) break;
                 clearSpecificNotice(position);
                 break;
         }
     }
 
-    private void clearSpecificNotice(int position) {
-        switch (position) {
-            case INDEX_MENTION:
-                NoticeManager
-                        .clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
-                break;
-            case INDEX_COMMENT:
-                NoticeManager
-                        .clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
-                break;
-            case INDEX_MESSAGE:
-                NoticeManager
-                        .clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
-                break;
-        }
-    }
-
-    private void postChangeTitle(final int position, int delay) {
-        mViewPager.postDelayed(new Runnable() {
+    private void clearSpecificNotice(final int position) {
+        mViewPager.removeCallbacks(mNotifyAction);
+        Runnable notifyAction = new Runnable() {
             @Override
             public void run() {
-                TabLayout.Tab tab = mLayoutTab.getTabAt(position);
-                if (tab == null) return;
-                tab.setText(mAdapter.getPageTitle(position));
+                switch (position) {
+                    case INDEX_MENTION:
+                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
+                        break;
+                    case INDEX_COMMENT:
+                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
+                        break;
+                    case INDEX_MESSAGE:
+                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
+                        break;
+                }
             }
-        }, delay);
+        };
+        mNotifyAction = notifyAction;
+        mViewPager.postDelayed(notifyAction, 2000);
     }
 
     public void onRequestSuccess(int position) {
@@ -134,32 +131,39 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         clearSpecificNoticeIfNecessary(position);
     }
 
-    private void analyzeOldAndNew(int _old, int _new, int position) {
+    private void updateTitle(int _old, int _new, int position) {
         if (_old == _new) return;
+
         if (mViewPager.getCurrentItem() != position || _new != 0) {
             mStatusLoading &= 0X111 ^ 0X1 << (2 - position) * 4;
-            postChangeTitle(position, 0);
-        } else {
-            postChangeTitle(position, 1500);
         }
+
+        TabLayout.Tab tab = mLayoutTab.getTabAt(position);
+        if (tab == null) return;
+        tab.setText(mAdapter.getPageTitle(position));
+    }
+
+    private NoticeBean getNotice() {
+        if (mNotice == null) return new NoticeBean();
+        return mNotice;
     }
 
     @Override
     public void onNoticeArrived(NoticeBean bean) {
-        NoticeBean nb = mNotice;
+        NoticeBean nb = getNotice();
         mNotice = bean;
-        analyzeOldAndNew(nb.getMention(), bean.getMention(), INDEX_MENTION);
-        analyzeOldAndNew(nb.getReview(), bean.getReview(), INDEX_COMMENT);
-        analyzeOldAndNew(nb.getLetter(), bean.getLetter(), INDEX_MESSAGE);
+        updateTitle(nb.getMention(), bean.getMention(), INDEX_MENTION);
+        updateTitle(nb.getReview(), bean.getReview(), INDEX_COMMENT);
+        updateTitle(nb.getLetter(), bean.getLetter(), INDEX_MESSAGE);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mNotice = null;
         NoticeManager.unBindNotify(this);
-        clearSpecificNotice(INDEX_MENTION);
-        clearSpecificNotice(INDEX_COMMENT);
-        clearSpecificNotice(INDEX_MESSAGE);
+        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION |
+                NoticeManager.FLAG_CLEAR_REVIEW | NoticeManager.FLAG_CLEAR_LETTER);
     }
 
     private FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -184,11 +188,11 @@ public class UserMessageActivity extends BaseBackActivity implements NoticeManag
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case INDEX_MENTION:
-                    return formatMessageCount("@我", mNotice.getMention());
+                    return formatMessageCount("@我", getNotice().getMention());
                 case INDEX_COMMENT:
-                    return formatMessageCount("评论", mNotice.getReview());
+                    return formatMessageCount("评论", getNotice().getReview());
                 default:
-                    return formatMessageCount("私信", mNotice.getLetter());
+                    return formatMessageCount("私信", getNotice().getLetter());
             }
         }
     };
