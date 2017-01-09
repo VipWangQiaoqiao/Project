@@ -9,9 +9,9 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.Software;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.utils.ReadedIndexCacheManager;
-import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
 
@@ -27,6 +27,8 @@ public class NewsDetailFragment extends DetailFragment {
     @Bind(R.id.tv_pub_date)
     TextView mTextPubDate;
 
+    @Bind(R.id.tv_author)
+    TextView mTextAuthor;
 
     @Bind(R.id.lay_about_software)
     LinearLayout mLinearSoftware;
@@ -51,7 +53,11 @@ public class NewsDetailFragment extends DetailFragment {
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
         mTextTitle.setText(bean.getTitle());
-        mTextPubDate.setText(bean.getPubDate());
+        mTextPubDate.setText("发布于 " + bean.getPubDate());
+        Author author = mBean.getAuthor();
+        if (author != null) {
+            mTextAuthor.setText("@" + author.getName());
+        }
         final Software software = bean.getSoftware();
         if (software != null) {
             mLinearSoftware.setVisibility(View.VISIBLE);
