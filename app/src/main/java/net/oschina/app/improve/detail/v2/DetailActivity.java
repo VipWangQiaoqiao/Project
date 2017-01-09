@@ -173,6 +173,9 @@ public abstract class DetailActivity extends BaseBackActivity implements
         this.mBean = bean;
         if (mDelegation != null)
             mDelegation.setFavDrawable(mBean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
+        if (mCommentCountView != null && mBean.getStatistics() != null) {
+            mCommentCountView.setText(String.valueOf(mBean.getStatistics().getComment()));
+        }
     }
 
     @Override
