@@ -36,6 +36,7 @@ import net.oschina.app.widget.IndexView;
 import net.oschina.common.utils.CollectionUtil;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -93,7 +94,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     private ArrayList<UserFriend> mCacheFriends;
 
     //选中icon缓存朋友数据
-    private ArrayList<UserFriend> mCacheIconFriends = new ArrayList<>();
+    private LinkedList<UserFriend> mCacheIconFriends = new LinkedList<>();
 
     private UserSearchFriendsAdapter mSearchAdapter;
 
@@ -245,7 +246,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     private void updateSelectIcon(UserFriend userFriend) {
 
-        ArrayList<UserFriend> cacheIcons = this.mCacheIconFriends;
+        LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
 
         int index = containsUserFriend(userFriend);
 
@@ -308,7 +309,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         int index = -1;
 
-        ArrayList<UserFriend> cacheIcons = this.mCacheIconFriends;
+        LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
         for (int i = 0; i < cacheIcons.size(); i++) {
             UserFriend friend = cacheIcons.get(i);
             if (friend.getId() == userFriend.getId()) {
@@ -393,7 +394,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
 
-        //缓存的搜索好友列表
+        //初始化缓存本地搜索好友列表
         ArrayList<UserFriend> searchFriends = new ArrayList<>();
 
         UserFriend LocalUserFriend = new UserFriend();
@@ -420,6 +421,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
             //搜索列表当中没有该条数据，进行添加
             if (AssimilateUtils.returnPinyin(name, false).startsWith(pinyinQueryText)) {
+
                 friend.setShowLabel(name);
                 friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
                 searchFriends.add(1, friend);
@@ -428,7 +430,10 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         }
         mSearchAdapter.clear();
         mSearchAdapter.addItems(searchFriends);
+        mSearchAdapter.setSelectIcons(mCacheIconFriends);
     }
+
+
 
     private void updateView(ArrayList<UserFriend> friends) {
 
@@ -448,7 +453,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     public void onIndexTouchMove(char indexLetter) {
 
         ArrayList<UserFriend> userFriends = this.mCacheFriends;
-        userFriends.trimToSize();
         int position = 0;
         for (int i = userFriends.size() - 1; i > 0; i--) {
             UserFriend friend = userFriends.get(i);
@@ -508,13 +512,15 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
             mSearchAdapter.clear();
             mSearchAdapter.setSearchContent(newText);
+
             if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
                 mRecyclerFriends.setAdapter(mSearchAdapter);
             }
+
             queryUpdateView(newText);
         }
 
-        mSearchAdapter.setOnOnFriendSelector(new OnFriendSelector() {
+        mSearchAdapter.setOnFriendSelector(new OnFriendSelector() {
             @Override
             public void select(View view, UserFriend userFriend, int position) {
                 updateSelectIcon(userFriend);

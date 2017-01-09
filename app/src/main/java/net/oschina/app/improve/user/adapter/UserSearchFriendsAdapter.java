@@ -31,6 +31,7 @@ import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -54,6 +55,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
     //最大可选择好友的数量
     private static final int MAX_SELECTED_SIZE = 10;
+    private LinkedList<UserFriend> mSelectIcons = new LinkedList<>();
 
     public UserSearchFriendsAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -152,6 +154,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         return mItems;
     }
 
+    public LinkedList<UserFriend> getSelectIcons() {
+        return mSelectIcons;
+    }
+
     public void updateSelectStatus(int position, boolean isSelected) {
         this.mItems.get(position).setSelected(isSelected);
         notifyItemChanged(position);
@@ -166,7 +172,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public void setOnOnFriendSelector(OnFriendSelector OnFriendSelector) {
+    public void setOnFriendSelector(OnFriendSelector OnFriendSelector) {
         mOnFriendSelector = OnFriendSelector;
     }
 
@@ -176,6 +182,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
     private String getSearchContent() {
         return mSearchContent;
+    }
+
+    public void setSelectIcons(LinkedList<UserFriend> selectIcons) {
+        mSelectIcons = selectIcons;
     }
 
     static class IndexViewHolder extends RecyclerView.ViewHolder {
@@ -261,9 +271,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
         void onBindView(UserFriend item, int position) {
             mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_net_label));
-            if (mStatus == 0x01) {
-                //requestData(mTvSearch);
-            }
         }
 
         @Override
@@ -348,14 +355,20 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
                         for (User user : users) {
 
-                            if (isLocalData(user.getId(), searchAdapter)) {
+                            long userId = user.getId();
+                            //如果是本地数据，那么就跳过
+                            if (isLocalData(userId, searchAdapter)) {
                                 continue;
                             }
 
                             UserFriend friend = new UserFriend();
-                            friend.setId(user.getId());
+                            friend.setId(userId);
                             friend.setPortrait(user.getPortrait());
                             friend.setName(user.getName());
+                            //判断是否是已经被选中的数据
+                            if (isContainsIconFriend(userId, searchAdapter)) {
+                                friend.setSelected(true);
+                            }
                             friend.setShowLabel(AssimilateUtils.returnPinyin(user.getName(), true));
                             friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
 
@@ -374,12 +387,33 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
             });
         }
 
+        /**
+         * @param id            friend id
+         * @param searchAdapter searchAdapter
+         * @return is localData?true:false
+         */
         private boolean isLocalData(long id, UserSearchFriendsAdapter searchAdapter) {
-
-            for (UserFriend f : searchAdapter.getItems()) {
+            List<UserFriend> items = searchAdapter.getItems();
+            for (UserFriend f : items) {
                 if (f.getId() == id) {
                     return true;
                 }
+            }
+            return false;
+        }
+
+        /**
+         * verify isSelected status
+         *
+         * @param id            friend id
+         * @param searchAdapter searchAdapter
+         * @return isSelected status true/false
+         */
+        private boolean isContainsIconFriend(long id, UserSearchFriendsAdapter searchAdapter) {
+            LinkedList<UserFriend> cacheIconFriends = searchAdapter.getSelectIcons();
+            for (UserFriend iconFriend : cacheIconFriends) {
+                if (iconFriend.getId() == id && iconFriend.isSelected())
+                    return true;
             }
             return false;
         }

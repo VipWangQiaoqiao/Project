@@ -55,7 +55,6 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
     }
 
     protected void init(Context context) {
-        //mHandler = new Handler();
         mBanners = new ArrayList<>();
         List<Banner> banners = CacheManager.readListJson(context, mBannerCache, Banner.class);
         if (banners != null) {
