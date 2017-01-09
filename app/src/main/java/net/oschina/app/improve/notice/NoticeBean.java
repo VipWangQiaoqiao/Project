@@ -96,6 +96,16 @@ public class NoticeBean implements Serializable {
         this.like = 0;
     }
 
+    NoticeBean set(NoticeBean bean) {
+        this.mention = bean.mention;
+        this.letter = bean.letter;
+        this.review = bean.review;
+        this.fans = bean.fans;
+        // 暂不累加点赞数据
+        //this.like = bean.like;
+        return this;
+    }
+
     NoticeBean add(NoticeBean bean) {
         this.mention += bean.mention;
         this.letter += bean.letter;

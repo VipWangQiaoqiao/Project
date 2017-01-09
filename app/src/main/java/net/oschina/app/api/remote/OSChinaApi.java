@@ -1299,8 +1299,20 @@ public class OSChinaApi {
      * @param handler TextHttpResponseHandler
      */
     public static void getNotice(TextHttpResponseHandler handler) {
-        ApiHttpClient.get("action/apiv2/notice", handler);
+        ApiHttpClient.get("action/apiv2/notice?clear=false", handler);
     }
+
+    /**
+     * 清理消息
+     *
+     * @param handler TextHttpResponseHandler
+     */
+    public static void clearNotice(int flag, TextHttpResponseHandler handler) {
+        ApiHttpClient.post("action/apiv2/notice_clear",
+                new RequestParams("clearFlag", flag),
+                handler);
+    }
+
 
     /**
      * 获取个人信息

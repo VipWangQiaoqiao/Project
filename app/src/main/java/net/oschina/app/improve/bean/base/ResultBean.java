@@ -2,6 +2,7 @@ package net.oschina.app.improve.bean.base;
 
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
+import net.oschina.app.util.TLog;
 
 /**
  * Created by huanghaibin
@@ -55,7 +56,15 @@ public class ResultBean<T> {
         this.time = time;
     }
 
+    public boolean isOk() {
+        TLog.error("ResultBean#isOk");
+        return code == RESULT_SUCCESS;
+    }
+
     public boolean isSuccess() {
+        TLog.error("ResultBean#isSuccess");
+        // 每次回来后通知消息到达
+        NoticeManager.publish(this, this.notice);
         return code == RESULT_SUCCESS && result != null;
     }
 
@@ -65,8 +74,6 @@ public class ResultBean<T> {
 
     public void setNotice(NoticeBean notice) {
         this.notice = notice;
-        // 每次回来后通知消息到达
-        NoticeManager.publish(this, this.notice);
     }
 
     @Override
@@ -74,6 +81,6 @@ public class ResultBean<T> {
         return "code:" + code
                 + " + message:" + message
                 + " + time:" + time
-                + " + result:" + result.toString();
+                + " + result:" + (result != null ? result.toString() : null);
     }
 }

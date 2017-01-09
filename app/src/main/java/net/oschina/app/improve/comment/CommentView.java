@@ -47,7 +47,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by fei
  * on 2016/11/16.
- * desc:  资讯、问答、博客、翻译、活动详情评论列表当中进行展示的子view.
+ * desc:  资讯、问答、博客、翻译、活动、软件详情评论列表当中进行展示的子view.
  * 包括直接渲染出评论下的refer和reply
  */
 public class CommentView extends LinearLayout implements View.OnClickListener {
@@ -58,8 +58,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     private TextView mSeeMore;
     private LinearLayout mLayComments;
     private ProgressDialog mDialog;
-    private View mLabelLine;
-    private View mLabelBottomLine;
     private CommentBar commentBar;
 
     public CommentView(Context context) {
@@ -82,9 +80,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.lay_detail_comment_layout, this, true);
         mTitle = (TextView) findViewById(R.id.tv_blog_detail_comment);
-        mLabelLine = findViewById(R.id.label_line);
         mLayComments = (LinearLayout) findViewById(R.id.lay_detail_comment);
-        mLabelBottomLine = findViewById(R.id.label_line_bottom);
         mSeeMore = (TextView) findViewById(R.id.tv_see_more_comment);
     }
 
@@ -116,7 +112,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
 
     public void init(long id, final int type, int order, final int commentCount, final RequestManager imageLoader,
                      final OnCommentClickListener onCommentClickListener) {
-
         this.mId = id;
         this.mType = type;
 
@@ -137,11 +132,13 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
 
                     ResultBean<PageBean<Comment>> resultBean = AppOperator.createGson().fromJson(responseString, getCommentType());
                     if (resultBean.isSuccess()) {
+
                         List<Comment> comments = resultBean.getResult().getItems();
 
                         int size = comments.size();
                         if (type == OSChinaApi.COMMENT_NEWS) {
                             List<Comment> hotComments = new ArrayList<>();
+                            hotComments.clear();
                             //筛选出热门评论
                             for (int i = 0, len = comments.size(); i < (len > 5 ? 5 : len); i++) {
                                 Comment comment = comments.get(i);
@@ -175,35 +172,36 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
 
     private void initComment(final Comment[] comments, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         if (mLayComments != null)
-            if (comments != null && comments.length > 0) {
-                if (getVisibility() != VISIBLE) {
-                    setVisibility(VISIBLE);
-                }
+            mLayComments.removeAllViews();
+        if (comments != null && comments.length > 0) {
+            if (getVisibility() != VISIBLE) {
+                setVisibility(VISIBLE);
+            }
 
-                for (int i = 0, len = comments.length; i < len; i++) {
-                    final Comment comment = comments[i];
-                    if (comment != null) {
-                        final ViewGroup lay = insertComment((i + 1), true, comment, imageLoader, onCommentClickListener);
-                        lay.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (mType == OSChinaApi.COMMENT_EVENT || mType == OSChinaApi.COMMENT_QUESTION) {
-                                    QuesAnswerDetailActivity.show(lay.getContext(), comment, mId, mType);
-                                }
+            for (int i = 0, len = comments.length; i < len; i++) {
+                final Comment comment = comments[i];
+                if (comment != null) {
+                    final ViewGroup lay = insertComment((i + 1), true, comment, imageLoader, onCommentClickListener);
+                    lay.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mType == OSChinaApi.COMMENT_EVENT || mType == OSChinaApi.COMMENT_QUESTION) {
+                                QuesAnswerDetailActivity.show(lay.getContext(), comment, mId, mType);
                             }
-                        });
-
-                        addView(lay, indexOfChild(mLabelBottomLine));
-                        if (i == len - 1) {
-                            lay.findViewById(R.id.line).setVisibility(GONE);
-                        } else {
-                            lay.findViewById(R.id.line).setVisibility(View.VISIBLE);
                         }
+                    });
+
+                    mLayComments.addView(lay);
+                    if (i == len - 1) {
+                        lay.findViewById(R.id.line).setVisibility(GONE);
+                    } else {
+                        lay.findViewById(R.id.line).setVisibility(View.VISIBLE);
                     }
                 }
-            } else {
-                setVisibility(View.GONE);
             }
+        } else {
+            setVisibility(View.GONE);
+        }
     }
 
 
