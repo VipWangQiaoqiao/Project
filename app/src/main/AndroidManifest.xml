@@ -30,7 +30,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <uses-feature android:name="android.hardware.camera" />
@@ -50,7 +49,6 @@
         android:label="@string/app_name"
         android:theme="@style/App.Theme.Light"
         tools:replace="android:allowBackup">
-
         <activity
             android:name=".LaunchActivity"
             android:label="@string/app_name"
@@ -90,7 +88,6 @@
             android:name="com.dtr.zxing.activity.CaptureActivity"
             android:label="@string/actionbar_title_qr_scan"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.SelectFriendsActivity"
             android:label="@string/actionbar_title_select_friends"
@@ -137,7 +134,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/App.Theme.Transparent" />
-
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
@@ -152,42 +148,35 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".improve.detail.general.BlogDetailActivity"
             android:label="博客详情"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".improve.detail.general.QuestionDetailActivity"
             android:label="问答详情"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="adjustResize" />
-
-
         <activity
             android:name=".improve.detail.general.EventDetailActivity"
             android:label="活动详情"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".improve.detail.apply.ApplyActivity"
             android:label="活动出席人"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".improve.detail.general.SoftwareDetailActivity"
             android:label="软件详情"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".improve.tweet.activities.TweetDetailActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -195,7 +184,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme.NoTitle"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".improve.detail.sign.SignUpActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -203,7 +191,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemeTranslucent"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".improve.user.activities.UserTweetActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -342,7 +329,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme" />
-
         <activity
             android:name=".improve.tweet.activities.TopicTweetActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -367,7 +353,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Account_Base.App.Theme.NoTitle"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <activity
             android:name=".improve.account.activity.RegisterStepTwoActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -417,7 +402,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
-
         <activity
             android:name=".improve.media.crop.CropActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -425,7 +409,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
-
         <activity
             android:name=".improve.tweet.activities.TweetPublishQueueActivity"
             android:label="动弹队列"
@@ -455,14 +438,12 @@
             android:name=".improve.main.FeedBackActivity"
             android:label="意见反馈"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".improve.detail.activities.EventSigninActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="活动签到"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-
         <activity
             android:name=".improve.user.activities.UserEventActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -471,7 +452,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme.NoTitle"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <activity
             android:name=".improve.user.activities.UserSelectFriendsActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -493,7 +473,6 @@
             android:exported="false" />
 
         <activity android:name=".improve.main.BrowserActivity" />
-
         <activity
             android:name=".improve.search.activities.NearbyActivity"
             android:label="附近的人" />
@@ -511,6 +490,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity android:name=".improve.tweet.activities.TweetTopicActivity"></activity>
     </application>
 
 </manifest>

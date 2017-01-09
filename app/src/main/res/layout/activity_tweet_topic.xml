@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_tweet_topic"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="net.oschina.app.improve.tweet.activities.TweetTopicActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/lay_4"
+        android:background="@drawable/shape_search_user_friends"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/size_14"
+            android:layout_height="@dimen/size_14"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/lay_8"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_tweet_topic_normal" />
+
+        <EditText
+            android:id="@+id/edit_enter_tag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="输入话题、软件名"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLength="32"
+            android:maxLines="1"
+            android:textColorHint="@color/black_alpha_48"
+            android:minHeight="@dimen/size_32"
+            android:paddingRight="@dimen/lay_8"
+            android:singleLine="true"
+            android:textColor="#ff24cf5f"
+            android:textSize="@dimen/font_16" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>
