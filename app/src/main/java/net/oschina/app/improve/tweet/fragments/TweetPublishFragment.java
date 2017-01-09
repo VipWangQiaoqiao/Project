@@ -32,6 +32,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.tweet.activities.TweetTopicActivity;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
@@ -53,7 +54,8 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         TweetPublishContract.View {
     private final static String TAG = TweetPublishFragment.class.getName();
     public static final int MAX_TEXT_LENGTH = 160;
-    public static final int SELECT_FRIENDS_REQUEST_CODE = 100;
+    public static final int REQUEST_CODE_SELECT_FRIENDS = 0x0001;
+    public static final int REQUEST_CODE_SELECT_TOPIC = 0x0002;
     private static final String TEXT_TAG = "#输入软件名#";
 
     @Bind(R.id.edit_content)
@@ -265,7 +267,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                     toSelectFriends();
                     break;
                 case R.id.iv_tag:
-                    insertTrendSoftware();
+                    toSelectTopic();
                     break;
                 case R.id.iv_emoji:
                     handleEmojiClick(v);
@@ -406,6 +408,47 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         */
     }
 
+    private void toSelectTopic() {
+        Context context = getContext();
+        if (context == null)
+            return;
+        if (!AccountHelper.isLogin()) {
+            UIHelper.showLoginActivity(context);
+            return;
+        }
+
+        Intent intent = new Intent(context, TweetTopicActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_SELECT_TOPIC);
+    }
+
+    /**
+     * 好友名字选择
+     *
+     * @param data Intent
+     */
+    private void handleSelectTopicResult(Intent data) {
+        String topic = data.getStringExtra("topic");
+        if (!TextUtils.isEmpty(topic)) {
+            topic = String.format("#%s#", topic.trim());
+
+            SpannableString spannable = new SpannableString(topic);
+            RichEditText.matchTopic(spannable);
+
+            Editable msg = mEditContent.getText();
+            int selStart = mEditContent.getSelectionStart();
+            int selEnd = mEditContent.getSelectionEnd();
+
+            int selStartBefore = selStart - 1;
+            if (selStart == selEnd && selStart > 0
+                    && "#".equals(msg.subSequence(selStartBefore, selEnd).toString())
+                    && msg.getSpans(selStartBefore, selEnd, RichEditText.TagSpan.class).length == 0) {
+                selStart = selStartBefore;
+            }
+
+            msg.replace(selStart, selEnd, spannable);
+        }
+    }
+
     /**
      * 跳转选择好友
      */
@@ -419,7 +462,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         }
 
         Intent intent = new Intent(context, UserSelectFriendsActivity.class);
-        startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
+        startActivityForResult(intent, REQUEST_CODE_SELECT_FRIENDS);
     }
 
     /**
@@ -457,10 +500,17 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK
-                && requestCode == SELECT_FRIENDS_REQUEST_CODE) {
-            handleSelectFriendsResult(data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_SELECT_FRIENDS:
+                    handleSelectFriendsResult(data);
+                    break;
+                case REQUEST_CODE_SELECT_TOPIC:
+                    handleSelectTopicResult(data);
+                    break;
+            }
         }
+
         mEditContent.postDelayed(new Runnable() {
             @Override
             public void run() {

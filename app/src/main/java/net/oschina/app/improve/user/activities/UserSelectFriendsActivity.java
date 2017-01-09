@@ -100,7 +100,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     public static void show(Activity activity) {
         Intent intent = new Intent(activity, UserSelectFriendsActivity.class);
-        activity.startActivityForResult(intent, TweetPublishFragment.SELECT_FRIENDS_REQUEST_CODE);
+        activity.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
     }
 
 
