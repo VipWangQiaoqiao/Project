@@ -202,36 +202,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     }
 
 
-    /**
-     * send select data
-     */
-    private void sendSelectData(boolean isLabel) {
-
-        String queryLabel = (String) mTvLabel.getText();
-
-        List<String> friendNames = new ArrayList<>();
-
-        if (isLabel) {
-            if (!TextUtils.isEmpty(queryLabel)) {
-                queryLabel = queryLabel.substring(1);
-                friendNames.add(queryLabel);
-            }
-        }
-
-        for (UserFriend friend : mCacheIconFriends) {
-            friendNames.add(friend.getName());
-        }
-
-        String[] names = CollectionUtil.toArray(friendNames, String.class);
-
-        Intent result = new Intent();
-        result.putExtra("names", names);
-
-        setResult(RESULT_OK, result);
-
-        finish();
-    }
-
     @Override
     protected void initData() {
         super.initData();
@@ -245,6 +215,62 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     }
 
+    /**
+     * request data
+     */
+    private void requestData() {
+
+        //检查网络
+        if (!checkNetIsAvailable()) {
+            showError(EmptyLayout.NETWORK_ERROR);
+        } else {
+
+            final ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
+            if (friends != null && friends.size() > 0) {
+                updateView(friends);
+            } else {
+                SyncFriendHelper.load(new Runnable() {
+                    @Override
+                    public void run() {
+                        mEmptyLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
+                                updateView(friends);
+                            }
+                        });
+
+                    }
+                });
+            }
+
+        }
+
+    }
+
+    /**
+     * refresh the friends ui
+     *
+     * @param friends friends
+     */
+    private void updateView(ArrayList<UserFriend> friends) {
+
+        if (friends != null && friends.size() > 0) {
+            mLocalAdapter.clear();
+            mLocalAdapter.addItems(friends);
+            hideLoading();
+        } else {
+            showError(EmptyLayout.NODATA);
+        }
+
+        this.mCacheFriends = friends;
+    }
+
+    /**
+     * refresh the select friends ui
+     *
+     * @param userFriend friend
+     */
     private void updateSelectIcon(UserFriend userFriend) {
 
         LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
@@ -303,96 +329,10 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     }
 
     /**
-     * contains userFriend
+     * refresh the query ui
      *
-     * @param userFriend userFriend
-     * @return index
+     * @param queryText query text
      */
-    private int containsUserFriend(UserFriend userFriend) {
-
-        int index = -1;
-
-        LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
-        for (int i = 0; i < cacheIcons.size(); i++) {
-            UserFriend friend = cacheIcons.get(i);
-            if (friend.getId() == userFriend.getId()) {
-                index = i;
-            }
-        }
-        return index;
-    }
-
-
-    private boolean checkNetIsAvailable() {
-        if (!TDevice.hasInternet()) {
-            AppContext.showToastShort(getString(R.string.tip_network_error));
-            showError(EmptyLayout.NETWORK_ERROR);
-            return false;
-        }
-        return true;
-    }
-
-    private void hideLoading() {
-        final EmptyLayout emptyLayout = mEmptyLayout;
-        if (emptyLayout == null)
-            return;
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_to_hide);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        emptyLayout.startAnimation(animation);
-    }
-
-    private void showError(int type) {
-        EmptyLayout layout = mEmptyLayout;
-        if (layout != null) {
-            layout.setErrorType(type);
-        }
-    }
-
-    private void requestData() {
-
-        //检查网络
-        if (!checkNetIsAvailable()) {
-            showError(EmptyLayout.NETWORK_ERROR);
-        } else {
-
-            final ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
-            if (friends != null && friends.size() > 0) {
-                updateView(friends);
-            } else {
-                SyncFriendHelper.load(new Runnable() {
-                    @Override
-                    public void run() {
-                        mEmptyLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
-                                updateView(friends);
-                            }
-                        });
-
-                    }
-                });
-            }
-
-        }
-
-    }
-
     private void queryUpdateView(String queryText) {
 
         String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
@@ -436,18 +376,54 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mSearchAdapter.setSelectIcons(mCacheIconFriends);
     }
 
+    /**
+     * send select data to  publish tweet
+     */
+    private void sendSelectData(boolean isLabel) {
 
-    private void updateView(ArrayList<UserFriend> friends) {
+        String queryLabel = (String) mTvLabel.getText();
 
-        if (friends != null && friends.size() > 0) {
-            mLocalAdapter.clear();
-            mLocalAdapter.addItems(friends);
-            hideLoading();
-        } else {
-            showError(EmptyLayout.NODATA);
+        List<String> friendNames = new ArrayList<>();
+
+        if (isLabel) {
+            if (!TextUtils.isEmpty(queryLabel)) {
+                queryLabel = queryLabel.substring(1);
+                friendNames.add(queryLabel);
+            }
         }
 
-        this.mCacheFriends = friends;
+        for (UserFriend friend : mCacheIconFriends) {
+            friendNames.add(friend.getName());
+        }
+
+        String[] names = CollectionUtil.toArray(friendNames, String.class);
+
+        Intent result = new Intent();
+        result.putExtra("names", names);
+
+        setResult(RESULT_OK, result);
+
+        finish();
+    }
+
+    /**
+     * contains userFriend
+     *
+     * @param userFriend userFriend
+     * @return index
+     */
+    private int containsUserFriend(UserFriend userFriend) {
+
+        int index = -1;
+
+        LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
+        for (int i = 0; i < cacheIcons.size(); i++) {
+            UserFriend friend = cacheIcons.get(i);
+            if (friend.getId() == userFriend.getId()) {
+                index = i;
+            }
+        }
+        return index;
     }
 
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")
@@ -535,5 +511,58 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         });
         return true;
 
+    }
+
+    /**
+     * verify network status
+     *
+     * @return
+     */
+    private boolean checkNetIsAvailable() {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(getString(R.string.tip_network_error));
+            showError(EmptyLayout.NETWORK_ERROR);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * hide empty view's loading
+     */
+    private void hideLoading() {
+        final EmptyLayout emptyLayout = mEmptyLayout;
+        if (emptyLayout == null)
+            return;
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_to_hide);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        emptyLayout.startAnimation(animation);
+    }
+
+    /**
+     * show empty view's error type
+     *
+     * @param type
+     */
+    private void showError(int type) {
+        EmptyLayout layout = mEmptyLayout;
+        if (layout != null) {
+            layout.setErrorType(type);
+        }
     }
 }
