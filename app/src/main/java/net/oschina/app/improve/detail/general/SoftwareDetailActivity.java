@@ -23,6 +23,18 @@ public class SoftwareDetailActivity extends DetailActivity {
         context.startActivity(intent);
     }
 
+    public static void show(Context context, String ident) {
+        Intent intent = new Intent(context, SoftwareDetailActivity.class);
+        Bundle bundle = new Bundle();
+        SubBean bean = new SubBean();
+        bean.setType(1);
+        bundle.putSerializable("sub_bean", bean);
+        bundle.putString("ident", ident);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
+
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, SoftwareDetailActivity.class);
         Bundle bundle = new Bundle();

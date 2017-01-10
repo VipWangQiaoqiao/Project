@@ -82,6 +82,8 @@ public final class DetailCache {
      * 读取缓存
      */
     static SubBean readCache(SubBean bean) {
+        if (bean == null || bean.getId() <= 0)
+            return null;
         String path = (bean.isFavorite() ? COLLECTION_CACHE : CUSTOM_CACHE)
                 + bean.getId() + String.valueOf(bean.getType());
         File file = new File(path);
