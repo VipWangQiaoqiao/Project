@@ -201,7 +201,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         final String[] os = new String[operators.size()];
         operators.toArray(os);
 
-        DialogHelper.getSelectDialog(getContext(), os, getString(R.string.cancle),
+        DialogHelper.getSelectDialog(getContext(), os, getString(R.string.cancel),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int index) {

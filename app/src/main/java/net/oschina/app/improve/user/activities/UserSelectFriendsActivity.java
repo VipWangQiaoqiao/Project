@@ -120,11 +120,12 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         });
 
-        if (mCacheIconFriends.size() <= 0) {
-            mBtSelectSubmit.setEnabled(false);
+        if (mCacheIconFriends.size() == 0) {
+            mBtSelectSubmit.setText(R.string.cancel);
         } else {
-            mBtSelectSubmit.setEnabled(true);
+            mBtSelectSubmit.setText(R.string.ok);
         }
+
         mBtSelectSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -248,6 +249,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
 
+        Button selectSubmit = this.mBtSelectSubmit;
+
         int index = containsUserFriend(userFriend);
 
         if (index != -1) {
@@ -256,10 +259,10 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             cacheIcons.add(userFriend);
         }
 
-        if (cacheIcons.size() > 0) {
-            mBtSelectSubmit.setEnabled(true);
+        if (cacheIcons.size() == 0) {
+            selectSubmit.setText(R.string.cancel);
         } else {
-            mBtSelectSubmit.setEnabled(false);
+            selectSubmit.setText(R.string.ok);
         }
 
         mSelectContainer.removeAllViews();
@@ -420,7 +423,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             if (TextUtils.isEmpty(name)) continue;
 
             //搜索列表当中没有该条数据，进行添加
-            if (AssimilateUtils.returnPinyin(name, false).startsWith(pinyinQueryText)) {
+            if (AssimilateUtils.returnPinyin(name, false).contains(pinyinQueryText)) {
 
                 friend.setShowLabel(name);
                 friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
@@ -432,7 +435,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mSearchAdapter.addItems(searchFriends);
         mSearchAdapter.setSelectIcons(mCacheIconFriends);
     }
-
 
 
     private void updateView(ArrayList<UserFriend> friends) {
@@ -496,19 +498,19 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
             mRecyclerFriends.setAdapter(mLocalAdapter);
 
-            mBtSelectSubmit.setEnabled(false);
+            mBtSelectSubmit.setText(R.string.cancel);
             mSearchAdapter.notifyDataSetChanged();
             mSearchAdapter.setSearchContent(newText);
             return false;
         } else {
-
-            mBtSelectSubmit.setEnabled(true);
 
             if (mIndex.getVisibility() == View.VISIBLE) {
                 mIndex.setVisibility(View.GONE);
             }
             mTvLabel.setText("@" + newText);
             mTvLabel.setVisibility(View.VISIBLE);
+
+            mBtSelectSubmit.setText(R.string.ok);
 
             mSearchAdapter.clear();
             mSearchAdapter.setSearchContent(newText);
