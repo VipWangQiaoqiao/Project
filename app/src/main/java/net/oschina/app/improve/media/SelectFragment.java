@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
+import android.support.v4.content.FileProvider;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -299,9 +301,17 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
 
         mCamImageName = Util.getSaveImageFullName();
         File out = new File(savePath, mCamImageName);
-        Uri uri = Uri.fromFile(out);
 
+        /**
+         * android N 系统适配
+         */
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(getContext(), "net.oschina.app.provider", out);
+        } else {
+            uri = Uri.fromFile(out);
+        }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         startActivityForResult(intent,
                 0x03);
