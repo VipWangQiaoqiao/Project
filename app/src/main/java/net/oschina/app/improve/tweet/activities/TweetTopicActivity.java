@@ -1,5 +1,6 @@
 package net.oschina.app.improve.tweet.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,11 +19,14 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.CacheManager;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.common.adapter.TextWatcherAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,9 +41,10 @@ public class TweetTopicActivity extends BaseBackActivity {
     @Bind(R.id.recycler)
     RecyclerView mRecycler;
 
-    private List<Object> mList = new ArrayList<>();
+    private List<Object> mHotList = new ArrayList<>();
     private List<TopicBean> mLocalList = new ArrayList<>();
-    private List<String> mCache;
+    private LinkedList<String> mCache;
+    private String[] mLabels = new String[]{"热门", "本地"};
 
     @Override
     protected int getContentView() {
@@ -83,17 +88,10 @@ public class TweetTopicActivity extends BaseBackActivity {
     protected void initData() {
         super.initData();
 
+        mHotList.add(new TopicBean("开源中国"));
+        mHotList.add(new TopicBean("开源中国客户端"));
+
         loadCache();
-
-        mList.add("热门");
-        mList.add(new TopicBean("开源中国"));
-        mList.add(new TopicBean("开源中国客户端", false));
-        mList.add("本地");
-
-        int size = mCache.size();
-        for (int i = 0; i < size; i++) {
-            mLocalList.add(new TopicBean(mCache.get(i), i != size - 1));
-        }
 
         adapter.notifyDataSetChanged();
     }
@@ -119,32 +117,33 @@ public class TweetTopicActivity extends BaseBackActivity {
     }
 
     private void loadCache() {
-        mCache = CacheManager.readListJson(this, CACHE_FILE, String.class);
-        if (mCache == null)
-            mCache = new ArrayList<>();
+        List<String> cache = CacheManager.readListJson(this, CACHE_FILE, String.class);
+        mCache = new LinkedList<>();
+        if (cache != null)
+            mCache.addAll(cache);
+        int size = mCache.size();
+        for (int i = 0; i < size; i++) {
+            mLocalList.add(new TopicBean(mCache.get(i), true));
+        }
     }
 
     private void saveCache(String str) {
+        final LinkedList<String> cache = mCache;
         // 避免重复添加
         boolean isHave = false;
-        for (String s : mCache) {
+        for (String s : cache) {
             if (isHave = s.equals(str))
                 break;
         }
         if (!isHave)
-            mCache.add(0, str);
+            cache.addFirst(str);
 
-        // 至多存储15条，默认清理5条
-        List<String> cache;
-        if (mCache.size() >= 15) {
-            cache = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
-                cache.add(mCache.get(i));
-            }
-        } else {
-            cache = mCache;
+        // 至多存储15条
+        while (cache.size() > 15) {
+            cache.removeLast();
         }
-        CacheManager.saveToJson(this, "TweetTopicLocalCache", cache);
+
+        CacheManager.saveToJson(this, CACHE_FILE, cache);
     }
 
     private void onSubmit() {
@@ -162,6 +161,28 @@ public class TweetTopicActivity extends BaseBackActivity {
         result.putExtra("topic", topic);
         setResult(RESULT_OK, result);
         finish();
+    }
+
+    private void doDeleteCache(TopicBean bean, boolean clear) {
+        final LinkedList<String> cache = mCache;
+        final List<TopicBean> cacheLocal = mLocalList;
+        if (clear) {
+            cache.clear();
+            cacheLocal.clear();
+        } else {
+            Iterator<TopicBean> itr = cacheLocal.iterator();
+            while (itr.hasNext()) {
+                if (itr.next().equals(bean))
+                    itr.remove();
+            }
+            Iterator<String> itrCache = cache.iterator();
+            while (itrCache.hasNext()) {
+                if (itrCache.next().equals(bean.text))
+                    itrCache.remove();
+            }
+        }
+        CacheManager.saveToJson(this, CACHE_FILE, cache);
+        adapter.notifyDataSetChanged();
     }
 
     private void sortLocalList(String text) {
@@ -195,28 +216,28 @@ public class TweetTopicActivity extends BaseBackActivity {
             if (get(position) instanceof String) {
                 return R.layout.list_item_sample_label;
             } else {
-                return R.layout.list_item_topic;
+                if (position == getItemCount() - 1 || position == mHotList.size())
+                    return 0;
+                else
+                    return R.layout.list_item_topic;
             }
         }
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == R.layout.list_item_sample_label) {
-                return new LabelHolder(LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_sample_label, parent, false));
-            } else {
-                View root = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_topic, parent, false);
-                root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Object obj = v.getTag();
-                        if (obj != null && obj instanceof TopicBean) {
-                            doResult(((TopicBean) obj).text);
-                        }
-                    }
-                });
-                return new DataHolder(root);
+            switch (viewType) {
+                case R.layout.list_item_sample_label:
+                    return new LabelHolder(LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.list_item_sample_label, parent, false));
+                case R.layout.list_item_topic: {
+                    View root = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.list_item_topic, parent, false);
+                    return new DataHolder(root, true);
+                }
+                default:
+                    View root = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.list_item_topic, parent, false);
+                    return new DataHolder(root, false);
             }
         }
 
@@ -227,22 +248,33 @@ public class TweetTopicActivity extends BaseBackActivity {
             } else {
                 TopicBean bean = (TopicBean) get(position);
                 ((DataHolder) holder).set(bean);
+                // Set tag
                 holder.itemView.setTag(bean);
             }
         }
 
         @Override
         public int getItemCount() {
-            return mList.size() + mLocalList.size();
+            int hotCount = mHotList.size();
+            int localCount = mLocalList.size();
+            return hotCount + localCount + (localCount > 0 ? 2 : 1);
         }
 
         private Object get(int position) {
-            int fixedCount = mList.size();
-            if (position >= fixedCount) {
-                return mLocalList.get(position - fixedCount);
-            } else {
-                return mList.get(position);
+            if (position == 0)
+                return mLabels[0];
+
+            int hotCount = mHotList.size();
+            int localCount = mLocalList.size();
+
+            if (localCount > 0) {
+                if (position == hotCount + 1)
+                    return mLabels[1];
+                if ((position >= hotCount + 2))
+                    return mLocalList.get(position - hotCount - 2);
             }
+
+            return mHotList.get(position - 1);
         }
     };
 
@@ -260,19 +292,56 @@ public class TweetTopicActivity extends BaseBackActivity {
         }
     }
 
-    private class DataHolder extends RecyclerView.ViewHolder {
+    private class DataHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private TextView mTitle;
-        private View mLine;
 
-        DataHolder(View itemView) {
+
+        DataHolder(View itemView, boolean needLine) {
             super(itemView);
             mTitle = (TextView) itemView.findViewById(R.id.txt_title);
-            mLine = itemView.findViewById(R.id.line);
+            if (needLine)
+                itemView.findViewById(R.id.line).setVisibility(View.VISIBLE);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         void set(TopicBean data) {
             mTitle.setText(data.text);
-            mLine.setVisibility(data.needLine ? View.VISIBLE : View.GONE);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Object obj = v.getTag();
+            if (obj != null && obj instanceof TopicBean) {
+                doResult(((TopicBean) obj).text);
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            Object obj = v.getTag();
+            if (obj != null && obj instanceof TopicBean) {
+                final TopicBean bean = (TopicBean) obj;
+                if (!bean.isLocal)
+                    return false;
+
+                String[] items = new String[2];
+                items[0] = getResources().getString(R.string.delete);
+                items[1] = getResources().getString(R.string.delete_all);
+                DialogHelper.getSelectDialog(TweetTopicActivity.this, items, "取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == 0) {
+                            doDeleteCache(bean, false);
+                        } else if (i == 1) {
+                            doDeleteCache(null, true);
+                        }
+                    }
+                }).show();
+
+                return true;
+            }
+            return false;
         }
     }
 
@@ -282,7 +351,7 @@ public class TweetTopicActivity extends BaseBackActivity {
     private class TopicBean {
         String text;
         String py;
-        boolean needLine = true;
+        private boolean isLocal;
         private int sort = ORDER_MAX;
         private int order = ORDER_COUNT++;
 
@@ -291,9 +360,21 @@ public class TweetTopicActivity extends BaseBackActivity {
             this.py = AssimilateUtils.returnPinyin(text, false);
         }
 
-        TopicBean(String text, boolean needLine) {
-            this(text);
-            this.needLine = needLine;
+        TopicBean(String text, boolean isLocal) {
+            this.text = text;
+            this.py = AssimilateUtils.returnPinyin(text, false);
+            this.isLocal = isLocal;
+        }
+
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null || !(obj instanceof TopicBean))
+                return false;
+            String oth = ((TopicBean) obj).text;
+            if (oth == null)
+                return this.text == null;
+            return oth.equals(this.text);
         }
     }
 
