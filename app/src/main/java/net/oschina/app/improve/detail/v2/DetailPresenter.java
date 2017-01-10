@@ -28,10 +28,12 @@ public class DetailPresenter implements DetailContract.Presenter {
     private final DetailContract.EmptyView mEmptyView;
     private SubBean mBean;
     private SubBean mCacheBean;
+    private String mIdent;
 
-    DetailPresenter(DetailContract.View mView, DetailContract.EmptyView mEmptyView, SubBean bean) {
+    DetailPresenter(DetailContract.View mView, DetailContract.EmptyView mEmptyView, SubBean bean, String ident) {
         this.mView = mView;
         this.mBean = bean;
+        this.mIdent = ident;
         this.mEmptyView = mEmptyView;
         this.mView.setPresenter(this);
     }
@@ -47,7 +49,7 @@ public class DetailPresenter implements DetailContract.Presenter {
 
     @Override
     public void getDetail() {
-        OSChinaApi.getDetail(mBean.getType(), mBean.getId(), new TextHttpResponseHandler() {
+        OSChinaApi.getDetail(mBean.getType(), mIdent, mBean.getId(), new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 //mView.showNetworkError(R.string.tip_network_error);

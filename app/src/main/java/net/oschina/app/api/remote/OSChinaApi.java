@@ -1575,10 +1575,12 @@ public class OSChinaApi {
     /**
      * 新版获得各种类型详情统一接口和Model
      */
-    public static void getDetail(int type, long id, TextHttpResponseHandler handler) {
+    public static void getDetail(int type, String ident, long id, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("type", type);
         params.put("id", id);
+        if (!TextUtils.isEmpty(ident))
+            params.put("ident", ident);
         ApiHttpClient.get("action/apiv2/detail", params, handler);
     }
 

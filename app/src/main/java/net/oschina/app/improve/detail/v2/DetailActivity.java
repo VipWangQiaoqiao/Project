@@ -57,6 +57,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
     protected CommentBar mDelegation;
 
     protected SubBean mBean;
+    protected String mIdent;
 
     protected long mCommentId;
     protected long mCommentAuthorId;
@@ -83,9 +84,10 @@ public abstract class DetailActivity extends BaseBackActivity implements
             }
         });
         mBean = (SubBean) getIntent().getSerializableExtra("sub_bean");
+        mIdent = getIntent().getStringExtra("ident");
         mDetailFragment = getDetailFragment();
         addFragment(R.id.lay_container, mDetailFragment);
-        mPresenter = new DetailPresenter(mDetailFragment, this, mBean);
+        mPresenter = new DetailPresenter(mDetailFragment, this, mBean, mIdent);
         if (!mPresenter.isHideCommentBar()) {
             mDelegation = CommentBar.delegation(this, layComment);
             mDelegation.setFavDrawable(mBean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
@@ -313,10 +315,6 @@ public abstract class DetailActivity extends BaseBackActivity implements
                 mInputDoubleEmpty = false;
             }
         }
-    }
-
-    protected String getExtraString(Object object) {
-        return object == null ? "" : object.toString();
     }
 
     protected int getExtraInt(Object object) {

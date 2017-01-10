@@ -1,13 +1,9 @@
 package net.oschina.app.improve.tweet.fragments;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.RectF;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
@@ -41,7 +37,6 @@ import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
 import net.oschina.app.util.UIHelper;
 import net.oschina.common.widget.RichEditText;
-import net.oschina.common.widget.drawable.shape.BorderShape;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -72,12 +67,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @Bind(R.id.icon_send)
     View mIconSend;
-
-    @Bind(R.id.lay_enter_tag)
-    View mLayTagEnter;
-
-    @Bind(R.id.edit_enter_tag)
-    EditText mEditTagEnter;
 
     private TweetPublishContract.Operator mOperator;
     private final EmojiKeyboardFragment mEmojiKeyboard = new EmojiKeyboardFragment();
@@ -194,33 +183,10 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
             @Override
             public boolean onTopicKeyArrived() {
-                //showInsertTag();
+                onClick(findView(R.id.iv_tag));
                 return true;
             }
         });
-
-        mEditTagEnter.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    mLayTagEnter.animate()
-                            .alphaBy(1)
-                            .alpha(0)
-                            .setDuration(100)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    mLayTagEnter.setVisibility(View.GONE);
-                                    mLayTagEnter.setAlpha(1);
-                                }
-                            }).start();
-                }
-            }
-        });
-
-        ShapeDrawable doubleLineDrawable = new ShapeDrawable(new BorderShape(new RectF(0, 1, 0, 1)));
-        doubleLineDrawable.getPaint().setColor(0xFF24cf5f);
-        mLayTagEnter.setBackground(doubleLineDrawable);
 
         // Show keyboard
         mEmojiKeyboard.showSoftKeyboard(mEditContent);
@@ -247,7 +213,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
             R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back,
-            R.id.icon_send, R.id.btn_submit_enter_tag})
+            R.id.icon_send})
     @Override
     public void onClick(View v) {
         // 用来解决快速点击多个按钮弹出多个界面的情况
@@ -281,10 +247,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 case R.id.icon_send:
                     mOperator.publish();
                     break;
-                case R.id.btn_submit_enter_tag:
-                    handleInsertTag();
-                    break;
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -311,7 +273,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
      * @param v View
      */
     private void handleEmojiClick(View v) {
-        hideInsertTag();
         if (mEmojiKeyboard.isShow()) {
             mEmojiKeyboard.hideEmojiKeyBoard();
             showSoftKeyboard(mEditContent);
@@ -330,84 +291,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
-    private void handleInsertTag() {
-        String text = mEditTagEnter.getText().toString();
-        if (text.trim().length() > 0) {
-            Editable msg = mEditContent.getText();
-            int selStart = mEditContent.getSelectionStart();
-            int selEnd = mEditContent.getSelectionEnd();
-
-            text = String.format("#%s# ", text.replace("#", ""));
-
-            int selStartBefore = selStart - 1;
-            if (selStart == selEnd && selStart > 0
-                    && "#".equals(msg.subSequence(selStartBefore, selEnd).toString())
-                    && msg.getSpans(selStartBefore, selEnd, RichEditText.TagSpan.class).length == 0) {
-                selStart = selStartBefore;
-            }
-
-            Spannable spannable = RichEditText.matchMention(new SpannableString(text));
-            spannable = RichEditText.matchTopic(spannable);
-
-            msg.replace(selStart, selEnd, spannable);
-        }
-
-        hideInsertTag();
-    }
-
-    private void hideInsertTag() {
-        mLayTagEnter.setVisibility(View.GONE);
-        mEditTagEnter.clearFocus();
-        mEditContent.requestFocus();
-    }
-
-    private void showInsertTag() {
-        mEditTagEnter.setText("");
-        mLayTagEnter.setVisibility(View.VISIBLE);
-        mEditContent.clearFocus();
-        mEditTagEnter.requestFocus();
-    }
-
-    /**
-     * 插入 #软件名#
-     */
-    private void insertTrendSoftware() {
-        final EditText editText = mEditContent;
-        final int maxTextLen = MAX_TEXT_LENGTH;
-        int curTextLength = editText.getText().length();
-        if (curTextLength >= maxTextLen)
-            return;
-        String software = TEXT_TAG;
-        int start, end;
-        if ((maxTextLen - curTextLength) >= software.length()) {
-            start = editText.getSelectionStart() + 1;
-            end = start + software.length() - 2;
-        } else {
-            int num = maxTextLen - curTextLength;
-            if (num < software.length()) {
-                software = software.substring(0, num);
-            }
-            start = editText.getSelectionStart() + 1;
-            end = start + software.length() - 1;
-        }
-        if (start > maxTextLen || end > maxTextLen) {
-            start = maxTextLen;
-            end = maxTextLen;
-            mLayTagEnter.setVisibility(View.VISIBLE);
-            mEditContent.clearFocus();
-            mEditTagEnter.requestFocus();
-        }
-        editText.getText().insert(editText.getSelectionStart(), software);
-        editText.setSelection(start, end);
-        /*
-        if (mLayTagEnter.getVisibility() == View.VISIBLE) {
-            hideInsertTag();
-        } else {
-            showInsertTag();
-        }
-        */
-    }
-
     private void toSelectTopic() {
         Context context = getContext();
         if (context == null)
@@ -421,11 +304,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         startActivityForResult(intent, REQUEST_CODE_SELECT_TOPIC);
     }
 
-    /**
-     * 好友名字选择
-     *
-     * @param data Intent
-     */
     private void handleSelectTopicResult(Intent data) {
         String topic = data.getStringExtra("topic");
         if (!TextUtils.isEmpty(topic)) {

@@ -460,7 +460,7 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         items = new String[]{getString(R.string.copy)};
         // }
 
-        DialogHelper.getSelectDialog(this, items, getString(R.string.cancle), new DialogInterface.OnClickListener() {
+        DialogHelper.getSelectDialog(this, items, getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

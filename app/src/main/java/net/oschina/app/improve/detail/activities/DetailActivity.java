@@ -337,7 +337,7 @@ public abstract class DetailActivity<Data extends PrimaryBean, DataView extends 
         dialog.setCancelable(true);
         dialog.setTitle(R.string.report);
         dialog.setCanceledOnTouchOutside(true);
-        dialog.setNegativeButton(R.string.cancle, null);
+        dialog.setNegativeButton(R.string.cancel, null);
         final TextHttpResponseHandler handler = new TextHttpResponseHandler() {
 
             @Override

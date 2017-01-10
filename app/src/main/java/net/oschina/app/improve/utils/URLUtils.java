@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.improve.detail.general.SoftwareDetailActivity;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
@@ -138,7 +139,7 @@ public class URLUtils {
                 matcher = PATTERN_PATH_SOFTWARE.matcher(path);
                 if (matcher.find()) {
                     // https://www.oschina.net/p/parallels-desktop
-                    //net.oschina.app.improve.detail.general.SoftwareDetailActivity.show(context, matcher.group(1));
+                    SoftwareDetailActivity.show(context, matcher.group(1));
                     break;
                 }
                 matcher = PATTERN_PATH_TOPIC.matcher(path);

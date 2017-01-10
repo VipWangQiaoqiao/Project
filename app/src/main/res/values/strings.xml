@@ -92,7 +92,7 @@
     <string name="record_sound_notfound">找不到录音</string>
 
     <string name="ok">确定</string>
-    <string name="cancle">取消</string>
+    <string name="cancel">取消</string>
     <string name="tip_content_empty">内容不能为空</string>
     <string name="tip_content_too_long">内容太长</string>
 
@@ -135,6 +135,7 @@
 
     <string name="copy">复制</string>
     <string name="delete">删除</string>
+    <string name="delete_all">删除所有</string>
     <string name="transmit">转发</string>
     <string name="copy_success">复制成功</string>
     <string name="deleting">正在删除…</string>

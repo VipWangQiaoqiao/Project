@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@drawable/ic_material"
     android:orientation="vertical">
 
     <TextView
@@ -22,5 +22,6 @@
         android:id="@+id/line"
         style="@style/h_line"
         android:layout_marginLeft="@dimen/lay_16"
+        android:visibility="gone"
         tools:ignore="RtlHardcoded" />
 </LinearLayout>

@@ -187,115 +187,66 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/list_divider_color"
-            android:visibility="gone" />
+            android:background="@color/list_divider_color" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="@dimen/size_44"
+            android:gravity="center_horizontal"
+            android:weightSum="4">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/list_divider_color" />
-
-            <LinearLayout
-                android:id="@+id/lay_enter_tag"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/iv_picture"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:visibility="gone">
+                android:layout_weight="1"
+                android:background="@drawable/ic_material"
+                android:clickable="true"
+                android:contentDescription="@string/app_name"
+                android:paddingBottom="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_12"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_tweet_picture_normal" />
 
-                <EditText
-                    android:id="@+id/edit_enter_tag"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#1624cf5f"
-                    android:hint="@string/hint_enter_tag"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:lines="1"
-                    android:maxLength="16"
-                    android:maxLines="1"
-                    android:paddingBottom="@dimen/lay_8"
-                    android:paddingLeft="@dimen/lay_12"
-                    android:paddingRight="@dimen/lay_12"
-                    android:paddingTop="@dimen/lay_8"
-                    android:textColor="#ff24cf5f"
-                    android:textSize="15sp" />
+            <ImageView
+                android:id="@+id/iv_mention"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/ic_material"
+                android:clickable="true"
+                android:contentDescription="@string/app_name"
+                android:paddingBottom="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_12"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_tweet_mention_normal" />
 
-                <ImageView
-                    android:id="@+id/btn_submit_enter_tag"
-                    android:layout_width="@dimen/lay_56"
-                    android:layout_height="@dimen/lay_40"
-                    android:background="@color/main_green"
-                    android:clickable="true"
-                    android:contentDescription="@string/app_name"
-                    android:paddingBottom="@dimen/lay_8"
-                    android:paddingTop="@dimen/lay_8"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_tweet_ok_normal" />
+            <ImageView
+                android:id="@+id/iv_tag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/ic_material"
+                android:clickable="true"
+                android:contentDescription="@string/app_name"
+                android:paddingBottom="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_12"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_tweet_topic_normal" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_44"
-                android:gravity="center_horizontal"
-                android:weightSum="4">
-
-                <ImageView
-                    android:id="@+id/iv_picture"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:contentDescription="@string/app_name"
-                    android:paddingBottom="@dimen/lay_12"
-                    android:paddingTop="@dimen/lay_12"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_tweet_picture_normal" />
-
-                <ImageView
-                    android:id="@+id/iv_mention"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:contentDescription="@string/app_name"
-                    android:paddingBottom="@dimen/lay_12"
-                    android:paddingTop="@dimen/lay_12"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_tweet_mention_normal" />
-
-                <ImageView
-                    android:id="@+id/iv_tag"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:contentDescription="@string/app_name"
-                    android:paddingBottom="@dimen/lay_12"
-                    android:paddingTop="@dimen/lay_12"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_tweet_topic_normal" />
-
-                <ImageView
-                    android:id="@+id/iv_emoji"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:contentDescription="@string/app_name"
-                    android:paddingBottom="@dimen/lay_12"
-                    android:paddingTop="@dimen/lay_12"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_tweet_expression_normal" />
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/iv_emoji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/ic_material"
+                android:clickable="true"
+                android:contentDescription="@string/app_name"
+                android:paddingBottom="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_12"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_tweet_expression_normal" />
         </LinearLayout>
-
 
         <View style="@style/h_line" />
 
