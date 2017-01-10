@@ -33,7 +33,10 @@ public class ViewEventBanner extends RelativeLayout implements View.OnClickListe
 
     public void initData(RequestManager manager, Banner banner) {
         this.banner = banner;
-        manager.load(banner.getImg()).into(mImageEnent);
+        manager.load(banner.getImg())
+                .placeholder(R.mipmap.event_cover_default)
+                .error(R.mipmap.event_cover_default)
+                .into(mImageEnent);
     }
 
     @Override
