@@ -516,7 +516,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     /**
      * verify network status
      *
-     * @return
+     * @return true/false
      */
     private boolean checkNetIsAvailable() {
         if (!TDevice.hasInternet()) {
@@ -557,7 +557,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     /**
      * show empty view's error type
      *
-     * @param type
+     * @param type type
      */
     private void showError(int type) {
         EmptyLayout layout = mEmptyLayout;
