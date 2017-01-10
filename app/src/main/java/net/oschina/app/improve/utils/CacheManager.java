@@ -37,19 +37,22 @@ import static com.google.gson.internal.$Gson$Types.typeToString;
 
 public final class CacheManager {
 
-    public static <T> void saveToJson(Context context, String fileName, List<T> list) {
-        if (context == null || list == null || list.size() <= 0)
-            return;
+    public static <T> boolean saveToJson(Context context, String fileName, List<T> list) {
+        if (context == null || list == null)
+            return false;
         String path = context.getCacheDir() + "/" + fileName + ".json";
         File file = new File(path);
+        if (list.size() == 0) {
+            return !file.exists() || file.delete();
+        }
+
         try {
-            if (!file.exists() && !file.createNewFile()) {
-                return;
-            }
-            save(file, list);
+            return !(!file.exists() && !file.createNewFile())
+                    && save(file, list);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
 
@@ -59,33 +62,37 @@ public final class CacheManager {
      * @param file file
      * @param list list
      */
-    private static <T> void save(File file, List<T> list) {
+    private static <T> boolean save(File file, List<T> list) {
         Writer writer = null;
         try {
             writer = new FileWriter(file);
             AppOperator.getGson().toJson(list, writer);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             StreamUtil.close(writer);
         }
+        return false;
     }
 
-    public static void saveToJson(Context context, String fileName, Object object) {
+    public static boolean saveToJson(Context context, String fileName, Object object) {
         String json = new Gson().toJson(object);
         String path = context.getCacheDir() + "/" + fileName;
         File file = new File(path);
         FileOutputStream os = null;
         try {
-            if (!file.exists())
-                file.createNewFile();
+            if (!file.exists() && !file.createNewFile())
+                return false;
             os = new FileOutputStream(file);
             os.write(json.getBytes("utf-8"));
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             StreamUtil.close(os);
         }
+        return false;
     }
 
     public static <T> T readFromJson(Context context, String fileName, Class cla) {

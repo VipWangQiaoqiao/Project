@@ -14,7 +14,7 @@
     <color name="main_black">#333</color>
     <color name="actionbar_background">@color/main_green</color>
     <color name="transparent">#00000000</color>
-    <color name="window_background">#EBEBEB</color>
+    <color name="window_background">#f5f5f5</color>
 
     <color name="main_touch">@color/black_alpha_32</color>
 
