@@ -93,7 +93,8 @@ public class SoftwareDetailFragment extends DetailFragment {
         List<SubBean.Image> images = bean.getImages();
         if (images != null && images.size() != 0)
             getImgLoader().load(images.get(0).getHref()).asBitmap().into(mImageSoftware);
-        mTextCommentCount.setText(String.format("评论(%d)", bean.getStatistics().getComment()));
+        SubBean.Statistics statistics = bean.getStatistics();
+        mTextCommentCount.setText(String.format("评论(%d)", statistics != null ? statistics.getComment() : 0));
         Author author = bean.getAuthor();
         if (author != null) {
             mTextAuthor.setText(author.getName());
