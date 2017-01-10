@@ -16,10 +16,16 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.CacheManager;
+import net.oschina.common.adapter.TextWatcherAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 
@@ -32,6 +38,7 @@ public class TweetTopicActivity extends BaseBackActivity {
     RecyclerView mRecycler;
 
     private List<Object> mList = new ArrayList<>();
+    private List<TopicBean> mLocalList = new ArrayList<>();
     private List<String> mCache;
 
     @Override
@@ -64,6 +71,12 @@ public class TweetTopicActivity extends BaseBackActivity {
                 return false;
             }
         });
+        mTopicContent.addTextChangedListener(new TextWatcherAdapter() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                sortLocalList(getContent());
+            }
+        });
     }
 
     @Override
@@ -79,7 +92,7 @@ public class TweetTopicActivity extends BaseBackActivity {
 
         int size = mCache.size();
         for (int i = 0; i < size; i++) {
-            mList.add(new TopicBean(mCache.get(i), i != size - 1));
+            mLocalList.add(new TopicBean(mCache.get(i), i != size - 1));
         }
 
         adapter.notifyDataSetChanged();
@@ -100,6 +113,11 @@ public class TweetTopicActivity extends BaseBackActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private String getContent() {
+        return mTopicContent.getText()
+                .toString().trim().replace("#", "");
+    }
+
     private void loadCache() {
         mCache = CacheManager.readListJson(this, CACHE_FILE, String.class);
         if (mCache == null)
@@ -107,9 +125,17 @@ public class TweetTopicActivity extends BaseBackActivity {
     }
 
     private void saveCache(String str) {
-        mCache.add(0, str);
-        List<String> cache;
+        // 避免重复添加
+        boolean isHave = false;
+        for (String s : mCache) {
+            if (isHave = s.equals(str))
+                break;
+        }
+        if (!isHave)
+            mCache.add(0, str);
 
+        // 至多存储15条，默认清理5条
+        List<String> cache;
         if (mCache.size() >= 15) {
             cache = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
@@ -122,19 +148,12 @@ public class TweetTopicActivity extends BaseBackActivity {
     }
 
     private void onSubmit() {
-        String str = mTopicContent.getText().toString().trim();
+        String str = getContent();
         if (TextUtils.isEmpty(str))
             finish();
         else {
             saveCache(str);
             doResult(str);
-        }
-    }
-
-    private void onSelect(int position) {
-        Object obj = mList.get(position);
-        if (obj instanceof TopicBean) {
-            doResult(((TopicBean) obj).text);
         }
     }
 
@@ -145,10 +164,35 @@ public class TweetTopicActivity extends BaseBackActivity {
         finish();
     }
 
+    private void sortLocalList(String text) {
+        final String py = TextUtils.isEmpty(text) ? "!#" : AssimilateUtils.returnPinyin(text, false);
+        Pattern pattern = Pattern.compile(py);
+        for (TopicBean bean : mLocalList) {
+            Matcher matcher = pattern.matcher(bean.py);
+            if (matcher.find()) {
+                bean.sort = matcher.start();
+            } else {
+                bean.sort = ORDER_MAX;
+            }
+        }
+
+        Collections.sort(mLocalList, new Comparator<TopicBean>() {
+            @Override
+            public int compare(TopicBean o1, TopicBean o2) {
+                if (o1.sort == ORDER_MAX && o2.sort == ORDER_MAX) {
+                    return o1.order - o2.order;
+                }
+                return o1.sort - o2.sort;
+            }
+        });
+
+        adapter.notifyDataSetChanged();
+    }
+
     private RecyclerView.Adapter adapter = new RecyclerView.Adapter() {
         @Override
         public int getItemViewType(int position) {
-            if (mList.get(position) instanceof String) {
+            if (get(position) instanceof String) {
                 return R.layout.list_item_sample_label;
             } else {
                 return R.layout.list_item_topic;
@@ -167,8 +211,8 @@ public class TweetTopicActivity extends BaseBackActivity {
                     @Override
                     public void onClick(View v) {
                         Object obj = v.getTag();
-                        if (obj != null && obj instanceof Integer) {
-                            onSelect((Integer) obj);
+                        if (obj != null && obj instanceof TopicBean) {
+                            doResult(((TopicBean) obj).text);
                         }
                     }
                 });
@@ -179,16 +223,26 @@ public class TweetTopicActivity extends BaseBackActivity {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof LabelHolder) {
-                ((LabelHolder) holder).set((String) mList.get(position));
+                ((LabelHolder) holder).set((String) get(position));
             } else {
-                ((DataHolder) holder).set((TopicBean) mList.get(position));
-                holder.itemView.setTag(position);
+                TopicBean bean = (TopicBean) get(position);
+                ((DataHolder) holder).set(bean);
+                holder.itemView.setTag(bean);
             }
         }
 
         @Override
         public int getItemCount() {
-            return mList.size();
+            return mList.size() + mLocalList.size();
+        }
+
+        private Object get(int position) {
+            int fixedCount = mList.size();
+            if (position >= fixedCount) {
+                return mLocalList.get(position - fixedCount);
+            } else {
+                return mList.get(position);
+            }
         }
     };
 
@@ -222,16 +276,23 @@ public class TweetTopicActivity extends BaseBackActivity {
         }
     }
 
+    private static int ORDER_COUNT = 0;
+    private static int ORDER_MAX = 100;
+
     private class TopicBean {
         String text;
+        String py;
         boolean needLine = true;
+        private int sort = ORDER_MAX;
+        private int order = ORDER_COUNT++;
 
         TopicBean(String text) {
             this.text = text;
+            this.py = AssimilateUtils.returnPinyin(text, false);
         }
 
         TopicBean(String text, boolean needLine) {
-            this.text = text;
+            this(text);
             this.needLine = needLine;
         }
     }
