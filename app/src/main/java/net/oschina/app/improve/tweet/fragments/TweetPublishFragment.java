@@ -194,7 +194,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
             @Override
             public boolean onTopicKeyArrived() {
-                //showInsertTag();
+                onClick(findView(R.id.iv_tag));
                 return true;
             }
         });
