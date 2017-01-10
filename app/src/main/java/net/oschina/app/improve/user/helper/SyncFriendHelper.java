@@ -37,7 +37,6 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 public class SyncFriendHelper {
-    private static final String TAG = SyncFriendHelper.class.getName();
 
     private PageBean mPageBean;
     private ArrayList<UserFansOrFollows> mNetFriends = new ArrayList<>();
@@ -77,17 +76,15 @@ public class SyncFriendHelper {
 
                         ResultBean<PageBean<UserFansOrFollows>> resultBean = AppOperator.createGson().fromJson(responseString, type);
                         if (resultBean.isSuccess()) {
-                            final List<UserFansOrFollows> fansOrFollows = resultBean.getResult().getItems();
-                            if (fansOrFollows.size() > 0) {
+                            List<UserFansOrFollows> fansOrFollows = resultBean.getResult().getItems();
+                            int size = fansOrFollows.size();
+                            if (size > 0) {
                                 mNetFriends.addAll(fansOrFollows);
                                 mPageBean = resultBean.getResult();
-                                if (mNetFriends.size() < mPageBean.getTotalResults() &&
-                                        !TextUtils.isEmpty(mPageBean.getNextPageToken())) {
-                                    syncUserFriends();
-                                    return;
-                                } else {
-                                    mPageBean = null;
-                                }
+                                syncUserFriends();
+                                return;
+                            } else {
+                                mPageBean = null;
                             }
                         } else {
                             mPageBean = null;

@@ -397,7 +397,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         dialog.setCancelable(true);
         dialog.setTitle(R.string.report);
         dialog.setCanceledOnTouchOutside(true);
-        dialog.setNegativeButton(R.string.cancle, null);
+        dialog.setNegativeButton(R.string.cancel, null);
         final TextHttpResponseHandler mReportHandler = new TextHttpResponseHandler() {
 
             @Override
