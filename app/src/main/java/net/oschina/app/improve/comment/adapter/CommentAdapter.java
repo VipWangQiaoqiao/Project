@@ -136,9 +136,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         CommentHolder(View itemView, boolean isFooter, CommentBar commentBar) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            //if (isFooter) {
-            // mLine.setVisibility(View.GONE);
-            //}
             this.commentBar = commentBar;
         }
 
@@ -180,15 +177,21 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
             });
 
             if (commentType == OSChinaApi.COMMENT_QUESTION || commentType == OSChinaApi.COMMENT_EVENT
-                    || commentType == OSChinaApi.COMMENT_BLOG || commentType == OSChinaApi.COMMENT_TRANSLATION) {
+                    || commentType == OSChinaApi.COMMENT_BLOG || commentType == OSChinaApi.COMMENT_TRANSLATION
+                    || commentType == OSChinaApi.COMMENT_SOFT) {
                 mVoteCount.setVisibility(View.GONE);
                 mVote.setVisibility(View.GONE);
-                if (comment.isBest()) {
-                    mComment.setImageResource(R.mipmap.label_best_answer);
-                    mComment.setEnabled(false);
+
+                if (commentType == OSChinaApi.COMMENT_SOFT) {
+                    mComment.setVisibility(View.GONE);
                 } else {
-                    mComment.setEnabled(true);
-                    mComment.setImageResource(R.mipmap.ic_comment_30);
+                    if (comment.isBest()) {
+                        mComment.setImageResource(R.mipmap.label_best_answer);
+                        mComment.setEnabled(false);
+                    } else {
+                        mComment.setEnabled(true);
+                        mComment.setImageResource(R.mipmap.ic_comment_30);
+                    }
                 }
             } else {
                 mVoteCount.setText(String.valueOf(comment.getVote()));
