@@ -257,8 +257,6 @@ public class NoticeServer extends Service {
 
     private synchronized void refreshNoticeForNet() {
         log("refreshNoticeForNet: mRunning:" + mRunning);
-        if (true)// (mRunning)
-            return;
 
         mRunning = true;
         OSChinaApi.getNotice(new TextHttpResponseHandler() {
