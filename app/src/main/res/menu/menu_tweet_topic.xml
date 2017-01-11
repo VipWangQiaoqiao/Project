@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/menu_submit"
+        android:icon="@drawable/selector_enter"
         android:orderInCategory="100"
-        android:title="确定"
+        android:title="@string/enter"
         app:showAsAction="always" />
 </menu>
