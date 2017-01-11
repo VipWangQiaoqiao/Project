@@ -1,7 +1,7 @@
 package net.oschina.app.improve.tweet.fragments;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -50,9 +50,9 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mOperator = (TweetDetailContract.Operator) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mOperator = (TweetDetailContract.Operator) context;
     }
 
     @Override
