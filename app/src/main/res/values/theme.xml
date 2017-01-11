@@ -40,7 +40,7 @@
         <!--window style-->
         <item name="elevation">0dp</item>
         <item name="android:windowBackground">@color/window_background</item>
-        <item name="windows_bg">@color/day_windows_bg</item>
+        <item name="windows_bg">@color/window_background</item>
         <item name="android:windowContentOverlay">@null</item>
 
         <item name="dividerVertical">@color/list_divider_color</item>

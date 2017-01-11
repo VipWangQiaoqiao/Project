@@ -8,7 +8,6 @@
     <color name="day_infoTextColor">#999999</color>
     <color name="day_layout_bg_normal">#f6f6f6</color>
     <color name="day_layout_bg_pressed">#dfdfdf</color>
-    <color name="day_windows_bg">#fafafa</color>
     <color name="day_edit_color">#333333</color>
     <color name="day_edit_hit_color">#999999</color>
 
