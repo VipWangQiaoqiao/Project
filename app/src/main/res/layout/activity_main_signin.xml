@@ -124,7 +124,6 @@
                 style="@style/h_line"
                 android:layout_height="1px"
                 android:layout_marginBottom="@dimen/lay_4"
-                android:background="@color/day_line_color"
                 android:visibility="gone"
                 tools:ignore="RtlHardcoded"
                 tools:visibility="invisible"/>

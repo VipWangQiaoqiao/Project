@@ -40,7 +40,7 @@
         <!--window style-->
         <item name="elevation">0dp</item>
         <item name="android:windowBackground">@color/window_background</item>
-        <item name="windows_bg">@color/day_windows_bg</item>
+        <item name="windows_bg">@color/window_background</item>
         <item name="android:windowContentOverlay">@null</item>
 
         <item name="dividerVertical">@color/list_divider_color</item>
@@ -51,7 +51,7 @@
         <item name="sliding_block_bg">@mipmap/image_sliding_block</item>
         <item name="comment_reply_container_bg">@mipmap/day_comment_reply_container_bg</item>
 
-        <item name="lineColor">@color/day_line_color</item>
+        <item name="lineColor">@color/list_divider_color</item>
 
         <item name="message_bg_left">@mipmap/chat_from_bg_normal</item>
         <item name="message_bg_right">@mipmap/chat_to_bg_normal</item>
@@ -109,6 +109,8 @@
     </style>
 
     <style name="App.Theme.Tweet.Main" parent="Base.App.Theme.NoTitle" />
+
+    <style name="App.Theme.Main" parent="Base.App.Theme.NoTitle" />
 
     <!--button-->
     <style name="App.Widget.Button" parent="Widget.AppCompat.Button">
