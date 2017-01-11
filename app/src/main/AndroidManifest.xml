@@ -464,6 +464,20 @@
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme.NoTitle"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".improve.search.activities.NearbyActivity"
+            android:label="附近的人"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".improve.tweet.activities.TweetTopicActivity"
+            android:label="话题"
+            android:screenOrientation="portrait"
+            android:theme="@style/App.Theme.Light" />
+
+        <activity
+            android:name=".improve.main.BrowserActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
@@ -476,12 +490,6 @@
         <service
             android:name=".improve.main.update.DownloadService"
             android:exported="false" />
-
-        <activity android:name=".improve.main.BrowserActivity" />
-        <activity
-            android:name=".improve.search.activities.NearbyActivity"
-            android:label="附近的人" />
-
         <service
             android:name=".improve.main.update.DownloadService"
             android:exported="false" />
@@ -496,7 +504,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".improve.tweet.activities.TweetTopicActivity"></activity>
     </application>
 
 </manifest>
