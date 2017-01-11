@@ -34,10 +34,11 @@ import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.adapter.CommentAdapter;
+import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
-import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -178,10 +179,12 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AccountHelper.isLogin())
-                    SelectFriendsActivity.show(CommentsActivity.this);
-                else
+                if (AccountHelper.isLogin()) {
+                    Intent intent = new Intent(CommentsActivity.this, UserSelectFriendsActivity.class);
+                    startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+                } else {
                     LoginActivity.show(CommentsActivity.this);
+                }
             }
         });
 
@@ -441,8 +444,10 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
-            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
-            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
+            if (requestCode == TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS) {
+                mDelegation.getBottomSheet().handleSelectFriendsResult(data);
+                mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
+            }
         }
     }
 
