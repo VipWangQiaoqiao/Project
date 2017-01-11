@@ -32,6 +32,7 @@ import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -71,7 +72,10 @@ public abstract class DetailActivity extends BaseBackActivity implements
     @Override
     protected void initWidget() {
         super.initWidget();
-
+        if (!TDevice.hasWebView(this)) {
+            finish();
+            return;
+        }
         LinearLayout layComment = (LinearLayout) findViewById(R.id.ll_comment);
         mEmptyLayout = (EmptyLayout) findViewById(R.id.lay_error);
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {

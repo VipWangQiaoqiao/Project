@@ -37,6 +37,7 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.dialog.ShareDialogBuilder;
 import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.util.TDevice;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -140,7 +141,8 @@ public class BrowserFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mWebView.destroy();
+        if (mWebView != null)
+            mWebView.destroy();
     }
 
     @Override
@@ -155,14 +157,19 @@ public class BrowserFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_browser, container,
-                false);
-        aty = getActivity();
-        ButterKnife.bind(this, rootView);
-        initData();
-        initView(rootView);
-        return rootView;
+        if (TDevice.hasWebView(getContext())) {
+            View rootView = inflater.inflate(R.layout.fragment_browser, container,
+                    false);
+            aty = getActivity();
+            ButterKnife.bind(this, rootView);
+            initData();
+            initView(rootView);
+            return rootView;
+        } else {
+            getActivity().finish();
+            return super.onCreateView(inflater, container, savedInstanceState);
+        }
+
     }
 
     @Override

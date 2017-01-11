@@ -22,11 +22,13 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
 import android.widget.EditText;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseApplication;
+import net.oschina.app.improve.widget.SimplexToast;
 
 import java.io.File;
 import java.util.List;
@@ -292,5 +294,25 @@ public class TDevice {
         } else {
             return resources.getColor(id);
         }
+    }
+
+    private static Boolean mHasWebView;
+
+    public static boolean hasWebView(Context context) {
+        if (mHasWebView != null) {
+            if (!mHasWebView)
+                SimplexToast.show(context, "Not WebView for you phone");
+            return mHasWebView;
+        }
+        try {
+            WebView webView = new WebView(context);
+            webView.destroy();
+            mHasWebView = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            mHasWebView = false;
+            SimplexToast.show(context, "Not WebView for you phone");
+        }
+        return mHasWebView;
     }
 }
