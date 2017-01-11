@@ -5,8 +5,9 @@
 
     <permission
         android:name="net.oschina.app.ACCESS_UPDATE_RESULT"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="net.oschina.app.ACCESS_UPDATE_RESULT"/>
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="net.oschina.app.ACCESS_UPDATE_RESULT" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -77,7 +78,8 @@
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity
             android:name=".team.ui.TeamMainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/App.Theme.Light" />
         <activity
             android:name=".team.ui.TeamNewActiveActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -424,7 +426,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/App.Theme.Tweet.Main" />
+            android:theme="@style/App.Theme.Main" />
         <activity
             android:name=".improve.search.activities.SearchActivity"
             android:label="搜索"

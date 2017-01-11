@@ -12,6 +12,11 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="App.Theme.Main" parent="Base.App.Theme.NoTitle">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+
     <style name="App.Theme.Tweet.Main" parent="Base.App.Theme.NoTitle">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowIsTranslucent">false</item>

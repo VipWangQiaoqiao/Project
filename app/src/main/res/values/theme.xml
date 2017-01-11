@@ -110,6 +110,8 @@
 
     <style name="App.Theme.Tweet.Main" parent="Base.App.Theme.NoTitle" />
 
+    <style name="App.Theme.Main" parent="Base.App.Theme.NoTitle" />
+
     <!--button-->
     <style name="App.Widget.Button" parent="Widget.AppCompat.Button">
         <item name="android:windowContentOverlay">@null</item>
