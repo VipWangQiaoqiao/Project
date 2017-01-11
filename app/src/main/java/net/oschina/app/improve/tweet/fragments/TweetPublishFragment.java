@@ -47,7 +47,7 @@ import butterknife.OnClick;
 @SuppressWarnings("WeakerAccess")
 public class TweetPublishFragment extends BaseFragment implements View.OnClickListener,
         TweetPublishContract.View {
-    private final static String TAG = TweetPublishFragment.class.getName();
+
     public static final int MAX_TEXT_LENGTH = 160;
     public static final int REQUEST_CODE_SELECT_FRIENDS = 0x0001;
     public static final int REQUEST_CODE_SELECT_TOPIC = 0x0002;

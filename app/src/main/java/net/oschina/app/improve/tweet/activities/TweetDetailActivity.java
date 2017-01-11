@@ -51,7 +51,7 @@ import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
+import net.oschina.app.improve.tweet.fragments.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.RecordButtonUtil;
 
 import java.util.ArrayList;
@@ -310,7 +310,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         resolveVoice();
         setupDetailView();
 
-        TweetDetailViewPagerFragment mPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
+        TweetDetailViewPagerFragment mPagerFrag = TweetDetailViewPagerFragment.instantiate();
         mCmnViewImp = mPagerFrag.getCommentViewHandler();
         mThumbupViewImp = mPagerFrag.getThumbupViewHandler();
         mAgencyViewImp = mPagerFrag.getAgencyViewHandler();

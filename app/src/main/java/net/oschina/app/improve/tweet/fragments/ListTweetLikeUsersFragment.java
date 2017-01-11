@@ -1,6 +1,7 @@
 package net.oschina.app.improve.tweet.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -37,9 +38,9 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<TweetLi
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mOperator = (TweetDetailContract.Operator) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mOperator = (TweetDetailContract.Operator) context;
     }
 
     @Override
