@@ -14,7 +14,7 @@
     <LinearLayout
         android:id="@+id/rl_soft"
         style="@style/option_item_rl"
-        android:background="@drawable/item_selector">
+        android:background="@drawable/ic_material">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
     <LinearLayout
         android:id="@+id/rl_scan"
         style="@style/option_item_rl"
-        android:background="@drawable/item_selector">
+        android:background="@drawable/ic_material">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
     <LinearLayout
         android:id="@+id/rl_shake"
         style="@style/option_item_rl"
-        android:background="@drawable/item_selector">
+        android:background="@drawable/ic_material">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -122,7 +122,7 @@
     <LinearLayout
         android:id="@+id/layout_nearby"
         style="@style/option_item_rl"
-        android:background="@drawable/item_selector">
+        android:background="@drawable/ic_material">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -157,7 +157,7 @@
     <LinearLayout
         android:id="@+id/layout_events"
         style="@style/option_item_rl"
-        android:background="@drawable/item_selector">
+        android:background="@drawable/ic_material">
 
         <ImageView
             android:layout_width="wrap_content"
