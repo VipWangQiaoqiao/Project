@@ -46,12 +46,12 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<TweetLike> {
         LikeUsersHolderView h = (LikeUsersHolderView) holder;
         h.ivPortrait.setTag(null);
         if (TextUtils.isEmpty(item.getAuthor().getPortrait())) {
-            h.ivPortrait.setImageResource(R.mipmap.widget_dface);
+            h.ivPortrait.setImageResource(R.mipmap.widget_default_face);
         } else {
             reqManager.load(item.getAuthor().getPortrait())
                     .asBitmap()
-                    .placeholder(mContext.getResources().getDrawable(R.mipmap.widget_dface))
-                    .error(mContext.getResources().getDrawable(R.mipmap.widget_dface))
+                    .placeholder(mContext.getResources().getDrawable(R.mipmap.widget_default_face))
+                    .error(mContext.getResources().getDrawable(R.mipmap.widget_default_face))
                     .into(h.ivPortrait);
         }
         h.ivPortrait.setTag(item);

@@ -57,7 +57,7 @@
                         android:layout_height="70dp"
                         android:onClick="onClick"
                         android:layout_margin="2dp"
-                        android:src="@mipmap/widget_dface" />
+                        android:src="@mipmap/widget_default_face" />
 
                     <ImageView
                         android:id="@+id/iv_gender"
@@ -160,7 +160,7 @@
                     android:id="@+id/iv_logo_portrait"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
-                    android:src="@mipmap/widget_dface"
+                    android:src="@mipmap/widget_default_face"
                     android:visibility="gone"
                     tools:visibility="visible" />
 

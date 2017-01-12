@@ -38,8 +38,8 @@ public class UserQuestionAdapter extends BaseRecyclerAdapter<Question> {
         Glide.with(mContext)
                 .load(item.getAuthorPortrait())
                 .asBitmap()
-                .placeholder(R.mipmap.widget_dface)
-                .error(R.mipmap.widget_dface)
+                .placeholder(R.mipmap.widget_default_face)
+                .error(R.mipmap.widget_default_face)
                 .into(holder.mViewPortrait);
         holder.mViewTitle.setText(item.getTitle());
         holder.mViewContent.setText(item.getBody());

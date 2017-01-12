@@ -12,7 +12,10 @@
         android:background="@drawable/ic_material"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/lay_8">
+        android:paddingBottom="@dimen/lay_8"
+        android:paddingLeft="@dimen/lay_16"
+        android:paddingRight="@dimen/lay_8"
+        android:paddingTop="@dimen/lay_8">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_portrait"
@@ -21,7 +24,7 @@
             android:layout_gravity="center"
             android:contentDescription="@null"
             android:scaleType="centerCrop"
-            tools:src="@mipmap/widget_dface"/>
+            tools:src="@mipmap/widget_default_face"/>
 
         <TextView
             android:id="@+id/tv_name"
@@ -41,6 +44,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/lay_8"
             android:layout_marginRight="@dimen/lay_32"
+            android:contentDescription="@null"
             android:scaleType="centerCrop"
             android:src="@mipmap/form_checkbox_checked"
             tools:ignore="RtlHardcoded"/>
@@ -50,6 +54,6 @@
     <View
         android:id="@+id/line"
         style="@style/h_line"
-        android:layout_marginLeft="@dimen/lay_8"
+        android:layout_marginLeft="@dimen/lay_60"
         tools:ignore="RtlHardcoded"/>
 </LinearLayout>

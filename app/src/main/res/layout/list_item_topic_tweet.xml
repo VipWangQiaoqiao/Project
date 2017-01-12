@@ -42,7 +42,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:src="@mipmap/widget_dface"/>
+                android:src="@mipmap/widget_default_face"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -69,7 +69,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:src="@mipmap/widget_dface"/>
+                android:src="@mipmap/widget_default_face"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -96,7 +96,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:src="@mipmap/widget_dface"/>
+                android:src="@mipmap/widget_default_face"/>
 
             <TextView
                 android:layout_width="0dp"

@@ -179,7 +179,7 @@
         <item name="android:padding">1.0dip</item>
         <item name="android:clickable">true</item>
         <item name="android:contentDescription">face</item>
-        <item name="android:src">@mipmap/widget_dface</item>
+        <item name="android:src">@mipmap/widget_default_face</item>
     </style>
 
     <style name="dialog_waiting" parent="@android:style/Theme.Dialog">
@@ -254,7 +254,7 @@
         <item name="android:layout_height">40.0dip</item>
         <item name="android:padding">1.0dip</item>
         <item name="android:clickable">true</item>
-        <item name="android:src">@mipmap/widget_dface</item>
+        <item name="android:src">@mipmap/widget_default_face</item>
     </style>
 
     <style name="comment_user_face_image">
@@ -262,7 +262,7 @@
         <item name="android:layout_height">28.0dip</item>
         <item name="android:padding">1.0dip</item>
         <item name="android:clickable">true</item>
-        <item name="android:src">@mipmap/widget_dface</item>
+        <item name="android:src">@mipmap/widget_default_face</item>
     </style>
 
     <style name="toolbar_action">

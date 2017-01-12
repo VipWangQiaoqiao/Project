@@ -33,7 +33,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
     public static final int SEARCH_TYPE = 0x03;
-    private static final int USER_TYPE_UN_LINE = 0x04;
+    public static final int USER_TYPE_UN_LINE = 0x04;
 
     private LayoutInflater mInflater;
     private List<UserFriend> mItems = new ArrayList<>();
@@ -187,7 +187,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
         void onBindView(final UserFriend item, int position) {
 
-            setImageFromNet(mCirclePortrait, item.getPortrait(), R.mipmap.widget_dface);
+            setImageFromNet(mCirclePortrait, item.getPortrait(), R.mipmap.widget_default_face);
             mCirclePortrait.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

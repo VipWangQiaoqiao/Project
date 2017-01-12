@@ -15,7 +15,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_portrait"
-            android:src="@mipmap/widget_dface"
+            android:src="@mipmap/widget_default_face"
             android:layout_width="45dp"
             android:layout_height="45dp" />
 

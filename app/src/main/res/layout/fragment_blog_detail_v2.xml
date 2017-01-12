@@ -33,7 +33,7 @@
                     android:id="@+id/iv_avatar"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@mipmap/widget_dface" />
+                    android:src="@mipmap/widget_default_face" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -67,6 +67,7 @@
                     android:background="@drawable/ic_bg_btn_blue"
                     android:minWidth="48dp"
                     android:textColor="@color/white"
+                    style="?android:attr/borderlessButtonStyle"
                     android:textSize="12sp"
                     tools:text="关注" />
             </LinearLayout>

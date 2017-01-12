@@ -56,7 +56,7 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impl
 
         mCallBack.getImgLoader()
                 .load(author != null ? author.getPortrait() : "")
-                .asBitmap().placeholder(R.mipmap.widget_dface)
+                .asBitmap().placeholder(R.mipmap.widget_default_face)
                 .into(vh.iv_question);
 
         vh.tv_question_title.setText(item.getTitle());

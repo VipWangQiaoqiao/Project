@@ -47,7 +47,7 @@
                         android:id="@+id/iv_portrait"
                         android:layout_width="@dimen/size_48"
                         android:layout_height="@dimen/size_48"
-                        tools:src="@mipmap/widget_dface"/>
+                        tools:src="@mipmap/widget_default_face"/>
 
                     <TextView
                         android:id="@+id/tv_nick"

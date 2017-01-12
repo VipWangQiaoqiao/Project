@@ -14,6 +14,7 @@
         tools:ignore="RtlHardcoded">
 
         <LinearLayout
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -91,7 +92,7 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/software_about_hint"
-                    android:textColor="#6a6a6a"
+                    android:textColor="#9d9d9d"
                     android:textSize="12sp" />
 
                 <View

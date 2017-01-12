@@ -105,6 +105,8 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                         }
                     }
                 });
+                if (viewType == UserSelectFriendsAdapter.USER_TYPE_UN_LINE)
+                    userInfoViewHolder.mLine.setVisibility(View.GONE);
                 return userInfoViewHolder;
         }
     }
@@ -112,9 +114,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         UserFriend item = mItems.get(position);
-
         switch (item.getShowViewType()) {
             case UserSelectFriendsAdapter.USER_TYPE:
                 ((UserInfoViewHolder) holder).onBindView(item, position);
@@ -130,8 +130,23 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        List<UserFriend> item = this.mItems;
-        return item.get(position).getShowViewType();
+        List<UserFriend> items = this.mItems;
+        UserFriend item = items.get(position);
+        switch (item.getShowViewType()) {
+            case UserSelectFriendsAdapter.INDEX_TYPE:
+                return UserSelectFriendsAdapter.INDEX_TYPE;
+            case UserSelectFriendsAdapter.SEARCH_TYPE:
+                return UserSelectFriendsAdapter.SEARCH_TYPE;
+            default: {
+                int maxPos = getItemCount() - 1;
+                if ((position == maxPos)
+                        || (position < maxPos && items.get(position + 1).getShowViewType() == UserSelectFriendsAdapter.INDEX_TYPE)) {
+                    return UserSelectFriendsAdapter.USER_TYPE_UN_LINE;
+                } else {
+                    return UserSelectFriendsAdapter.USER_TYPE;
+                }
+            }
+        }
     }
 
     @Override
@@ -221,7 +236,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
         void onBindView(final UserFriend item, int position) {
 
-            setImageFromNet(mCirclePortrait, item.getPortrait(), R.mipmap.widget_dface);
+            setImageFromNet(mCirclePortrait, item.getPortrait(), R.mipmap.widget_default_face);
             mCirclePortrait.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

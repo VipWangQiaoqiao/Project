@@ -44,7 +44,7 @@ public class UserFansOrFollowAdapter extends BaseRecyclerAdapter<UserFansOrFollo
 
         if (item == null) return;
         final UserFansViewHolder vh = (UserFansViewHolder) holder;
-        ImageLoader.loadImage(requestManager, vh.mCiIcon, item.getPortrait(), R.mipmap.widget_dface);
+        ImageLoader.loadImage(requestManager, vh.mCiIcon, item.getPortrait(), R.mipmap.widget_default_face);
         vh.mTvName.setText(item.getName());
         switch (item.getGender()) {
             case 0:

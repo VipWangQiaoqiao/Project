@@ -207,6 +207,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                     info.comments, info.distance, info.mobileName, info.mobileOS, info.userID));
         }
         mAdapter.addAll(results);
+        mAdapter.setState(results.size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, true);
     }
 
     /**
