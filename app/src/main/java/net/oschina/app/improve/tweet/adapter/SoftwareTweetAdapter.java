@@ -64,7 +64,7 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
 
         CircleImageView icon = vh.icon;
         icon.setTag(R.id.iv_tweet_face, position);
-        ImageLoader.loadImage(requestManager, vh.icon, item.getAuthor().getPortrait(), R.mipmap.widget_dface);
+        ImageLoader.loadImage(requestManager, vh.icon, item.getAuthor().getPortrait(), R.mipmap.widget_default_face);
         vh.icon.setOnClickListener(this);
         vh.name.setText(item.getAuthor().getName());
         CommentsUtil.formatHtml(mContext.getResources(), vh.content, item.getContent());

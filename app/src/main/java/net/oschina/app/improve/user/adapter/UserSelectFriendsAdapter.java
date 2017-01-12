@@ -187,7 +187,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
         void onBindView(final UserFriend item, int position) {
 
-            setImageFromNet(mCirclePortrait, item.getPortrait(), R.mipmap.widget_dface);
+            setImageFromNet(mCirclePortrait, item.getPortrait(), R.mipmap.widget_default_face);
             mCirclePortrait.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

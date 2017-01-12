@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:contentDescription="@null"
             android:scaleType="centerCrop"
-            tools:src="@mipmap/widget_dface"/>
+            tools:src="@mipmap/widget_default_face"/>
 
         <TextView
             android:id="@+id/tv_name"

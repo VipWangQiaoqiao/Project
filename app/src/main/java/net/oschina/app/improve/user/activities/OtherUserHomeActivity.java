@@ -311,14 +311,14 @@ public class OtherUserHomeActivity extends BaseActivity
         getImageLoader()
                 .load(user.getPortrait())
                 .asBitmap()
-                .placeholder(R.mipmap.widget_dface)
-                .error(R.mipmap.widget_dface)
+                .placeholder(R.mipmap.widget_default_face)
+                .error(R.mipmap.widget_default_face)
                 .into(mPortrait);
         getImageLoader()
                 .load(user.getPortrait())
                 .asBitmap()
-                .placeholder(R.mipmap.widget_dface)
-                .error(R.mipmap.widget_dface)
+                .placeholder(R.mipmap.widget_default_face)
+                .error(R.mipmap.widget_default_face)
                 .into(mLogoPortrait);
         mLogoNick.setText(user.getName());
         mNick.setText(user.getName());

@@ -211,7 +211,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         @SuppressLint("InflateParams") final ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
 
         ImageView ivAvatar = (ImageView) lay.findViewById(R.id.iv_avatar);
-        imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
+        imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_default_face)
                 .into(ivAvatar);
         ivAvatar.setOnClickListener(new OnClickListener() {
             @Override

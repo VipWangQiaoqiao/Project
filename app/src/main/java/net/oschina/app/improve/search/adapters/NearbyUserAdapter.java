@@ -21,70 +21,70 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by thanatos on 16/10/24.
+ * Created by thanatos
+ * on 16/10/24.
+ * Updated by fei
+ * on 17/01/12.
  */
 
 public class NearbyUserAdapter extends BaseRecyclerAdapter<NearbyResult> {
 
     public NearbyUserAdapter(Context context) {
-        this(context, ONLY_FOOTER);
-    }
-
-    public NearbyUserAdapter(Context context, int mode) {
-        super(context, mode);
+        super(context, ONLY_FOOTER);
     }
 
     @Override
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
-        return new ViewHolder(LayoutInflater.from(mContext)
-                .inflate(R.layout.list_item_nearby_user, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_nearby_user, parent, false));
     }
 
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder h, NearbyResult item, int position) {
-        ViewHolder holder = (ViewHolder) h;
 
-        if (item.getUser() != null) {
-            Glide.with(mContext)
-                    .load(item.getUser().getPortrait())
-                    .asBitmap()
-                    .placeholder(R.mipmap.widget_dface)
-                    .error(R.mipmap.widget_dface)
-                    .into(holder.mViewPortrait);
-            holder.mViewNick.setText(item.getUser().getName());
-            holder.mViewGender.setVisibility(View.VISIBLE);
-            switch (item.getUser().getGender()) {
-                case User.GENDER_FEMALE:
-                    holder.mViewGender.setImageResource(R.mipmap.ic_female);
-                    break;
-                case User.GENDER_MALE:
-                    holder.mViewGender.setImageResource(R.mipmap.ic_male);
-                    break;
-                default:
-                    holder.mViewGender.setVisibility(View.GONE);
-            }
-            User.More more = item.getUser().getMore();
-            if (more != null) {
-                holder.mViewPosition.setText(more.getCompany() + " " + more.getPosition());
+        if (h instanceof ViewHolder) {
+            ViewHolder holder = (ViewHolder) h;
+            if (item.getUser() != null) {
+                Glide.with(mContext)
+                        .load(item.getUser().getPortrait())
+                        .asBitmap()
+                        .placeholder(R.mipmap.widget_default_face)
+                        .error(R.mipmap.widget_default_face)
+                        .into(holder.mViewPortrait);
+                holder.mViewNick.setText(item.getUser().getName());
+                holder.mViewGender.setVisibility(View.VISIBLE);
+                switch (item.getUser().getGender()) {
+                    case User.GENDER_FEMALE:
+                        holder.mViewGender.setImageResource(R.mipmap.ic_female);
+                        break;
+                    case User.GENDER_MALE:
+                        holder.mViewGender.setImageResource(R.mipmap.ic_male);
+                        break;
+                    default:
+                        holder.mViewGender.setVisibility(View.GONE);
+                }
+                User.More more = item.getUser().getMore();
+                if (more != null) {
+                    holder.mViewPosition.setText(more.getCompany() + " " + more.getPosition());
+                } else {
+                    holder.mViewPosition.setText("??? ???");
+                }
             } else {
+                holder.mViewPortrait.setImageResource(R.mipmap.widget_default_face);
+                holder.mViewNick.setText("???");
+                holder.mViewGender.setVisibility(View.GONE);
                 holder.mViewPosition.setText("??? ???");
             }
-        } else {
-            holder.mViewPortrait.setImageResource(R.mipmap.widget_dface);
-            holder.mViewNick.setText("???");
-            holder.mViewGender.setVisibility(View.GONE);
-            holder.mViewPosition.setText("??? ???");
-        }
 
-        if (item.getNearby() != null) {
-            holder.mViewDistance.setText(StringUtils.formatDistance(item.getNearby().getDistance()));
-        } else {
-            holder.mViewDistance.setText("未知距离");
+            if (item.getNearby() != null) {
+                holder.mViewDistance.setText(StringUtils.formatDistance(item.getNearby().getDistance()));
+            } else {
+                holder.mViewDistance.setText("未知距离");
+            }
         }
 
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.iv_portrait)
         CircleImageView mViewPortrait;

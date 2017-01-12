@@ -50,12 +50,12 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
         Author author = item.getAuthor();
         if (author == null) {
             holder.mViewNick.setText("匿名用户");
-            holder.mViewPortrait.setImageResource(R.mipmap.widget_dface);
+            holder.mViewPortrait.setImageResource(R.mipmap.widget_default_face);
         } else {
             Glide.with(mContext).load(item.getAuthor().getPortrait())
                     .asBitmap()
-                    .placeholder(R.mipmap.widget_dface)
-                    .error(R.mipmap.widget_dface)
+                    .placeholder(R.mipmap.widget_default_face)
+                    .error(R.mipmap.widget_default_face)
                     .into(holder.mViewPortrait);
             holder.mViewNick.setText(item.getAuthor().getName());
         }

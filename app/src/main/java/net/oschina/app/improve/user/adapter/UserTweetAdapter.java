@@ -97,15 +97,15 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
 
         final Author author = item.getAuthor();
         if (author == null) {
-            holder.mViewPortrait.setImageResource(R.mipmap.widget_dface);
+            holder.mViewPortrait.setImageResource(R.mipmap.widget_default_face);
             holder.mViewPortrait.setOnClickListener(null);
             holder.mViewName.setText("匿名用户");
         } else {
             Glide.with(mContext)
                     .load(author.getPortrait())
                     .asBitmap()
-                    .placeholder(R.mipmap.widget_dface)
-                    .error(R.mipmap.widget_dface)
+                    .placeholder(R.mipmap.widget_default_face)
+                    .error(R.mipmap.widget_default_face)
                     .into(holder.mViewPortrait);
             holder.mViewPortrait.setOnClickListener(new View.OnClickListener() {
                 @Override

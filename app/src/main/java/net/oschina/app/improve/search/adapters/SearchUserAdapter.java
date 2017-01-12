@@ -43,8 +43,8 @@ public class SearchUserAdapter extends BaseRecyclerAdapter<User> {
         Glide.with(mContext)
                 .load(item.getPortrait())
                 .asBitmap()
-                .placeholder(R.mipmap.widget_dface)
-                .error(R.mipmap.widget_dface)
+                .placeholder(R.mipmap.widget_default_face)
+                .error(R.mipmap.widget_default_face)
                 .into(holder.mViewPortrait);
         holder.mViewNick.setText(item.getName());
         holder.mViewPosition.setText(String.format("%s  %s  %s",

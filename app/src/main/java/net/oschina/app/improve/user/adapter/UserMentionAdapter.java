@@ -54,7 +54,7 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
         MentionViewHolder viewHolder = (MentionViewHolder) holder;
         Author author = item.getAuthor();
         if (author != null) {
-            mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().placeholder(R.mipmap.widget_dface).into(viewHolder.iv_user_avatar);
+            mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().placeholder(R.mipmap.widget_default_face).into(viewHolder.iv_user_avatar);
             viewHolder.tv_user_name.setText(author.getName());
         }
         viewHolder.iv_user_avatar.setOnClickListener(mListener);
