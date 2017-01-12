@@ -16,7 +16,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/about_comment_hint"
-        android:textColor="#6a6a6a"
+        android:textColor="#9d9d9d"
         android:textSize="12sp" />
 
     <View
