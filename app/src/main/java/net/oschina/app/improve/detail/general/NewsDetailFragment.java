@@ -85,9 +85,13 @@ public class NewsDetailFragment extends DetailFragment {
         final int index = ReadedIndexCacheManager.getIndex(getContext(), mBean.getId(),
                 OSChinaApi.CATALOG_NEWS);
         if (index != 0) {
+            if (mViewScroller == null)
+                return;
             mViewScroller.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    if (mViewScroller == null)
+                        return;
                     mViewScroller.smoothScrollTo(0, index);
                 }
             }, 250);

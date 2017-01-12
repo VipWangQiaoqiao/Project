@@ -399,4 +399,10 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
             this.nameId = nameId;
         }
     }
+
+    public void hideProgressDialog(){
+        if(mDialog == null)
+            return;
+        mDialog.dismiss();
+    }
 }

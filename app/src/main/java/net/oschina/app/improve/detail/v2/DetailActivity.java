@@ -347,6 +347,14 @@ public abstract class DetailActivity extends BaseBackActivity implements
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(mAlertDialog ==null)
+            return;
+        mAlertDialog.hideProgressDialog();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
