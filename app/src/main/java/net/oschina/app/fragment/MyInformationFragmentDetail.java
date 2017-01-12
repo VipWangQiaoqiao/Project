@@ -81,7 +81,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
     @SuppressWarnings("deprecation")
     public void fillUI() {
         Glide.with(getContext()).load(userInfo.getPortrait())
-                .placeholder(R.mipmap.widget_dface)
+                .placeholder(R.mipmap.widget_default_face)
                 .into(mUserFace);
         mName.setText(userInfo.getName());
         mJoinTime.setText(StringUtils.formatYearMonthDayNew(userInfo.getMore().getJoinDate()));

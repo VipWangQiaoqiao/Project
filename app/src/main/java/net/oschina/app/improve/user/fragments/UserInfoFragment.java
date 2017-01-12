@@ -257,7 +257,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      */
     private void updateView(User userInfo) {
 
-        setImageFromNet(mCirclePortrait, userInfo.getPortrait(), R.mipmap.widget_dface);
+        setImageFromNet(mCirclePortrait, userInfo.getPortrait(), R.mipmap.widget_default_face);
         mCirclePortrait.setVisibility(View.VISIBLE);
 
         mTvName.setText(userInfo.getName());
@@ -390,7 +390,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      *
      */
     private void hideView() {
-        mCirclePortrait.setImageResource(R.mipmap.widget_dface);
+        mCirclePortrait.setImageResource(R.mipmap.widget_default_face);
         mTvName.setText(R.string.user_hint_login);
         mTvName.setTextSize(16.0f);
         mIvGander.setVisibility(View.INVISIBLE);

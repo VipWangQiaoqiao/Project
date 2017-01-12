@@ -322,7 +322,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             });
             mSelectContainer.addView(ivIcon);
             Glide.with(this).load(friend.getPortrait())
-                    .error(R.mipmap.widget_dface)
+                    .error(R.mipmap.widget_default_face)
                     .into(ivIcon);
         }
 

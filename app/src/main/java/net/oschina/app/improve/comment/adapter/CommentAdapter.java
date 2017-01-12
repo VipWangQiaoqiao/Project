@@ -57,20 +57,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
 
     private int mType;
     private CommentBar delegation;
-
-    @Override
-    public int getItemViewType(int position) {
-        int type = super.getItemViewType(position);
-        if (type == VIEW_TYPE_NORMAL && isRealDataFooter(position)) {
-            return VIEW_TYPE_DATA_FOOTER;
-        }
-        return type;
-    }
-
-    private boolean isRealDataFooter(int position) {
-        return getIndex(position) == getCount() - 1;
-    }
-
     private RequestManager mRequestManager;
 
     public CommentAdapter(final Context context, RequestManager requestManager, int mode) {
@@ -92,6 +78,15 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        int type = super.getItemViewType(position);
+        if (type == VIEW_TYPE_NORMAL && isRealDataFooter(position)) {
+            return VIEW_TYPE_DATA_FOOTER;
+        }
+        return type;
+    }
+
     public void setSourceId(long sourceId) {
         this.mSourceId = sourceId;
     }
@@ -102,6 +97,11 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
 
     public void setDelegation(CommentBar delegation) {
         this.delegation = delegation;
+    }
+
+
+    private boolean isRealDataFooter(int position) {
+        return getIndex(position) == getCount() - 1;
     }
 
     static class CommentHolder extends RecyclerView.ViewHolder {
@@ -147,7 +147,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         @SuppressLint("DefaultLocale")
         void addComment(int position, final long sourceId, final int commentType, final Comment comment, RequestManager requestManager) {
 
-            requestManager.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface).into(mIvAvatar);
+            requestManager.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_default_face).into(mIvAvatar);
             mIvAvatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

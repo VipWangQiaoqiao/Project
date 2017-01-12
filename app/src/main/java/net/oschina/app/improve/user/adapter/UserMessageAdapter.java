@@ -52,7 +52,7 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
         MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
         User author = item.getSender();
         if (author != null) {
-            mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().placeholder(R.mipmap.widget_dface).into(messageViewHolder.iv_user_avatar);
+            mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().placeholder(R.mipmap.widget_default_face).into(messageViewHolder.iv_user_avatar);
             messageViewHolder.tv_user_name.setText(author.getName());
         }
         messageViewHolder.iv_user_avatar.setOnClickListener(mListener);

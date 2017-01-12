@@ -20,7 +20,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/widget_dface"/>
+            android:src="@mipmap/widget_default_face"/>
 
         <LinearLayout
             android:layout_width="0dp"

@@ -364,10 +364,10 @@ public class CommentExsActivity extends BaseBackActivity {
 
         void setData(Comment comment, RequestManager imageLoader, View.OnClickListener l) {
             if (comment.getAuthor().getPortrait() != null)
-                imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_dface)
+                imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_default_face)
                         .into((mAvatar));
             else
-                mAvatar.setImageResource(R.mipmap.widget_dface);
+                mAvatar.setImageResource(R.mipmap.widget_default_face);
 
             mName.setText(comment.getAuthor().getName());
             mDate.setText(comment.getPubDate());

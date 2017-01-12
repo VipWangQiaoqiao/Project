@@ -143,7 +143,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         setBodyContent(translationDetail.getBody());
 
         mTVAuthorName.setText(translationDetail.getAuthor());
-        getImgLoader().load(translationDetail.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
+        getImgLoader().load(translationDetail.getAuthorPortrait()).error(R.mipmap.widget_default_face).into(mIVAuthorPortrait);
 
         mTVPubDate.setText(StringUtils.formatSomeAgo(translationDetail.getPubDate()));
 

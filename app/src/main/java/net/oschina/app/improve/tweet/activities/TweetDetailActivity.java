@@ -395,13 +395,13 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             return;
         if (tweet.getAuthor() != null) {
             if (TextUtils.isEmpty(tweet.getAuthor().getPortrait())) {
-                ivPortrait.setImageResource(R.mipmap.widget_dface);
+                ivPortrait.setImageResource(R.mipmap.widget_default_face);
             } else {
                 getImageLoader()
                         .load(tweet.getAuthor().getPortrait())
                         .asBitmap()
-                        .placeholder(getResources().getDrawable(R.mipmap.widget_dface))
-                        .error(getResources().getDrawable(R.mipmap.widget_dface))
+                        .placeholder(getResources().getDrawable(R.mipmap.widget_default_face))
+                        .error(getResources().getDrawable(R.mipmap.widget_default_face))
                         .into(ivPortrait);
             }
             ivPortrait.setOnClickListener(getOnPortraitClickListener());

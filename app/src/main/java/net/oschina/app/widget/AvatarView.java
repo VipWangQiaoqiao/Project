@@ -55,7 +55,7 @@ public class AvatarView extends CircleImageView {
 
     public void setAvatarUrl(String url) {
         if (TextUtils.isEmpty(url)) {
-            setImageResource(R.mipmap.widget_dface);
+            setImageResource(R.mipmap.widget_default_face);
             return;
         }
         // 由于头像地址默认加了一段参数需要去掉
@@ -69,8 +69,8 @@ public class AvatarView extends CircleImageView {
 
         if (aty != null) {
             Glide.with(aty).load(headUrl)
-                    .error(R.mipmap.widget_dface)
-                    .placeholder(R.mipmap.widget_dface)
+                    .error(R.mipmap.widget_default_face)
+                    .placeholder(R.mipmap.widget_default_face)
                     .into(this);
         }
     }
