@@ -1,6 +1,6 @@
-package net.oschina.app.viewpagerfragment;
+package net.oschina.app.improve.tweet.fragments;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -15,8 +15,6 @@ import net.oschina.app.R;
 import net.oschina.app.bean.User;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
-import net.oschina.app.improve.tweet.fragments.ListTweetCommentFragment;
-import net.oschina.app.improve.tweet.fragments.ListTweetLikeUsersFragment;
 
 /**
  * 赞 | 评论
@@ -52,14 +50,14 @@ public class TweetDetailViewPagerFragment extends Fragment
     private TweetDetailContract.IThumbupView mThumbupViewImp;
     private TweetDetailContract.Operator mOperator;
 
-    public static TweetDetailViewPagerFragment instantiate(TweetDetailContract.Operator operator) {
+    public static TweetDetailViewPagerFragment instantiate() {
         return new TweetDetailViewPagerFragment();
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mOperator = (TweetDetailContract.Operator) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mOperator = (TweetDetailContract.Operator) context;
     }
 
     @Nullable

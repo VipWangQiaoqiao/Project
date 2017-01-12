@@ -21,7 +21,10 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by thanatos on 16/6/13.
+ * Created by
+ * thanatos on 16/6/13.
+ * Updated by
+ * fei on 17/01/11.
  */
 public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<TweetLike> {
 
