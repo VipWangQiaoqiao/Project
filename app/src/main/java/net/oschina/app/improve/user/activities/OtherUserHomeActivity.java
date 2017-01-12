@@ -38,6 +38,7 @@ import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.UserRelation;
+import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.improve.user.fragments.UserActiveFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
@@ -354,6 +355,7 @@ public class OtherUserHomeActivity extends BaseActivity
                 Toast.makeText(OtherUserHomeActivity.this, "获取用户信息失败", Toast.LENGTH_SHORT).show();
             }
 
+            @SuppressWarnings("RestrictedApi")
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 ResultBean<User> result = AppOperator.createGson().fromJson(
@@ -375,6 +377,7 @@ public class OtherUserHomeActivity extends BaseActivity
         });
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (AccountHelper.isLogin() && user.getId() > 0 && AccountHelper.getUserId() != user.getId()) {
@@ -423,14 +426,9 @@ public class OtherUserHomeActivity extends BaseActivity
                 UIHelper.showSimpleBack(this, SimpleBackPage.MY_INFORMATION_DETAIL, userBundle);
                 break;
             case R.id.iv_portrait:
-                DialogHelper.getSelectDialog(this, "请选择操作", new String[]{"查看头像"}, "取消",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if (user == null || TextUtils.isEmpty(user.getPortrait())) return;
-                                UIHelper.showUserAvatar(OtherUserHomeActivity.this, user.getPortrait());
-                            }
-                        }).show();
+                if (user == null || TextUtils.isEmpty(user.getPortrait())) return;
+                String[] paths = {user.getPortrait()};
+                ImageGalleryActivity.show(this, paths, 0);
                 break;
         }
     }
@@ -551,8 +549,7 @@ public class OtherUserHomeActivity extends BaseActivity
                 mDivider.setVisibility(View.VISIBLE);
                 isShow = false;
             }
-            mTabLayout.getBackground().setAlpha(
-                    Math.round(255 - Math.abs(verticalOffset) / (float) mScrollRange * 255));
+            mTabLayout.getBackground().setAlpha(Math.round(255 - Math.abs(verticalOffset) / (float) mScrollRange * 255));
         }
 
         public void resetRange() {
