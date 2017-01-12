@@ -46,6 +46,7 @@ import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.AvatarView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -426,9 +427,10 @@ public class OtherUserHomeActivity extends BaseActivity
                 UIHelper.showSimpleBack(this, SimpleBackPage.MY_INFORMATION_DETAIL, userBundle);
                 break;
             case R.id.iv_portrait:
-                if (user == null || TextUtils.isEmpty(user.getPortrait())) return;
-                String[] paths = {user.getPortrait()};
-                ImageGalleryActivity.show(this, paths, 0);
+                String url;
+                if (user == null || TextUtils.isEmpty(url = user.getPortrait())) return;
+                url = AvatarView.getLargeAvatar(url);
+                ImageGalleryActivity.show(this, url);
                 break;
         }
     }
