@@ -9,47 +9,6 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/day_colorPrimary"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:drawableLeft="@mipmap/btn_back_normal"
-            android:drawablePadding="@dimen/lay_8"
-            android:gravity="center|left"
-            android:paddingLeft="@dimen/lay_16"
-            android:text="@string/friend_list_hint"
-            android:textColor="@color/white"
-            android:textSize="@dimen/font_18"
-            tools:ignore="RtlHardcoded,RtlSymmetry"/>
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/bt_select_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@color/day_colorPrimary"
-            android:elevation="0dp"
-            android:gravity="center"
-            android:outlineProvider="none"
-            android:text="@string/ok"
-            android:textColor="@color/white"
-            android:textSize="@dimen/font_16"
-            tools:ignore="RtlHardcoded"
-            tools:targetApi="lollipop"/>
-
-    </LinearLayout>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
