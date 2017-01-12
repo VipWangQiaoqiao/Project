@@ -8,11 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,12 +50,6 @@ import butterknife.Bind;
 
 public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener,
         SearchView.OnQueryTextListener {
-
-    @Bind(R.id.tv_back)
-    TextView mTvBack;
-
-    @Bind(R.id.bt_select_submit)
-    Button mBtSelectSubmit;
 
     @Bind(R.id.searcher_friends)
     SearchView mSearchView;
@@ -112,26 +107,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Override
     protected void initWidget() {
         super.initWidget();
-
-        mTvBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        if (mCacheIconFriends.size() == 0) {
-            mBtSelectSubmit.setText(R.string.cancel);
-        } else {
-            mBtSelectSubmit.setText(R.string.ok);
-        }
-
-        mBtSelectSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendSelectData(false);
-            }
-        });
 
         //初始化searchView的搜索icon
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mSearchIcon.getLayoutParams();
@@ -201,7 +176,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     }
 
-
     @Override
     protected void initData() {
         super.initData();
@@ -215,19 +189,34 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_tweet_topic, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_submit) {
+            sendSelectData(false);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * request data
      */
     private void requestData() {
 
-        //检查网络
-        if (!checkNetIsAvailable()) {
-            showError(EmptyLayout.NETWORK_ERROR);
+        final ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
+        if (friends != null && friends.size() > 0) {
+            updateView(friends);
         } else {
-
-            final ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
-            if (friends != null && friends.size() > 0) {
-                updateView(friends);
+            //检查网络
+            if (!checkNetIsAvailable()) {
+                showError(EmptyLayout.NETWORK_ERROR);
             } else {
                 SyncFriendHelper.load(new Runnable() {
                     @Override
@@ -243,9 +232,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                     }
                 });
             }
-
         }
-
     }
 
     /**
@@ -275,20 +262,12 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
 
-        Button selectSubmit = this.mBtSelectSubmit;
-
         int index = containsUserFriend(userFriend);
 
         if (index != -1) {
             cacheIcons.remove(index);
         } else {
             cacheIcons.add(userFriend);
-        }
-
-        if (cacheIcons.size() == 0) {
-            selectSubmit.setText(R.string.cancel);
-        } else {
-            selectSubmit.setText(R.string.ok);
         }
 
         mSelectContainer.removeAllViews();
@@ -474,7 +453,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
             mRecyclerFriends.setAdapter(mLocalAdapter);
 
-            mBtSelectSubmit.setText(R.string.cancel);
             mSearchAdapter.notifyDataSetChanged();
             mSearchAdapter.setSearchContent(newText);
             return false;
@@ -485,8 +463,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
             mTvLabel.setText("@" + newText);
             mTvLabel.setVisibility(View.VISIBLE);
-
-            mBtSelectSubmit.setText(R.string.ok);
 
             mSearchAdapter.clear();
             mSearchAdapter.setSearchContent(newText);
