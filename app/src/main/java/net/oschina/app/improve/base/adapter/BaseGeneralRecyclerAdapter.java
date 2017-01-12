@@ -31,9 +31,9 @@ public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<
     }
 
     protected void parseAtUserContent(TweetTextView textView, String text) {
-        String content = "";
+        String content ;
         if (TextUtils.isEmpty(text)) return;
-        content = text.replaceAll("[\n\\s]+", " ");
+        content = text.replaceAll("[\n\\s]+", " ").replaceAll("&nbsp;"," ");
         Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mCallBack.getContext(), content);
         spannable = AssimilateUtils.assimilateOnlyTag(mCallBack.getContext(), spannable);
         spannable = AssimilateUtils.assimilateOnlyLink(mCallBack.getContext(), spannable);

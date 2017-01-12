@@ -67,6 +67,7 @@
                     android:background="@drawable/ic_bg_btn_blue"
                     android:minWidth="48dp"
                     android:textColor="@color/white"
+                    style="?android:attr/borderlessButtonStyle"
                     android:textSize="12sp"
                     tools:text="关注" />
             </LinearLayout>
