@@ -42,6 +42,7 @@ import net.oschina.app.improve.detail.general.EventDetailActivity;
 import net.oschina.app.improve.detail.general.NewsDetailActivity;
 import net.oschina.app.improve.detail.general.QuestionDetailActivity;
 import net.oschina.app.improve.detail.general.SoftwareDetailActivity;
+import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
@@ -61,7 +62,6 @@ import net.oschina.app.team.fragment.TeamActiveFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.team.ui.TeamNewIssueActivity;
 import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.widget.AvatarView;
 
@@ -315,7 +315,7 @@ public class UIHelper {
             @JavascriptInterface
             public void showImagePreview(String bigImageUrl) {
                 if (bigImageUrl != null && !StringUtils.isEmpty(bigImageUrl)) {
-                    OSCPhotosActivity.showImagePreview(cxt, bigImageUrl);
+                    ImageGalleryActivity.show(cxt, bigImageUrl);
                 }
             }
         }, "mWebViewImageListener");
@@ -536,7 +536,7 @@ public class UIHelper {
             return;
         }
         String url = AvatarView.getLargeAvatar(avatarUrl);
-        OSCPhotosActivity.showImagePreview(context, url);
+        ImageGalleryActivity.show(context, url);
     }
 
     /**

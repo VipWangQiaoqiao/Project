@@ -12,7 +12,6 @@ import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
-import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
@@ -240,7 +239,7 @@ public class URLUtils {
             try {
                 JSONObject json = new JSONObject(jos);
                 String[] urls = json.getString("urls").split(",");
-                OSCPhotosActivity.showImagePreview(context, urls[0]);
+                ImageGalleryActivity.show(context, urls[0]);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
