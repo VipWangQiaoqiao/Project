@@ -49,12 +49,8 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
 
     private static final int RC_EXTERNAL_STORAGE = 0x04;//存储权限
 
-    @Bind(R.id.tb_loading_img)
-    ToggleButton mTbLoadImg;
     @Bind(R.id.tv_cache_size)
     TextView mTvCacheSize;
-    //@Bind(R.id.setting_logout)
-    // TextView mTvExit;
     @Bind(R.id.rl_check_version)
     FrameLayout mRlCheck_version;
     @Bind(R.id.tb_double_click_exit)
@@ -81,12 +77,6 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
 
     @Override
     public void initView(View view) {
-        mTbLoadImg.setOnToggleChanged(new OnToggleChanged() {
-            @Override
-            public void onToggle(boolean on) {
-                AppContext.setLoadImage(on);
-            }
-        });
 
         mTbDoubleClickExit.setOnToggleChanged(new OnToggleChanged() {
             @Override
@@ -95,7 +85,6 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
             }
         });
 
-        view.findViewById(R.id.rl_loading_img).setOnClickListener(this);
         view.findViewById(R.id.rl_clean_cache).setOnClickListener(this);
         view.findViewById(R.id.rl_double_click_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_about).setOnClickListener(this);
@@ -104,21 +93,11 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
         mCancel.setOnClickListener(this);
 
-        //  if (!AppContext.getInstance().isLogin()) {
-        //  mTvExit.setText("退出");
-        //    }
-
         SystemConfigView.show((ViewGroup) view.findViewById(R.id.lay_linear));
     }
 
     @Override
     public void initData() {
-        if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true)) {
-            mTbLoadImg.setToggleOn();
-        } else {
-            mTbLoadImg.setToggleOff();
-        }
-
         if (AppContext.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true)) {
             mTbDoubleClickExit.setToggleOn();
         } else {
@@ -168,9 +147,6 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
     public void onClick(View v) {
         final int id = v.getId();
         switch (id) {
-            case R.id.rl_loading_img:
-                mTbLoadImg.toggle();
-                break;
             case R.id.rl_clean_cache:
                 onClickCleanCache();
                 break;
@@ -191,9 +167,6 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
             case R.id.rl_check_version:
                 onClickUpdate();
                 break;
-            //            case R.id.rl_exit:
-            //              //  onClickExit();
-            //                break;
             case R.id.rl_cancel:
                 // 清理所有缓存
                 UIHelper.clearAppCache(false);

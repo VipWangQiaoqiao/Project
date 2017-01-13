@@ -17,27 +17,10 @@
             style="@style/h_line"
             android:layout_marginTop="20dip"/>
 
-        <RelativeLayout
-            android:id="@+id/rl_loading_img"
-            style="@style/option_item_rl"
-            android:visibility="gone">
-
-            <TextView
-                style="@style/option_item_text_parent"
-                android:text="@string/loading_img"
-                android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16"/>
-
-            <net.oschina.app.improve.widget.togglebutton.ToggleButton
-                android:id="@+id/tb_loading_img"
-                style="@style/option_item_toggleButton"
-                android:layout_alignParentRight="true"/>
-        </RelativeLayout>
-
         <LinearLayout
             android:id="@+id/rl_clean_cache"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector"
+            android:background="@drawable/ic_material"
             android:orientation="horizontal">
 
             <TextView
@@ -71,7 +54,7 @@
         <LinearLayout
             android:id="@+id/rl_double_click_exit"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector"
+            android:background="@drawable/ic_material"
             android:orientation="horizontal">
 
             <TextView
@@ -89,21 +72,6 @@
 
         <View style="@style/h_line"/>
 
-        <RelativeLayout
-            style="@style/option_item_rl"
-            android:visibility="gone">
-
-            <TextView
-                style="@style/option_item_text_parent"
-                android:text="@string/loading_more"
-                android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16"/>
-
-            <net.oschina.app.improve.widget.togglebutton.ToggleButton
-                style="@style/option_item_toggleButton"
-                android:layout_alignParentRight="true"/>
-        </RelativeLayout>
-
         <View
             style="@style/h_line"
             android:layout_marginTop="20dip"/>
@@ -111,7 +79,7 @@
         <FrameLayout
             android:id="@+id/rl_feedback"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector">
+            android:background="@drawable/ic_material">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -133,7 +101,7 @@
         <FrameLayout
             android:id="@+id/rl_about"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector">
+            android:background="@drawable/ic_material">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -155,7 +123,7 @@
         <FrameLayout
             android:id="@+id/rl_check_version"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector">
+            android:background="@drawable/ic_material">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -174,7 +142,7 @@
         <FrameLayout
             android:id="@+id/rl_cancel"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector">
+            android:background="@drawable/ic_material">
 
             <TextView
                 style="@style/option_item_text_parent"

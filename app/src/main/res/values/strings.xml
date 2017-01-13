@@ -350,4 +350,5 @@
     <string name="feedback_hint">我们将不断改进</string>
     <string name="screenshot_hint">截图描述：（可选）</string>
     <string name="submit_feedback_hint">提交反馈</string>
+    <string name="near_bodies_hint">附近的人</string>
 </resources>
