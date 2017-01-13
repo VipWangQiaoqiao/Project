@@ -24,9 +24,10 @@ import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.TranslateDetailContract;
+import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
-import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 
 /**
@@ -122,9 +123,10 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AccountHelper.isLogin())
-                    SelectFriendsActivity.show(TranslationDetailFragment.this);
-                else
+                if (AccountHelper.isLogin()) {
+                    Intent intent = new Intent(getActivity(), UserSelectFriendsActivity.class);
+                    startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+                } else
                     LoginActivity.show(getActivity());
             }
         });

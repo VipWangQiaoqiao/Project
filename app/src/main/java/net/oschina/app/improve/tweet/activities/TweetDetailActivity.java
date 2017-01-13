@@ -43,15 +43,16 @@ import net.oschina.app.improve.bean.simple.TweetLike;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
+import net.oschina.app.improve.tweet.fragments.TweetDetailViewPagerFragment;
+import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
-import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.improve.tweet.fragments.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.RecordButtonUtil;
 
 import java.util.ArrayList;
@@ -71,7 +72,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TweetDetailActivity extends BaseActivity implements TweetDetailContract.Operator {
 
     public static final String BUNDLE_KEY_TWEET = "BUNDLE_KEY_TWEET";
-    public static final String BUNDLE_KEY_TWEET_ID = "BUNDLE_KEY_TWEET_ID";
 
     @Bind(R.id.iv_portrait)
     CircleImageView ivPortrait;
@@ -276,9 +276,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AccountHelper.isLogin())
-                    SelectFriendsActivity.show(TweetDetailActivity.this);
-                else
+                if (AccountHelper.isLogin()) {
+                    Intent intent = new Intent(TweetDetailActivity.this, UserSelectFriendsActivity.class);
+                    startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+                } else
                     LoginActivity.show(TweetDetailActivity.this);
             }
         });
@@ -436,15 +437,15 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             } else {
                 if (about.getType() == OSChinaApi.COMMENT_TWEET) {
                     mViewRefTitle.setVisibility(View.GONE);
-                    String aname = "@" + about.getTitle();
+                    String aName = "@" + about.getTitle();
                     String cnt = about.getContent();
                     Spannable spannable = AssimilateUtils.assimilate(this, cnt);
                     SpannableStringBuilder builder = new SpannableStringBuilder();
-                    builder.append(aname + ": ");
+                    builder.append(aName).append(": ");
                     builder.append(spannable);
                     ForegroundColorSpan span = new ForegroundColorSpan(
                             getResources().getColor(R.color.day_colorPrimary));
-                    builder.setSpan(span, 0, aname.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    builder.setSpan(span, 0, aName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                     mViewRefContent.setText(builder);
                 } else {
                     mViewRefTitle.setVisibility(View.VISIBLE);

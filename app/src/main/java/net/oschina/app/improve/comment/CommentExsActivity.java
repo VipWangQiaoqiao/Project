@@ -34,9 +34,10 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
+import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
-import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
@@ -110,10 +111,12 @@ public class CommentExsActivity extends BaseBackActivity {
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AccountHelper.isLogin())
-                    SelectFriendsActivity.show(CommentExsActivity.this);
-                else
+                if (AccountHelper.isLogin()) {
+                    Intent intent = new Intent(CommentExsActivity.this, UserSelectFriendsActivity.class);
+                    startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+                } else {
                     LoginActivity.show(CommentExsActivity.this);
+                }
             }
         });
 

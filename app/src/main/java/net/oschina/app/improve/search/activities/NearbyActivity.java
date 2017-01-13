@@ -50,7 +50,10 @@ import butterknife.Bind;
 
 /**
  * 寻找附近的人
- * Created by thanatosx on 2016/12/22.
+ * Created by thanatosx
+ * on 2016/12/22.
+ * Updated bt fei
+ * on 2017/01/13
  */
 
 public class NearbyActivity extends BaseBackActivity implements RadarSearchListener, BDLocationListener,
@@ -180,35 +183,42 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             mAdapter.clear();
             mRecyclerRefresh.setRefreshing(false);
         }
-        if (error != RadarSearchError.RADAR_NO_ERROR) {
-            SimplexToast.show(this, "没有获取到附近的人");
-            mAdapter.clear();
-            mPageNum = --mPageNum > 0 ? mPageNum : 0;
-            return;
-        }
-        List<RadarNearbyInfo> infos = result.infoList;
-        List<NearbyResult> results = new ArrayList<>();
-        for (RadarNearbyInfo info : infos) {
-            User user = null;
-            try {
-                String comments = URLDecoder.decode(info.comments, "UTF-8");
-                TLog.i("oschina", "Nearby Info List: " + comments);
-                user = AppOperator.createGson().fromJson(comments, User.class);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (user == null) continue;
-            NearbyResult.Nearby nearby = new NearbyResult.Nearby();
-            nearby.setDistance(info.distance);
-            nearby.setMobileName(info.mobileName);
-            nearby.setMobileOS(info.mobileOS);
+        List<RadarNearbyInfo> infoList = result.infoList;
 
-            results.add(new NearbyResult(user, nearby));
-            TLog.i("oschina", String.format("comments: %s, distance: %s, mobile name: %s, mobile OS: %s, user id: %s",
-                    info.comments, info.distance, info.mobileName, info.mobileOS, info.userID));
+        int size = 0;
+
+        if (error != RadarSearchError.RADAR_NO_ERROR || infoList == null) {
+            SimplexToast.show(this, "没有获取到附近的人");
+        } else {
+
+            List<NearbyResult> results = new ArrayList<>();
+
+            for (RadarNearbyInfo info : infoList) {
+                User user = null;
+                try {
+                    String comments = URLDecoder.decode(info.comments, "UTF-8");
+                    TLog.i("oschina", "Nearby Info List: " + comments);
+                    user = AppOperator.createGson().fromJson(comments, User.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (user == null) continue;
+
+                NearbyResult.Nearby nearby = new NearbyResult.Nearby();
+                nearby.setDistance(info.distance);
+                nearby.setMobileName(info.mobileName);
+                nearby.setMobileOS(info.mobileOS);
+
+                results.add(new NearbyResult(user, nearby));
+                TLog.i("oschina", String.format("comments: %s, distance: %s, mobile name: %s, mobile OS: %s, user id: %s",
+                        info.comments, info.distance, info.mobileName, info.mobileOS, info.userID));
+            }
+            mAdapter.addAll(results);
+            size = infoList.size();
         }
-        mAdapter.addAll(results);
-        mAdapter.setState(results.size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, true);
+
+        mAdapter.setState(size == 0 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, true);
     }
 
     /**

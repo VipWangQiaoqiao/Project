@@ -35,10 +35,11 @@ import net.oschina.app.improve.bean.comment.Reply;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
+import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.OWebView;
-import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -181,9 +182,10 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AccountHelper.isLogin())
-                    SelectFriendsActivity.show(QuesAnswerDetailActivity.this);
-                else
+                if (AccountHelper.isLogin()) {
+                    Intent intent = new Intent(QuesAnswerDetailActivity.this, UserSelectFriendsActivity.class);
+                    startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+                } else
                     LoginActivity.show(QuesAnswerDetailActivity.this);
             }
         });
