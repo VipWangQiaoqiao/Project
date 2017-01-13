@@ -2,6 +2,7 @@ package net.oschina.app.improve.widget.togglebutton;
 
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -28,7 +29,7 @@ public class ToggleButton extends View {
     /**
      * 开启颜色
      */
-    private int onColor = Color.parseColor("#4ebb7f");
+    private int onColor = Color.parseColor("#24cf5f");
     /**
      * 关闭颜色
      */
@@ -101,7 +102,7 @@ public class ToggleButton extends View {
     }
 
     public void setup(AttributeSet attrs) {
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         paint.setStyle(Style.FILL);
         paint.setStrokeCap(Cap.ROUND);
 
@@ -180,6 +181,7 @@ public class ToggleButton extends View {
 
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
         rect.set(0, 0, getWidth(), getHeight());
         paint.setColor(borderColor);
         canvas.drawRoundRect(rect, radius, radius, paint);
@@ -210,6 +212,7 @@ public class ToggleButton extends View {
     private static final int ANIMATION_DURATION = 280;
     private ObjectAnimator mAnimator;
 
+    @SuppressLint("ObsoleteSdkInt")
     private void animateCheckedState(boolean newCheckedState) {
         AnimatorProperty property = new AnimatorProperty();
         if (newCheckedState) {
