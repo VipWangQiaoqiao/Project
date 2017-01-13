@@ -150,6 +150,9 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         holder.mViewLikeState.setTag(position);
         holder.mViewLikeState.setOnClickListener(mOnLikeClickListener);
 
+        holder.mViewLikeCount.setTag(position);
+        holder.mViewLikeCount.setOnClickListener(mOnLikeClickListener);
+
         Tweet.Image[] images = item.getImages();
         holder.mLayoutFlow.setImage(images);
 
