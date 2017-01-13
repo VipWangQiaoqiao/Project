@@ -8,13 +8,14 @@
 
     <TextView
         android:id="@+id/tv_blog_detail_about"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
         android:text="相关推荐"
+        android:background="#f5f5f5"
         android:textColor="#9d9d9d"
         android:textSize="12sp" />
 

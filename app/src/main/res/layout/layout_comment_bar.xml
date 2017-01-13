@@ -48,18 +48,18 @@
 
         <ImageButton
             android:id="@+id/ib_fav"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_marginLeft="@dimen/lay_16"
+            android:layout_width="46dp"
+            android:layout_height="match_parent"
+            android:padding="@dimen/lay_12"
             android:background="@drawable/ic_material"
             android:scaleType="centerInside"
             android:src="@mipmap/ic_fav_pressed" />
 
         <ImageButton
             android:id="@+id/ib_share"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_marginLeft="@dimen/lay_16"
+            android:layout_width="46dp"
+            android:layout_height="match_parent"
+            android:padding="@dimen/lay_12"
             android:background="@drawable/ic_material"
             android:scaleType="centerInside"
             android:src="@mipmap/ic_share_black_normal" />

@@ -1,16 +1,20 @@
 package net.oschina.app.improve.detail.v2;
 
 import android.annotation.SuppressLint;
+import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
+import net.oschina.app.improve.utils.ReadedIndexCacheManager;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.improve.widget.OWebView;
+import net.oschina.app.improve.widget.ScreenView;
 import net.oschina.app.improve.widget.SimplexToast;
 
 /**
@@ -26,6 +30,9 @@ public abstract class DetailFragment extends BaseFragment implements
     protected SubBean mBean;
     protected CommentView mCommentView;
     protected DetailAboutView mDetailAboutView;
+    protected int CACHE_CATALOG;
+    protected NestedScrollView mViewScroller;
+    protected ScreenView mScreenView;
 
     @Override
     protected int getLayoutId() {
@@ -38,7 +45,8 @@ public abstract class DetailFragment extends BaseFragment implements
         mWebView = (OWebView) mRoot.findViewById(R.id.webView);
         mCommentView = (CommentView) mRoot.findViewById(R.id.cv_comment);
         mDetailAboutView = (DetailAboutView) mRoot.findViewById(R.id.lay_detail_about);
-
+        mViewScroller = (NestedScrollView) mRoot.findViewById(R.id.lay_nsv);
+        mScreenView = (ScreenView) mRoot.findViewById(R.id.screenView);
     }
 
     @Override
@@ -76,7 +84,21 @@ public abstract class DetailFragment extends BaseFragment implements
     }
 
     public void onPageFinished() {
-        // pass
+        if (mBean == null || mBean.getId() <= 0) return;
+        final int index = ReadedIndexCacheManager.getIndex(getContext(), mBean.getId(),
+                OSChinaApi.CATALOG_NEWS);
+        if (index != 0) {
+            if (mViewScroller == null)
+                return;
+            mViewScroller.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mViewScroller == null)
+                        return;
+                    mViewScroller.smoothScrollTo(0, index);
+                }
+            }, 250);
+        }
     }
 
     @Override
@@ -127,4 +149,14 @@ public abstract class DetailFragment extends BaseFragment implements
     }
 
     protected abstract int getCommentOrder();
+
+    @Override
+    public void onDestroy() {
+        if (mBean != null && mBean.getId() > 0 && mViewScroller != null) {
+            ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_NEWS,
+                    (mScreenView != null && mScreenView.isViewInScreen()) ? 0 : mViewScroller.getScrollY());
+        }
+        mWebView.destroy();
+        super.onDestroy();
+    }
 }
