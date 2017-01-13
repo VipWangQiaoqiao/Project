@@ -89,6 +89,11 @@ public class EventDetailFragment extends DetailFragment {
     }
 
     @Override
+    public void onPageFinished() {
+        // TODO: 2017/1/13  
+    }
+
+    @Override
     protected int getCommentOrder() {
         return OSChinaApi.COMMENT_HOT_ORDER;
     }

@@ -291,6 +291,11 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white" />
 
+            <net.oschina.app.improve.widget.ScreenView
+                android:id="@+id/screenView"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/transparent" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
