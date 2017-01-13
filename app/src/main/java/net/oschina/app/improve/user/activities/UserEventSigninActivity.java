@@ -1,4 +1,4 @@
-package net.oschina.app.improve.detail.activities;
+package net.oschina.app.improve.user.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -51,7 +51,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:活动签到
  */
 
-public class EventSigninActivity extends BaseBackActivity {
+public class UserEventSigninActivity extends BaseBackActivity {
 
     public static final String EVENT_ID_KEY = "event_id_key";
 
@@ -102,7 +102,7 @@ public class EventSigninActivity extends BaseBackActivity {
      * @param context context
      */
     public static void show(Context context, long sourceId) {
-        Intent intent = new Intent(context, EventSigninActivity.class);
+        Intent intent = new Intent(context, UserEventSigninActivity.class);
         intent.putExtra(EVENT_ID_KEY, sourceId);
         context.startActivity(intent);
     }
@@ -165,7 +165,7 @@ public class EventSigninActivity extends BaseBackActivity {
         mIvImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                net.oschina.app.improve.detail.general.EventDetailActivity.show(EventSigninActivity.this, mId);
+                net.oschina.app.improve.detail.general.EventDetailActivity.show(UserEventSigninActivity.this, mId);
             }
         });
     }

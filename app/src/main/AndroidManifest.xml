@@ -446,7 +446,7 @@
             android:label="意见反馈"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".improve.detail.activities.EventSigninActivity"
+            android:name=".improve.user.activities.UserEventSigninActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="活动签到"
             android:screenOrientation="portrait"

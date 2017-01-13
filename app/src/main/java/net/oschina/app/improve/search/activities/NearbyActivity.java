@@ -1,5 +1,6 @@
 package net.oschina.app.improve.search.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -131,7 +132,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     private Dialog getSelectorDialog() {
         if (mSelectorDialog == null) {
             mSelectorDialog = new BottomDialog(this, true);
-            View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null);
+            @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null);
             view.findViewById(R.id.tv_clear_opt).setOnClickListener(this);
             view.findViewById(R.id.tv_cancel_opt).setOnClickListener(this);
             mSelectorDialog.setContentView(view);
@@ -243,7 +244,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     /**
      * 定位回调
      *
-     * @param location
+     * @param location location
      */
     @Override
     public void onReceiveLocation(BDLocation location) {
