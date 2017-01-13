@@ -345,4 +345,9 @@
     <string name="btn_ok">确定</string>
     <string name="btn_cancel">取消</string>
     <string name="hint_enter_tag">输入讨论话题/软件名</string>
+    <string name="program_error_hint">程序错误</string>
+    <string name="feature_suggestions_hint">功能建议</string>
+    <string name="feedback_hint">我们将不断改进</string>
+    <string name="screenshot_hint">截图描述：（可选）</string>
+    <string name="submit_feedback_hint">提交反馈</string>
 </resources>

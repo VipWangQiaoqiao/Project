@@ -53,7 +53,7 @@ import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.improve.detail.activities.EventSigninActivity;
+import net.oschina.app.improve.user.activities.UserEventSigninActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -89,7 +89,6 @@ public final class CaptureActivity extends BaseActivity implements
     private SurfaceView scanPreview = null;
     private RelativeLayout scanContainer;
     private RelativeLayout scanCropView;
-    private ImageView scanLine;
     private ImageView mFlash;
 
     private Rect mCropRect = null;
@@ -242,7 +241,7 @@ public final class CaptureActivity extends BaseActivity implements
 
         if (url.contains("www.oschina.net/event/signin?event")) {
             long sourceId = Long.valueOf(url.substring(url.indexOf("=") + 1));//2192570;2193441
-            EventSigninActivity.show(CaptureActivity.this, sourceId);
+            UserEventSigninActivity.show(CaptureActivity.this, sourceId);
             finish();
             return;
         }
@@ -286,6 +285,7 @@ public final class CaptureActivity extends BaseActivity implements
         }).show();
     }
 
+    @SuppressWarnings("deprecation")
     private void handleScanLogin(final String url) {
         OSChinaApi.scanQrCodeLogin(url, new AsyncHttpResponseHandler() {
 
@@ -547,7 +547,7 @@ public final class CaptureActivity extends BaseActivity implements
     private void initCamera() {
         scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
         scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
-        scanLine = (ImageView) findViewById(R.id.capture_scan_line);
+        ImageView scanLine = (ImageView) findViewById(R.id.capture_scan_line);
         mFlash = (ImageView) findViewById(R.id.capture_flash);
         mFlash.setOnClickListener(this);
 

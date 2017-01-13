@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/main_background"
-    android:orientation="vertical">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/main_background"
+              android:orientation="vertical">
 
     <RadioGroup
         android:layout_width="match_parent"
@@ -14,16 +15,15 @@
         android:layout_marginTop="@dimen/lay_12"
         android:orientation="horizontal">
 
-
         <RadioButton
             android:id="@+id/rb_error"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="程序错误"
+            android:text="@string/program_error_hint"
             android:textColor="@color/feed_back_color"
-            android:textSize="@dimen/font_14" />
+            android:textSize="@dimen/font_14"/>
 
         <RadioButton
             android:layout_width="0dp"
@@ -31,9 +31,9 @@
             android:layout_marginLeft="@dimen/lay_12"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="功能建议"
+            android:text="@string/feature_suggestions_hint"
             android:textColor="@color/feed_back_color"
-            android:textSize="@dimen/font_14" />
+            android:textSize="@dimen/font_14"/>
     </RadioGroup>
 
     <EditText
@@ -45,17 +45,17 @@
         android:layout_marginRight="@dimen/lay_16"
         android:background="@color/white"
         android:gravity="top"
-        android:hint="我们将不断改进"
+        android:hint="@string/feedback_hint"
         android:padding="@dimen/lay_8"
-        android:textSize="@dimen/font_14" />
+        android:textSize="@dimen/font_14"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/lay_16"
         android:layout_marginRight="@dimen/lay_16"
-        android:text="截图描述：（可选）"
-        android:textSize="@dimen/font_14" />
+        android:text="@string/screenshot_hint"
+        android:textSize="@dimen/font_14"/>
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -70,8 +70,9 @@
             android:layout_marginRight="@dimen/lay_16"
             android:layout_marginTop="@dimen/lay_12"
             android:background="@color/white"
+            android:contentDescription="@null"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_tweet_add" />
+            android:src="@mipmap/ic_tweet_add"/>
 
         <ImageView
             android:id="@+id/iv_clear_img"
@@ -81,7 +82,9 @@
             android:layout_marginRight="@dimen/lay_4"
             android:layout_marginTop="@dimen/lay_4"
             android:background="@drawable/ib_clear_image_selector"
-            android:visibility="gone" />
+            android:contentDescription="@null"
+            android:visibility="gone"
+            tools:visibility="visible"/>
     </FrameLayout>
 
     <Button
@@ -92,7 +95,10 @@
         android:layout_marginLeft="@dimen/lay_16"
         android:layout_marginRight="@dimen/lay_16"
         android:background="@drawable/selector_shake_get"
+        android:elevation="0dp"
         android:onClick="onClick"
-        android:text="提交反馈"
-        android:textColor="@color/white" />
+        android:outlineProvider="none"
+        android:text="@string/submit_feedback_hint"
+        android:textColor="@color/white"
+        tools:targetApi="lollipop"/>
 </LinearLayout>

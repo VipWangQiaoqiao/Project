@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -12,7 +11,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import net.oschina.app.AppConfig;
@@ -57,14 +56,15 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
     //@Bind(R.id.setting_logout)
     // TextView mTvExit;
     @Bind(R.id.rl_check_version)
-    RelativeLayout mRlCheck_version;
+    FrameLayout mRlCheck_version;
     @Bind(R.id.tb_double_click_exit)
     ToggleButton mTbDoubleClickExit;
     @Bind(R.id.setting_line_top)
     View mSettingLineTop;
     @Bind(R.id.setting_line_bottom)
     View mSettingLineBottom;
-    private RelativeLayout mCancel;
+    @Bind(R.id.rl_cancel)
+    FrameLayout mCancel;
 
     private Version mVersion;
 
@@ -102,7 +102,6 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
         view.findViewById(R.id.rl_check_version).setOnClickListener(this);
         // view.findViewById(R.id.rl_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
-        mCancel = (RelativeLayout) view.findViewById(R.id.rl_cancle);
         mCancel.setOnClickListener(this);
 
         //  if (!AppContext.getInstance().isLogin()) {
@@ -192,14 +191,15 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
             case R.id.rl_check_version:
                 onClickUpdate();
                 break;
-//            case R.id.rl_exit:
-//              //  onClickExit();
-//                break;
-            case R.id.rl_cancle:
+            //            case R.id.rl_exit:
+            //              //  onClickExit();
+            //                break;
+            case R.id.rl_cancel:
                 // 清理所有缓存
                 UIHelper.clearAppCache(false);
                 // 注销操作
                 AccountHelper.logout(mCancel, new Runnable() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void run() {
                         //getActivity().finish();
@@ -223,23 +223,13 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
     private void onClickCleanCache() {
         DialogHelper.getConfirmDialog(getActivity(), "是否清空缓存?", new DialogInterface.OnClickListener
                 () {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 UIHelper.clearAppCache(true);
                 mTvCacheSize.setText("0KB");
             }
         }).show();
-    }
-
-    private void onClickExit() {
-        AppContext
-                .set(AppConfig.KEY_NOTIFICATION_DISABLE_WHEN_EXIT,
-                        false);
-        //getActivity().finish();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            getActivity().finishAffinity();
-        }
     }
 
     @Override
