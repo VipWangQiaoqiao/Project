@@ -1,5 +1,6 @@
 package net.oschina.app.improve.tweet.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
@@ -117,33 +118,41 @@ public class TweetTopicActivity extends BaseBackActivity {
     }
 
     private void loadCache() {
-        List<String> cache = CacheManager.readListJson(this, CACHE_FILE, String.class);
-        mCache = new LinkedList<>();
-        if (cache != null)
-            mCache.addAll(cache);
+        mCache = loadCache(this);
         int size = mCache.size();
         for (int i = 0; i < size; i++) {
             mLocalList.add(new TopicBean(mCache.get(i), true));
         }
     }
 
-    private void saveCache(String str) {
-        final LinkedList<String> cache = mCache;
+    private static LinkedList<String> loadCache(Context context) {
+        List<String> cache = CacheManager.readListJson(context, CACHE_FILE, String.class);
+        LinkedList<String> linkedList = new LinkedList<>();
+        if (cache != null)
+            linkedList.addAll(cache);
+        return linkedList;
+    }
+
+    public static void saveCache(Context context, String... strs) {
+        final LinkedList<String> cache = loadCache(context);
+
         // 避免重复添加
-        boolean isHave = false;
-        for (String s : cache) {
-            if (isHave = s.equals(str))
-                break;
+        for (String str : strs) {
+            boolean isHave = false;
+            for (String s : cache) {
+                if (isHave = s.equals(str))
+                    break;
+            }
+            if (!isHave)
+                cache.addFirst(str);
         }
-        if (!isHave)
-            cache.addFirst(str);
 
         // 至多存储15条
         while (cache.size() > 15) {
             cache.removeLast();
         }
 
-        CacheManager.saveToJson(this, CACHE_FILE, cache);
+        CacheManager.saveToJson(context, CACHE_FILE, cache);
     }
 
     private void onSubmit() {
@@ -151,7 +160,7 @@ public class TweetTopicActivity extends BaseBackActivity {
         if (TextUtils.isEmpty(str))
             finish();
         else {
-            saveCache(str);
+            saveCache(this, str);
             doResult(str);
         }
     }

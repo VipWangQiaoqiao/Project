@@ -214,7 +214,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 String tagStr = msgStr.substring(startIndex, selStartIndex) + "#";
                 Pattern pattern = Pattern.compile("#.+?#");
                 Matcher matcher = pattern.matcher(tagStr);
-                if (matcher.find()) {
+                while (matcher.find()) {
                     String str = matcher.group();
                     int matcherStart = matcher.start() + startIndex;
                     int matcherEnd = matcher.end() + startIndex;
