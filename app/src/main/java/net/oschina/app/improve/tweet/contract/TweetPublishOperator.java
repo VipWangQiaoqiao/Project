@@ -11,14 +11,18 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.tweet.activities.TweetTopicActivity;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.common.utils.CollectionUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by JuQiu
@@ -81,6 +85,19 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
 
         // Toast
         AppContext.showToast(R.string.tweet_publishing_toast);
+
+        // Save topic cache
+        Pattern pattern = Pattern.compile("#.+?#");
+        Matcher matcher = pattern.matcher(content);
+        List<String> topics = new ArrayList<>();
+        while (matcher.find()) {
+            String str = matcher.group().trim()
+                    .replace("#", "");
+            topics.add(str);
+        }
+        if (topics.size() > 0) {
+            TweetTopicActivity.saveCache(context, CollectionUtil.toArray(topics, String.class));
+        }
 
         // clear the tweet data
         clearAndFinish(context);
