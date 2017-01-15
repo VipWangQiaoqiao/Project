@@ -139,6 +139,16 @@
             android:text="@string/near_bodies_hint"/>
 
         <ImageView
+            android:id="@+id/iv_has_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/lay_16"
+            android:contentDescription="@null"
+            android:visibility="gone"
+            app:srcCompat="@mipmap/ic_located"
+            tools:visibility="visible"/>
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
@@ -171,7 +181,7 @@
             style="@style/option_item_text"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="线下活动"/>
+            android:text="@string/offline_event_hint"/>
 
         <ImageView
             android:layout_width="wrap_content"
