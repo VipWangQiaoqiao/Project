@@ -7,55 +7,14 @@
     android:fitsSystemWindows="true"
     tools:context="net.oschina.app.improve.tweet.fragments.TweetPublishFragment">
 
-    <FrameLayout
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_warp_height"
-        android:background="@color/tweet_publish_title_bg">
-
-        <ImageView
-            android:id="@+id/icon_back"
-            android:layout_width="@dimen/title_bar_item_height"
-            android:layout_height="@dimen/title_bar_item_height"
-            android:layout_gravity="left"
-            android:layout_marginLeft="-4dp"
-            android:layout_marginTop="17dp"
-            android:clickable="true"
-            android:scaleType="centerInside"
-            android:src="@mipmap/btn_back_normal" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:paddingTop="25dp"
-            android:text="弹一弹"
-            android:textColor="@color/white"
-            android:textSize="@dimen/font_18" />
-
-        <Button
-            android:id="@+id/icon_send"
-            android:layout_width="@dimen/title_bar_item_height"
-            android:layout_height="@dimen/title_bar_item_height"
-            android:layout_gravity="right"
-            android:layout_marginRight="-4dp"
-            android:layout_marginTop="17dp"
-            android:background="@null"
-            android:enabled="false"
-            android:gravity="center"
-            android:text="发送"
-            android:textColor="@color/tweet_publish_send"
-            android:textSize="@dimen/font_16" />
-    </FrameLayout>
-
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/layout_coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/lay_44"
-        android:layout_marginTop="@dimen/title_bar_warp_height"
-        android:background="@color/white">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/white"
+        android:paddingTop="25dp">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/layout_appbar"
@@ -160,6 +119,45 @@
 
 
     </android.support.design.widget.CoordinatorLayout>
+
+    <FrameLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/actionbar_background"
+        android:paddingTop="25dp">
+
+        <ImageView
+            android:id="@+id/icon_back"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/ic_material_ripple"
+            android:clickable="true"
+            android:scaleType="centerInside"
+            android:src="@mipmap/btn_back_normal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="弹一弹"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_18" />
+
+        <Button
+            android:id="@+id/icon_send"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="end"
+            android:background="@drawable/ic_material_ripple"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="发送"
+            android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+            android:textColor="@color/tweet_publish_send" />
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/lay_option"
