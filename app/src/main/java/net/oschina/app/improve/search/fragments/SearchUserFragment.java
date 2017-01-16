@@ -82,6 +82,8 @@ public class SearchUserFragment extends BaseRecyclerViewFragment<User>
         Log.i("thanatosx", "Search User Fragment Do Search, Content: " + content);
         if (this.content != null && this.content.equals(content)) return;
         this.content = content;
+        if(mRecyclerView == null)
+            return;
         mAdapter.clear();
         mRefreshLayout.setRefreshing(true);
         onRefreshing();
