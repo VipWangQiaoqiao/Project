@@ -299,13 +299,10 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             User user = AccountHelper.getUser();
             try {
                 String company = "";
-                String position = "";
                 if (user.getMore() != null) {
                     company = user.getMore().getCompany();
-                    position = user.getMore().getPosition();
                 }
                 company = TextUtils.isEmpty(company) ? "" : company;
-                position = TextUtils.isEmpty(position) ? "" : position;
                 String comments = String.format(
                         "{" +
                                 "\"id\":\"%s\"," +
@@ -314,10 +311,9 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                                 "\"gender\":\"%s\"," +
                                 "\"more\":{" +
                                 "\"company\":\"%s\"," +
-                                "\"position\":\"%s\"" +
                                 "}" +
                                 "}"
-                        , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company, position);
+                        , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company);
                 comments = comments.replaceAll("[\\s\n]+", "");
                 comments = URLEncoder.encode(comments, "UTF-8");
                 TLog.i("oschina", comments);

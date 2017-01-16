@@ -64,7 +64,7 @@ public class NearbyUserAdapter extends BaseRecyclerAdapter<NearbyResult> {
                 }
                 User.More more = item.getUser().getMore();
                 if (more != null) {
-                    holder.mViewPosition.setText(more.getCompany() + " " + more.getPosition());
+                    holder.mViewPosition.setText(more.getCompany());
                 } else {
                     holder.mViewPosition.setText("??? ???");
                 }
