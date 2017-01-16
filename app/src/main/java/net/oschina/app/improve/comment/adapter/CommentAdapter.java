@@ -68,13 +68,13 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
     protected CommentHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.lay_comment_refer_item, parent, false);
-        return new CommentHolder(view, type == VIEW_TYPE_DATA_FOOTER, delegation);
+        return new CommentHolder(view, delegation);
     }
 
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
         if (holder instanceof CommentHolder) {
-            ((CommentHolder) holder).addComment((position + 1), mSourceId, mType, item, mRequestManager);
+            ((CommentHolder) holder).addComment(mSourceId, mType, item, mRequestManager);
         }
     }
 
@@ -98,7 +98,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
     public void setDelegation(CommentBar delegation) {
         this.delegation = delegation;
     }
-
 
     private boolean isRealDataFooter(int position) {
         return getIndex(position) == getCount() - 1;
@@ -132,8 +131,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
 
         private CommentBar commentBar;
 
-
-        CommentHolder(View itemView, boolean isFooter, CommentBar commentBar) {
+        CommentHolder(View itemView, CommentBar commentBar) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.commentBar = commentBar;
@@ -145,7 +143,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
          * @param comment comment
          */
         @SuppressLint("DefaultLocale")
-        void addComment(int position, final long sourceId, final int commentType, final Comment comment, RequestManager requestManager) {
+        void addComment(final long sourceId, final int commentType, final Comment comment, RequestManager requestManager) {
 
             requestManager.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_default_face).into(mIvAvatar);
             mIvAvatar.setOnClickListener(new View.OnClickListener() {
@@ -158,8 +156,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
             if (TextUtils.isEmpty(name))
                 name = mName.getResources().getString(R.string.martian_hint);
             mName.setText(name);
-            mPubDate.setText(String.format("%d%s  %s", position, mPubDate.getResources().getString(R.string.floor_hint),
-                    StringUtils.formatSomeAgo(comment.getPubDate())));
+            mPubDate.setText(String.format("%s", StringUtils.formatSomeAgo(comment.getPubDate())));
 
             mComment.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -293,7 +290,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
             return mDialog;
         }
 
-
         /**
          * hide waitDialog
          */
@@ -303,7 +299,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                 mDialog = null;
                 try {
                     dialog.cancel();
-                    // dialog.dismiss();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

@@ -181,7 +181,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
             for (int i = 0, len = comments.length; i < len; i++) {
                 final Comment comment = comments[i];
                 if (comment != null) {
-                    final ViewGroup lay = insertComment((i + 1), true, comment, imageLoader, onCommentClickListener);
+                    final ViewGroup lay = insertComment(true, comment, imageLoader, onCommentClickListener);
                     lay.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -206,7 +206,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
 
 
     @SuppressLint("DefaultLocale")
-    private ViewGroup insertComment(int position, final boolean first, final Comment comment, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    private ViewGroup insertComment(final boolean first, final Comment comment, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") final ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
 
@@ -326,11 +326,11 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         if (TextUtils.isEmpty(name)) {
             name = getResources().getString(R.string.martian_hint);
         }
+
         ((TextView) lay.findViewById(R.id.tv_name)).setText(name);
 
         ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
-                String.format("%d%s  %s", position, getResources().getString(R.string.floor_hint),
-                        StringUtils.formatSomeAgo(comment.getPubDate())));
+                String.format("%s", StringUtils.formatSomeAgo(comment.getPubDate())));
 
         TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
         CommentsUtil.formatHtml(getResources(), content, comment.getContent());
@@ -338,7 +338,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
 
         if (refers != null && refers.length > 0) {
             View view = CommentsUtil.getReferLayout(inflater, refers, 0);
-
             lay.addView(view, lay.indexOfChild(content));
         }
 
@@ -392,7 +391,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
             mDialog = null;
             try {
                 dialog.cancel();
-                // dialog.dismiss();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
