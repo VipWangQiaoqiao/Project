@@ -40,7 +40,9 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="6dp"
             android:layout_marginTop="36dp"
-            android:src="@mipmap/ic_add" />
+            android:contentDescription="@null"
+            android:src="@mipmap/ic_add"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/tv_title"
@@ -50,7 +52,9 @@
             android:layout_below="@id/iv_plus"
             android:layout_marginRight="40dp"
             android:layout_marginTop="50dp"
-            android:src="@mipmap/tips_subscribe" />
+            android:contentDescription="@null"
+            android:src="@mipmap/tips_subscribe"
+            tools:ignore="RtlHardcoded" />
 
     </net.oschina.app.improve.widget.RippleIntroView>
 

@@ -96,7 +96,6 @@ public class RippleIntroView extends RelativeLayout implements Runnable {
             cv.drawPath(mArcPath, mRipplePaint);
             cv.drawCircle(px, py + rh + mInterval, 6, mCirclePaint);
         }
-
         canvas.drawBitmap(mCacheBitmap, 0, 0, mCirclePaint);
 
         int save = canvas.save();
