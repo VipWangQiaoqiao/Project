@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/layout_item_bg"
-    android:orientation="vertical"
-    android:scrollbars="none">
-
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/layout_item_bg"
+            android:orientation="vertical"
+            android:scrollbars="none">
 
     <LinearLayout
         android:id="@+id/lay_linear"
@@ -16,162 +15,145 @@
 
         <View
             style="@style/h_line"
-            android:layout_marginTop="20dip" />
+            android:layout_marginTop="20dip"/>
 
-        <RelativeLayout
-            android:id="@+id/rl_loading_img"
-            style="@style/option_item_rl"
-            android:visibility="gone">
-
-            <TextView
-                style="@style/option_item_text_parent"
-                android:text="@string/loading_img"
-                android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
-
-            <net.oschina.app.improve.widget.togglebutton.ToggleButton
-                android:id="@+id/tb_loading_img"
-                style="@style/option_item_toggleButton"
-                android:layout_alignParentRight="true" />
-        </RelativeLayout>
-
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/rl_clean_cache"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector">
+            android:background="@drawable/ic_material"
+            android:orientation="horizontal">
 
             <TextView
                 style="@style/option_item_text_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:text="@string/clean_cache"
                 android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
+                android:textSize="@dimen/text_size_16"/>
 
             <TextView
                 android:id="@+id/tv_cache_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:textColor="?attr/infoTextColor"
                 android:textSize="@dimen/text_size_14"
-                tools:text="13M" />
-        </RelativeLayout>
+                tools:ignore="RelativeOverlap"
+                tools:text="13M"/>
+        </LinearLayout>
 
-        <View style="@style/h_line" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
-        <RelativeLayout
+            <View
+                style="@style/h_line"
+                android:layout_marginLeft="@dimen/lay_14"/>
+        </FrameLayout>
+
+        <LinearLayout
             android:id="@+id/rl_double_click_exit"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector">
+            android:background="@drawable/ic_material"
+            android:orientation="horizontal">
 
             <TextView
                 style="@style/option_item_text_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:text="@string/double_click_exit"
                 android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
+                android:textSize="@dimen/text_size_16"/>
 
             <net.oschina.app.improve.widget.togglebutton.ToggleButton
                 android:id="@+id/tb_double_click_exit"
-                style="@style/option_item_toggleButton"
-                android:layout_alignParentRight="true" />
-        </RelativeLayout>
+                style="@style/option_item_toggleButton"/>
+        </LinearLayout>
 
-        <View style="@style/h_line" />
-
-        <RelativeLayout
-            style="@style/option_item_rl"
-            android:visibility="gone">
-
-            <TextView
-                style="@style/option_item_text_parent"
-                android:text="@string/loading_more"
-                android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
-
-            <net.oschina.app.improve.widget.togglebutton.ToggleButton
-                style="@style/option_item_toggleButton"
-                android:layout_alignParentRight="true" />
-        </RelativeLayout>
+        <View style="@style/h_line"/>
 
         <View
             style="@style/h_line"
-            android:layout_marginTop="20dip" />
+            android:layout_marginTop="20dip"/>
 
-        <RelativeLayout
+        <FrameLayout
             android:id="@+id/rl_feedback"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector">
+            android:background="@drawable/ic_material">
 
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/feedback"
                 android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
-        </RelativeLayout>
+                android:textSize="@dimen/text_size_16"/>
+        </FrameLayout>
 
-        <View style="@style/h_line" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
-        <RelativeLayout
+            <View
+                style="@style/h_line"
+                android:layout_marginLeft="@dimen/lay_14"/>
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/rl_about"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector">
+            android:background="@drawable/ic_material">
 
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/about"
                 android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
-        </RelativeLayout>
+                android:textSize="@dimen/text_size_16"/>
+        </FrameLayout>
 
-        <View style="@style/h_line" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
-        <RelativeLayout
+            <View
+                style="@style/h_line"
+                android:layout_marginLeft="@dimen/lay_14"/>
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/rl_check_version"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector">
+            android:background="@drawable/ic_material">
 
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/update"
                 android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
-        </RelativeLayout>
+                android:textSize="@dimen/text_size_16"/>
+        </FrameLayout>
 
-        <View style="@style/h_line" />
-
-        <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_exit"-->
-        <!--style="@style/option_item_rl">-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/setting_logout"-->
-        <!--style="@style/option_item_text_parent"-->
-        <!--android:text="@string/exit"-->
-        <!--android:textColor="?attr/textColor"-->
-        <!--android:textSize="@dimen/text_size_16" />-->
-        <!--</RelativeLayout>-->
-
-        <!--<View style="@style/h_line" />-->
+        <View style="@style/h_line"/>
 
         <View
             android:id="@+id/setting_line_top"
             style="@style/h_line"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"/>
 
-        <RelativeLayout
-            android:id="@+id/rl_cancle"
+        <FrameLayout
+            android:id="@+id/rl_cancel"
             style="@style/option_item_rl"
-            android:background="@drawable/item_selector">
+            android:background="@drawable/ic_material">
 
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/setting_cancel"
                 android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
-        </RelativeLayout>
+                android:textSize="@dimen/text_size_16"/>
+        </FrameLayout>
 
         <View
             android:id="@+id/setting_line_bottom"
-            style="@style/h_line" />
+            style="@style/h_line"/>
     </LinearLayout>
 
 </ScrollView>

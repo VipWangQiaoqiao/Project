@@ -27,8 +27,9 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.tweet.adapter.SoftwareTweetAdapter;
+import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
-import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
@@ -97,10 +98,12 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AccountHelper.isLogin())
-                    SelectFriendsActivity.show(SoftwareTweetActivity.this);
-                else
+                if (AccountHelper.isLogin()) {
+                    Intent intent = new Intent(SoftwareTweetActivity.this, UserSelectFriendsActivity.class);
+                    startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+                } else {
                     LoginActivity.show(SoftwareTweetActivity.this);
+                }
             }
         });
         mDelegation.getBottomSheet().hideSyncAction();

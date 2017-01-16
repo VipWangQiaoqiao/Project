@@ -29,7 +29,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#fcfcfc"
+                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingBottom="16dp"
@@ -291,11 +291,11 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white" />
 
-            <net.oschina.app.improve.comment.CommentView
-                android:id="@+id/cv_comment"
+            <net.oschina.app.improve.widget.ScreenView
+                android:id="@+id/screenView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/ques_detail_bg_color" />
+                android:layout_height="1px"
+                android:background="@color/transparent" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

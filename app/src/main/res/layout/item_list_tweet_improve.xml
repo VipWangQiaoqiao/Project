@@ -179,7 +179,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:textColor="#9d9d9d"
-                        android:textSize="@dimen/font_12"
+                        android:textSize="@dimen/font_10"
                         tools:text="12"/>
 
                     <ImageView
@@ -197,7 +197,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:textColor="#9d9d9d"
-                        android:textSize="@dimen/font_12"
+                        android:textSize="@dimen/font_10"
                         tools:text="12"/>
 
                     <ImageView
@@ -216,7 +216,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:textColor="#9d9d9d"
-                        android:textSize="@dimen/font_12"
+                        android:textSize="@dimen/font_10"
                         tools:text="12"/>
                 </LinearLayout>
             </LinearLayout>

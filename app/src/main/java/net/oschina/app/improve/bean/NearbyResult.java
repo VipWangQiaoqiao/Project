@@ -1,12 +1,17 @@
 package net.oschina.app.improve.bean;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
- * Created by thanatosx on 2016/12/23.
+ * Created by thanatosx
+ * on 2016/12/23.
+ * Updated by fei
+ * on 2017/01/13.
  */
 
-public class NearbyResult implements Serializable {
+public class NearbyResult implements Serializable, Comparable<NearbyResult> {
 
     private User user;
     private Nearby nearby;
@@ -30,6 +35,11 @@ public class NearbyResult implements Serializable {
 
     public void setNearby(Nearby nearby) {
         this.nearby = nearby;
+    }
+
+    @Override
+    public int compareTo(@NonNull NearbyResult nearbyResult) {
+        return nearby.distance > nearbyResult.getNearby().distance ? 1 : -1;
     }
 
     public static class Nearby implements Serializable {
@@ -60,5 +70,7 @@ public class NearbyResult implements Serializable {
         public void setMobileOS(String mobileOS) {
             this.mobileOS = mobileOS;
         }
+
+
     }
 }

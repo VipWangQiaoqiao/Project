@@ -1,5 +1,6 @@
 package net.oschina.app.improve.search.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import com.baidu.mapapi.radar.RadarSearchManager;
 import com.baidu.mapapi.radar.RadarUploadInfo;
 
 import net.oschina.app.R;
+import net.oschina.app.Setting;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
@@ -42,14 +44,17 @@ import net.oschina.app.util.TLog;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
 
 /**
  * 寻找附近的人
- * Created by thanatosx on 2016/12/22.
+ * Created by thanatosx
+ * on 2016/12/22.
+ * Updated bt fei
+ * on 2017/01/13
  */
 
 public class NearbyActivity extends BaseBackActivity implements RadarSearchListener, BDLocationListener,
@@ -63,7 +68,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     private int mPageNum = 0;
     private LatLng mUserLatLng;
     private Dialog mLoadingDialog;
-    private Dialog mSelectorDialog;
+    private BottomDialog mSelectorDialog;
     private BaseRecyclerAdapter<NearbyResult> mAdapter;
     private LocationClient mLocationClient;
     private RadarSearchManager mManager = RadarSearchManager.getInstance();
@@ -100,7 +105,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         mLocationClient = new LocationClient(this);
         mLocationClient.registerLocationListener(this);
 
-
         LocationClientOption option = new LocationClientOption();
 
         //可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
@@ -131,7 +135,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     private Dialog getSelectorDialog() {
         if (mSelectorDialog == null) {
             mSelectorDialog = new BottomDialog(this, true);
-            View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null);
+            @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null, false);
             view.findViewById(R.id.tv_clear_opt).setOnClickListener(this);
             view.findViewById(R.id.tv_cancel_opt).setOnClickListener(this);
             mSelectorDialog.setContentView(view);
@@ -150,7 +154,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         switch (item.getItemId()) {
             case R.id.menu_item_more:
                 getSelectorDialog().show();
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -179,35 +183,44 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             mAdapter.clear();
             mRecyclerRefresh.setRefreshing(false);
         }
-        if (error != RadarSearchError.RADAR_NO_ERROR) {
-            SimplexToast.show(this, "没有获取到附近的人");
-            mAdapter.clear();
-            mPageNum = --mPageNum > 0 ? mPageNum : 0;
-            return;
-        }
-        List<RadarNearbyInfo> infos = result.infoList;
-        List<NearbyResult> results = new ArrayList<>();
-        for (RadarNearbyInfo info : infos) {
-            User user = null;
-            try {
-                String comments = URLDecoder.decode(info.comments, "UTF-8");
-                TLog.i("oschina", "Nearby Info List: " + comments);
-                user = AppOperator.createGson().fromJson(comments, User.class);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (user == null) continue;
-            NearbyResult.Nearby nearby = new NearbyResult.Nearby();
-            nearby.setDistance(info.distance);
-            nearby.setMobileName(info.mobileName);
-            nearby.setMobileOS(info.mobileOS);
+        List<RadarNearbyInfo> infoList = result.infoList;
 
-            results.add(new NearbyResult(user, nearby));
-            TLog.i("oschina", String.format("comments: %s, distance: %s, mobile name: %s, mobile OS: %s, user id: %s",
-                    info.comments, info.distance, info.mobileName, info.mobileOS, info.userID));
+        int size = 0;
+
+        if (error != RadarSearchError.RADAR_NO_ERROR || infoList == null) {
+            SimplexToast.show(this, "没有获取到附近的人");
+        } else {
+
+            List<NearbyResult> results = mAdapter.getItems();
+
+            for (RadarNearbyInfo info : infoList) {
+                User user = null;
+                try {
+                    String comments = URLDecoder.decode(info.comments, "UTF-8");
+                    TLog.i("oschina", "Nearby Info List: " + comments);
+                    user = AppOperator.createGson().fromJson(comments, User.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (user == null) continue;
+
+                NearbyResult.Nearby nearby = new NearbyResult.Nearby();
+                nearby.setDistance(info.distance);
+                nearby.setMobileName(info.mobileName);
+                nearby.setMobileOS(info.mobileOS);
+
+                results.add(new NearbyResult(user, nearby));
+                TLog.i("oschina", String.format("comments: %s, distance: %s, mobile name: %s, mobile OS: %s, user id: %s",
+                        info.comments, info.distance, info.mobileName, info.mobileOS, info.userID));
+            }
+
+            Collections.sort(results);
+            mAdapter.notifyDataSetChanged();
+            size = infoList.size();
         }
-        mAdapter.addAll(results);
-        mAdapter.setState(results.size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, true);
+
+        mAdapter.setState(size == 0 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, true);
     }
 
     /**
@@ -222,6 +235,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             SimplexToast.show(this, "上传用户信息失败");
             return;
         }
+        Setting.updateLocationInfo(getApplicationContext(), true);
         onRefreshing();
     }
 
@@ -237,13 +251,14 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             SimplexToast.show(this, "清除失败");
             return;
         }
+        Setting.updateLocationInfo(getApplicationContext(), false);
         supportFinishAfterTransition();
     }
 
     /**
      * 定位回调
      *
-     * @param location
+     * @param location location
      */
     @Override
     public void onReceiveLocation(BDLocation location) {
@@ -339,9 +354,13 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             case R.id.tv_clear_opt:
                 //清除用户信息
                 mManager.clearUserInfo();
+                Setting.updateLocationInfo(getApplicationContext(), false);
+                if (mSelectorDialog.isShowing())
+                    mSelectorDialog.cancel();
                 break;
             case R.id.tv_cancel_opt:
-                mSelectorDialog.dismiss();
+                if (mSelectorDialog.isShowing())
+                    mSelectorDialog.cancel();
                 break;
         }
     }

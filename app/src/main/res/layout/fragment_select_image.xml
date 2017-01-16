@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/toolbar"
@@ -19,7 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:clickable="true"
             android:scaleType="centerInside"
-            android:src="@mipmap/btn_back_normal" />
+            android:src="@mipmap/btn_back_normal"/>
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -36,7 +35,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:paddingRight="@dimen/lay_4"
                 android:scaleType="centerInside"
-                android:src="@mipmap/ic_arrow_bottom" />
+                android:src="@mipmap/ic_arrow_bottom"/>
 
             <Button
                 android:id="@+id/btn_title_select"
@@ -69,21 +68,20 @@
             android:id="@+id/error_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/lay_button"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:padding="1dp"
-            android:scrollbars="none" />
+            android:scrollbars="none"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/black_alpha_80" />
+            android:background="@color/black_alpha_80"/>
 
         <FrameLayout
             android:id="@+id/lay_button"
@@ -125,7 +123,7 @@
                 android:paddingTop="@dimen/lay_4"
                 android:text="@string/image_select_opt_done"
                 android:textColor="@color/btn_select_image_done_bg_selector"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
         </FrameLayout>
     </LinearLayout>

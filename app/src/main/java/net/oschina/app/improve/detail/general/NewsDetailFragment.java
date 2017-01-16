@@ -1,6 +1,5 @@
 package net.oschina.app.improve.detail.general;
 
-import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,9 +35,6 @@ public class NewsDetailFragment extends DetailFragment {
     @Bind(R.id.tv_about_software_title)
     TextView mTextSoftwareTitle;
 
-    @Bind(R.id.lay_nsv)
-    NestedScrollView mViewScroller;
-
     public static NewsDetailFragment newInstance() {
         NewsDetailFragment fragment = new NewsDetailFragment();
         return fragment;
@@ -47,6 +43,12 @@ public class NewsDetailFragment extends DetailFragment {
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_news_detail_v2;
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        CACHE_CATALOG = OSChinaApi.CATALOG_NEWS;
     }
 
     @Override
@@ -76,26 +78,6 @@ public class NewsDetailFragment extends DetailFragment {
     @Override
     protected int getCommentOrder() {
         return OSChinaApi.COMMENT_HOT_ORDER;
-    }
-
-    @Override
-    public void onPageFinished() {
-        super.onPageFinished();
-        if (mBean == null || mBean.getId() <= 0) return;
-        final int index = ReadedIndexCacheManager.getIndex(getContext(), mBean.getId(),
-                OSChinaApi.CATALOG_NEWS);
-        if (index != 0) {
-            if (mViewScroller == null)
-                return;
-            mViewScroller.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mViewScroller == null)
-                        return;
-                    mViewScroller.smoothScrollTo(0, index);
-                }
-            }, 250);
-        }
     }
 
     @Override

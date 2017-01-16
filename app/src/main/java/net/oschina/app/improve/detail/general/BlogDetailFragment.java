@@ -14,7 +14,6 @@ import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.utils.ReadedIndexCacheManager;
 import net.oschina.app.improve.widget.SimplexToast;
-import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -71,6 +70,12 @@ public class BlogDetailFragment extends DetailFragment {
     }
 
     @Override
+    protected void initData() {
+        super.initData();
+        CACHE_CATALOG = OSChinaApi.CATALOG_BLOG;
+    }
+
+    @Override
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
         Author author = bean.getAuthor();
@@ -89,22 +94,6 @@ public class BlogDetailFragment extends DetailFragment {
         mBtnRelation.setText(bean.getAuthor().getRelation() < UserRelation.RELATION_ONLY_HER
                 ? "已关注" : "关注");
 
-    }
-
-    @Override
-    public void onPageFinished() {
-        super.onPageFinished();
-        if (mBean == null || mBean.getId() <= 0) return;
-        final int index = ReadedIndexCacheManager.getIndex(getContext(), mBean.getId(),
-                OSChinaApi.CATALOG_BLOG);
-        if (index != 0) {
-            mViewScroller.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mViewScroller.smoothScrollTo(0, index);
-                }
-            }, 250);
-        }
     }
 
     @Override

@@ -150,7 +150,7 @@ public class StringUtils {
      * @param sdate YYYY-MM-DD HH:mm:ss
      * @return n分钟前, n小时前, 昨天, 前天, n天前, n个月前
      */
-    public static String                                                                                                                       formatSomeAgo(String sdate) {
+    public static String formatSomeAgo(String sdate) {
         if (sdate == null) return "";
         Calendar calendar = parseCalendar(sdate);
         if (calendar == null) return sdate;
@@ -590,9 +590,9 @@ public class StringUtils {
 
     public static String formatDistance(int distance) {
         return distance < 1000
-                ? String.format("%s00米以内",
+                ? String.format("%s00m以内",
                 distance % 100 == 0 ? distance / 100 : (distance + 100) / 100)
-                : String.format("%s公里以内",
+                : String.format("%skm以内",
                 distance % 1000 == 0 ? distance / 1000 : (distance + 1000) / 1000);
     }
 
