@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
@@ -49,7 +48,7 @@ public final class CacheManager {
         try {
             return !(!file.exists() && !file.createNewFile())
                     && save(file, list);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -68,7 +67,7 @@ public final class CacheManager {
             writer = new FileWriter(file);
             AppOperator.getGson().toJson(list, writer);
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             StreamUtil.close(writer);
@@ -87,7 +86,7 @@ public final class CacheManager {
             os = new FileOutputStream(file);
             os.write(json.getBytes("utf-8"));
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             StreamUtil.close(os);
@@ -115,7 +114,7 @@ public final class CacheManager {
         try {
             reader = new FileReader(file);
             return AppOperator.getGson().fromJson(reader, clx);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             StreamUtil.close(reader);
