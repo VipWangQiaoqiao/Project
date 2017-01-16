@@ -16,6 +16,7 @@ public final class Setting {
     public static final String KEY_VERSION_CODE = "versionCode";
     public static final String KEY_APP_UNIQUE_ID = "appUniqueID";
     public static final String KEY_SYSTEM_CONFIG_TIMESTAMP = "systemConfigTimeStamp";
+    public static final String KEY_LOCATION_INFO = "location_info";
 
     public static SharedPreferences getSettingPreferences(Context context) {
         return context.getSharedPreferences(Setting.class.getName(), Context.MODE_PRIVATE);
@@ -74,5 +75,16 @@ public final class Setting {
     public static long getSystemConfigTimeStamp(Context context) {
         SharedPreferences sp = getSettingPreferences(context);
         return sp.getLong(KEY_SYSTEM_CONFIG_TIMESTAMP, 0);
+    }
+
+    public static void updateLocationInfo(Context context, boolean hasLocation) {
+        SharedPreferences sp = getSettingPreferences(context);
+        SharedPreferences.Editor editor = sp.edit().putBoolean(KEY_LOCATION_INFO, hasLocation);
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+    }
+
+    public static boolean hasLocation(Context context) {
+        SharedPreferences sp = getSettingPreferences(context);
+        return sp.getBoolean(KEY_LOCATION_INFO, false);
     }
 }

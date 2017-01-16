@@ -2,8 +2,10 @@ package net.oschina.app.improve.main.tabs;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import net.oschina.app.R;
+import net.oschina.app.Setting;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
@@ -12,6 +14,7 @@ import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.main.discover.ShakePresentActivity;
 import net.oschina.app.improve.search.activities.NearbyActivity;
 import net.oschina.app.improve.search.activities.SearchActivity;
+import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
@@ -22,13 +25,16 @@ import butterknife.OnClick;
  * desc:
  */
 
-public class ExploreFragment extends BaseTitleFragment implements View.OnClickListener {
+public class ExploreFragment extends BaseTitleFragment implements View.OnClickListener, OnTabReselectListener {
 
     @Bind(R.id.rl_soft)
     View mRlActive;
 
     @Bind(R.id.rl_scan)
     View mScan;
+
+    @Bind(R.id.iv_has_location)
+    ImageView mIvLocated;
 
     @Override
     protected int getIconRes() {
@@ -53,6 +59,12 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
     @Override
     protected int getTitleRes() {
         return R.string.main_tab_name_explore;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        hasLocation();
     }
 
     @OnClick({R.id.rl_soft, R.id.rl_scan, R.id.rl_shake, R.id.layout_events, R.id.layout_nearby})
@@ -104,7 +116,21 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
         }
     }
 
+    @Override
+    public void onTabReselect() {
+        hasLocation();
+    }
+
     private void showShake() {
         ShakePresentActivity.show(getActivity());
+    }
+
+    private void hasLocation() {
+        boolean hasLocation = Setting.hasLocation(getContext());
+        if (hasLocation) {
+            mIvLocated.setVisibility(View.VISIBLE);
+        } else {
+            mIvLocated.setVisibility(View.GONE);
+        }
     }
 }
