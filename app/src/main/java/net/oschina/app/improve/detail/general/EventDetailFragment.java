@@ -60,6 +60,12 @@ public class EventDetailFragment extends DetailFragment {
     }
 
     @Override
+    protected void initData() {
+        super.initData();
+        CACHE_CATALOG = OSChinaApi.CATALOG_EVENT;
+    }
+
+    @Override
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
         mTextTitle.setText(bean.getTitle());

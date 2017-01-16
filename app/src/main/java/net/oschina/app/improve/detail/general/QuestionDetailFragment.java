@@ -42,6 +42,12 @@ public class QuestionDetailFragment extends DetailFragment {
     }
 
     @Override
+    protected void initData() {
+        super.initData();
+        CACHE_CATALOG = OSChinaApi.CATALOG_QUESTION;
+    }
+
+    @Override
     public void onClick(View v) {
 
     }

@@ -55,6 +55,12 @@ public class SoftwareDetailFragment extends DetailFragment {
         return R.layout.fragment_software_detail_v2;
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        CACHE_CATALOG = OSChinaApi.CATALOG_SOFTWARE;
+    }
+
     @OnClick({R.id.ll_comment, R.id.ll_fav, R.id.tv_software_author_name,
             R.id.ll_share, R.id.tv_home, R.id.tv_document})
     @Override
