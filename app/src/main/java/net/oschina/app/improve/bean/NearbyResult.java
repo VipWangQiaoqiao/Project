@@ -39,7 +39,7 @@ public class NearbyResult implements Serializable, Comparable<NearbyResult> {
 
     @Override
     public int compareTo(@NonNull NearbyResult nearbyResult) {
-        return nearby.distance > nearbyResult.getNearby().distance ? 1 : -1;
+        return nearby.distance - nearbyResult.getNearby().distance;
     }
 
     public static class Nearby implements Serializable {
