@@ -16,15 +16,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/lay_16"
-        android:paddingRight="@dimen/lay_16">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/ll_comment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/lay_8"
+            android:layout_marginLeft="@dimen/lay_16"
+            android:layout_marginRight="@dimen/lay_16"
             android:layout_marginTop="@dimen/lay_8"
             android:layout_weight="1"
             android:background="@drawable/bg_text_comment"
@@ -49,18 +49,21 @@
         <ImageButton
             android:id="@+id/ib_fav"
             android:layout_width="46dp"
-            android:layout_height="match_parent"
-            android:padding="@dimen/lay_12"
-            android:background="@drawable/ic_material"
+            android:layout_height="46dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ic_material_ripple"
+            android:padding="@dimen/lay_8"
             android:scaleType="centerInside"
             android:src="@mipmap/ic_fav_pressed" />
 
         <ImageButton
             android:id="@+id/ib_share"
             android:layout_width="46dp"
-            android:layout_height="match_parent"
-            android:padding="@dimen/lay_12"
-            android:background="@drawable/ic_material"
+            android:layout_height="46dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/lay_8"
+            android:background="@drawable/ic_material_ripple"
+            android:padding="@dimen/lay_8"
             android:scaleType="centerInside"
             android:src="@mipmap/ic_share_black_normal" />
 
