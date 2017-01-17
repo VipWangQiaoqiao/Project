@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 
 import net.oschina.app.improve.tweet.activities.TweetTopicActivity;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.common.widget.RichEditText;
 
 import java.util.regex.Matcher;
@@ -85,13 +86,13 @@ public class OnKeyArrivedListenerAdapter implements RichEditText.OnKeyArrivedLis
 
     public void skipMention(RichEditText editText) {
         Context context = editText.getContext();
-        if (context != null)
-            TweetTopicActivity.show(mHost, editText);
+        if (context != null && mHost != null)
+            UserSelectFriendsActivity.show(mHost, editText);
     }
 
     public void skipTopic(RichEditText editText) {
         Context context = editText.getContext();
-        if (context != null)
+        if (context != null && mHost != null)
             TweetTopicActivity.show(mHost, editText);
     }
 }

@@ -215,7 +215,7 @@ public class TweetTopicActivity extends BaseBackActivity {
         }
 
         Intent result = new Intent();
-        result.putExtra("topic", topic);
+        result.putExtra("data", topic);
         setResult(RESULT_OK, result);
 
         finish();

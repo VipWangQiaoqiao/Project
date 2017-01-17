@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -173,6 +172,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
+        // 设置键盘输入#或者@适合的监听器
         mEditContent.setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter(this));
 
         // Show keyboard
@@ -278,6 +278,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
+    /**
+     * 跳转选择话题
+     */
     private void toSelectTopic() {
         Context context = getContext();
         if (context == null)
@@ -303,40 +306,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
-        Intent intent = new Intent(context, UserSelectFriendsActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_SELECT_FRIENDS);
-    }
-
-    /**
-     * 好友名字选择
-     *
-     * @param data Intent
-     */
-    private void handleSelectFriendsResult(Intent data) {
-        String names[] = data.getStringArrayExtra("names");
-        if (names != null && names.length > 0) {
-            String text = "";
-            for (String n : names) {
-                text += "@" + n + " ";
-            }
-
-            SpannableString spannable = new SpannableString(text);
-            RichEditText.matchMention(spannable);
-            RichEditText.matchTopic(spannable);
-
-            Editable msg = mEditContent.getText();
-            int selStart = mEditContent.getSelectionStart();
-            int selEnd = mEditContent.getSelectionEnd();
-
-            int selStartBefore = selStart - 1;
-            if (selStart == selEnd && selStart > 0
-                    && "@".equals(msg.subSequence(selStartBefore, selEnd).toString())
-                    && msg.getSpans(selStartBefore, selEnd, RichEditText.TagSpan.class).length == 0) {
-                selStart = selStartBefore;
-            }
-
-            msg.replace(selStart, selEnd, spannable);
-        }
+        UserSelectFriendsActivity.show(this, mEditContent);
     }
 
     @Override
@@ -345,7 +315,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_SELECT_FRIENDS:
-                    handleSelectFriendsResult(data);
+                    // Nun Do handleSelectFriendsResult(data);
                     break;
                 case REQUEST_CODE_SELECT_TOPIC:
                     // Nun Do handleSelectTopicResult(data);
