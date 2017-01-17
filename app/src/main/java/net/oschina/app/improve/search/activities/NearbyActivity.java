@@ -342,7 +342,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     private void requestData(int pageNum) {
         //构造请求参数，其中centerPt是自己的位置坐标
         RadarNearbySearchOption option = new RadarNearbySearchOption()
-                .centerPt(mUserLatLng).pageNum(pageNum).radius(20000).pageCapacity(20);
+                .centerPt(mUserLatLng).pageNum(pageNum).radius(35000).pageCapacity(20);
         //发起查询请求
         mManager.nearbyInfoRequest(option);
     }
