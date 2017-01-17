@@ -60,7 +60,6 @@ import butterknife.Bind;
 public class NearbyActivity extends BaseBackActivity implements RadarSearchListener, BDLocationListener,
         RecyclerRefreshLayout.SuperRefreshLayoutListener, BaseRecyclerAdapter.OnItemClickListener, View.OnClickListener {
 
-    private static final String TAG = "NearbyActivity";
     @Bind(R.id.recycler)
     RecyclerView mRecycler;
     @Bind(R.id.layout_recycler_refresh)
