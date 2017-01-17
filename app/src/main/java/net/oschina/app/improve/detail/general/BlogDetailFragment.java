@@ -12,6 +12,7 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.v2.DetailFragment;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.ReadedIndexCacheManager;
 import net.oschina.app.improve.widget.SimplexToast;
 
@@ -67,6 +68,14 @@ public class BlogDetailFragment extends DetailFragment {
             }
         });
         mDetailAboutView.setTitle("相关文章");
+        mImageAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mBean != null && mBean.getAuthor() != null) {
+                    OtherUserHomeActivity.show(mContext, mBean.getAuthor());
+                }
+            }
+        });
     }
 
     @Override

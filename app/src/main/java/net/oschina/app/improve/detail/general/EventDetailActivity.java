@@ -151,6 +151,8 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
     @Override
     public void hideEmptyLayout() {
         super.hideEmptyLayout();
+        if (isDestroy())
+            return;
         mHeaderView.setVisibility(View.VISIBLE);
         mHeaderView.getLayoutParams().height = 400;
         List<SubBean.Image> images = mBean.getImages();

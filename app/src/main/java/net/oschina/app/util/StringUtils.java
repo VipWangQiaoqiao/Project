@@ -1,5 +1,6 @@
 package net.oschina.app.util;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -588,10 +589,10 @@ public class StringUtils {
         return new SimpleDateFormat(format, Locale.getDefault()).format(new Date());
     }
 
+    @SuppressLint("DefaultLocale")
     public static String formatDistance(int distance) {
-        return distance < 1000
-                ? String.format("%s00m以内",
-                distance % 100 == 0 ? distance / 100 : (distance + 100) / 100)
+        return distance < 1000 ? String.format("%s00m以内", distance != 0 && distance % 100 == 0 ?
+                distance / 100 : (distance + 100) / 100)
                 : String.format("%skm以内",
                 distance % 1000 == 0 ? distance / 1000 : (distance + 1000) / 1000);
     }

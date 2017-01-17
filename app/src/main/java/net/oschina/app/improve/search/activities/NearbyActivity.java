@@ -194,6 +194,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             List<NearbyResult> results = mAdapter.getItems();
 
             for (RadarNearbyInfo info : infoList) {
+
                 User user = null;
                 try {
                     String comments = URLDecoder.decode(info.comments, "UTF-8");
@@ -203,7 +204,8 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                     e.printStackTrace();
                 }
 
-                if (user == null) continue;
+                if (user == null || user.getId() == 0 || TextUtils.isEmpty(user.getName()))
+                    continue;
 
                 NearbyResult.Nearby nearby = new NearbyResult.Nearby();
                 nearby.setDistance(info.distance);
@@ -220,7 +222,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             size = infoList.size();
         }
 
-        mAdapter.setState(size == 0 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, true);
+        mAdapter.setState(size < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, true);
     }
 
     /**
@@ -286,41 +288,45 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                 location.getLatitude(), location.getLongitude(), location.getLocationDescribe(), AccountHelper.getUserId()));
 
         //周边雷达设置用户身份标识，id为空默认是设备标识
-        mManager.setUserID(String.valueOf(AccountHelper.getUserId()));
+        String userId = null;
+
         //上传位置
         RadarUploadInfo info = new RadarUploadInfo();
-        User user = AccountHelper.getUser();
-        try {
-            String company = "";
-            String position = "";
-            if (user.getMore() != null) {
-                company = user.getMore().getCompany();
-                position = user.getMore().getPosition();
+
+        if (AccountHelper.isLogin()) {
+            userId = String.valueOf(AccountHelper.getUserId());
+
+            User user = AccountHelper.getUser();
+            try {
+                String company = "";
+                if (user.getMore() != null) {
+                    company = user.getMore().getCompany();
+                }
+                company = TextUtils.isEmpty(company) ? "" : company;
+                String comments = String.format(
+                        "{" +
+                                "\"id\":\"%s\"," +
+                                "\"name\":\"%s\"," +
+                                "\"portrait\":\"%s\"," +
+                                "\"gender\":\"%s\"," +
+                                "\"more\":{" +
+                                "\"company\":\"%s\"," +
+                                "}" +
+                                "}"
+                        , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company);
+                comments = comments.replaceAll("[\\s\n]+", "");
+                comments = URLEncoder.encode(comments, "UTF-8");
+                TLog.i("oschina", comments);
+                info.comments = comments;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                SimplexToast.show(this, "上传用户信息失败");
             }
-            company = TextUtils.isEmpty(company) ? "" : company;
-            position = TextUtils.isEmpty(position) ? "" : position;
-            String comments = String.format(
-                    "{" +
-                            "\"id\":\"%s\"," +
-                            "\"name\":\"%s\"," +
-                            "\"portrait\":\"%s\"," +
-                            "\"gender\":\"%s\"," +
-                            "\"more\":{" +
-                            "\"company\":\"%s\"," +
-                            "\"position\":\"%s\"" +
-                            "}" +
-                            "}"
-                    , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company, position);
-            comments = comments.replaceAll("[\\s\n]+", "");
-            comments = URLEncoder.encode(comments, "UTF-8");
-            TLog.i("oschina", comments);
-            info.comments = comments;
-            info.pt = mUserLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-            mManager.uploadInfoRequest(info);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            SimplexToast.show(this, "上传用户信息失败");
         }
+
+        mManager.setUserID(userId);
+        info.pt = mUserLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        mManager.uploadInfoRequest(info);
     }
 
     @Override

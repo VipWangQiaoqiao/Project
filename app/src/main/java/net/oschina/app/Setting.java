@@ -16,7 +16,7 @@ public final class Setting {
     public static final String KEY_VERSION_CODE = "versionCode";
     public static final String KEY_APP_UNIQUE_ID = "appUniqueID";
     public static final String KEY_SYSTEM_CONFIG_TIMESTAMP = "systemConfigTimeStamp";
-    public static final String KEY_LOCATION_INFO = "location_info";
+    public static final String KEY_LOCATION_INFO = "locationInfo";
 
     public static SharedPreferences getSettingPreferences(Context context) {
         return context.getSharedPreferences(Setting.class.getName(), Context.MODE_PRIVATE);

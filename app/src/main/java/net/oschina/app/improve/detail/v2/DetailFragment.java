@@ -86,7 +86,7 @@ public abstract class DetailFragment extends BaseFragment implements
     public void onPageFinished() {
         if (mBean == null || mBean.getId() <= 0) return;
         final int index = ReadedIndexCacheManager.getIndex(getContext(), mBean.getId(),
-                OSChinaApi.CATALOG_NEWS);
+                CACHE_CATALOG);
         if (index != 0) {
             if (mViewScroller == null)
                 return;
