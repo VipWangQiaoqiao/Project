@@ -1,10 +1,14 @@
 package net.oschina.app.improve.tweet.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,11 +21,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.app.ParentLinkedHolder;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.common.adapter.TextWatcherAdapter;
+import net.oschina.common.widget.RichEditText;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +39,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.Bind;
+
+import static net.oschina.app.improve.tweet.fragments.TweetPublishFragment.REQUEST_CODE_SELECT_TOPIC;
 
 public class TweetTopicActivity extends BaseBackActivity {
     private static final String CACHE_FILE = "TweetTopicLocalCache";
@@ -46,6 +54,20 @@ public class TweetTopicActivity extends BaseBackActivity {
     private List<TopicBean> mLocalList = new ArrayList<>();
     private LinkedList<String> mCache;
     private String[] mLabels = new String[]{"热门", "本地"};
+
+    private static ParentLinkedHolder<RichEditText> textParentLinkedHolder;
+
+    public static void show(Fragment fragment, RichEditText editText) {
+        synchronized (TweetTopicActivity.class) {
+            ParentLinkedHolder<RichEditText> holder = new ParentLinkedHolder<>(editText);
+            if (textParentLinkedHolder == null)
+                textParentLinkedHolder = holder;
+            else
+                textParentLinkedHolder.addParent(holder);
+        }
+        Intent intent = new Intent(fragment.getContext(), TweetTopicActivity.class);
+        fragment.startActivityForResult(intent, REQUEST_CODE_SELECT_TOPIC);
+    }
 
     @Override
     protected int getContentView() {
@@ -169,6 +191,32 @@ public class TweetTopicActivity extends BaseBackActivity {
         Intent result = new Intent();
         result.putExtra("topic", topic);
         setResult(RESULT_OK, result);
+
+        if (textParentLinkedHolder != null) {
+            RichEditText editText = textParentLinkedHolder.item;
+            textParentLinkedHolder = textParentLinkedHolder.putParent();
+
+            if (!TextUtils.isEmpty(topic)) {
+                topic = String.format("#%s#", topic.trim());
+
+                SpannableString spannable = new SpannableString(topic);
+                RichEditText.matchTopic(spannable);
+
+                Editable msg = editText.getText();
+                int selStart = editText.getSelectionStart();
+                int selEnd = editText.getSelectionEnd();
+
+                int selStartBefore = selStart - 1;
+                if (selStart == selEnd && selStart > 0
+                        && "#".equals(msg.subSequence(selStartBefore, selEnd).toString())
+                        && msg.getSpans(selStartBefore, selEnd, RichEditText.TagSpan.class).length == 0) {
+                    selStart = selStartBefore;
+                }
+
+                msg.replace(selStart, selEnd, spannable);
+            }
+        }
+
         finish();
     }
 

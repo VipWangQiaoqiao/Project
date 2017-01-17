@@ -11,7 +11,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -35,8 +34,8 @@ import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
-import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
 import net.oschina.app.util.UIHelper;
+import net.oschina.common.adapter.TextWatcherAdapter;
 import net.oschina.common.widget.RichEditText;
 
 import java.util.regex.Matcher;
@@ -345,11 +344,14 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
-        Intent intent = new Intent(context, TweetTopicActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_SELECT_TOPIC);
+        //Intent intent = new Intent(context, TweetTopicActivity.class);
+        //startActivityForResult(intent, REQUEST_CODE_SELECT_TOPIC);
+
+        TweetTopicActivity.show(this, mEditContent);
     }
 
     private void handleSelectTopicResult(Intent data) {
+        /*
         String topic = data.getStringExtra("topic");
         if (!TextUtils.isEmpty(topic)) {
             topic = String.format("#%s#", topic.trim());
@@ -370,6 +372,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
             msg.replace(selStart, selEnd, spannable);
         }
+        */
     }
 
     /**
@@ -487,7 +490,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     public boolean needCommit() {
         return ((CheckBox) findView(R.id.cb_commit_control)).isChecked();
     }
-
+ 
     @Override
     public String[] getImages() {
         return mLayImages.getPaths();
@@ -530,9 +533,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
-        super.onInflate(context, attrs, savedInstanceState);
-        if (savedInstanceState != null)
-            mOperator.onRestoreInstanceState(savedInstanceState);
+    protected void onRestartInstance(Bundle bundle) {
+        super.onRestartInstance(bundle);
+        if (bundle != null)
+            mOperator.onRestoreInstanceState(bundle);
     }
 }
