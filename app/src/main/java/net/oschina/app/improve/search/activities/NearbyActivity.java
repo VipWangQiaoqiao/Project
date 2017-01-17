@@ -204,7 +204,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                     e.printStackTrace();
                 }
 
-                if (user == null || user.getId() == 0 || TextUtils.isEmpty(user.getName()))
+                if (user == null || (user.getId() == 0 && TextUtils.isEmpty(user.getName())))
                     continue;
 
                 NearbyResult.Nearby nearby = new NearbyResult.Nearby();
@@ -310,8 +310,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                                 "\"portrait\":\"%s\"," +
                                 "\"gender\":\"%s\"," +
                                 "\"more\":{" +
-                                "\"company\":\"%s\"," +
-                                "}" +
+                                "\"company\":\"%s\"}" +
                                 "}"
                         , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company);
                 comments = comments.replaceAll("[\\s\n]+", "");
