@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.general;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,8 +37,7 @@ public class NewsDetailFragment extends DetailFragment {
     TextView mTextSoftwareTitle;
 
     public static NewsDetailFragment newInstance() {
-        NewsDetailFragment fragment = new NewsDetailFragment();
-        return fragment;
+        return new NewsDetailFragment();
     }
 
     @Override
@@ -51,6 +51,7 @@ public class NewsDetailFragment extends DetailFragment {
         CACHE_CATALOG = OSChinaApi.CATALOG_NEWS;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);

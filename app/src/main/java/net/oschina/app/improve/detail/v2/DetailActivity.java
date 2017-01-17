@@ -2,8 +2,6 @@ package net.oschina.app.improve.detail.v2;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -29,6 +27,7 @@ import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
@@ -111,7 +110,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
                 @Override
                 public void onClick(View v) {
                     if ((AccountHelper.isLogin())) {
-                        UserSelectFriendsActivity.show(DetailActivity.this);
+                        UserSelectFriendsActivity.show(DetailActivity.this, mDelegation.getBottomSheet().getEditText());
                     } else {
                         LoginActivity.show(DetailActivity.this, 1);
                     }
@@ -146,6 +145,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
                             mCommentAuthorId);
                 }
             });
+            mDelegation.getBottomSheet().getEditText().setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter(this));
         }
         mEmptyLayout.post(new Runnable() {
             @Override
@@ -353,14 +353,5 @@ public abstract class DetailActivity extends BaseBackActivity implements
         if (mAlertDialog == null)
             return;
         mAlertDialog.hideProgressDialog();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
-            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
-            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
-        }
     }
 }

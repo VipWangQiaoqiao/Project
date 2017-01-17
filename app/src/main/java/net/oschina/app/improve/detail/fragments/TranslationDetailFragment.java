@@ -1,9 +1,7 @@
 package net.oschina.app.improve.detail.fragments;
 
-import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,10 +22,10 @@ import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.TranslateDetailContract;
-import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
+import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.StringUtils;
 
 /**
@@ -63,7 +61,6 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     protected int getLayoutId() {
         return R.layout.fragment_general_news_detail;
     }
-
 
     @Override
     protected void initWidget(View root) {
@@ -120,12 +117,13 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
             }
         });
 
+        mDelegation.getBottomSheet().getEditText().setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter(this));
+
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (AccountHelper.isLogin()) {
-                    Intent intent = new Intent(getActivity(), UserSelectFriendsActivity.class);
-                    startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+                    UserSelectFriendsActivity.show(TranslationDetailFragment.this, mDelegation.getBottomSheet().getEditText());
                 } else
                     LoginActivity.show(getActivity());
             }
@@ -230,12 +228,4 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
                 comment.getAuthor().getName()));
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
-            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
-            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
-        }
-    }
 }
