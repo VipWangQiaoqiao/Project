@@ -103,10 +103,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         if (editText != null && (starter instanceof Activity || starter instanceof Fragment || starter instanceof android.app.Fragment)) {
             synchronized (UserSelectFriendsActivity.class) {
                 ParentLinkedHolder<RichEditText> holder = new ParentLinkedHolder<>(editText);
-                if (textParentLinkedHolder == null)
-                    textParentLinkedHolder = holder;
-                else
-                    textParentLinkedHolder.addParent(holder);
+                textParentLinkedHolder = holder.addParent(textParentLinkedHolder);
             }
 
             if (starter instanceof Activity) {
@@ -409,7 +406,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         synchronized (UserSelectFriendsActivity.class) {
             if (textParentLinkedHolder != null) {
                 RichEditText editText = textParentLinkedHolder.item;
-                textParentLinkedHolder = textParentLinkedHolder.putParent();
                 if (editText != null)
                     editText.appendMention(names);
             }
@@ -420,6 +416,16 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         setResult(RESULT_OK, result);
 
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        synchronized (UserSelectFriendsActivity.class) {
+            if (textParentLinkedHolder != null) {
+                textParentLinkedHolder = textParentLinkedHolder.putParent();
+            }
+        }
     }
 
     /**
