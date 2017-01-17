@@ -1,6 +1,8 @@
 package net.oschina.app.improve.widget.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -17,6 +19,15 @@ import java.util.regex.Pattern;
  */
 
 public class OnKeyArrivedListenerAdapter implements RichEditText.OnKeyArrivedListener {
+    private Object mHost;
+
+    public OnKeyArrivedListenerAdapter(Object host) {
+        if (host instanceof Activity || host instanceof Fragment || host instanceof android.app.Fragment) {
+            mHost = host;
+        } else {
+            throw new RuntimeException("Host 必须是 Activity／Fragment");
+        }
+    }
 
     @Override
     public boolean onMentionKeyArrived(RichEditText editText) {
@@ -75,12 +86,12 @@ public class OnKeyArrivedListenerAdapter implements RichEditText.OnKeyArrivedLis
     public void skipMention(RichEditText editText) {
         Context context = editText.getContext();
         if (context != null)
-            TweetTopicActivity.show(context, editText);
+            TweetTopicActivity.show(mHost, editText);
     }
 
     public void skipTopic(RichEditText editText) {
         Context context = editText.getContext();
         if (context != null)
-            TweetTopicActivity.show(context, editText);
+            TweetTopicActivity.show(mHost, editText);
     }
 }

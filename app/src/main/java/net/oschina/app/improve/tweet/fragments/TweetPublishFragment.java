@@ -173,7 +173,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
-        mEditContent.setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter());
+        mEditContent.setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter(this));
 
         // Show keyboard
         mEmojiKeyboard.showSoftKeyboard(mEditContent);
@@ -287,36 +287,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
-        //Intent intent = new Intent(context, TweetTopicActivity.class);
-        //startActivityForResult(intent, REQUEST_CODE_SELECT_TOPIC);
-
-        TweetTopicActivity.show(getContext(), mEditContent);
+        TweetTopicActivity.show(this, mEditContent);
     }
 
-    private void handleSelectTopicResult(Intent data) {
-        /*
-        String topic = data.getStringExtra("topic");
-        if (!TextUtils.isEmpty(topic)) {
-            topic = String.format("#%s#", topic.trim());
-
-            SpannableString spannable = new SpannableString(topic);
-            RichEditText.matchTopic(spannable);
-
-            Editable msg = mEditContent.getText();
-            int selStart = mEditContent.getSelectionStart();
-            int selEnd = mEditContent.getSelectionEnd();
-
-            int selStartBefore = selStart - 1;
-            if (selStart == selEnd && selStart > 0
-                    && "#".equals(msg.subSequence(selStartBefore, selEnd).toString())
-                    && msg.getSpans(selStartBefore, selEnd, RichEditText.TagSpan.class).length == 0) {
-                selStart = selStartBefore;
-            }
-
-            msg.replace(selStart, selEnd, spannable);
-        }
-        */
-    }
 
     /**
      * 跳转选择好友
@@ -375,7 +348,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                     handleSelectFriendsResult(data);
                     break;
                 case REQUEST_CODE_SELECT_TOPIC:
-                    handleSelectTopicResult(data);
+                    // Nun Do handleSelectTopicResult(data);
                     break;
             }
         }
