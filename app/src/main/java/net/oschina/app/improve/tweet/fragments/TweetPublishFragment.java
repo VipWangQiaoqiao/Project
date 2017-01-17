@@ -9,7 +9,6 @@ import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,12 +33,10 @@ import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.UIHelper;
 import net.oschina.common.adapter.TextWatcherAdapter;
 import net.oschina.common.widget.RichEditText;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -176,61 +173,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
-        mEditContent.setOnKeyArrivedListener(new RichEditText.OnKeyArrivedListener() {
-            @Override
-            public boolean onMentionKeyArrived() {
-                Editable msg = mEditContent.getText();
-                String msgStr = msg.toString();
-                int selStartIndex = mEditContent.getSelectionStart();
-
-                if (TextUtils.isEmpty(msgStr.trim()) || selStartIndex <= 0
-                        || TextUtils.isEmpty(msgStr.substring(selStartIndex - 1, selStartIndex).trim())) {
-                    onClick(findView(R.id.iv_mention));
-                }
-
-                return true;
-            }
-
-            @Override
-            public boolean onTopicKeyArrived() {
-                Editable msg = mEditContent.getText();
-                String msgStr = msg.toString();
-                int selStartIndex = mEditContent.getSelectionStart();
-                int selEndIndex = mEditContent.getSelectionEnd();
-
-                if (TextUtils.isEmpty(msgStr.trim()) || selStartIndex <= 0) {
-                    onClick(findView(R.id.iv_tag));
-                    return true;
-                }
-
-                int startIndex = 0;
-                RichEditText.TagSpan[] spans = msg.getSpans(0, selStartIndex, RichEditText.TagSpan.class);
-                if (spans.length > 0) {
-                    startIndex = msg.getSpanEnd(spans[spans.length - 1]);
-                }
-
-                boolean isMatcher = false;
-                String tagStr = msgStr.substring(startIndex, selStartIndex) + "#";
-                Pattern pattern = Pattern.compile("#.+?#");
-                Matcher matcher = pattern.matcher(tagStr);
-                while (matcher.find()) {
-                    String str = matcher.group();
-                    int matcherStart = matcher.start() + startIndex;
-                    int matcherEnd = matcher.end() + startIndex;
-                    if (matcherEnd == selStartIndex + 1)
-                        msg.replace(selStartIndex, selEndIndex, "#");
-                    msg.setSpan(new RichEditText.TagSpan(str), matcherStart, matcherEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    isMatcher = true;
-                }
-                if (isMatcher) {
-                    mEditContent.setSelection(selEndIndex);
-                    return false;
-                }
-
-                onClick(findView(R.id.iv_tag));
-                return true;
-            }
-        });
+        mEditContent.setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter());
 
         // Show keyboard
         mEmojiKeyboard.showSoftKeyboard(mEditContent);
@@ -347,7 +290,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         //Intent intent = new Intent(context, TweetTopicActivity.class);
         //startActivityForResult(intent, REQUEST_CODE_SELECT_TOPIC);
 
-        TweetTopicActivity.show(this, mEditContent);
+        TweetTopicActivity.show(getContext(), mEditContent);
     }
 
     private void handleSelectTopicResult(Intent data) {
@@ -490,7 +433,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     public boolean needCommit() {
         return ((CheckBox) findView(R.id.cb_commit_control)).isChecked();
     }
- 
+
     @Override
     public String[] getImages() {
         return mLayImages.getPaths();

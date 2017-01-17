@@ -32,4 +32,12 @@ public class ParentLinkedHolder<T> {
         parentLinkedHolder = null;
         return holder;
     }
+
+    @Override
+    public String toString() {
+        return "ParentLinkedHolder{" +
+                "item=" + item +
+                ", parentLinkedHolder=" + parentLinkedHolder +
+                '}';
+    }
 }

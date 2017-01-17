@@ -1,14 +1,10 @@
 package net.oschina.app.improve.tweet.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -40,8 +36,6 @@ import java.util.regex.Pattern;
 
 import butterknife.Bind;
 
-import static net.oschina.app.improve.tweet.fragments.TweetPublishFragment.REQUEST_CODE_SELECT_TOPIC;
-
 public class TweetTopicActivity extends BaseBackActivity {
     private static final String CACHE_FILE = "TweetTopicLocalCache";
     @Bind(R.id.edit_enter_tag)
@@ -57,7 +51,7 @@ public class TweetTopicActivity extends BaseBackActivity {
 
     private static ParentLinkedHolder<RichEditText> textParentLinkedHolder;
 
-    public static void show(Fragment fragment, RichEditText editText) {
+    public static void show(Context context, RichEditText editText) {
         synchronized (TweetTopicActivity.class) {
             ParentLinkedHolder<RichEditText> holder = new ParentLinkedHolder<>(editText);
             if (textParentLinkedHolder == null)
@@ -65,8 +59,8 @@ public class TweetTopicActivity extends BaseBackActivity {
             else
                 textParentLinkedHolder.addParent(holder);
         }
-        Intent intent = new Intent(fragment.getContext(), TweetTopicActivity.class);
-        fragment.startActivityForResult(intent, REQUEST_CODE_SELECT_TOPIC);
+        Intent intent = new Intent(context, TweetTopicActivity.class);
+        context.startActivity(intent);
     }
 
     @Override
@@ -188,34 +182,18 @@ public class TweetTopicActivity extends BaseBackActivity {
     }
 
     private void doResult(String topic) {
+        synchronized (TweetTopicActivity.class) {
+            if (textParentLinkedHolder != null) {
+                RichEditText editText = textParentLinkedHolder.item;
+                textParentLinkedHolder = textParentLinkedHolder.putParent();
+                if (editText != null)
+                    editText.appendTopic(topic);
+            }
+        }
+
         Intent result = new Intent();
         result.putExtra("topic", topic);
         setResult(RESULT_OK, result);
-
-        if (textParentLinkedHolder != null) {
-            RichEditText editText = textParentLinkedHolder.item;
-            textParentLinkedHolder = textParentLinkedHolder.putParent();
-
-            if (!TextUtils.isEmpty(topic)) {
-                topic = String.format("#%s#", topic.trim());
-
-                SpannableString spannable = new SpannableString(topic);
-                RichEditText.matchTopic(spannable);
-
-                Editable msg = editText.getText();
-                int selStart = editText.getSelectionStart();
-                int selEnd = editText.getSelectionEnd();
-
-                int selStartBefore = selStart - 1;
-                if (selStart == selEnd && selStart > 0
-                        && "#".equals(msg.subSequence(selStartBefore, selEnd).toString())
-                        && msg.getSpans(selStartBefore, selEnd, RichEditText.TagSpan.class).length == 0) {
-                    selStart = selStartBefore;
-                }
-
-                msg.replace(selStart, selEnd, spannable);
-            }
-        }
 
         finish();
     }
