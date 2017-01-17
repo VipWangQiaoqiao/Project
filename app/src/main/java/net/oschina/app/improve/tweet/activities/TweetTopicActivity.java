@@ -58,10 +58,7 @@ public class TweetTopicActivity extends BaseBackActivity {
         if (editText != null && (starter instanceof Activity || starter instanceof Fragment || starter instanceof android.app.Fragment)) {
             synchronized (TweetTopicActivity.class) {
                 ParentLinkedHolder<RichEditText> holder = new ParentLinkedHolder<>(editText);
-                if (textParentLinkedHolder == null)
-                    textParentLinkedHolder = holder;
-                else
-                    textParentLinkedHolder.addParent(holder);
+                textParentLinkedHolder = holder.addParent(textParentLinkedHolder);
             }
 
             if (starter instanceof Activity) {
@@ -208,7 +205,6 @@ public class TweetTopicActivity extends BaseBackActivity {
         synchronized (TweetTopicActivity.class) {
             if (textParentLinkedHolder != null) {
                 RichEditText editText = textParentLinkedHolder.item;
-                textParentLinkedHolder = textParentLinkedHolder.putParent();
                 if (editText != null)
                     editText.appendTopic(topic);
             }
@@ -219,6 +215,16 @@ public class TweetTopicActivity extends BaseBackActivity {
         setResult(RESULT_OK, result);
 
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        synchronized (TweetTopicActivity.class) {
+            if (textParentLinkedHolder != null) {
+                textParentLinkedHolder = textParentLinkedHolder.putParent();
+            }
+        }
     }
 
     private void doDeleteCache(TopicBean bean, boolean clear) {
