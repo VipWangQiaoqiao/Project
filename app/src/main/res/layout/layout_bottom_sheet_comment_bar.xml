@@ -42,25 +42,26 @@
 
         <ImageButton
             android:id="@+id/ib_mention"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/lay_28"
+            android:layout_height="@dimen/lay_28"
             android:layout_marginRight="@dimen/lay_4"
-            android:background="@drawable/ic_material"
+            android:background="@drawable/ic_material_ripple"
             android:contentDescription="@null"
+            android:padding="@dimen/lay_4"
             android:scaleType="centerInside"
-            android:src="@mipmap/btn_at_normal"
+            android:src="@mipmap/ic_tweet_mention_normal"
             tools:ignore="RtlHardcoded" />
 
         <ImageButton
             android:id="@+id/ib_face"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/lay_28"
+            android:layout_height="@dimen/lay_28"
             android:layout_marginRight="@dimen/lay_4"
-            android:background="@drawable/ic_material"
+            android:background="@drawable/ic_material_ripple"
             android:contentDescription="@null"
-            android:padding="6dp"
+            android:padding="@dimen/lay_4"
             android:scaleType="centerInside"
-            android:src="@mipmap/btn_emoji_normal"
+            android:src="@mipmap/ic_tweet_expression_normal"
             tools:ignore="RtlHardcoded" />
 
 
