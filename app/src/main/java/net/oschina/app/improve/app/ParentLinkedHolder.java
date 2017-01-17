@@ -23,8 +23,9 @@ public class ParentLinkedHolder<T> {
         return parentLinkedHolder != null;
     }
 
-    public void addParent(ParentLinkedHolder<T> holder) {
+    public ParentLinkedHolder<T> addParent(ParentLinkedHolder<T> holder) {
         parentLinkedHolder = holder;
+        return this;
     }
 
     public ParentLinkedHolder<T> putParent() {
