@@ -342,14 +342,15 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
     @Override
     public void finish() {
-        DetailCache.addCache(mBean);
+        if (mEmptyLayout.getErrorState() == EmptyLayout.HIDE_LAYOUT)
+            DetailCache.addCache(mBean);
         super.finish();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mAlertDialog ==null)
+        if (mAlertDialog == null)
             return;
         mAlertDialog.hideProgressDialog();
     }
