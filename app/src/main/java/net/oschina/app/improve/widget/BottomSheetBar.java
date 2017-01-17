@@ -28,6 +28,7 @@ import net.oschina.app.util.TDevice;
  * <p>
  * Changed by fei
  * on 2016/11/17
+ * @author Qiujuer
  */
 @SuppressWarnings("unused")
 public class BottomSheetBar {
