@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
@@ -20,6 +19,7 @@ import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.improve.emoji.EmojiView;
 import net.oschina.app.util.TDevice;
+import net.oschina.common.widget.RichEditText;
 
 /**
  * 底部弹出评论框
@@ -28,13 +28,14 @@ import net.oschina.app.util.TDevice;
  * <p>
  * Changed by fei
  * on 2016/11/17
+ *
  * @author Qiujuer
  */
 @SuppressWarnings("unused")
 public class BottomSheetBar {
 
     private View mRootView;
-    private EditText mEditText;
+    private RichEditText mEditText;
     private ImageButton mAtView;
     private ImageButton mFaceView;
     private CheckBox mSyncToTweetView;
@@ -59,7 +60,7 @@ public class BottomSheetBar {
 
     private void initView() {
         mFrameLayout = (FrameLayout) mRootView.findViewById(R.id.fl_face);
-        mEditText = (EditText) mRootView.findViewById(R.id.et_comment);
+        mEditText = (RichEditText) mRootView.findViewById(R.id.et_comment);
         mAtView = (ImageButton) mRootView.findViewById(R.id.ib_mention);
         mFaceView = (ImageButton) mRootView.findViewById(R.id.ib_face);
         mFaceView.setVisibility(View.GONE);
@@ -188,7 +189,7 @@ public class BottomSheetBar {
         }
     }
 
-    public EditText getEditText() {
+    public RichEditText getEditText() {
         return mEditText;
     }
 

@@ -10,7 +10,7 @@
 
     <View style="@style/h_line" />
 
-    <EditText
+    <net.oschina.common.widget.RichEditText
         android:id="@+id/et_comment"
         android:layout_width="match_parent"
         android:layout_height="80dp"

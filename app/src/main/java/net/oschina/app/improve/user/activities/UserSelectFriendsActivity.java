@@ -49,7 +49,7 @@ import butterknife.Bind;
 /**
  * Created by fei
  * on 2016/12/22.
- * desc:
+ * desc:用户联系人列表
  */
 
 public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener,
@@ -130,12 +130,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         }
     }
-
-    public static void show(Activity activity) {
-        Intent intent = new Intent(activity, UserSelectFriendsActivity.class);
-        activity.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
-    }
-
 
     @Override
     protected int getContentView() {

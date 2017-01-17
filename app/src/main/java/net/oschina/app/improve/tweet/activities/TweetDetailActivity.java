@@ -17,7 +17,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,12 +43,12 @@ import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.tweet.fragments.TweetDetailViewPagerFragment;
-import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
+import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -109,8 +108,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     ImageView mViewDispatch;
     @Bind(R.id.layout_ref)
     LinearLayout mLayoutRef;
-
-    EditText mViewInput;
 
     private Tweet tweet;
     private List<TweetComment> replies = new ArrayList<>();
@@ -208,11 +205,9 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                             About.buildShare(tempTweet.getId(), OSChinaApi.COMMENT_TWEET));
                 }
 
-                mViewInput.setHint("添加评论");
                 mDelegation.setCommentHint("添加评论");
                 mDelegation.getBottomSheet().getEditText().setText("");
                 mDelegation.getBottomSheet().getEditText().setHint("添加评论");
-                mViewInput.setText(null);
                 mDelegation.getBottomSheet().dismiss();
                 dismissDialog();
             }
@@ -277,13 +272,13 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             @Override
             public void onClick(View v) {
                 if (AccountHelper.isLogin()) {
-                    Intent intent = new Intent(TweetDetailActivity.this, UserSelectFriendsActivity.class);
-                    startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+                    UserSelectFriendsActivity.show(TweetDetailActivity.this, mDelegation.getBottomSheet().getEditText());
                 } else
                     LoginActivity.show(TweetDetailActivity.this);
             }
         });
 
+        mDelegation.getBottomSheet().getEditText().setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter(this));
         mDelegation.getBottomSheet().showEmoji();
         mDelegation.getBottomSheet().hideSyncAction();
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
@@ -299,15 +294,12 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     return;
                 }
                 if (replies != null && replies.size() > 0)
-                    content = mViewInput.getHint() + ": " + content;
+                    content = mDelegation.getBottomSheet().getEditText().getHint() + ": " + content;
                 dialog = DialogHelper.getProgressDialog(TweetDetailActivity.this, "正在发表评论...");
                 dialog.show();
                 OSChinaApi.pubTweetComment(tweet.getId(), content, 0, publishCommentHandler);
             }
         });
-
-        mViewInput = mDelegation.getBottomSheet().getEditText();
-
         resolveVoice();
         setupDetailView();
 
@@ -487,11 +479,11 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 }
             }
             if (replies.size() == 0) {
-                mViewInput.setHint("回复: @" + comment.getAuthor().getName());
-                mDelegation.setCommentHint(mViewInput.getHint().toString());
+                mDelegation.getBottomSheet().getEditText().setHint("回复: @" + comment.getAuthor().getName());
+                mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
             } else {
-                mViewInput.setHint(mViewInput.getHint() + " @" + comment.getAuthor().getName());
-                mDelegation.setCommentHint(mViewInput.getHint().toString());
+                mDelegation.getBottomSheet().getEditText().setHint(mDelegation.getBottomSheet().getEditText().getHint() + " @" + comment.getAuthor().getName());
+                mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
             }
             this.replies.add(comment);
         }
@@ -567,13 +559,13 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             if (mInputDoubleEmpty) {
                 replies.remove(replies.size() - 1);
                 if (replies.size() == 0) {
-                    mViewInput.setHint("发表评论");
-                    mDelegation.setCommentHint(mViewInput.getHint().toString());
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
                     return;
                 }
-                mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
+                mDelegation.getBottomSheet().getEditText().setHint("回复: @" + replies.get(0).getAuthor().getName());
                 for (int i = 1; i < replies.size(); i++) {
-                    mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(i).getAuthor()
+                    mDelegation.getBottomSheet().getEditText().setHint(mDelegation.getBottomSheet().getEditText().getHint() + " @" + replies.get(i).getAuthor()
                             .getName());
                 }
             } else {
@@ -593,12 +585,4 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
-            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
-        }
-    }
 }
