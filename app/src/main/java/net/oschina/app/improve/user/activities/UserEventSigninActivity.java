@@ -33,9 +33,9 @@ import net.oschina.app.improve.bean.EventSignin;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
-import net.oschina.app.improve.widget.listenerAdapter.TextWatcherAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.common.adapter.TextWatcherAdapter;
 
 import java.util.Map;
 import java.util.Set;

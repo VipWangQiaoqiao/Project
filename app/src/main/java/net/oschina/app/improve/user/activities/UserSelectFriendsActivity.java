@@ -2,7 +2,9 @@ package net.oschina.app.improve.user.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -23,6 +25,7 @@ import com.bumptech.glide.Glide;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.improve.app.ParentLinkedHolder;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.user.OnFriendSelector;
@@ -35,6 +38,7 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.IndexView;
 import net.oschina.common.utils.CollectionUtil;
+import net.oschina.common.widget.RichEditText;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -92,6 +96,40 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     private LinkedList<UserFriend> mCacheIconFriends = new LinkedList<>();
 
     private UserSearchFriendsAdapter mSearchAdapter;
+
+    private static ParentLinkedHolder<RichEditText> textParentLinkedHolder;
+
+    public static void show(Object starter, RichEditText editText) {
+        if (editText != null && (starter instanceof Activity || starter instanceof Fragment || starter instanceof android.app.Fragment)) {
+            synchronized (UserSelectFriendsActivity.class) {
+                ParentLinkedHolder<RichEditText> holder = new ParentLinkedHolder<>(editText);
+                if (textParentLinkedHolder == null)
+                    textParentLinkedHolder = holder;
+                else
+                    textParentLinkedHolder.addParent(holder);
+            }
+
+            if (starter instanceof Activity) {
+                Activity context = (Activity) starter;
+                Intent intent = new Intent(context, UserSelectFriendsActivity.class);
+                context.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+            } else if (starter instanceof Fragment) {
+                Fragment fragment = (Fragment) starter;
+                Context context = fragment.getContext();
+                if (context == null)
+                    return;
+                Intent intent = new Intent(context, UserSelectFriendsActivity.class);
+                fragment.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+            } else {
+                android.app.Fragment fragment = (android.app.Fragment) starter;
+                Context context = fragment.getActivity();
+                if (context == null)
+                    return;
+                Intent intent = new Intent(context, UserSelectFriendsActivity.class);
+                fragment.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+            }
+        }
+    }
 
     public static void show(Activity activity) {
         Intent intent = new Intent(activity, UserSelectFriendsActivity.class);
@@ -359,11 +397,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
      * send select data to  publish tweet
      */
     private void sendSelectData(boolean isLabel) {
-
         String queryLabel = (String) mTvLabel.getText();
-
         List<String> friendNames = new ArrayList<>();
-
         if (isLabel) {
             if (!TextUtils.isEmpty(queryLabel)) {
                 queryLabel = queryLabel.substring(1);
@@ -377,9 +412,17 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         String[] names = CollectionUtil.toArray(friendNames, String.class);
 
-        Intent result = new Intent();
-        result.putExtra("names", names);
+        synchronized (UserSelectFriendsActivity.class) {
+            if (textParentLinkedHolder != null) {
+                RichEditText editText = textParentLinkedHolder.item;
+                textParentLinkedHolder = textParentLinkedHolder.putParent();
+                if (editText != null)
+                    editText.appendMention(names);
+            }
+        }
 
+        Intent result = new Intent();
+        result.putExtra("data", names);
         setResult(RESULT_OK, result);
 
         finish();

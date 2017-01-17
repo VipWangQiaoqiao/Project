@@ -1,8 +1,10 @@
 package net.oschina.app.improve.tweet.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -17,11 +19,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.app.ParentLinkedHolder;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.common.adapter.TextWatcherAdapter;
+import net.oschina.common.widget.RichEditText;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,6 +51,40 @@ public class TweetTopicActivity extends BaseBackActivity {
     private List<TopicBean> mLocalList = new ArrayList<>();
     private LinkedList<String> mCache;
     private String[] mLabels = new String[]{"热门", "本地"};
+
+    private static ParentLinkedHolder<RichEditText> textParentLinkedHolder;
+
+    public static void show(Object starter, RichEditText editText) {
+        if (editText != null && (starter instanceof Activity || starter instanceof Fragment || starter instanceof android.app.Fragment)) {
+            synchronized (TweetTopicActivity.class) {
+                ParentLinkedHolder<RichEditText> holder = new ParentLinkedHolder<>(editText);
+                if (textParentLinkedHolder == null)
+                    textParentLinkedHolder = holder;
+                else
+                    textParentLinkedHolder.addParent(holder);
+            }
+
+            if (starter instanceof Activity) {
+                Activity context = (Activity) starter;
+                Intent intent = new Intent(context, TweetTopicActivity.class);
+                context.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_TOPIC);
+            } else if (starter instanceof Fragment) {
+                Fragment fragment = (Fragment) starter;
+                Context context = fragment.getContext();
+                if (context == null)
+                    return;
+                Intent intent = new Intent(context, TweetTopicActivity.class);
+                fragment.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_TOPIC);
+            } else {
+                android.app.Fragment fragment = (android.app.Fragment) starter;
+                Context context = fragment.getActivity();
+                if (context == null)
+                    return;
+                Intent intent = new Intent(context, TweetTopicActivity.class);
+                fragment.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_TOPIC);
+            }
+        }
+    }
 
     @Override
     protected int getContentView() {
@@ -166,9 +205,19 @@ public class TweetTopicActivity extends BaseBackActivity {
     }
 
     private void doResult(String topic) {
+        synchronized (TweetTopicActivity.class) {
+            if (textParentLinkedHolder != null) {
+                RichEditText editText = textParentLinkedHolder.item;
+                textParentLinkedHolder = textParentLinkedHolder.putParent();
+                if (editText != null)
+                    editText.appendTopic(topic);
+            }
+        }
+
         Intent result = new Intent();
-        result.putExtra("topic", topic);
+        result.putExtra("data", topic);
         setResult(RESULT_OK, result);
+
         finish();
     }
 
