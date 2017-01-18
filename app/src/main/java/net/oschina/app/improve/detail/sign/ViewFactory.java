@@ -24,7 +24,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SignUpEventOptions;
 import net.oschina.app.improve.utils.DialogHelper;
-import net.oschina.app.improve.widget.FlowLayout;
+import net.oschina.common.widget.FlowLayout;
 
 import java.util.ArrayList;
 
