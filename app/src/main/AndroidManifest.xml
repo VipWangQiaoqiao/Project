@@ -212,12 +212,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".improve.detail.activities.TranslateDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="翻译详情"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
             android:name=".improve.comment.QuesAnswerDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="问答答案详情"
@@ -435,6 +429,10 @@
         <activity
             android:name=".improve.user.collection.UserCollectionActivity"
             android:label="收藏"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".improve.user.event.UserEventActivity"
+            android:label="我的活动"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".improve.main.FeedBackActivity"
