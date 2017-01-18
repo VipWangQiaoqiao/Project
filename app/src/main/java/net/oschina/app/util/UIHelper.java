@@ -35,8 +35,8 @@ import net.oschina.app.fragment.BrowserFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.User;
-import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.detail.general.BlogDetailActivity;
 import net.oschina.app.improve.detail.general.EventDetailActivity;
 import net.oschina.app.improve.detail.general.NewsDetailActivity;
@@ -204,7 +204,7 @@ public class UIHelper {
                 break;
             case OSChinaApi.CATALOG_TRANSLATION:
                 //4.翻译
-                TranslateDetailActivity.show(context, id);
+                NewsDetailActivity.show(context, id, News.TYPE_TRANSLATE);
                 break;
             case OSChinaApi.CATALOG_EVENT:
                 //活动
