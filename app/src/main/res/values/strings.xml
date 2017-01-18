@@ -37,6 +37,7 @@
     <string name="error_view_no_data">暂无内容</string>
     <string name="error_view_loading">加载中…</string>
     <string name="error_view_loading_friend">数据初始化中…</string>
+    <string name="error_view_loading_local_friend">获取附近人中…</string>
     <string name="error_view_load_error_click_to_refresh">内容加载失败\r\n点击重新加载</string>
     <string name="error_view_network_error_click_to_refresh">没有可用的网络</string>
     <string name="tip_network_error">没有可用的网络</string>
