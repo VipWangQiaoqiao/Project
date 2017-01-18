@@ -11,7 +11,7 @@ import net.oschina.app.improve.bean.Collection;
  * on 2016/12/30.
  */
 
-public interface UserCollectionContract {
+ interface UserCollectionContract {
 
     interface View extends BaseListView<Presenter, Collection> {
         void showGetFavSuccess(int position);
