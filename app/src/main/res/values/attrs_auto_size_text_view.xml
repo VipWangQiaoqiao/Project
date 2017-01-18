@@ -1,5 +1,0 @@
-<resources>
-    <declare-styleable name="AutoSizeTextView">
-        <attr name="textMinSize" format="dimension" />
-    </declare-styleable>
-</resources>

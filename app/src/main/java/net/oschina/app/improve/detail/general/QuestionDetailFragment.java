@@ -8,8 +8,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.detail.v2.DetailFragment;
-import net.oschina.app.improve.widget.FlowLayout;
-import net.oschina.app.util.StringUtils;
+import net.oschina.common.widget.FlowLayout;
 
 import butterknife.Bind;
 

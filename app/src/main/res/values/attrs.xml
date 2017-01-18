@@ -43,11 +43,6 @@
     <attr name="verticalSpace" format="dimension" />
     <attr name="horizontalSpace" format="dimension" />
 
-    <declare-styleable name="FlowLayout">
-        <attr name="verticalSpace" />
-        <attr name="horizontalSpace" />
-    </declare-styleable>
-
     <declare-styleable name="TweetPicturesLayout">
         <attr name="verticalSpace" />
         <attr name="horizontalSpace" />
