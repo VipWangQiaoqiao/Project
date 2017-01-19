@@ -342,6 +342,7 @@
     <string name="net_search_label">网络搜索结果</string>
     <string name="check_count_hint">只能选10位好友哦!!!</string>
     <string name="friend_list_hint">好友列表</string>
+    <string name="no_friend_hint">你没有任何好友!!!</string>
 
     <string name="btn_ok">确定</string>
     <string name="btn_cancel">取消</string>
