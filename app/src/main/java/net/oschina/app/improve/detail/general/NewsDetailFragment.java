@@ -12,6 +12,7 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.utils.ReadedIndexCacheManager;
+import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
 
@@ -56,7 +57,7 @@ public class NewsDetailFragment extends DetailFragment {
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
         mTextTitle.setText(bean.getTitle());
-        mTextPubDate.setText("发布于 " + bean.getPubDate());
+        mTextPubDate.setText("发布于 " + StringUtils.formatYearMonthDay(bean.getPubDate()));
         Author author = mBean.getAuthor();
         if (author != null) {
             mTextAuthor.setText("@" + author.getName());

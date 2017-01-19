@@ -47,6 +47,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
         DetailContract.EmptyView, Runnable,
         OnCommentClickListener {
 
+    protected String mCommentHint;
     protected ProgressDialog mProgressDialog;
     protected DetailPresenter mPresenter;
     protected EmptyLayout mEmptyLayout;
@@ -75,6 +76,8 @@ public abstract class DetailActivity extends BaseBackActivity implements
             finish();
             return;
         }
+        if (TextUtils.isEmpty(mCommentHint))
+            mCommentHint = getString(R.string.pub_comment_hint);
         LinearLayout layComment = (LinearLayout) findViewById(R.id.ll_comment);
         mEmptyLayout = (EmptyLayout) findViewById(R.id.lay_error);
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
@@ -93,6 +96,8 @@ public abstract class DetailActivity extends BaseBackActivity implements
         mPresenter = new DetailPresenter(mDetailFragment, this, mBean, mIdent);
         if (!mPresenter.isHideCommentBar()) {
             mDelegation = CommentBar.delegation(this, layComment);
+            mDelegation.setCommentHint(mCommentHint);
+            mDelegation.getBottomSheet().getEditText().setHint(mCommentHint);
             mDelegation.setFavDrawable(mBean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
 
             mDelegation.setFavListener(new View.OnClickListener() {
@@ -209,9 +214,9 @@ public abstract class DetailActivity extends BaseBackActivity implements
                     About.buildShare(mBean.getId(), mBean.getType()));
         }
         Toast.makeText(this, getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
-        mDelegation.getCommentText().setHint(getString(R.string.add_comment_hint));
+        mDelegation.getCommentText().setHint(mCommentHint);
         mDelegation.getBottomSheet().getEditText().setText("");
-        mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.add_comment_hint));
+        mDelegation.getBottomSheet().getEditText().setHint(mCommentHint);
         mDelegation.getBottomSheet().dismiss();
 
     }
@@ -244,7 +249,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
     @SuppressWarnings("LoopStatementThatDoesntLoop")
     protected boolean toShare(String title, String content, String url) {
-        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(url))
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(url))
             return false;
 
         String imageUrl = null;
@@ -279,7 +284,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
             content = HTMLUtil.delHTMLTag(content);
         }
         if (TextUtils.isEmpty(content))
-            return false;
+            content = "";
 
         // 分享
         if (mAlertDialog == null) {
@@ -310,8 +315,8 @@ public abstract class DetailActivity extends BaseBackActivity implements
                 if (mInputDoubleEmpty) {
                     mCommentId = mBean.getId();
                     mCommentAuthorId = 0;
-                    mDelegation.setCommentHint(getString(R.string.pub_comment_hint));
-                    mDelegation.getBottomSheet().getEditText().setHint(getString(R.string.pub_comment_hint));
+                    mDelegation.setCommentHint(mCommentHint);
+                    mDelegation.getBottomSheet().getEditText().setHint(mCommentHint);
                 } else {
                     mInputDoubleEmpty = true;
                 }

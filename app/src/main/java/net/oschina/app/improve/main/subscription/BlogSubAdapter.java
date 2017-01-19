@@ -115,6 +115,8 @@ public class BlogSubAdapter extends BaseRecyclerAdapter<SubBean> implements Base
             } else {
                 content.setVisibility(View.GONE);
             }
+        } else {
+            content.setVisibility(View.INVISIBLE);
         }
 
         if (mReadState.already(item.getKey())) {

@@ -82,8 +82,9 @@ public class EmojiPageFragment extends Fragment {
                     listener.onEmojiClick((Emojicon) parent.getAdapter()
                             .getItem(position));
                 }
-                InputHelper.input2OSC(editText, (Emojicon) parent.getAdapter()
-                        .getItem(position));
+                if (editText != null)
+                    InputHelper.input2OSC(editText, (Emojicon) parent.getAdapter()
+                            .getItem(position));
             }
         });
         sGrid.setSelector(new ColorDrawable(android.R.color.transparent));

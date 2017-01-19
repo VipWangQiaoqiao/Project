@@ -1,6 +1,5 @@
 package net.oschina.app.emoji;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,36 +8,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
+import net.oschina.app.improve.widget.TitleBar;
 
+/**
+ * 表情选择界面
+ */
 public class EmojiKeyboardFragment extends Fragment implements
         SoftKeyboardStateListener {
 
-    private LinearLayout mEmojiContent;
-    private RadioGroup mEmojiBottom;
-    private View[] mEmojiTabs;
     private ViewPager mEmojiPager;
-
-    private EmojiPagerAdapter adapter;
-
     private LinearLayout mRootView;
     private OnEmojiClickListener listener;
-    public static int EMOJI_TAB_CONTENT;
+    public int EMOJI_TAB_CONTENT;
 
-    private boolean isDelegate;
-
-    private SoftKeyboardStateHelper mKeyboardHelper;
+    private boolean isDelegate = false;
+    private int keyboardHeightInPx = -1;
+    private boolean isClipStatusHeight = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         if (null != mRootView) {
             ViewGroup parent = (ViewGroup) mRootView.getParent();
             if (null != parent) {
@@ -53,10 +47,9 @@ public class EmojiKeyboardFragment extends Fragment implements
 
     private void initWidget(View rootView) {
         // bottom
-        mEmojiBottom = (RadioGroup) rootView.findViewById(R.id.emoji_bottom);
-        //mEmojiBottom.setVisibility(View.VISIBLE);
+        RadioGroup mEmojiBottom = (RadioGroup) rootView.findViewById(R.id.emoji_bottom);
         EMOJI_TAB_CONTENT = mEmojiBottom.getChildCount() - 1; // 减一是因为有一个删除按钮
-        mEmojiTabs = new View[EMOJI_TAB_CONTENT];
+        View[] mEmojiTabs = new View[EMOJI_TAB_CONTENT];
         if (EMOJI_TAB_CONTENT <= 1) { // 只有一个分类的时候就不显示了
             mEmojiBottom.setVisibility(View.GONE);
         }
@@ -75,21 +68,30 @@ public class EmojiKeyboardFragment extends Fragment implements
                 });
 
         // content必须放在bottom下面初始化
-        mEmojiContent = (LinearLayout) rootView.findViewById(R.id.emoji_content);
-        mEmojiPager = (ViewPager) mEmojiContent.findViewById(R.id.emoji_pager);
-        adapter = new EmojiPagerAdapter(getChildFragmentManager(), EMOJI_TAB_CONTENT, listener);
-        mEmojiPager.setAdapter(adapter);
-        //mEmojiContent.setVisibility(View.VISIBLE);
+        mEmojiPager = (ViewPager) rootView.findViewById(R.id.emoji_pager);
+        EmojiPagerAdapter adapter = new EmojiPagerAdapter(getChildFragmentManager(), EMOJI_TAB_CONTENT, new OnEmojiClickListener() {
+            @Override
+            public void onDeleteButtonClick(View v) {
+                if (listener != null) {
+                    listener.onDeleteButtonClick(v);
+                }
+            }
 
-        mKeyboardHelper = new SoftKeyboardStateHelper(getActivity().getWindow().getDecorView());
+            @Override
+            public void onEmojiClick(Emojicon v) {
+                if (listener != null) {
+                    listener.onEmojiClick(v);
+                }
+            }
+        });
+        mEmojiPager.setAdapter(adapter);
+
+        SoftKeyboardStateHelper mKeyboardHelper = new SoftKeyboardStateHelper(getActivity().getWindow().getDecorView());
         mKeyboardHelper.addSoftKeyboardStateListener(this);
     }
 
     /**
      * 底部栏点击事件监听器
-     *
-     * @param index
-     * @return
      */
     private OnClickListener getBottomBarClickListener(final int index) {
         return new OnClickListener() {
@@ -104,13 +106,8 @@ public class EmojiKeyboardFragment extends Fragment implements
         this.listener = l;
     }
 
-    public void hideAllKeyBoard() {
-        hideEmojiKeyBoard();
-        hideSoftKeyboard();
-    }
-
     public boolean isShow() {
-        return mEmojiContent.getVisibility() == View.VISIBLE;
+        return mRootView.getVisibility() == View.VISIBLE;
     }
 
     /**
@@ -118,8 +115,7 @@ public class EmojiKeyboardFragment extends Fragment implements
      */
     public void hideEmojiKeyBoard() {
         if (!isDelegate) {
-            mEmojiContent.setVisibility(View.GONE);
-            mEmojiBottom.setVisibility(View.GONE);
+            mRootView.setVisibility(View.GONE);
         }
     }
 
@@ -127,28 +123,14 @@ public class EmojiKeyboardFragment extends Fragment implements
      * 显示Emoji并隐藏软键盘
      */
     public void showEmojiKeyBoard() {
-        mEmojiContent.setVisibility(View.VISIBLE);
-        if (EMOJI_TAB_CONTENT > 1) {
-            mEmojiBottom.setVisibility(View.VISIBLE);
+        if (keyboardHeightInPx > 0) {
+            ViewGroup.LayoutParams params = mRootView.getLayoutParams();
+            params.height = isClipStatusHeight
+                    ? keyboardHeightInPx - TitleBar.getExtPaddingTop(mRootView.getResources())
+                    : keyboardHeightInPx;
+            mRootView.requestLayout();
         }
-    }
-
-    /**
-     * 隐藏软键盘
-     */
-    public void hideSoftKeyboard() {
-        ((InputMethodManager) getActivity().getSystemService(
-                Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
-                mEmojiBottom.getWindowToken(), 0);
-    }
-
-    /**
-     * 显示软键盘
-     */
-    public void showSoftKeyboard(EditText et) {
-        ((InputMethodManager) getActivity().getSystemService(
-                Context.INPUT_METHOD_SERVICE)).showSoftInput(et,
-                InputMethodManager.SHOW_FORCED);
+        mRootView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -156,20 +138,16 @@ public class EmojiKeyboardFragment extends Fragment implements
      */
     @Override
     public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-        if (!isDelegate) {
-            mEmojiContent.setVisibility(View.GONE);
-            mEmojiBottom.setVisibility(View.GONE);
-        }
+        this.keyboardHeightInPx = keyboardHeightInPx;
+        hideEmojiKeyBoard();
     }
 
     @Override
     public void onSoftKeyboardClosed() {
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        hideSoftKeyboard();
+    public void setClipStatusHeight(boolean clipStatusHeight) {
+        isClipStatusHeight = clipStatusHeight;
     }
 
     public void setDelegate(boolean delegate) {

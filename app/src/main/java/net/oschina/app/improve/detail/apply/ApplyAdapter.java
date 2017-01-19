@@ -12,6 +12,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.ApplyUser;
 import net.oschina.app.improve.bean.simple.UserRelation;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.widget.CircleImageView;
 
 /**
@@ -34,12 +35,18 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
     }
 
     @Override
-    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, ApplyUser item, int position) {
+    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, final ApplyUser item, int position) {
         ApplyViewHolder h = (ApplyViewHolder) holder;
         h.mTextAuthor.setText(item.getId() <= 0 ? "匿名" : item.getName());
         mCallBack.getImgLoader().load(item.getPortrait())
                 .asBitmap()
                 .into(h.mImageAuthor);
+        h.mImageAuthor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OtherUserHomeActivity.show(mContext, item.getId());
+            }
+        });
         ApplyUser.EventInfo info = item.getEventInfo();
         if (info != null) {
             h.mTextName.setText(info.getName());

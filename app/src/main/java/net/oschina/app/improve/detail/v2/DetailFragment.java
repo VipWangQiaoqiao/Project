@@ -157,7 +157,7 @@ public abstract class DetailFragment extends BaseFragment implements
     @Override
     public void onDestroy() {
         if (mBean != null && mBean.getId() > 0 && mViewScroller != null) {
-            ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_NEWS,
+            ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), CACHE_CATALOG,
                     (mScreenView != null && mScreenView.isViewInScreen()) ? 0 : mViewScroller.getScrollY());
         }
         mWebView.destroy();

@@ -56,6 +56,12 @@ public class QuestionDetailActivity extends DetailActivity {
     }
 
     @Override
+    protected void initWidget() {
+        mCommentHint = "我要回答";
+        super.initWidget();
+    }
+
+    @Override
     protected DetailFragment getDetailFragment() {
         return QuestionDetailFragment.newInstance();
     }

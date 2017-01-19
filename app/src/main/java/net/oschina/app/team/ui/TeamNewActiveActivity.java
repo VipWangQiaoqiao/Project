@@ -44,6 +44,7 @@ import net.oschina.app.team.bean.TeamMemberList;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.File;
@@ -132,10 +133,10 @@ public class TeamNewActiveActivity extends BaseActivity {
             case R.id.ib_emoji_keyboard:
                 if (keyboardFragment.isShow()) {
                     keyboardFragment.hideEmojiKeyBoard();
-                    keyboardFragment.showSoftKeyboard(mEtInput);
+                    TDevice.showSoftKeyboard(mEtInput);
                 } else {
                     keyboardFragment.showEmojiKeyBoard();
-                    keyboardFragment.hideSoftKeyboard();
+                    TDevice.hideSoftKeyboard(mEtInput);
                 }
                 break;
             case R.id.ib_picture:
