@@ -67,7 +67,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     View mIconSend;
 
     private TweetPublishContract.Operator mOperator;
-    private final EmojiKeyboardFragment mEmojiKeyboard = new EmojiKeyboardFragment();
+    private EmojiKeyboardFragment mEmojiKeyboard;
 
     public TweetPublishFragment() {
         // Required empty public constructor
@@ -99,11 +99,10 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-        // EmojiKeyboardFragment
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.lay_emoji_keyboard, mEmojiKeyboard)
-                .commitNowAllowingStateLoss();
 
+        // EmojiKeyboardFragment
+        mEmojiKeyboard = (EmojiKeyboardFragment) getChildFragmentManager().findFragmentById(R.id.frag_emoji_keyboard);
+        mEmojiKeyboard.setClipStatusHeight(true);
         mEmojiKeyboard.setOnEmojiClickListener(new OnEmojiClickListener() {
             @Override
             public void onEmojiClick(Emojicon v) {
@@ -120,7 +119,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         mLayImages.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                mEmojiKeyboard.hideAllKeyBoard();
+                hideAllKeyBoard();
                 return false;
             }
         });
@@ -174,9 +173,16 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
         // 设置键盘输入#或者@适合的监听器
         mEditContent.setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter(this));
+        mEditContent.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mEmojiKeyboard.hideEmojiKeyBoard();
+                return false;
+            }
+        });
 
         // Show keyboard
-        mEmojiKeyboard.showSoftKeyboard(mEditContent);
+        showSoftKeyboard(mEditContent);
     }
 
     private void setSendIconStatus(boolean haveContent, String content) {
@@ -199,7 +205,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
             R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back,
-            R.id.icon_send})
+            R.id.icon_send, R.id.edit_content})
     @Override
     public void onClick(View v) {
         // 用来解决快速点击多个按钮弹出多个界面的情况
@@ -211,11 +217,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         try {
             switch (v.getId()) {
                 case R.id.iv_picture:
-                    mEmojiKeyboard.hideAllKeyBoard();
+                    hideAllKeyBoard();
                     mLayImages.onLoadMoreClick();
                     break;
                 case R.id.iv_mention:
-                    mEmojiKeyboard.hideAllKeyBoard();
+                    hideAllKeyBoard();
                     toSelectFriends();
                     break;
                 case R.id.iv_tag:
@@ -233,6 +239,10 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 case R.id.icon_send:
                     mOperator.publish();
                     break;
+                case R.id.edit_content: {
+                    mEmojiKeyboard.hideEmojiKeyBoard();
+                }
+                break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -264,7 +274,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             mEmojiKeyboard.hideEmojiKeyBoard();
             showSoftKeyboard(mEditContent);
         } else {
-            mEmojiKeyboard.hideSoftKeyboard();
+            hideSoftKeyboard();
             v.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -331,6 +341,12 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         }, 200);
     }
 
+    private void hideSoftKeyboard() {
+        ((InputMethodManager) getActivity().getSystemService(
+                Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
+                mEditContent.getWindowToken(), 0);
+    }
+
     private void showSoftKeyboard(final EditText requestView) {
         if (requestView == null)
             return;
@@ -338,6 +354,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         ((InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE)).showSoftInput(requestView,
                 InputMethodManager.SHOW_FORCED);
+    }
+
+    private void hideAllKeyBoard() {
+        mEmojiKeyboard.hideEmojiKeyBoard();
+        hideSoftKeyboard();
     }
 
     @Override
@@ -390,7 +411,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void finish() {
         // hide key board before finish
-        mEmojiKeyboard.hideAllKeyBoard();
+        hideAllKeyBoard();
         // finish
         Activity activity = getActivity();
         if (activity != null && activity instanceof BaseBackActivity) {
