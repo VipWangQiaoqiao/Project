@@ -31,6 +31,7 @@ public class EmptyLayout extends LinearLayout implements
     private String strNoDataContent = "";
     private TextView tv;
     private boolean mLoadingFriend;
+    private boolean mLoadingLocalFriend;
 
     public EmptyLayout(Context context) {
         super(context);
@@ -127,6 +128,11 @@ public class EmptyLayout extends LinearLayout implements
         tv.setText(R.string.error_view_loading_friend);
     }
 
+    public void setLoadingLocalFriend(boolean loadingLocalFriend) {
+        this.mLoadingLocalFriend = loadingLocalFriend;
+        tv.setText(R.string.error_view_loading_local_friend);
+    }
+
     /**
      * 新添设置背景
      *
@@ -166,7 +172,11 @@ public class EmptyLayout extends LinearLayout implements
                 if (mLoadingFriend) {
                     tv.setText(R.string.error_view_loading_friend);
                 } else {
-                    tv.setText(R.string.error_view_loading);
+                    if (mLoadingLocalFriend) {
+                        tv.setText(R.string.error_view_loading_local_friend);
+                    } else {
+                        tv.setText(R.string.error_view_loading);
+                    }
                 }
                 clickEnable = false;
                 break;

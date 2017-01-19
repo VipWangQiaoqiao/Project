@@ -59,5 +59,8 @@
     </string-array>
 
     <!--created by fei 20160524-->
+    <string-array name="near_friends_action_hint">
+        <item>清除位置并退出</item>
+    </string-array>
 
 </resources>

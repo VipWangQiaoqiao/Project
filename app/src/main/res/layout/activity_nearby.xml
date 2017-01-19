@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<net.oschina.app.improve.widget.RecyclerRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_recycler_refresh"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
+    <net.oschina.app.improve.widget.RecyclerRefreshLayout
+        android:id="@+id/layout_recycler_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-</net.oschina.app.improve.widget.RecyclerRefreshLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </net.oschina.app.improve.widget.RecyclerRefreshLayout>
+
+    <net.oschina.app.ui.empty.EmptyLayout
+        android:id="@+id/lay_emptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>
+
