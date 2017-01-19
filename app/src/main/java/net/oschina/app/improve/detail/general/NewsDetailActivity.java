@@ -23,6 +23,17 @@ public class NewsDetailActivity extends DetailActivity {
         context.startActivity(intent);
     }
 
+    public static void show(Context context, long id, int type) {
+        Intent intent = new Intent(context, NewsDetailActivity.class);
+        Bundle bundle = new Bundle();
+        SubBean bean = new SubBean();
+        bean.setType(type);
+        bean.setId(id);
+        bundle.putSerializable("sub_bean", bean);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
         Bundle bundle = new Bundle();

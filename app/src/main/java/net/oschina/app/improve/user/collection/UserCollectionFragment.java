@@ -6,7 +6,6 @@ import net.oschina.app.improve.base.BaseRecyclerFragment;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.News;
-import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.detail.general.BlogDetailActivity;
 import net.oschina.app.improve.detail.general.EventDetailActivity;
 import net.oschina.app.improve.detail.general.NewsDetailActivity;
@@ -51,7 +50,7 @@ public class UserCollectionFragment extends BaseRecyclerFragment<UserCollectionC
                 BlogDetailActivity.show(mContext, item.getId(), true);
                 break;
             case News.TYPE_TRANSLATE:
-                TranslateDetailActivity.show(mContext, item.getId());
+                NewsDetailActivity.show(mContext, item.getId(), item.getType());
                 break;
             case News.TYPE_EVENT:
                 EventDetailActivity.show(mContext, item.getId(), true);

@@ -3,6 +3,7 @@ package net.oschina.app.improve.user.event;
 import net.oschina.app.improve.base.BaseRecyclerFragment;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.detail.general.EventDetailActivity;
 
 /**
  * Created by haibin
@@ -18,7 +19,7 @@ public class UserEventFragment extends BaseRecyclerFragment<UserEventContract.Pr
 
     @Override
     protected void onItemClick(SubBean subBean, int position) {
-
+        EventDetailActivity.show(mContext, subBean);
     }
 
     @Override
