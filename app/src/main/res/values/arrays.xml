@@ -63,4 +63,12 @@
         <item>清除位置并退出</item>
     </string-array>
 
+    <string-array name="topic_list">
+        <item>码云</item>
+        <item>毎日の歌</item>
+        <item>开源中国</item>
+        <item>新春祝福</item>
+        <item>开源中国客户端</item>
+    </string-array>
+
 </resources>
