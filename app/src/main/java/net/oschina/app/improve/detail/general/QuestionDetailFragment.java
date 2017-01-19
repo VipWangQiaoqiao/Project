@@ -8,6 +8,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.detail.v2.DetailFragment;
+import net.oschina.app.util.StringUtils;
 import net.oschina.common.widget.FlowLayout;
 
 import butterknife.Bind;
@@ -56,7 +57,7 @@ public class QuestionDetailFragment extends DetailFragment {
         super.showGetDetailSuccess(bean);
         mTextTitle.setText(bean.getTitle());
         mTextAuthor.setText(bean.getAuthor().getName());
-        mTextPubDate.setText(bean.getPubDate());
+        mTextPubDate.setText(StringUtils.formatYearMonthDay(bean.getPubDate()));
         mTextCommentCount.setText(String.valueOf(bean.getStatistics().getComment()));
         mTextViewCount.setText(String.valueOf(bean.getStatistics().getView()));
         for (String tag : bean.getTags()) {

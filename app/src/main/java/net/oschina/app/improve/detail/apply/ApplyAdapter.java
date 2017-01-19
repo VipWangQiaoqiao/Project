@@ -22,17 +22,10 @@ import net.oschina.app.widget.CircleImageView;
 
 class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
     private View.OnClickListener mRelationListener;
-    private View.OnClickListener mAuthorListener;
 
     ApplyAdapter(Callback callback, View.OnClickListener mRelationListener) {
         super(callback, ONLY_FOOTER);
         this.mRelationListener = mRelationListener;
-        this.mAuthorListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
     }
 
 
