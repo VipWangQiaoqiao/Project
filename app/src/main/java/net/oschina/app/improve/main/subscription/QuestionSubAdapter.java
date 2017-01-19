@@ -24,10 +24,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * on 2016/10/27.
  */
 
-public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
+class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
     private OSCApplication.ReadState mReadState;
 
-    public QuestionSubAdapter(Callback callback, int mode) {
+    QuestionSubAdapter(Callback callback, int mode) {
         super(callback, mode);
         mReadState = OSCApplication.getReadState("sub_list");
         setOnLoadingHeaderCallBack(this);
@@ -74,12 +74,11 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impl
 
         String authorName;
         if (author != null && !TextUtils.isEmpty(authorName = author.getName())) {
-            authorName = authorName.trim();
             vh.tv_time.setText(String.format("@%s %s",
                     (authorName.length() > 9 ? authorName.substring(0, 9) : authorName),
-                    StringUtils.formatSomeAgo(item.getPubDate().trim())));
+                    StringUtils.formatSomeAgo(item.getPubDate())));
         } else {
-            vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate().trim()));
+            vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         }
 
         vh.tv_view.setText(String.valueOf(item.getStatistics().getView()));
@@ -90,7 +89,7 @@ public class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impl
         TextView tv_question_title, tv_question_content, tv_time, tv_comment_count, tv_view;
         CircleImageView iv_question;
 
-        public QuestionViewHolder(View itemView) {
+        QuestionViewHolder(View itemView) {
             super(itemView);
             tv_question_title = (TextView) itemView.findViewById(R.id.tv_question_title);
             tv_question_content = (TextView) itemView.findViewById(R.id.tv_question_content);
