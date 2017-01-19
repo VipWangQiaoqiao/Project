@@ -1,4 +1,4 @@
-<net.oschina.app.improve.tweet.widget.FitSystemWindowView xmlns:android="http://schemas.android.com/apk/res/android"
+<net.oschina.common.widget.FitWindowFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
@@ -255,4 +255,4 @@
             android:layout_gravity="bottom" />
     </LinearLayout>
 
-</net.oschina.app.improve.tweet.widget.FitSystemWindowView>
+</net.oschina.common.widget.FitWindowFrameLayout>

@@ -34,11 +34,11 @@ import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.adapter.CommentAdapter;
-import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
+import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -180,13 +180,14 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
             @Override
             public void onClick(View v) {
                 if (AccountHelper.isLogin()) {
-                    Intent intent = new Intent(CommentsActivity.this, UserSelectFriendsActivity.class);
-                    startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+                    UserSelectFriendsActivity.show(CommentsActivity.this, mDelegation.getBottomSheet().getEditText());
                 } else {
                     LoginActivity.show(CommentsActivity.this);
                 }
             }
         });
+
+        mDelegation.getBottomSheet().getEditText().setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter(this));
 
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
 
@@ -248,7 +249,6 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     @Override
     protected void initData() {
         super.initData();
-
 
         mRefreshLayout.setSuperRefreshLayoutListener(new RecyclerRefreshLayout.SuperRefreshLayoutListener() {
             @Override
@@ -392,7 +392,6 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         }
     }
 
-
     private void getData(final boolean clearData, String token) {
         OSChinaApi.getComments(mId, mType, "refer,reply", mOrder, token, new TextHttpResponseHandler() {
             @Override
@@ -439,18 +438,6 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
             mCommentAdapter.clear();
         mCommentAdapter.addAll(comments);
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS) {
-                mDelegation.getBottomSheet().handleSelectFriendsResult(data);
-                mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
-            }
-        }
-    }
-
 
     @Override
     public void onLongClick(int position, long itemId) {

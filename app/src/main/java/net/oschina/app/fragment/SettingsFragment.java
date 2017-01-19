@@ -178,6 +178,9 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
                         //getActivity().finish();
                         mTvCacheSize.setText("0KB");
                         AppContext.showToastShort(getString(R.string.logout_success_hint));
+                        mCancel.setVisibility(View.INVISIBLE);
+                        mSettingLineTop.setVisibility(View.INVISIBLE);
+                        mSettingLineBottom.setVisibility(View.INVISIBLE);
                     }
                 });
                 break;

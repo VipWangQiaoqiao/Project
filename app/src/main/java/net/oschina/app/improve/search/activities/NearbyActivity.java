@@ -204,7 +204,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                     e.printStackTrace();
                 }
 
-                if (user == null || user.getId() == 0 || TextUtils.isEmpty(user.getName()))
+                if (user == null || (user.getId() == 0 && TextUtils.isEmpty(user.getName())))
                     continue;
 
                 NearbyResult.Nearby nearby = new NearbyResult.Nearby();
@@ -299,13 +299,10 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             User user = AccountHelper.getUser();
             try {
                 String company = "";
-                String position = "";
                 if (user.getMore() != null) {
                     company = user.getMore().getCompany();
-                    position = user.getMore().getPosition();
                 }
                 company = TextUtils.isEmpty(company) ? "" : company;
-                position = TextUtils.isEmpty(position) ? "" : position;
                 String comments = String.format(
                         "{" +
                                 "\"id\":\"%s\"," +
@@ -313,11 +310,9 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                                 "\"portrait\":\"%s\"," +
                                 "\"gender\":\"%s\"," +
                                 "\"more\":{" +
-                                "\"company\":\"%s\"," +
-                                "\"position\":\"%s\"" +
-                                "}" +
+                                "\"company\":\"%s\"}" +
                                 "}"
-                        , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company, position);
+                        , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company);
                 comments = comments.replaceAll("[\\s\n]+", "");
                 comments = URLEncoder.encode(comments, "UTF-8");
                 TLog.i("oschina", comments);
@@ -346,7 +341,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     private void requestData(int pageNum) {
         //构造请求参数，其中centerPt是自己的位置坐标
         RadarNearbySearchOption option = new RadarNearbySearchOption()
-                .centerPt(mUserLatLng).pageNum(pageNum).radius(20000).pageCapacity(20);
+                .centerPt(mUserLatLng).pageNum(pageNum).radius(35000).pageCapacity(20);
         //发起查询请求
         mManager.nearbyInfoRequest(option);
     }

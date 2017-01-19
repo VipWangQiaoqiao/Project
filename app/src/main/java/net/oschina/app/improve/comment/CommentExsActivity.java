@@ -34,10 +34,10 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
-import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
+import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
@@ -112,14 +112,14 @@ public class CommentExsActivity extends BaseBackActivity {
             @Override
             public void onClick(View v) {
                 if (AccountHelper.isLogin()) {
-                    Intent intent = new Intent(CommentExsActivity.this, UserSelectFriendsActivity.class);
-                    startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
+                    UserSelectFriendsActivity.show(CommentExsActivity.this, mDelegation.getBottomSheet().getEditText());
                 } else {
                     LoginActivity.show(CommentExsActivity.this);
                 }
             }
         });
 
+        mDelegation.getBottomSheet().getEditText().setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter(this));
         mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -432,12 +432,4 @@ public class CommentExsActivity extends BaseBackActivity {
         QuesAnswerDetailActivity.show(this, comment, mId, mType);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
-            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
-        }
-    }
 }
