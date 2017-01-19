@@ -37,6 +37,7 @@
     <string name="error_view_no_data">暂无内容</string>
     <string name="error_view_loading">加载中…</string>
     <string name="error_view_loading_friend">数据初始化中…</string>
+    <string name="error_view_loading_local_friend">获取附近人中…</string>
     <string name="error_view_load_error_click_to_refresh">内容加载失败\r\n点击重新加载</string>
     <string name="error_view_network_error_click_to_refresh">没有可用的网络</string>
     <string name="tip_network_error">没有可用的网络</string>
@@ -350,6 +351,8 @@
     <string name="feedback_hint">我们将不断改进</string>
     <string name="screenshot_hint">截图描述：（可选）</string>
     <string name="submit_feedback_hint">提交反馈</string>
-    <string name="near_bodies_hint">附近的人</string>
+    <string name="near_bodies_hint">附近的程序员</string>
+    <string name="clear_near_bodies_hint">清除位置并退出</string>
+    <string name="near_body_gps_error_hint">当前手机定位功能无法使用!!!</string>
     <string name="offline_event_hint">线下活动</string>
 </resources>
