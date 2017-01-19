@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.util.TDevice;
 
 /**
  * Created by JuQiu
@@ -110,16 +111,18 @@ public class TitleBar extends FrameLayout {
     }
 
     public static int getExtPaddingTop(Resources resources) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && EXT_PADDING_TOP == 0) {
-            try {
-                Class<?> clazz = Class.forName("com.android.internal.R$dimen");
-                Object object = clazz.newInstance();
-                int height = Integer.parseInt(clazz.getField("status_bar_height")
-                        .get(object).toString());
-                EXT_PADDING_TOP = resources.getDimensionPixelSize(height);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (EXT_PADDING_TOP > 0)
+            return EXT_PADDING_TOP;
+
+        try {
+            Class<?> clazz = Class.forName("com.android.internal.R$dimen");
+            Object object = clazz.newInstance();
+            int height = Integer.parseInt(clazz.getField("status_bar_height")
+                    .get(object).toString());
+            EXT_PADDING_TOP = resources.getDimensionPixelSize(height);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (int) TDevice.dp2px(25);
         }
         return EXT_PADDING_TOP;
     }
