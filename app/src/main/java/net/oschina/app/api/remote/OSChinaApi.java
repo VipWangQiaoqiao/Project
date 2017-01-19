@@ -1700,4 +1700,17 @@ public class OSChinaApi {
 
     }
 
+    /**
+     * 获取用户活动列表
+     */
+    public static void getUserEvents(long authorId, String authorName, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (authorId > 0)
+            params.put("authorId", authorId);
+        if (!TextUtils.isEmpty(authorName))
+            params.put("authorName", authorName);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/event_list", params, handler);
+    }
 }

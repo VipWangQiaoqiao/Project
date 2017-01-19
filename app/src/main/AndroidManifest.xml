@@ -212,12 +212,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".improve.detail.activities.TranslateDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="翻译详情"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
             android:name=".improve.comment.QuesAnswerDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="问答答案详情"
@@ -229,12 +223,6 @@
             android:label="评论列表"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
-            android:name=".improve.tweet.activities.SoftwareTweetActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="软件动态列表"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".improve.main.SchemeUrlActivity"
@@ -437,6 +425,10 @@
             android:label="收藏"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".improve.user.event.UserEventActivity"
+            android:label="我的活动"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".improve.main.FeedBackActivity"
             android:label="意见反馈"
             android:screenOrientation="portrait"/>
@@ -446,14 +438,6 @@
             android:label="活动签到"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
-        <activity
-            android:name=".improve.user.activities.UserEventActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="我的活动"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/Base.App.Theme.NoTitle"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".improve.user.activities.UserSelectFriendsActivity"
             android:configChanges="keyboardHidden|orientation"

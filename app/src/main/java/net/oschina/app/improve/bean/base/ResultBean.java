@@ -2,7 +2,6 @@ package net.oschina.app.improve.bean.base;
 
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
-import net.oschina.app.util.TLog;
 
 /**
  * Created by huanghaibin
@@ -57,12 +56,10 @@ public class ResultBean<T> {
     }
 
     public boolean isOk() {
-        TLog.error("ResultBean#isOk");
         return code == RESULT_SUCCESS;
     }
 
     public boolean isSuccess() {
-        TLog.error("ResultBean#isSuccess");
         // 每次回来后通知消息到达
         NoticeManager.publish(this, this.notice);
         return code == RESULT_SUCCESS && result != null;

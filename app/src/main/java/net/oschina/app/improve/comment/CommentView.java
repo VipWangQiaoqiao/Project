@@ -206,9 +206,10 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
 
 
     @SuppressLint("DefaultLocale")
-    private ViewGroup insertComment(final boolean first, final Comment comment, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
-        final LayoutInflater inflater = LayoutInflater.from(getContext());
-        @SuppressLint("InflateParams") final ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
+    private ViewGroup insertComment(final boolean first, final Comment comment, final RequestManager imageLoader,
+                                    final OnCommentClickListener onCommentClickListener) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
 
         ImageView ivAvatar = (ImageView) lay.findViewById(R.id.iv_avatar);
         imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_default_face)

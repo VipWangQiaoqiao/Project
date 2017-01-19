@@ -40,6 +40,7 @@ import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.OWebView;
+import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -178,6 +179,8 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
 
         mDelegation.hideFav();
         mDelegation.hideShare();
+
+        mDelegation.getBottomSheet().getEditText().setOnKeyArrivedListener(new OnKeyArrivedListenerAdapter(this));
 
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
@@ -506,14 +509,5 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
             webView.destroy();
         }
         super.onDestroy();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            mDelegation.getBottomSheet().handleSelectFriendsResult(data);
-            mDelegation.setCommentHint(mDelegation.getBottomSheet().getEditText().getHint().toString());
-        }
     }
 }

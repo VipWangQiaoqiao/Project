@@ -52,8 +52,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by
  * thanatos on 16/8/17.
- * <p>
- * 突然间变成各个地方都在用的Adapter了...
  */
 public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implements View.OnClickListener {
     private Bitmap mRecordBitmap;
@@ -175,6 +173,9 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         }
         String textCount = holder.mViewLikeCount.getText().toString();
         holder.mViewLikeCount.setText("0".equals(textCount) ? "点赞" : textCount);
+
+        String textComCount = holder.mViewCmmCount.getText().toString();
+        holder.mViewCmmCount.setText("0".equals(textComCount) ? "评论" : textComCount);
 
         /* - about - */
         if (item.getAbout() != null) {

@@ -1,4 +1,4 @@
-package net.oschina.app.improve.user.adapter;
+package net.oschina.app.improve.user.event;
 
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
@@ -21,17 +21,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by fei
- * on 2016/12/2.
- * desc:
+ * 用户活动列表
+ * Created by haibin
+ * on 2016/10/27.
  */
 
-public class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
-
+class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
     private OSCApplication.ReadState mReadState;
 
-    public UserEventAdapter(Callback callback, int mode) {
-        super(callback, mode);
+    UserEventAdapter(Callback callback) {
+        super(callback, ONLY_FOOTER);
         mReadState = OSCApplication.getReadState("sub_list");
         setOnLoadingHeaderCallBack(this);
     }
@@ -60,20 +59,20 @@ public class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implem
         if (images != null && images.size() > 0) {
             mCallBack.getImgLoader()
                     .load(images.get(0).getHref())
-                    .placeholder(R.drawable.bg_normal)
+                    .placeholder(R.mipmap.event_cover_default)
                     .into(vh.iv_event);
         } else {
-            vh.iv_event.setImageResource(R.drawable.bg_normal);
+            vh.iv_event.setImageResource(R.mipmap.event_cover_default);
         }
 
         Resources resources = mContext.getResources();
 
         Map<String, Object> extras = item.getExtra();
         if (extras != null) {
-            vh.tv_event_pub_date.setText(StringUtils.getDateString(extras.get("eventStartDate").toString()));
-            vh.tv_event_member.setText(Double.valueOf(extras.get("eventApplyCount").toString()).intValue() + "人参与");
+            vh.tv_event_pub_date.setText(StringUtils.getDateString(getExtraString(extras.get("eventStartDate"))));
+            vh.tv_event_member.setText(getExtraInt(extras.get("eventApplyCount")) + "人参与");
 
-            switch (Double.valueOf(extras.get("eventStatus").toString()).intValue()) {
+            switch (getExtraInt(extras.get("eventStatus"))) {
                 case Event.STATUS_END:
                     setText(vh.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);
                     setTextColor(vh.tv_event_title, TDevice.getColor(resources, R.color.light_gray));
@@ -87,7 +86,7 @@ public class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implem
                     break;
             }
             int typeStr = R.string.oscsite;
-            switch (Double.valueOf(extras.get("eventType").toString()).intValue()) {
+            switch (getExtraInt(extras.get("eventType"))) {
                 case Event.EVENT_TYPE_OSC:
                     typeStr = R.string.event_type_osc;
                     break;
@@ -126,7 +125,7 @@ public class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implem
         TextView tv_event_title, tv_description, tv_event_pub_date, tv_event_member, tv_event_state, tv_event_type;
         ImageView iv_event;
 
-        public EventViewHolder(View itemView) {
+        EventViewHolder(View itemView) {
             super(itemView);
             tv_event_title = (TextView) itemView.findViewById(R.id.tv_event_title);
             tv_event_state = (TextView) itemView.findViewById(R.id.tv_event_state);
@@ -138,4 +137,11 @@ public class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implem
         }
     }
 
+    private String getExtraString(Object object) {
+        return object == null ? "" : object.toString();
+    }
+
+    private int getExtraInt(Object object) {
+        return object == null ? 0 : Double.valueOf(object.toString()).intValue();
+    }
 }
