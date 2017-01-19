@@ -83,10 +83,13 @@ public class TDevice {
     }
 
     public static int getStatusBarHeight(Activity context) {
-        Rect rectangle = new Rect();
-        Window window = context.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
-        return rectangle.top;
+        if (context != null) {
+            Rect rectangle = new Rect();
+            Window window = context.getWindow();
+            window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+            return rectangle.top;
+        }
+        return (int) dp2px(25);
     }
 
     public static boolean hasInternet() {
