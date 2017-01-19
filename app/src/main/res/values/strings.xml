@@ -90,20 +90,20 @@
     <string name="tweet_image_publish_failed" formatted="false">发布图片失败-[%s/%s]</string>
 
     <string name="tweet_detail_data_null">啊噢, 没有找到该动弹~ 可能被主人删除了呢!</string>
-    <string name="record_sound_notfound">找不到录音</string>
+    <string name="record_sound_not_found">找不到录音</string>
 
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="tip_content_empty">内容不能为空</string>
     <string name="tip_content_too_long">内容太长</string>
 
-    <string name="actionbar_title_softwarelist">开源软件</string>
+    <string name="actionbar_title_software_list">开源软件</string>
     <string name="actionbar_title_user_blog">用户博客列表</string>
     <string name="actionbar_title_my_information">我的资料</string>
     <string name="actionbar_title_setting">设置</string>
     <string name="actionbar_title_about_osc">关于开源中国</string>
     <string name="actionbar_title_note">便签</string>
-    <string name="actionbar_title_noteedit">编辑便签</string>
+    <string name="actionbar_title_note_edit">编辑便签</string>
     <!-- 找人不显示标题 -->
     <string name="actionbar_title_event">我的活动</string>
     <string name="actionbar_title_my_event">我的活动</string>
@@ -142,7 +142,7 @@
     <string name="copy_success">复制成功</string>
     <string name="deleting">正在删除…</string>
     <string name="delete_success">删除成功</string>
-    <string name="delete_faile">删除失败</string>
+    <string name="delete_failed">删除失败</string>
 
     <!-- software detail -->
 
@@ -193,9 +193,9 @@
     <string name="logout_success_hint">注销成功</string>
     <string name="grade">去评分</string>
 
-    <string name="oscsite">官网</string>
-    <string name="knowmore">了解更多</string>
-    <string name="gitapp">Git客户端</string>
+    <string name="osc_site">官网</string>
+    <string name="know_more">了解更多</string>
+    <string name="git_app">Git客户端</string>
     <string name="copyright">Copyright © 2016 OSChina.net All rights reserved.</string>
 
     <string name="tip_save_image_suc">图片已保存(手机相册-> osc_img)</string>
@@ -205,10 +205,10 @@
 
     <string name="report">举报</string>
     <string name="report_link">链接地址</string>
-    <string name="report_reson">举报原因</string>
+    <string name="report_reason">举报原因</string>
     <string name="hint_report_desc">其他原因</string>
     <string name="tip_report_success">举报成功</string>
-    <string name="tip_report_faile">举报失败</string>
+    <string name="tip_report_failed">举报失败</string>
 
     <string name="tip_double_click_exit">再次点击退出开源中国</string>
 
@@ -218,7 +218,7 @@
 
     <!-- 反馈 -->
 
-    <string name="str_team_userinfo">用户主页</string>
+    <string name="str_team_user_info">用户主页</string>
 
     <string name="str_team_my_issue">我的任务</string>
 
@@ -291,7 +291,7 @@
     <string name="login_hint">抱歉,您未安装该应用,不能登录&#8230;</string>
     <string name="login_wechat_hint">正在启动微信中&#8230;</string>
     <string name="login_tencent_hint">正在启动QQ中&#8230;</string>
-    <string name="login_webo_hint">正在启动微博中&#8230;</string>
+    <string name="login_weibo_hint">正在启动微博中&#8230;</string>
     <string name="message_pwd_error">密码错误</string>
     <string name="message_username_null">用户名未填写！！！</string>
     <string name="tv_my_score">积分 0</string>

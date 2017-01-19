@@ -459,7 +459,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      * login weiBo
      */
     private void weiBoLogin() {
-        showWaitDialog(R.string.login_webo_hint);
+        showWaitDialog(R.string.login_weibo_hint);
         openType = OpenConstant.SINA;
         mSsoHandler = OpenBuilder.with(this)
                 .useWeibo(OpenConstant.WB_APP_KEY)

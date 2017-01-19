@@ -1,6 +1,8 @@
 package net.oschina.app.improve.search.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,9 +13,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -42,6 +46,7 @@ import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.search.adapters.NearbyUserAdapter;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.BottomDialog;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -67,7 +72,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class NearbyActivity extends BaseBackActivity implements RadarSearchListener, BDLocationListener,
         RecyclerRefreshLayout.SuperRefreshLayoutListener, BaseRecyclerAdapter.OnItemClickListener,
-        EasyPermissions.PermissionCallbacks {
+        EasyPermissions.PermissionCallbacks, View.OnClickListener {
 
     private static final int LOCATION_PERMISSION = 0x0100;//定位权限
 
@@ -92,6 +97,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     private boolean mIsFirstLocation = true;
     private AlertDialog.Builder confirmDialog;
     private AlertDialog alertDialog;
+    private BottomDialog mSelectorDialog;
 
     /**
      * show activity
@@ -133,6 +139,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     @Override
     protected void initData() {
+        initLbs();
         requestLocationPermission();
     }
 
@@ -146,20 +153,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_more:
-                DialogHelper.getSelectDialog(this, null,
-                        getResources().getStringArray(R.array.near_friends_action_hint), getResources().getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int position) {
-                                switch (position) {
-                                    case 0:
-                                        //清除用户信息
-                                        mRadarSearchManager.clearUserInfo();
-                                        Setting.updateLocationInfo(getApplicationContext(), false);
-                                        break;
-                                }
-                            }
-                        }).create().show();
+                getSelectorDialog().show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -169,14 +163,14 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     protected void onResume() {
         super.onResume();
         if (!mIsFirstLocation && isEnabledLocation()) {
-            startLocationClient();
+            startLbs();
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        releaseLocation();
+        releaseLbs();
     }
 
     @Override
@@ -184,7 +178,24 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         super.onActivityResult(requestCode, resultCode, data);
         if ((resultCode == RESULT_OK || resultCode == RESULT_CANCELED)
                 && requestCode == LOCATION_PERMISSION) {
-            requestLocationPermission();
+            startLbs();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_clear_opt:
+                //清除用户信息
+                mRadarSearchManager.clearUserInfo();
+                Setting.updateLocationInfo(getApplicationContext(), false);
+                if (mSelectorDialog.isShowing())
+                    mSelectorDialog.cancel();
+                break;
+            case R.id.tv_cancel_opt:
+                if (mSelectorDialog.isShowing())
+                    mSelectorDialog.cancel();
+                break;
         }
     }
 
@@ -206,15 +217,28 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
      */
     @Override
     public void onGetUploadState(RadarSearchError error) {
-        if (error != RadarSearchError.RADAR_NO_ERROR) {
-            showError(EmptyLayout.NETWORK_ERROR);
-            SimplexToast.show(this, "上传用户信息失败");
-            return;
-        }
+        switch (error) {
+            case RADAR_NETWORK_ERROR:
+            case RADAR_NETWORK_TIMEOUT:
+                if (mPageNum == 0) {
+                    showError(EmptyLayout.NETWORK_ERROR);
+                    mEmptyLayout.setNoDataContent("网络请求超时...");
+                } else {
+                    AppContext.showToastShort(R.string.request_error_hint);
+                }
+                showError(EmptyLayout.NETWORK_ERROR);
+                SimplexToast.show(this, "上传自己的位置信息失败");
+                break;
+            case RADAR_NO_ERROR:
+                if (mIsFirstLocation) {
+                    Setting.updateLocationInfo(getApplicationContext(), true);
+                    onRefreshing();
+                }
+                break;
+            case RADAR_PERMISSION_UNFINISHED:
+                ShowSettingDialog();
 
-        if (mIsFirstLocation) {
-            Setting.updateLocationInfo(getApplicationContext(), true);
-            onRefreshing();
+                break;
         }
     }
 
@@ -252,7 +276,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     @Override
     public void onLoadMore() {
-        ++mPageNum;
         requestData(mPageNum);
     }
 
@@ -270,6 +293,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         ShowSettingDialog();
+        EasyPermissions.checkDeniedPermissionsNeverAskAgain(this, "需要定位权限", R.string.actionbar_title_setting, R.string.cancel, perms);
     }
 
     private void updateView(RadarNearbyResult result, RadarSearchError error) {
@@ -342,6 +366,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                     mAdapter.setState(size < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, size >= 20);
                     //隐藏emptyView
                     hideLoading();
+                    mPageNum++;
                     break;
                 }
 
@@ -356,9 +381,10 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     @AfterPermissionGranted(LOCATION_PERMISSION)
     private void requestLocationPermission() {
+
         if (isEnabledLocation()) {
             if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)) {
-                startLocationClient();
+                startLbs();
             } else {
                 EasyPermissions.requestPermissions(this, "需要定位权限", LOCATION_PERMISSION,
                         Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE);
@@ -366,20 +392,41 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         }
     }
 
+    private Dialog getSelectorDialog() {
+        if (mSelectorDialog == null) {
+            mSelectorDialog = new BottomDialog(this, true);
+            @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null, false);
+            view.findViewById(R.id.tv_clear_opt).setOnClickListener(this);
+            view.findViewById(R.id.tv_cancel_opt).setOnClickListener(this);
+            mSelectorDialog.setContentView(view);
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.setBackgroundResource(R.color.transparent);
+            }
+        }
+        return mSelectorDialog;
+    }
+
     /**
      * show setting dialog
      */
     private void ShowSettingDialog() {
-        if (confirmDialog == null)
-            confirmDialog = DialogHelper.getConfirmDialog(this, "温馨提示", "定位权限已被禁用，需要开启定位权限", "去开启", "取消", false, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
-                }
-            }, null);
 
-        if (alertDialog == null)
+        if (confirmDialog == null) {
+            confirmDialog = DialogHelper.getConfirmDialog(this, "无法获取位置信息", "现在去「设置」打开定位服务并允许开源中国获取位置信息吗？",
+                    "取消", "设置", true, null, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivityForResult(intent, LOCATION_PERMISSION);
+                        }
+                    });
+        }
+
+        if (alertDialog == null) {
             alertDialog = confirmDialog.create();
+        }
 
         if (alertDialog != null) {
             if (!alertDialog.isShowing()) {
@@ -399,8 +446,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             case BDLocation.TypeCriteriaException:
                 showError(EmptyLayout.NODATA);
                 SimplexToast.show(this, "无法定位");
-                if (mLocationClient != null)
-                    mLocationClient.requestLocation();
+                mLocationClient.requestLocation();
                 mRecyclerRefresh.setOnLoading(false);
                 return;
             case BDLocation.TypeNetWorkException:
@@ -492,17 +538,24 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
             //network  基于wifi和基站定位
-            //boolean netEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            boolean netEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             //passive  基于被动的精度不高，或者不怎么变化的位置服务，比如其他应用或者定位服务位置更新时的定位
             //boolean passiveEnabled = locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER);
 
-            if (gpsEnabled) {
+            if (gpsEnabled || netEnabled) {
                 return true;
             } else {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+
+                DialogHelper.getConfirmDialog(this, "无法获取位置信息", "现在去「设置」打开定位服务并允许开源中国获取位置信息吗", "取消", "设置",
+                        true, null, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivityForResult(intent, LOCATION_PERMISSION);
+                            }
+                        }).create().show();
 
                 return false;
             }
@@ -518,8 +571,15 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     /**
      * 进行定位
      */
-    private void startLocationClient() {
+    private void startLbs() {
+        if (mLocationClient == null) {
+            initLbs();
+        }
+        //进行定位
+        mLocationClient.start();
+    }
 
+    private void initLbs() {
         if (mRadarSearchManager == null) {
             mRadarSearchManager = RadarSearchManager.getInstance();
             mRadarSearchManager.addNearbyInfoListener(this);
@@ -554,20 +614,28 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         option.SetIgnoreCacheException(false);
 
         mLocationClient.setLocOption(option);
-        //进行定位
-        mLocationClient.start();
+    }
+
+    private void releaseLbs() {
+        if (mLocationClient != null && mLocationClient.isStarted())
+            mLocationClient.stop();
+        //移除监听
+        if (mRadarSearchManager != null) {
+            mRadarSearchManager.removeNearbyInfoListener(this);
+            //释放资源
+            mRadarSearchManager.destroy();
+            mRadarSearchManager = null;
+        }
     }
 
     private void requestData(int pageNum) {
 
         if (TDevice.hasInternet()) {
             if (mUserLatLng == null) {
-                if (mLocationClient != null)
-                    mLocationClient.requestLocation();
+                mLocationClient.requestLocation();
             } else {
                 if (mUserLatLng.latitude == 4.9E-324 && mUserLatLng.longitude == 4.9E-324) {
-                    if (mLocationClient != null)
-                        mLocationClient.requestLocation();
+                    mLocationClient.requestLocation();
                 }
             }
             //构造请求参数，其中centerPt是自己的位置坐标
@@ -580,18 +648,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             showError(EmptyLayout.NETWORK_ERROR);
         }
 
-    }
-
-    private void releaseLocation() {
-        if (mLocationClient != null && mLocationClient.isStarted())
-            mLocationClient.stop();
-        //移除监听
-        if (mRadarSearchManager != null) {
-            mRadarSearchManager.removeNearbyInfoListener(this);
-            //释放资源
-            mRadarSearchManager.destroy();
-            mRadarSearchManager = null;
-        }
     }
 
     /**
