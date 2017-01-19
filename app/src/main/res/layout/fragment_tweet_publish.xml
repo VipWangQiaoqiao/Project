@@ -248,11 +248,13 @@
 
         <View style="@style/h_line" />
 
-        <FrameLayout
-            android:id="@+id/lay_emoji_keyboard"
+        <fragment
+            android:id="@+id/frag_emoji_keyboard"
+            class="net.oschina.app.emoji.EmojiKeyboardFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="bottom" />
+
     </LinearLayout>
 
 </net.oschina.common.widget.FitWindowFrameLayout>

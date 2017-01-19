@@ -44,7 +44,7 @@ public class KJEmojiFragment extends Fragment implements
     private LinearLayout mRootView;
 
     private View mEmojiTitle;
-    private LinearLayout mEmojiContent;
+    private View mEmojiContent;
     private RadioGroup mEmojiBottom;
     private View[] mEmojiTabs;
 
@@ -126,9 +126,8 @@ public class KJEmojiFragment extends Fragment implements
                 });
 
         // content必须放在bottom下面初始化
-        mEmojiContent = (LinearLayout) rootView
-                .findViewById(R.id.emoji_content);
         mEmojiPager = (ViewPager) mEmojiContent.findViewById(R.id.emoji_pager);
+        mEmojiContent = mEmojiPager;
         adapter = new EmojiPagerAdapter(getFragmentManager());
         mEmojiPager.setAdapter(adapter);
 

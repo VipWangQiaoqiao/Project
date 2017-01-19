@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author kymjs (http://www.kymjs.com)
+ * 软键盘弹出辅助类，用于计算软键盘高度和打开状态
  */
 public class SoftKeyboardStateHelper implements
         ViewTreeObserver.OnGlobalLayoutListener {
