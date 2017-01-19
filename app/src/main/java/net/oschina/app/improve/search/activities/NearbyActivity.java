@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,8 +68,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class NearbyActivity extends BaseBackActivity implements RadarSearchListener, BDLocationListener,
         RecyclerRefreshLayout.SuperRefreshLayoutListener, BaseRecyclerAdapter.OnItemClickListener,
         EasyPermissions.PermissionCallbacks {
-
-    private static final String TAG = "NearbyActivity";
 
     private static final int LOCATION_PERMISSION = 0x0100;//定位权限
 
@@ -249,7 +246,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     @Override
     public void onRefreshing() {
         mPageNum = 0;
-        Log.e(TAG, "onRefreshing: ------->" + mPageNum);
         mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         requestData(mPageNum);
     }
@@ -257,7 +253,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     @Override
     public void onLoadMore() {
         ++mPageNum;
-        Log.e(TAG, "onLoadMore: ----->" + mPageNum);
         requestData(mPageNum);
     }
 
@@ -270,20 +265,15 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        Log.e(TAG, "onPermissionsGranted:  权限申请成功---->");
-        startLocationClient();
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         ShowSettingDialog();
-
     }
 
     private void updateView(RadarNearbyResult result, RadarSearchError error) {
         mRecyclerRefresh.onComplete();
-
-        Log.e(TAG, "onGetNearbyInfoList: ------->获取附近的人列表-------   " + error);
 
         if (mPageNum == 0) {
             mAdapter.clear();
@@ -405,7 +395,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
      */
     private void ReceiveLocation(BDLocation location) {
         final int code = location.getLocType();
-        Log.e(TAG, "onReceiveLocation: ------>" + code);
         switch (code) {
             case BDLocation.TypeCriteriaException:
                 showError(EmptyLayout.NODATA);
@@ -512,8 +501,8 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                 return true;
             } else {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivityForResult(intent, LOCATION_PERMISSION);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
 
                 return false;
             }
