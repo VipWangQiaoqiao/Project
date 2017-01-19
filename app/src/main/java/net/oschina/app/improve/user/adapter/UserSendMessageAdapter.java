@@ -26,6 +26,7 @@ import net.oschina.common.widget.Loading;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by huanghaibin_dev
@@ -199,7 +200,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
     }
 
     private String formatWeek(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("EEEE");
+        SimpleDateFormat format = new SimpleDateFormat("EEEE", Locale.CHINESE);
         return format.format(date);
     }
 

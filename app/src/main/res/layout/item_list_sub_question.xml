@@ -52,7 +52,7 @@
                     android:layout_marginTop="4dp"
                     android:ellipsize="end"
                     android:lineSpacingExtra="4dp"
-                    android:maxLines="3"
+                    android:maxLines="2"
                     android:minLines="1"
                     android:textColor="@color/text_desc_color"
                     android:textSize="13sp" />

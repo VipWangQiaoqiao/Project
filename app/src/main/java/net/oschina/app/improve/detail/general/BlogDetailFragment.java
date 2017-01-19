@@ -15,6 +15,7 @@ import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.ReadedIndexCacheManager;
 import net.oschina.app.improve.widget.SimplexToast;
+import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -92,7 +93,7 @@ public class BlogDetailFragment extends DetailFragment {
             mTextName.setText(author.getName());
             getImgLoader().load(author.getPortrait()).asBitmap().into(mImageAvatar);
         }
-        mTextPubDate.setText(bean.getPubDate());
+        mTextPubDate.setText(StringUtils.formatYearMonthDay(bean.getPubDate()));
         mTextTitle.setText(bean.getTitle());
         mTextAbstract.setText(bean.getSummary());
         if (TextUtils.isEmpty(bean.getSummary())) {
@@ -114,14 +115,5 @@ public class BlogDetailFragment extends DetailFragment {
     @Override
     protected int getCommentOrder() {
         return OSChinaApi.COMMENT_NEW_ORDER;
-    }
-
-    @Override
-    public void onDestroy() {
-        if (mBean != null && mBean.getId() > 0) {
-            ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_BLOG,
-                    mViewScroller.getScrollY());
-        }
-        super.onDestroy();
     }
 }
