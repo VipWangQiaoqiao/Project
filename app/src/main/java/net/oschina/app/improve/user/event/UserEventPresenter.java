@@ -46,7 +46,7 @@ class UserEventPresenter implements UserEventContract.Presenter {
 
     @Override
     public void onRefreshing() {
-        OSChinaApi.getUserEvent(mAuthorId, mAuthorName, mNextPageToken, new TextHttpResponseHandler() {
+        OSChinaApi.getUserEvent(mAuthorId, mAuthorName, null, new TextHttpResponseHandler() {
             @Override
             public void onFinish() {
                 super.onFinish();

@@ -1,6 +1,8 @@
 package net.oschina.app.improve.user.event;
 
+import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 
 import net.oschina.app.R;
@@ -19,6 +21,14 @@ public class UserEventActivity extends BaseBackActivity implements UserEventCont
     EmptyLayout mEmptyLayout;
 
     private UserEventPresenter mPresenter;
+
+    public static void show(Context context, long authorId, String authorName) {
+        Intent intent = new Intent(context, UserEventActivity.class);
+        intent.putExtra("authorId", authorId);
+        if (!TextUtils.isEmpty(authorName))
+            intent.putExtra("authorName", authorName);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getContentView() {
@@ -39,7 +49,7 @@ public class UserEventActivity extends BaseBackActivity implements UserEventCont
         });
 
         UserEventFragment fragment = UserEventFragment.newInstance();
-        addFragment(R.id.layout_container, fragment);
+        addFragment(R.id.lay_container, fragment);
         Intent intent = getIntent();
         mPresenter = new UserEventPresenter(fragment,
                 this,

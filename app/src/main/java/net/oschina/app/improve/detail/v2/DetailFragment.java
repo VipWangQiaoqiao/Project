@@ -108,11 +108,15 @@ public abstract class DetailFragment extends BaseFragment implements
 
     @Override
     public void showFavError() {
+        if (mContext == null)
+            return;
         SimplexToast.show(mContext, "收藏失败");
     }
 
     @Override
     public void showNetworkError(int strId) {
+        if (mContext == null)
+            return;
         SimplexToast.show(mContext, mContext.getResources().getString(strId));
     }
 
