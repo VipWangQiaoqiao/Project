@@ -116,13 +116,4 @@ public class BlogDetailFragment extends DetailFragment {
     protected int getCommentOrder() {
         return OSChinaApi.COMMENT_NEW_ORDER;
     }
-
-    @Override
-    public void onDestroy() {
-        if (mBean != null && mBean.getId() > 0) {
-            ReadedIndexCacheManager.saveIndex(getContext(), mBean.getId(), OSChinaApi.CATALOG_BLOG,
-                    mViewScroller.getScrollY());
-        }
-        super.onDestroy();
-    }
 }

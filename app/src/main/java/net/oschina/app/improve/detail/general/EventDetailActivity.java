@@ -215,7 +215,6 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
             if (eventStatus != EventDetail.STATUS_ING && eventApplyStatus != EventDetail.APPLY_STATUS_PRESENTED) {
                 setSignUnEnable();
             }
-            Log.e("eventStatus", " -- " + eventStatus);
             switch (eventStatus) {
                 case Event.STATUS_END:
                     mTextApplyStatus.setText(getResources().getString(R.string.event_status_end));
@@ -274,7 +273,7 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
     }
 
     public int getApplyStatusStrId(int status) {
-        int strId = R.string.event_status_ing;
+        int strId = R.string.event_apply_status_un_sign;
         switch (status) {
             case EventDetail.APPLY_STATUS_UN_SIGN:
                 strId = R.string.event_apply_status_un_sign;
