@@ -200,12 +200,8 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
     }
 
     private String formatWeek(Date date) {
-        Locale defaultLocale = Locale.getDefault();
-        Locale.setDefault(Locale.CHINESE);
-        SimpleDateFormat format = new SimpleDateFormat("EEEE");
-        String week = format.format(date);
-        Locale.setDefault(defaultLocale);
-        return week;
+        SimpleDateFormat format = new SimpleDateFormat("EEEE", Locale.CHINESE);
+        return format.format(date);
     }
 
     private String formatDate(Date date) {

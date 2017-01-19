@@ -10,6 +10,7 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.CircleImageView;
 
 import java.util.HashMap;
@@ -89,7 +90,7 @@ public class EventDetailFragment extends DetailFragment {
                     getExtraString(extra.get("eventCity")) + " " +
                     getExtraString(extra.get("eventSpot")));
             mTextMember.setText(String.format("%s人参与", getExtraInt(extra.get("eventApplyCount"))));
-            mTextStartDate.setText(getExtraString(extra.get("eventStartDate")));
+            mTextStartDate.setText(StringUtils.getDateString(getExtraString(extra.get("eventStartDate"))));
             mTextCostDesc.setText(getExtraString(extra.get("eventCostDesc")));
         }
     }
