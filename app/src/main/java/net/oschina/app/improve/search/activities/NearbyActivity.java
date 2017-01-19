@@ -1,19 +1,17 @@
 package net.oschina.app.improve.search.activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,12 +43,10 @@ import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.search.adapters.NearbyUserAdapter;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
-import net.oschina.app.improve.widget.BottomDialog;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -72,30 +68,39 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class NearbyActivity extends BaseBackActivity implements RadarSearchListener, BDLocationListener,
         RecyclerRefreshLayout.SuperRefreshLayoutListener, BaseRecyclerAdapter.OnItemClickListener,
-        View.OnClickListener, EasyPermissions.PermissionCallbacks {
+        EasyPermissions.PermissionCallbacks {
 
     private static final String TAG = "NearbyActivity";
 
+    private static final int LOCATION_PERMISSION = 0x0100;//定位权限
+
     @Bind(R.id.recycler)
     RecyclerView mRecycler;
+
     @Bind(R.id.layout_recycler_refresh)
     RecyclerRefreshLayout mRecyclerRefresh;
 
     @Bind(R.id.lay_emptyLayout)
     EmptyLayout mEmptyLayout;
+    private BaseRecyclerAdapter<NearbyResult> mAdapter;
 
     private int mPageNum = 0;
     private LatLng mUserLatLng;
-    private BottomDialog mSelectorDialog;
-    private BaseRecyclerAdapter<NearbyResult> mAdapter;
-    private LocationClient mLocationClient;
-    private RadarSearchManager mManager = null;
 
-    private boolean isFirstLocation = true;
+    private LocationClient mLocationClient = null;
+    private RadarSearchManager mRadarSearchManager = null;
 
-    private static final int LOCATION_PERMISSION = 0x01;//定位权限
     private LocationManager mLocationManager;
 
+    private boolean mIsFirstLocation = true;
+    private AlertDialog.Builder confirmDialog;
+    private AlertDialog alertDialog;
+
+    /**
+     * show activity
+     *
+     * @param context context
+     */
     public static void show(Context context) {
         Intent intent = new Intent(context, NearbyActivity.class);
         context.startActivity(intent);
@@ -144,7 +149,20 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_more:
-                getSelectorDialog().show();
+                DialogHelper.getSelectDialog(this, null,
+                        getResources().getStringArray(R.array.near_friends_action_hint), getResources().getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int position) {
+                                switch (position) {
+                                    case 0:
+                                        //清除用户信息
+                                        mRadarSearchManager.clearUserInfo();
+                                        Setting.updateLocationInfo(getApplicationContext(), false);
+                                        break;
+                                }
+                            }
+                        }).create().show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -153,20 +171,25 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG, "onResume: ----------->");
-        if (isEnabledLocation()) {
+        if (!mIsFirstLocation && isEnabledLocation()) {
             startLocationClient();
         }
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        release();
-        Log.e(TAG, "onDestroy: ---->");
+        releaseLocation();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((resultCode == RESULT_OK || resultCode == RESULT_CANCELED)
+                && requestCode == LOCATION_PERMISSION) {
+            requestLocationPermission();
+        }
+    }
 
     /**
      * 附近的人的监听
@@ -191,7 +214,8 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             SimplexToast.show(this, "上传用户信息失败");
             return;
         }
-        if (isFirstLocation) {
+
+        if (mIsFirstLocation) {
             Setting.updateLocationInfo(getApplicationContext(), true);
             onRefreshing();
         }
@@ -205,7 +229,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     @Override
     public void onGetClearInfoState(RadarSearchError error) {
         if (error != RadarSearchError.RADAR_NO_ERROR) {
-            TLog.i("oschina", "On Clear Radar Search Info State: ERROR!!");
             SimplexToast.show(this, "清除失败");
             return;
         }
@@ -238,7 +261,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         requestData(mPageNum);
     }
 
-
     @Override
     public void onItemClick(int position, long itemId) {
         NearbyResult result = mAdapter.getItem(position);
@@ -247,159 +269,167 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_clear_opt:
-                //清除用户信息
-                mManager.clearUserInfo();
-                Setting.updateLocationInfo(getApplicationContext(), false);
-                if (mSelectorDialog.isShowing())
-                    mSelectorDialog.cancel();
-                break;
-            case R.id.tv_cancel_opt:
-                if (mSelectorDialog.isShowing())
-                    mSelectorDialog.cancel();
-                break;
-        }
-    }
-
-    @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         Log.e(TAG, "onPermissionsGranted:  权限申请成功---->");
+        startLocationClient();
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
+        ShowSettingDialog();
 
-        Log.e(TAG, "onPermissionsDenied: --------> 授权被拒绝");
-
-        ShowDialog();
-
-        boolean denied = EasyPermissions.checkDeniedPermissionsNeverAskAgain(this, "我要获取定位权限", R.string.btn_ok, R.string.cancel, perms);
-
-        Log.e(TAG, "onPermissionsDenied: ----------------------->" + denied);
     }
 
     private void updateView(RadarNearbyResult result, RadarSearchError error) {
         mRecyclerRefresh.onComplete();
 
-        Log.e(TAG, "onGetNearbyInfoList: ------->获取附近的人列表-------   " + (result.infoList == null ? null : result.infoList.size()) + "  totolNum=" + result.totalNum + " pageNum=" + result.pageNum + " pageIndex=" + result.pageIndex);
+        Log.e(TAG, "onGetNearbyInfoList: ------->获取附近的人列表-------   " + error);
 
         if (mPageNum == 0) {
             mAdapter.clear();
         }
 
-        List<RadarNearbyInfo> infoList = result.infoList;
+        switch (error) {
+            case RADAR_NETWORK_ERROR:
+            case RADAR_NETWORK_TIMEOUT:
+                if (mPageNum == 0) {
+                    showError(EmptyLayout.NETWORK_ERROR);
+                    mEmptyLayout.setNoDataContent("网络请求超时...");
+                } else {
+                    AppContext.showToastShort(R.string.request_error_hint);
+                }
+                break;
+            case RADAR_NO_RESULT:
+                //当第一次请求的时候，没有数据的话，直接noData
+                if (mPageNum == 0) {
+                    showError(EmptyLayout.NODATA);
+                    mEmptyLayout.setNoDataContent("没有获取到附近的人...");
+                }
+                break;
+            case RADAR_NO_ERROR:
 
-        int size;
+                List<RadarNearbyInfo> infoList = result.infoList;
 
-        if (infoList == null || error != RadarSearchError.RADAR_NO_ERROR) {
-            //当第一次请求的时候，没有数据的话，直接noData
-            if (mPageNum == 0) {
-                showError(EmptyLayout.NODATA);
-                mEmptyLayout.setNoDataContent("没有获取到附近的人");
-                AppContext.showToastShort("没有获取到附近的人...");
-            } else {
-                //当不是第一次请求数据时，但是没有数据返回不做处理。
-                AppContext.showToastShort("没有获取到更多附近的人...");
-            }
-        } else {
-            //不是第一次请求，有数据情况，所以进行数据的添加
+                int size;
 
-            List<NearbyResult> results = mAdapter.getItems();
+                if (infoList == null) {
+                    //当第一次请求的时候，没有数据的话，直接noData
+                    if (mPageNum == 0) {
+                        showError(EmptyLayout.NODATA);
+                        mEmptyLayout.setNoDataContent("没有获取到附近的人...");
+                    }
+                } else {
+                    //不是第一次请求，有数据情况，所以进行数据的添加
 
-            for (RadarNearbyInfo info : infoList) {
+                    List<NearbyResult> results = mAdapter.getItems();
 
-                User user = null;
-                try {
-                    String comments = URLDecoder.decode(info.comments, "UTF-8");
-                    TLog.i("oschina", "Nearby Info List: " + comments);
-                    user = AppOperator.createGson().fromJson(comments, User.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    for (RadarNearbyInfo info : infoList) {
+
+                        User user = null;
+                        try {
+                            String comments = URLDecoder.decode(info.comments, "UTF-8");
+                            user = AppOperator.createGson().fromJson(comments, User.class);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if (user == null || (user.getId() == 0 && TextUtils.isEmpty(user.getName())))
+                            continue;
+
+                        NearbyResult.Nearby nearby = new NearbyResult.Nearby();
+                        nearby.setDistance(info.distance);
+                        nearby.setMobileName(info.mobileName);
+                        nearby.setMobileOS(info.mobileOS);
+
+                        results.add(new NearbyResult(user, nearby));
+                    }
+
+                    //根据数据的距离从近到远进行排序
+                    Collections.sort(results);
+                    //刷新数据，初始化有效数据ui
+                    mAdapter.notifyDataSetChanged();
+                    size = infoList.size();
+                    mAdapter.setState(size < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, size >= 20);
+                    //隐藏emptyView
+                    hideLoading();
+                    break;
                 }
 
-                if (user == null || (user.getId() == 0 && TextUtils.isEmpty(user.getName())))
-                    continue;
-
-                NearbyResult.Nearby nearby = new NearbyResult.Nearby();
-                nearby.setDistance(info.distance);
-                nearby.setMobileName(info.mobileName);
-                nearby.setMobileOS(info.mobileOS);
-
-                results.add(new NearbyResult(user, nearby));
-                TLog.i("oschina", String.format("comments: %s, distance: %s, mobile name: %s, mobile OS: %s, user id: %s",
-                        info.comments, info.distance, info.mobileName, info.mobileOS, info.userID));
-            }
-
-            //根据数据的距离从近到远进行排序
-            Collections.sort(results);
-            //刷新数据，初始化有效数据ui
-            mAdapter.notifyDataSetChanged();
-            size = infoList.size();
-            mAdapter.setState(size < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, size >= 20);
-            //隐藏emptyView
-            hideLoading();
         }
-    }
-
-    private void ShowDialog() {
-        DialogHelper.getConfirmDialog(this, "温馨提示", "定位权限已被禁用，需要开启定位权限", "去开启", "取消", false, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
-            }
-        }, null).show();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.e(TAG, "onRequestPermissionsResult: -----> 授权代理");
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @AfterPermissionGranted(LOCATION_PERMISSION)
     private void requestLocationPermission() {
         if (isEnabledLocation()) {
-            if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                Log.e(TAG, "requestLocationPermission: ------》授权成功。。。。。");
+            if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)) {
                 startLocationClient();
             } else {
-                Log.e(TAG, "requestLocationPermission: -----2-->未授权，所以申请定位授权");
-                EasyPermissions.requestPermissions(this, "hello", LOCATION_PERMISSION,
-                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
+                EasyPermissions.requestPermissions(this, "需要定位权限", LOCATION_PERMISSION,
+                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE);
             }
         }
     }
 
+    /**
+     * show setting dialog
+     */
+    private void ShowSettingDialog() {
+        if (confirmDialog == null)
+            confirmDialog = DialogHelper.getConfirmDialog(this, "温馨提示", "定位权限已被禁用，需要开启定位权限", "去开启", "取消", false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+                }
+            }, null);
+
+        if (alertDialog == null)
+            alertDialog = confirmDialog.create();
+
+        if (alertDialog != null) {
+            if (!alertDialog.isShowing()) {
+                alertDialog.show();
+            }
+        }
+    }
+
+    /**
+     * 定位回调处理
+     *
+     * @param location location
+     */
     private void ReceiveLocation(BDLocation location) {
         final int code = location.getLocType();
         Log.e(TAG, "onReceiveLocation: ------>" + code);
         switch (code) {
-            case 62:
+            case BDLocation.TypeCriteriaException:
                 showError(EmptyLayout.NODATA);
                 SimplexToast.show(this, "无法定位");
-                mLocationClient.requestLocation();
+                if (mLocationClient != null)
+                    mLocationClient.requestLocation();
                 mRecyclerRefresh.setOnLoading(false);
                 return;
-            case 63:
+            case BDLocation.TypeNetWorkException:
                 showError(EmptyLayout.NETWORK_ERROR);
                 mRecyclerRefresh.setOnLoading(false);
                 SimplexToast.show(this, "网络异常");
                 return;
-            case 167:
-
+            case BDLocation.TypeServerError:
                 if (isEnabledLocation()) {
-                    ShowDialog();
+                    ShowSettingDialog();
                 }
-
+                hideLoading();
                 showError(EmptyLayout.NODATA);
-                Log.e(TAG, "onReceiveLocation: ------->未授权，所以申请定位授权");
                 mRecyclerRefresh.setOnLoading(false);
                 SimplexToast.show(this, "服务器定位失败，请检查权限");
                 return;
         }
+
         if (code >= 501) {
             showError(EmptyLayout.NODATA);
             SimplexToast.show(this, "非法或无效的APP KEY");
@@ -408,15 +438,10 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
         mUserLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-        Log.e(TAG, "onReceiveLocation: ------定位回调----->latitude=" + location.getLatitude() + "  longitude=" + location.getLongitude());
-
         if (!TDevice.hasInternet()) {
             showError(EmptyLayout.NETWORK_ERROR);
             return;
         }
-
-        TLog.i("oschina", String.format("定位成功，latitude: %s, longitude: %s, location describe: %s, user id: %s",
-                location.getLatitude(), location.getLongitude(), location.getLocationDescribe(), AccountHelper.getUserId()));
 
         //周边雷达设置用户身份标识，id为空默认是设备标识
         String userId = null;
@@ -446,23 +471,27 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                         , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company);
                 comments = comments.replaceAll("[\\s\n]+", "");
                 comments = URLEncoder.encode(comments, "UTF-8");
-                TLog.i("oschina", comments);
                 info.comments = comments;
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
-
                 SimplexToast.show(this, "上传用户信息失败");
             }
         }
 
-        mManager.setUserID(userId);
+        mRadarSearchManager.setUserID(userId);
         info.pt = mUserLatLng;
-        mManager.uploadInfoRequest(info);
+        mRadarSearchManager.uploadInfoRequest(info);
     }
 
+    /**
+     * 判断系统定位功能是否打开，如果未打开直接跳转去打开
+     *
+     * @return true/false
+     */
     private boolean isEnabledLocation() {
 
         LocationManager locationManager = this.mLocationManager;
+
         if (mLocationManager == null) {
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
             this.mLocationManager = locationManager;
@@ -470,19 +499,20 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
         if (locationManager != null) {
 
-            boolean GpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            //gps  基于gps定位
+            boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-            boolean NetEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            //network  基于wifi和基站定位
+            //boolean netEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-            if (GpsEnabled || NetEnabled) {
-                Log.e(TAG, "requestLocationPermission: -----已开启gps，可以进行定位---然后进行权限判断");
+            //passive  基于被动的精度不高，或者不怎么变化的位置服务，比如其他应用或者定位服务位置更新时的定位
+            //boolean passiveEnabled = locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER);
+
+            if (gpsEnabled) {
                 return true;
             } else {
-
-                Log.e(TAG, "requestLocationPermission: 未开启gps，准备开启gps定位功能");
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                setResult(RESULT_OK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivityForResult(intent, LOCATION_PERMISSION);
 
                 return false;
@@ -490,18 +520,22 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
         } else {
             showError(EmptyLayout.NODATA);
-            AppContext.showToastShort("当前手机gps不可用！！！");
+            AppContext.showToastShort(R.string.near_body_gps_error_hint);
             finish();
-            Log.e(TAG, "requestLocationPermission:----------> 获取gps功能失败");
             return false;
         }
     }
 
+    /**
+     * 进行定位
+     */
     private void startLocationClient() {
-        if (mManager == null) {
-            mManager = RadarSearchManager.getInstance();
-            mManager.addNearbyInfoListener(this);
+
+        if (mRadarSearchManager == null) {
+            mRadarSearchManager = RadarSearchManager.getInstance();
+            mRadarSearchManager.addNearbyInfoListener(this);
         }
+
         if (mLocationClient == null) {
             mLocationClient = new LocationClient(this);
             mLocationClient.registerLocationListener(this);
@@ -530,8 +564,8 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         //可选，默认false，设置是否收集CRASH信息，默认收集
         option.SetIgnoreCacheException(false);
 
-        //进行定位
         mLocationClient.setLocOption(option);
+        //进行定位
         mLocationClient.start();
     }
 
@@ -539,27 +573,36 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
         if (TDevice.hasInternet()) {
             if (mUserLatLng == null) {
-                mLocationClient.requestLocation();
-                Log.e(TAG, "requestData: ---------->经纬度为null");
+                if (mLocationClient != null)
+                    mLocationClient.requestLocation();
             } else {
                 if (mUserLatLng.latitude == 4.9E-324 && mUserLatLng.longitude == 4.9E-324) {
-                    mLocationClient.requestLocation();
-                    Log.e(TAG, "requestData: ------>经纬度有问题，需要重新定位");
+                    if (mLocationClient != null)
+                        mLocationClient.requestLocation();
                 }
             }
             //构造请求参数，其中centerPt是自己的位置坐标
             RadarNearbySearchOption option = new RadarNearbySearchOption()
                     .centerPt(mUserLatLng).pageNum(pageNum).radius(35000).pageCapacity(20);
             //发起查询请求
-            mManager.nearbyInfoRequest(option);
-            isFirstLocation = false;
-            Log.e(TAG, "requestData: ---------->开始发起附近人查询请求");
-            if (mUserLatLng != null)
-                Log.e(TAG, "requestData: ------->latitude=" + mUserLatLng.latitude + "   longitude=" + mUserLatLng.longitude);
+            mRadarSearchManager.nearbyInfoRequest(option);
+            mIsFirstLocation = false;
         } else {
             showError(EmptyLayout.NETWORK_ERROR);
         }
 
+    }
+
+    private void releaseLocation() {
+        if (mLocationClient != null && mLocationClient.isStarted())
+            mLocationClient.stop();
+        //移除监听
+        if (mRadarSearchManager != null) {
+            mRadarSearchManager.removeNearbyInfoListener(this);
+            //释放资源
+            mRadarSearchManager.destroy();
+            mRadarSearchManager = null;
+        }
     }
 
     /**
@@ -601,27 +644,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         if (layout != null) {
             layout.setErrorType(type);
         }
-    }
-
-    private Dialog getSelectorDialog() {
-        if (mSelectorDialog == null) {
-            mSelectorDialog = new BottomDialog(this, true);
-            @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null, false);
-            view.findViewById(R.id.tv_clear_opt).setOnClickListener(this);
-            view.findViewById(R.id.tv_cancel_opt).setOnClickListener(this);
-            mSelectorDialog.setContentView(view);
-        }
-        return mSelectorDialog;
-    }
-
-    private void release() {
-        if (mLocationClient.isStarted())
-            mLocationClient.stop();
-        //移除监听
-        mManager.removeNearbyInfoListener(this);
-        //释放资源
-        mManager.destroy();
-        mManager = null;
     }
 
 }

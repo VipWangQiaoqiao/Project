@@ -463,7 +463,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".improve.search.activities.NearbyActivity"
-            android:label="附近的人"
+            android:label="@string/near_bodies_hint"
             android:screenOrientation="portrait" />
 
         <activity
