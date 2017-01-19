@@ -125,8 +125,12 @@ public class TweetTopicActivity extends BaseBackActivity {
     protected void initData() {
         super.initData();
 
-        mHotList.add(new TopicBean("开源中国"));
-        mHotList.add(new TopicBean("开源中国客户端"));
+        String[] topics = getResources().getStringArray(R.array.topic_list);
+        for (String topic : topics) {
+            if (TextUtils.isEmpty(topic))
+                continue;
+            mHotList.add(new TopicBean(topic));
+        }
 
         loadCache();
 

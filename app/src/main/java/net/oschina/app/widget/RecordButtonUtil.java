@@ -139,7 +139,7 @@ public class RecordButtonUtil {
                     e.printStackTrace();
                 }
             } else {
-                AppContext.showToastShort(R.string.record_sound_notfound);
+                AppContext.showToastShort(R.string.record_sound_not_found);
             }
         } else {
             stopPlay();

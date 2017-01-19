@@ -74,7 +74,7 @@
                 android:paddingLeft="@dimen/lay_16"
                 android:paddingRight="@dimen/lay_16"
                 android:paddingTop="@dimen/lay_12"
-                android:text="@string/gitapp"
+                android:text="@string/git_app"
                 android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
@@ -96,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
-            android:text="@string/oscsite"
+            android:text="@string/osc_site"
             android:textColor="?android:textColorLink" />
 
 
@@ -104,7 +104,7 @@
             android:id="@+id/tv_knowmore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/knowmore"
+            android:text="@string/know_more"
             android:textColor="?android:textColorLink" />
     </LinearLayout>
 

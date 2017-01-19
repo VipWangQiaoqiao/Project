@@ -412,7 +412,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
             @Override
             public void onFailure(int arg0, Header[] arg1, String arg2,
                                   Throwable arg3) {
-                AppContext.showToastShort(R.string.tip_report_faile);
+                AppContext.showToastShort(R.string.tip_report_failed);
             }
 
             @Override

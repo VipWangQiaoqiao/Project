@@ -162,7 +162,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements
         switch (item.iconId) {
             //新浪微博
             case R.mipmap.ic_login_3party_weibo:
-                showWaitDialog(R.string.login_webo_hint);
+                showWaitDialog(R.string.login_weibo_hint);
                 OpenBuilder.with(mActivity)
                         .useWeibo(OpenConstant.WB_APP_KEY)
                         .share(share, this);

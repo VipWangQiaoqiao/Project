@@ -303,7 +303,7 @@ public class TeamTweetDetailFragment extends
 
         @Override
         public void onFailure(int code, String errorMessage, Object[] args) {
-            AppContext.showToastShort(R.string.delete_faile);
+            AppContext.showToastShort(R.string.delete_failed);
         }
     }
 

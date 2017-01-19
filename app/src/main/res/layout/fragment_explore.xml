@@ -28,7 +28,7 @@
             style="@style/option_item_text"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="@string/actionbar_title_softwarelist" />
+            android:text="@string/actionbar_title_software_list" />
 
         <ImageView
             android:layout_width="wrap_content"

@@ -32,7 +32,7 @@ public enum SimpleBackPage {
 
     USER_BLOG(6, R.string.actionbar_title_user_blog, UserBlogFragment.class),
 
-    OPEN_SOURCE_SOFTWARE(10, R.string.actionbar_title_softwarelist,
+    OPEN_SOURCE_SOFTWARE(10, R.string.actionbar_title_software_list,
             OpenSoftwareFragment.class),
 
     QUESTION_TAG(12, R.string.actionbar_title_question,
@@ -49,7 +49,7 @@ public enum SimpleBackPage {
 
     NOTE(24, R.string.actionbar_title_note, NoteBookFragment.class),
 
-    NOTE_EDIT(25, R.string.actionbar_title_noteedit, NoteEditFragment.class),
+    NOTE_EDIT(25, R.string.actionbar_title_note_edit, NoteEditFragment.class),
 
     BROWSER(26, R.string.app_name, BrowserFragment.class),
 
@@ -58,7 +58,7 @@ public enum SimpleBackPage {
     MY_INFORMATION_DETAIL(28, R.string.actionbar_title_my_information,
             MyInformationFragmentDetail.class),
 
-    TEAM_USER_INFO(30, R.string.str_team_userinfo,
+    TEAM_USER_INFO(30, R.string.str_team_user_info,
             TeamMemberInformationFragment.class),
 
     MY_ISSUE_PAGER(31, R.string.str_team_my_issue, MyIssuePagerfragment.class),
