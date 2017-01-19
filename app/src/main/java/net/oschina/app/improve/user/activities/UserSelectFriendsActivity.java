@@ -73,6 +73,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Bind(R.id.tv_label)
     TextView mTvLabel;
 
+    @Bind(R.id.tv_no_friends)
+    TextView mTvNoFriends;
+
     @Bind(R.id.recycler_friends)
     RecyclerView mRecyclerFriends;
     @Bind(R.id.tv_index_show)
@@ -202,7 +205,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         });
 
-
     }
 
     @Override
@@ -221,7 +223,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_tweet_topic, menu);
-
         return true;
     }
 
@@ -234,190 +235,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * request data
-     */
-    private void requestData() {
-
-        final ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
-        if (friends != null && friends.size() > 0) {
-            updateView(friends);
-        } else {
-            //检查网络
-            if (!checkNetIsAvailable()) {
-                showError(EmptyLayout.NETWORK_ERROR);
-            } else {
-                SyncFriendHelper.load(new Runnable() {
-                    @Override
-                    public void run() {
-                        mEmptyLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
-                                updateView(friends);
-                            }
-                        });
-
-                    }
-                });
-            }
-        }
-    }
-
-    /**
-     * refresh the friends ui
-     *
-     * @param friends friends
-     */
-    private void updateView(ArrayList<UserFriend> friends) {
-
-        if (friends != null && friends.size() > 0) {
-            mLocalAdapter.clear();
-            mLocalAdapter.addItems(friends);
-            hideLoading();
-        } else {
-            showError(EmptyLayout.NODATA);
-        }
-
-        this.mCacheFriends = friends;
-    }
-
-    /**
-     * refresh the select friends ui
-     *
-     * @param userFriend friend
-     */
-    private void updateSelectIcon(UserFriend userFriend) {
-
-        LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
-
-        int index = containsUserFriend(userFriend);
-
-        if (index != -1) {
-            cacheIcons.remove(index);
-        } else {
-            cacheIcons.add(userFriend);
-        }
-
-        mSelectContainer.removeAllViews();
-
-        for (UserFriend friend : cacheIcons) {
-
-            ImageView ivIcon = (ImageView) LayoutInflater.from(this)
-                    .inflate(R.layout.activity_main_select_friend_label_container_item, mSelectContainer, false);
-
-            ivIcon.setTag(R.id.iv_show_icon, friend);
-            ivIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    UserFriend friend = (UserFriend) v.getTag(R.id.iv_show_icon);
-
-                    int selectPosition = friend.getSelectPosition();
-
-                    RecyclerView.Adapter recyclerFriendsAdapter = mRecyclerFriends.getAdapter();
-
-                    if (recyclerFriendsAdapter instanceof UserSelectFriendsAdapter) {
-                        ((UserSelectFriendsAdapter) recyclerFriendsAdapter).updateSelectStatus(selectPosition, false);
-                    } else {
-                        ((UserSearchFriendsAdapter) recyclerFriendsAdapter).updateSelectStatus(selectPosition, false);
-                    }
-
-                    mRecyclerFriends.smoothScrollToPosition(selectPosition);
-
-                    //更新icons
-                    updateSelectIcon(friend);
-                }
-            });
-            mSelectContainer.addView(ivIcon);
-            Glide.with(this).load(friend.getPortrait())
-                    .error(R.mipmap.widget_default_face)
-                    .into(ivIcon);
-        }
-
-    }
-
-    /**
-     * refresh the query ui
-     *
-     * @param queryText query text
-     */
-    private void queryUpdateView(String queryText) {
-
-        String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
-
-        //初始化缓存本地搜索好友列表
-        ArrayList<UserFriend> searchFriends = new ArrayList<>();
-
-        UserFriend LocalUserFriend = new UserFriend();
-
-        LocalUserFriend.setName(getString(R.string.local_search_label));
-        LocalUserFriend.setShowLabel(getString(R.string.local_search_label));
-        LocalUserFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
-        searchFriends.add(LocalUserFriend);
-
-        UserFriend NetUserFriend = new UserFriend();
-
-        NetUserFriend.setName(getString(R.string.net_search_label));
-        NetUserFriend.setShowLabel(getString(R.string.search_net_label));
-        NetUserFriend.setShowViewType(UserSelectFriendsAdapter.SEARCH_TYPE);
-        searchFriends.add(NetUserFriend);
-
-
-        //缓存的本地好友列表
-        ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
-
-        for (UserFriend friend : cacheFriends) {
-            String name = friend.getName();
-            if (TextUtils.isEmpty(name)) continue;
-
-            //搜索列表当中没有该条数据，进行添加
-            if (AssimilateUtils.returnPinyin(name, false).contains(pinyinQueryText)) {
-
-                friend.setShowLabel(name);
-                friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
-                searchFriends.add(1, friend);
-            }
-
-        }
-        mSearchAdapter.clear();
-        mSearchAdapter.addItems(searchFriends);
-        mSearchAdapter.setSelectIcons(mCacheIconFriends);
-    }
-
-    /**
-     * send select data to  publish tweet
-     */
-    private void sendSelectData(boolean isLabel) {
-        String queryLabel = (String) mTvLabel.getText();
-        List<String> friendNames = new ArrayList<>();
-        if (isLabel) {
-            if (!TextUtils.isEmpty(queryLabel)) {
-                queryLabel = queryLabel.substring(1);
-                friendNames.add(queryLabel);
-            }
-        }
-
-        for (UserFriend friend : mCacheIconFriends) {
-            friendNames.add(friend.getName());
-        }
-
-        String[] names = CollectionUtil.toArray(friendNames, String.class);
-
-        synchronized (UserSelectFriendsActivity.class) {
-            if (textParentLinkedHolder != null) {
-                RichEditText editText = textParentLinkedHolder.item;
-                if (editText != null)
-                    editText.appendMention(names);
-            }
-        }
-
-        Intent result = new Intent();
-        result.putExtra("data", names);
-        setResult(RESULT_OK, result);
-
-        finish();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -426,26 +243,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                 textParentLinkedHolder = textParentLinkedHolder.putParent();
             }
         }
-    }
-
-    /**
-     * contains userFriend
-     *
-     * @param userFriend userFriend
-     * @return index
-     */
-    private int containsUserFriend(UserFriend userFriend) {
-
-        int index = -1;
-
-        LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
-        for (int i = 0; i < cacheIcons.size(); i++) {
-            UserFriend friend = cacheIcons.get(i);
-            if (friend.getId() == userFriend.getId()) {
-                index = i;
-            }
-        }
-        return index;
     }
 
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")
@@ -492,7 +289,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         if (TextUtils.isEmpty(newText)) {
             mTvLabel.setText(null);
             mTvLabel.setVisibility(View.GONE);
-            mIndex.setVisibility(View.VISIBLE);
+            if (mCacheFriends == null || mCacheFriends.size() <= 0) {
+                mIndex.setVisibility(View.GONE);
+            } else {
+                mIndex.setVisibility(View.VISIBLE);
+            }
+
+            mTvNoFriends.setVisibility(View.VISIBLE);
 
             mRecyclerFriends.setAdapter(mLocalAdapter);
 
@@ -500,6 +303,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             mSearchAdapter.setSearchContent(newText);
             return false;
         } else {
+            mTvNoFriends.setVisibility(View.GONE);
 
             if (mIndex.getVisibility() == View.VISIBLE) {
                 mIndex.setVisibility(View.GONE);
@@ -529,7 +333,216 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         });
         return true;
+    }
 
+    /**
+     * request data
+     */
+    private void requestData() {
+
+        final ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
+        if (friends != null && friends.size() > 0) {
+            updateView(friends);
+        } else {
+            //检查网络
+            if (!checkNetIsAvailable()) {
+                showError(EmptyLayout.NETWORK_ERROR);
+            } else {
+                SyncFriendHelper.load(new Runnable() {
+                    @Override
+                    public void run() {
+                        mEmptyLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
+                                updateView(friends);
+                            }
+                        });
+
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * refresh the friends ui
+     *
+     * @param friends friends
+     */
+    private void updateView(ArrayList<UserFriend> friends) {
+
+        if (friends != null && friends.size() > 0) {
+            mLocalAdapter.clear();
+            mLocalAdapter.addItems(friends);
+            mTvNoFriends.setVisibility(View.GONE);
+        } else {
+            showError(EmptyLayout.NODATA);
+            mIndex.setVisibility(View.GONE);
+            mTvNoFriends.setVisibility(View.VISIBLE);
+        }
+
+        hideLoading();
+
+        this.mCacheFriends = friends;
+    }
+
+    /**
+     * refresh the select friends ui
+     *
+     * @param userFriend friend
+     */
+    private void updateSelectIcon(UserFriend userFriend) {
+
+        LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
+
+        int index = containsUserFriend(userFriend);
+
+        if (index != -1) {
+            cacheIcons.remove(index);
+        } else {
+            cacheIcons.add(userFriend);
+        }
+
+        mSelectContainer.removeAllViews();
+
+        for (UserFriend friend : cacheIcons) {
+
+            ImageView ivIcon = (ImageView) LayoutInflater.from(this)
+                    .inflate(R.layout.activity_main_select_friend_label_container_item, mSelectContainer, false);
+
+            ivIcon.setTag(R.id.iv_show_icon, friend);
+            ivIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UserFriend friend = (UserFriend) v.getTag(R.id.iv_show_icon);
+
+                    int selectPosition = friend.getSelectPosition();
+
+                    RecyclerView.Adapter recyclerFriendsAdapter = mRecyclerFriends.getAdapter();
+
+                    if (recyclerFriendsAdapter instanceof UserSelectFriendsAdapter) {
+                        if (recyclerFriendsAdapter.getItemCount() > 0)
+                            ((UserSelectFriendsAdapter) recyclerFriendsAdapter).updateSelectStatus(selectPosition, false);
+                    } else {
+                        if (recyclerFriendsAdapter.getItemCount() > 0)
+                            ((UserSearchFriendsAdapter) recyclerFriendsAdapter).updateSelectStatus(selectPosition, false);
+                    }
+
+                    mRecyclerFriends.smoothScrollToPosition(selectPosition);
+
+                    //更新icons
+                    updateSelectIcon(friend);
+                }
+            });
+            mSelectContainer.addView(ivIcon);
+            Glide.with(this).load(friend.getPortrait()).error(R.mipmap.widget_default_face).into(ivIcon);
+        }
+
+    }
+
+    /**
+     * refresh the query ui
+     *
+     * @param queryText query text
+     */
+    private void queryUpdateView(String queryText) {
+
+        String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
+
+        //初始化缓存本地搜索好友列表
+        ArrayList<UserFriend> searchFriends = new ArrayList<>();
+
+        UserFriend LocalUserFriend = new UserFriend();
+
+        LocalUserFriend.setName(getString(R.string.local_search_label));
+        LocalUserFriend.setShowLabel(getString(R.string.local_search_label));
+        LocalUserFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
+        searchFriends.add(LocalUserFriend);
+
+        UserFriend NetUserFriend = new UserFriend();
+
+        NetUserFriend.setName(getString(R.string.net_search_label));
+        NetUserFriend.setShowLabel(getString(R.string.search_net_label));
+        NetUserFriend.setShowViewType(UserSelectFriendsAdapter.SEARCH_TYPE);
+        searchFriends.add(NetUserFriend);
+
+
+        //缓存的本地好友列表
+        ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
+        if (cacheFriends != null) {
+            for (UserFriend friend : cacheFriends) {
+                String name = friend.getName();
+                if (TextUtils.isEmpty(name)) continue;
+
+                //搜索列表当中没有该条数据，进行添加
+                if (AssimilateUtils.returnPinyin(name, false).contains(pinyinQueryText)) {
+
+                    friend.setShowLabel(name);
+                    friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
+                    searchFriends.add(1, friend);
+                }
+
+            }
+        }
+
+        mSearchAdapter.clear();
+        mSearchAdapter.addItems(searchFriends);
+        mSearchAdapter.setSelectIcons(mCacheIconFriends);
+    }
+
+    /**
+     * send select data to  publish tweet
+     */
+    private void sendSelectData(boolean isLabel) {
+        String queryLabel = (String) mTvLabel.getText();
+        List<String> friendNames = new ArrayList<>();
+        if (isLabel) {
+            if (!TextUtils.isEmpty(queryLabel)) {
+                queryLabel = queryLabel.substring(1);
+                friendNames.add(queryLabel);
+            }
+        }
+
+        for (UserFriend friend : mCacheIconFriends) {
+            friendNames.add(friend.getName());
+        }
+
+        String[] names = CollectionUtil.toArray(friendNames, String.class);
+
+        synchronized (UserSelectFriendsActivity.class) {
+            if (textParentLinkedHolder != null) {
+                RichEditText editText = textParentLinkedHolder.item;
+                if (editText != null)
+                    editText.appendMention(names);
+            }
+        }
+
+        Intent result = new Intent();
+        result.putExtra("data", names);
+        setResult(RESULT_OK, result);
+
+        finish();
+    }
+
+    /**
+     * contains userFriend
+     *
+     * @param userFriend userFriend
+     * @return index
+     */
+    private int containsUserFriend(UserFriend userFriend) {
+
+        int index = -1;
+
+        LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
+        for (int i = 0; i < cacheIcons.size(); i++) {
+            UserFriend friend = cacheIcons.get(i);
+            if (friend.getId() == userFriend.getId()) {
+                index = i;
+            }
+        }
+        return index;
     }
 
     /**
