@@ -85,7 +85,7 @@ class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements Ba
                     setTextColor(vh.tv_event_title, TDevice.getColor(resources, R.color.light_gray));
                     break;
             }
-            int typeStr = R.string.oscsite;
+            int typeStr = R.string.osc_site;
             switch (getExtraInt(extras.get("eventType"))) {
                 case Event.EVENT_TYPE_OSC:
                     typeStr = R.string.event_type_osc;

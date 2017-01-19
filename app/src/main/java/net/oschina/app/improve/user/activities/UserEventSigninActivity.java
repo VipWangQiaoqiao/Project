@@ -367,7 +367,7 @@ public class UserEventSigninActivity extends BaseBackActivity {
         if (eventDetail.getAuthor() != null)
             mTvAuthor.setText(String.format("%s %s", getString(R.string.signin_event_author), eventDetail.getAuthor()));
 
-        int typeStr = R.string.oscsite;
+        int typeStr = R.string.osc_site;
 
         switch (eventDetail.getType()) {
             case Event.EVENT_TYPE_OSC:
