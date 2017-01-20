@@ -31,7 +31,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
@@ -45,7 +44,7 @@ public class KJEmojiFragment extends Fragment implements
 
     private View mEmojiTitle;
     private View mEmojiContent;
-    private RadioGroup mEmojiBottom;
+    private ViewGroup mEmojiBottom;
     private View[] mEmojiTabs;
 
     private EditText mEt;
@@ -107,7 +106,7 @@ public class KJEmojiFragment extends Fragment implements
             }
         });
         // bottom
-        mEmojiBottom = (RadioGroup) rootView.findViewById(R.id.emoji_bottom);
+        mEmojiBottom = (ViewGroup) rootView.findViewById(R.id.emoji_bottom);
         EMOJI_TAB_CONTENT = mEmojiBottom.getChildCount() - 1; // 减一是因为有一个删除按钮
         mEmojiTabs = new View[EMOJI_TAB_CONTENT];
         if (EMOJI_TAB_CONTENT <= 1) { // 只有一个分类的时候就不显示了
@@ -117,7 +116,7 @@ public class KJEmojiFragment extends Fragment implements
             mEmojiTabs[i] = mEmojiBottom.getChildAt(i);
             mEmojiTabs[i].setOnClickListener(getBottomBarClickListener(i));
         }
-        mEmojiBottom.findViewById(R.id.emoji_bottom_del).setOnClickListener(
+        mEmojiBottom.findViewById(R.id.btn_del).setOnClickListener(
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
