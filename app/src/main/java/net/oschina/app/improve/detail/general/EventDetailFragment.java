@@ -89,7 +89,7 @@ public class EventDetailFragment extends DetailFragment {
             mTextLocation.setText(getExtraString(extra.get("eventProvince")) + " " +
                     getExtraString(extra.get("eventCity")) + " " +
                     getExtraString(extra.get("eventSpot")));
-            mTextMember.setText(String.format("%s人参与", getExtraInt(extra.get("eventApplyCount"))));
+            mTextMember.setText(String.format("%s人报名", getExtraInt(extra.get("eventApplyCount"))));
             mTextStartDate.setText(StringUtils.getDateString(getExtraString(extra.get("eventStartDate"))));
             mTextCostDesc.setText(getExtraString(extra.get("eventCostDesc")));
         }

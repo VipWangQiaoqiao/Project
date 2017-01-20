@@ -93,11 +93,15 @@ public class ApplyActivity extends BackActivity implements
         switch (v.getId()) {
             case R.id.ll_search:
                 mLinearSearch.setVisibility(View.GONE);
+                mSearchView.setVisibility(View.VISIBLE);
                 mSearchView.setFocusable(true);
+                mSearchView.setFocusableInTouchMode(true);
+                mSearchView.requestFocus();
                 TDevice.openKeyboard(mSearchView);
                 break;
             case R.id.tv_cancel:
                 mLinearSearch.setVisibility(View.VISIBLE);
+                mSearchView.setVisibility(View.GONE);
                 mViewSearchEditor.setText("");
                 mPresenter.setFilter("");
                 mSearchView.clearFocus();
