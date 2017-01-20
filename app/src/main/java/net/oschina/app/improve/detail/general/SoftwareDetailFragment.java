@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.comment.CommentsActivity;
@@ -70,6 +72,10 @@ public class SoftwareDetailFragment extends DetailFragment {
                 CommentsActivity.show(mContext, mBean.getId(), mBean.getType(), OSChinaApi.COMMENT_NEW_ORDER);
                 break;
             case R.id.ll_fav:
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(mContext);
+                    return;
+                }
                 mPresenter.favReverse();
                 break;
             case R.id.ll_share:
