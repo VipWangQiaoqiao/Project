@@ -94,6 +94,7 @@ public class SoftwareDetailFragment extends DetailFragment {
         super.showGetDetailSuccess(bean);
         if (mContext == null)
             return;
+        mImageFav.setImageResource(bean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
         mTextName.setText(bean.getTitle());
         mImageRecommend.setVisibility(bean.isRecommend() ? View.VISIBLE : View.INVISIBLE);
         List<SubBean.Image> images = bean.getImages();
