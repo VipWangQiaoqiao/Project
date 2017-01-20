@@ -63,11 +63,12 @@ public class DetailAboutView extends LinearLayout {
         this.mDefaultType = defaultType;
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         if (abouts != null && abouts.size() > 0) {
-            boolean clearLine = true;
+            int size = abouts.size();
             for (final About about : abouts) {
                 if (about == null)
                     continue;
-                @SuppressLint("InflateParams") View lay = inflater.inflate(R.layout.lay_blog_detail_about, null, false);
+                @SuppressLint("InflateParams")
+                View lay = inflater.inflate(R.layout.lay_blog_detail_about, null, false);
                 ((TextView) lay.findViewById(R.id.tv_title)).setText(about.getTitle());
 
                 View layInfo = lay.findViewById(R.id.lay_info_view_comment);
@@ -75,8 +76,7 @@ public class DetailAboutView extends LinearLayout {
                 ((TextView) layInfo.findViewById(R.id.tv_info_view)).setVisibility(GONE);//setText(String.valueOf(about.getViewCount()));
                 ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.getCommentCount()));
 
-                if (clearLine) {
-                    clearLine = false;
+                if (--size == 0) {
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
                 }
 
@@ -91,7 +91,7 @@ public class DetailAboutView extends LinearLayout {
                     }
                 });
 
-                mLayAbouts.addView(lay, 0);
+                mLayAbouts.addView(lay);
             }
         } else {
             setVisibility(View.GONE);
