@@ -12,6 +12,7 @@ import net.oschina.app.emoji.DisplayRules;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.media.Util;
 
 /**
  * Created by haibin
@@ -48,9 +49,10 @@ public class EmojiRecyclerView extends RecyclerView {
         this.listener = listener;
     }
 
+    @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         ViewParent parent = this;
-        while (!((parent = parent.getParent()) instanceof ViewPager));
+        while (!((parent = parent.getParent()) instanceof ViewPager)) ;
         parent.requestDisallowInterceptTouchEvent(true);
         return super.dispatchTouchEvent(ev);
     }
