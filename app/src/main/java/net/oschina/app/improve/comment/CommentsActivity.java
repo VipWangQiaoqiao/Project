@@ -175,7 +175,7 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         mDelegation.getBottomSheet().getEditText().setHint(mSourceId);
         mDelegation.hideFav();
         mDelegation.hideShare();
-        
+
         if (mType == OSChinaApi.COMMENT_SOFT) {
             mDelegation.getBottomSheet().hideSyncAction();
         }
