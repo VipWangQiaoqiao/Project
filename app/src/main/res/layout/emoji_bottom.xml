@@ -8,8 +8,9 @@
 
     <TextView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/ic_material"
         android:gravity="center"
         android:padding="@dimen/lay_8"
         android:text="QQ表情"
@@ -18,8 +19,9 @@
 
     <TextView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/ic_material"
         android:gravity="center"
         android:padding="@dimen/lay_8"
         android:text="Emoji表情"
@@ -33,6 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/ic_material"
         android:gravity="center"
         android:padding="@dimen/lay_4"
         android:scaleType="centerInside"
