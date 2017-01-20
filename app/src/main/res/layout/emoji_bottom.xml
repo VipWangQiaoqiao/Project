@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/emoji_bottom"
     android:layout_width="match_parent"
     android:layout_height="@dimen/lay_36"
@@ -7,9 +7,11 @@
     android:orientation="horizontal">
 
     <TextView
+        android:id="@+id/tv_qq"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/ic_material"
         android:gravity="center"
         android:padding="@dimen/lay_8"
         android:text="QQ表情"
@@ -17,25 +19,26 @@
         android:textSize="@dimen/font_14" />
 
     <TextView
+        android:id="@+id/tv_emoji"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/ic_material"
         android:gravity="center"
         android:padding="@dimen/lay_8"
         android:text="Emoji表情"
         android:textColor="?attr/infoTextColor"
         android:textSize="@dimen/font_14" />
 
-    <!-- 必须放在最下面 -->
-
     <ImageView
-        android:id="@+id/emoji_bottom_del"
+        android:id="@+id/btn_del"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/ic_material"
         android:gravity="center"
         android:padding="@dimen/lay_4"
         android:scaleType="centerInside"
         android:src="@mipmap/btn_del" />
 
-</RadioGroup>
+</LinearLayout>

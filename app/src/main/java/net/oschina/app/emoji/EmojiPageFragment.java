@@ -16,7 +16,6 @@
 package net.oschina.app.emoji;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -87,7 +86,7 @@ public class EmojiPageFragment extends Fragment {
                             .getItem(position));
             }
         });
-        sGrid.setSelector(new ColorDrawable(android.R.color.transparent));
+        sGrid.setSelector(R.drawable.ic_material);
         return sGrid;
     }
 

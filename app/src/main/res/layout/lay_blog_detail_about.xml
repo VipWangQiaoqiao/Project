@@ -28,7 +28,6 @@
         android:maxLines="1"
         android:paddingRight="16dp"
         android:singleLine="true"
-        android:text="使用webpack前端重构感受"
         android:textColor="#111111"
         android:textSize="14sp"
         tools:ignore="RtlHardcoded,RtlSymmetry"
