@@ -92,7 +92,6 @@ public abstract class BaseRecyclerFragment<Presenter extends BaseListPresenter, 
     @Override
     public void showMoreMore() {
         mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
-        mRefreshLayout.setCanLoadMore(false);
     }
 
     @Override
