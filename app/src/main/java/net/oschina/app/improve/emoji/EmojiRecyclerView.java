@@ -18,12 +18,12 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
  * on 2017/1/20.
  */
 
-public class EmojiRecyclerView extends RecyclerView {
+ class EmojiRecyclerView extends RecyclerView {
     private EmojiAdapter mAdapter;
     private OnEmojiClickListener listener;
     private EditText mEditText;
 
-    public EmojiRecyclerView(Context context, EditText editText) {
+     EmojiRecyclerView(Context context, EditText editText) {
         super(context);
         setLayoutManager(new GridLayoutManager(context, 7));
         mAdapter = new EmojiAdapter(context);

@@ -15,8 +15,8 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
  * on 2017/1/20.
  */
 
-public class EmojiAdapter extends BaseRecyclerAdapter<Emojicon> {
-    public EmojiAdapter(Context context) {
+class EmojiAdapter extends BaseRecyclerAdapter<Emojicon> {
+    EmojiAdapter(Context context) {
         super(context, NEITHER);
     }
 
