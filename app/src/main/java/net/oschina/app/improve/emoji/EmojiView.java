@@ -3,12 +3,10 @@ package net.oschina.app.improve.emoji;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,7 +22,7 @@ public class EmojiView extends LinearLayout {
     private ViewPager mEmpjiPager;
     private TextView mQQText;
     private TextView mEmojiText;
-    private ImageButton mDel;
+    private View mDel;
     private EditText mEditText;
     private OnEmojiClickListener listener;
 
@@ -43,7 +41,7 @@ public class EmojiView extends LinearLayout {
         mEmpjiPager = (ViewPager) findViewById(R.id.vp_emoji);
         mQQText = (TextView) findViewById(R.id.tv_qq);
         mEmojiText = (TextView) findViewById(R.id.tv_emoji);
-        mDel = (ImageButton) findViewById(R.id.ib_del);
+        mDel = findViewById(R.id.btn_del);
 
         mQQText.setOnClickListener(new OnClickListener() {
             @Override
@@ -78,20 +76,18 @@ public class EmojiView extends LinearLayout {
             }
 
             @Override
-            public Object instantiateItem(ViewGroup container, int position) {
-                NestedScrollView scrollView = new NestedScrollView(getContext());
-                EmojiGridView view = new EmojiGridView(getContext(), mEditText);
+            public Object instantiateItem(ViewGroup container, final int position) {
+                final EmojiRecyclerView view = new EmojiRecyclerView(getContext(), mEditText);
                 view.setListener(listener);
-                scrollView.addView(view);
-                container.addView(scrollView);
                 view.initData(position);
-                return scrollView;
+                container.addView(view);
+                return view;
             }
 
             @Override
             public void destroyItem(ViewGroup container, int position, Object object) {
-                if (object instanceof EmojiGridView) {
-                    container.removeView((EmojiGridView) object);
+                if (object instanceof EmojiRecyclerView) {
+                    container.removeView((EmojiRecyclerView) object);
                 }
             }
         });

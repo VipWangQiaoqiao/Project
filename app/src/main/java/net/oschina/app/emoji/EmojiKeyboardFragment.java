@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
@@ -47,7 +46,7 @@ public class EmojiKeyboardFragment extends Fragment implements
 
     private void initWidget(View rootView) {
         // bottom
-        RadioGroup mEmojiBottom = (RadioGroup) rootView.findViewById(R.id.emoji_bottom);
+        ViewGroup mEmojiBottom = (ViewGroup) rootView.findViewById(R.id.emoji_bottom);
         EMOJI_TAB_CONTENT = mEmojiBottom.getChildCount() - 1; // 减一是因为有一个删除按钮
         View[] mEmojiTabs = new View[EMOJI_TAB_CONTENT];
         if (EMOJI_TAB_CONTENT <= 1) { // 只有一个分类的时候就不显示了
@@ -57,7 +56,7 @@ public class EmojiKeyboardFragment extends Fragment implements
             mEmojiTabs[i] = mEmojiBottom.getChildAt(i);
             mEmojiTabs[i].setOnClickListener(getBottomBarClickListener(i));
         }
-        mEmojiBottom.findViewById(R.id.emoji_bottom_del).setOnClickListener(
+        mEmojiBottom.findViewById(R.id.btn_del).setOnClickListener(
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {

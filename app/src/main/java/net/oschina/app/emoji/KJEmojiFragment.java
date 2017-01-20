@@ -31,7 +31,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
@@ -42,17 +41,14 @@ import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 public class KJEmojiFragment extends Fragment implements
         SoftKeyboardStateListener {
     private LinearLayout mRootView;
-
     private View mEmojiTitle;
-    private View mEmojiContent;
-    private RadioGroup mEmojiBottom;
+    private ViewGroup mEmojiBottom;
+    private ViewPager mEmojiContent;
     private View[] mEmojiTabs;
 
     private EditText mEt;
     private CheckBox mCBox;
-    private ViewPager mEmojiPager;
 
-    private EmojiPagerAdapter adapter;
     private OnSendClickListener listener;
     public static int EMOJI_TAB_CONTENT;
 
@@ -107,7 +103,7 @@ public class KJEmojiFragment extends Fragment implements
             }
         });
         // bottom
-        mEmojiBottom = (RadioGroup) rootView.findViewById(R.id.emoji_bottom);
+        mEmojiBottom = (ViewGroup) rootView.findViewById(R.id.emoji_bottom);
         EMOJI_TAB_CONTENT = mEmojiBottom.getChildCount() - 1; // 减一是因为有一个删除按钮
         mEmojiTabs = new View[EMOJI_TAB_CONTENT];
         if (EMOJI_TAB_CONTENT <= 1) { // 只有一个分类的时候就不显示了
@@ -117,7 +113,7 @@ public class KJEmojiFragment extends Fragment implements
             mEmojiTabs[i] = mEmojiBottom.getChildAt(i);
             mEmojiTabs[i].setOnClickListener(getBottomBarClickListener(i));
         }
-        mEmojiBottom.findViewById(R.id.emoji_bottom_del).setOnClickListener(
+        mEmojiBottom.findViewById(R.id.btn_del).setOnClickListener(
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -126,10 +122,9 @@ public class KJEmojiFragment extends Fragment implements
                 });
 
         // content必须放在bottom下面初始化
-        mEmojiPager = (ViewPager) mEmojiContent.findViewById(R.id.emoji_pager);
-        mEmojiContent = mEmojiPager;
-        adapter = new EmojiPagerAdapter(getFragmentManager());
-        mEmojiPager.setAdapter(adapter);
+        mEmojiContent = (ViewPager) rootView.findViewById(R.id.emoji_pager);
+        EmojiPagerAdapter adapter = new EmojiPagerAdapter(getFragmentManager());
+        mEmojiContent.setAdapter(adapter);
 
         mKeyboardHelper = new SoftKeyboardStateHelper(getActivity().getWindow()
                 .getDecorView());
@@ -160,7 +155,7 @@ public class KJEmojiFragment extends Fragment implements
         return new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEmojiPager.setCurrentItem(index);
+                mEmojiContent.setCurrentItem(index);
             }
         };
     }
