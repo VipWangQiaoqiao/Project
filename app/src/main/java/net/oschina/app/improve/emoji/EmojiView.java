@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,7 +22,7 @@ public class EmojiView extends LinearLayout {
     private ViewPager mEmpjiPager;
     private TextView mQQText;
     private TextView mEmojiText;
-    private ImageButton mDel;
+    private View mDel;
     private EditText mEditText;
     private OnEmojiClickListener listener;
 
@@ -42,7 +41,7 @@ public class EmojiView extends LinearLayout {
         mEmpjiPager = (ViewPager) findViewById(R.id.vp_emoji);
         mQQText = (TextView) findViewById(R.id.tv_qq);
         mEmojiText = (TextView) findViewById(R.id.tv_emoji);
-        mDel = (ImageButton) findViewById(R.id.ib_del);
+        mDel = findViewById(R.id.btn_del);
 
         mQQText.setOnClickListener(new OnClickListener() {
             @Override
