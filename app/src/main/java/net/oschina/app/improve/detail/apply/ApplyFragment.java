@@ -6,6 +6,7 @@ import android.view.View;
 import net.oschina.app.improve.base.BaseRecyclerFragment;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.ApplyUser;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.TDevice;
@@ -46,7 +47,12 @@ public class ApplyFragment extends BaseRecyclerFragment<ApplyContract.Presenter,
 
     @Override
     protected void onItemClick(ApplyUser applyUser, int position) {
-
+        ApplyUser user = mAdapter.getItem(position);
+        if (user == null || user.getId() == 0) {
+            SimplexToast.show(mContext, "用户不存在");
+            return;
+        }
+        OtherUserHomeActivity.show(mContext, user.getId());
     }
 
     @Override

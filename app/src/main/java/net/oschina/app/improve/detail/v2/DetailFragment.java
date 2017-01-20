@@ -5,7 +5,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 
 import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
@@ -126,7 +125,13 @@ public abstract class DetailFragment extends BaseFragment implements
 
     @Override
     public void showCommentSuccess(Comment comment) {
-
+        if (mCommentView == null)
+            return;
+        mCommentView.init(mBean.getId(),
+                mBean.getType(),
+                getCommentOrder(),
+                mBean.getStatistics().getComment(),
+                getImgLoader(), (OnCommentClickListener) mContext);
     }
 
     @Override
