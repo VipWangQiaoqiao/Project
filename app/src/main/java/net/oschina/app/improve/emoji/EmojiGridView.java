@@ -55,8 +55,14 @@ public class EmojiGridView extends GridView {
     public void initData(int type) {
         datas = new ArrayList<>();
         datas = DisplayRules.getAllByType(type);
-
         adapter = new EmojiGridAdapter(getContext(), datas);
         setAdapter(adapter);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
+                MeasureSpec.AT_MOST);
+        super.onMeasure(widthMeasureSpec, expandSpec);
     }
 }

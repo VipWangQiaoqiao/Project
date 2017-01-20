@@ -3,6 +3,7 @@ package net.oschina.app.improve.emoji;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,11 +79,13 @@ public class EmojiView extends LinearLayout {
 
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
+                NestedScrollView scrollView = new NestedScrollView(getContext());
                 EmojiGridView view = new EmojiGridView(getContext(), mEditText);
                 view.setListener(listener);
-                container.addView(view);
+                scrollView.addView(view);
+                container.addView(scrollView);
                 view.initData(position);
-                return view;
+                return scrollView;
             }
 
             @Override
