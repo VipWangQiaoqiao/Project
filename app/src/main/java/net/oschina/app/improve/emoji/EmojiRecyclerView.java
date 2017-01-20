@@ -12,7 +12,6 @@ import net.oschina.app.emoji.DisplayRules;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
-import net.oschina.app.improve.media.Util;
 
 /**
  * Created by haibin
