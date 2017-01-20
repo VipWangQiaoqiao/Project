@@ -172,7 +172,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
             holder.mViewDispatchCount.setVisibility(View.GONE);
         }
         String textCount = holder.mViewLikeCount.getText().toString();
-        holder.mViewLikeCount.setText("0".equals(textCount) ? "点赞" : textCount);
+        holder.mViewLikeCount.setText("0".equals(textCount) ? "赞" : textCount);
 
         String textComCount = holder.mViewCmmCount.getText().toString();
         holder.mViewCmmCount.setText("0".equals(textComCount) ? "评论" : textComCount);
