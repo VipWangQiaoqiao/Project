@@ -36,6 +36,7 @@ import net.oschina.app.improve.user.helper.SyncFriendHelper;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.widget.IndexView;
 import net.oschina.common.utils.CollectionUtil;
 import net.oschina.common.widget.RichEditText;
@@ -291,11 +292,11 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             mTvLabel.setVisibility(View.GONE);
             if (mCacheFriends == null || mCacheFriends.size() <= 0) {
                 mIndex.setVisibility(View.GONE);
+                mTvNoFriends.setVisibility(View.VISIBLE);
             } else {
                 mIndex.setVisibility(View.VISIBLE);
+                mTvNoFriends.setVisibility(View.GONE);
             }
-
-            mTvNoFriends.setVisibility(View.VISIBLE);
 
             mRecyclerFriends.setAdapter(mLocalAdapter);
 
@@ -448,41 +449,49 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
      */
     private void queryUpdateView(String queryText) {
 
-        String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
-
         //初始化缓存本地搜索好友列表
         ArrayList<UserFriend> searchFriends = new ArrayList<>();
 
         UserFriend LocalUserFriend = new UserFriend();
-
         LocalUserFriend.setName(getString(R.string.local_search_label));
         LocalUserFriend.setShowLabel(getString(R.string.local_search_label));
         LocalUserFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
         searchFriends.add(LocalUserFriend);
 
         UserFriend NetUserFriend = new UserFriend();
-
         NetUserFriend.setName(getString(R.string.net_search_label));
         NetUserFriend.setShowLabel(getString(R.string.search_net_label));
         NetUserFriend.setShowViewType(UserSelectFriendsAdapter.SEARCH_TYPE);
         searchFriends.add(NetUserFriend);
 
+        if (!TextUtils.isEmpty(queryText)) {
+            String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
+            //缓存的本地好友列表
+            ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
+            if (cacheFriends != null) {
+                for (UserFriend friend : cacheFriends) {
+                    String name = friend.getName();
+                    if (TextUtils.isEmpty(name)) continue;
 
-        //缓存的本地好友列表
-        ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
-        if (cacheFriends != null) {
-            for (UserFriend friend : cacheFriends) {
-                String name = friend.getName();
-                if (TextUtils.isEmpty(name)) continue;
+                    String pingYin = AssimilateUtils.returnPinyin4(name, true);
+                    boolean isZH = AssimilateUtils.checkIsZH(queryText);
 
-                //搜索列表当中没有该条数据，进行添加
-                if (AssimilateUtils.returnPinyin(name, false).contains(pinyinQueryText)) {
+                    boolean isMatch;
+                    if (isZH) {
+                        isMatch = name.contains(queryText);
+                    } else {
+                        isMatch = pingYin.startsWith(pinyinQueryText) || pingYin.contains(" " + pinyinQueryText);
+                    }
 
-                    friend.setShowLabel(name);
-                    friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
-                    searchFriends.add(1, friend);
+                    //搜索列表当中没有该条数据，进行添加
+                    if (isMatch) {
+                        TLog.error("ZH:" + isZH + pingYin);
+                        friend.setShowLabel(name);
+                        friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
+                        searchFriends.add(1, friend);
+                    }
+
                 }
-
             }
         }
 

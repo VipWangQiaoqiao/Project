@@ -406,6 +406,7 @@ public class AssimilateUtils {
         return Pattern.matches(regex, email);
     }
 
+
     /**
      * string 2 pinyin
      *
@@ -444,6 +445,56 @@ public class AssimilateUtils {
         }
 
         return sb.toString().toUpperCase();
+    }
+
+    /**
+     * string 2 pinyin
+     *
+     * @param input     string
+     * @param needSpace 是否需要空格
+     * @return pinyin
+     */
+    public static String returnPinyin4(String input, boolean needSpace) {
+
+        StringBuilder sb = new StringBuilder(0);
+
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+
+        format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
+
+        char[] charArray = input.toLowerCase().toCharArray();
+
+        for (char c : charArray) {
+            String tempC = Character.toString(c);
+            if (tempC.matches("[\u4E00-\u9FA5]+")) {
+                try {
+                    String[] temp = PinyinHelper.toHanyuPinyinStringArray(c, format);
+                    sb.append(temp[0]);
+                } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+                    badHanyuPinyinOutputFormatCombination.printStackTrace();
+                }
+            } else {
+                sb.append(tempC);
+            }
+            if (needSpace)
+                sb.append(" ");
+        }
+
+        return sb.toString().trim().toUpperCase();
+    }
+
+
+    public static boolean checkIsZH(String input) {
+        char[] charArray = input.toLowerCase().toCharArray();
+        for (char c : charArray) {
+            String tempC = Character.toString(c);
+            if (tempC.matches("[\u4E00-\u9FA5]+")) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
