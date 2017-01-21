@@ -177,6 +177,10 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
 
         mDelegation = CommentBar.delegation(this, mCoordinatorLayout);
 
+        mDelegation.setCommentHint("我要回答");
+        mDelegation.getBottomSheet().getEditText().setHint("我要回答");
+        mDelegation.getBottomSheet().getEditText().setText("");
+
         mDelegation.hideFav();
         mDelegation.hideShare();
 
@@ -219,8 +223,8 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
                 if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (reply == null) return false;
                     reply = null;
-                    mDelegation.setCommentHint("发表评论");
-                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.setCommentHint("我要回答");
+                    mDelegation.getBottomSheet().getEditText().setHint("我要回答");
                 }
                 return false;
             }
@@ -311,8 +315,8 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
                     replies.add(result.getResult());
                     tvCmnCount.setText("评论 (" + replies.size() + ")");
                     reply = null;
-                    mDelegation.setCommentHint("发表评论");
-                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                    mDelegation.setCommentHint("我要回答");
+                    mDelegation.getBottomSheet().getEditText().setHint("我要回答");
                     mDelegation.getBottomSheet().getEditText().setText("");
                     mDelegation.getBottomSheet().getBtnCommit().setTag(null);
                     appendComment(replies.size() - 1, result.getResult());
