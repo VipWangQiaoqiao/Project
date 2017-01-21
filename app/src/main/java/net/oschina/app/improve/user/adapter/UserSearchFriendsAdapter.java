@@ -3,6 +3,7 @@ package net.oschina.app.improve.user.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,8 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
     private static final int MAX_SELECTED_SIZE = 10;
     private LinkedList<UserFriend> mSelectIcons = new LinkedList<>();
 
+    private onKeyboardListener mOnKeyboardListener;
+
     public UserSearchFriendsAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
@@ -68,7 +71,9 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
             case UserSelectFriendsAdapter.INDEX_TYPE:
                 return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
             case UserSelectFriendsAdapter.SEARCH_TYPE:
-                return new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false), this);
+                SearchViewHolder searchViewHolder = new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false), this);
+                searchViewHolder.setOnKeyboardListener(mOnKeyboardListener);
+                return searchViewHolder;
             case UserSelectFriendsAdapter.USER_TYPE:
             default:
                 UserInfoViewHolder userInfoViewHolder = new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
@@ -174,6 +179,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
     }
 
     public void updateSelectStatus(int position, boolean isSelected) {
+        Log.e("TAG", "updateSelectStatus: ----->"+position);
         this.mItems.get(position).setSelected(isSelected);
         notifyItemChanged(position);
         if (selectCount > 0) {
@@ -189,6 +195,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
     public void setOnFriendSelector(OnFriendSelector OnFriendSelector) {
         mOnFriendSelector = OnFriendSelector;
+    }
+
+    public void setOnKeyboardListener(onKeyboardListener onKeyboardListener) {
+        this.mOnKeyboardListener = onKeyboardListener;
     }
 
     public void setSearchContent(String searchContent) {
@@ -276,7 +286,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
         private int mStatus = 0x00;
 
-        SearchViewHolder(View itemView, UserSearchFriendsAdapter searchFriendsAdapter) {
+        private UserSearchFriendsAdapter.onKeyboardListener mOnKeyboardListener;
+
+
+        private SearchViewHolder(View itemView, UserSearchFriendsAdapter searchFriendsAdapter) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.mUserSearchFriendsAdapter = searchFriendsAdapter;
@@ -288,9 +301,12 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
             mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_net_label));
         }
 
+        public void setOnKeyboardListener(onKeyboardListener mOnKeyBoardListener) {
+            this.mOnKeyboardListener = mOnKeyBoardListener;
+        }
+
         @Override
         public void onClick(final View v) {
-
             requestData(v);
         }
 
@@ -347,6 +363,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                     ResultBean<PageBean<User>> resultBean = AppOperator.createGson().fromJson(responseString, type);
 
                     if (resultBean.isSuccess()) {
+
+                        if (mOnKeyboardListener != null) {
+                            mOnKeyboardListener.hideKeyboard();
+                        }
 
                         PageBean<User> pageBean = resultBean.getResult();
 
@@ -432,5 +452,12 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
             }
             return false;
         }
+
     }
+
+    public interface onKeyboardListener {
+
+        void hideKeyboard();
+    }
+
 }

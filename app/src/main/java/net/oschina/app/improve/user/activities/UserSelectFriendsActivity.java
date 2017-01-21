@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -36,7 +37,6 @@ import net.oschina.app.improve.user.helper.SyncFriendHelper;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import net.oschina.app.widget.IndexView;
 import net.oschina.common.utils.CollectionUtil;
 import net.oschina.common.widget.RichEditText;
@@ -54,7 +54,9 @@ import butterknife.Bind;
  */
 
 public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener,
-        SearchView.OnQueryTextListener {
+        SearchView.OnQueryTextListener, UserSearchFriendsAdapter.onKeyboardListener, OnFriendSelector {
+
+    private static final String TAG = "UserSelectFriendsActivity";
 
     @Bind(R.id.searcher_friends)
     SearchView mSearchView;
@@ -149,13 +151,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         LinearLayout.LayoutParams params1 = (LinearLayout.LayoutParams) mLayoutEditFrame.getLayoutParams();
         params1.setMargins(0, 0, 0, 0);
         mLayoutEditFrame.setLayoutParams(params1);
-
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                return false;
-            }
-        });
         mSearchView.setOnQueryTextListener(this);
 
         mSearchView.post(new Runnable() {
@@ -179,23 +174,26 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         });
 
         mRecyclerFriends.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerFriends.setAdapter(mLocalAdapter = new UserSelectFriendsAdapter(this));
+        mRecyclerFriends.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                TDevice.hideSoftKeyboard(mSearchView);
+                return false;
+            }
+        });
+
+        if (mLocalAdapter == null) {
+            mLocalAdapter = new UserSelectFriendsAdapter(this);
+            mLocalAdapter.setOnFriendSelector(this);
+        }
+
+        mRecyclerFriends.setAdapter(mLocalAdapter);
 
         if (mSearchAdapter == null) {
             mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
+            mSearchAdapter.setOnKeyboardListener(this);
+            mSearchAdapter.setOnFriendSelector(this);
         }
-
-        mLocalAdapter.setOnFriendSelector(new OnFriendSelector() {
-            @Override
-            public void select(View view, UserFriend userFriend, int position) {
-                updateSelectIcon(userFriend);
-            }
-
-            @Override
-            public void selectFull(int selectCount) {
-                AppContext.showToastShort(getString(R.string.check_count_hint));
-            }
-        });
 
         mIndex.setOnIndexTouchListener(this);
 
@@ -211,14 +209,12 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Override
     protected void initData() {
         super.initData();
-
         mEmptyLayout.post(new Runnable() {
             @Override
             public void run() {
                 requestData();
             }
         });
-
     }
 
     @Override
@@ -234,6 +230,11 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onIndexTouchUp() {
+        mTvIndexShow.setVisibility(View.GONE);
     }
 
     @Override
@@ -266,11 +267,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mTvIndexShow.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onIndexTouchUp() {
-        mTvIndexShow.setVisibility(View.GONE);
-    }
-
     @SuppressWarnings("RestrictedApi")
     @Override
     protected void onStop() {
@@ -280,13 +276,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-
         return false;
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public boolean onQueryTextChange(String newText) {
+
         if (TextUtils.isEmpty(newText)) {
             mTvLabel.setText(null);
             mTvLabel.setVisibility(View.GONE);
@@ -302,8 +298,14 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
             mSearchAdapter.notifyDataSetChanged();
             mSearchAdapter.setSearchContent(newText);
-            return false;
+
+            TDevice.hideSoftKeyboard(mSearchView);
+
+            return true;
         } else {
+
+            TDevice.showSoftKeyboard(mSearchView);
+
             mTvNoFriends.setVisibility(View.GONE);
 
             if (mIndex.getVisibility() == View.VISIBLE) {
@@ -321,26 +323,28 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
             queryUpdateView(newText);
         }
-
-        mSearchAdapter.setOnFriendSelector(new OnFriendSelector() {
-            @Override
-            public void select(View view, UserFriend userFriend, int position) {
-                updateSelectIcon(userFriend);
-            }
-
-            @Override
-            public void selectFull(int selectCount) {
-                AppContext.showToastShort(getString(R.string.check_count_hint));
-            }
-        });
         return true;
+    }
+
+    @Override
+    public void select(View view, UserFriend userFriend, int position) {
+        updateSelectIcon(userFriend);
+    }
+
+    @Override
+    public void selectFull(int selectCount) {
+        AppContext.showToastShort(getString(R.string.check_count_hint));
+    }
+
+    @Override
+    public void hideKeyboard() {
+        TDevice.hideSoftKeyboard(mSearchView);
     }
 
     /**
      * request data
      */
     private void requestData() {
-
         final ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
         if (friends != null && friends.size() > 0) {
             updateView(friends);
@@ -422,15 +426,14 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
                     RecyclerView.Adapter recyclerFriendsAdapter = mRecyclerFriends.getAdapter();
 
-                    if (recyclerFriendsAdapter instanceof UserSelectFriendsAdapter) {
-                        if (recyclerFriendsAdapter.getItemCount() > 0)
-                            ((UserSelectFriendsAdapter) recyclerFriendsAdapter).updateSelectStatus(selectPosition, false);
-                    } else {
-                        if (recyclerFriendsAdapter.getItemCount() > 0)
-                            ((UserSearchFriendsAdapter) recyclerFriendsAdapter).updateSelectStatus(selectPosition, false);
+                    if (recyclerFriendsAdapter.getItemCount() > 0) {
+                        if (recyclerFriendsAdapter instanceof UserSelectFriendsAdapter) {
+                            mLocalAdapter.updateSelectStatus(selectPosition, false);
+                        } else {
+                            mSearchAdapter.updateSelectStatus(selectPosition, false);
+                        }
+                        mRecyclerFriends.smoothScrollToPosition(selectPosition);
                     }
-
-                    mRecyclerFriends.smoothScrollToPosition(selectPosition);
 
                     //更新icons
                     updateSelectIcon(friend);
@@ -485,7 +488,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
                     //搜索列表当中没有该条数据，进行添加
                     if (isMatch) {
-                        TLog.error("ZH:" + isZH + pingYin);
                         friend.setShowLabel(name);
                         friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
                         searchFriends.add(1, friend);
@@ -541,7 +543,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
      * @return index
      */
     private int containsUserFriend(UserFriend userFriend) {
-
         int index = -1;
 
         LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
@@ -551,8 +552,21 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                 index = i;
             }
         }
+
+        updateCacheFriendSelectStatus(userFriend, index == -1);
+
         return index;
     }
+
+    private void updateCacheFriendSelectStatus(UserFriend userFriend, boolean isSelect) {
+        ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
+        for (int i = 0, len = cacheFriends.size(); i < len; i++) {
+            if (userFriend.getId() == cacheFriends.get(i).getId()) {
+                cacheFriends.get(i).setSelected(isSelect);
+            }
+        }
+    }
+
 
     /**
      * verify network status

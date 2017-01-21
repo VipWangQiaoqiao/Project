@@ -2,6 +2,7 @@ package net.oschina.app.improve.user.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,11 +143,16 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public List<UserFriend> getItems() {
+        return mItems;
+    }
+
     public void clear() {
         this.mItems.clear();
     }
 
     public void updateSelectStatus(int position, boolean isSelected) {
+        Log.e("123", "updateSelectStatus: ------>" + position);
         this.mItems.get(position).setSelected(isSelected);
         notifyItemChanged(position);
         if (selectCount > 0) {
