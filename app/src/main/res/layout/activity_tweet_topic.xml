@@ -35,11 +35,11 @@
             android:lines="1"
             android:maxLength="32"
             android:maxLines="1"
-            android:textColorHint="@color/black_alpha_48"
             android:minHeight="@dimen/size_32"
             android:paddingRight="@dimen/lay_8"
             android:singleLine="true"
             android:textColor="#ff24cf5f"
+            android:textColorHint="@color/black_alpha_48"
             android:textSize="@dimen/font_16" />
     </LinearLayout>
 
