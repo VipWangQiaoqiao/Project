@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.general;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -116,7 +117,10 @@ public class SoftwareDetailFragment extends DetailFragment {
         }
         Map<String, Object> extras = bean.getExtra();
         if (extras != null) {
-            mTextProtocol.setText(getExtraString(extras.get("softwareLicense")));
+            String protocol = getExtraString(extras.get("softwareLicense"));
+            if(TextUtils.isEmpty(protocol))
+                protocol = "未知";
+            mTextProtocol.setText(protocol);
             mTextRecordTime.setText(getExtraString(extras.get("softwareCollectionDate")));
             mTextSystem.setText(getExtraString(extras.get("softwareSupportOS")));
             mTextLanguage.setText(getExtraString(extras.get("softwareLanguage")));
