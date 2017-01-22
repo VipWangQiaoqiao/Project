@@ -352,8 +352,21 @@
     <string name="feedback_hint">我们将不断改进</string>
     <string name="screenshot_hint">截图描述：（可选）</string>
     <string name="submit_feedback_hint">提交反馈</string>
+    <string name="offline_event_hint">线下活动</string>
+
+    <!--附近的人-->
     <string name="near_bodies_hint">附近的程序员</string>
     <string name="clear_near_bodies_hint">清除位置并退出</string>
+    <string name="nobody_hint">附近没有更多的程序员…</string>
     <string name="near_body_gps_error_hint">当前手机定位功能无法使用!!!</string>
-    <string name="offline_event_hint">线下活动</string>
+    <string name="need_lbs_permission_hint">需要定位权限</string>
+    <string name="clear_bodies_failed_hint">清除位置信息失败</string>
+    <string name="upload_lbs_info_hint">上传位置信息失败</string>
+    <string name="network_timeout_hint">网络请求超时…</string>
+    <string name="location_get_failed_hint">无法获取位置信息</string>
+    <string name="no_permission_hint">现在去「设置」打开定位服务并允许开源中国获取位置信息吗?</string>
+    <string name="no_location_hint">无法定位</string>
+    <string name="server_no_have_permission_hint">服务器定位失败，请检查权限</string>
+    <string name="network_exception_hint">网络异常</string>
+    <string name="key_is_invalid_hint">非法或无效的APP KEY</string>
 </resources>
