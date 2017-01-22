@@ -176,6 +176,10 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         mDelegation.hideFav();
         mDelegation.hideShare();
 
+        if (mType == OSChinaApi.COMMENT_SOFT) {
+            mDelegation.getBottomSheet().hideSyncAction();
+        }
+
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

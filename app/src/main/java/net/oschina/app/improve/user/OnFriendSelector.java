@@ -14,5 +14,7 @@ public interface OnFriendSelector {
 
     void select(View view, UserFriend userFriend, int position);
 
+    void unSelect(View view, UserFriend userFriend, int position);
+
     void selectFull(int selectCount);
 }

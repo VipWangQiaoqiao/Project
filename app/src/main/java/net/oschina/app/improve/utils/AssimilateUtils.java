@@ -31,9 +31,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 后台很多String数据需要做本地化处理
- * <p>
- * Created by thanatos on 16/7/27.
+ * String 处理工具类
  */
 public class AssimilateUtils {
 
@@ -406,6 +404,7 @@ public class AssimilateUtils {
         return Pattern.matches(regex, email);
     }
 
+
     /**
      * string 2 pinyin
      *
@@ -445,5 +444,103 @@ public class AssimilateUtils {
 
         return sb.toString().toUpperCase();
     }
+
+    /**
+     * string 2 pinyin
+     *
+     * @param input     string
+     * @param needSpace 是否需要空格
+     * @return pinyin
+     */
+    public static String returnPinyin4(String input, boolean needSpace) {
+
+        StringBuilder sb = new StringBuilder(0);
+
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+
+        format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
+
+        char[] charArray = input.toLowerCase().toCharArray();
+
+        for (char c : charArray) {
+            String tempC = Character.toString(c);
+            if (tempC.matches("[\u4E00-\u9FA5]+")) {
+                try {
+                    String[] temp = PinyinHelper.toHanyuPinyinStringArray(c, format);
+                    sb.append(temp[0]);
+                } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+                    badHanyuPinyinOutputFormatCombination.printStackTrace();
+                }
+            } else {
+                sb.append(tempC);
+            }
+            if (needSpace)
+                sb.append(" ");
+        }
+
+        return sb.toString().trim().toUpperCase();
+    }
+
+
+    public static boolean checkIsZH(String input) {
+        char[] charArray = input.toLowerCase().toCharArray();
+        for (char c : charArray) {
+            String tempC = Character.toString(c);
+            if (tempC.matches("[\u4E00-\u9FA5]+")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 字符串转化为拼音
+     * 字符串中英文不转换为拼音
+     *
+     * @param input     可能含有拼音的字符串
+     * @param splitHead 每个中文转化为拼音后头部添加的分割符号
+     *                  eg: "V好De","~"->"~V~hao~De"
+     * @return 转化为拼音后的字符串
+     */
+    public static String convertToPinyin(String input, String splitHead) {
+        if (TextUtils.isEmpty(input))
+            return "";
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+        format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
+
+        char[] charArray = input.toCharArray();
+
+        StringBuilder sb = new StringBuilder();
+        boolean canAdd = true;
+        for (char c : charArray) {
+            String temp = Character.toString(c);
+            if (temp.matches("[\u4E00-\u9FA5]+")) {
+                String py;
+                try {
+                    String[] pys = PinyinHelper.toHanyuPinyinStringArray(c, format);
+                    py = pys[0];
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    py = " ";
+                }
+                sb.append(splitHead);
+                sb.append(py);
+                canAdd = true;
+            } else {
+                if (canAdd) {
+                    sb.append(splitHead);
+                    canAdd = false;
+                }
+                sb.append(temp);
+            }
+        }
+        return sb.toString().trim();
+    }
+
 
 }

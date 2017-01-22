@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,7 @@ import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.common.adapter.TextWatcherAdapter;
+import net.oschina.common.utils.CollectionUtil;
 import net.oschina.common.widget.RichEditText;
 
 import java.util.ArrayList;
@@ -88,10 +90,12 @@ public class TweetTopicActivity extends BaseBackActivity {
         return R.layout.activity_tweet_topic;
     }
 
+    private LinearLayoutManager mLayoutManager;
+
     @Override
     protected void initWidget() {
         super.initWidget();
-        mRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mRecycler.setLayoutManager(mLayoutManager = new LinearLayoutManager(this));
         mRecycler.setAdapter(adapter);
         mTopicContent.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -125,7 +129,7 @@ public class TweetTopicActivity extends BaseBackActivity {
     protected void initData() {
         super.initData();
 
-        String[] topics = getResources().getStringArray(R.array.topic_list);
+        String[] topics = loadHotCache(getResources());
         for (String topic : topics) {
             if (TextUtils.isEmpty(topic))
                 continue;
@@ -135,6 +139,10 @@ public class TweetTopicActivity extends BaseBackActivity {
         loadCache();
 
         adapter.notifyDataSetChanged();
+    }
+
+    private static String[] loadHotCache(Resources resources) {
+        return resources.getStringArray(R.array.topic_list);
     }
 
     @Override
@@ -174,25 +182,22 @@ public class TweetTopicActivity extends BaseBackActivity {
     }
 
     public static void saveCache(Context context, String... strs) {
-        final LinkedList<String> cache = loadCache(context);
+        final ArrayList<String> hotCaches = CollectionUtil.toArrayList(loadHotCache(context.getResources()));
+        final LinkedList<String> localCache = loadCache(context);
 
         // 避免重复添加
         for (String str : strs) {
-            boolean isHave = false;
-            for (String s : cache) {
-                if (isHave = s.equals(str))
-                    break;
+            if (!hotCaches.contains(str) && !localCache.contains(str)) {
+                localCache.addFirst(str);
             }
-            if (!isHave)
-                cache.addFirst(str);
         }
 
         // 至多存储15条
-        while (cache.size() > 15) {
-            cache.removeLast();
+        while (localCache.size() > 15) {
+            localCache.removeLast();
         }
 
-        CacheManager.saveToJson(context, CACHE_FILE, cache);
+        CacheManager.saveToJson(context, CACHE_FILE, localCache);
     }
 
     private void onSubmit() {
@@ -254,8 +259,13 @@ public class TweetTopicActivity extends BaseBackActivity {
     }
 
     private void sortLocalList(String text) {
-        final String py = TextUtils.isEmpty(text) ? "!#" : AssimilateUtils.returnPinyin(text, false);
+        if (mLocalList.size() == 0)
+            return;
+
+        boolean isEmpty = TextUtils.isEmpty(text);
+        final String py = isEmpty ? "!#" : AssimilateUtils.convertToPinyin(text, SPLIT_HEAD);
         Pattern pattern = Pattern.compile(py);
+
         for (TopicBean bean : mLocalList) {
             Matcher matcher = pattern.matcher(bean.py);
             if (matcher.find()) {
@@ -276,6 +286,12 @@ public class TweetTopicActivity extends BaseBackActivity {
         });
 
         adapter.notifyDataSetChanged();
+
+        if (isEmpty)
+            mLayoutManager.scrollToPosition(0);
+        else {
+            mLayoutManager.scrollToPositionWithOffset(mHotList.size() + 1, 0);
+        }
     }
 
     private RecyclerView.Adapter adapter = new RecyclerView.Adapter() {
@@ -415,6 +431,7 @@ public class TweetTopicActivity extends BaseBackActivity {
 
     private static int ORDER_COUNT = 0;
     private static int ORDER_MAX = 100;
+    private static final String SPLIT_HEAD = "~";
 
     private class TopicBean {
         String text;
@@ -425,12 +442,11 @@ public class TweetTopicActivity extends BaseBackActivity {
 
         TopicBean(String text) {
             this.text = text;
-            this.py = AssimilateUtils.returnPinyin(text, false);
+            this.py = AssimilateUtils.convertToPinyin(text, SPLIT_HEAD);
         }
 
         TopicBean(String text, boolean isLocal) {
-            this.text = text;
-            this.py = AssimilateUtils.returnPinyin(text, false);
+            this(text);
             this.isLocal = isLocal;
         }
 

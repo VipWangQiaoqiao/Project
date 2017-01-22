@@ -155,5 +155,7 @@ class ApplyPresenter implements ApplyContract.Presenter {
 
     void setFilter(String mFilter) {
         this.mFilter = mFilter;
+        if (TextUtils.isEmpty(this.mFilter))
+            mPageToken = null;
     }
 }
