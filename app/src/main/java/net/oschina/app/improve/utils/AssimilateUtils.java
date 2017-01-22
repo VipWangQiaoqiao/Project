@@ -497,23 +497,41 @@ public class AssimilateUtils {
 
 
     /**
+     * 获取最后一个汉字的坐标
+     *
+     * @param text 可能含有拼音的字符串
+     * @return 如果未查询到返回-1，否则返回最后一个汉字所在的坐标
+     */
+    public static int lastIndexOfChinese(String text) {
+        char[] charArray = text.toCharArray();
+        int index = -1;
+        for (int i = 0; i < charArray.length; i++) {
+            String tempC = Character.toString(charArray[i]);
+            if (tempC.matches("[\u4E00-\u9FA5]+")) {
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    /**
      * 字符串转化为拼音
      * 字符串中英文不转换为拼音
      *
-     * @param input     可能含有拼音的字符串
+     * @param text      可能含有拼音的字符串
      * @param splitHead 每个中文转化为拼音后头部添加的分割符号
      *                  eg: "V好De","~"->"~V~hao~De"
      * @return 转化为拼音后的字符串
      */
-    public static String convertToPinyin(String input, String splitHead) {
-        if (TextUtils.isEmpty(input))
+    public static String convertToPinyin(String text, String splitHead) {
+        if (TextUtils.isEmpty(text))
             return "";
         HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
         format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
         format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
         format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
 
-        char[] charArray = input.toCharArray();
+        char[] charArray = text.toCharArray();
 
         StringBuilder sb = new StringBuilder();
         boolean canAdd = true;
