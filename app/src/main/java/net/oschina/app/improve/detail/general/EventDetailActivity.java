@@ -220,7 +220,7 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                     mTextApplyStatus.setText(getResources().getString(R.string.event_status_end));
                     break;
                 case Event.STATUS_ING:
-                    mTextApplyStatus.setText(getResources().getString(R.string.event_status_ing));
+                    mTextApplyStatus.setText(getResources().getString(R.string.event_apply_status_un_sign));
                     break;
                 case Event.STATUS_SING_UP:
                     mTextApplyStatus.setText(getResources().getString(R.string.event_status_sing_up));
