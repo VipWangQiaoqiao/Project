@@ -294,10 +294,55 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         ShowSettingDialog();
-        EasyPermissions.checkDeniedPermissionsNeverAskAgain(this,
-                getResources().getString(R.string.need_lbs_permission_hint), R.string.actionbar_title_setting, R.string.cancel, perms);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    /**
+     * proxy request permission
+     */
+    @AfterPermissionGranted(LOCATION_PERMISSION)
+    private void requestLocationPermission() {
+
+        if (isEnabledLocation()) {
+            if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)) {
+                startLbs();
+            } else {
+                EasyPermissions.requestPermissions(this, getString(R.string.need_lbs_permission_hint), LOCATION_PERMISSION,
+                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE);
+            }
+        }
+    }
+
+    /**
+     * menu action selector Dialog
+     *
+     * @return dialog
+     */
+    private Dialog getSelectorDialog() {
+        if (mSelectorDialog == null) {
+            mSelectorDialog = new BottomDialog(this, true);
+            @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null, false);
+            view.findViewById(R.id.tv_clear_opt).setOnClickListener(this);
+            view.findViewById(R.id.tv_cancel_opt).setOnClickListener(this);
+            mSelectorDialog.setContentView(view);
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.setBackgroundResource(R.color.transparent);
+            }
+        }
+        return mSelectorDialog;
+    }
+
+    /**
+     * update data view
+     *
+     * @param result radarNearByResult
+     */
     private void updateView(RadarNearbyResult result) {
 
         mRecyclerRefresh.onComplete();
@@ -436,43 +481,12 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         mNextPageIndex = (pageIndex + 1);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
     /**
-     * proxy request permission
+     * check is cache
+     *
+     * @param user load_user
+     * @return isCache?index:-1
      */
-    @AfterPermissionGranted(LOCATION_PERMISSION)
-    private void requestLocationPermission() {
-
-        if (isEnabledLocation()) {
-            if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)) {
-                startLbs();
-            } else {
-                EasyPermissions.requestPermissions(this, getResources().getString(R.string.need_lbs_permission_hint), LOCATION_PERMISSION,
-                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE);
-            }
-        }
-    }
-
-    private Dialog getSelectorDialog() {
-        if (mSelectorDialog == null) {
-            mSelectorDialog = new BottomDialog(this, true);
-            @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.view_nearby_operator, null, false);
-            view.findViewById(R.id.tv_clear_opt).setOnClickListener(this);
-            view.findViewById(R.id.tv_cancel_opt).setOnClickListener(this);
-            mSelectorDialog.setContentView(view);
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (parent != null) {
-                parent.setBackgroundResource(R.color.transparent);
-            }
-        }
-        return mSelectorDialog;
-    }
-
     private int containsFriend(User user) {
         int index = -1;
         List<NearbyResult> items = this.mAdapter.getItems();
