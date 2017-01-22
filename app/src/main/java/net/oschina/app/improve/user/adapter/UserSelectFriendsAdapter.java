@@ -2,7 +2,6 @@ package net.oschina.app.improve.user.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.util.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -31,6 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
+
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
     public static final int SEARCH_TYPE = 0x03;
@@ -72,7 +73,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
                                 items.get(position).setSelectPosition(position);
                                 selectCount--;
                                 notifyItemChanged(position);
-                                mOnFriendSelector.select(v, userFriend, position);
+                                mOnFriendSelector.unSelect(v, userFriend, position);
                             }
                         } else {
                             if (selectCount == MAX_SELECTED_SIZE) {
@@ -151,12 +152,46 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
         this.mItems.clear();
     }
 
-    public void updateSelectStatus(int position, boolean isSelected) {
-        Log.e("123", "updateSelectStatus: ------>" + position);
-        this.mItems.get(position).setSelected(isSelected);
-        notifyItemChanged(position);
-        if (selectCount > 0) {
-            selectCount--;
+    public void updateSelectStatus(UserFriend userFriend, boolean isSelected) {
+        if (!isSelected)
+            for (int i = 0, len = mItems.size(); i < len; i++) {
+                if (userFriend.getId() == mItems.get(i).getId()) {
+                    mItems.get(i).setSelected(false);
+                    mItems.get(i).setSelectPosition(i);
+                    notifyItemChanged(i);
+                }
+            }
+
+        if (!isSelected) {
+            if (selectCount != 0) {
+                selectCount--;
+            }
+        }
+    }
+
+    public void updateAllSelectStatus(boolean isSelected) {
+        List<UserFriend> items = this.mItems;
+        for (int i = 0, len = items.size(); i < len; i++) {
+            if (items.get(i).isSelected()) {
+                items.get(i).setSelected(isSelected);
+                items.get(i).setSelectPosition(i);
+                notifyItemChanged(i);
+            }
+        }
+        selectCount = 0;
+    }
+
+    public void updateSelectCount(LinkedList<UserFriend> cacheIcons) {
+        this.selectCount = cacheIcons.size();
+
+        for (UserFriend cacheIcon : cacheIcons) {
+            for (int i = 0; i < mItems.size(); i++) {
+                if (mItems.get(i).getId() == cacheIcon.getId()) {
+                    mItems.get(i).setSelected(cacheIcon.isSelected());
+                    mItems.get(i).setSelectPosition(i);
+                    notifyItemChanged(i);
+                }
+            }
         }
     }
 

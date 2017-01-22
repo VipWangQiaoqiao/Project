@@ -56,8 +56,6 @@ import butterknife.Bind;
 public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener,
         SearchView.OnQueryTextListener, UserSearchFriendsAdapter.onKeyboardListener, OnFriendSelector {
 
-    private static final String TAG = "UserSelectFriendsActivity";
-
     @Bind(R.id.searcher_friends)
     SearchView mSearchView;
 
@@ -294,8 +292,20 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                 mTvNoFriends.setVisibility(View.GONE);
             }
 
+            //当直接在搜索界面删除信息时，
+            for (UserFriend cacheIconFriend : mCacheIconFriends) {
+                mLocalAdapter.updateSelectStatus(cacheIconFriend, true);
+            }
+
+            if (mCacheIconFriends.size() == 0) {
+                mLocalAdapter.updateAllSelectStatus(false);
+            } else {
+                mLocalAdapter.updateSelectCount(mCacheIconFriends);
+            }
+
             mRecyclerFriends.setAdapter(mLocalAdapter);
 
+            mSearchAdapter.clear();
             mSearchAdapter.notifyDataSetChanged();
             mSearchAdapter.setSearchContent(newText);
 
@@ -320,6 +330,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
                 mRecyclerFriends.setAdapter(mSearchAdapter);
             }
+            mSearchAdapter.setOnFriendSelector(this);
 
             queryUpdateView(newText);
         }
@@ -328,7 +339,16 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     @Override
     public void select(View view, UserFriend userFriend, int position) {
+        if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
+            mSearchAdapter.updateSelectCount(mCacheIconFriends);
+        }
         updateSelectIcon(userFriend);
+    }
+
+    @Override
+    public void unSelect(View view, UserFriend userFriend, int position) {
+        updateSelectIcon(userFriend);
+        mLocalAdapter.updateSelectCount(mCacheIconFriends);
     }
 
     @Override
@@ -397,7 +417,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
      *
      * @param userFriend friend
      */
-    private void updateSelectIcon(UserFriend userFriend) {
+    private void updateSelectIcon(final UserFriend userFriend) {
 
         LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
 
@@ -411,7 +431,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         mSelectContainer.removeAllViews();
 
-        for (UserFriend friend : cacheIcons) {
+        for (final UserFriend friend : cacheIcons) {
 
             ImageView ivIcon = (ImageView) LayoutInflater.from(this)
                     .inflate(R.layout.activity_main_select_friend_label_container_item, mSelectContainer, false);
@@ -420,23 +440,22 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             ivIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UserFriend friend = (UserFriend) v.getTag(R.id.iv_show_icon);
 
-                    int selectPosition = friend.getSelectPosition();
+                    UserFriend friend = (UserFriend) v.getTag(R.id.iv_show_icon);
 
                     RecyclerView.Adapter recyclerFriendsAdapter = mRecyclerFriends.getAdapter();
 
-                    if (recyclerFriendsAdapter.getItemCount() > 0) {
-                        if (recyclerFriendsAdapter instanceof UserSelectFriendsAdapter) {
-                            mLocalAdapter.updateSelectStatus(selectPosition, false);
-                        } else {
-                            mSearchAdapter.updateSelectStatus(selectPosition, false);
-                        }
-                        mRecyclerFriends.smoothScrollToPosition(selectPosition);
+                    if (recyclerFriendsAdapter instanceof UserSelectFriendsAdapter) {
+                        mLocalAdapter.updateSelectStatus(friend, false);
+                    } else {
+                        mSearchAdapter.updateSelectStatus(friend, false);
                     }
+
+                    mRecyclerFriends.smoothScrollToPosition(friend.getSelectPosition());
 
                     //更新icons
                     updateSelectIcon(friend);
+                    mLocalAdapter.updateSelectCount(mCacheIconFriends);
                 }
             });
             mSelectContainer.addView(ivIcon);
@@ -471,6 +490,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
             //缓存的本地好友列表
             ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
+
             if (cacheFriends != null) {
                 for (UserFriend friend : cacheFriends) {
                     String name = friend.getName();
@@ -492,7 +512,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                         friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
                         searchFriends.add(1, friend);
                     }
-
                 }
             }
         }
@@ -552,21 +571,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                 index = i;
             }
         }
-
-        updateCacheFriendSelectStatus(userFriend, index == -1);
-
         return index;
     }
-
-    private void updateCacheFriendSelectStatus(UserFriend userFriend, boolean isSelect) {
-        ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
-        for (int i = 0, len = cacheFriends.size(); i < len; i++) {
-            if (userFriend.getId() == cacheFriends.get(i).getId()) {
-                cacheFriends.get(i).setSelected(isSelect);
-            }
-        }
-    }
-
 
     /**
      * verify network status

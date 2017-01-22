@@ -3,7 +3,6 @@ package net.oschina.app.improve.user.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +46,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
+
     private LayoutInflater mInflater;
     private List<UserFriend> mItems = new ArrayList<>();
     private String mSearchContent;
@@ -81,6 +81,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                 userInfoViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         if (mOnFriendSelector == null) return;
 
                         List<UserFriend> items = mItems;
@@ -91,17 +92,15 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                             if (userFriend.isSelected()) {
                                 if (selectCount != 0) {
                                     items.get(position).setSelected(false);
-                                    items.get(position).setSelectPosition(position);
                                     selectCount--;
                                     notifyItemChanged(position);
-                                    mOnFriendSelector.select(v, userFriend, position);
+                                    mOnFriendSelector.unSelect(v, userFriend, position);
                                 }
                             } else {
                                 if (selectCount == MAX_SELECTED_SIZE) {
                                     mOnFriendSelector.selectFull(selectCount);
                                 } else {
                                     items.get(position).setSelected(true);
-                                    items.get(position).setSelectPosition(position);
                                     selectCount++;
                                     notifyItemChanged(position);
                                     mOnFriendSelector.select(v, userFriend, position);
@@ -162,6 +161,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
     public void addItems(List<UserFriend> items) {
         this.mItems.addAll(items);
+        this.selectCount = items.size();
         notifyDataSetChanged();
     }
 
@@ -178,13 +178,21 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         return mSelectIcons;
     }
 
-    public void updateSelectStatus(int position, boolean isSelected) {
-        Log.e("TAG", "updateSelectStatus: ----->"+position);
-        this.mItems.get(position).setSelected(isSelected);
-        notifyItemChanged(position);
-        if (selectCount > 0) {
-            selectCount--;
+    public void updateSelectStatus(UserFriend userFriend, boolean isSelected) {
+        List<UserFriend> items = this.mItems;
+        for (int i = 0, len = items.size(); i < len; i++) {
+            UserFriend tempUserFriend = items.get(i);
+            if (tempUserFriend.getId() == userFriend.getId()) {
+                items.get(i).setSelected(isSelected);
+                items.get(i).setSelectPosition(i);
+                notifyItemChanged(i);
+            }
+
         }
+        if (!isSelected)
+            if (selectCount > 0) {
+                selectCount--;
+            }
     }
 
     public void clear() {
@@ -211,6 +219,11 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
     public void setSelectIcons(LinkedList<UserFriend> selectIcons) {
         mSelectIcons = selectIcons;
+        this.selectCount = selectIcons.size();
+    }
+
+    public void updateSelectCount(LinkedList<UserFriend> cacheIconFriends) {
+        this.selectCount = cacheIconFriends.size();
     }
 
     static class IndexViewHolder extends RecyclerView.ViewHolder {
