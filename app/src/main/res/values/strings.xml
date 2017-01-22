@@ -9,7 +9,7 @@
     <string name="main_tab_name_explore">发现</string>
 
     <string name="event_status_end">活动结束</string>
-    <string name="event_status_ing">我要报名</string>
+    <string name="event_status_ing">正在报名</string>
     <string name="event_status_sing_up">截止报名</string>
     <string name="event_type_osc">源创会</string>
     <string name="event_type_tec">技术交流</string>
