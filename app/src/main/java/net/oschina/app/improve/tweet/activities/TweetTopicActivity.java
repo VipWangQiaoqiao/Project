@@ -187,6 +187,8 @@ public class TweetTopicActivity extends BaseBackActivity {
 
         // 避免重复添加
         for (String str : strs) {
+            if (TextUtils.isEmpty(str) || TextUtils.isEmpty(str = str.trim()))
+                continue;
             if (!hotCaches.contains(str) && !localCache.contains(str)) {
                 localCache.addFirst(str);
             }
