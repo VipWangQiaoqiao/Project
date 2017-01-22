@@ -340,7 +340,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                         }
                         if (tempSize < items.size()) {
                             notifySortData(loadInfoSize, pageIndex, items);
-
                         }
                     } else {
                         //没有缓存数据，直接添加
