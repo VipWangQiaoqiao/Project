@@ -81,14 +81,6 @@ android {
         oschina {
             manifestPlaceholders = [UMENG_CHANNEL: "oschina"]
         }
-
-        wandoujia {
-            manifestPlaceholders = [UMENG_CHANNEL: "wandoujia"]
-        }
-
-        xiaomi {
-            manifestPlaceholders = [UMENG_CHANNEL: "xiaomi"]
-        }
     }
 }
 
