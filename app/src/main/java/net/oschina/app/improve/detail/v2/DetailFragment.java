@@ -6,6 +6,7 @@ import android.view.View;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.comment.CommentView;
@@ -70,10 +71,15 @@ public abstract class DetailFragment extends BaseFragment implements
             mDetailAboutView.setAbout(bean.getAbouts(), bean.getType());
         }
 
-        if (mCommentView == null)
+        if (mCommentView == null || mBean.getType() == News.TYPE_TRANSLATE) {
+            if (mCommentView != null) {
+                mCommentView.setVisibility(View.GONE);
+            }
             return;
+        }
         SubBean.Statistics statistics = bean.getStatistics();
-        if (statistics == null) return;
+        if (statistics == null)
+            return;
         mCommentView.setTitle(String.format("%s (%d)", getResources().getString(R.string.answer_hint), bean.getStatistics().getComment()));
         mCommentView.init(bean.getId(),
                 bean.getType(),
