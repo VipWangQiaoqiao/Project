@@ -85,7 +85,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     @Bind(R.id.lay_emptyLayout)
     EmptyLayout mEmptyLayout;
-    private BaseRecyclerAdapter<NearbyResult> mAdapter;
+    private NearbyUserAdapter mAdapter;
 
     private int mNextPageIndex = 0;
     private LatLng mUserLatLng;
@@ -354,7 +354,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             if (infoList != null) {
                 int loadInfoSize = infoList.size();
 
-
                 List<NearbyResult> items = mAdapter.getItems();
 
                 int tempSize = items.size();
@@ -459,8 +458,9 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         int count = mAdapter.getCount();
         if (count <= 0) {
             //没有缓存直接进行提示
-            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, false);
+            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
         }
+        hideLoading();
     }
 
     /**
