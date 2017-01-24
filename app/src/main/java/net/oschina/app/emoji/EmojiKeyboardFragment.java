@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import net.oschina.app.R;
 import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 import net.oschina.app.improve.widget.TitleBar;
+import net.oschina.app.util.TDevice;
 
 /**
  * 表情选择界面
@@ -27,6 +28,8 @@ public class EmojiKeyboardFragment extends Fragment implements
 
     private boolean isDelegate = false;
     private int keyboardHeightInPx = -1;
+    private int keyboardMinHeightInPx;
+    private int keyboardMaxHeightInPx;
     private boolean isClipStatusHeight = false;
 
     @Override
@@ -41,7 +44,15 @@ public class EmojiKeyboardFragment extends Fragment implements
             mRootView = (LinearLayout) inflater.inflate(R.layout.frag_keyboard, container, false);
             initWidget(mRootView);
         }
+
+        intKeyboardHeight();
         return mRootView;
+    }
+
+    private void intKeyboardHeight() {
+        // init keyboard min and max height
+        keyboardMinHeightInPx = (int) TDevice.dipToPx(getResources(), isClipStatusHeight ? 176 : 151);
+        keyboardMaxHeightInPx = (int) TDevice.dipToPx(getResources(), 254);
     }
 
     private void initWidget(View rootView) {
@@ -122,13 +133,18 @@ public class EmojiKeyboardFragment extends Fragment implements
      * 显示Emoji并隐藏软键盘
      */
     public void showEmojiKeyBoard() {
-        if (keyboardHeightInPx > 0) {
-            ViewGroup.LayoutParams params = mRootView.getLayoutParams();
-            params.height = isClipStatusHeight
-                    ? keyboardHeightInPx - TitleBar.getExtPaddingTop(mRootView.getResources())
-                    : keyboardHeightInPx;
-            mRootView.requestLayout();
-        }
+        int height = keyboardHeightInPx;
+        height = Math.max(height, keyboardMinHeightInPx);
+        height = isClipStatusHeight
+                ? height - TitleBar.getExtPaddingTop(mRootView.getResources())
+                : height;
+        if (height > 0)
+            height = Math.min(height, keyboardMaxHeightInPx);
+
+        ViewGroup.LayoutParams params = mRootView.getLayoutParams();
+        params.height = height;
+        mRootView.requestLayout();
+
         mRootView.setVisibility(View.VISIBLE);
     }
 
@@ -147,6 +163,7 @@ public class EmojiKeyboardFragment extends Fragment implements
 
     public void setClipStatusHeight(boolean clipStatusHeight) {
         isClipStatusHeight = clipStatusHeight;
+        intKeyboardHeight();
     }
 
     public void setDelegate(boolean delegate) {
