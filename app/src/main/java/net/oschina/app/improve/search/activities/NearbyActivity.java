@@ -29,6 +29,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.radar.RadarNearbyInfo;
 import com.baidu.mapapi.radar.RadarNearbyResult;
 import com.baidu.mapapi.radar.RadarNearbySearchOption;
+import com.baidu.mapapi.radar.RadarNearbySearchSortType;
 import com.baidu.mapapi.radar.RadarSearchError;
 import com.baidu.mapapi.radar.RadarSearchListener;
 import com.baidu.mapapi.radar.RadarSearchManager;
@@ -85,7 +86,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     @Bind(R.id.lay_emptyLayout)
     EmptyLayout mEmptyLayout;
-    private NearbyUserAdapter mAdapter;
+    private BaseRecyclerAdapter<NearbyResult> mAdapter;
 
     private int mNextPageIndex = 0;
     private LatLng mUserLatLng;
@@ -773,7 +774,8 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
             //构造请求参数，其中centerPt是自己的位置坐标
             RadarNearbySearchOption option = new RadarNearbySearchOption()
-                    .centerPt(mUserLatLng).pageNum(pageIndex).radius(35000).pageCapacity(20);
+                    .centerPt(mUserLatLng).pageNum(pageIndex).radius(35000).pageCapacity(20).
+                            sortType(RadarNearbySearchSortType.distance_from_near_to_far);
             //发起查询请求
             mRadarSearchManager.nearbyInfoRequest(option);
             mIsFirstLocation = false;
