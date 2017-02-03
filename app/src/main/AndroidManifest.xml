@@ -477,9 +477,6 @@
         <service
             android:name=".improve.main.update.DownloadService"
             android:exported="false" />
-        <service
-            android:name=".improve.main.update.DownloadService"
-            android:exported="false" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
