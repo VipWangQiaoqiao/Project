@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.general;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -96,13 +97,13 @@ public class SoftwareDetailFragment extends DetailFragment {
         }
     }
 
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
         if (mContext == null)
             return;
         mImageFav.setImageResource(bean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
-        mTextName.setText(bean.getTitle());
         mImageRecommend.setVisibility(bean.isRecommend() ? View.VISIBLE : View.INVISIBLE);
         List<SubBean.Image> images = bean.getImages();
         if (images != null && images.size() != 0)
@@ -117,8 +118,9 @@ public class SoftwareDetailFragment extends DetailFragment {
         }
         Map<String, Object> extras = bean.getExtra();
         if (extras != null) {
+            mTextName.setText(getExtraString(extras.get("softwareTitle")) + getExtraString(extras.get("softwareName")));
             String protocol = getExtraString(extras.get("softwareLicense"));
-            if(TextUtils.isEmpty(protocol))
+            if (TextUtils.isEmpty(protocol))
                 protocol = "未知";
             mTextProtocol.setText(protocol);
             mTextRecordTime.setText(getExtraString(extras.get("softwareCollectionDate")));

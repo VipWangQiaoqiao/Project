@@ -4,6 +4,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -26,6 +27,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class BlogDetailFragment extends DetailFragment {
+
+    @Bind(R.id.iv_label_recommend)
+    ImageView mImageRecommend;
+
+    @Bind(R.id.iv_label_originate)
+    ImageView mImageOriginate;
 
     @Bind(R.id.iv_avatar)
     CircleImageView mImageAvatar;
@@ -88,6 +95,7 @@ public class BlogDetailFragment extends DetailFragment {
     @Override
     public void showGetDetailSuccess(SubBean bean) {
         super.showGetDetailSuccess(bean);
+        if (mContext == null) return;
         Author author = bean.getAuthor();
         if (author != null) {
             mTextName.setText(author.getName());
@@ -103,7 +111,8 @@ public class BlogDetailFragment extends DetailFragment {
         }
         mBtnRelation.setText(bean.getAuthor().getRelation() < UserRelation.RELATION_ONLY_HER
                 ? "已关注" : "关注");
-
+        mImageRecommend.setVisibility(mBean.isRecommend() ? View.VISIBLE : View.GONE);
+        mImageOriginate.setVisibility(mBean.isOriginal() ? View.VISIBLE : View.GONE);
     }
 
     @Override

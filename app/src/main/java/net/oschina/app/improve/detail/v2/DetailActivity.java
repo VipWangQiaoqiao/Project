@@ -17,6 +17,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
@@ -249,32 +250,36 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
     @SuppressWarnings("LoopStatementThatDoesntLoop")
     protected boolean toShare(String title, String content, String url) {
-        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(url))
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(url) || mBean == null)
             return false;
 
         String imageUrl = null;
-
-        //1.如果是活动直接在分享中加入活动icon
-        if (mBean != null && mBean.getType() == OSChinaApi.CATALOG_EVENT) {
-            List<SubBean.Image> images = mBean.getImages();
-            if (images != null && images.size() > 0) {
-                imageUrl = images.get(0).getThumb();
-            }
-        } else {
-            //2.不是活动类型,匹配内容中是否有图片，有就返回第一张图片的url
-            //"<\\s*img\\s+([^>]*)\\s*/>"
-            String regex = "<img src=\"([^\"]+)\"";
-
-            Pattern pattern = Pattern.compile(regex);
-
-            Matcher matcher = pattern.matcher(content);
-
-            while (matcher.find()) {
-                imageUrl = matcher.group(1);
+        List<SubBean.Image> images = mBean.getImages();
+        switch (mBean.getType()) {
+            case News.TYPE_EVENT:
+                if (images != null && images.size() > 0) {
+                    imageUrl = images.get(0).getHref();
+                }
                 break;
-            }
-        }
+            case News.TYPE_SOFTWARE:
+                if (images != null && images.size() > 0) {
+                    imageUrl = images.get(0).getThumb();
+                    if (!"https://www.oschina.net/img/logo/default.png?t=1482336104000".equals(imageUrl))
+                        break;
+                }
+            default:
+                String regex = "<img src=\"([^\"]+)\"";
 
+                Pattern pattern = Pattern.compile(regex);
+
+                Matcher matcher = pattern.matcher(content);
+
+                while (matcher.find()) {
+                    imageUrl = matcher.group(1);
+                    break;
+                }
+                break;
+        }
         content = content.trim();
         if (content.length() > 55) {
             content = HTMLUtil.delHTMLTag(content);
