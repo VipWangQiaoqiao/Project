@@ -56,7 +56,6 @@ import net.oschina.app.util.TDevice;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -273,6 +272,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     @Override
     public void onRefreshing() {
+        mAdapter.clear();
         requestData(0);
     }
 
@@ -473,7 +473,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
      */
     private void notifySortData(int loadInfoSize, int pageIndex, List<NearbyResult> items) {
         //根据数据的距离从近到远进行排序
-        Collections.sort(items);
+        //Collections.sort(items);
         //刷新数据，初始化有效数据ui
         mAdapter.notifyDataSetChanged();
         mAdapter.setState(loadInfoSize < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, loadInfoSize >= 20);
@@ -764,6 +764,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         if (TDevice.hasInternet()) {
 
             if (pageIndex == 0 && mAdapter.getCount() <= 0) {
+                //if (mEmptyLayout.getVisibility() == View.VISIBLE)
                 mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             }
 
@@ -775,7 +776,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             //构造请求参数，其中centerPt是自己的位置坐标
             RadarNearbySearchOption option = new RadarNearbySearchOption()
                     .centerPt(mUserLatLng).pageNum(pageIndex).radius(35000).pageCapacity(20).
-                            sortType(RadarNearbySearchSortType.distance_from_near_to_far);
+                            sortType(RadarNearbySearchSortType.distance_from_far_to_near);
             //发起查询请求
             mRadarSearchManager.nearbyInfoRequest(option);
             mIsFirstLocation = false;
@@ -803,28 +804,31 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
      */
     private void hideLoading() {
         final EmptyLayout emptyLayout = mEmptyLayout;
+
         if (emptyLayout == null)
             return;
 
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_to_hide);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_to_hide);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
+                @Override
+                public void onAnimationRepeat(Animation animation) {
 
-            }
-        });
+                }
+            });
 
-        emptyLayout.startAnimation(animation);
+            emptyLayout.startAnimation(animation);
+        }
     }
 
     /**
