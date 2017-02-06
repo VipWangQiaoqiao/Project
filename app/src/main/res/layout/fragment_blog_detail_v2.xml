@@ -121,7 +121,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:lineSpacingExtra="4dp"
-                    android:maxLines="2"
                     android:textColor="#111111"
                     android:textSize="18sp"
                     tools:text="Webpack从零开始" />
@@ -146,7 +145,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="4dp"
-                        android:maxLines="6"
                         android:textColor="#6a6a6a"
                         android:textSize="14sp"
                         tools:text="在Google IO大会中不仅仅带来了Android Studio 2.2预览版，同时带给我们一个依赖约束的库。 简单来说，她是相对布局的升级版本，但是区别与相对布局更加强调约束。何为约束，即控件之间的关系。" />
