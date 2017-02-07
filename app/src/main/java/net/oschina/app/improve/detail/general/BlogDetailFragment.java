@@ -14,7 +14,6 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
-import net.oschina.app.improve.utils.ReadedIndexCacheManager;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.StringUtils;
 
@@ -28,11 +27,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BlogDetailFragment extends DetailFragment {
 
+
+    @Bind(R.id.iv_label_today)
+    ImageView mImageToday;
+
     @Bind(R.id.iv_label_recommend)
     ImageView mImageRecommend;
 
     @Bind(R.id.iv_label_originate)
     ImageView mImageOriginate;
+
+    @Bind(R.id.iv_label_reprint)
+    ImageView mImageReprint;
 
     @Bind(R.id.iv_avatar)
     CircleImageView mImageAvatar;
@@ -113,6 +119,8 @@ public class BlogDetailFragment extends DetailFragment {
                 ? "已关注" : "关注");
         mImageRecommend.setVisibility(mBean.isRecommend() ? View.VISIBLE : View.GONE);
         mImageOriginate.setVisibility(mBean.isOriginal() ? View.VISIBLE : View.GONE);
+        mImageReprint.setVisibility(mImageOriginate.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        mImageToday.setVisibility(StringUtils.isToday(mBean.getPubDate()) ? View.VISIBLE : View.GONE);
     }
 
     @Override
