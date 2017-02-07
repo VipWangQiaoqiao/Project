@@ -62,12 +62,12 @@
 
                 <Button
                     android:id="@+id/btn_relation"
+                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
                     android:background="@drawable/ic_bg_btn_blue"
                     android:minWidth="48dp"
                     android:textColor="@color/white"
-                    style="?android:attr/borderlessButtonStyle"
                     android:textSize="12sp"
                     tools:text="关注" />
             </LinearLayout>
@@ -86,13 +86,14 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/iv_label_recommend"
+                    android:id="@+id/iv_label_today"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginRight="4dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_label_recommend"
+                    android:src="@mipmap/ic_label_today"
+                    android:visibility="gone"
                     tools:ignore="RtlHardcoded" />
 
                 <ImageView
@@ -102,6 +103,27 @@
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
                     android:src="@mipmap/ic_label_originate" />
+
+                <ImageView
+                    android:id="@+id/iv_label_reprint"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="4dp"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_label_reprint"
+                    android:visibility="gone"
+                    tools:ignore="RtlHardcoded" />
+
+                <ImageView
+                    android:id="@+id/iv_label_recommend"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="4dp"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_label_recommend"
+                    tools:ignore="RtlHardcoded" />
             </LinearLayout>
 
 
