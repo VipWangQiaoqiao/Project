@@ -20,8 +20,9 @@ public class CropDrawable extends Drawable {
     private Context mContext;
     private int offset = 50;
 
-    private Paint mCirclePaint = new Paint();//圆角
-    private Paint mLinePaint = new Paint();//正方形框
+    private Paint mCornerPaint = new Paint();
+    private Paint mLinePaint = new Paint();
+    private Paint mNineLinePaint = new Paint();
 
     private int mCropWidth = 800, mCropHeight = 800;
 
@@ -35,15 +36,20 @@ public class CropDrawable extends Drawable {
     }
 
     private void initPaint() {
-        mLinePaint.setARGB(200, 50, 50, 50);
-        mLinePaint.setStrokeWidth(2f);
-        mLinePaint.setStyle(Paint.Style.STROKE);
-        mLinePaint.setAntiAlias(true);
         mLinePaint.setColor(Color.WHITE);
+        mLinePaint.setAntiAlias(true);
+        mLinePaint.setStrokeWidth(2);
+        mLinePaint.setStyle(Paint.Style.STROKE);
 
-        mCirclePaint.setColor(Color.WHITE);
-        mCirclePaint.setStyle(Paint.Style.FILL);//实心圆
-        mCirclePaint.setAntiAlias(true);
+        mNineLinePaint.setColor(Color.WHITE);
+        mNineLinePaint.setAntiAlias(true);
+        mNineLinePaint.setStrokeWidth(1);
+        mNineLinePaint.setStyle(Paint.Style.STROKE);
+
+        mCornerPaint.setColor(Color.WHITE);
+        mCornerPaint.setAntiAlias(true);
+        mCornerPaint.setStrokeWidth(8);
+        mCornerPaint.setStyle(Paint.Style.FILL);
     }
 
     @Override
@@ -56,10 +62,34 @@ public class CropDrawable extends Drawable {
         mBottom = (height + mCropHeight) / 2;
         Rect rect = new Rect(mLeft, mTop, mRight, mBottom);
         canvas.drawRect(rect, mLinePaint);
-        canvas.drawCircle(rect.left, rect.top + mCropHeight, RADIUS, mCirclePaint);
-        canvas.drawCircle(rect.right, rect.top + mCropHeight, RADIUS, mCirclePaint);
-        canvas.drawCircle(rect.left, rect.bottom - mCropHeight, RADIUS, mCirclePaint);
-        canvas.drawCircle(rect.right, rect.bottom - mCropHeight, RADIUS, mCirclePaint);
+        //左上
+        canvas.drawLine(mLeft, mTop, mLeft, mTop + 50, mCornerPaint);
+        canvas.drawLine(mLeft - 4, mTop, mLeft + 50, mTop, mCornerPaint);
+
+        //右上
+        canvas.drawLine(mRight, mTop, mRight, mTop + 50, mCornerPaint);
+        canvas.drawLine(mRight - 50, mTop, mRight + 4, mTop, mCornerPaint);
+
+        //左下
+        canvas.drawLine(mLeft, mBottom, mLeft + 50, mBottom, mCornerPaint);
+        canvas.drawLine(mLeft, mBottom - 50, mLeft, mBottom + 4, mCornerPaint);
+
+        //右下
+        canvas.drawLine(mRight, mBottom, mRight, mBottom - 50, mCornerPaint);
+        canvas.drawLine(mRight - 50, mBottom, mRight + 4, mBottom, mCornerPaint);
+
+        int index = canvas.save();
+        canvas.clipRect(rect);
+        //画九宫格
+        int vAvg = mCropWidth / 3;
+        int hAvg = mCropHeight / 3;
+        canvas.drawLine(mLeft + vAvg, mTop, mLeft + vAvg, mBottom, mNineLinePaint);
+        canvas.drawLine(mLeft + vAvg * 2, mTop, mLeft + vAvg * 2, mBottom, mNineLinePaint);
+
+        canvas.drawLine(mLeft, mTop + hAvg, mRight, mTop + hAvg, mNineLinePaint);
+        canvas.drawLine(mLeft, mTop + hAvg * 2, mRight, mTop + hAvg * 2, mNineLinePaint);
+
+        canvas.restoreToCount(index);
     }
 
     @Override
