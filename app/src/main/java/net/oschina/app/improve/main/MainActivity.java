@@ -12,26 +12,45 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.radar.RadarSearchError;
+import com.baidu.mapapi.radar.RadarSearchManager;
+import com.baidu.mapapi.radar.RadarUploadInfo;
+
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.Setting;
 import net.oschina.app.base.BaseApplication;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.Version;
+import net.oschina.app.improve.main.location.BDLocationAdapter;
+import net.oschina.app.improve.main.location.RadarSearchAdapter;
 import net.oschina.app.improve.main.nav.NavFragment;
 import net.oschina.app.improve.main.nav.NavigationButton;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.notice.NoticeManager;
+import net.oschina.app.improve.search.activities.NearbyActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.util.TDevice;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +58,15 @@ import butterknife.Bind;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends BaseActivity implements
-        NavFragment.OnNavigationReselectListener,
+import static net.oschina.app.improve.search.activities.NearbyActivity.LOCATION_PERMISSION;
+
+public class MainActivity extends BaseActivity implements NavFragment.OnNavigationReselectListener,
         EasyPermissions.PermissionCallbacks,
         CheckUpdateManager.RequestPermissions {
 
-    private final int RC_EXTERNAL_STORAGE = 0x04;//存储权限
+    private static final String TAG = "MainActivity";
+
+    private static final int RC_EXTERNAL_STORAGE = 0x04;//存储权限
     public static final String ACTION_NOTICE = "ACTION_NOTICE";
     private long mBackPressedTime;
 
@@ -55,6 +77,9 @@ public class MainActivity extends BaseActivity implements
 
     private NavFragment mNavBar;
     private List<TurnBackListener> mTurnBackListeners = new ArrayList<>();
+    private RadarSearchManager mRadarSearchManager;
+    private LocationClient mLocationClient;
+    private RadarSearchAdapter mRadarSearchAdapter;
 
     public interface TurnBackListener {
         boolean onTurnBack();
@@ -125,6 +150,13 @@ public class MainActivity extends BaseActivity implements
         NoticeManager.init(this);
         // in this we can checkShare update
         checkUpdate();
+
+        //如果有账户登陆，并且有主动上传过位置信息。那么准备请求定位
+        if (AccountHelper.isLogin() && Setting.hasLocation(getApplicationContext())) {
+            //1.有主动授权过，直接进行定位，否则不进行操作任何操作
+            if (Setting.hasLocationPermission(getApplicationContext()))
+                requestLocationPermission();
+        }
     }
 
     @Override
@@ -143,6 +175,21 @@ public class MainActivity extends BaseActivity implements
     }
 
 
+    /**
+     * proxy request permission
+     */
+    @AfterPermissionGranted(NearbyActivity.LOCATION_PERMISSION)
+    private void requestLocationPermission() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE)) {
+            startLbs();
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.need_lbs_permission_hint), LOCATION_PERMISSION,
+                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE);
+        }
+    }
+
+
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
 
@@ -150,12 +197,23 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        DialogHelper.getConfirmDialog(this, "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", false, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+
+        for (String perm : perms) {
+            if (perm.equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                DialogHelper.getConfirmDialog(this, "温馨提示", "需要开启开源中国对您手机的存储权限才能下载安装，是否现在开启", "去开启", "取消", false, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+                    }
+                }, null).show();
+
+            } else {
+                Setting.updateLocationPermission(getApplicationContext(), false);
             }
-        }, null).show();
+        }
+
+
     }
 
     @Override
@@ -167,6 +225,7 @@ public class MainActivity extends BaseActivity implements
     protected void onDestroy() {
         super.onDestroy();
         NoticeManager.stopListen(this);
+        releaseLbs();
     }
 
     public void addOnTurnBackListener(TurnBackListener l) {
@@ -234,5 +293,179 @@ public class MainActivity extends BaseActivity implements
         CheckUpdateManager manager = new CheckUpdateManager(this, false);
         manager.setCaller(this);
         manager.checkUpdate();
+    }
+
+    /**
+     * start auto lbs service
+     */
+    private void startLbs() {
+        if (mRadarSearchManager == null || mLocationClient == null) {
+            initLbs();
+        }
+        //进行定位
+        mLocationClient.start();
+    }
+
+    /**
+     * init lbs service
+     */
+    private void initLbs() {
+        if (mRadarSearchManager == null) {
+            mRadarSearchManager = RadarSearchManager.getInstance();
+            mRadarSearchManager.addNearbyInfoListener(this.mRadarSearchAdapter = new RadarSearchAdapter() {
+                @Override
+                public void onGetUploadState(RadarSearchError radarSearchError) {
+                    super.onGetUploadState(radarSearchError);
+                    //上传成功，更新用户本地定位信息标示
+                    if (radarSearchError == RadarSearchError.RADAR_NO_ERROR) {
+                        Setting.updateLocationInfo(getApplicationContext(), true);
+                    } else {
+                        Setting.updateLocationInfo(getApplicationContext(), false);
+                    }
+                    //不管是否上传成功，都主动释放lbs资源
+                    releaseLbs();
+                }
+            });
+        }
+
+        if (mLocationClient == null) {
+            mLocationClient = new LocationClient(this);
+            mLocationClient.registerLocationListener(new BDLocationAdapter() {
+                @Override
+                public void onReceiveLocation(BDLocation bdLocation) {
+                    super.onReceiveLocation(bdLocation);
+                    //处理返回的定位信息，进行用户位置信息上传
+                    ReceiveLocation(bdLocation);
+                }
+            });
+        }
+
+        LocationClientOption option = new LocationClientOption();
+
+        //可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+
+        //可选，默认gcj02，设置返回的定位结果坐标系
+        option.setCoorType("bd09ll");
+
+        //根据网络情况和gps进行准确定位，只定位一次 当获取到真实有效的经纬度时，主动关闭定位功能
+        option.setScanSpan(0);
+
+        //可选，设置是否需要地址信息，默认不需要
+        option.setIsNeedAddress(false);
+
+        //设置是否需要位置语义化结果
+        option.setIsNeedLocationDescribe(false);
+
+        //可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
+        //option.setIgnoreKillProcess(false);
+
+        //可选，默认false，设置是否收集CRASH信息，默认收集
+        option.SetIgnoreCacheException(false);
+
+        mLocationClient.setLocOption(option);
+    }
+
+    /**
+     * 定位回调处理
+     *
+     * @param location location
+     */
+    private void ReceiveLocation(BDLocation location) {
+
+        final int code = location.getLocType();
+        switch (code) {
+            case BDLocation.TypeCriteriaException://62
+                releaseLbs();
+                return;
+            case BDLocation.TypeNetWorkException://63
+                releaseLbs();
+                return;
+            case BDLocation.TypeServerError://167
+                releaseLbs();
+                return;
+            case BDLocation.TypeNetWorkLocation://161 网络定位模式
+                break;
+            case BDLocation.TypeOffLineLocation://66  离线模式
+
+                if (!TDevice.hasInternet()) {
+                    SimplexToast.show(this, getString(R.string.tip_network_error));
+                    releaseLbs();
+                    return;
+                }
+
+                break;
+        }
+
+        if (code >= 501) {//非法key
+            releaseLbs();
+            return;
+        }
+
+        //定位成功，网络ok，主动上传用户位置信息
+        if (TDevice.hasInternet() && location.getLatitude() != 4.9E-324 && location.getLongitude() != 4.9E-324) {
+
+            LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+            Setting.updateLocationPermission(getApplicationContext(), true);
+
+            //周边雷达设置用户身份标识，id为空默认是设备标识
+            String userId = null;
+
+            //上传位置
+            RadarUploadInfo info = new RadarUploadInfo();
+
+            if (AccountHelper.isLogin()) {
+                userId = String.valueOf(AccountHelper.getUserId());
+
+                User user = AccountHelper.getUser();
+                try {
+                    String company = "";
+                    if (user.getMore() != null) {
+                        company = user.getMore().getCompany();
+                    }
+                    company = TextUtils.isEmpty(company) ? "" : company;
+                    String comments = String.format(
+                            "{" +
+                                    "\"id\":\"%s\"," +
+                                    "\"name\":\"%s\"," +
+                                    "\"portrait\":\"%s\"," +
+                                    "\"gender\":\"%s\"," +
+                                    "\"more\":{" +
+                                    "\"company\":\"%s\"}" +
+                                    "}"
+                            , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company);
+                    comments = comments.replaceAll("[\\s\n]+", "");
+                    comments = URLEncoder.encode(comments, NearbyActivity.CHARSET);
+                    info.comments = comments;
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    SimplexToast.show(this, getString(R.string.upload_lbs_info_hint));
+                }
+            }
+
+            mRadarSearchManager.setUserID(userId);
+            info.pt = userLatLng;
+            mRadarSearchManager.uploadInfoRequest(info);
+        } else {
+            //返回的位置信息异常或网络有问题，即定位失败，停止定位功能，并释放lbs资源
+            releaseLbs();
+        }
+    }
+
+    /**
+     * release lbs source
+     */
+    private void releaseLbs() {
+        if (mLocationClient != null && mLocationClient.isStarted())
+            mLocationClient.stop();
+        mLocationClient = null;
+        //移除监听
+        if (mRadarSearchManager != null) {
+            mRadarSearchManager.removeNearbyInfoListener(mRadarSearchAdapter);
+            //释放资源
+            mRadarSearchManager.destroy();
+            mRadarSearchManager = null;
+        }
     }
 }

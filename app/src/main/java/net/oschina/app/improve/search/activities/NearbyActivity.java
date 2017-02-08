@@ -74,7 +74,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         RecyclerRefreshLayout.SuperRefreshLayoutListener, BaseRecyclerAdapter.OnItemClickListener,
         EasyPermissions.PermissionCallbacks, View.OnClickListener {
 
-    private static final int LOCATION_PERMISSION = 0x0100;//定位权限
+    public static final int LOCATION_PERMISSION = 0x0100;//定位权限
     public static final String CHARSET = "UTF-8";
 
     @Bind(R.id.recycler)
