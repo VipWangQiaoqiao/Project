@@ -64,8 +64,6 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         EasyPermissions.PermissionCallbacks,
         CheckUpdateManager.RequestPermissions {
 
-    private static final String TAG = "MainActivity";
-
     private static final int RC_EXTERNAL_STORAGE = 0x04;//存储权限
     public static final String ACTION_NOTICE = "ACTION_NOTICE";
     private long mBackPressedTime;
