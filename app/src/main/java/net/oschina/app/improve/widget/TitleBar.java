@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.utils.StatusBarHeightUtil;
 import net.oschina.app.util.TDevice;
 
 /**
@@ -78,7 +79,7 @@ public class TitleBar extends FrameLayout {
         setBackgroundColor(getResources().getColor(R.color.main_green));
 
         // Init padding
-        setPadding(getLeft(), getTop() + getExtPaddingTop(getResources()), getRight(), getBottom());
+        setPadding(getLeft(), getTop() + StatusBarHeightUtil.getStatusBarHeight(getContext()), getRight(), getBottom());
     }
 
     public void setTitle(@StringRes int titleRes) {
@@ -103,7 +104,7 @@ public class TitleBar extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         float d = getResources().getDisplayMetrics().density;
-        int minH = (int) (d * 36 + getExtPaddingTop(getResources()));
+        int minH = (int) (d * 36 + StatusBarHeightUtil.getStatusBarHeight(getContext()));
 
         heightMeasureSpec = MeasureSpec.makeMeasureSpec(minH, MeasureSpec.EXACTLY);
 

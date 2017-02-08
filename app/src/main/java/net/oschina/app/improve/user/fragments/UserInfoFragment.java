@@ -38,6 +38,7 @@ import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.user.collection.UserCollectionActivity;
 import net.oschina.app.improve.user.event.UserEventActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.utils.StatusBarHeightUtil;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
@@ -405,7 +406,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     private void measureTitleBarHeight() {
         if (mRlShowInfo != null) {
             mRlShowInfo.setPadding(mRlShowInfo.getLeft(),
-                    TitleBar.getExtPaddingTop(getResources()),
+                    StatusBarHeightUtil.getStatusBarHeight(getContext()),
                     mRlShowInfo.getRight(), mRlShowInfo.getBottom());
         }
     }
