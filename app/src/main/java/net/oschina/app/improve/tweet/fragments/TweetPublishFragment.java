@@ -18,14 +18,13 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.face.FacePanelView;
 import net.oschina.app.improve.tweet.activities.TweetTopicActivity;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
@@ -67,7 +66,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     View mIconSend;
 
     private TweetPublishContract.Operator mOperator;
-    private EmojiKeyboardFragment mEmojiKeyboard;
+    private FacePanelView mFacePanel;
 
     public TweetPublishFragment() {
         // Required empty public constructor
@@ -100,18 +99,22 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     protected void initWidget(View root) {
         super.initWidget(root);
 
-        // EmojiKeyboardFragment
-        mEmojiKeyboard = (EmojiKeyboardFragment) getChildFragmentManager().findFragmentById(R.id.frag_emoji_keyboard);
-        mEmojiKeyboard.setClipStatusHeight(true);
-        mEmojiKeyboard.setOnEmojiClickListener(new OnEmojiClickListener() {
+        // init face panel
+        mFacePanel = findView(R.id.panel_face);
+        mFacePanel.setListener(new FacePanelView.FacePanelListener() {
             @Override
-            public void onEmojiClick(Emojicon v) {
-                InputHelper.input2OSC(mEditContent, v);
+            public void onDeleteClick() {
+                InputHelper.backspace(mEditContent);
             }
 
             @Override
-            public void onDeleteButtonClick(View v) {
-                InputHelper.backspace(mEditContent);
+            public void hideSoftKeyboard() {
+                TweetPublishFragment.this.hideSoftKeyboard();
+            }
+
+            @Override
+            public void onFaceClick(Emojicon v) {
+                InputHelper.input2OSC(mEditContent, v);
             }
         });
 
@@ -176,7 +179,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         mEditContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                mEmojiKeyboard.hideEmojiKeyBoard();
+                mFacePanel.hidePanel();
                 return false;
             }
         });
@@ -240,7 +243,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                     mOperator.publish();
                     break;
                 case R.id.edit_content: {
-                    mEmojiKeyboard.hideEmojiKeyBoard();
+                    mFacePanel.hidePanel();
                 }
                 break;
             }
@@ -270,21 +273,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
      * @param v View
      */
     private void handleEmojiClick(View v) {
-        if (mEmojiKeyboard.isShow()) {
-            mEmojiKeyboard.hideEmojiKeyBoard();
+        if (mFacePanel.isShow()) {
+            mFacePanel.hidePanel();
             showSoftKeyboard(mEditContent);
         } else {
-            hideSoftKeyboard();
-            v.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        mEmojiKeyboard.showEmojiKeyBoard();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, 200);
+            mFacePanel.openPanel();
         }
     }
 
@@ -342,6 +335,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void hideSoftKeyboard() {
+        mEditContent.clearFocus();
         ((InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
                 mEditContent.getWindowToken(), 0);
@@ -357,7 +351,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void hideAllKeyBoard() {
-        mEmojiKeyboard.hideEmojiKeyBoard();
+        mFacePanel.hidePanel();
         hideSoftKeyboard();
     }
 
@@ -426,8 +420,8 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public boolean onBackPressed() {
-        if (mEmojiKeyboard.isShow()) {
-            mEmojiKeyboard.hideEmojiKeyBoard();
+        if (mFacePanel.isShow()) {
+            mFacePanel.hidePanel();
             return false;
         }
         return true;

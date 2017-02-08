@@ -63,7 +63,7 @@ public class UiUtil {
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         if (layoutParams == null) {
             layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
+                    aimHeight);
             view.setLayoutParams(layoutParams);
         } else {
             layoutParams.height = aimHeight;

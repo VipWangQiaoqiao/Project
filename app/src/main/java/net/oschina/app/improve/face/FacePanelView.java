@@ -1,6 +1,7 @@
 package net.oschina.app.improve.face;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.Nullable;
@@ -14,15 +15,21 @@ import android.widget.LinearLayout;
 import net.oschina.app.R;
 import net.oschina.app.emoji.DisplayRules;
 import net.oschina.app.emoji.Emojicon;
+import net.oschina.app.improve.utils.SoftKeyboardUtil;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author qiujuer Email:qiujuer@live.cn
  * @version 1.0.0
  */
-
-public class FacePanelView extends LinearLayout implements View.OnClickListener, FaceRecyclerView.OnFaceClickListener {
+public class FacePanelView extends LinearLayout implements View.OnClickListener,
+        FaceRecyclerView.OnFaceClickListener, SoftKeyboardUtil.IPanelHeightTarget {
     private ViewPager mPager;
     private FacePanelListener mListener;
+    private boolean mKeyboardShowing;
+    private AtomicBoolean mWillShowPanel = new AtomicBoolean();
+    private int mRealHeight;
 
     public FacePanelView(Context context) {
         super(context);
@@ -69,6 +76,7 @@ public class FacePanelView extends LinearLayout implements View.OnClickListener,
             public Object instantiateItem(ViewGroup container, final int position) {
                 final FaceRecyclerView view = createRecyclerView();
                 bindRecyclerViewData(view, position);
+                container.addView(view);
                 return view;
             }
 
@@ -79,6 +87,9 @@ public class FacePanelView extends LinearLayout implements View.OnClickListener,
                 }
             }
         });
+
+        // init soft keyboard helper
+        SoftKeyboardUtil.attach((Activity) getContext(), this);
     }
 
     @Override
@@ -122,8 +133,62 @@ public class FacePanelView extends LinearLayout implements View.OnClickListener,
         mListener = listener;
     }
 
+    @Override
+    public void refreshHeight(int panelHeight) {
+        mRealHeight = panelHeight;
+        //UiUtil.changeViewHeight(this, panelHeight);
+    }
+
+    @Override
+    public void onKeyboardShowing(boolean showing) {
+        mKeyboardShowing = showing;
+        if (showing) {
+            hidePanel();
+        } else if (mWillShowPanel.getAndSet(false)) {
+            openPanel();
+        }
+    }
+
+    public boolean isShow() {
+        return getVisibility() != GONE;
+    }
+
+    public void hidePanel() {
+        setVisibility(GONE);
+    }
+
+    public void openPanel() {
+        if (mKeyboardShowing) {
+            mWillShowPanel.set(true);
+            FacePanelListener listener = mListener;
+            if (listener != null)
+                listener.hideSoftKeyboard();
+        } else {
+            setVisibility(VISIBLE);
+        }
+    }
+
+    @Override
+    public int getPanelHeight() {
+        return mRealHeight;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (mKeyboardShowing) {
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(0,
+                    MeasureSpec.getMode(MeasureSpec.EXACTLY));
+        } else {
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(mRealHeight,
+                    MeasureSpec.getMode(MeasureSpec.EXACTLY));
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
     public interface FacePanelListener extends FaceRecyclerView.OnFaceClickListener {
         void onDeleteClick();
+
+        void hideSoftKeyboard();
     }
 
 }

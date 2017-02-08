@@ -7,38 +7,23 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 
+import net.oschina.app.Setting;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 
 /**
  * @author qiujuer Email:qiujuer@live.cn
  * @version 1.0.0
+ *          <p>
+ *          PS: Most code form WeChat
  */
-
+@SuppressWarnings("WeakerAccess")
 public class SoftKeyboardUtil {
-
-    public static void showKeyboard(final View view) {
-        view.requestFocus();
-        InputMethodManager inputManager =
-                (InputMethodManager) view.getContext().getSystemService(
-                        Context.INPUT_METHOD_SERVICE);
-        inputManager.showSoftInput(view, 0);
-    }
-
-    public static void hideKeyboard(final View view) {
-        InputMethodManager imm =
-                (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-
     private static int LAST_SAVE_KEYBOARD_HEIGHT = 0;
 
     private static boolean saveKeyboardHeight(final Context context, int keyboardHeight) {
@@ -51,17 +36,16 @@ public class SoftKeyboardUtil {
         }
 
         LAST_SAVE_KEYBOARD_HEIGHT = keyboardHeight;
-        Log.d("KeyBordUtil", String.format("save keyboard: %d", keyboardHeight));
-
+        Setting.updateSoftKeyboardHeight(context, keyboardHeight);
         return true;
     }
 
-
     public static int getKeyboardHeight(final Context context) {
         if (LAST_SAVE_KEYBOARD_HEIGHT == 0) {
-            LAST_SAVE_KEYBOARD_HEIGHT = getMinPanelHeight(context.getResources());
+            LAST_SAVE_KEYBOARD_HEIGHT = Setting.getSoftKeyboardHeight(context);
+            if (LAST_SAVE_KEYBOARD_HEIGHT == 0)
+                LAST_SAVE_KEYBOARD_HEIGHT = getMinPanelHeight(context.getResources());
         }
-
         return LAST_SAVE_KEYBOARD_HEIGHT;
     }
 
@@ -76,14 +60,13 @@ public class SoftKeyboardUtil {
         return validPanelHeight;
     }
 
-
     private static int MAX_PANEL_HEIGHT = 0;
     private static int MIN_PANEL_HEIGHT = 0;
     private static int MIN_KEYBOARD_HEIGHT = 0;
 
     public static int getMaxPanelHeight(final Resources res) {
         if (MAX_PANEL_HEIGHT == 0) {
-            MAX_PANEL_HEIGHT = (int) TDevice.dipToPx(res, 280);
+            MAX_PANEL_HEIGHT = (int) TDevice.dipToPx(res, 300);
         }
 
         return MAX_PANEL_HEIGHT;
@@ -99,25 +82,12 @@ public class SoftKeyboardUtil {
 
     public static int getMinKeyboardHeight(Context context) {
         if (MIN_KEYBOARD_HEIGHT == 0) {
-            MIN_KEYBOARD_HEIGHT = (int) TDevice.dipToPx(context.getResources(), 92);
+            MIN_KEYBOARD_HEIGHT = (int) TDevice.dipToPx(context.getResources(), 56);
         }
         return MIN_KEYBOARD_HEIGHT;
     }
 
-
-    /**
-     * Recommend invoked by {@link Activity#onCreate(Bundle)}
-     * For align the height of the keyboard to {@code target} as much as possible.
-     * For save the refresh the keyboard height to shared-preferences.
-     *
-     * @param activity contain the view
-     * @param target   whose height will be align to the keyboard height.
-     * @param listener the listener to listen in: keyboard is showing or not.
-     * @see #saveKeyboardHeight(Context, int)
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public static ViewTreeObserver.OnGlobalLayoutListener attach(final Activity activity, IPanelHeightTarget target,
-                                                                 /** Nullable **/OnKeyboardShowingListener listener) {
+    public static ViewTreeObserver.OnGlobalLayoutListener attach(final Activity activity, IPanelHeightTarget target) {
         final ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
         final boolean isFullScreen = UiUtil.isFullScreen(activity);
         final boolean isTranslucentStatus = UiUtil.isTranslucentStatus(activity);
@@ -125,15 +95,10 @@ public class SoftKeyboardUtil {
 
         // get the screen height.
         final Display display = activity.getWindowManager().getDefaultDisplay();
-        final int screenHeight;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            final Point screenSize = new Point();
-            display.getSize(screenSize);
-            screenHeight = screenSize.y;
-        } else {
-            //noinspection deprecation
-            screenHeight = display.getHeight();
-        }
+        final Point screenSize = new Point();
+        display.getSize(screenSize);
+        final int screenHeight = screenSize.y;
+
 
         ViewTreeObserver.OnGlobalLayoutListener globalLayoutListener = new KeyboardStatusListener(
                 isFullScreen,
@@ -141,35 +106,16 @@ public class SoftKeyboardUtil {
                 isFitSystemWindows,
                 contentView,
                 target,
-                listener,
                 screenHeight);
 
         contentView.getViewTreeObserver().addOnGlobalLayoutListener(globalLayoutListener);
         return globalLayoutListener;
     }
 
-    /**
-     * @see #attach(Activity, IPanelHeightTarget, OnKeyboardShowingListener)
-     */
-    public static ViewTreeObserver.OnGlobalLayoutListener attach(final Activity activity, IPanelHeightTarget target) {
-        return attach(activity, target, null);
-    }
-
-    /**
-     * Remove the OnGlobalLayoutListener from the activity root view
-     *
-     * @param activity same activity used in {@link #attach} method
-     * @param l        ViewTreeObserver.OnGlobalLayoutListener returned by {@link #attach} method
-     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void detach(Activity activity, ViewTreeObserver.OnGlobalLayoutListener l) {
         ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            contentView.getViewTreeObserver().removeOnGlobalLayoutListener(l);
-        } else {
-            //noinspection deprecation
-            contentView.getViewTreeObserver().removeGlobalOnLayoutListener(l);
-        }
+        contentView.getViewTreeObserver().removeOnGlobalLayoutListener(l);
     }
 
     private static class KeyboardStatusListener implements ViewTreeObserver.OnGlobalLayoutListener {
@@ -183,22 +129,22 @@ public class SoftKeyboardUtil {
         private final boolean isFitSystemWindows;
         private final int statusBarHeight;
         private boolean lastKeyboardShowing;
-        private final OnKeyboardShowingListener keyboardShowingListener;
         private final int screenHeight;
 
         private boolean isOverlayLayoutDisplayHContainStatusBar = false;
 
-        KeyboardStatusListener(boolean isFullScreen, boolean isTranslucentStatus,
+        KeyboardStatusListener(boolean isFullScreen,
+                               boolean isTranslucentStatus,
                                boolean isFitSystemWindows,
-                               ViewGroup contentView, IPanelHeightTarget panelHeightTarget,
-                               OnKeyboardShowingListener listener, int screenHeight) {
+                               ViewGroup contentView,
+                               IPanelHeightTarget panelHeightTarget,
+                               int screenHeight) {
             this.contentView = contentView;
             this.panelHeightTarget = panelHeightTarget;
             this.isFullScreen = isFullScreen;
             this.isTranslucentStatus = isTranslucentStatus;
             this.isFitSystemWindows = isFitSystemWindows;
-            this.statusBarHeight = net.oschina.app.improve.utils.UiUtil.getStatusBarHeight(contentView.getContext());
-            this.keyboardShowingListener = listener;
+            this.statusBarHeight = UiUtil.getStatusBarHeight(contentView.getContext());
             this.screenHeight = screenHeight;
         }
 
@@ -218,7 +164,6 @@ public class SoftKeyboardUtil {
                 // In the case of the Theme is Status-Bar-Translucent, we calculate the keyboard
                 // state(showing/hiding) and the keyboard height based on assuming that the
                 // displayHeight includes the height of the status bar.
-
                 actionBarOverlayLayout.getWindowVisibleDisplayFrame(r);
 
                 final int overlayLayoutDisplayHeight = (r.bottom - r.top);
@@ -272,7 +217,7 @@ public class SoftKeyboardUtil {
 
                 keyboardHeight = actionBarOverlayLayout.getHeight() - displayHeight;
 
-                Log.d(TAG, String.format("action bar over layout %d display height: %d",
+                TLog.d(TAG, String.format("action bar over layout %s display height: %s",
                         ((View) contentView.getParent()).getHeight(), displayHeight));
 
             } else {
@@ -283,13 +228,13 @@ public class SoftKeyboardUtil {
                 return;
             }
 
-            Log.d(TAG, String.format("pre display height: %d display height: %d keyboard: %d ",
+            TLog.d(TAG, String.format("pre display height: %s display height: %s keyboard: %s ",
                     previousDisplayHeight, displayHeight, keyboardHeight));
 
             // influence from the layout of the Status-bar.
             if (keyboardHeight == this.statusBarHeight) {
-                Log.w(TAG, String.format("On global layout change get keyboard height just equal" +
-                        " statusBar height %d", keyboardHeight));
+                TLog.e(TAG, String.format("On global layout change get keyboard height just equal" +
+                        " statusBar height %s", keyboardHeight));
                 return;
             }
 
@@ -297,7 +242,7 @@ public class SoftKeyboardUtil {
             boolean changed = SoftKeyboardUtil.saveKeyboardHeight(getContext(), keyboardHeight);
             if (changed) {
                 final int validPanelHeight = SoftKeyboardUtil.getValidPanelHeight(getContext());
-                if (this.panelHeightTarget.getHeight() != validPanelHeight) {
+                if (this.panelHeightTarget.getPanelHeight() != validPanelHeight) {
                     // Step3. refresh the panel's height with valid-panel-height which refer to
                     // the last keyboard height
                     this.panelHeightTarget.refreshHeight(validPanelHeight);
@@ -308,7 +253,6 @@ public class SoftKeyboardUtil {
         private int maxOverlayLayoutHeight;
 
         private void calculateKeyboardShowing(final int displayHeight) {
-
             boolean isKeyboardShowing;
 
             // the height of content parent = contentView.height + actionBar.height
@@ -329,7 +273,6 @@ public class SoftKeyboardUtil {
                 } else {
                     isKeyboardShowing = actionBarOverlayLayoutHeight > displayHeight;
                 }
-
             } else {
 
                 final int phoneDisplayHeight = contentView.getResources().getDisplayMetrics().heightPixels;
@@ -337,7 +280,7 @@ public class SoftKeyboardUtil {
                         phoneDisplayHeight == actionBarOverlayLayoutHeight) {
                     // no space to settle down the status bar, switch to fullscreen,
                     // only in the case of paused and opened the fullscreen page.
-                    Log.w(TAG, String.format("skip the keyboard status calculate, the current" +
+                    TLog.e(TAG, String.format("skip the keyboard status calculate, the current" +
                                     " activity is paused. and phone-display-height %d," +
                                     " root-height+actionbar-height %d", phoneDisplayHeight,
                             actionBarOverlayLayoutHeight));
@@ -356,13 +299,10 @@ public class SoftKeyboardUtil {
             }
 
             if (lastKeyboardShowing != isKeyboardShowing) {
-                Log.d(TAG, String.format("displayHeight %d actionBarOverlayLayoutHeight %d " +
-                                "keyboard status change: %B",
+                TLog.d(TAG, String.format("displayHeight %s actionBarOverlayLayoutHeight %s " +
+                                "keyboard status change: %s",
                         displayHeight, actionBarOverlayLayoutHeight, isKeyboardShowing));
                 this.panelHeightTarget.onKeyboardShowing(isKeyboardShowing);
-                if (keyboardShowingListener != null) {
-                    keyboardShowingListener.onKeyboardShowing(isKeyboardShowing);
-                }
             }
 
             lastKeyboardShowing = isKeyboardShowing;
@@ -374,30 +314,9 @@ public class SoftKeyboardUtil {
         }
     }
 
-    /**
-     * The interface is used to listen the keyboard showing state.
-     *
-     * @see #attach(Activity, IPanelHeightTarget, OnKeyboardShowingListener)
-     * @see KeyboardStatusListener#calculateKeyboardShowing(int)
-     */
-    public interface OnKeyboardShowingListener {
 
-        /**
-         * Keyboard showing state callback method.
-         * <p>
-         * This method is invoked in {@link ViewTreeObserver.OnGlobalLayoutListener#onGlobalLayout()} which is one of the
-         * ViewTree lifecycle callback methods. So deprecating those time-consuming operation(I/O, complex calculation,
-         * alloc objects, etc.) here from blocking main ui thread is recommended.
-         * </p>
-         *
-         * @param isShowing Indicate whether keyboard is showing or not.
-         */
-        void onKeyboardShowing(boolean isShowing);
-
-    }
-
-    public static boolean isHandleByPlaceholder(boolean isFullScreen, boolean isTranslucentStatus,
-                                                boolean isFitsSystem) {
+    private static boolean isHandleByPlaceholder(boolean isFullScreen, boolean isTranslucentStatus,
+                                                 boolean isFitsSystem) {
         return isFullScreen || (isTranslucentStatus && !isFitsSystem);
     }
 
@@ -411,7 +330,7 @@ public class SoftKeyboardUtil {
         /**
          * @return get the height of target-view.
          */
-        int getHeight();
+        int getPanelHeight();
 
         /**
          * Be invoked by onGlobalLayoutListener call-back.

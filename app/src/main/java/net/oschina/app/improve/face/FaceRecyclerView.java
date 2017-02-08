@@ -12,15 +12,15 @@ import com.bumptech.glide.Glide;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.Emojicon;
+import net.oschina.app.util.TDevice;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by haibin
- * on 2017/1/20.
+ * @author qiujuer Email:qiujuer@live.cn
+ * @version 1.0.0
  */
-
 class FaceRecyclerView extends RecyclerView {
     private FaceAdapter mAdapter;
     private OnFaceClickListener mListener;
@@ -30,7 +30,10 @@ class FaceRecyclerView extends RecyclerView {
         super(context);
         this.mListener = listener;
 
-        setLayoutManager(new GridLayoutManager(context, 7));
+        // 自动计算显示的列数
+        int autoCount = (int) (TDevice.getScreenWidth() / TDevice.dipToPx(getResources(), 48));
+
+        setLayoutManager(new GridLayoutManager(context, autoCount));
         setAdapter(mAdapter = new FaceAdapter());
     }
 
@@ -83,15 +86,16 @@ class FaceRecyclerView extends RecyclerView {
         }
 
         void bindData(Emojicon emojicon, int position) {
-            mImage.setTag(position);
+            itemView.setTag(R.id.recycle_tag, position);
             Glide.with(itemView.getContext())
                     .load(emojicon.getResId())
                     .into(mImage);
         }
 
         int getTagData() {
-            if (mImage.getTag() != null && mImage.getTag() instanceof Integer) {
-                return (int) mImage.getTag();
+            Object obj = itemView.getTag(R.id.recycle_tag);
+            if (obj != null && obj instanceof Integer) {
+                return (int) obj;
             }
             return -1;
         }
