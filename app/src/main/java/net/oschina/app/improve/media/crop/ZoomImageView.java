@@ -33,6 +33,7 @@ public class ZoomImageView extends ImageView implements
 
     private float SCALE_MAX = 4.0f;
     private float SCALE_MID = 2.0f;
+    private float SCALE_MIN = 1.0f;
 
     private float mScale = 1.0f;
     private boolean isFirst = true;
@@ -128,14 +129,15 @@ public class ZoomImageView extends ImageView implements
 
         if (getDrawable() == null)
             return true;
-        if ((scale < SCALE_MAX && scaleFactor > 1.0f)
-                || (scale > mScale && scaleFactor < 1.0f)) {
-            if (scaleFactor * scale < mScale) {
-                scaleFactor = mScale / scale;
+        if ((scale < SCALE_MAX && scaleFactor > SCALE_MIN)
+                || (scale > mScale && scaleFactor < SCALE_MIN)) {
+            if (scaleFactor * scale < SCALE_MIN) {
+                scaleFactor = SCALE_MIN / scale;
             }
             if (scaleFactor * scale > SCALE_MAX) {
                 scaleFactor = SCALE_MAX / scale;
             }
+
             mScaleMatrix.postScale(scaleFactor, scaleFactor,
                     detector.getFocusX(), detector.getFocusY());
             checkBorder();
@@ -293,6 +295,13 @@ public class ZoomImageView extends ImageView implements
                 float scaleH = (getHeight() * 1.0f - mVOffset * 2) / dh;
                 scale = Math.max(scaleW, scaleH);
             }
+
+            float sw = (float) (width - 2 * mOffset) / (float) dw;
+            float sh = (float) (height - 2 * mVOffset) / (float) dh;
+
+            SCALE_MIN = Math.max(sw, sh);
+            if (SCALE_MIN >= 1.0F) SCALE_MIN = 1.0F;
+            if (SCALE_MIN <= 0.5F) SCALE_MIN = 0.5F;
 
             mScale = scale;
             SCALE_MID = mScale * 2;
