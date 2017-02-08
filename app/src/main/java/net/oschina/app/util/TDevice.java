@@ -11,7 +11,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -20,7 +19,6 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.EditText;
@@ -80,16 +78,6 @@ public class TDevice {
 
     public static float getScreenWidth() {
         return getDisplayMetrics().widthPixels;
-    }
-
-    public static int getStatusBarHeight(Activity context) {
-        if (context != null) {
-            Rect rectangle = new Rect();
-            Window window = context.getWindow();
-            window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
-            return rectangle.top;
-        }
-        return (int) dp2px(25);
     }
 
     public static boolean hasInternet() {
