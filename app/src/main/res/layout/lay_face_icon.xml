@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical"
     app:oscAccordTo="width">
 
     <ImageView
         android:id="@+id/iv_face"
-        android:layout_width="@dimen/size_48"
-        android:layout_height="@dimen/size_48"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_gravity="center"
         android:contentDescription="@string/app_name"
-        android:padding="@dimen/size_10"
-        tools:src="@color/amber_500" />
+        android:foreground="@drawable/ic_material_ripple"
+        android:padding="@dimen/size_8"
+        android:scaleType="fitCenter"
+        tools:src="@mipmap/ic_tweet_expression_normal" />
 </net.oschina.common.widget.SquareLayout>
