@@ -16,7 +16,6 @@ import net.oschina.app.R;
 import net.oschina.app.emoji.DisplayRules;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.improve.utils.SoftKeyboardUtil;
-import net.oschina.app.improve.utils.UiUtil;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -30,6 +29,7 @@ public class FacePanelView extends LinearLayout implements View.OnClickListener,
     private FacePanelListener mListener;
     private boolean mKeyboardShowing;
     private AtomicBoolean mWillShowPanel = new AtomicBoolean();
+    private int mRealHeight;
 
     public FacePanelView(Context context) {
         super(context);
@@ -135,7 +135,8 @@ public class FacePanelView extends LinearLayout implements View.OnClickListener,
 
     @Override
     public void refreshHeight(int panelHeight) {
-        UiUtil.changeViewHeight(this, panelHeight);
+        mRealHeight = panelHeight;
+        //UiUtil.changeViewHeight(this, panelHeight);
     }
 
     @Override
@@ -149,7 +150,7 @@ public class FacePanelView extends LinearLayout implements View.OnClickListener,
     }
 
     public boolean isShow() {
-        return getVisibility() == VISIBLE;
+        return getVisibility() != GONE;
     }
 
     public void hidePanel() {
@@ -167,6 +168,22 @@ public class FacePanelView extends LinearLayout implements View.OnClickListener,
         }
     }
 
+    @Override
+    public int getPanelHeight() {
+        return mRealHeight;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (mKeyboardShowing) {
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(0,
+                    MeasureSpec.getMode(MeasureSpec.EXACTLY));
+        } else {
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(mRealHeight,
+                    MeasureSpec.getMode(MeasureSpec.EXACTLY));
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
 
     public interface FacePanelListener extends FaceRecyclerView.OnFaceClickListener {
         void onDeleteClick();

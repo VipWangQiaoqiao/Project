@@ -89,7 +89,6 @@ class FaceRecyclerView extends RecyclerView {
             itemView.setTag(R.id.recycle_tag, position);
             Glide.with(itemView.getContext())
                     .load(emojicon.getResId())
-                    .placeholder(R.mipmap.ic_tweet_expression_normal)
                     .into(mImage);
         }
 

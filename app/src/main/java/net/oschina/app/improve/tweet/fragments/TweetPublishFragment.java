@@ -277,7 +277,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             mFacePanel.hidePanel();
             showSoftKeyboard(mEditContent);
         } else {
-            hideSoftKeyboard();
             mFacePanel.openPanel();
         }
     }
@@ -336,6 +335,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void hideSoftKeyboard() {
+        mEditContent.clearFocus();
         ((InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
                 mEditContent.getWindowToken(), 0);

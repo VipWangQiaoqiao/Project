@@ -449,7 +449,7 @@ public class ImagePreviewView extends ImageView {
                 translateTop -= distanceY * 1.5;
                 translateTop = getExplicitTranslateTop(translateTop);
                 /*if (getDiffY() != 0) {
-                    final float disY = (float) (Math.acos(Math.abs(getDiffY()) / getHeight() * 6) * distanceY);
+                    final float disY = (float) (Math.acos(Math.abs(getDiffY()) / getPanelHeight() * 6) * distanceY);
                     if (disY == disY) translateTop -= disY; // float 低值溢出变Nan数值
                 } else {
                     translateTop -= distanceY * 1.5;
