@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical"
     app:oscAccordTo="width">
 
     <ImageView
@@ -15,5 +13,6 @@
         android:layout_gravity="center"
         android:contentDescription="@string/app_name"
         android:padding="@dimen/size_10"
-        tools:src="@color/amber_500" />
+        android:scaleType="fitCenter"
+        tools:src="@mipmap/ic_tweet_expression_normal" />
 </net.oschina.common.widget.SquareLayout>
