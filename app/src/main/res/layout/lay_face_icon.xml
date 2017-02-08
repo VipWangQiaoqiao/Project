@@ -8,11 +8,12 @@
 
     <ImageView
         android:id="@+id/iv_face"
-        android:layout_width="@dimen/size_48"
-        android:layout_height="@dimen/size_48"
+        android:layout_width="@dimen/size_44"
+        android:layout_height="@dimen/size_44"
         android:layout_gravity="center"
         android:contentDescription="@string/app_name"
-        android:padding="@dimen/size_10"
+        android:foreground="@drawable/ic_material_ripple"
+        android:padding="@dimen/size_8"
         android:scaleType="fitCenter"
         tools:src="@mipmap/ic_tweet_expression_normal" />
 </net.oschina.common.widget.SquareLayout>
