@@ -60,14 +60,13 @@ public class UiUtil {
             return false;
         }
 
-        final int validPanelHeight = KeyboardUtil.getValidPanelHeight(view.getContext());
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         if (layoutParams == null) {
             layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    validPanelHeight);
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
             view.setLayoutParams(layoutParams);
         } else {
-            layoutParams.height = validPanelHeight;
+            layoutParams.height = aimHeight;
             view.requestLayout();
         }
 
