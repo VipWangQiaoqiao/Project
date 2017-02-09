@@ -90,6 +90,11 @@ public class TeamNewIssueActivity extends BaseActivity {
     }
 
     @Override
+    protected void onBeforeSetContentLayout() {
+        setTheme(R.style.AppMainTheme);
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.activity_team_new_issue;
     }
