@@ -40,4 +40,12 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="AppMainTheme" parent="App.Theme.Light">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="colorPrimary">@color/main_green</item>
+        <item name="android:textColorPrimary">@color/black_alpha_240</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
 </resources>
