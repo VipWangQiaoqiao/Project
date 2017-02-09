@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
@@ -23,9 +24,11 @@ import net.oschina.app.widget.TweetTextView;
  */
 public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
     private final Context context;
+    private RequestManager mManager;
 
     public TeamActiveAdapter(Context cxt) {
         this.context = cxt;
+        mManager = Glide.with(context);
     }
 
     static class ViewHolder {
@@ -64,7 +67,8 @@ public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
         } else {
             holder = (ViewHolder) v.getTag();
         }
-        holder.img_head.setAvatarUrl(data.getAuthor().getPortrait());
+        //holder.img_head.setAvatarUrl(data.getAuthor().getPortrait());
+        mManager.load(data.getAuthor().getPortrait()).asBitmap().into(holder.img_head);
         holder.img_head.setUserInfo(data.getAuthor().getId(), data.getAuthor()
                 .getName());
         holder.tv_name.setText(data.getAuthor().getName());
