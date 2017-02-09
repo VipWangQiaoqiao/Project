@@ -242,8 +242,9 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
             readCacheData(key);
         } else {
             // 取新的数据
-            sendRequestData();
+
         }
+        sendRequestData();
     }
 
     /***

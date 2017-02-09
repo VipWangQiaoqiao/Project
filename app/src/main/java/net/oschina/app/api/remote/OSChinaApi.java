@@ -476,7 +476,7 @@ public class OSChinaApi {
         params.put("teamid", teamid);
         params.put("pageIndex", pageIndex);
         params.put("pageSize", 20);
-        params.put("type", "git");
+        params.put("type", "all");
         params.put("uid", uid);
         ApiHttpClient.get("action/api/team_active_list", params, handler);
     }
