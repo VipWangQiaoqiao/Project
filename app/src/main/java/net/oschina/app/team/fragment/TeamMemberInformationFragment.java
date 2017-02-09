@@ -14,6 +14,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
@@ -23,12 +25,14 @@ import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 用户个人信息界面
@@ -114,7 +118,8 @@ public class TeamMemberInformationFragment extends BaseListFragment<TeamActive> 
         }
         mTvTel.setText(tel);
         mTvAddress.setText(teamMember.getLocation());
-        mImgHead.setAvatarUrl(teamMember.getPortrait());
+        //mImgHead.setAvatarUrl(teamMember.getPortrait());
+        Glide.with(this).load(teamMember.getPortrait()).asBitmap().into(mImgHead);
         super.initView(view);
         mListView.setSelector(new ColorDrawable(android.R.color.transparent));
         mListView.setDivider(new ColorDrawable(android.R.color.transparent));
@@ -123,15 +128,14 @@ public class TeamMemberInformationFragment extends BaseListFragment<TeamActive> 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                if (position == 0) {// 第一项是头部
-                } else {
-                    Adapter adapter = parent.getAdapter();
-                    if (adapter != null) {
-                        Object obj = adapter.getItem(position);
-                        TeamActive data = null;
-                        if (obj instanceof TeamActive) {
-                            data = (TeamActive) obj;
-                        }
+                if (position == 0 || position == mAdapter.getDataSize() + 1) // 第一项是头部、尾部
+                    return;
+                Adapter adapter = parent.getAdapter();
+                if (adapter != null) {
+                    Object obj = adapter.getItem(position);
+                    TeamActive data = null;
+                    if (obj instanceof TeamActive) {
+                        data = (TeamActive) obj;
                     }
                 }
             }
@@ -163,5 +167,11 @@ public class TeamMemberInformationFragment extends BaseListFragment<TeamActive> 
     protected void sendRequestData() {
         OSChinaApi.getUserDynamic(teamId, teamMember.getId() + "",
                 mCurrentPage, mHandler);
+    }
+
+    @Override
+    protected void executeOnLoadDataSuccess(List<TeamActive> data) {
+        super.executeOnLoadDataSuccess(data);
+        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
     }
 }
