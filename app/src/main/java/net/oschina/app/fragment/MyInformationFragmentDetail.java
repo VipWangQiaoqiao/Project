@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
  *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月6日 上午10:33:18
+ *          updated  by jzz on 2017/02/09
  */
 
 public class MyInformationFragmentDetail extends BaseFragment {
@@ -80,8 +81,9 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     @SuppressWarnings("deprecation")
     public void fillUI() {
-        Glide.with(getContext()).load(userInfo.getPortrait())
+        Glide.with(this).load(userInfo.getPortrait()).asBitmap()
                 .placeholder(R.mipmap.widget_default_face)
+                .error(R.mipmap.widget_default_face)
                 .into(mUserFace);
         mName.setText(userInfo.getName());
         mJoinTime.setText(StringUtils.formatYearMonthDayNew(userInfo.getMore().getJoinDate()));
