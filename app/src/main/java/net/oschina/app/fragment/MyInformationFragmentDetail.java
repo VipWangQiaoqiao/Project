@@ -23,11 +23,7 @@ import butterknife.ButterKnife;
  *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月6日 上午10:33:18
- *          <<<<<<< HEAD
  *          updated by jzz on 2017/02/09
- *          =======
- *          updated  by jzz on 2017/02/09
- *          >>>>>>> e5f25ee642ef056055a820640a166e7fee6e280a
  */
 
 public class MyInformationFragmentDetail extends BaseFragment {
