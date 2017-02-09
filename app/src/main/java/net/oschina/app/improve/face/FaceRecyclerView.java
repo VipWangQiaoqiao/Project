@@ -21,12 +21,12 @@ import java.util.List;
  * @author qiujuer Email:qiujuer@live.cn
  * @version 1.0.0
  */
-class FaceRecyclerView extends RecyclerView {
+public class FaceRecyclerView extends RecyclerView {
     private FaceAdapter mAdapter;
     private OnFaceClickListener mListener;
     private final List<Emojicon> mData = new ArrayList<>();
 
-    FaceRecyclerView(Context context, OnFaceClickListener listener) {
+    public FaceRecyclerView(Context context, OnFaceClickListener listener) {
         super(context);
         this.mListener = listener;
 
@@ -101,7 +101,7 @@ class FaceRecyclerView extends RecyclerView {
         }
     }
 
-    interface OnFaceClickListener {
+    public interface OnFaceClickListener {
         void onFaceClick(Emojicon v);
     }
 }
