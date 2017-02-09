@@ -53,6 +53,7 @@ public class FacePanelView extends LinearLayout implements View.OnClickListener,
     }
 
     private void init() {
+        mRealHeight = SoftKeyboardUtil.getMinPanelHeight(getResources());
         setOrientation(VERTICAL);
         inflate(getContext(), R.layout.lay_face_panel, this);
 
