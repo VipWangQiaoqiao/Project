@@ -348,7 +348,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_share:
-                if (tweet == null || tweet.getId() <= 0) break;
+                if (tweet == null || tweet.getId() <= 0 || TextUtils.isEmpty(tweet.getContent())) break;
 
                 String content = tweet.getContent().trim();
                 if (content.length() > 10)
