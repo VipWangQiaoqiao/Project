@@ -321,7 +321,6 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     public void onClick(View v) {
         if ((mReqCatalog == CATALOG_MYSELF || mReqCatalog == CATALOG_FRIENDS)
                 && !AccountHelper.isLogin()) {
-            //UIHelper.showLoginActivity(getActivity());
             LoginActivity.show(this, 1);
         } else {
             super.onClick(v);
