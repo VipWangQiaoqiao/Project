@@ -301,7 +301,6 @@ public class ZoomImageView extends ImageView implements
 
             SCALE_MIN = Math.max(sw, sh);
             if (SCALE_MIN >= 1.0F) SCALE_MIN = 1.0F;
-            if (SCALE_MIN <= 0.5F) SCALE_MIN = 0.5F;
 
             mScale = scale;
             SCALE_MID = mScale * 2;
