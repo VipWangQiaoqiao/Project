@@ -59,6 +59,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * 别的用户的主页
  * Created by thanatos on 16/7/13.
+ * Updated by jzz on 2017/02/09
  */
 public class OtherUserHomeActivity extends BaseActivity
         implements View.OnClickListener, DialogInterface.OnClickListener {

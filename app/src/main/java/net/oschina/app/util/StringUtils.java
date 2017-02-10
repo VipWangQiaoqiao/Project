@@ -591,10 +591,9 @@ public class StringUtils {
 
     @SuppressLint("DefaultLocale")
     public static String formatDistance(int distance) {
-        return distance < 1000 ? String.format("%s00m 以内", distance != 0 && distance % 100 == 0 ?
-                distance / 100 : (distance + 100) / 100)
-                : String.format("%skm 以内",
-                distance % 1000 == 0 ? distance / 1000 : (distance + 1000) / 1000);
+        return distance < 1000 ?
+                String.format("%s00m 以内", distance > 100 ? distance / 100 : 1)
+                : String.format("%skm 以内", distance / 1000);
     }
 
 }

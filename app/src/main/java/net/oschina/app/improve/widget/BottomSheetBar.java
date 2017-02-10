@@ -14,9 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import net.oschina.app.R;
-import net.oschina.app.emoji.Emojicon;
-import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.improve.emoji.EmojiView;
 import net.oschina.app.util.TDevice;
 import net.oschina.common.widget.RichEditText;
@@ -121,22 +118,11 @@ public class BottomSheetBar {
             public void onClick(View v) {
                 if (mEmojiView == null) {
                     mEmojiView = new EmojiView(mContext, mEditText);
-                    mEmojiView.setListener(new OnEmojiClickListener() {
-                        @Override
-                        public void onDeleteButtonClick(View v) {
-                            InputHelper.backspace(mEditText);
-                        }
-
-                        @Override
-                        public void onEmojiClick(Emojicon v) {
-
-                        }
-                    });
                     mFrameLayout.addView(mEmojiView);
                 }
-                TDevice.closeKeyboard(mEditText);
                 mFrameLayout.setVisibility(View.VISIBLE);
-
+                mEmojiView.openPanel();
+                TDevice.closeKeyboard(mEditText);
             }
         });
 

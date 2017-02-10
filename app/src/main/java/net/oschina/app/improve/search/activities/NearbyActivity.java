@@ -29,6 +29,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.radar.RadarNearbyInfo;
 import com.baidu.mapapi.radar.RadarNearbyResult;
 import com.baidu.mapapi.radar.RadarNearbySearchOption;
+import com.baidu.mapapi.radar.RadarNearbySearchSortType;
 import com.baidu.mapapi.radar.RadarSearchError;
 import com.baidu.mapapi.radar.RadarSearchListener;
 import com.baidu.mapapi.radar.RadarSearchManager;
@@ -55,7 +56,6 @@ import net.oschina.app.util.TDevice;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -74,7 +74,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         RecyclerRefreshLayout.SuperRefreshLayoutListener, BaseRecyclerAdapter.OnItemClickListener,
         EasyPermissions.PermissionCallbacks, View.OnClickListener {
 
-    private static final int LOCATION_PERMISSION = 0x0100;//定位权限
+    public static final int LOCATION_PERMISSION = 0x0100;//定位权限
     public static final String CHARSET = "UTF-8";
 
     @Bind(R.id.recycler)
@@ -85,7 +85,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
     @Bind(R.id.lay_emptyLayout)
     EmptyLayout mEmptyLayout;
-    private NearbyUserAdapter mAdapter;
+    private BaseRecyclerAdapter<NearbyResult> mAdapter;
 
     private int mNextPageIndex = 0;
     private LatLng mUserLatLng;
@@ -130,9 +130,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerRefresh.setSuperRefreshLayoutListener(this);
-        mRecyclerRefresh.setColorSchemeResources(
-                R.color.swiperefresh_color1, R.color.swiperefresh_color2,
-                R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+        mRecyclerRefresh.setEnabled(false);
 
         mRecycler.setAdapter(mAdapter = new NearbyUserAdapter(this));
         mAdapter.setOnItemClickListener(this);
@@ -191,9 +189,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_clear_opt:
-                //清除用户信息
-                mRadarSearchManager.clearUserInfo();
-                Setting.updateLocationInfo(getApplicationContext(), false);
+                clearLbsUserInfo();
                 if (mSelectorDialog.isShowing())
                     mSelectorDialog.cancel();
                 break;
@@ -252,12 +248,18 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
      */
     @Override
     public void onGetClearInfoState(RadarSearchError error) {
-        if (error != RadarSearchError.RADAR_NO_ERROR) {
-            SimplexToast.show(this, getString(R.string.clear_bodies_failed_hint));
-            return;
+        switch (error) {
+            case RADAR_NO_RESULT://未上传有雷达信息
+                Setting.updateLocationInfo(getApplicationContext(), false);
+                break;
+            case RADAR_NO_ERROR://清除雷达信息成功
+                Setting.updateLocationInfo(getApplicationContext(), false);
+                supportFinishAfterTransition();
+                break;
+            default:
+                SimplexToast.show(this, getString(R.string.clear_bodies_failed_hint));
+                break;
         }
-        Setting.updateLocationInfo(getApplicationContext(), false);
-        supportFinishAfterTransition();
     }
 
     /**
@@ -344,74 +346,41 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
      * @param result radarNearByResult
      */
     private void updateView(RadarNearbyResult result) {
-
         mRecyclerRefresh.onComplete();
         if (result != null) {
             //pageNum==0，表示初始化数据，有可能是刷新，也有可能是第一次加载
             List<RadarNearbyInfo> infoList = result.infoList;
             int pageIndex = result.pageIndex;
-
             if (infoList != null) {
-                int loadInfoSize = infoList.size();
-
                 List<NearbyResult> items = mAdapter.getItems();
 
                 int tempSize = items.size();
 
                 if (pageIndex == 0) {
-                    //发现已有数据，直接更新对应的数据
-                    if (tempSize > 0) {
-                        for (RadarNearbyInfo info : infoList) {
-                            User user = null;
-                            try {
-                                String comments = URLDecoder.decode(info.comments, CHARSET);
-                                user = AppOperator.createGson().fromJson(comments, User.class);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            if (user == null || (user.getId() == 0 && TextUtils.isEmpty(user.getName())))
-                                continue;
-
-                            int index = containsFriend(user);
-                            if (index == -1) {
-                                NearbyResult.Nearby nearby = new NearbyResult.Nearby();
-                                nearby.setDistance(info.distance);
-                                nearby.setMobileName(info.mobileName);
-                                nearby.setMobileOS(info.mobileOS);
-                                items.add(new NearbyResult(user, nearby));
-                            }
-                        }
-                        if (tempSize < items.size()) {
-                            notifySortData(loadInfoSize, pageIndex, items);
-                        }
-                    } else {
-                        //没有缓存数据，直接添加
-                        for (RadarNearbyInfo info : infoList) {
-                            User user = null;
-                            try {
-                                String comments = URLDecoder.decode(info.comments, CHARSET);
-                                user = AppOperator.createGson().fromJson(comments, User.class);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            if (user == null || (user.getId() == 0 && TextUtils.isEmpty(user.getName())))
-                                continue;
-
-                            NearbyResult.Nearby nearby = new NearbyResult.Nearby();
-                            nearby.setDistance(info.distance);
-                            nearby.setMobileName(info.mobileName);
-                            nearby.setMobileOS(info.mobileOS);
-                            items.add(new NearbyResult(user, nearby));
+                    //没有缓存数据，直接添加
+                    for (RadarNearbyInfo info : infoList) {
+                        User user = null;
+                        try {
+                            String comments = URLDecoder.decode(info.comments, CHARSET);
+                            user = AppOperator.createGson().fromJson(comments, User.class);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
 
-                        //根据数据的距离从近到远进行排序
-                        notifySortData(loadInfoSize, pageIndex, items);
+                        if (user == null || (user.getId() == 0 && TextUtils.isEmpty(user.getName())))
+                            continue;
+
+                        NearbyResult.Nearby nearby = new NearbyResult.Nearby();
+                        nearby.setDistance(info.distance);
+                        nearby.setMobileName(info.mobileName);
+                        nearby.setMobileOS(info.mobileOS);
+                        items.add(new NearbyResult(user, nearby));
                     }
 
+                    //根据数据的距离从近到远进行排序
+                    notifySortData(pageIndex, infoList);
                 } else {
-                    //当pageNum>0时，证明是翻页，不管时候有缓存，直接添加
+                    //当pageNum>0时，证明是翻页，不管是否有缓存，直接添加
                     for (RadarNearbyInfo info : infoList) {
                         User user = null;
                         try {
@@ -437,26 +406,35 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
                     if (tempSize < items.size()) {
                         //根据数据的距离从近到远进行排序
-                        notifySortData(loadInfoSize, pageIndex, items);
+                        notifySortData(pageIndex, infoList);
                     }
                 }
             } else {
                 //没有数据返回时,不管pageIndex是多少，保证nextPageIndex不变与缓存不变
-                notifyNoData();
+                notifyNoData(null);
             }
         } else {
             //2.请求结果为null，不管pageIndex如何，保持缓存不变
-            notifyNoData();
+            notifyNoData(null);
         }
 
     }
 
     /**
+     * clear lbs user info
+     */
+    private void clearLbsUserInfo() {
+        //清除用户信息
+        if (mRadarSearchManager == null) return;
+        mRadarSearchManager.clearUserInfo();
+        Setting.updateLocationInfo(getApplicationContext(), false);
+    }
+
+    /**
      * notify no data
      */
-    private void notifyNoData() {
-        int count = mAdapter.getCount();
-        if (count <= 0) {
+    private void notifyNoData(List<RadarNearbyInfo> infoList) {
+        if (infoList == null) {
             //没有缓存直接进行提示
             mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
         }
@@ -466,16 +444,14 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     /**
      * notify sort data
      *
-     * @param loadInfoSize response info size
-     * @param pageIndex    request page index
-     * @param items        cache data
+     * @param pageIndex request page index
      */
-    private void notifySortData(int loadInfoSize, int pageIndex, List<NearbyResult> items) {
+    private void notifySortData(int pageIndex, List<RadarNearbyInfo> infoList) {
         //根据数据的距离从近到远进行排序
-        Collections.sort(items);
+        //Collections.sort(items);
         //刷新数据，初始化有效数据ui
         mAdapter.notifyDataSetChanged();
-        mAdapter.setState(loadInfoSize < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, loadInfoSize >= 20);
+        mAdapter.setState(infoList == null ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOAD_MORE, true);
         //隐藏emptyView
         hideLoading();
         mNextPageIndex = (pageIndex + 1);
@@ -507,7 +483,13 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         if (confirmDialog == null) {
             confirmDialog = DialogHelper.getConfirmDialog(this, getString(R.string.location_get_failed_hint),
                     getString(R.string.no_permission_hint),
-                    getString(R.string.cancel), getString(R.string.actionbar_title_setting), true, null, new DialogInterface.OnClickListener() {
+                    getString(R.string.cancel), getString(R.string.actionbar_title_setting), false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            clearLbsUserInfo();
+                            supportFinishAfterTransition();
+                        }
+                    }, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -664,25 +646,14 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             if (gpsEnabled || netEnabled) {
                 return true;
             } else {
-
-                DialogHelper.getConfirmDialog(this, getString(R.string.location_get_failed_hint),
-                        getString(R.string.no_permission_hint), getString(R.string.cancel), getString(R.string.actionbar_title_setting),
-                        true, null, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivityForResult(intent, LOCATION_PERMISSION);
-                            }
-                        }).create().show();
-
+                ShowSettingDialog();
                 return false;
             }
 
         } else {
             showError(EmptyLayout.NODATA);
             AppContext.showToastShort(R.string.near_body_gps_error_hint);
-            finish();
+            supportFinishAfterTransition();
             return false;
         }
     }
@@ -763,6 +734,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
         if (TDevice.hasInternet()) {
 
             if (pageIndex == 0 && mAdapter.getCount() <= 0) {
+                //if (mEmptyLayout.getVisibility() == View.VISIBLE)
                 mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             }
 
@@ -773,7 +745,8 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
             //构造请求参数，其中centerPt是自己的位置坐标
             RadarNearbySearchOption option = new RadarNearbySearchOption()
-                    .centerPt(mUserLatLng).pageNum(pageIndex).radius(35000).pageCapacity(20);
+                    .centerPt(mUserLatLng).pageNum(pageIndex).radius(38000).pageCapacity(50).
+                            sortType(RadarNearbySearchSortType.distance_from_far_to_near);
             //发起查询请求
             mRadarSearchManager.nearbyInfoRequest(option);
             mIsFirstLocation = false;
@@ -801,28 +774,31 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
      */
     private void hideLoading() {
         final EmptyLayout emptyLayout = mEmptyLayout;
+
         if (emptyLayout == null)
             return;
 
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_to_hide);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_to_hide);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
+                @Override
+                public void onAnimationRepeat(Animation animation) {
 
-            }
-        });
+                }
+            });
 
-        emptyLayout.startAnimation(animation);
+            emptyLayout.startAnimation(animation);
+        }
     }
 
     /**

@@ -17,6 +17,8 @@ public final class Setting {
     public static final String KEY_APP_UNIQUE_ID = "appUniqueID";
     public static final String KEY_SYSTEM_CONFIG_TIMESTAMP = "systemConfigTimeStamp";
     public static final String KEY_LOCATION_INFO = "locationInfo";
+    public static final String KEY_LOCATION_PERMISSION = "locationPermission";
+    public static final String KEY_SOFT_KEYBOARD_HEIGHT = "softKeyboardHeight";
 
     public static SharedPreferences getSettingPreferences(Context context) {
         return context.getSharedPreferences(Setting.class.getName(), Context.MODE_PRIVATE);
@@ -86,5 +88,27 @@ public final class Setting {
     public static boolean hasLocation(Context context) {
         SharedPreferences sp = getSettingPreferences(context);
         return sp.getBoolean(KEY_LOCATION_INFO, false);
+    }
+
+    public static void updateLocationPermission(Context context, boolean hasPermission) {
+        SharedPreferences sp = getSettingPreferences(context);
+        SharedPreferences.Editor editor = sp.edit().putBoolean(KEY_LOCATION_PERMISSION, hasPermission);
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+    }
+
+    public static boolean hasLocationPermission(Context context) {
+        SharedPreferences sp = getSettingPreferences(context);
+        return sp.getBoolean(KEY_LOCATION_PERMISSION, false);
+    }
+
+    public static int getSoftKeyboardHeight(Context context) {
+        SharedPreferences sp = getSettingPreferences(context);
+        return sp.getInt(KEY_SOFT_KEYBOARD_HEIGHT, 0);
+    }
+
+    public static void updateSoftKeyboardHeight(Context context, int height) {
+        SharedPreferences sp = getSettingPreferences(context);
+        SharedPreferences.Editor editor = sp.edit().putInt(KEY_SOFT_KEYBOARD_HEIGHT, height);
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
     }
 }

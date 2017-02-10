@@ -192,7 +192,7 @@ public class UIHelper {
             case OSChinaApi.CATALOG_SOFTWARE:
                 //软件推荐
                 SoftwareDetailActivity.show(context, id);
-                //UIUtil.showSoftwareDetailById(context, (int) id);
+                //UiUtil.showSoftwareDetailById(context, (int) id);
                 break;
             case OSChinaApi.CATALOG_QUESTION:
                 //问答
@@ -300,7 +300,7 @@ public class UIHelper {
             ZoomButtonsController zbc = new ZoomButtonsController(webView);
             zbc.getZoomControls().setVisibility(View.GONE);
         }
-        //webView.setWebViewClient(UIUtil.getWebViewClient());
+        //webView.setWebViewClient(UiUtil.getWebViewClient());
     }
 
     /**

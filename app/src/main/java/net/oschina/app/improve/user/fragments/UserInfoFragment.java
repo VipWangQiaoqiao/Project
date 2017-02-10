@@ -38,8 +38,8 @@ import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.user.collection.UserCollectionActivity;
 import net.oschina.app.improve.user.event.UserEventActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.utils.UiUtil;
 import net.oschina.app.improve.widget.SolarSystemView;
-import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQRCodeDialog;
 import net.oschina.app.util.ImageUtils;
@@ -405,7 +405,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     private void measureTitleBarHeight() {
         if (mRlShowInfo != null) {
             mRlShowInfo.setPadding(mRlShowInfo.getLeft(),
-                    TitleBar.getExtPaddingTop(getResources()),
+                    UiUtil.getStatusBarHeight(getContext()),
                     mRlShowInfo.getRight(), mRlShowInfo.getBottom());
         }
     }

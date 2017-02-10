@@ -248,12 +248,12 @@
 
         <View style="@style/h_line" />
 
-        <fragment
-            android:id="@+id/frag_emoji_keyboard"
-            class="net.oschina.app.emoji.EmojiKeyboardFragment"
+        <net.oschina.app.improve.face.FacePanelView
+            android:id="@+id/panel_face"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_gravity="bottom" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="gone" />
 
     </LinearLayout>
 
