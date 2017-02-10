@@ -264,7 +264,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
             case News.TYPE_SOFTWARE:
                 if (images != null && images.size() > 0) {
                     imageUrl = images.get(0).getThumb();
-                    if ("https://www.oschina.net/img/logo/default.png?t=1482336104000".equals(imageUrl)) {
+                    if (imageUrl != null && images.contains("logo/default.png")) {
                         imageUrl = null;
                     }
                     break;
