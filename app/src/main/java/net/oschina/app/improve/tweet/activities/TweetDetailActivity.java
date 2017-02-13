@@ -1,6 +1,5 @@
 package net.oschina.app.improve.tweet.activities;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
@@ -46,7 +45,6 @@ import net.oschina.app.improve.tweet.fragments.TweetDetailViewPagerFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
-import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.PlatfromUtil;
@@ -111,7 +109,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     private Tweet tweet;
     private List<TweetComment> replies = new ArrayList<>();
-    private Dialog dialog;
     private RecordButtonUtil mRecordUtil;
     private TextHttpResponseHandler publishAdmireHandler;
     private TextHttpResponseHandler publishCommentHandler;
@@ -147,7 +144,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     protected boolean initBundle(Bundle bundle) {
         tweet = (Tweet) getIntent().getSerializableExtra(BUNDLE_KEY_TWEET);
         if (tweet == null) {
-            Toast.makeText(this, "对象没找到", Toast.LENGTH_SHORT).show();
+            AppContext.showToastShort("对象没找到");
             return false;
         }
         return super.initBundle(bundle);
@@ -159,8 +156,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString,
                                   Throwable throwable) {
-                Toast.makeText(TweetDetailActivity.this, ivThumbup.isSelected() ? "取消失败" :
-                        "点赞失败", Toast.LENGTH_SHORT).show();
+                AppContext.showToastShort(ivThumbup.isSelected() ? "取消失败" : "点赞失败");
             }
 
             @Override
@@ -175,12 +171,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     onFailure(statusCode, headers, responseString, null);
                 }
             }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                dismissDialog();
-            }
         };
 
         // publish tweet comment
@@ -188,8 +178,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString,
                                   Throwable throwable) {
-                Toast.makeText(TweetDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
-                dismissDialog();
+                AppContext.showToastShort("评论失败");
             }
 
             @Override
@@ -205,11 +194,11 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                             About.buildShare(tempTweet.getId(), OSChinaApi.COMMENT_TWEET));
                 }
 
+                AppContext.showToastShort("评论成功");
                 mDelegation.setCommentHint("添加评论");
                 mDelegation.getBottomSheet().getEditText().setText("");
                 mDelegation.getBottomSheet().getEditText().setHint("添加评论");
                 mDelegation.getBottomSheet().dismiss();
-                dismissDialog();
             }
         };
 
@@ -295,8 +284,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 }
                 if (replies != null && replies.size() > 0)
                     content = mDelegation.getBottomSheet().getEditText().getHint() + ": " + content;
-                dialog = DialogHelper.getProgressDialog(TweetDetailActivity.this, "正在发表评论...");
-                dialog.show();
                 OSChinaApi.pubTweetComment(tweet.getId(), content, 0, publishCommentHandler);
             }
         });
@@ -371,12 +358,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             mRecordUtil = new RecordButtonUtil();
         }
         return mRecordUtil;
-    }
-
-    private void dismissDialog() {
-        if (dialog == null) return;
-        dialog.dismiss();
-        dialog = null;
     }
 
     /**
@@ -498,8 +479,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     @OnClick(R.id.iv_thumbup)
     void onClickThumbUp() {
         if (checkLogin()) return;
-        this.dialog = DialogHelper.getProgressDialog(this, "正在提交请求...");
-        this.dialog.show();
         OSChinaApi.reverseTweetLike(tweet.getId(), publishAdmireHandler);
     }
 
