@@ -11,6 +11,7 @@ import com.bumptech.glide.RequestManager;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by JuQiu
@@ -117,5 +118,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public boolean isDestroy() {
         return mIsDestroy;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 }

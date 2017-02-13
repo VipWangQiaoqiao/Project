@@ -1,5 +1,6 @@
 package net.oschina.app.improve.media;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -34,15 +35,20 @@ import net.oschina.common.utils.StreamUtil;
 import net.oschina.common.widget.Loading;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.Future;
 
 import butterknife.OnClick;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 
 /**
  * 图片预览Activity
  */
-public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPageChangeListener,
+        EasyPermissions.PermissionCallbacks {
     public static final String KEY_IMAGE = "images";
     public static final String KEY_COOKIE = "cookie_need";
     public static final String KEY_POSITION = "position";
@@ -158,10 +164,31 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         }
     }
 
+    private static final int PERMISSION_ID = 0x0001;
+
     @SuppressWarnings("unused")
+    @AfterPermissionGranted(PERMISSION_ID)
     @OnClick(R.id.iv_save)
-    void saveToFileByPermission() {
-        saveToFile();
+    public void saveToFileByPermission() {
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, permissions)) {
+            saveToFile();
+        } else {
+            EasyPermissions.requestPermissions(this, "请授予保存图片权限", PERMISSION_ID, permissions);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        Toast.makeText(this, R.string.gallery_save_file_not_have_external_storage_permission, Toast.LENGTH_SHORT).show();
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this).build().show();
+        }
     }
 
     private void saveToFile() {
@@ -204,28 +231,29 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                     }
                     final File saveFile = new File(extDirFile, String.format("IMG_%s.%s", System.currentTimeMillis(), extension));
                     final boolean isSuccess = StreamUtil.copyFile(sourceFile, saveFile);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            callSaveStatus(isSuccess, saveFile);
-                        }
-                    });
+                    callSaveStatus(isSuccess, saveFile);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    callSaveStatus(false, null);
                 }
             }
         });
     }
 
-    private void callSaveStatus(boolean success, File savePath) {
-        if (success) {
-            // notify
-            Uri uri = Uri.fromFile(savePath);
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
-            Toast.makeText(ImageGalleryActivity.this, R.string.gallery_save_file_success, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(ImageGalleryActivity.this, R.string.gallery_save_file_failed, Toast.LENGTH_SHORT).show();
-        }
+    private void callSaveStatus(final boolean success, final File savePath) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (success) {
+                    // notify
+                    Uri uri = Uri.fromFile(savePath);
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                    Toast.makeText(ImageGalleryActivity.this, R.string.gallery_save_file_success, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ImageGalleryActivity.this, R.string.gallery_save_file_failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -369,7 +397,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
                     // If download or get option error we not set override
                     if (isTrue && overrideW > 0 && overrideH > 0) {
-                        builder = builder.override(overrideW, overrideH);
+                        builder = builder.override(overrideW, overrideH).fitCenter();
                     }
 
                     builder.into(previewView);
