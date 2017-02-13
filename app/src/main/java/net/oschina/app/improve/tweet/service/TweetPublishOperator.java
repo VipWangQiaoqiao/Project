@@ -1,10 +1,12 @@
 package net.oschina.app.improve.tweet.service;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -53,7 +55,6 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
         this.service.start(model.getId(), this);
         // notify
         notifyMsg(R.string.tweet_publishing);
-
         // doing
         final TweetPublishModel model = this.model;
         if (model.getSrcImages() == null && model.getCacheImages() == null) {
@@ -70,6 +71,8 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
 
                 if (model.getCacheImages() == null) {
                     notifyMsg(R.string.tweet_image_wait_failed);
+                    //图片转存失败，注册失败广播
+                    AppContext.getInstance().sendBroadcast(new Intent(TweetPublishService.ACTION_FAILED));
                     publish();
                     return;
                 }
@@ -230,7 +233,9 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
     }
 
     private void setSuccess() {
+        AppContext.getInstance().sendBroadcast(new Intent(TweetPublishService.ACTION_SUCCESS));
         notifyMsg(R.string.tweet_publish_success);
+        AppContext.showToastShort(R.string.tweet_publish_success);
         try {
             Thread.sleep(1600);
         } catch (InterruptedException e) {
@@ -250,6 +255,8 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
     }
 
     private void setError(int resId, Object... values) {
+        AppContext.getInstance().sendBroadcast(new Intent(TweetPublishService.ACTION_FAILED));
+        AppContext.showToastShort(resId);
         notifyMsg(true, resId, values);
         stop();
     }
@@ -323,6 +330,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
     }
 
     private void saveError(String cmd, String log) {
+        AppContext.getInstance().sendBroadcast(new Intent(TweetPublishService.ACTION_FAILED));
         model.setErrorString(String.format("%s | %s", cmd, log));
         // update to cache file save error log
         service.updateModelCache(model.getId(), model);
