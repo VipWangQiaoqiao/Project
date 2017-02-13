@@ -1,7 +1,6 @@
 package net.oschina.app.improve.comment;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -74,25 +72,13 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     private CommentAdapter mCommentAdapter;
 
     private CommentBar mDelegation;
-    private ProgressDialog mDialog;
     private boolean mInputDoubleEmpty = true;
 
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
-        @Override
-        public void onStart() {
-            super.onStart();
-            showWaitDialog(R.string.progress_submit);
-        }
-
-        @Override
-        public void onFinish() {
-            super.onFinish();
-            hideWaitDialog();
-        }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            AppContext.showToast(getResources().getString(R.string.pub_comment_failed));
+            AppContext.showToastShort(getResources().getString(R.string.pub_comment_failed));
         }
 
         @Override
@@ -108,7 +94,7 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                         handleSyncTweet();
                         mDelegation.setCommentHint(getString(mSourceId));
                         mDelegation.getBottomSheet().getEditText().setHint(getString(mSourceId));
-                        Toast.makeText(CommentsActivity.this, getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
+                        AppContext.showToastShort(getString(R.string.pub_comment_success));
                         mDelegation.getBottomSheet().getEditText().setText("");
                         mDelegation.getBottomSheet().getBtnCommit().setTag(null);
                         mDelegation.getBottomSheet().dismiss();
@@ -360,40 +346,6 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                 break;
         }
 
-    }
-
-
-    /**
-     * show waittDialog
-     *
-     * @param messageId messageId
-     * @return progressDialog
-     */
-    private ProgressDialog showWaitDialog(int messageId) {
-        String message = getResources().getString(messageId);
-        if (mDialog == null) {
-            mDialog = DialogHelper.getProgressDialog(this, message);
-        }
-
-        mDialog.setMessage(message);
-        mDialog.show();
-
-        return mDialog;
-    }
-
-    /**
-     * hideWaitDialog
-     */
-    public void hideWaitDialog() {
-        ProgressDialog dialog = mDialog;
-        if (dialog != null) {
-            mDialog = null;
-            try {
-                dialog.dismiss();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
     }
 
     private void getData(final boolean clearData, String token) {

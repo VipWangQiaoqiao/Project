@@ -1,6 +1,5 @@
 package net.oschina.app.improve.comment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
@@ -35,7 +33,6 @@ import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
-import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.TDevice;
@@ -67,7 +64,6 @@ public class CommentExsActivity extends BaseBackActivity {
     private Comment reply;
     private CommentBar mDelegation;
     private View.OnClickListener onReplyBtnClickListener;
-    private ProgressDialog mDialog;
 
     public static void show(Context context, long id, int type) {
         Intent intent = new Intent(context, CommentExsActivity.class);
@@ -203,13 +199,11 @@ public class CommentExsActivity extends BaseBackActivity {
             @Override
             public void onStart() {
                 super.onStart();
-                showWaitDialog(R.string.progress_submit);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                AppContext.showToast("评论失败!");
-                hideWaitDialog();
+                AppContext.showToastShort("评论失败!");
             }
 
             @Override
@@ -222,22 +216,19 @@ public class CommentExsActivity extends BaseBackActivity {
                     if (resultBean.isSuccess()) {
                         CommentEX respComment = resultBean.getResult();
                         if (respComment != null) {
-
-                            Toast.makeText(CommentExsActivity.this, "评论成功", Toast.LENGTH_LONG).show();
+                            AppContext.showToastShort("评论成功");
                             mDelegation.setCommentHint("发表评论");
                             mDelegation.getBottomSheet().getEditText().setHint("发表评论");
                             getData(true, null);
                             mDelegation.getBottomSheet().dismiss();
                         }
                     } else {
-                        Toast.makeText(CommentExsActivity.this, resultBean.getMessage(), Toast.LENGTH_LONG).show();
+                        AppContext.showToastShort(resultBean.getMessage());
                     }
-                    hideWaitDialog();
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseString, e);
                 }
-                hideWaitDialog();
             }
 
             @Override
@@ -249,39 +240,7 @@ public class CommentExsActivity extends BaseBackActivity {
 
     }
 
-    /**
-     * show waittDialog
-     *
-     * @param messageId messageId
-     * @return progressDialog
-     */
-    private ProgressDialog showWaitDialog(int messageId) {
-        String message = getResources().getString(messageId);
-        if (mDialog == null) {
-            mDialog = DialogHelper.getProgressDialog(this, message);
-        }
-
-        mDialog.setMessage(message);
-        mDialog.show();
-
-        return mDialog;
-    }
-
-    /**
-     * hideWaitDialog
-     */
-    public void hideWaitDialog() {
-        ProgressDialog dialog = mDialog;
-        if (dialog != null) {
-            mDialog = null;
-            try {
-                dialog.dismiss();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
+    @SuppressWarnings("deprecation")
     private void getData(final boolean clearData, String token) {
         OSChinaApi.getComments(mId, mType, "refer", token, new TextHttpResponseHandler() {
             @Override

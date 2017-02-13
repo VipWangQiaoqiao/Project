@@ -1,7 +1,6 @@
 package net.oschina.app.improve.detail.v2;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -10,8 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
@@ -27,7 +26,6 @@ import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
-import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -49,7 +47,6 @@ public abstract class DetailActivity extends BaseBackActivity implements
         OnCommentClickListener {
 
     protected String mCommentHint;
-    protected ProgressDialog mProgressDialog;
     protected DetailPresenter mPresenter;
     protected EmptyLayout mEmptyLayout;
     protected DetailFragment mDetailFragment;
@@ -142,7 +139,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
             mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showDialog("正在提交评论...");
+                    // showDialog("正在提交评论...");
                     mPresenter.addComment(mBean.getId(),
                             mBean.getType(),
                             mDelegation.getBottomSheet().getCommentText(),
@@ -206,7 +203,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
     @Override
     public void showCommentSuccess(Comment comment) {
-        hideDialog();
+        //hideDialog();
         if (mDelegation == null)
             return;
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
@@ -214,7 +211,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
                     mDelegation.getBottomSheet().getCommentText(), null,
                     About.buildShare(mBean.getId(), mBean.getType()));
         }
-        Toast.makeText(this, getString(R.string.pub_comment_success), Toast.LENGTH_SHORT).show();
+        AppContext.showToastShort(R.string.pub_comment_success);
         mDelegation.getCommentText().setHint(mCommentHint);
         mDelegation.getBottomSheet().getEditText().setText("");
         mDelegation.getBottomSheet().getEditText().setHint(mCommentHint);
@@ -224,7 +221,9 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
     @Override
     public void showCommentError(String message) {
-        hideDialog();
+        //hideDialog();
+        AppContext.showToastShort(R.string.pub_comment_failed);
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -248,7 +247,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
     }
 
 
-    @SuppressWarnings("LoopStatementThatDoesntLoop")
+    @SuppressWarnings({"LoopStatementThatDoesntLoop", "SuspiciousMethodCalls"})
     protected boolean toShare(String title, String content, String url) {
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(url) || mBean == null)
             return false;
@@ -335,19 +334,6 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
     protected int getExtraInt(Object object) {
         return object == null ? 0 : Double.valueOf(object.toString()).intValue();
-    }
-
-    protected void showDialog(String message) {
-        if (mProgressDialog == null)
-            mProgressDialog = DialogHelper.getProgressDialog(this);
-        mProgressDialog.setMessage(message);
-        mProgressDialog.show();
-    }
-
-    protected void hideDialog() {
-        if (mProgressDialog == null)
-            return;
-        mProgressDialog.dismiss();
     }
 
     protected abstract DetailFragment getDetailFragment();

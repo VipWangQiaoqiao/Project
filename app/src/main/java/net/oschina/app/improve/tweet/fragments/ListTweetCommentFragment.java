@@ -1,15 +1,14 @@
 package net.oschina.app.improve.tweet.fragments;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
@@ -40,7 +39,6 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
     private TweetDetailContract.Operator mOperator;
     private TweetDetailContract.IAgencyView mAgencyView;
     private int mDeleteIndex = 0;
-    private Dialog mDeleteDialog;
 
     public static ListTweetCommentFragment instantiate(TweetDetailContract.Operator operator, TweetDetailContract.IAgencyView mAgencyView) {
         ListTweetCommentFragment fragment = new ListTweetCommentFragment();
@@ -142,11 +140,10 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        mDeleteDialog = DialogHelper.getProgressDialog(getContext(), "正在删除...", false);
         OSChinaApi.deleteTweetComment(mOperator.getTweetDetail().getId(), comment.getId(), new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                AppContext.showToastShort("删除失败");
             }
 
             @Override
@@ -159,17 +156,9 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
                     int count = mOperator.getTweetDetail().getCommentCount() - 1;
                     mOperator.getTweetDetail().setCommentCount(count); // Bean就这样写的,我也不知道为什么!!!!
                     mAgencyView.resetCmnCount(count);
+                    AppContext.showToastShort("删除成功");
                 } else {
-                    Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                if (mDeleteDialog != null) {
-                    mDeleteDialog.dismiss();
-                    mDeleteDialog = null;
+                    AppContext.showToastShort("删除失败");
                 }
             }
         });

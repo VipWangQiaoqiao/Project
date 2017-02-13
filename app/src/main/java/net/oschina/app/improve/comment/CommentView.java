@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -32,7 +31,6 @@ import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.bean.comment.Vote;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
-import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.TweetTextView;
@@ -278,12 +276,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                     OSChinaApi.voteComment(mType, comment.getId(), comment.getAuthor().getId(), ivVoteStatus.getTag() != null ? 0 : 1, new TextHttpResponseHandler() {
 
                         @Override
-                        public void onStart() {
-                            super.onStart();
-                            showWaitDialog(R.string.progress_submit);
-                        }
-
-                        @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             requestFailureHint(throwable);
                         }
@@ -308,16 +300,12 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                                     comment.setVote(voteVoteCount);
                                     tvVoteCount.setText(String.valueOf(voteVoteCount));
                                 }
+                                AppContext.showToastShort("操作成功!!!");
                             } else {
-                                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
+                                AppContext.showToastShort(resultBean.getMessage());
                             }
                         }
 
-                        @Override
-                        public void onFinish() {
-                            super.onFinish();
-                            hideWaitDialog();
-                        }
                     });
                 }
             });
@@ -363,48 +351,12 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     }
 
     /**
-     * show WaitDialog
-     *
-     * @return progressDialog
-     */
-    private ProgressDialog showWaitDialog(@StringRes int messageId) {
-
-        if (mDialog == null) {
-            if (messageId <= 0) {
-                mDialog = DialogHelper.getProgressDialog(getContext(), true);
-            } else {
-                String message = getResources().getString(messageId);
-                mDialog = DialogHelper.getProgressDialog(getContext(), message, true);
-            }
-        }
-        mDialog.show();
-
-        return mDialog;
-    }
-
-
-    /**
-     * hide waitDialog
-     */
-    private void hideWaitDialog() {
-        ProgressDialog dialog = mDialog;
-        if (dialog != null) {
-            mDialog = null;
-            try {
-                dialog.cancel();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    /**
      * request network error
      *
      * @param throwable throwable
      */
     protected void requestFailureHint(Throwable throwable) {
-        AppContext.showToast(R.string.request_error_hint);
+        AppContext.showToastShort(R.string.request_error_hint);
         if (throwable != null) {
             throwable.printStackTrace();
         }
