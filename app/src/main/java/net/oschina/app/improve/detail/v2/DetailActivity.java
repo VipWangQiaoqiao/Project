@@ -198,7 +198,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
 
     @Override
-    public void showFavReverseSuccess(boolean isFav, int strId) {
+    public void showFavReverseSuccess(boolean isFav, int favCount, int strId) {
         if (mDelegation != null) {
             mDelegation.setFavDrawable(isFav ? R.drawable.ic_faved : R.drawable.ic_fav);
         }
@@ -264,8 +264,10 @@ public abstract class DetailActivity extends BaseBackActivity implements
             case News.TYPE_SOFTWARE:
                 if (images != null && images.size() > 0) {
                     imageUrl = images.get(0).getThumb();
-                    if (!"https://www.oschina.net/img/logo/default.png?t=1482336104000".equals(imageUrl))
-                        break;
+                    if (imageUrl != null && images.contains("logo/default.png")) {
+                        imageUrl = null;
+                    }
+                    break;
                 }
             default:
                 String regex = "<img src=\"([^\"]+)\"";

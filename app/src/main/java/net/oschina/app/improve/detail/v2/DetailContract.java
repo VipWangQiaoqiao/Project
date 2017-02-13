@@ -19,7 +19,7 @@ public interface DetailContract {
 
         void showGetDetailSuccess(SubBean bean);
 
-        void showFavReverseSuccess(boolean isFav, int strId);
+        void showFavReverseSuccess(boolean isFav, int favCount, int strId);
 
         void showCommentSuccess(Comment comment);
 
@@ -29,7 +29,7 @@ public interface DetailContract {
     interface View extends BaseView<Presenter> {
         void showGetDetailSuccess(SubBean bean);
 
-        void showFavReverseSuccess(boolean isFav, int strId);
+        void showFavReverseSuccess(boolean isFav, int favCount, int strId);
 
         void showFavError();
 

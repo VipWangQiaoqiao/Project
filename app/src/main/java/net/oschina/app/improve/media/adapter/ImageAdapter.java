@@ -19,10 +19,15 @@ import net.oschina.app.improve.media.config.ImageLoaderListener;
  */
 public class ImageAdapter extends BaseRecyclerAdapter<Image> {
     private ImageLoaderListener loader;
+    private boolean isSingleSelect;
 
     public ImageAdapter(Context context, ImageLoaderListener loader) {
         super(context, NEITHER);
         this.loader = loader;
+    }
+
+    public void setSingleSelect(boolean singleSelect) {
+        isSingleSelect = singleSelect;
     }
 
     @Override
@@ -60,6 +65,7 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
                     View.VISIBLE : View.GONE);
 
             loader.displayImage(h.mImageView, item.getPath());
+            h.mCheckView.setVisibility(isSingleSelect ? View.GONE : View.VISIBLE);
         }
     }
 

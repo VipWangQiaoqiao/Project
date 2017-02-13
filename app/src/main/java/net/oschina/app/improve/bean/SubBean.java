@@ -262,6 +262,9 @@ public class SubBean implements Serializable {
     public static class Statistics implements Serializable {
         private int comment;
         private int view;
+        private int like;
+        private int transmit;
+        private int favCount;
 
         public int getComment() {
             return comment;
@@ -277,6 +280,30 @@ public class SubBean implements Serializable {
 
         public void setView(int view) {
             this.view = view;
+        }
+
+        public int getLike() {
+            return like;
+        }
+
+        public void setLike(int like) {
+            this.like = like;
+        }
+
+        public int getTransmit() {
+            return transmit;
+        }
+
+        public void setTransmit(int transmit) {
+            this.transmit = transmit;
+        }
+
+        public int getFavCount() {
+            return favCount;
+        }
+
+        public void setFavCount(int favCount) {
+            this.favCount = favCount;
         }
     }
 }
