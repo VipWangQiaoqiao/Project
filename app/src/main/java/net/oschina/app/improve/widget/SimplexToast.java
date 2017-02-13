@@ -61,7 +61,7 @@ public class SimplexToast {
 
     public static void show(Context context, String content, int gravity, int duration) {
         long current = System.currentTimeMillis();
-        if (current < nextTimeMillis) return;
+        //if (current < nextTimeMillis) return;
         if (mToast == null) init(context.getApplicationContext());
         mToast.setText(content);
         mToast.setDuration(duration);

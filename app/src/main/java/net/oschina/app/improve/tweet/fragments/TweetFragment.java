@@ -333,8 +333,8 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                     break;
                 case TweetPublishService.ACTION_SUCCESS:
                     //如果再次发送动弹成功，gone草稿箱view
+                    AppContext.showToastShort(R.string.tweet_publish_success);
                     showDraftsBox(View.GONE);
-
                     break;
                 case TweetPublishService.ACTION_FAILED:
 

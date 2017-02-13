@@ -469,7 +469,7 @@
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
-            android:exported="false"
+            android:exported="true"
             android:process="net.oschina.app.tweet.TweetPublishService"/>
         <service
             android:name=".improve.notice.NoticeServer"
