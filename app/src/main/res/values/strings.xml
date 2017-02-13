@@ -247,6 +247,7 @@
     <string name="vote_up">顶</string>
     <string name="vote_down">踩</string>
 
+    <string name="gallery_save_file_not_have_external_storage_permission">没有外部存储权限!</string>
     <string name="gallery_save_file_not_have_external_storage">没有外部存储!</string>
     <string name="gallery_save_file_success">保存成功!</string>
     <string name="gallery_save_file_failed">存储失败!</string>
@@ -372,7 +373,9 @@
     <string name="server_no_have_permission_hint">服务器定位失败，请检查权限</string>
     <string name="network_exception_hint">网络异常</string>
     <string name="key_is_invalid_hint">非法或无效的APP KEY</string>
+
     <string name="notification_ignore_hint">忽略</string>
     <string name="notification_retry_hint">重试</string>
     <string name="content_upload_error_hint">部分内容没有上传成功</string>
+
 </resources>
