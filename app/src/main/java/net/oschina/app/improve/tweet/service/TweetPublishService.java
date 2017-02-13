@@ -1,7 +1,5 @@
 package net.oschina.app.improve.tweet.service;
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,12 +9,9 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.ArrayMap;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.util.TLog;
@@ -36,9 +31,11 @@ public class TweetPublishService extends Service implements Contract.IService {
     public static final String ACTION_RECEIVER_SEARCH_INCOMPLETE = "net.oschina.app.improve.tweet.service.action.receiver.SEARCH_INCOMPLETE";
     public static final String ACTION_RECEIVER_SEARCH_FAILED = "net.oschina.app.improve.tweet.service.action.receiver.SEARCH_FAILED";
 
-    private static final String ACTION_PUBLISH = "net.oschina.app.improve.tweet.service.action.PUBLISH";
-    private static final String ACTION_CONTINUE = "net.oschina.app.improve.tweet.service.action.CONTINUE";
-    private static final String ACTION_DELETE = "net.oschina.app.improve.tweet.service.action.DELETE";
+    public static final String ACTION_PUBLISH = "net.oschina.app.improve.tweet.service.action.PUBLISH";
+    public static final String ACTION_CONTINUE = "net.oschina.app.improve.tweet.service.action.CONTINUE";
+    public static final String ACTION_DELETE = "net.oschina.app.improve.tweet.service.action.DELETE";
+    public static final String ACTION_FAILED = "net.oschina.app.improve.tweet.service.action.FAILED";
+    public static final String ACTION_SUCCESS = "net.oschina.app.improve.tweet.service.action.SUCCESS";
 
     private static final String EXTRA_CONTENT = "net.oschina.app.improve.tweet.service.extra.CONTENT";
     private static final String EXTRA_IMAGES = "net.oschina.app.improve.tweet.service.extra.IMAGES";
@@ -151,7 +148,7 @@ public class TweetPublishService extends Service implements Contract.IService {
         log("onCreate");
 
         // init sync client
-        ApiHttpClient.init((AppContext) getApplication());
+        ApiHttpClient.init(getApplication());
 
         HandlerThread thread = new HandlerThread(TweetPublishService.class.getSimpleName());
         thread.start();
@@ -338,37 +335,35 @@ public class TweetPublishService extends Service implements Contract.IService {
 
     @Override
     public void notifyMsg(int notifyId, String modelId, boolean haveReDo, boolean haveDelete, int resId, Object... values) {
-        PendingIntent contentIntent = null;
-        if (haveReDo) {
-            Intent intent = new Intent(this, TweetPublishService.class);
-            intent.setAction(ACTION_CONTINUE);
-            intent.putExtra(EXTRA_ID, modelId);
-            contentIntent = PendingIntent.getService(getApplicationContext(), notifyId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        }
-
-        PendingIntent deleteIntent = null;
-        if (haveDelete) {
-            Intent intent = new Intent(this, TweetPublishService.class);
-            intent.setAction(ACTION_DELETE);
-            intent.putExtra(EXTRA_ID, modelId);
-            deleteIntent = PendingIntent.getService(getApplicationContext(), notifyId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        }
-
+//        PendingIntent contentIntent = null;
+//        if (haveReDo) {
+//            Intent intent = new Intent(this, TweetPublishService.class);
+//            intent.setAction(ACTION_CONTINUE);
+//            intent.putExtra(EXTRA_ID, modelId);
+//            contentIntent = PendingIntent.getService(getApplicationContext(), notifyId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        }
+//
+//        PendingIntent deleteIntent = null;
+//        if (haveDelete) {
+//            Intent intent = new Intent(this, TweetPublishService.class);
+//            intent.setAction(ACTION_DELETE);
+//            intent.putExtra(EXTRA_ID, modelId);
+//            deleteIntent = PendingIntent.getService(getApplicationContext(), notifyId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        }
+//
         String content = getString(resId, values);
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+//                .setTicker(content)
+//                .setContentTitle(getString(R.string.tweet_publish_title))
+//                .setContentText(content)
+//                .setAutoCancel(haveDelete)
+//                .setOngoing(!haveReDo)
+//                .setContentIntent(contentIntent)
+//                .setDeleteIntent(deleteIntent)
+//                .setSmallIcon(R.mipmap.ic_notification);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                this)
-                .setTicker(content)
-                .setContentTitle(getString(R.string.tweet_publish_title))
-                .setContentText(content)
-                .setAutoCancel(haveDelete)
-                .setOngoing(!haveReDo)
-                .setContentIntent(contentIntent)
-                .setDeleteIntent(deleteIntent)
-                .setSmallIcon(R.mipmap.ic_notification);
-
-        Notification notification = builder.build();
-        NotificationManagerCompat.from(this).notify(notifyId, notification);
+        //Notification notification = builder.build();
+        //NotificationManagerCompat.from(this).notify(notifyId, notification);
 
         log(content);
     }

@@ -84,7 +84,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
         TweetPublishService.startActionPublish(context, content, paths, mAboutShare);
 
         // Toast
-        AppContext.showToast(R.string.tweet_publishing_toast);
+        AppContext.showToastShort(R.string.tweet_publishing);
 
         // Save topic cache
         Pattern pattern = Pattern.compile("#.+?#");

@@ -9,15 +9,19 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
@@ -34,6 +38,7 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.CacheManager;
@@ -49,7 +54,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
+
+import static net.oschina.app.improve.tweet.service.TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED;
 
 /**
  * 动弹列表
@@ -81,6 +90,17 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     public long mUserId; // login user or another user
     public String tag;
     private LoginReceiver mReceiver;
+    private PubTweetReceiver mPubTweetReceiver;
+
+    @Bind(R.id.lay_notification)
+    LinearLayout mLayNotification;
+    @Bind(R.id.bt_ignore)
+    Button mBtIgnore;
+    @Bind(R.id.bt_retry)
+    Button mBtRetry;
+    @Bind(R.id.notification_baseline)
+    View mBaseLine;
+    private String[] mPubFailedCacheIds;
 
     public static Fragment instantiate(long uid) {
         Bundle bundle = new Bundle();
@@ -152,6 +172,30 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mReqCatalog == 1) {
+            //每次进入或回到最新动弹界面先查询是否有本地发送失败的动弹缓存
+            TweetPublishService.startActionSearchFailed(AppContext.context());
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mReqCatalog == 1) {
+            //每次离开最新动弹界面都必须gone掉垃圾箱的view
+            showDraftsBox(View.GONE);
+        }
+
+    }
+
+    @Override
+    protected void initWidget(View root) {
+        super.initWidget(root);
+    }
+
+    @Override
     public void initData() {
         switch (mReqCatalog) {
             case CATALOG_NEW:
@@ -183,6 +227,20 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                 (!AccountHelper.isLogin() && mReqCatalog == CATALOG_FRIENDS)) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mErrorLayout.setErrorMessage("未登录");
+        }
+
+
+        if (mPubTweetReceiver == null)
+            mPubTweetReceiver = new PubTweetReceiver();
+        if (mReqCatalog == 1) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(TweetPublishService.ACTION_PUBLISH);
+            filter.addAction(TweetPublishService.ACTION_CONTINUE);
+            filter.addAction(TweetPublishService.ACTION_DELETE);
+            filter.addAction(TweetPublishService.ACTION_SUCCESS);
+            filter.addAction(TweetPublishService.ACTION_FAILED);
+            filter.addAction(ACTION_RECEIVER_SEARCH_FAILED);
+            getContext().registerReceiver(mPubTweetReceiver, filter);
         }
     }
 
@@ -256,12 +314,61 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         }
     }
 
+    private class PubTweetReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case TweetPublishService.ACTION_PUBLISH:
+                    //开始发送动弹,监听发布进度起点
+                    break;
+                case TweetPublishService.ACTION_CONTINUE:
+                    //重新尝试发送该条动弹
+                    break;
+                case TweetPublishService.ACTION_DELETE:
+
+                    //忽略该条动弹之后，直接gone草稿箱view
+                    showDraftsBox(View.GONE);
+
+                    break;
+                case TweetPublishService.ACTION_SUCCESS:
+                    //如果再次发送动弹成功，gone草稿箱view
+                    showDraftsBox(View.GONE);
+
+                    break;
+                case TweetPublishService.ACTION_FAILED:
+
+                    //发送动弹失败，显示草稿箱view
+                    AppContext.showToastShort(R.string.tweet_publish_failed_hint);
+                    showDraftsBox(View.VISIBLE);
+
+                    break;
+                case TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED:
+
+                    mPubFailedCacheIds = intent.getStringArrayExtra(TweetPublishService.EXTRA_IDS);
+
+                    if (mPubFailedCacheIds != null && mPubFailedCacheIds.length > 0) {
+                        showDraftsBox(View.VISIBLE);
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+
+
+        }
+    }
+
+
     @Override
     protected void requestData() {
         super.requestData();
         String pageToken = isRefreshing ? null : mBean.getNextPageToken();
         switch (mReqCatalog) {
             case CATALOG_NEW:
+                //注册草稿箱查询操作
+                TweetPublishService.startActionSearchFailed(AppContext.context());
                 OSChinaApi.getTweetList(null, null, 1, 1, pageToken, mHandler);
                 break;
             case CATALOG_HOT:
@@ -317,14 +424,38 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
      *
      * @param v {@link View}
      */
+    @OnClick({R.id.bt_ignore, R.id.bt_retry})
     @Override
     public void onClick(View v) {
-        if ((mReqCatalog == CATALOG_MYSELF || mReqCatalog == CATALOG_FRIENDS)
-                && !AccountHelper.isLogin()) {
-            //UIHelper.showLoginActivity(getActivity());
-            LoginActivity.show(this, 1);
-        } else {
-            super.onClick(v);
+        switch (v.getId()) {
+            case R.id.bt_ignore:
+                //忽略该动弹
+                showDraftsBox(View.GONE);
+                AppContext.showToastShort(R.string.tweet_ignore_hint);
+                if (mPubFailedCacheIds == null) return;
+                for (String id : mPubFailedCacheIds) {
+                    if (TextUtils.isEmpty(id)) continue;
+                    TweetPublishService.startActionDelete(getContext(), id);
+                }
+                break;
+            case R.id.bt_retry:
+                //重新发送动弹
+                AppContext.showToastShort(R.string.tweet_retry_publishing_hint);
+                showDraftsBox(View.GONE);
+                if (mPubFailedCacheIds == null) return;
+                for (String id : mPubFailedCacheIds) {
+                    if (TextUtils.isEmpty(id)) continue;
+                    TweetPublishService.startActionContinue(getContext(), id);
+                }
+                break;
+            default:
+                if ((mReqCatalog == CATALOG_MYSELF || mReqCatalog == CATALOG_FRIENDS)
+                        && !AccountHelper.isLogin()) {
+                    LoginActivity.show(this, 1);
+                } else {
+                    super.onClick(v);
+                }
+                break;
         }
     }
 
@@ -377,14 +508,12 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
             ((BaseGeneralRecyclerAdapter) mAdapter).addItems(resultBean.getResult().getItems());
         }
 
-        if (resultBean.getResult().getItems() == null
-                || resultBean.getResult().getItems().size() < 20)
+        if (resultBean.getResult().getItems() == null || resultBean.getResult().getItems().size() < 20)
             mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
 //        mAdapter.setState(resultBean.getResult().getItems() == null
 //                || resultBean.getResult().getItems().size() < 20
 //                ? BaseRecyclerAdapter.STATE_NO_MORE
 //                : BaseRecyclerAdapter.STATE_LOADING, true);
-
         if (mAdapter.getItems().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
@@ -402,6 +531,9 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         if (mReceiver != null) {
             LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mReceiver);
         }
+        //解除注册广播
+        if (mPubTweetReceiver != null)
+            getContext().unregisterReceiver(mPubTweetReceiver);
         super.onDestroy();
     }
 
@@ -442,5 +574,12 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                 onFailure(statusCode, headers, responseString, e);
             }
         }
+    }
+
+    private void showDraftsBox(int GoneOrVisible) {
+        mLayNotification.setVisibility(GoneOrVisible);
+        mBtIgnore.setVisibility(GoneOrVisible);
+        mBtRetry.setVisibility(GoneOrVisible);
+        mBaseLine.setVisibility(GoneOrVisible);
     }
 }

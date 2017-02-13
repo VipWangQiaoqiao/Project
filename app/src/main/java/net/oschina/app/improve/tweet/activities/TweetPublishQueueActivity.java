@@ -60,7 +60,7 @@ public class TweetPublishQueueActivity extends BaseBackActivity implements Tweet
                     @Override
                     public void run() {
                         Context context = getApplicationContext();
-                        List<TweetPublishModel> models = new ArrayList<TweetPublishModel>();
+                        List<TweetPublishModel> models = new ArrayList<>();
                         for (String str : ids) {
                             TweetPublishModel model = TweetPublishCache.get(context, str);
                             if (model != null)
