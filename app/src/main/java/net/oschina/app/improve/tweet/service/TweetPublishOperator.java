@@ -144,6 +144,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
                 try {
                     Type type = new TypeToken<ResultBean<ImageResource>>() {
                     }.getType();
@@ -235,7 +236,6 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
     private void setSuccess() {
         AppContext.getInstance().sendBroadcast(new Intent(TweetPublishService.ACTION_SUCCESS));
         notifyMsg(R.string.tweet_publish_success);
-        AppContext.showToastShort(R.string.tweet_publish_success);
         try {
             Thread.sleep(1600);
         } catch (InterruptedException e) {
@@ -256,7 +256,6 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
 
     private void setError(int resId, Object... values) {
         AppContext.getInstance().sendBroadcast(new Intent(TweetPublishService.ACTION_FAILED));
-        AppContext.showToastShort(resId);
         notifyMsg(true, resId, values);
         stop();
     }

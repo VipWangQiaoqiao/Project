@@ -3,8 +3,11 @@ package net.oschina.app.improve.main;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -44,6 +47,7 @@ import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.search.activities.NearbyActivity;
+import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.interf.OnTabReselectListener;
@@ -78,6 +82,8 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     private RadarSearchManager mRadarSearchManager;
     private LocationClient mLocationClient;
     private RadarSearchAdapter mRadarSearchAdapter;
+
+    private PubTweetReceiver mPubTweetReceiver;
 
     public interface TurnBackListener {
         boolean onTurnBack();
@@ -155,6 +161,14 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
             if (Setting.hasLocationPermission(getApplicationContext()))
                 requestLocationPermission();
         }
+
+        if (mPubTweetReceiver == null)
+            mPubTweetReceiver = new PubTweetReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(TweetPublishService.ACTION_SUCCESS);
+        filter.addAction(TweetPublishService.ACTION_FAILED);
+        registerReceiver(mPubTweetReceiver, filter);
+
     }
 
     @Override
@@ -221,6 +235,8 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
 
     @Override
     protected void onDestroy() {
+        if (mPubTweetReceiver != null)
+            unregisterReceiver(mPubTweetReceiver);
         super.onDestroy();
         NoticeManager.stopListen(this);
         releaseLbs();
@@ -464,6 +480,27 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
             //释放资源
             mRadarSearchManager.destroy();
             mRadarSearchManager = null;
+        }
+    }
+
+    private class PubTweetReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case TweetPublishService.ACTION_SUCCESS:
+                    //动弹发送成功
+                    AppContext.showToastShort(R.string.tweet_publish_success);
+                    break;
+                case TweetPublishService.ACTION_FAILED:
+                    //发送动弹失败
+                    AppContext.showToastShort(R.string.tweet_publish_failed_hint);
+                    break;
+                default:
+                    break;
+            }
+
+
         }
     }
 }
