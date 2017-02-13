@@ -33,6 +33,7 @@ import java.util.ArrayList;
  * on 16/8/22.
  */
 public class TweetPublishActivity extends BaseBackActivity {
+    private static final String TAG = "TweetPublishActivity";
     private TweetPublishContract.View mView;
 
     public static void show(Context context) {
@@ -225,9 +226,9 @@ public class TweetPublishActivity extends BaseBackActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
         unRegisterPublishStateReceiver();
-        super.onDestroy();
+        super.onPause();
     }
 
     private void registerPublishStateReceiver() {

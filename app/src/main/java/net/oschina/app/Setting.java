@@ -12,13 +12,13 @@ import net.oschina.app.util.TDevice;
  * @version 1.0.0
  */
 public final class Setting {
-    public static final String KEY_SEVER_URL = "serverUrl";
-    public static final String KEY_VERSION_CODE = "versionCode";
+    private static final String KEY_SEVER_URL = "serverUrl";
+    private static final String KEY_VERSION_CODE = "versionCode";
     public static final String KEY_APP_UNIQUE_ID = "appUniqueID";
-    public static final String KEY_SYSTEM_CONFIG_TIMESTAMP = "systemConfigTimeStamp";
-    public static final String KEY_LOCATION_INFO = "locationInfo";
-    public static final String KEY_LOCATION_PERMISSION = "locationPermission";
-    public static final String KEY_SOFT_KEYBOARD_HEIGHT = "softKeyboardHeight";
+    private static final String KEY_SYSTEM_CONFIG_TIMESTAMP = "systemConfigTimeStamp";
+    private static final String KEY_LOCATION_INFO = "locationInfo";
+    private static final String KEY_LOCATION_PERMISSION = "locationPermission";
+    private static final String KEY_SOFT_KEYBOARD_HEIGHT = "softKeyboardHeight";
 
     public static SharedPreferences getSettingPreferences(Context context) {
         return context.getSharedPreferences(Setting.class.getName(), Context.MODE_PRIVATE);
