@@ -107,7 +107,7 @@ public abstract class DetailFragment extends BaseFragment implements
     }
 
     @Override
-    public void showFavReverseSuccess(boolean isFav, int strId) {
+    public void showFavReverseSuccess(boolean isFav, int favCount, int strId) {
         SimplexToast.show(mContext, mContext.getResources().getString(strId));
     }
 

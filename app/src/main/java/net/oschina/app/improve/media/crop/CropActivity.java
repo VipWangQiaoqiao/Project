@@ -49,7 +49,7 @@ public class CropActivity extends BaseActivity implements View.OnClickListener {
 
         String url = mOption.getSelectedImages().get(0);
         getImageLoader().load(url)
-                .override(720, 1280)
+                .fitCenter()
                 .into(mCropLayout.getImageView());
 
         mCropLayout.setCropWidth(mOption.getCropWidth());

@@ -81,9 +81,8 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
     private static SelectOptions mOption;
 
     public static SelectFragment newInstance(SelectOptions options) {
-        SelectFragment fragment = new SelectFragment();
         mOption = options;
-        return fragment;
+        return new SelectFragment();
     }
 
     @Override
@@ -124,6 +123,8 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
         mContentView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         mContentView.addItemDecoration(new SpaceGridItemDecoration((int) TDevice.dipToPx(getResources(), 1)));
         mImageAdapter = new ImageAdapter(getContext(), this);
+        mImageAdapter.setSingleSelect(mOption.getSelectCount() <= 1);
+        mRoot.findViewById(R.id.lay_button).setVisibility(mOption.getSelectCount() == 1 ? View.GONE : View.VISIBLE);
         mImageFolderAdapter = new ImageFolderAdapter(getActivity());
         mImageFolderAdapter.setLoader(this);
         mContentView.setAdapter(mImageAdapter);
