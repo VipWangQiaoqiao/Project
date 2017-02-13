@@ -1,5 +1,6 @@
 package net.oschina.app.improve.media;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -34,13 +35,20 @@ import net.oschina.common.utils.StreamUtil;
 import net.oschina.common.widget.Loading;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.Future;
+
+import butterknife.OnClick;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 
 /**
  * 图片预览Activity
  */
-public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPageChangeListener,
+        EasyPermissions.PermissionCallbacks {
     public static final String KEY_IMAGE = "images";
     public static final String KEY_COOKIE = "cookie_need";
     public static final String KEY_POSITION = "position";
@@ -51,6 +59,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     private int mCurPosition;
     private boolean mNeedSaveLocal;
     private boolean mNeedCookie;
+    private boolean[] mImageDownloadStatus;
 
     public static void show(Context context, String images) {
         show(context, images, true);
@@ -93,7 +102,14 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         mCurPosition = bundle.getInt(KEY_POSITION, 0);
         mNeedSaveLocal = bundle.getBoolean(KEY_NEED_SAVE, true);
         mNeedCookie = bundle.getBoolean(KEY_COOKIE, false);
-        return mImageSources != null;
+
+        if (mImageSources != null) {
+            // 初始化下载状态
+            mImageDownloadStatus = new boolean[mImageSources.length];
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -111,13 +127,10 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     protected void initWidget() {
         super.initWidget();
         setTitle("");
+
         mImagePager = (PreviewerViewPager) findViewById(R.id.vp_image);
         mIndexText = (TextView) findViewById(R.id.tv_index);
         mImagePager.addOnPageChangeListener(this);
-        if (mNeedSaveLocal)
-            findViewById(R.id.iv_save).setOnClickListener(this);
-        else
-            findViewById(R.id.iv_save).setVisibility(View.GONE);
     }
 
     @Override
@@ -137,12 +150,44 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         onPageSelected(mCurPosition);
     }
 
+    private void changeSaveButtonStatus(boolean isShow) {
+        if (mNeedSaveLocal) {
+            findViewById(R.id.iv_save).setVisibility(isShow ? View.VISIBLE : View.GONE);
+        } else
+            findViewById(R.id.iv_save).setVisibility(View.GONE);
+    }
+
+    private void updateDownloadStatus(int pos, boolean isOk) {
+        mImageDownloadStatus[pos] = isOk;
+        if (mCurPosition == pos) {
+            changeSaveButtonStatus(isOk);
+        }
+    }
+
+    private static final int PERMISSION_ID = 0x0001;
+
+    @SuppressWarnings("unused")
+    @AfterPermissionGranted(PERMISSION_ID)
+    @OnClick(R.id.iv_save)
+    public void saveToFileByPermission() {
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, permissions)) {
+            saveToFile();
+        } else {
+            EasyPermissions.requestPermissions(this, "请授予保存图片权限", PERMISSION_ID, permissions);
+        }
+    }
+
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_save:
-                saveToFile();
-                break;
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        Toast.makeText(this, R.string.gallery_save_file_not_have_external_storage_permission, Toast.LENGTH_SHORT).show();
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this).build().show();
         }
     }
 
@@ -186,28 +231,29 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                     }
                     final File saveFile = new File(extDirFile, String.format("IMG_%s.%s", System.currentTimeMillis(), extension));
                     final boolean isSuccess = StreamUtil.copyFile(sourceFile, saveFile);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            callSaveStatus(isSuccess, saveFile);
-                        }
-                    });
+                    callSaveStatus(isSuccess, saveFile);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    callSaveStatus(false, null);
                 }
             }
         });
     }
 
-    private void callSaveStatus(boolean success, File savePath) {
-        if (success) {
-            // notify
-            Uri uri = Uri.fromFile(savePath);
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
-            Toast.makeText(ImageGalleryActivity.this, R.string.gallery_save_file_success, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(ImageGalleryActivity.this, R.string.gallery_save_file_failed, Toast.LENGTH_SHORT).show();
-        }
+    private void callSaveStatus(final boolean success, final File savePath) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (success) {
+                    // notify
+                    Uri uri = Uri.fromFile(savePath);
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                    Toast.makeText(ImageGalleryActivity.this, R.string.gallery_save_file_success, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ImageGalleryActivity.this, R.string.gallery_save_file_failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -219,6 +265,8 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     public void onPageSelected(int position) {
         mCurPosition = position;
         mIndexText.setText(String.format("%s/%s", (position + 1), mImageSources.length));
+        // 滑动时自动切换当前的下载状态
+        changeSaveButtonStatus(mImageDownloadStatus[position]);
     }
 
     @Override
@@ -277,10 +325,10 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
             // Do load
             if (mNeedCookie)
-                loadImage(AppOperator.getGlideUrlByUser(mImageSources[position]),
+                loadImage(position, AppOperator.getGlideUrlByUser(mImageSources[position]),
                         previewView, defaultView, loading);
             else
-                loadImage(mImageSources[position], previewView, defaultView, loading);
+                loadImage(position, mImageSources[position], previewView, defaultView, loading);
 
             previewView.setOnClickListener(getListener());
             container.addView(view);
@@ -309,7 +357,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
             mImagePager.isInterceptable(isReached);
         }
 
-        private <T> void loadImage(final T urlOrPath,
+        private <T> void loadImage(final int pos, final T urlOrPath,
                                    final ImageView previewView,
                                    final ImageView defaultView,
                                    final Loading loading) {
@@ -330,6 +378,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                                     loading.stop();
                                     loading.setVisibility(View.GONE);
                                     defaultView.setVisibility(View.VISIBLE);
+                                    updateDownloadStatus(pos, false);
                                     return false;
                                 }
 
@@ -341,13 +390,14 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                                                                boolean isFirstResource) {
                                     loading.stop();
                                     loading.setVisibility(View.GONE);
+                                    updateDownloadStatus(pos, true);
                                     return false;
                                 }
                             }).diskCacheStrategy(DiskCacheStrategy.SOURCE);
 
                     // If download or get option error we not set override
                     if (isTrue && overrideW > 0 && overrideH > 0) {
-                        builder = builder.override(overrideW, overrideH);
+                        builder = builder.override(overrideW, overrideH).fitCenter();
                     }
 
                     builder.into(previewView);
@@ -426,6 +476,14 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         }
 
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     interface DoOverrideSizeCallback {
