@@ -36,11 +36,13 @@ import net.oschina.common.widget.Loading;
 import java.io.File;
 import java.util.concurrent.Future;
 
+import butterknife.OnClick;
+
 
 /**
  * 图片预览Activity
  */
-public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     public static final String KEY_IMAGE = "images";
     public static final String KEY_COOKIE = "cookie_need";
     public static final String KEY_POSITION = "position";
@@ -51,6 +53,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     private int mCurPosition;
     private boolean mNeedSaveLocal;
     private boolean mNeedCookie;
+    private boolean[] mImageDownloadStatus;
 
     public static void show(Context context, String images) {
         show(context, images, true);
@@ -93,7 +96,14 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         mCurPosition = bundle.getInt(KEY_POSITION, 0);
         mNeedSaveLocal = bundle.getBoolean(KEY_NEED_SAVE, true);
         mNeedCookie = bundle.getBoolean(KEY_COOKIE, false);
-        return mImageSources != null;
+
+        if (mImageSources != null) {
+            // 初始化下载状态
+            mImageDownloadStatus = new boolean[mImageSources.length];
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -111,13 +121,10 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     protected void initWidget() {
         super.initWidget();
         setTitle("");
+
         mImagePager = (PreviewerViewPager) findViewById(R.id.vp_image);
         mIndexText = (TextView) findViewById(R.id.tv_index);
         mImagePager.addOnPageChangeListener(this);
-        if (mNeedSaveLocal)
-            findViewById(R.id.iv_save).setOnClickListener(this);
-        else
-            findViewById(R.id.iv_save).setVisibility(View.GONE);
     }
 
     @Override
@@ -137,13 +144,24 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         onPageSelected(mCurPosition);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_save:
-                saveToFile();
-                break;
+    private void changeSaveButtonStatus(boolean isShow) {
+        if (mNeedSaveLocal) {
+            findViewById(R.id.iv_save).setVisibility(isShow ? View.VISIBLE : View.GONE);
+        } else
+            findViewById(R.id.iv_save).setVisibility(View.GONE);
+    }
+
+    private void updateDownloadStatus(int pos, boolean isOk) {
+        mImageDownloadStatus[pos] = isOk;
+        if (mCurPosition == pos) {
+            changeSaveButtonStatus(isOk);
         }
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.iv_save)
+    void saveToFileByPermission() {
+        saveToFile();
     }
 
     private void saveToFile() {
@@ -219,6 +237,8 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     public void onPageSelected(int position) {
         mCurPosition = position;
         mIndexText.setText(String.format("%s/%s", (position + 1), mImageSources.length));
+        // 滑动时自动切换当前的下载状态
+        changeSaveButtonStatus(mImageDownloadStatus[position]);
     }
 
     @Override
@@ -277,10 +297,10 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
             // Do load
             if (mNeedCookie)
-                loadImage(AppOperator.getGlideUrlByUser(mImageSources[position]),
+                loadImage(position, AppOperator.getGlideUrlByUser(mImageSources[position]),
                         previewView, defaultView, loading);
             else
-                loadImage(mImageSources[position], previewView, defaultView, loading);
+                loadImage(position, mImageSources[position], previewView, defaultView, loading);
 
             previewView.setOnClickListener(getListener());
             container.addView(view);
@@ -309,7 +329,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
             mImagePager.isInterceptable(isReached);
         }
 
-        private <T> void loadImage(final T urlOrPath,
+        private <T> void loadImage(final int pos, final T urlOrPath,
                                    final ImageView previewView,
                                    final ImageView defaultView,
                                    final Loading loading) {
@@ -330,6 +350,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                                     loading.stop();
                                     loading.setVisibility(View.GONE);
                                     defaultView.setVisibility(View.VISIBLE);
+                                    updateDownloadStatus(pos, false);
                                     return false;
                                 }
 
@@ -341,6 +362,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                                                                boolean isFirstResource) {
                                     loading.stop();
                                     loading.setVisibility(View.GONE);
+                                    updateDownloadStatus(pos, true);
                                     return false;
                                 }
                             }).diskCacheStrategy(DiskCacheStrategy.SOURCE);
