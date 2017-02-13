@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -253,7 +252,7 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
     }
 
     @Override
-    public void showFavReverseSuccess(boolean isFav, int strId) {
+    public void showFavReverseSuccess(boolean isFav, int favCount, int strId) {
         if (mMenuFav == null)
             return;
         mMenuFav.setIcon(isFav ? R.mipmap.ic_faved_light_normal : R.mipmap.ic_fav_light_normal);

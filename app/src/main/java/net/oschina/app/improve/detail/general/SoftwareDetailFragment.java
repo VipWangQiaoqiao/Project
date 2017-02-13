@@ -47,6 +47,8 @@ public class SoftwareDetailFragment extends DetailFragment {
     TextView mTextRecordTime;
     @Bind(R.id.iv_fav)
     ImageView mImageFav;
+    @Bind(R.id.tv_fav_count)
+    TextView mTextFavCount;
     @Bind(R.id.tv_comment_count)
     TextView mTextCommentCount;
 
@@ -110,6 +112,7 @@ public class SoftwareDetailFragment extends DetailFragment {
             getImgLoader().load(images.get(0).getHref()).asBitmap().into(mImageSoftware);
         SubBean.Statistics statistics = bean.getStatistics();
         mTextCommentCount.setText(String.format("评论(%d)", statistics != null ? statistics.getComment() : 0));
+        mTextFavCount.setText(String.format("收藏(%d)", statistics != null ? statistics.getFavCount() : 0));
         Author author = bean.getAuthor();
         if (author != null) {
             mTextAuthor.setText(author.getName());
@@ -134,9 +137,11 @@ public class SoftwareDetailFragment extends DetailFragment {
         return OSChinaApi.COMMENT_HOT_ORDER;
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
-    public void showFavReverseSuccess(boolean isFav, int strId) {
-        super.showFavReverseSuccess(isFav, strId);
+    public void showFavReverseSuccess(boolean isFav, int favCount, int strId) {
+        super.showFavReverseSuccess(isFav, favCount, strId);
         mImageFav.setImageResource(isFav ? R.drawable.ic_faved : R.drawable.ic_fav);
+        mTextFavCount.setText(String.format("收藏(%d)", favCount));
     }
 }

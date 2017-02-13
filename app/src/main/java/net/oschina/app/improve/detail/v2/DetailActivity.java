@@ -198,7 +198,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
 
 
     @Override
-    public void showFavReverseSuccess(boolean isFav, int strId) {
+    public void showFavReverseSuccess(boolean isFav, int favCount, int strId) {
         if (mDelegation != null) {
             mDelegation.setFavDrawable(isFav ? R.drawable.ic_faved : R.drawable.ic_fav);
         }
