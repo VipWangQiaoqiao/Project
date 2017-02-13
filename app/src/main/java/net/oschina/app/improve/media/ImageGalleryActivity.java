@@ -478,6 +478,14 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
     interface DoOverrideSizeCallback {
         void onDone(int overrideW, int overrideH, boolean isTrue);
     }
