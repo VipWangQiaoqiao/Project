@@ -28,6 +28,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.ParentLinkedHolder;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.user.OnFriendSelector;
 import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapter;
@@ -35,6 +36,7 @@ import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
 import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.user.helper.SyncFriendHelper;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.widget.RecentContactsView;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.IndexView;
@@ -99,6 +101,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     //选中icon缓存朋友数据
     private LinkedList<UserFriend> mCacheIconFriends = new LinkedList<>();
 
+    // 最近联系人
+    private RecentContactsView mRecentView;
+
     private UserSearchFriendsAdapter mSearchAdapter;
 
     private static ParentLinkedHolder<RichEditText> textParentLinkedHolder;
@@ -141,6 +146,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     protected void initWidget() {
         super.initWidget();
 
+        // 初始化最近联系人
+        mRecentView = new RecentContactsView(this);
+
         //初始化searchView的搜索icon
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mSearchIcon.getLayoutParams();
         params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -181,7 +189,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         });
 
         if (mLocalAdapter == null) {
-            mLocalAdapter = new UserSelectFriendsAdapter(this);
+            mLocalAdapter = new UserSelectFriendsAdapter(this, mRecentView);
             mLocalAdapter.setOnFriendSelector(this);
         }
 
@@ -396,10 +404,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
      * @param friends friends
      */
     private void updateView(ArrayList<UserFriend> friends) {
-
-        if (friends != null && friends.size() > 0) {
-            mLocalAdapter.clear();
-            mLocalAdapter.addItems(friends);
+        // 没有拉取到用户，但是有最近联系人也显示界面
+        if ((friends != null && friends.size() > 0) || mRecentView.hasData()) {
+            mLocalAdapter.initItems(friends);
             mTvNoFriends.setVisibility(View.GONE);
         } else {
             showError(EmptyLayout.NODATA);
@@ -547,6 +554,11 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                     editText.appendMention(names);
             }
         }
+
+
+        // 回调前进行最近联系人存储
+        RecentContactsView.add((Author[]) CollectionUtil.toArray(mCacheIconFriends, UserFriend.class));
+
 
         Intent result = new Intent();
         result.putExtra("data", names);

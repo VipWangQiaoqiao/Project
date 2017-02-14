@@ -31,7 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
-
+    public static final int INDEX_FIRST_TYPE = 0x11111111;
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
     public static final int SEARCH_TYPE = 0x03;
@@ -44,14 +44,21 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
     private static final int MAX_SELECTED_SIZE = 10;
 
     private OnFriendSelector mOnFriendSelector;
+    private View mFirstView;
 
-    public UserSelectFriendsAdapter(Context context) {
+    public UserSelectFriendsAdapter(Context context, View firstView) {
         mInflater = LayoutInflater.from(context);
+        mFirstView = firstView;
     }
 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == INDEX_FIRST_TYPE) {
+            return new RecyclerView.ViewHolder(mFirstView) {
+            };
+        }
+
         LayoutInflater inflater = this.mInflater;
         if (viewType == INDEX_TYPE) {
             return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
@@ -100,6 +107,9 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        // 第一位不做处理，预留为顶部最近联系人
+        if (position == 0)
+            return;
 
         UserFriend item = mItems.get(position);
 
@@ -113,6 +123,8 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
+        if (position == 0)
+            return INDEX_FIRST_TYPE;
         UserFriend item = this.mItems.get(position);
         switch (item.getShowViewType()) {
             case INDEX_TYPE:
@@ -139,17 +151,14 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
         mOnFriendSelector = onFriendSelector;
     }
 
-    public void addItems(List<UserFriend> items) {
-        this.mItems.addAll(items);
-        notifyDataSetChanged();
-    }
-
-    public List<UserFriend> getItems() {
-        return mItems;
-    }
-
-    public void clear() {
+    public void initItems(List<UserFriend> items) {
         this.mItems.clear();
+
+        // 添加一个空的UserFriend 用于最近联系人占位
+        this.mItems.add(new UserFriend());
+        if (items != null && items.size() > 0)
+            this.mItems.addAll(items);
+        notifyDataSetChanged();
     }
 
     public void updateSelectStatus(UserFriend userFriend, boolean isSelected) {
