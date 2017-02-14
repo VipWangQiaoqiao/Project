@@ -60,6 +60,7 @@ import cz.msebera.android.httpclient.Header;
 
 import static net.oschina.app.improve.tweet.service.TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED;
 
+
 /**
  * 动弹列表
  * Created by huanghaibin_dev
@@ -100,6 +101,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     Button mBtRetry;
     @Bind(R.id.notification_baseline)
     View mBaseLine;
+
     private String[] mPubFailedCacheIds;
     private boolean mIsRegister;
 
@@ -349,7 +351,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                     showDraftsBox(View.VISIBLE);
 
                     break;
-                case ACTION_RECEIVER_SEARCH_FAILED:
+                case TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED:
 
                     mPubFailedCacheIds = intent.getStringArrayExtra(TweetPublishService.EXTRA_IDS);
 

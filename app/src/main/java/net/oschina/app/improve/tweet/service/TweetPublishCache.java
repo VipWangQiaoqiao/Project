@@ -144,7 +144,7 @@ public class TweetPublishCache {
         log("remove", data.getAbsolutePath());
         return !data.exists() || data.delete();
     }
-
+    
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void deleteDir(File dir) {
