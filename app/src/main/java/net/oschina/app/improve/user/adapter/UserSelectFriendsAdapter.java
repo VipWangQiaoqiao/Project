@@ -238,7 +238,6 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
     }
 
     static class UserInfoViewHolder extends RecyclerView.ViewHolder {
-
         @Bind(R.id.iv_portrait)
         CircleImageView mCirclePortrait;
         @Bind(R.id.tv_name)
@@ -254,8 +253,8 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
         }
 
         void onBindView(final UserFriend item, int position) {
-
-            setImageFromNet(mCirclePortrait, item.getPortrait(), R.mipmap.widget_default_face);
+            ImageLoader.loadImage(Glide.with(itemView.getContext()),
+                    mCirclePortrait, item.getPortrait(), R.mipmap.widget_default_face);
             mCirclePortrait.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -274,9 +273,6 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
                 mLine.setVisibility(View.GONE);
         }
 
-        private void setImageFromNet(ImageView imageView, String imageUrl, int placeholder) {
-            ImageLoader.loadImage(Glide.with(imageView.getContext()), imageView, imageUrl, placeholder);
-        }
 
     }
 }
