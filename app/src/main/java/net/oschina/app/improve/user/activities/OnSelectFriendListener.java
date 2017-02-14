@@ -1,4 +1,4 @@
-package net.oschina.app.improve.user;
+package net.oschina.app.improve.user.activities;
 
 import net.oschina.app.improve.user.bean.UserFriend;
 
@@ -8,7 +8,7 @@ import net.oschina.app.improve.user.bean.UserFriend;
  * desc:
  */
 
-public interface OnFriendSelector {
+public interface OnSelectFriendListener {
 
     void select(UserFriend userFriend);
 

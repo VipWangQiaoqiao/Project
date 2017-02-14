@@ -22,7 +22,7 @@ import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.user.activities.OnSelectFriendListener;
+import net.oschina.app.improve.user.activities.OnFriendSelector;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -45,13 +45,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * desc:
  */
 
-public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
+public class UserSearchFriendsAdapterOld extends RecyclerView.Adapter {
 
     private LayoutInflater mInflater;
     private List<UserFriend> mItems = new ArrayList<>();
     private String mSearchContent;
 
-    private OnSelectFriendListener mOnFriendSelector;
+    private OnFriendSelector mOnFriendSelector;
     private int selectCount = 0;
 
     //最大可选择好友的数量
@@ -60,7 +60,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
     private onKeyboardListener mOnKeyboardListener;
 
-    public UserSearchFriendsAdapter(Context context) {
+    public UserSearchFriendsAdapterOld(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
@@ -201,7 +201,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public void setOnFriendSelector(OnSelectFriendListener OnFriendSelector) {
+    public void setOnFriendSelector(OnFriendSelector OnFriendSelector) {
         mOnFriendSelector = OnFriendSelector;
     }
 
@@ -292,17 +292,17 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         ProgressBar mProgressBar;
         @Bind(R.id.tv_footer)
         TextView mTvSearch;
-        private UserSearchFriendsAdapter mUserSearchFriendsAdapter;
+        private UserSearchFriendsAdapterOld mUserSearchFriendsAdapter;
 
         private String mNextPageToken;
         private String mSearchContent;
 
         private int mStatus = 0x00;
 
-        private UserSearchFriendsAdapter.onKeyboardListener mOnKeyboardListener;
+        private UserSearchFriendsAdapterOld.onKeyboardListener mOnKeyboardListener;
 
 
-        private SearchViewHolder(View itemView, UserSearchFriendsAdapter searchFriendsAdapter) {
+        private SearchViewHolder(View itemView, UserSearchFriendsAdapterOld searchFriendsAdapter) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.mUserSearchFriendsAdapter = searchFriendsAdapter;
@@ -385,7 +385,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
 
                         List<User> users = pageBean.getItems();
 
-                        UserSearchFriendsAdapter searchAdapter = mUserSearchFriendsAdapter;
+                        UserSearchFriendsAdapterOld searchAdapter = mUserSearchFriendsAdapter;
 
                         //未变化搜索内容
                         if (mStatus == 0x00) {
@@ -440,7 +440,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
          * @param searchAdapter searchAdapter
          * @return is localData?true:false
          */
-        private boolean isLocalData(long id, UserSearchFriendsAdapter searchAdapter) {
+        private boolean isLocalData(long id, UserSearchFriendsAdapterOld searchAdapter) {
             List<UserFriend> items = searchAdapter.getItems();
             for (UserFriend f : items) {
                 if (f.getId() == id) {
@@ -457,7 +457,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
          * @param searchAdapter searchAdapter
          * @return isSelected status true/false
          */
-        private boolean isContainsIconFriend(long id, UserSearchFriendsAdapter searchAdapter) {
+        private boolean isContainsIconFriend(long id, UserSearchFriendsAdapterOld searchAdapter) {
             LinkedList<UserFriend> cacheIconFriends = searchAdapter.getSelectIcons();
             for (UserFriend iconFriend : cacheIconFriends) {
                 if (iconFriend.getId() == id && iconFriend.isSelected())

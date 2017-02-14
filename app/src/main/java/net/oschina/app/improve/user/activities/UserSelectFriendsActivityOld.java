@@ -54,8 +54,8 @@ import butterknife.Bind;
  * desc:用户联系人列表
  */
 
-public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener,
-        SearchView.OnQueryTextListener, UserSearchFriendsAdapter.onKeyboardListener, OnSelectFriendListener {
+public class UserSelectFriendsActivityOld extends BaseBackActivity implements IndexView.OnIndexTouchListener,
+        SearchView.OnQueryTextListener, UserSearchFriendsAdapter.onKeyboardListener, OnFriendSelector {
 
     @Bind(R.id.searcher_friends)
     SearchView mSearchView;
@@ -109,28 +109,28 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
     public static void show(Object starter, RichEditText editText) {
         if (editText != null && (starter instanceof Activity || starter instanceof Fragment || starter instanceof android.app.Fragment)) {
-            synchronized (UserSelectFriendsActivity.class) {
+            synchronized (UserSelectFriendsActivityOld.class) {
                 ParentLinkedHolder<RichEditText> holder = new ParentLinkedHolder<>(editText);
                 textParentLinkedHolder = holder.addParent(textParentLinkedHolder);
             }
 
             if (starter instanceof Activity) {
                 Activity context = (Activity) starter;
-                Intent intent = new Intent(context, UserSelectFriendsActivity.class);
+                Intent intent = new Intent(context, UserSelectFriendsActivityOld.class);
                 context.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
             } else if (starter instanceof Fragment) {
                 Fragment fragment = (Fragment) starter;
                 Context context = fragment.getContext();
                 if (context == null)
                     return;
-                Intent intent = new Intent(context, UserSelectFriendsActivity.class);
+                Intent intent = new Intent(context, UserSelectFriendsActivityOld.class);
                 fragment.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
             } else {
                 android.app.Fragment fragment = (android.app.Fragment) starter;
                 Context context = fragment.getActivity();
                 if (context == null)
                     return;
-                Intent intent = new Intent(context, UserSelectFriendsActivity.class);
+                Intent intent = new Intent(context, UserSelectFriendsActivityOld.class);
                 fragment.startActivityForResult(intent, TweetPublishFragment.REQUEST_CODE_SELECT_FRIENDS);
             }
         }
@@ -195,7 +195,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mRecyclerFriends.setAdapter(mLocalAdapter);
 
         if (mSearchAdapter == null) {
-            mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
+            mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivityOld.this);
             mSearchAdapter.setOnKeyboardListener(this);
             mSearchAdapter.setOnFriendSelector(this);
         }
@@ -245,7 +245,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        synchronized (UserSelectFriendsActivity.class) {
+        synchronized (UserSelectFriendsActivityOld.class) {
             if (textParentLinkedHolder != null) {
                 textParentLinkedHolder = textParentLinkedHolder.putParent();
             }
@@ -550,7 +550,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         String[] names = CollectionUtil.toArray(friendNames, String.class);
 
-        synchronized (UserSelectFriendsActivity.class) {
+        synchronized (UserSelectFriendsActivityOld.class) {
             if (textParentLinkedHolder != null) {
                 RichEditText editText = textParentLinkedHolder.item;
                 if (editText != null)

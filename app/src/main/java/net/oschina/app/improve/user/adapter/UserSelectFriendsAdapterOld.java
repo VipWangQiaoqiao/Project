@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.simple.Author;
-import net.oschina.app.improve.user.activities.OnSelectFriendListener;
+import net.oschina.app.improve.user.activities.OnFriendSelector;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.widget.RecentContactsView;
@@ -32,8 +32,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * desc:
  */
 
-public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements RecentContactsView.RecentContactsListener {
-    private static final int INDEX_FIRST_TYPE = 0x11111111;
+public class UserSelectFriendsAdapterOld extends RecyclerView.Adapter implements RecentContactsView.RecentContactsListener {
+    public static final int INDEX_FIRST_TYPE = 0x11111111;
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
     public static final int SEARCH_TYPE = 0x03;
@@ -45,10 +45,10 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
     //最大可选择好友的数量
     private static final int MAX_SELECTED_SIZE = 10;
 
-    private OnSelectFriendListener mOnFriendSelector;
+    private OnFriendSelector mOnFriendSelector;
     private View mFirstView;
 
-    public UserSelectFriendsAdapter(Context context, View firstView) {
+    public UserSelectFriendsAdapterOld(Context context, View firstView) {
         mInflater = LayoutInflater.from(context);
         mFirstView = firstView;
     }
@@ -153,7 +153,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
         return item.size();
     }
 
-    public void setOnFriendSelector(OnSelectFriendListener onFriendSelector) {
+    public void setOnFriendSelector(OnFriendSelector onFriendSelector) {
         mOnFriendSelector = onFriendSelector;
     }
 
