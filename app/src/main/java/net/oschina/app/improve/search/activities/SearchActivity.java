@@ -1,6 +1,7 @@
 package net.oschina.app.improve.search.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -21,9 +24,13 @@ import android.widget.LinearLayout;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.News;
+import net.oschina.app.improve.search.adapters.SearchHistoryAdapter;
 import net.oschina.app.improve.search.fragments.SearchArticleFragment;
 import net.oschina.app.improve.search.fragments.SearchUserFragment;
+import net.oschina.app.improve.utils.CacheManager;
+import net.oschina.app.improve.utils.DialogHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -54,8 +61,12 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     LinearLayout mLayoutEditFrame;
     @Bind(R.id.search_src_text)
     EditText mViewSearchEditor;
+    @Bind(R.id.recyclerView)
+    RecyclerView mRecyclerView;
 
+    private SearchHistoryAdapter mAdapter;
     private static boolean isMiUi = false;
+    private static final String CACHE_NAME = "search_history";
     private List<Pair<String, Fragment>> mPagerItems;
     private String mSearchText;
     private Runnable mSearchRunnable = new Runnable() {
@@ -65,6 +76,16 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
                 return;
             SearchAction f = (SearchAction) mPagerItems.get(mViewPager.getCurrentItem()).second;
             f.search(mSearchText);
+            SearchHistoryAdapter.SearchItem item = new SearchHistoryAdapter.SearchItem(mSearchText);
+            if (mAdapter.getItems().contains(item)) {
+                mAdapter.removeItem(item);
+            }
+            mAdapter.addItem(0, item);
+            mRecyclerView.scrollToPosition(0);
+            SearchHistoryAdapter.SearchItem last = mAdapter.getItem(mAdapter.getItems().size() - 1);
+            if (last.getType() == 0) {
+                mAdapter.addItem(new SearchHistoryAdapter.SearchItem("清空搜索历史", 1));
+            }
         }
     };
 
@@ -113,7 +134,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     public void onPageSelected(int position) {
         String content = mSearchText;
         if (TextUtils.isEmpty(content)) return;
-        doSearch(content, false);
+        doSearch(content);
         mViewSearch.clearFocus();
     }
 
@@ -145,6 +166,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         mPagerItems.add(new Pair<>("资讯", SearchArticleFragment.instantiate(this, News.TYPE_NEWS)));
         mPagerItems.add(new Pair<>("问答", SearchArticleFragment.instantiate(this, News.TYPE_QUESTION)));
         mPagerItems.add(new Pair<>("找人", SearchUserFragment.instantiate(this)));
+
     }
 
     @Override
@@ -157,6 +179,34 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     protected void initWidget() {
         super.initWidget();
         setStatusBarDarkMode(true);
+        mAdapter = new SearchHistoryAdapter(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.addAll((List<SearchHistoryAdapter.SearchItem>) CacheManager.readListJson(this, CACHE_NAME, SearchHistoryAdapter.SearchItem.class));
+        if (mAdapter.getItems().size() != 0) {
+            mAdapter.addItem(new SearchHistoryAdapter.SearchItem("清空搜索历史", 1));
+        }
+        mRecyclerView.setAnimation(null);
+        mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, long itemId) {
+                SearchHistoryAdapter.SearchItem item = mAdapter.getItem(position);
+                if (item.getType() == 0) {
+                    mViewSearch.clearFocus();
+                    String query = item.getSearchText();
+                    mViewSearchEditor.setText(query);
+                    mViewSearchEditor.setSelection(query.length());
+                    doSearch(query);
+                } else {
+                    DialogHelper.getConfirmDialog(SearchActivity.this, "清空搜索历史", "确认清空搜索历史记录？", "确认", "取消", true, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mAdapter.clear();
+                        }
+                    }).show();
+                }
+            }
+        });
         mViewSearchEditor.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         mViewSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -169,12 +219,15 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
             @Override
             public boolean onQueryTextSubmit(String query) {
                 mViewSearch.clearFocus();
-                return doSearch(query, false);
+                return doSearch(query);
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return doSearch(newText, true);
+                if (TextUtils.isEmpty(newText)) {
+                    doSearch("");
+                }
+                return false;
             }
         });
 
@@ -216,7 +269,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     }
 
 
-    private boolean doSearch(String query, boolean fromTextChange) {
+    private boolean doSearch(String query) {
         mSearchText = query.trim();
         // Always cancel all request
         mViewPager.removeCallbacks(mSearchRunnable);
@@ -224,14 +277,16 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         if (TextUtils.isEmpty(mSearchText)) {
             mLayoutTab.setVisibility(View.GONE);
             mViewPager.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
             return false;
         }
 
         mLayoutTab.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
 
         // In this we delay 1 seconds
-        mViewPager.postDelayed(mSearchRunnable, fromTextChange ? 1000 : 0);
+        mViewPager.postDelayed(mSearchRunnable, 0);
         return true;
     }
 
@@ -244,5 +299,15 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        SearchHistoryAdapter.SearchItem last = mAdapter.getItem(mAdapter.getItems().size() - 1);
+        if (last != null && last.getType() != 0) {
+            mAdapter.removeItem(last);
+        }
+        CacheManager.saveToJson(this, CACHE_NAME, mAdapter.getItems());
+        super.onDestroy();
     }
 }
