@@ -2,6 +2,11 @@ package net.oschina.app.improve.utils;
 
 import android.graphics.BitmapFactory;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.util.TLog;
 import net.oschina.common.utils.BitmapUtil;
 
 import java.io.File;
@@ -73,8 +78,21 @@ public final class PicturesCompressor {
             return copyFile(sourceFile, saveFile);
         }
 
+
+        File tmp;
+        try {
+            tmp = Glide.with(AppContext.getInstance())
+                    .load(sourceFile)
+                    .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .get();
+            TLog.d("PicturesCompressor", "compressImage file path:" + tmp.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
         // Doing
-        File tempFile = BitmapUtil.Compressor.compressImage(sourceFile, maxSize, minQuality, maxWidth,
+        File tempFile = BitmapUtil.Compressor.compressImage(tmp, maxSize, minQuality, maxWidth,
                 maxHeight, byteStorage, options, exactDecode);
 
         // Rename to out file
