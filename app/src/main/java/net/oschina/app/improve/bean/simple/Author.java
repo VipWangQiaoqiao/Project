@@ -56,4 +56,15 @@ public class Author implements Serializable {
     public void setGender(int gender) {
         this.gender = gender;
     }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", portrait='" + portrait + '\'' +
+                ", relation=" + relation +
+                ", gender=" + gender +
+                '}';
+    }
 }

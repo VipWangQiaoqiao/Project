@@ -2,10 +2,12 @@ package net.oschina.app.improve.widget;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.util.ImageLoader;
+import net.oschina.app.util.TLog;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -34,6 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RecentContactsView extends LinearLayout implements View.OnClickListener {
     private static final String CACHE_FILE = "RecentContactsCache";
     private List<Model> models;
+    private RecentContactsListener listener;
 
     public RecentContactsView(Context context) {
         super(context);
@@ -52,6 +56,8 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
 
     private void init() {
         setOrientation(VERTICAL);
+        setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
 
         List<Author> authors = loadCache(getContext());
         if (authors.size() == 0)
@@ -64,17 +70,18 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
             for (Author author : authors) {
                 Model model = new Model(author);
                 models.add(model);
-                createView(inflater, model);
+                View view = createView(inflater, model);
+                addView(view, view.getLayoutParams());
+                refreshView(model);
             }
         }
     }
 
     private View createView(LayoutInflater inflater, Model model) {
-        View view = inflater.inflate(R.layout.activity_item_select_friend, this, true);
+        View view = inflater.inflate(R.layout.activity_item_select_friend, this, false);
         // 双向绑定
         model.tag = view;
         view.setTag(model);
-        refreshView(model);
         return view;
     }
 
@@ -103,6 +110,9 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
             isSelected.setVisibility(View.INVISIBLE);
         }
         line.setVisibility(View.GONE);
+
+
+        TLog.error("refreshView:" + model.toString());
     }
 
     public boolean hasData() {
@@ -119,6 +129,10 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
                 refreshView(model);
             }
         }
+    }
+
+    public void setListener(RecentContactsListener listener) {
+        this.listener = listener;
     }
 
     public static void add(Author... authors) {
@@ -162,17 +176,39 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        if (listener == null ||
+                v.getTag() == null ||
+                !(v.getTag() instanceof Model))
+            return;
 
+        Model model = (Model) v.getTag();
+        if (listener.onSelectChanged(model.author)) {
+            model.isSelected = !model.isSelected;
+            refreshView(model);
+        }
     }
 
     private static class Model {
-        public Model(Author author) {
+        Model(Author author) {
             this.author = author;
         }
 
         Author author;
         boolean isSelected = false;
         View tag;
+
+        @Override
+        public String toString() {
+            return "Model{" +
+                    "author=" + author +
+                    ", isSelected=" + isSelected +
+                    ", tag=" + tag +
+                    '}';
+        }
     }
 
+
+    public interface RecentContactsListener {
+        boolean onSelectChanged(Author author);
+    }
 }

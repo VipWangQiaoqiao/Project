@@ -11,9 +11,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.OnFriendSelector;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.bean.UserFriend;
+import net.oschina.app.improve.widget.RecentContactsView;
 import net.oschina.app.util.ImageLoader;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * desc:
  */
 
-public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
+public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements RecentContactsView.RecentContactsListener {
     public static final int INDEX_FIRST_TYPE = 0x11111111;
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
@@ -73,27 +75,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
                     UserInfoViewHolder holder = (UserInfoViewHolder) v.getTag();
                     int position = holder.getAdapterPosition();
                     UserFriend userFriend = items.get(position);
-                    if (selectCount <= MAX_SELECTED_SIZE) {
-                        if (userFriend.isSelected()) {
-                            if (selectCount != 0) {
-                                items.get(position).setSelected(false);
-                                items.get(position).setSelectPosition(position);
-                                selectCount--;
-                                notifyItemChanged(position);
-                                mOnFriendSelector.unSelect(v, userFriend, position);
-                            }
-                        } else {
-                            if (selectCount == MAX_SELECTED_SIZE) {
-                                mOnFriendSelector.selectFull(selectCount);
-                            } else {
-                                items.get(position).setSelected(true);
-                                items.get(position).setSelectPosition(position);
-                                selectCount++;
-                                notifyItemChanged(position);
-                                mOnFriendSelector.select(v, userFriend, position);
-                            }
-                        }
-                    }
+                    onSelectClick(userFriend, position);
                 }
             });
 
@@ -101,6 +83,30 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
                 userInfoViewHolder.mLine.setVisibility(View.GONE);
             return userInfoViewHolder;
 
+        }
+    }
+
+    private void onSelectClick(UserFriend userFriend, int position) {
+        if (selectCount <= MAX_SELECTED_SIZE) {
+            if (userFriend.isSelected()) {
+                if (selectCount != 0) {
+                    userFriend.setSelected(false);
+                    userFriend.setSelectPosition(position);
+                    selectCount--;
+                    notifyItemChanged(position);
+                    mOnFriendSelector.unSelect(userFriend, position);
+                }
+            } else {
+                if (selectCount == MAX_SELECTED_SIZE) {
+                    mOnFriendSelector.selectFull(selectCount);
+                } else {
+                    userFriend.setSelected(true);
+                    userFriend.setSelectPosition(position);
+                    selectCount++;
+                    notifyItemChanged(position);
+                    mOnFriendSelector.select(userFriend, position);
+                }
+            }
         }
     }
 
@@ -202,6 +208,18 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean onSelectChanged(Author author) {
+        if (mItems.size() == 0 || author == null)
+            return true;
+        for (UserFriend mItem : mItems) {
+            if (mItem.getId() == author.getId()) {
+
+            }
+        }
+        return true;
     }
 
     static class IndexViewHolder extends RecyclerView.ViewHolder {
