@@ -80,7 +80,7 @@ public final class NoticeManager {
      */
     public static void publish(ResultBean resultBean, NoticeBean newNotice) {
         if (resultBean != null && resultBean.isOk() && newNotice != null) {
-            TLog.error("NewNotice:" + newNotice.toString());
+            TLog.d("NoticeManager", "publish:" + newNotice.toString());
             NoticeServer.arrivedMsgAction(OSCApplication.getInstance(), newNotice);
         }
     }
