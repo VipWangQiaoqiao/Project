@@ -94,7 +94,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                                     items.get(position).setSelected(false);
                                     selectCount--;
                                     notifyItemChanged(position);
-                                    mOnFriendSelector.unSelect(userFriend, position);
+                                    mOnFriendSelector.unSelect(userFriend);
                                 }
                             } else {
                                 if (selectCount == MAX_SELECTED_SIZE) {
@@ -103,7 +103,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                                     items.get(position).setSelected(true);
                                     selectCount++;
                                     notifyItemChanged(position);
-                                    mOnFriendSelector.select(userFriend, position);
+                                    mOnFriendSelector.select(userFriend);
                                 }
                             }
                         }
