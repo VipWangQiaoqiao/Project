@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.util.TLog;
 import net.oschina.common.utils.StreamUtil;
 
 import java.io.File;
@@ -96,7 +97,7 @@ public final class DetailCache {
             reader.close();
             return subBean;
         } catch (Exception e) {
-            e.printStackTrace();
+            TLog.error(e.getMessage());
             return null;
         } finally {
             StreamUtil.close(reader);
