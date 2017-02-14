@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.ArrayMap;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.util.TLog;
@@ -364,6 +365,8 @@ public class TweetPublishService extends Service implements Contract.IService {
 
         //Notification notification = builder.build();
         //NotificationManagerCompat.from(this).notify(notifyId, notification);
+
+        AppContext.showToastShort(content);
 
         log(content);
     }
