@@ -94,7 +94,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
                     userFriend.setSelectPosition(position);
                     selectCount--;
                     notifyItemChanged(position);
-                    mOnFriendSelector.unSelect(userFriend, position);
+                    mOnFriendSelector.unSelect(userFriend);
                 }
             } else {
                 if (selectCount == MAX_SELECTED_SIZE) {
@@ -104,7 +104,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
                     userFriend.setSelectPosition(position);
                     selectCount++;
                     notifyItemChanged(position);
-                    mOnFriendSelector.select(userFriend, position);
+                    mOnFriendSelector.select(userFriend);
                 }
             }
         }
@@ -211,7 +211,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
     }
 
     @Override
-    public boolean onSelectChanged(Author author) {
+    public boolean onSelectChanged(Author author, boolean willSelected) {
         if (mItems.size() == 0 || author == null)
             return true;
         for (UserFriend mItem : mItems) {

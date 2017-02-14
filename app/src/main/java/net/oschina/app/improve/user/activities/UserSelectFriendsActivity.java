@@ -346,7 +346,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     }
 
     @Override
-    public void select(UserFriend userFriend, int position) {
+    public void select(UserFriend userFriend) {
         if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
             mSearchAdapter.updateSelectCount(mCacheIconFriends);
         }
@@ -356,7 +356,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     }
 
     @Override
-    public void unSelect(UserFriend userFriend, int position) {
+    public void unSelect(UserFriend userFriend) {
         updateSelectIcon(userFriend);
         mLocalAdapter.updateSelectCount(mCacheIconFriends);
         // 刷新最近联系人

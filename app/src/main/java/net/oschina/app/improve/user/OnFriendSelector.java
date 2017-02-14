@@ -1,7 +1,5 @@
 package net.oschina.app.improve.user;
 
-import android.view.View;
-
 import net.oschina.app.improve.user.bean.UserFriend;
 
 /**
@@ -12,9 +10,9 @@ import net.oschina.app.improve.user.bean.UserFriend;
 
 public interface OnFriendSelector {
 
-    void select(UserFriend userFriend, int position);
+    void select(UserFriend userFriend);
 
-    void unSelect(UserFriend userFriend, int position);
+    void unSelect(UserFriend userFriend);
 
     void selectFull(int selectCount);
 }

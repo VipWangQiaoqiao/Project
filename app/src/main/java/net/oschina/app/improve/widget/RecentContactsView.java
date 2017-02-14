@@ -21,7 +21,6 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.util.ImageLoader;
-import net.oschina.app.util.TLog;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -79,6 +78,7 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
 
     private View createView(LayoutInflater inflater, Model model) {
         View view = inflater.inflate(R.layout.activity_item_select_friend, this, false);
+        view.setOnClickListener(this);
         // 双向绑定
         model.tag = view;
         view.setTag(model);
@@ -110,9 +110,6 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
             isSelected.setVisibility(View.INVISIBLE);
         }
         line.setVisibility(View.GONE);
-
-
-        TLog.error("refreshView:" + model.toString());
     }
 
     public boolean hasData() {
@@ -182,7 +179,7 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
             return;
 
         Model model = (Model) v.getTag();
-        if (listener.onSelectChanged(model.author)) {
+        if (listener.onSelectChanged(model.author, !model.isSelected)) {
             model.isSelected = !model.isSelected;
             refreshView(model);
         }
@@ -209,6 +206,6 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
 
 
     public interface RecentContactsListener {
-        boolean onSelectChanged(Author author);
+        boolean onSelectChanged(Author author, boolean willSelected);
     }
 }
