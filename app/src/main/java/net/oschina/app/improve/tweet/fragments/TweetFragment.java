@@ -101,6 +101,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @Bind(R.id.notification_baseline)
     View mBaseLine;
     private String[] mPubFailedCacheIds;
+    private boolean mIsRegister;
 
     public static Fragment instantiate(long uid) {
         Bundle bundle = new Bundle();
@@ -180,6 +181,22 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         }
     }
 
+    private void registerBroadcaster() {
+        if (mPubTweetReceiver == null)
+            mPubTweetReceiver = new PubTweetReceiver();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(TweetPublishService.ACTION_PUBLISH);
+        filter.addAction(TweetPublishService.ACTION_CONTINUE);
+        filter.addAction(TweetPublishService.ACTION_DELETE);
+        filter.addAction(TweetPublishService.ACTION_SUCCESS);
+        filter.addAction(TweetPublishService.ACTION_FAILED);
+        filter.addAction(ACTION_RECEIVER_SEARCH_FAILED);
+        getContext().registerReceiver(mPubTweetReceiver, filter);
+
+        mIsRegister = true;
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -229,19 +246,8 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
             mErrorLayout.setErrorMessage("未登录");
         }
 
+        registerBroadcaster();
 
-        if (mPubTweetReceiver == null)
-            mPubTweetReceiver = new PubTweetReceiver();
-        if (mReqCatalog == 1) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(TweetPublishService.ACTION_PUBLISH);
-            filter.addAction(TweetPublishService.ACTION_CONTINUE);
-            filter.addAction(TweetPublishService.ACTION_DELETE);
-            filter.addAction(TweetPublishService.ACTION_SUCCESS);
-            filter.addAction(TweetPublishService.ACTION_FAILED);
-            filter.addAction(ACTION_RECEIVER_SEARCH_FAILED);
-            getContext().registerReceiver(mPubTweetReceiver, filter);
-        }
     }
 
     @Override
@@ -343,7 +349,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                     showDraftsBox(View.VISIBLE);
 
                     break;
-                case TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED:
+                case ACTION_RECEIVER_SEARCH_FAILED:
 
                     mPubFailedCacheIds = intent.getStringArrayExtra(TweetPublishService.EXTRA_IDS);
 
@@ -531,8 +537,9 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         if (mReceiver != null) {
             LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mReceiver);
         }
+
         //解除注册广播
-        if (mPubTweetReceiver != null)
+        if (mIsRegister && mPubTweetReceiver != null)
             getContext().unregisterReceiver(mPubTweetReceiver);
         super.onDestroy();
     }

@@ -84,6 +84,7 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     private RadarSearchAdapter mRadarSearchAdapter;
 
     private PubTweetReceiver mPubTweetReceiver;
+    private boolean mIsRegister;
 
     public interface TurnBackListener {
         boolean onTurnBack();
@@ -162,13 +163,18 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
                 requestLocationPermission();
         }
 
+        registerBroadcast();
+
+    }
+
+    private void registerBroadcast() {
         if (mPubTweetReceiver == null)
             mPubTweetReceiver = new PubTweetReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(TweetPublishService.ACTION_SUCCESS);
         filter.addAction(TweetPublishService.ACTION_FAILED);
         registerReceiver(mPubTweetReceiver, filter);
-
+        mIsRegister = true;
     }
 
     @Override
@@ -235,7 +241,8 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
 
     @Override
     protected void onDestroy() {
-        if (mPubTweetReceiver != null)
+
+        if (mIsRegister && mPubTweetReceiver != null)
             unregisterReceiver(mPubTweetReceiver);
         super.onDestroy();
         NoticeManager.stopListen(this);
