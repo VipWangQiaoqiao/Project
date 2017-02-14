@@ -167,6 +167,10 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
         notifyDataSetChanged();
     }
 
+    public List<UserFriend> getItems(){
+        return mItems;
+    }
+
     public void updateSelectStatus(UserFriend userFriend, boolean isSelected) {
         if (!isSelected)
             for (int i = 0, len = mItems.size(); i < len; i++) {

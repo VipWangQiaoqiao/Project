@@ -15,8 +15,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,13 +47,12 @@ import java.util.List;
 import butterknife.Bind;
 
 /**
- * Created by fei
- * on 2016/12/22.
- * desc:用户联系人列表
+ * 用户联系人列表
  */
-
 public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener,
         SearchView.OnQueryTextListener, UserSearchFriendsAdapter.onKeyboardListener, OnSelectFriendListener {
+
+    public static final String CACHE_NAME = "UserFriendsCache";
 
     @Bind(R.id.searcher_friends)
     SearchView mSearchView;
@@ -89,16 +86,12 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Bind(R.id.lay_error)
     EmptyLayout mEmptyLayout;
 
-    public static final String CACHE_NAME = "userFriends";
 
     //网络初始化的adapter
     private UserSelectFriendsAdapter mLocalAdapter = null;
 
-    //网络初始化的朋友数据
-    private ArrayList<UserFriend> mCacheFriends;
-
     //选中icon缓存朋友数据
-    private LinkedList<UserFriend> mCacheIconFriends = new LinkedList<>();
+    private LinkedList<UserFriend> mSelectFriendList = new LinkedList<>();
 
     // 最近联系人
     private RecentContactsView mRecentView;
@@ -173,7 +166,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                 EmptyLayout emptyLayout = mEmptyLayout;
                 if (emptyLayout != null && emptyLayout.getErrorState() != EmptyLayout.HIDE_LAYOUT) {
                     emptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                    requestData();
+                    initDataFromCacheOrNet();
                 }
             }
         });
@@ -217,7 +210,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         mEmptyLayout.post(new Runnable() {
             @Override
             public void run() {
-                requestData();
+                initDataFromCacheOrNet();
             }
         });
     }
@@ -255,12 +248,12 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     @Override
     public void onIndexTouchMove(char indexLetter) {
-
-        ArrayList<UserFriend> userFriends = this.mCacheFriends;
+        String str = Character.toString(indexLetter);
+        List<UserFriend> userFriends = mLocalAdapter.getItems();
         int position = 0;
         for (int i = userFriends.size() - 1; i > 0; i--) {
             UserFriend friend = userFriends.get(i);
-            if (friend.getShowLabel().startsWith(Character.toString(indexLetter))) {
+            if (friend.getShowLabel().startsWith(str)) {
                 position = i;
                 break;
             }
@@ -268,7 +261,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         mRecyclerFriends.smoothScrollToPosition(position);
 
-        mTvIndexShow.setText(Character.toString(indexLetter));
+        mTvIndexShow.setText(str);
         mTvIndexShow.setVisibility(View.VISIBLE);
     }
 
@@ -291,7 +284,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         if (TextUtils.isEmpty(newText)) {
             mTvLabel.setText(null);
             mTvLabel.setVisibility(View.GONE);
-            if (mCacheFriends == null || mCacheFriends.size() <= 0) {
+            if (mLocalAdapter.getItemCount()==0) {
                 mIndex.setVisibility(View.GONE);
                 mTvNoFriends.setVisibility(View.VISIBLE);
             } else {
@@ -300,14 +293,14 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
 
             //当直接在搜索界面删除信息时，
-            for (UserFriend cacheIconFriend : mCacheIconFriends) {
+            for (UserFriend cacheIconFriend : mSelectFriendList) {
                 mLocalAdapter.updateSelectStatus(cacheIconFriend, true);
             }
 
-            if (mCacheIconFriends.size() == 0) {
+            if (mSelectFriendList.size() == 0) {
                 mLocalAdapter.updateAllSelectStatus(false);
             } else {
-                mLocalAdapter.updateSelectCount(mCacheIconFriends);
+                mLocalAdapter.updateSelectCount(mSelectFriendList);
             }
 
             mRecyclerFriends.setAdapter(mLocalAdapter);
@@ -347,7 +340,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Override
     public void select(UserFriend userFriend) {
         if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
-            mSearchAdapter.updateSelectCount(mCacheIconFriends);
+            mSearchAdapter.updateSelectCount(mSelectFriendList);
         }
         updateSelectIcon(userFriend);
         // 刷新最近联系人
@@ -357,7 +350,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Override
     public void unSelect(UserFriend userFriend) {
         updateSelectIcon(userFriend);
-        mLocalAdapter.updateSelectCount(mCacheIconFriends);
+        mLocalAdapter.updateSelectCount(mSelectFriendList);
         // 刷新最近联系人
         mRecentView.setSelected(userFriend, false);
     }
@@ -375,10 +368,10 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     /**
      * request data
      */
-    private void requestData() {
+    private void initDataFromCacheOrNet() {
         final ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
         if (friends != null && friends.size() > 0) {
-            updateView(friends);
+            displayFirstView(friends);
         } else {
             //检查网络
             if (!checkNetIsAvailable()) {
@@ -391,7 +384,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
                             @Override
                             public void run() {
                                 ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
-                                updateView(friends);
+                                displayFirstView(friends);
                             }
                         });
 
@@ -406,7 +399,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
      *
      * @param friends friends
      */
-    private void updateView(ArrayList<UserFriend> friends) {
+    private void displayFirstView(ArrayList<UserFriend> friends) {
         // 没有拉取到用户，但是有最近联系人也显示界面
         if ((friends != null && friends.size() > 0) || mRecentView.hasData()) {
             mLocalAdapter.initItems(friends);
@@ -418,8 +411,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         }
 
         hideLoading();
-
-        this.mCacheFriends = friends;
     }
 
     /**
@@ -429,7 +420,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
      */
     private void updateSelectIcon(final UserFriend userFriend) {
 
-        LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
+        LinkedList<UserFriend> cacheIcons = this.mSelectFriendList;
 
         int index = containsUserFriend(userFriend);
 
@@ -465,7 +456,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
                     //更新icons
                     updateSelectIcon(friend);
-                    mLocalAdapter.updateSelectCount(mCacheIconFriends);
+                    mLocalAdapter.updateSelectCount(mSelectFriendList);
                 }
             });
             mSelectContainer.addView(ivIcon);
@@ -499,7 +490,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         if (!TextUtils.isEmpty(queryText)) {
             String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
             //缓存的本地好友列表
-            ArrayList<UserFriend> cacheFriends = this.mCacheFriends;
+            List<UserFriend> cacheFriends = mLocalAdapter.getItems();
 
             if (cacheFriends != null) {
                 for (UserFriend friend : cacheFriends) {
@@ -528,7 +519,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         mSearchAdapter.clear();
         mSearchAdapter.addItems(searchFriends);
-        mSearchAdapter.setSelectIcons(mCacheIconFriends);
+        mSearchAdapter.setSelectIcons(mSelectFriendList);
     }
 
     /**
@@ -544,7 +535,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         }
 
-        for (UserFriend friend : mCacheIconFriends) {
+        for (UserFriend friend : mSelectFriendList) {
             friendNames.add(friend.getName());
         }
 
@@ -560,7 +551,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
 
         // 回调前进行最近联系人存储
-        RecentContactsView.add((Author[]) CollectionUtil.toArray(mCacheIconFriends, UserFriend.class));
+        RecentContactsView.add((Author[]) CollectionUtil.toArray(mSelectFriendList, UserFriend.class));
 
 
         Intent result = new Intent();
@@ -579,7 +570,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     private int containsUserFriend(UserFriend userFriend) {
         int index = -1;
 
-        LinkedList<UserFriend> cacheIcons = this.mCacheIconFriends;
+        LinkedList<UserFriend> cacheIcons = this.mSelectFriendList;
         for (int i = 0; i < cacheIcons.size(); i++) {
             UserFriend friend = cacheIcons.get(i);
             if (friend.getId() == userFriend.getId()) {
@@ -608,26 +599,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
      */
     private void hideLoading() {
         final EmptyLayout emptyLayout = mEmptyLayout;
-        if (emptyLayout == null)
-            return;
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_to_hide);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        emptyLayout.startAnimation(animation);
+        if (emptyLayout != null)
+            emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
     }
 
     /**

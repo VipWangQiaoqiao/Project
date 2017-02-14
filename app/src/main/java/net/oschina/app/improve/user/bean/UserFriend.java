@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 public class UserFriend extends Author implements Serializable, Comparable<UserFriend> {
     private int showViewType;
-    private String showLabel;
+    private String showLabel = "";
     private transient boolean isGoneLine;
     private transient boolean isSelected;
     private transient int selectPosition;

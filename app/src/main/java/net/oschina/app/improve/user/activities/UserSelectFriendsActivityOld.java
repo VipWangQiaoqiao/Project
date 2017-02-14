@@ -31,7 +31,9 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapter;
+import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapterOld;
 import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
+import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapterOld;
 import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.user.helper.SyncFriendHelper;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -55,7 +57,7 @@ import butterknife.Bind;
  */
 
 public class UserSelectFriendsActivityOld extends BaseBackActivity implements IndexView.OnIndexTouchListener,
-        SearchView.OnQueryTextListener, UserSearchFriendsAdapter.onKeyboardListener, OnFriendSelector {
+        SearchView.OnQueryTextListener, UserSearchFriendsAdapterOld.onKeyboardListener, OnFriendSelector {
 
     @Bind(R.id.searcher_friends)
     SearchView mSearchView;
@@ -92,7 +94,7 @@ public class UserSelectFriendsActivityOld extends BaseBackActivity implements In
     public static final String CACHE_NAME = "userFriends";
 
     //网络初始化的adapter
-    private UserSelectFriendsAdapter mLocalAdapter = null;
+    private UserSelectFriendsAdapterOld mLocalAdapter = null;
 
     //网络初始化的朋友数据
     private ArrayList<UserFriend> mCacheFriends;
@@ -103,7 +105,7 @@ public class UserSelectFriendsActivityOld extends BaseBackActivity implements In
     // 最近联系人
     private RecentContactsView mRecentView;
 
-    private UserSearchFriendsAdapter mSearchAdapter;
+    private UserSearchFriendsAdapterOld mSearchAdapter;
 
     private static ParentLinkedHolder<RichEditText> textParentLinkedHolder;
 
@@ -188,14 +190,14 @@ public class UserSelectFriendsActivityOld extends BaseBackActivity implements In
         });
 
         if (mLocalAdapter == null) {
-            mLocalAdapter = new UserSelectFriendsAdapter(this, mRecentView);
+            mLocalAdapter = new UserSelectFriendsAdapterOld(this, mRecentView);
             mLocalAdapter.setOnFriendSelector(this);
         }
 
         mRecyclerFriends.setAdapter(mLocalAdapter);
 
         if (mSearchAdapter == null) {
-            mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivityOld.this);
+            mSearchAdapter = new UserSearchFriendsAdapterOld(UserSelectFriendsActivityOld.this);
             mSearchAdapter.setOnKeyboardListener(this);
             mSearchAdapter.setOnFriendSelector(this);
         }
