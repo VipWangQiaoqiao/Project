@@ -3,7 +3,6 @@ package net.oschina.app.improve.widget;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +15,12 @@ import com.bumptech.glide.Glide;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
-import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.util.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -34,9 +30,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @version 1.0.0
  */
 
-public class RecentContactsView extends LinearLayout implements View.OnClickListener {
-    private List<Model> models;
-    private RecentContactsListener listener;
+public class RecentContactsView extends LinearLayout implements View.OnClickListener,
+        ContactsCacheManager.SelectedTrigger<RecentContactsView.Model> {
+    private final List<Model> models = new ArrayList<>();
+    private OnSelectedChangeListener listener;
 
     public RecentContactsView(Context context) {
         super(context);
@@ -65,7 +62,6 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
             LayoutInflater inflater = LayoutInflater.from(getContext());
             inflater.inflate(R.layout.lay_recent_contacts, this, true);
 
-            models = new ArrayList<>();
             for (Author author : authors) {
                 Model model = new Model(author);
                 models.add(model);
@@ -113,7 +109,7 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
     }
 
     public boolean hasData() {
-        return models != null && models.size() > 0;
+        return models.size() > 0;
     }
 
     public void setSelected(Author author, boolean selected) {
@@ -128,12 +124,12 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
         }
     }
 
-    public void setListener(RecentContactsListener listener) {
+    public void setListener(OnSelectedChangeListener listener) {
         this.listener = listener;
     }
 
     public static void add(Author... authors) {
-        ContactsCacheManager.saveRecentCache(AppContext.getInstance(), authors);
+        ContactsCacheManager.addRecentCache(AppContext.getInstance(), authors);
     }
 
     @Override
@@ -144,18 +140,32 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
             return;
 
         Model model = (Model) v.getTag();
-        if (listener.onSelectChanged(model.author, !model.isSelected)) {
-            model.isSelected = !model.isSelected;
-            refreshView(model);
+        listener.tryTriggerSelected(model, this);
+    }
+
+    @Override
+    public void trigger(Model model, boolean selected) {
+        model.isSelected = !model.isSelected;
+        refreshView(model);
+    }
+
+    @Override
+    public void trigger(Author author, boolean selected) {
+        for (Model model : models) {
+            if (model.author.getId() == author.getId()) {
+                model.isSelected = selected;
+                refreshView(model);
+                return;
+            }
         }
     }
 
-    private static class Model {
+    public static class Model {
         Model(Author author) {
             this.author = author;
         }
 
-        Author author;
+        public Author author;
         boolean isSelected = false;
         View tag;
 
@@ -170,7 +180,7 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
     }
 
 
-    public interface RecentContactsListener {
-        boolean onSelectChanged(Author author, boolean willSelected);
+    public interface OnSelectedChangeListener {
+        void tryTriggerSelected(Model t, ContactsCacheManager.SelectedTrigger<Model> trigger);
     }
 }

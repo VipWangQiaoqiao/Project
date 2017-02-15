@@ -48,7 +48,7 @@ public class ContactsCacheManager {
         return linkedList;
     }
 
-    public static void saveRecentCache(Context context, Author... authors) {
+    public static void addRecentCache(Context context, Author... authors) {
         final LinkedList<Author> localCache = getRecentCache(context);
 
         // 避免重复添加
@@ -93,7 +93,6 @@ public class ContactsCacheManager {
         public Author author;
         public String pinyin;
         public String firstChar;
-
     }
 
     private static final String SPLIT_HEAD = "~";
@@ -131,6 +130,16 @@ public class ContactsCacheManager {
         return friends;
     }
 
+
+    public interface SelectedTrigger<T> {
+        void trigger(T t, boolean selected);
+
+        void trigger(Author author, boolean selected);
+    }
+
+    public interface OnSelectedChangeListener {
+        void tryTriggerSelected(Friend t, SelectedTrigger<Friend> trigger);
+    }
 
     @SuppressWarnings("WeakerAccess")
     public final static class SyncHelper {

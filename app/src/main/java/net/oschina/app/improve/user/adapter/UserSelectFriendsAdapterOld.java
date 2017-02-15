@@ -32,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * desc:
  */
 
-public class UserSelectFriendsAdapterOld extends RecyclerView.Adapter implements RecentContactsView.RecentContactsListener {
+public class UserSelectFriendsAdapterOld extends RecyclerView.Adapter{
     public static final int INDEX_FIRST_TYPE = 0x11111111;
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
@@ -208,18 +208,6 @@ public class UserSelectFriendsAdapterOld extends RecyclerView.Adapter implements
                 }
             }
         }
-    }
-
-    @Override
-    public boolean onSelectChanged(Author author, boolean willSelected) {
-        if (mItems.size() == 0 || author == null)
-            return true;
-        for (UserFriend mItem : mItems) {
-            if (mItem.getId() == author.getId()) {
-
-            }
-        }
-        return true;
     }
 
     static class IndexViewHolder extends RecyclerView.ViewHolder {

@@ -31,6 +31,7 @@ import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapter;
 import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
 import net.oschina.app.improve.user.bean.UserFriend;
+import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.user.helper.SyncFriendHelper;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.RecentContactsView;
@@ -49,10 +50,9 @@ import butterknife.Bind;
 /**
  * 用户联系人列表
  */
-public class UserSelectFriendsActivity extends BaseBackActivity implements IndexView.OnIndexTouchListener,
-        SearchView.OnQueryTextListener, UserSearchFriendsAdapter.onKeyboardListener, OnSelectFriendListener {
-
-    public static final String CACHE_NAME = "UserFriendsCache";
+public class UserSelectFriendsActivity extends BaseBackActivity
+        implements RecentContactsView.OnSelectedChangeListener, ContactsCacheManager.OnSelectedChangeListener,
+        IndexView.OnIndexTouchListener, SearchView.OnQueryTextListener, UserSearchFriendsAdapter.onKeyboardListener {
 
     @Bind(R.id.searcher_friends)
     SearchView mSearchView;
@@ -86,16 +86,14 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
     @Bind(R.id.lay_error)
     EmptyLayout mEmptyLayout;
 
-
-    //网络初始化的adapter
-    private UserSelectFriendsAdapter mLocalAdapter = null;
-
     //选中icon缓存朋友数据
-    private LinkedList<UserFriend> mSelectFriendList = new LinkedList<>();
+    private LinkedList<Author> mSelectFriendList = new LinkedList<>();
 
     // 最近联系人
     private RecentContactsView mRecentView;
 
+    //网络初始化的adapter
+    private UserSelectFriendsAdapter mLocalAdapter = null;
     private UserSearchFriendsAdapter mSearchAdapter;
 
     private static ParentLinkedHolder<RichEditText> textParentLinkedHolder;
@@ -140,6 +138,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         // 初始化最近联系人
         mRecentView = new RecentContactsView(this);
+        mRecentView.setListener(this);
 
         //初始化searchView的搜索icon
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mSearchIcon.getLayoutParams();
@@ -150,14 +149,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         params1.setMargins(0, 0, 0, 0);
         mLayoutEditFrame.setLayoutParams(params1);
         mSearchView.setOnQueryTextListener(this);
-
-        mSearchView.post(new Runnable() {
-            @SuppressWarnings("RestrictedApi")
-            @Override
-            public void run() {
-                mSearchView.clearFocus();
-            }
-        });
 
         mEmptyLayout.setLoadingFriend(true);
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
@@ -180,18 +171,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         });
 
-        if (mLocalAdapter == null) {
-            mLocalAdapter = new UserSelectFriendsAdapter(this, mRecentView);
-            mLocalAdapter.setOnFriendSelector(this);
-        }
+        mLocalAdapter = new UserSelectFriendsAdapter(this, mRecentView, this);
+
+        mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
+        mSearchAdapter.setOnKeyboardListener(this);
+        //mSearchAdapter.setOnFriendSelector(this);
 
         mRecyclerFriends.setAdapter(mLocalAdapter);
-
-        if (mSearchAdapter == null) {
-            mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
-            mSearchAdapter.setOnKeyboardListener(this);
-            mSearchAdapter.setOnFriendSelector(this);
-        }
 
         mIndex.setOnIndexTouchListener(this);
 
@@ -202,6 +188,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         });
 
+        // 初始化trigger
+        recentSelectedTrigger = mRecentView;
+        adapterSelectedTrigger = mLocalAdapter;
     }
 
     @Override
@@ -284,7 +273,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         if (TextUtils.isEmpty(newText)) {
             mTvLabel.setText(null);
             mTvLabel.setVisibility(View.GONE);
-            if (mLocalAdapter.getItemCount()==0) {
+            if (mLocalAdapter.getItemCount() == 0) {
                 mIndex.setVisibility(View.GONE);
                 mTvNoFriends.setVisibility(View.VISIBLE);
             } else {
@@ -293,14 +282,14 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
 
             //当直接在搜索界面删除信息时，
-            for (UserFriend cacheIconFriend : mSelectFriendList) {
-                mLocalAdapter.updateSelectStatus(cacheIconFriend, true);
-            }
+            //for (UserFriend cacheIconFriend : mSelectFriendList) {
+            //    mLocalAdapter.updateSelectStatus(cacheIconFriend, true);
+            //}
 
             if (mSelectFriendList.size() == 0) {
                 mLocalAdapter.updateAllSelectStatus(false);
             } else {
-                mLocalAdapter.updateSelectCount(mSelectFriendList);
+                //mLocalAdapter.updateSelectCount(mSelectFriendList);
             }
 
             mRecyclerFriends.setAdapter(mLocalAdapter);
@@ -330,35 +319,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
                 mRecyclerFriends.setAdapter(mSearchAdapter);
             }
-            mSearchAdapter.setOnFriendSelector(this);
+            //mSearchAdapter.setOnFriendSelector(this);
 
             queryUpdateView(newText);
         }
         return true;
     }
 
-    @Override
-    public void select(UserFriend userFriend) {
-        if (mRecyclerFriends.getAdapter() instanceof UserSelectFriendsAdapter) {
-            mSearchAdapter.updateSelectCount(mSelectFriendList);
-        }
-        updateSelectIcon(userFriend);
-        // 刷新最近联系人
-        mRecentView.setSelected(userFriend, true);
-    }
-
-    @Override
-    public void unSelect(UserFriend userFriend) {
-        updateSelectIcon(userFriend);
-        mLocalAdapter.updateSelectCount(mSelectFriendList);
-        // 刷新最近联系人
-        mRecentView.setSelected(userFriend, false);
-    }
-
-    @Override
-    public void selectFull(int selectCount) {
-        AppContext.showToastShort(getString(R.string.check_count_hint));
-    }
 
     @Override
     public void hideKeyboard() {
@@ -411,58 +378,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         }
 
         hideLoading();
-    }
-
-    /**
-     * refresh the select friends ui
-     *
-     * @param userFriend friend
-     */
-    private void updateSelectIcon(final UserFriend userFriend) {
-
-        LinkedList<UserFriend> cacheIcons = this.mSelectFriendList;
-
-        int index = containsUserFriend(userFriend);
-
-        if (index != -1) {
-            cacheIcons.remove(index);
-        } else {
-            cacheIcons.add(userFriend);
-        }
-
-        mSelectContainer.removeAllViews();
-
-        for (final UserFriend friend : cacheIcons) {
-
-            ImageView ivIcon = (ImageView) LayoutInflater.from(this)
-                    .inflate(R.layout.activity_main_select_friend_label_container_item, mSelectContainer, false);
-
-            ivIcon.setTag(R.id.iv_show_icon, friend);
-            ivIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    UserFriend friend = (UserFriend) v.getTag(R.id.iv_show_icon);
-
-                    RecyclerView.Adapter recyclerFriendsAdapter = mRecyclerFriends.getAdapter();
-
-                    if (recyclerFriendsAdapter instanceof UserSelectFriendsAdapter) {
-                        mLocalAdapter.updateSelectStatus(friend, false);
-                    } else {
-                        mSearchAdapter.updateSelectStatus(friend, false);
-                    }
-
-                    mRecyclerFriends.smoothScrollToPosition(friend.getSelectPosition());
-
-                    //更新icons
-                    updateSelectIcon(friend);
-                    mLocalAdapter.updateSelectCount(mSelectFriendList);
-                }
-            });
-            mSelectContainer.addView(ivIcon);
-            Glide.with(this).load(friend.getPortrait()).error(R.mipmap.widget_default_face).into(ivIcon);
-        }
-
     }
 
     /**
@@ -519,7 +434,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
 
         mSearchAdapter.clear();
         mSearchAdapter.addItems(searchFriends);
-        mSearchAdapter.setSelectIcons(mSelectFriendList);
+        //mSearchAdapter.setSelectIcons(mSelectFriendList);
     }
 
     /**
@@ -535,8 +450,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         }
 
-        for (UserFriend friend : mSelectFriendList) {
-            friendNames.add(friend.getName());
+        for (Author author : mSelectFriendList) {
+            friendNames.add(author.getName());
         }
 
         String[] names = CollectionUtil.toArray(friendNames, String.class);
@@ -549,10 +464,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
             }
         }
 
-
         // 回调前进行最近联系人存储
-        RecentContactsView.add((Author[]) CollectionUtil.toArray(mSelectFriendList, UserFriend.class));
-
+        RecentContactsView.add(CollectionUtil.toArray(mSelectFriendList, Author.class));
 
         Intent result = new Intent();
         result.putExtra("data", names);
@@ -561,30 +474,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         finish();
     }
 
-    /**
-     * contains userFriend
-     *
-     * @param userFriend userFriend
-     * @return index
-     */
-    private int containsUserFriend(UserFriend userFriend) {
-        int index = -1;
-
-        LinkedList<UserFriend> cacheIcons = this.mSelectFriendList;
-        for (int i = 0; i < cacheIcons.size(); i++) {
-            UserFriend friend = cacheIcons.get(i);
-            if (friend.getId() == userFriend.getId()) {
-                index = i;
-            }
-        }
-        return index;
-    }
-
-    /**
-     * verify network status
-     *
-     * @return true/false
-     */
     private boolean checkNetIsAvailable() {
         if (!TDevice.hasInternet()) {
             AppContext.showToastShort(getString(R.string.tip_network_error));
@@ -594,24 +483,111 @@ public class UserSelectFriendsActivity extends BaseBackActivity implements Index
         return true;
     }
 
-    /**
-     * hide empty view's loading
-     */
     private void hideLoading() {
         final EmptyLayout emptyLayout = mEmptyLayout;
         if (emptyLayout != null)
             emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
     }
 
-    /**
-     * show empty view's error type
-     *
-     * @param type type
-     */
     private void showError(int type) {
         EmptyLayout layout = mEmptyLayout;
         if (layout != null) {
             layout.setErrorType(type);
+        }
+    }
+
+
+    /**
+     * 刷新选中的布局
+     */
+    private void updateSelectView() {
+        mSelectContainer.removeAllViews();
+
+        List<Author> authors = this.mSelectFriendList;
+        for (final Author author : authors) {
+            ImageView ivIcon = (ImageView) LayoutInflater.from(this)
+                    .inflate(R.layout.activity_main_select_friend_label_container_item, mSelectContainer, false);
+
+            ivIcon.setTag(R.id.iv_show_icon, author);
+            ivIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Author tag = (Author) v.getTag(R.id.iv_show_icon);
+                    onSelectIconClick(tag);
+                    mSelectContainer.removeView(v);
+                }
+            });
+            mSelectContainer.addView(ivIcon);
+            Glide.with(this).load(author.getPortrait()).error(R.mipmap.widget_default_face).into(ivIcon);
+        }
+    }
+
+    private void onSelectIconClick(Author author) {
+        // 通知适配器
+        adapterSelectedTrigger.trigger(author, false);
+        // 通知最近联系人
+        recentSelectedTrigger.trigger(author, false);
+    }
+
+    private ContactsCacheManager.SelectedTrigger<RecentContactsView.Model> recentSelectedTrigger;
+    private ContactsCacheManager.SelectedTrigger<ContactsCacheManager.Friend> adapterSelectedTrigger;
+
+    /**
+     * 尝试插入一个选中，如果不允许则不插入，并返回false
+     */
+    private boolean tryInsertSelected(Author author) {
+        boolean allow = mSelectFriendList.size() < 10;
+        if (allow) {
+            mSelectFriendList.add(author);
+            updateSelectView();
+        } else
+            AppContext.showToastShort(getString(R.string.check_count_hint));
+        return allow;
+    }
+
+    /**
+     * 移除选中
+     */
+    private void removeSelected(Author author) {
+        mSelectFriendList.remove(author);
+        updateSelectView();
+    }
+
+    /**
+     * 最近联系人触发
+     */
+    @Override
+    public void tryTriggerSelected(RecentContactsView.Model model, ContactsCacheManager.SelectedTrigger<RecentContactsView.Model> trigger) {
+        if (ContactsCacheManager.checkNotInContacts(mSelectFriendList, model.author)) {
+            if (tryInsertSelected(model.author)) {
+                trigger.trigger(model, true);
+                // 通知适配器
+                adapterSelectedTrigger.trigger(model.author, true);
+            }
+        } else {
+            removeSelected(model.author);
+            trigger.trigger(model, false);
+            // 通知适配器
+            adapterSelectedTrigger.trigger(model.author, false);
+        }
+    }
+
+    /**
+     * 适配器触发
+     */
+    @Override
+    public void tryTriggerSelected(ContactsCacheManager.Friend friend, ContactsCacheManager.SelectedTrigger<ContactsCacheManager.Friend> trigger) {
+        if (ContactsCacheManager.checkNotInContacts(mSelectFriendList, friend.author)) {
+            if (tryInsertSelected(friend.author)) {
+                trigger.trigger(friend, true);
+                // 通知最近联系人
+                recentSelectedTrigger.trigger(friend.author, true);
+            }
+        } else {
+            removeSelected(friend.author);
+            trigger.trigger(friend, false);
+            // 通知最近联系人
+            recentSelectedTrigger.trigger(friend.author, false);
         }
     }
 }

@@ -15,7 +15,7 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OnSelectFriendListener;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.bean.UserFriend;
-import net.oschina.app.improve.widget.RecentContactsView;
+import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.util.ImageLoader;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * desc:
  */
 
-public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements RecentContactsView.RecentContactsListener {
+public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements ContactsCacheManager.SelectedTrigger<ContactsCacheManager.Friend> {
     private static final int INDEX_FIRST_TYPE = 0x11111111;
     public static final int INDEX_TYPE = 0x01;
     public static final int USER_TYPE = 0x02;
@@ -45,12 +45,15 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
     //最大可选择好友的数量
     private static final int MAX_SELECTED_SIZE = 10;
 
+
+    ContactsCacheManager.OnSelectedChangeListener listener;
     private OnSelectFriendListener mOnFriendSelector;
     private View mFirstView;
 
-    public UserSelectFriendsAdapter(Context context, View firstView) {
+    public UserSelectFriendsAdapter(Context context, View firstView, ContactsCacheManager.OnSelectedChangeListener listener) {
         mInflater = LayoutInflater.from(context);
         mFirstView = firstView;
+        this.listener = listener;
     }
 
 
@@ -167,7 +170,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
         notifyDataSetChanged();
     }
 
-    public List<UserFriend> getItems(){
+    public List<UserFriend> getItems() {
         return mItems;
     }
 
@@ -214,16 +217,21 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
         }
     }
 
+
     @Override
-    public boolean onSelectChanged(Author author, boolean willSelected) {
+    public void trigger(ContactsCacheManager.Friend friend, boolean selected) {
+
+    }
+
+    @Override
+    public void trigger(Author author, boolean selected) {
         if (mItems.size() == 0 || author == null)
-            return true;
+            return;
         for (UserFriend mItem : mItems) {
             if (mItem.getId() == author.getId()) {
 
             }
         }
-        return true;
     }
 
     static class IndexViewHolder extends RecyclerView.ViewHolder {
@@ -276,7 +284,5 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Re
             if (item.isGoneLine())
                 mLine.setVisibility(View.GONE);
         }
-
-
     }
 }
