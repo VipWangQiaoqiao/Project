@@ -52,17 +52,35 @@ public class ContactsCacheManager {
 
         // 避免重复添加
         for (Author author : authors) {
-            if (author != null && author.getId() > 0 && !TextUtils.isEmpty(author.getName())
-                    && checkNotInContacts(localCache, author))
+            if (author == null || author.getId() <= 0 || TextUtils.isEmpty(author.getName())
+                    )
+                continue;
+            if (checkNotInContacts(localCache, author))
                 localCache.addFirst(author);
+            else {
+                // 移除后添加到头部
+                int index = indexOfContacts(localCache, author);
+                if (index >= 0) {
+                    localCache.remove(index);
+                    localCache.addFirst(author);
+                }
+            }
         }
 
         // 至多存储15条
-        while (localCache.size() > 15) {
+        while (localCache.size() > 10) {
             localCache.removeLast();
         }
 
         CacheManager.saveToJson(context, RECENT_CACHE_FILE, localCache);
+    }
+
+    public static int indexOfContacts(List<Author> list, Author user) {
+        for (Author author : list) {
+            if (author.getId() == user.getId())
+                return list.indexOf(author);
+        }
+        return -1;
     }
 
     public static boolean checkNotInContacts(List<Author> list, Author user) {
