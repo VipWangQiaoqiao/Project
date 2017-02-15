@@ -91,8 +91,9 @@ public class ContactsCacheManager {
         }
 
         public Author author;
-        public String pinyin;
-        public String firstChar;
+        public String pinyin = "";
+        public String firstChar = "#";
+        public boolean isSelected;
     }
 
     private static final String SPLIT_HEAD = "~";

@@ -109,7 +109,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                         }
                     }
                 });
-                if (viewType == UserSelectFriendsAdapter.USER_TYPE_UN_LINE)
+                if (viewType == UserSelectFriendsAdapterOld.USER_TYPE_UN_LINE)
                     userInfoViewHolder.mLine.setVisibility(View.GONE);
                 return userInfoViewHolder;
         }
@@ -145,7 +145,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
                 int maxPos = getItemCount() - 1;
                 if ((position == maxPos)
                         || (position < maxPos && items.get(position + 1).getShowViewType() == UserSelectFriendsAdapter.INDEX_TYPE)) {
-                    return UserSelectFriendsAdapter.USER_TYPE_UN_LINE;
+                    return UserSelectFriendsAdapterOld.USER_TYPE_UN_LINE;
                 } else {
                     return UserSelectFriendsAdapter.USER_TYPE;
                 }

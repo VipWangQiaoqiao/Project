@@ -109,7 +109,7 @@ public class UserSearchFriendsAdapterOld extends RecyclerView.Adapter {
                         }
                     }
                 });
-                if (viewType == UserSelectFriendsAdapter.USER_TYPE_UN_LINE)
+                if (viewType == UserSelectFriendsAdapterOld.USER_TYPE_UN_LINE)
                     userInfoViewHolder.mLine.setVisibility(View.GONE);
                 return userInfoViewHolder;
         }
@@ -120,7 +120,7 @@ public class UserSearchFriendsAdapterOld extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         UserFriend item = mItems.get(position);
         switch (item.getShowViewType()) {
-            case UserSelectFriendsAdapter.USER_TYPE:
+            case UserSelectFriendsAdapterOld.USER_TYPE:
                 ((UserInfoViewHolder) holder).onBindView(item, position);
                 break;
             case UserSelectFriendsAdapter.INDEX_TYPE:
@@ -145,7 +145,7 @@ public class UserSearchFriendsAdapterOld extends RecyclerView.Adapter {
                 int maxPos = getItemCount() - 1;
                 if ((position == maxPos)
                         || (position < maxPos && items.get(position + 1).getShowViewType() == UserSelectFriendsAdapter.INDEX_TYPE)) {
-                    return UserSelectFriendsAdapter.USER_TYPE_UN_LINE;
+                    return UserSelectFriendsAdapterOld.USER_TYPE_UN_LINE;
                 } else {
                     return UserSelectFriendsAdapter.USER_TYPE;
                 }

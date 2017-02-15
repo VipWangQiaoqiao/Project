@@ -32,7 +32,6 @@ import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapter;
 import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
 import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
-import net.oschina.app.improve.user.helper.SyncFriendHelper;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.RecentContactsView;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -171,7 +170,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
             }
         });
 
-        mLocalAdapter = new UserSelectFriendsAdapter(this, mRecentView, this);
+        mLocalAdapter = new UserSelectFriendsAdapter(mRecentView, this);
 
         mSearchAdapter = new UserSearchFriendsAdapter(UserSelectFriendsActivity.this);
         mSearchAdapter.setOnKeyboardListener(this);
@@ -196,12 +195,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     @Override
     protected void initData() {
         super.initData();
-        mEmptyLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                initDataFromCacheOrNet();
-            }
-        });
+        initDataFromCacheOrNet();
     }
 
     @Override
@@ -238,20 +232,22 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     @Override
     public void onIndexTouchMove(char indexLetter) {
         String str = Character.toString(indexLetter);
-        List<UserFriend> userFriends = mLocalAdapter.getItems();
-        int position = 0;
-        for (int i = userFriends.size() - 1; i > 0; i--) {
-            UserFriend friend = userFriends.get(i);
-            if (friend.getShowLabel().startsWith(str)) {
+        List<ContactsCacheManager.Friend> friends = mLocalAdapter.getItems();
+        int position = -1;
+        int size = friends.size();
+        for (int i = 0; i < size; i++) {
+            ContactsCacheManager.Friend friend = friends.get(i);
+            if (friend.firstChar.startsWith(str)) {
                 position = i;
                 break;
             }
         }
 
-        mRecyclerFriends.smoothScrollToPosition(position);
-
-        mTvIndexShow.setText(str);
-        mTvIndexShow.setVisibility(View.VISIBLE);
+        if (position >= 0) {
+            mRecyclerFriends.smoothScrollToPosition(position);
+            mTvIndexShow.setText(str);
+            mTvIndexShow.setVisibility(View.VISIBLE);
+        }
     }
 
     @SuppressWarnings("RestrictedApi")
@@ -287,7 +283,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
             //}
 
             if (mSelectFriendList.size() == 0) {
-                mLocalAdapter.updateAllSelectStatus(false);
+                //mLocalAdapter.updateAllSelectStatus(false);
             } else {
                 //mLocalAdapter.updateSelectCount(mSelectFriendList);
             }
@@ -333,50 +329,45 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     }
 
     /**
-     * request data
+     * 初始化数据
      */
     private void initDataFromCacheOrNet() {
-        final ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
-        if (friends != null && friends.size() > 0) {
-            displayFirstView(friends);
-        } else {
-            //检查网络
-            if (!checkNetIsAvailable()) {
-                showError(EmptyLayout.NETWORK_ERROR);
-            } else {
-                SyncFriendHelper.load(new Runnable() {
+        ContactsCacheManager.getContacts(new Runnable() {
+            @Override
+            public void run() {
+                List<Author> authors = ContactsCacheManager.getContacts();
+                final List<ContactsCacheManager.Friend> friends = ContactsCacheManager.sortToFriendModel(authors);
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mEmptyLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ArrayList<UserFriend> friends = SyncFriendHelper.getFriends();
-                                displayFirstView(friends);
-                            }
-                        });
-
+                        displayFirstView(friends);
                     }
                 });
             }
-        }
+        });
     }
 
-    /**
-     * refresh the friends ui
-     *
-     * @param friends friends
-     */
-    private void displayFirstView(ArrayList<UserFriend> friends) {
+    private final ArrayList<ContactsCacheManager.Friend> mLocalFriends = new ArrayList<>();
+
+    private void displayFirstView(List<ContactsCacheManager.Friend> friends) {
         // 没有拉取到用户，但是有最近联系人也显示界面
         if ((friends != null && friends.size() > 0) || mRecentView.hasData()) {
+            if (friends != null) {
+                mLocalFriends.addAll(friends);
+            }
+            mLocalFriends.trimToSize();
             mLocalAdapter.initItems(friends);
             mTvNoFriends.setVisibility(View.GONE);
         } else {
-            showError(EmptyLayout.NODATA);
+            //检查网络
+            if (!checkNetIsAvailable()) {
+                showError(EmptyLayout.NODATA);
+            } else {
+                showError(EmptyLayout.NETWORK_ERROR);
+            }
             mIndex.setVisibility(View.GONE);
             mTvNoFriends.setVisibility(View.VISIBLE);
         }
-
         hideLoading();
     }
 
@@ -405,6 +396,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
         if (!TextUtils.isEmpty(queryText)) {
             String pinyinQueryText = AssimilateUtils.returnPinyin(queryText, false);
             //缓存的本地好友列表
+            /*
             List<UserFriend> cacheFriends = mLocalAdapter.getItems();
 
             if (cacheFriends != null) {
@@ -430,6 +422,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
                     }
                 }
             }
+            */
         }
 
         mSearchAdapter.clear();
