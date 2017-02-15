@@ -172,7 +172,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
         });
 
         mLocalAdapter = new UserSelectFriendsAdapter(mRecentView, this);
-        mSearchAdapter = new UserSearchFriendsAdapter(this);
+        mSearchAdapter = new UserSearchFriendsAdapter(this, this);
 
         mRecyclerFriends.setAdapter(mLocalAdapter);
         mIndex.setOnIndexTouchListener(this);

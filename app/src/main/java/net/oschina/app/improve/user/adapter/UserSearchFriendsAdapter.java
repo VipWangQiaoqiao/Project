@@ -1,5 +1,6 @@
 package net.oschina.app.improve.user.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -50,8 +51,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
 
     private final ContactsCacheManager.OnSelectedChangeListener listener;
     private String mSearchContent;
+    private Context mContext;
 
-    public UserSearchFriendsAdapter(ContactsCacheManager.OnSelectedChangeListener listener) {
+    public UserSearchFriendsAdapter(Context context, ContactsCacheManager.OnSelectedChangeListener listener) {
+        this.mContext = context;
         this.listener = listener;
     }
 
@@ -154,7 +157,8 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         if (TextUtils.isEmpty(queryText))
             return;
 
-        ContactsCacheManager.Friend friend = new ContactsCacheManager.Friend(null, "R.string.local_search_label");
+        ContactsCacheManager.Friend friend = new ContactsCacheManager.Friend(null,
+                mContext.getText(R.string.local_search_label).toString());
         mSearchFriends.add(friend);
 
         // R.string.search_net_label
@@ -234,7 +238,8 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         ContactsCacheManager.Friend last = mNetFriends.get(lastPos);
         mNetFriends.remove(last);
         if (mNetFriends.size() == 0) {
-            ContactsCacheManager.Friend first = new ContactsCacheManager.Friend(null, "R.string.net_search_label");
+            ContactsCacheManager.Friend first = new ContactsCacheManager.Friend(null,
+                    mContext.getText(R.string.net_search_label).toString());
             mNetFriends.add(first);
         }
         mNetFriends.addAll(friends);
@@ -329,7 +334,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         @Bind(R.id.tv_footer)
         TextView mTvSearch;
         private String mNextPageToken;
-        private String mPreSearchText;
+        private String mOldSearchText;
 
         private SearchViewHolder(View itemView) {
             super(itemView);
@@ -358,9 +363,9 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
             }
 
             // 关键词改变时清理Token
-            if (!searchContent.equals(mPreSearchText)) {
+            if (!searchContent.equals(mOldSearchText)) {
                 mNextPageToken = null;
-                mPreSearchText = searchContent;
+                mOldSearchText = searchContent;
             }
 
             OSChinaApi.search(News.TYPE_FIND_PERSON, searchContent,
