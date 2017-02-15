@@ -15,6 +15,7 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.util.ImageLoader;
+import net.oschina.app.util.TLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Co
             // 有上一个
             ContactsCacheManager.Friend preItem = this.mItems.get(position - 1);
             if (!preItem.firstChar.equals(item.firstChar)) {
+                TLog.error("第一个：" + item.toString());
                 type = type | TYPE_TOP;
             }
         }
@@ -64,6 +66,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Co
                 || !(mItems.get(position + 1).firstChar.equals(item.firstChar))) {
             // 如果是最后一个或者后面一个不是当前首字母的类型则当前item是当前类型最后一个
             type = type | TYPE_BOTTOM;
+            TLog.error("后一个：" + item.toString());
         }
         return type;
     }
@@ -148,7 +151,8 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Co
         if (mItems.size() == 0 || author == null)
             return;
         for (ContactsCacheManager.Friend friend : mItems) {
-            if (friend.author.getId() == author.getId()) {
+            if (friend.author != null &&
+                    friend.author.getId() == author.getId()) {
                 trigger(friend, selected);
                 return;
             }
@@ -197,6 +201,7 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Co
         }
 
         void initView(boolean showLabel, boolean showLine) {
+            TLog.error("showLabel:" + showLabel + " showLine:" + showLine);
             mLabel.setVisibility(showLabel ? View.VISIBLE : View.GONE);
             mLine.setVisibility(showLine ? View.VISIBLE : View.GONE);
         }

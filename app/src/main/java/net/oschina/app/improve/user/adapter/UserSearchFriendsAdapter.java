@@ -1,6 +1,5 @@
 package net.oschina.app.improve.user.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,9 +21,10 @@ import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.user.activities.OnSelectFriendListener;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.bean.UserFriend;
+import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.ImageLoader;
 import net.oschina.app.util.TDevice;
@@ -39,210 +39,213 @@ import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by fei
- * on 2016/12/27.
- * desc:
- */
 
-public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
+public class UserSearchFriendsAdapter extends RecyclerView.Adapter
+        implements ContactsCacheManager.SelectedTrigger<ContactsCacheManager.Friend> {
+    private static final int TYPE_TITLE = 0x1111;
+    private static final int TYPE_NONE = 0x0000;
+    private static final int TYPE_FOOTER = 0x0001;
 
-    private LayoutInflater mInflater;
-    private List<UserFriend> mItems = new ArrayList<>();
+    private final ContactsCacheManager.OnSelectedChangeListener listener;
     private String mSearchContent;
 
-    private OnSelectFriendListener mOnFriendSelector;
-    private int selectCount = 0;
+    public UserSearchFriendsAdapter(ContactsCacheManager.OnSelectedChangeListener listener) {
+        this.listener = listener;
+    }
 
-    //最大可选择好友的数量
-    private static final int MAX_SELECTED_SIZE = 10;
-    private LinkedList<UserFriend> mSelectIcons = new LinkedList<>();
-
-    private onKeyboardListener mOnKeyboardListener;
-
-    public UserSearchFriendsAdapter(Context context) {
-        mInflater = LayoutInflater.from(context);
+    @Override
+    public int getItemViewType(int position) {
+        ContactsCacheManager.Friend friend = getItem(position);
+        if (friend.author == null) {
+            if (TextUtils.isEmpty(friend.firstChar)) {
+                return TYPE_FOOTER;
+            } else {
+                return TYPE_TITLE;
+            }
+        } else
+            return TYPE_NONE;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = this.mInflater;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
-            case UserSelectFriendsAdapter.INDEX_TYPE:
-                return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
-            case UserSelectFriendsAdapter.SEARCH_TYPE:
-                SearchViewHolder searchViewHolder = new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false), this);
-                searchViewHolder.setOnKeyboardListener(mOnKeyboardListener);
-                return searchViewHolder;
-            case UserSelectFriendsAdapter.USER_TYPE:
+            case TYPE_TITLE:
+                return new TitleViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
+            case TYPE_FOOTER:
+                return new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false), this);
             default:
-                UserInfoViewHolder userInfoViewHolder = new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
-                userInfoViewHolder.itemView.setTag(userInfoViewHolder);
-                userInfoViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                ViewHolder viewHolder = new ViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        if (mOnFriendSelector == null) return;
-
-                        List<UserFriend> items = mItems;
-                        UserInfoViewHolder holder = (UserInfoViewHolder) v.getTag();
-                        int position = holder.getAdapterPosition();
-                        UserFriend userFriend = items.get(position);
-                        if (selectCount <= MAX_SELECTED_SIZE) {
-                            if (userFriend.isSelected()) {
-                                if (selectCount != 0) {
-                                    items.get(position).setSelected(false);
-                                    selectCount--;
-                                    notifyItemChanged(position);
-                                    mOnFriendSelector.unSelect(userFriend);
-                                }
-                            } else {
-                                if (selectCount == MAX_SELECTED_SIZE) {
-                                    mOnFriendSelector.selectFull(selectCount);
-                                } else {
-                                    items.get(position).setSelected(true);
-                                    selectCount++;
-                                    notifyItemChanged(position);
-                                    mOnFriendSelector.select(userFriend);
-                                }
-                            }
+                        if (v.getTag() != null && v.getTag() instanceof ContactsCacheManager.Friend) {
+                            onViewHolderClick((ContactsCacheManager.Friend) v.getTag());
                         }
                     }
                 });
-                if (viewType == UserSelectFriendsAdapterOld.USER_TYPE_UN_LINE)
-                    userInfoViewHolder.mLine.setVisibility(View.GONE);
-                return userInfoViewHolder;
+                return viewHolder;
         }
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        UserFriend item = mItems.get(position);
-        switch (item.getShowViewType()) {
-            case UserSelectFriendsAdapter.USER_TYPE:
-                ((UserInfoViewHolder) holder).onBindView(item, position);
-                break;
-            case UserSelectFriendsAdapter.INDEX_TYPE:
-                ((IndexViewHolder) holder).onBindView(item, position);
-                break;
-            case UserSelectFriendsAdapter.SEARCH_TYPE:
-                ((SearchViewHolder) (holder)).onBindView(item, position);
-                break;
+        ContactsCacheManager.Friend friend = getItem(position);
+        if (holder instanceof TitleViewHolder) {
+            TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
+            titleViewHolder.onBindView(friend);
+        } else if (holder instanceof SearchViewHolder) {
+            //SearchViewHolder searchViewHolder = (SearchViewHolder) holder;
+        } else {
+            ViewHolder viewHolder = (ViewHolder) holder;
+            viewHolder.onBindView(friend);
         }
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        List<UserFriend> items = this.mItems;
-        UserFriend item = items.get(position);
-        switch (item.getShowViewType()) {
-            case UserSelectFriendsAdapter.INDEX_TYPE:
-                return UserSelectFriendsAdapter.INDEX_TYPE;
-            case UserSelectFriendsAdapter.SEARCH_TYPE:
-                return UserSelectFriendsAdapter.SEARCH_TYPE;
-            default: {
-                int maxPos = getItemCount() - 1;
-                if ((position == maxPos)
-                        || (position < maxPos && items.get(position + 1).getShowViewType() == UserSelectFriendsAdapter.INDEX_TYPE)) {
-                    return UserSelectFriendsAdapterOld.USER_TYPE_UN_LINE;
-                } else {
-                    return UserSelectFriendsAdapter.USER_TYPE;
-                }
-            }
+    private ContactsCacheManager.Friend getItem(int pos) {
+        if (pos < mSearchFriends.size()) {
+            return mSearchFriends.get(pos);
+        } else {
+            pos = pos - (mSearchFriends.size() - 1);
+            return mNetFriends.get(pos);
         }
     }
 
     @Override
     public int getItemCount() {
-        List<UserFriend> item = this.mItems;
-        return item.size();
+        return mSearchFriends.size() + mNetFriends.size();
     }
 
-    public void addItems(List<UserFriend> items) {
-        this.mItems.addAll(items);
-        this.selectCount = items.size();
-        notifyDataSetChanged();
+    private void onViewHolderClick(ContactsCacheManager.Friend friend) {
+        if (listener != null)
+            listener.tryTriggerSelected(friend, this);
     }
 
-    public void addItem(int index, UserFriend userFriend) {
-        this.mItems.add(index, userFriend);
-        notifyDataSetChanged();
+    private List<ContactsCacheManager.Friend> mCacheFriends = new ArrayList<>();
+
+    public void initBaseItems(List<ContactsCacheManager.Friend> friends) {
+        this.mCacheFriends.addAll(friends);
     }
 
-    public List<UserFriend> getItems() {
-        return mItems;
-    }
-
-    public LinkedList<UserFriend> getSelectIcons() {
-        return mSelectIcons;
-    }
-
-    public void updateSelectStatus(UserFriend userFriend, boolean isSelected) {
-        List<UserFriend> items = this.mItems;
-        for (int i = 0, len = items.size(); i < len; i++) {
-            UserFriend tempUserFriend = items.get(i);
-            if (tempUserFriend.getId() == userFriend.getId()) {
-                items.get(i).setSelected(isSelected);
-                items.get(i).setSelectPosition(i);
-                notifyItemChanged(i);
-            }
-
-        }
-        if (!isSelected)
-            if (selectCount > 0) {
-                selectCount--;
-            }
-    }
-
-    public void clear() {
-        List<UserFriend> items = this.mItems;
-        items.clear();
-        notifyDataSetChanged();
-    }
-
-    public void setOnFriendSelector(OnSelectFriendListener OnFriendSelector) {
-        mOnFriendSelector = OnFriendSelector;
-    }
-
-    public void setOnKeyboardListener(onKeyboardListener onKeyboardListener) {
-        this.mOnKeyboardListener = onKeyboardListener;
-    }
-
-    public void setSearchContent(String searchContent) {
+    public void onSearchTextChanged(String searchContent) {
         this.mSearchContent = searchContent;
+        query(searchContent);
     }
 
     private String getSearchContent() {
         return mSearchContent;
     }
 
-    public void setSelectIcons(LinkedList<UserFriend> selectIcons) {
-        mSelectIcons = selectIcons;
-        this.selectCount = selectIcons.size();
+    private final List<ContactsCacheManager.Friend> mSearchFriends = new ArrayList<>();
+    private final List<ContactsCacheManager.Friend> mNetFriends = new ArrayList<>();
+
+
+    /**
+     * 查询文字
+     */
+    private void query(String queryText) {
+        mSearchFriends.clear();
+        mNetFriends.clear();
+
+        if (TextUtils.isEmpty(queryText))
+            return;
+
+        ContactsCacheManager.Friend friend = new ContactsCacheManager.Friend(null);
+        friend.firstChar = "R.string.local_search_label";
+        mSearchFriends.add(friend);
+
+        // R.string.search_net_label
+        mNetFriends.add(new ContactsCacheManager.Friend(null));
+
+        for (ContactsCacheManager.Friend mCacheFriend : mCacheFriends) {
+            if (mCacheFriend.author == null)
+                continue;
+            Author author = mCacheFriend.author;
+            String name = author.getName();
+            if (TextUtils.isEmpty(name)) continue;
+
+            boolean isZH = AssimilateUtils.checkIsZH(queryText);
+
+            boolean isMatch;
+            if (isZH) {
+                isMatch = name.contains(queryText);
+            } else {
+                String pg = mCacheFriend.pinyin;
+                String pinyin = AssimilateUtils.convertToPinyin(queryText, ContactsCacheManager.SPLIT_HEAD);
+                isMatch = pg.startsWith(pinyin) || pg.contains(pinyin);
+            }
+
+            if (isMatch) {
+                mSearchFriends.add(mCacheFriend);
+            }
+        }
+        notifyDataSetChanged();
     }
 
-    public void updateSelectCount(LinkedList<UserFriend> cacheIconFriends) {
-        this.selectCount = cacheIconFriends.size();
+    private int indexOfItem(ContactsCacheManager.Friend friend) {
+        int pos = mSearchFriends.indexOf(friend);
+        if (pos >= 0)
+            return pos;
+        else {
+            pos = mNetFriends.indexOf(friend);
+            if (pos >= 0) {
+                return pos + mSearchFriends.size();
+            }
+        }
+        return -1;
     }
 
-    static class IndexViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void trigger(ContactsCacheManager.Friend friend, boolean selected) {
+        friend.isSelected = selected;
+        int pos = indexOfItem(friend);
+        if (pos >= 0) {
+            notifyItemChanged(pos);
+        }
+    }
 
+    @Override
+    public void trigger(Author author, boolean selected) {
+        if (author == null)
+            return;
+        for (ContactsCacheManager.Friend friend : mSearchFriends) {
+            if (friend.author != null &&
+                    friend.author.getId() == author.getId()) {
+                trigger(friend, selected);
+                return;
+            }
+        }
+
+        for (ContactsCacheManager.Friend friend : mNetFriends) {
+            if (friend.author != null &&
+                    friend.author.getId() == author.getId()) {
+                trigger(friend, selected);
+                return;
+            }
+        }
+    }
+
+    static class TitleViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_index_label)
-        TextView mTvIndexLabel;
+        TextView mLabel;
 
-        IndexViewHolder(View itemView) {
+        TitleViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        void onBindView(UserFriend item, int position) {
-            mTvIndexLabel.setText(item.getShowLabel());
+        void onBindView(ContactsCacheManager.Friend friend) {
+            if (TextUtils.isEmpty(friend.firstChar))
+                itemView.setVisibility(View.GONE);
+            else {
+                mLabel.setText(friend.firstChar);
+                itemView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
-    static class UserInfoViewHolder extends RecyclerView.ViewHolder {
-
+    static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_portrait)
         CircleImageView mCirclePortrait;
         @Bind(R.id.tv_name)
@@ -252,39 +255,34 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
         @Bind(R.id.line)
         View mLine;
 
-        UserInfoViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        void onBindView(final UserFriend item, int position) {
-
-            setImageFromNet(mCirclePortrait, item.getPortrait(), R.mipmap.widget_default_face);
+        void onBindView(final ContactsCacheManager.Friend item) {
+            if (item == null || item.author == null) {
+                itemView.setVisibility(View.GONE);
+                return;
+            } else
+                itemView.setVisibility(View.VISIBLE);
+            final Author author = item.author;
+            ImageLoader.loadImage(Glide.with(itemView.getContext()), mCirclePortrait, author.getPortrait(), R.mipmap.widget_default_face);
             mCirclePortrait.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    OtherUserHomeActivity.show(v.getContext(), item.getId());
+                    OtherUserHomeActivity.show(v.getContext(), author.getId());
                 }
             });
-            mtvName.setText(item.getName());
+            mtvName.setText(author.getName());
 
-            if (item.isSelected()) {
+            if (item.isSelected) {
                 mViewSelect.setVisibility(View.VISIBLE);
             } else {
-                mViewSelect.setVisibility(View.INVISIBLE);
+                mViewSelect.setVisibility(View.GONE);
             }
-
-            if (item.isGoneLine()) {
-                mLine.setVisibility(View.GONE);
-            }
-
-        }
-
-        private void setImageFromNet(ImageView imageView, String imageUrl, int placeholder) {
-            ImageLoader.loadImage(Glide.with(imageView.getContext()), imageView, imageUrl, placeholder);
         }
     }
-
 
     static class SearchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -308,9 +306,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
             this.mUserSearchFriendsAdapter = searchFriendsAdapter;
             mProgressBar.setVisibility(View.GONE);
             itemView.setOnClickListener(this);
-        }
-
-        void onBindView(UserFriend item, int position) {
             mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_net_label));
         }
 
@@ -466,11 +461,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter {
             return false;
         }
 
-    }
-
-    public interface onKeyboardListener {
-
-        void hideKeyboard();
     }
 
 }

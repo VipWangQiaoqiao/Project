@@ -94,9 +94,19 @@ public class ContactsCacheManager {
         public String pinyin = "";
         public String firstChar = "#";
         public boolean isSelected;
+
+        @Override
+        public String toString() {
+            return "Friend{" +
+                    "author=" + author +
+                    ", pinyin='" + pinyin + '\'' +
+                    ", firstChar='" + firstChar + '\'' +
+                    ", isSelected=" + isSelected +
+                    '}';
+        }
     }
 
-    private static final String SPLIT_HEAD = "~";
+    public static final String SPLIT_HEAD = "";
 
     public static List<Friend> sortToFriendModel(List<Author> list) {
         ArrayList<Friend> friends = new ArrayList<>();

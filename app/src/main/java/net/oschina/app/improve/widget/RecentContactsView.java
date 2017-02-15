@@ -19,6 +19,7 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.util.ImageLoader;
+import net.oschina.app.util.TDevice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +53,11 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
 
     private void init() {
         setOrientation(VERTICAL);
-        setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
+        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        //params.topMargin = (int) TDevice.dipToPx(getResources(), 2);
+        params.bottomMargin = (int) TDevice.dipToPx(getResources(), 16);
+        setLayoutParams(params);
 
         List<Author> authors = ContactsCacheManager.getRecentCache(getContext());
         if (authors.size() == 0)
