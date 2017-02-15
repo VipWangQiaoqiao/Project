@@ -23,7 +23,6 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
-import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.ImageLoader;
@@ -31,7 +30,6 @@ import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -73,7 +71,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
             case TYPE_TITLE:
                 return new TitleViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
             case TYPE_FOOTER:
-                return new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false), this);
+                return new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false));
             default:
                 ViewHolder viewHolder = new ViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -226,6 +224,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         }
     }
 
+    private void addNetFriends(List<ContactsCacheManager.Friend> friends) {
+        //R.string.net_search_label
+    }
+
     static class TitleViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_index_label)
         TextView mLabel;
@@ -284,33 +286,19 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         }
     }
 
-    static class SearchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
+    class SearchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.pb_footer)
         ProgressBar mProgressBar;
         @Bind(R.id.tv_footer)
         TextView mTvSearch;
-        private UserSearchFriendsAdapter mUserSearchFriendsAdapter;
-
         private String mNextPageToken;
-        private String mSearchContent;
 
-        private int mStatus = 0x00;
-
-        private UserSearchFriendsAdapter.onKeyboardListener mOnKeyboardListener;
-
-
-        private SearchViewHolder(View itemView, UserSearchFriendsAdapter searchFriendsAdapter) {
+        private SearchViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            this.mUserSearchFriendsAdapter = searchFriendsAdapter;
             mProgressBar.setVisibility(View.GONE);
             itemView.setOnClickListener(this);
             mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_net_label));
-        }
-
-        public void setOnKeyboardListener(onKeyboardListener mOnKeyBoardListener) {
-            this.mOnKeyboardListener = mOnKeyBoardListener;
         }
 
         @Override
@@ -319,22 +307,16 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         }
 
         private void requestData(final View v) {
-
-            String searchContent = mUserSearchFriendsAdapter.getSearchContent();
-
+            String searchContent = getSearchContent();
             if (TextUtils.isEmpty(searchContent)) {
                 mNextPageToken = null;
-                mStatus = 0x00;
                 AppContext.showToastShort(v.getResources().getString(R.string.search_null_hint));
                 return;
             } else {
                 if (!searchContent.equals(mSearchContent)) {
                     mNextPageToken = null;
-                    mStatus = 0x00;
                 }
             }
-
-            mSearchContent = searchContent;
 
             if (!TDevice.hasInternet()) {
                 AppContext.showToastShort(R.string.error_view_network_error_click_to_refresh);
@@ -343,7 +325,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
 
             OSChinaApi.search(News.TYPE_FIND_PERSON, searchContent, TextUtils.isEmpty(mNextPageToken)
                     ? null : mNextPageToken, new TextHttpResponseHandler() {
-
                 @Override
                 public void onStart() {
                     super.onStart();
@@ -364,103 +345,47 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
                     Type type = new TypeToken<ResultBean<PageBean<User>>>() {
                     }.getType();
 
                     ResultBean<PageBean<User>> resultBean = AppOperator.createGson().fromJson(responseString, type);
-
                     if (resultBean.isSuccess()) {
-
-                        if (mOnKeyboardListener != null) {
-                            mOnKeyboardListener.hideKeyboard();
-                        }
-
                         PageBean<User> pageBean = resultBean.getResult();
-
-                        List<User> users = pageBean.getItems();
-
-                        UserSearchFriendsAdapter searchAdapter = mUserSearchFriendsAdapter;
-
-                        //未变化搜索内容
-                        if (mStatus == 0x00) {
-                            //为网络请求的数据加入label
-                            UserFriend netFriend = new UserFriend();
-
-                            netFriend.setName("");
-                            netFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
-                            netFriend.setShowLabel(v.getResources().getString(R.string.net_search_label));
-
-                            searchAdapter.addItem(searchAdapter.getItemCount() - 1, netFriend);
-                        }
-
+                        mNextPageToken = pageBean.getNextPageToken();
                         mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_load_more_hint));
 
-                        for (User user : users) {
+                        List<User> users = pageBean.getItems();
+                        List<Author> authors = new ArrayList<>();
 
+                        for (User user : users) {
+                            if (user == null || user.getId() <= 0)
+                                continue;
                             long userId = user.getId();
-                            //如果是本地数据，那么就跳过
-                            if (isLocalData(userId, searchAdapter)) {
+                            if (isLocalOrSelectedData(userId)) {
                                 continue;
                             }
-
-                            UserFriend friend = new UserFriend();
-                            friend.setId(userId);
-                            friend.setPortrait(user.getPortrait());
-                            friend.setName(user.getName());
-                            //判断是否是已经被选中的数据
-                            if (isContainsIconFriend(userId, searchAdapter)) {
-                                friend.setSelected(true);
-                            }
-                            friend.setShowLabel(AssimilateUtils.returnPinyin(user.getName(), true));
-                            friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
-
-                            searchAdapter.addItem(searchAdapter.getItemCount() - 1, friend);
+                            authors.add(user);
                         }
 
-                        mNextPageToken = pageBean.getNextPageToken();
-
-                        mStatus = 0x01;
-
+                        addNetFriends(ContactsCacheManager.sortToFriendModel(authors));
                     } else {
                         mTvSearch.setText(mTvSearch.getResources().getString(R.string.state_not_more));
                     }
-
                 }
             });
         }
 
-        /**
-         * @param id            friend id
-         * @param searchAdapter searchAdapter
-         * @return is localData?true:false
-         */
-        private boolean isLocalData(long id, UserSearchFriendsAdapter searchAdapter) {
-            List<UserFriend> items = searchAdapter.getItems();
-            for (UserFriend f : items) {
-                if (f.getId() == id) {
+        // 判断是否是本地的或者已被选中的数据
+        private boolean isLocalOrSelectedData(long id) {
+            for (ContactsCacheManager.Friend mCacheFriend : mCacheFriends) {
+                if (mCacheFriend == null || mCacheFriend.author == null)
+                    continue;
+                if (mCacheFriend.author.getId() == id) {
                     return true;
                 }
             }
             return false;
         }
-
-        /**
-         * verify isSelected status
-         *
-         * @param id            friend id
-         * @param searchAdapter searchAdapter
-         * @return isSelected status true/false
-         */
-        private boolean isContainsIconFriend(long id, UserSearchFriendsAdapter searchAdapter) {
-            LinkedList<UserFriend> cacheIconFriends = searchAdapter.getSelectIcons();
-            for (UserFriend iconFriend : cacheIconFriends) {
-                if (iconFriend.getId() == id && iconFriend.isSelected())
-                    return true;
-            }
-            return false;
-        }
-
     }
 
 }
