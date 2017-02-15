@@ -25,6 +25,10 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
+/**
+ * @author qiujuer Email:qiujuer@live.cn
+ * @version 1.0.0
+ */
 public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements ContactsCacheManager.SelectedTrigger<ContactsCacheManager.Friend> {
     // 第一个头部
     private static final int TYPE_FIRST = 0x1111;

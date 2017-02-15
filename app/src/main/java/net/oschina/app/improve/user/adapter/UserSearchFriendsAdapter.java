@@ -38,6 +38,10 @@ import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
+/**
+ * @author qiujuer Email:qiujuer@live.cn
+ * @version 1.0.0
+ */
 public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         implements ContactsCacheManager.SelectedTrigger<ContactsCacheManager.Friend> {
     private static final int TYPE_TITLE = 0x1111;
@@ -105,7 +109,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         if (pos < mSearchFriends.size()) {
             return mSearchFriends.get(pos);
         } else {
-            pos = pos - (mSearchFriends.size() - 1);
+            pos = pos - (mSearchFriends.size());
             return mNetFriends.get(pos);
         }
     }
@@ -121,9 +125,11 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
     }
 
     private List<ContactsCacheManager.Friend> mCacheFriends = new ArrayList<>();
+    private List<Author> mCacheSelect;
 
-    public void initBaseItems(List<ContactsCacheManager.Friend> friends) {
+    public void initBaseItems(List<ContactsCacheManager.Friend> friends, List<Author> selectList) {
         this.mCacheFriends.addAll(friends);
+        mCacheSelect = selectList;
     }
 
     public void onSearchTextChanged(String searchContent) {
@@ -138,7 +144,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
     private final List<ContactsCacheManager.Friend> mSearchFriends = new ArrayList<>();
     private final List<ContactsCacheManager.Friend> mNetFriends = new ArrayList<>();
 
-
     /**
      * 查询文字
      */
@@ -149,12 +154,11 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         if (TextUtils.isEmpty(queryText))
             return;
 
-        ContactsCacheManager.Friend friend = new ContactsCacheManager.Friend(null);
-        friend.firstChar = "R.string.local_search_label";
+        ContactsCacheManager.Friend friend = new ContactsCacheManager.Friend(null, "R.string.local_search_label");
         mSearchFriends.add(friend);
 
         // R.string.search_net_label
-        mNetFriends.add(new ContactsCacheManager.Friend(null));
+        mNetFriends.add(new ContactsCacheManager.Friend(null, null));
 
         for (ContactsCacheManager.Friend mCacheFriend : mCacheFriends) {
             if (mCacheFriend.author == null)
@@ -226,6 +230,36 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
 
     private void addNetFriends(List<ContactsCacheManager.Friend> friends) {
         //R.string.net_search_label
+        int lastPos = mNetFriends.size() - 1;
+        ContactsCacheManager.Friend last = mNetFriends.get(lastPos);
+        mNetFriends.remove(last);
+        if (mNetFriends.size() == 0) {
+            ContactsCacheManager.Friend first = new ContactsCacheManager.Friend(null, "R.string.net_search_label");
+            mNetFriends.add(first);
+        }
+        mNetFriends.addAll(friends);
+        mNetFriends.add(last);
+        notifyDataSetChanged();
+    }
+
+    // 判断是否是本地的或者已被选中的数据
+    private boolean isLocalOrSelectedData(long id) {
+        for (ContactsCacheManager.Friend mCacheFriend : mCacheFriends) {
+            if (mCacheFriend == null || mCacheFriend.author == null)
+                continue;
+            if (mCacheFriend.author.getId() == id) {
+                return true;
+            }
+        }
+
+        if (mCacheSelect != null) {
+            for (Author author : mCacheSelect) {
+                if (author.getId() == id)
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     static class TitleViewHolder extends RecyclerView.ViewHolder {
@@ -263,6 +297,9 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         }
 
         void onBindView(final ContactsCacheManager.Friend item) {
+            // Set Tag
+            itemView.setTag(item);
+
             if (item == null || item.author == null) {
                 itemView.setVisibility(View.GONE);
                 return;
@@ -292,6 +329,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         @Bind(R.id.tv_footer)
         TextView mTvSearch;
         private String mNextPageToken;
+        private String mPreSearchText;
 
         private SearchViewHolder(View itemView) {
             super(itemView);
@@ -312,10 +350,6 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
                 mNextPageToken = null;
                 AppContext.showToastShort(v.getResources().getString(R.string.search_null_hint));
                 return;
-            } else {
-                if (!searchContent.equals(mSearchContent)) {
-                    mNextPageToken = null;
-                }
             }
 
             if (!TDevice.hasInternet()) {
@@ -323,69 +357,60 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
                 return;
             }
 
-            OSChinaApi.search(News.TYPE_FIND_PERSON, searchContent, TextUtils.isEmpty(mNextPageToken)
-                    ? null : mNextPageToken, new TextHttpResponseHandler() {
-                @Override
-                public void onStart() {
-                    super.onStart();
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    mTvSearch.setText(mTvSearch.getResources().getString(R.string.footer_type_loading));
-                }
+            // 关键词改变时清理Token
+            if (!searchContent.equals(mPreSearchText)) {
+                mNextPageToken = null;
+                mPreSearchText = searchContent;
+            }
 
-                @Override
-                public void onFinish() {
-                    super.onFinish();
-                    mProgressBar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_error_hint));
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    Type type = new TypeToken<ResultBean<PageBean<User>>>() {
-                    }.getType();
-
-                    ResultBean<PageBean<User>> resultBean = AppOperator.createGson().fromJson(responseString, type);
-                    if (resultBean.isSuccess()) {
-                        PageBean<User> pageBean = resultBean.getResult();
-                        mNextPageToken = pageBean.getNextPageToken();
-                        mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_load_more_hint));
-
-                        List<User> users = pageBean.getItems();
-                        List<Author> authors = new ArrayList<>();
-
-                        for (User user : users) {
-                            if (user == null || user.getId() <= 0)
-                                continue;
-                            long userId = user.getId();
-                            if (isLocalOrSelectedData(userId)) {
-                                continue;
-                            }
-                            authors.add(user);
+            OSChinaApi.search(News.TYPE_FIND_PERSON, searchContent,
+                    mNextPageToken == null ? null : mNextPageToken,
+                    new TextHttpResponseHandler() {
+                        @Override
+                        public void onStart() {
+                            super.onStart();
+                            mProgressBar.setVisibility(View.VISIBLE);
+                            mTvSearch.setText(mTvSearch.getResources().getString(R.string.footer_type_loading));
                         }
 
-                        addNetFriends(ContactsCacheManager.sortToFriendModel(authors));
-                    } else {
-                        mTvSearch.setText(mTvSearch.getResources().getString(R.string.state_not_more));
-                    }
-                }
-            });
-        }
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                            mProgressBar.setVisibility(View.GONE);
+                        }
 
-        // 判断是否是本地的或者已被选中的数据
-        private boolean isLocalOrSelectedData(long id) {
-            for (ContactsCacheManager.Friend mCacheFriend : mCacheFriends) {
-                if (mCacheFriend == null || mCacheFriend.author == null)
-                    continue;
-                if (mCacheFriend.author.getId() == id) {
-                    return true;
-                }
-            }
-            return false;
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_error_hint));
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                            Type type = new TypeToken<ResultBean<PageBean<User>>>() {
+                            }.getType();
+
+                            ResultBean<PageBean<User>> resultBean = AppOperator.createGson().fromJson(responseString, type);
+                            if (resultBean.isSuccess()) {
+                                PageBean<User> pageBean = resultBean.getResult();
+                                mNextPageToken = pageBean.getNextPageToken();
+                                mTvSearch.setText(mTvSearch.getResources().getString(R.string.search_load_more_hint));
+
+                                List<User> users = pageBean.getItems();
+                                List<Author> authors = new ArrayList<>();
+
+                                for (User user : users) {
+                                    if (user == null || user.getId() <= 0
+                                            || isLocalOrSelectedData(user.getId()))
+                                        continue;
+                                    authors.add(user);
+                                }
+
+                                addNetFriends(ContactsCacheManager.sortToFriendModel(authors));
+                            } else {
+                                mTvSearch.setText(mTvSearch.getResources().getString(R.string.state_not_more));
+                            }
+                        }
+                    });
         }
     }
-
 }

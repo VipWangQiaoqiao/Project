@@ -34,7 +34,6 @@ import cz.msebera.android.httpclient.Header;
  * @author qiujuer Email:qiujuer@live.cn
  * @version 1.0.0
  */
-
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class ContactsCacheManager {
     private static final String USER_CACHE_NAME = "UserContactsCache";
@@ -88,6 +87,11 @@ public class ContactsCacheManager {
     public static class Friend {
         public Friend(Author author) {
             this.author = author;
+        }
+
+        public Friend(Author author, String firstChar) {
+            this.author = author;
+            this.firstChar = firstChar;
         }
 
         public Author author;

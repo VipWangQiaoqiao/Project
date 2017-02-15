@@ -45,7 +45,10 @@ import java.util.List;
 import butterknife.Bind;
 
 /**
- * 用户联系人列表
+ * @author qiujuer Email:qiujuer@live.cn
+ * @version 1.0.0
+ *          <p>
+ *          用户联系人列表
  */
 public class UserSelectFriendsActivity extends BaseBackActivity
         implements RecentContactsView.OnSelectedChangeListener, ContactsCacheManager.OnSelectedChangeListener,
@@ -83,8 +86,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     @Bind(R.id.lay_error)
     EmptyLayout mEmptyLayout;
 
-    //选中icon缓存朋友数据
-    private final LinkedList<Author> mSelectFriends = new LinkedList<>();
+    //选中数据
+    private final LinkedList<Author> mSelectedFriends = new LinkedList<>();
     private final ArrayList<ContactsCacheManager.Friend> mLocalFriends = new ArrayList<>();
 
     // 最近联系人
@@ -215,7 +218,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
         if ((friends != null && friends.size() > 0) || mRecentView.hasData()) {
             if (friends != null) {
                 mLocalFriends.addAll(friends);
-                mSearchAdapter.initBaseItems(mLocalFriends);
+                mSearchAdapter.initBaseItems(mLocalFriends, mSelectedFriends);
             }
             mLocalFriends.trimToSize();
             mLocalAdapter.initItems(friends);
@@ -343,7 +346,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
             }
         }
 
-        for (Author author : mSelectFriends) {
+        for (Author author : mSelectedFriends) {
             friendNames.add(author.getName());
         }
 
@@ -358,7 +361,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
         }
 
         // 回调前进行最近联系人存储
-        RecentContactsView.add(CollectionUtil.toArray(mSelectFriends, Author.class));
+        RecentContactsView.add(CollectionUtil.toArray(mSelectedFriends, Author.class));
 
         Intent result = new Intent();
         result.putExtra("data", names);
@@ -396,7 +399,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     private void updateSelectView() {
         mSelectContainer.removeAllViews();
 
-        for (final Author author : mSelectFriends) {
+        for (final Author author : mSelectedFriends) {
             ImageView ivIcon = (ImageView) LayoutInflater.from(this)
                     .inflate(R.layout.activity_main_select_friend_label_container_item, mSelectContainer, false);
 
@@ -415,6 +418,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     }
 
     private void onSelectIconClick(Author author) {
+        mSelectedFriends.remove(author);
         // 通知适配器
         adapterSelectedTrigger.trigger(author, false);
         // 通知最近联系人
@@ -428,9 +432,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity
      * 尝试插入一个选中，如果不允许则不插入，并返回false
      */
     private boolean tryInsertSelected(Author author) {
-        boolean allow = mSelectFriends.size() < 10;
+        boolean allow = mSelectedFriends.size() < 10;
         if (allow) {
-            mSelectFriends.add(author);
+            mSelectedFriends.add(author);
             updateSelectView();
         } else
             AppContext.showToastShort(getString(R.string.check_count_hint));
@@ -441,7 +445,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
      * 移除选中
      */
     private void removeSelected(Author author) {
-        mSelectFriends.remove(author);
+        mSelectedFriends.remove(author);
         updateSelectView();
     }
 
@@ -450,7 +454,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
      */
     @Override
     public void tryTriggerSelected(RecentContactsView.Model model, ContactsCacheManager.SelectedTrigger<RecentContactsView.Model> trigger) {
-        if (ContactsCacheManager.checkNotInContacts(mSelectFriends, model.author)) {
+        if (ContactsCacheManager.checkNotInContacts(mSelectedFriends, model.author)) {
             if (tryInsertSelected(model.author)) {
                 trigger.trigger(model, true);
                 // 通知适配器
@@ -469,7 +473,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
      */
     @Override
     public void tryTriggerSelected(ContactsCacheManager.Friend friend, ContactsCacheManager.SelectedTrigger<ContactsCacheManager.Friend> trigger) {
-        if (ContactsCacheManager.checkNotInContacts(mSelectFriends, friend.author)) {
+        if (ContactsCacheManager.checkNotInContacts(mSelectedFriends, friend.author)) {
             if (tryInsertSelected(friend.author)) {
                 trigger.trigger(friend, true);
                 // 通知最近联系人

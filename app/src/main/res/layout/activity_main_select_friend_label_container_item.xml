@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<de.hdodenhof.circleimageview.CircleImageView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<de.hdodenhof.circleimageview.CircleImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/iv_show_icon"
-    android:layout_width="36dp"
-    android:layout_height="36dp"
-    android:layout_marginTop="@dimen/lay_8"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:layout_gravity="center"
     android:layout_marginBottom="@dimen/lay_8"
     android:layout_marginLeft="@dimen/lay_4"
     android:layout_marginRight="@dimen/lay_4"
-    android:layout_gravity="center"
-    android:scaleType="centerCrop"
+    android:layout_marginTop="@dimen/lay_8"
     android:contentDescription="@null"
-    tools:src="@mipmap/widget_default_face"/>
+    android:scaleType="centerCrop"
+    app:border_color="@color/black_alpha_96"
+    tools:src="@mipmap/widget_default_face" />
 
