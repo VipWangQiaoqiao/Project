@@ -1,5 +1,7 @@
 package net.oschina.app.improve.user.bean;
 
+import net.oschina.app.improve.bean.simple.Author;
+
 import java.io.Serializable;
 
 /**
@@ -7,38 +9,9 @@ import java.io.Serializable;
  * desc:
  */
 
-public class UserFansOrFollows implements Serializable {
-    private long id;
-    private String name;
-    private String portrait;//0 未知 1 男 2 女
-    private int gender;
+public class UserFansOrFollows extends Author implements Serializable {
     private String desc;
-    private int relation;
     private More more;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPortrait() {
-        return portrait;
-    }
-
-    public void setPortrait(String portrait) {
-        this.portrait = portrait;
-    }
 
     public String getDesc() {
         return desc;
@@ -46,22 +19,6 @@ public class UserFansOrFollows implements Serializable {
 
     public void setDesc(String desc) {
         this.desc = desc;
-    }
-
-    public int getGender() {
-        return gender;
-    }
-
-    public void setGender(int gender) {
-        this.gender = gender;
-    }
-
-    public int getRelation() {
-        return relation;
-    }
-
-    public void setRelation(int relation) {
-        this.relation = relation;
     }
 
     public More getMore() {

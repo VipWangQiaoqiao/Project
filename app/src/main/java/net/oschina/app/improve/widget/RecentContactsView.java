@@ -19,6 +19,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.util.ImageLoader;
 
@@ -34,7 +35,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class RecentContactsView extends LinearLayout implements View.OnClickListener {
-    private static final String CACHE_FILE = "RecentContactsCache";
     private List<Model> models;
     private RecentContactsListener listener;
 
@@ -58,7 +58,7 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
         setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        List<Author> authors = loadCache(getContext());
+        List<Author> authors = ContactsCacheManager.getRecentCache(getContext());
         if (authors.size() == 0)
             setVisibility(GONE);
         else {
@@ -133,42 +133,7 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
     }
 
     public static void add(Author... authors) {
-        saveCache(AppContext.getInstance(), authors);
-    }
-
-
-    private static LinkedList<Author> loadCache(Context context) {
-        List<User> cache = CacheManager.readListJson(context, CACHE_FILE, User.class);
-        LinkedList<Author> linkedList = new LinkedList<>();
-        if (cache != null)
-            linkedList.addAll(cache);
-        return linkedList;
-    }
-
-    private static void saveCache(Context context, Author... authors) {
-        final LinkedList<Author> localCache = loadCache(context);
-
-        // 避免重复添加
-        for (Author author : authors) {
-            if (author != null && author.getId() > 0 && !TextUtils.isEmpty(author.getName())
-                    && checkNotInList(localCache, author))
-                localCache.addFirst(author);
-        }
-
-        // 至多存储15条
-        while (localCache.size() > 15) {
-            localCache.removeLast();
-        }
-
-        CacheManager.saveToJson(context, CACHE_FILE, localCache);
-    }
-
-    private static boolean checkNotInList(List<Author> list, Author user) {
-        for (Author author : list) {
-            if (author.getId() == user.getId())
-                return false;
-        }
-        return true;
+        ContactsCacheManager.saveRecentCache(AppContext.getInstance(), authors);
     }
 
     @Override
