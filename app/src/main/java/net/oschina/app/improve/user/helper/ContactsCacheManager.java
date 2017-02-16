@@ -58,8 +58,10 @@ public class ContactsCacheManager {
 
         // 避免重复添加
         for (Author author : authors) {
-            if (author == null || author.getId() <= 0 || TextUtils.isEmpty(author.getName())
-                    )
+            if (author == null
+                    || author.getId() <= 0
+                    || TextUtils.isEmpty(author.getName())
+                    || author.getId() == AccountHelper.getUserId())
                 continue;
             if (checkNotInContacts(localCache, author))
                 localCache.addFirst(author);
