@@ -53,10 +53,12 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
     private String mSearchContent;
     private Context mContext;
 
-    public UserSearchFriendsAdapter(Context context, ContactsCacheManager.OnSelectedChangeListener listener, List<Author> selectPointer) {
+    public UserSearchFriendsAdapter(Context context, ContactsCacheManager.OnSelectedChangeListener listener,
+                                    List<Author> selectPointer, List<ContactsCacheManager.Friend> localFriendPointer) {
         this.mContext = context;
         this.listener = listener;
         this.mSelectFriendsPointer = selectPointer;
+        this.mLocalFriendPointer = localFriendPointer;
     }
 
     @Override
@@ -128,12 +130,8 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
             listener.tryTriggerSelected(friend, this);
     }
 
-    private List<ContactsCacheManager.Friend> mCacheFriends = new ArrayList<>();
+    private final List<ContactsCacheManager.Friend> mLocalFriendPointer;
     private final List<Author> mSelectFriendsPointer;
-
-    public void initLocalItems(List<ContactsCacheManager.Friend> friends) {
-        this.mCacheFriends.addAll(friends);
-    }
 
     public void onSearchTextChanged(String searchContent) {
         this.mSearchContent = searchContent;
@@ -164,7 +162,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
         // R.string.search_net_label
         mNetFriends.add(new ContactsCacheManager.Friend(null, null));
 
-        for (ContactsCacheManager.Friend mCacheFriend : mCacheFriends) {
+        for (ContactsCacheManager.Friend mCacheFriend : mLocalFriendPointer) {
             if (mCacheFriend.author == null)
                 continue;
             Author author = mCacheFriend.author;
@@ -249,7 +247,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
 
     // 判断是否是本地的或者已被选中的数据
     private boolean isLocalOrSelectedData(User user) {
-        for (ContactsCacheManager.Friend mCacheFriend : mCacheFriends) {
+        for (ContactsCacheManager.Friend mCacheFriend : mLocalFriendPointer) {
             if (mCacheFriend == null || mCacheFriend.author == null)
                 continue;
             if (mCacheFriend.author.getId() == user.getId()) {

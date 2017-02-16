@@ -171,7 +171,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
         });
 
         mLocalAdapter = new UserSelectFriendsAdapter(mRecentView, this);
-        mSearchAdapter = new UserSearchFriendsAdapter(this, this, mSelectedFriends);
+        mSearchAdapter = new UserSearchFriendsAdapter(this, this, mSelectedFriends, mLocalFriends);
 
         mRecyclerFriends.setAdapter(mLocalAdapter);
         mIndex.setOnIndexTouchListener(this);
@@ -217,12 +217,14 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     }
 
     private void displayFirstView(List<ContactsCacheManager.Friend> friends) {
+        // 先进行清理
+        mLocalFriends.clear();
+        mLocalAdapter.getItems().clear();
         // 没有拉取到用户，但是有最近联系人也显示界面
         if ((friends != null && friends.size() > 0) || mRecentView.hasData()) {
             // 有数据时
             if (friends != null) {
                 mLocalFriends.addAll(friends);
-                mSearchAdapter.initLocalItems(mLocalFriends);
             }
             mLocalFriends.trimToSize();
             mLocalAdapter.initItems(friends);
