@@ -198,7 +198,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
      * 初始化数据
      */
     private void initDataFromCacheOrNet() {
-        ContactsCacheManager.getContacts(new Runnable() {
+        ContactsCacheManager.sync(new Runnable() {
             @Override
             public void run() {
                 List<Author> authors = ContactsCacheManager.getContacts();
