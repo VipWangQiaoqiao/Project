@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
@@ -130,10 +129,6 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
 
     public void setListener(OnSelectedChangeListener listener) {
         this.listener = listener;
-    }
-
-    public static void add(Author... authors) {
-        ContactsCacheManager.addRecentCache(AppContext.getInstance(), authors);
     }
 
     @Override

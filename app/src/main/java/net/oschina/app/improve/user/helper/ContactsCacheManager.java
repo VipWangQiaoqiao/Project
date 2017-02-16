@@ -47,7 +47,13 @@ public class ContactsCacheManager {
         return linkedList;
     }
 
-    public static void addRecentCache(Context context, Author... authors) {
+    public static void addRecentCache(Author... authors) {
+        if (authors == null || authors.length == 0)
+            return;
+        ContactsCacheManager.addRecentCache(AppContext.getInstance(), authors);
+    }
+
+    private static void addRecentCache(Context context, Author... authors) {
         final LinkedList<Author> localCache = getRecentCache(context);
 
         // 避免重复添加

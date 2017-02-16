@@ -335,23 +335,29 @@ public class UserSelectFriendsActivity extends BaseBackActivity
 
     /**
      * 结束时发送选中的文字
+     * <p>
+     * isLabel 表示是否从点击Label触发，如果是则发送Label的文字
      */
     private void sendSelectData(boolean isLabel) {
-        String queryLabel = (String) mTvLabel.getText();
         List<String> friendNames = new ArrayList<>();
         if (isLabel) {
+            String queryLabel = mTvLabel.getText().toString().replace("@", "");
             if (!TextUtils.isEmpty(queryLabel)) {
-                queryLabel = queryLabel.substring(1);
                 friendNames.add(queryLabel);
             }
         }
 
-        for (Author author : mSelectedFriends) {
-            friendNames.add(author.getName());
+        if (mSelectedFriends.size() > 0) {
+            for (Author author : mSelectedFriends) {
+                friendNames.add(author.getName());
+            }
+
+            // 回调前进行最近联系人存储
+            ContactsCacheManager.addRecentCache(CollectionUtil.toArray(mSelectedFriends, Author.class));
         }
 
-        String[] names = CollectionUtil.toArray(friendNames, String.class);
-
+        // 回送@列表
+        final String[] names = CollectionUtil.toArray(friendNames, String.class);
         synchronized (UserSelectFriendsActivity.class) {
             if (textParentLinkedHolder != null) {
                 RichEditText editText = textParentLinkedHolder.item;
@@ -359,9 +365,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity
                     editText.appendMention(names);
             }
         }
-
-        // 回调前进行最近联系人存储
-        RecentContactsView.add(CollectionUtil.toArray(mSelectedFriends, Author.class));
 
         Intent result = new Intent();
         result.putExtra("data", names);

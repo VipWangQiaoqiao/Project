@@ -28,7 +28,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.ParentLinkedHolder;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
-import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapterOld;
 import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
@@ -558,11 +557,6 @@ public class UserSelectFriendsActivityOld extends BaseBackActivity implements In
                     editText.appendMention(names);
             }
         }
-
-
-        // 回调前进行最近联系人存储
-        RecentContactsView.add((Author[]) CollectionUtil.toArray(mCacheIconFriends, UserFriend.class));
-
 
         Intent result = new Intent();
         result.putExtra("data", names);
