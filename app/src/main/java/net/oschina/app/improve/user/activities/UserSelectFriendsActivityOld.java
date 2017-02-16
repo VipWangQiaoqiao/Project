@@ -75,7 +75,7 @@ public class UserSelectFriendsActivityOld extends BaseBackActivity implements In
     @Bind(R.id.tv_label)
     TextView mTvLabel;
 
-    @Bind(R.id.tv_no_friends)
+    //@Bind(R.id.tv_no_friends)
     TextView mTvNoFriends;
 
     @Bind(R.id.recycler_friends)
@@ -166,7 +166,6 @@ public class UserSelectFriendsActivityOld extends BaseBackActivity implements In
             }
         });
 
-        mEmptyLayout.setLoadingFriend(true);
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

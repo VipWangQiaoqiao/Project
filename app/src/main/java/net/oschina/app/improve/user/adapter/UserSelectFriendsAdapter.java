@@ -15,7 +15,6 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.util.ImageLoader;
-import net.oschina.app.util.TLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,7 +199,6 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Co
         }
 
         void initView(boolean showLabel, boolean showLine) {
-            TLog.error("showLabel:" + showLabel + " showLine:" + showLine);
             mLabel.setVisibility(showLabel ? View.VISIBLE : View.GONE);
             mLine.setVisibility(showLine ? View.VISIBLE : View.GONE);
         }

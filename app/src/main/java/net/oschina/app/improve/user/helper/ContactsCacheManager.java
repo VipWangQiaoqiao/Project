@@ -63,15 +63,15 @@ public class ContactsCacheManager {
                     || TextUtils.isEmpty(author.getName())
                     || author.getId() == AccountHelper.getUserId())
                 continue;
-            if (checkNotInContacts(localCache, author))
-                localCache.addFirst(author);
-            else {
+            if (checkInContacts(localCache, author)) {
                 // 移除后添加到头部
                 int index = indexOfContacts(localCache, author);
                 if (index >= 0) {
                     localCache.remove(index);
                     localCache.addFirst(author);
                 }
+            } else {
+                localCache.addFirst(author);
             }
         }
 
@@ -91,12 +91,14 @@ public class ContactsCacheManager {
         return -1;
     }
 
-    public static boolean checkNotInContacts(List<Author> list, Author user) {
+    public static boolean checkInContacts(List<Author> list, Author user) {
+        if (list == null || user == null)
+            return false;
         for (Author author : list) {
             if (author.getId() == user.getId())
-                return false;
+                return true;
         }
-        return true;
+        return false;
     }
 
     public static ArrayList<Author> getContacts() {
@@ -115,6 +117,7 @@ public class ContactsCacheManager {
     }
 
     public static final String SPLIT_HEAD = "";
+    public static final String DEFAULT_CHAR = "#";
 
     public static List<Friend> sortToFriendModel(List<Author> list) {
         ArrayList<Friend> friends = new ArrayList<>();
@@ -127,9 +130,9 @@ public class ContactsCacheManager {
             String name = author.getName().trim();
             if (TextUtils.isEmpty(name)) continue;
 
-            String pinyin = AssimilateUtils.convertToPinyin(name, SPLIT_HEAD);
+            String pinyin = AssimilateUtils.convertToPinyin(name, SPLIT_HEAD).trim();
             String firstChar = pinyin.substring(0, 1).toUpperCase();
-            firstChar = firstChar.matches("[a-zA-Z_]+") ? firstChar : "#";
+            firstChar = firstChar.matches("[A-Z]") ? firstChar : DEFAULT_CHAR;
 
             Friend friend = new Friend(author);
             friend.pinyin = pinyin;
@@ -138,10 +141,13 @@ public class ContactsCacheManager {
             friends.add(friend);
         }
 
-        //自然排序
+        // 排序
         Collections.sort(friends, new Comparator<Friend>() {
             @Override
             public int compare(Friend o1, Friend o2) {
+                if (o1.firstChar.equals(DEFAULT_CHAR) || o2.firstChar.equals(DEFAULT_CHAR)) {
+                    return o2.firstChar.compareTo(o1.firstChar);
+                }
                 return o1.firstChar.compareTo(o2.firstChar);
             }
         });
@@ -163,7 +169,7 @@ public class ContactsCacheManager {
 
         public Author author;
         public String pinyin = "";
-        public String firstChar = "#";
+        public String firstChar = "↑";
         public boolean isSelected;
 
         @Override
@@ -254,6 +260,12 @@ public class ContactsCacheManager {
         }
 
         public static void sync(Runnable callback) {
+            // 没有网络直接返回
+            if (!TDevice.hasInternet()) {
+                callback.run();
+                return;
+            }
+
             if (callback != null) {
                 synchronized (INSTANCE.notifies) {
                     INSTANCE.notifies.add(callback);
