@@ -226,9 +226,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity
             }
             mLocalFriends.trimToSize();
             mLocalAdapter.initItems(friends);
-            mRecyclerFriends.setVisibility(View.VISIBLE);
-            showError(EmptyLayout.HIDE_LAYOUT);
-        } else {
+        }
+
+        refreshLocalView();
+    }
+
+    private void refreshLocalView() {
+        if (mLocalAdapter.getItemCount() == 0) {
             // 无数据时
             if (checkNetIsAvailable()) {
                 showError(EmptyLayout.NODATA);
@@ -236,7 +240,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity
                 showError(EmptyLayout.NETWORK_ERROR);
             }
             mIndex.setVisibility(View.GONE);
-            mRecyclerFriends.setVisibility(View.GONE);
+        } else {
+            mIndex.setVisibility(View.VISIBLE);
+            showError(EmptyLayout.HIDE_LAYOUT);
         }
     }
 
@@ -316,13 +322,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     public boolean onQueryTextChange(String newText) {
         if (TextUtils.isEmpty(newText)) {
             transLabelX(false);
-
-            if (mLocalAdapter.getItemCount() == 0) {
-                mIndex.setVisibility(View.GONE);
-            } else {
-                mIndex.setVisibility(View.VISIBLE);
-            }
-
+            refreshLocalView();
             mRecyclerFriends.setAdapter(mLocalAdapter);
             TDevice.hideSoftKeyboard(mSearchView);
         } else {
@@ -336,6 +336,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity
             if (mRecyclerFriends.getAdapter() != mSearchAdapter) {
                 mRecyclerFriends.setAdapter(mSearchAdapter);
             }
+
+            // 有搜索时隐藏
+            showError(EmptyLayout.HIDE_LAYOUT);
         }
         return true;
     }
