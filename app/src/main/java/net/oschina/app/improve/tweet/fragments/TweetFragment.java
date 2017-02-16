@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -248,8 +249,26 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
             mErrorLayout.setErrorMessage("未登录");
         }
 
-        registerBroadcaster();
 
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        registerBroadcaster();
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (mReceiver != null) {
+            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mReceiver);
+        }
+
+        //解除注册广播
+        if (mIsRegister && mPubTweetReceiver != null)
+            getContext().unregisterReceiver(mPubTweetReceiver);
+        super.onDestroyView();
     }
 
     @Override
@@ -529,21 +548,6 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         } else {
             mErrorLayout.setErrorType(isNeedEmptyView() ? EmptyLayout.NODATA : EmptyLayout.HIDE_LAYOUT);
         }
-    }
-
-    /**
-     * 注销广播
-     */
-    @Override
-    public void onDestroy() {
-        if (mReceiver != null) {
-            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mReceiver);
-        }
-
-        //解除注册广播
-        if (mIsRegister && mPubTweetReceiver != null)
-            getContext().unregisterReceiver(mPubTweetReceiver);
-        super.onDestroy();
     }
 
     @Override
