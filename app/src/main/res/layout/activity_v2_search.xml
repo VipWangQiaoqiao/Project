@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/view_root"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#F6F6F6"
     android:fitsSystemWindows="true"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,31 +14,31 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:padding="8dp">
 
             <android.support.v7.widget.SearchView
                 android:id="@+id/view_searcher"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/shape_search_view"
-                android:layout_height="wrap_content"
+                app:iconifiedByDefault="false"
                 app:queryBackground="@color/transparent"
-                app:queryHint="搜索博客、软件、资讯、问答、找人"
-                app:iconifiedByDefault="false"/>
+                app:queryHint="搜索博客、软件、资讯、问答、找人" />
 
             <TextView
                 android:id="@+id/tv_cancel"
-                android:text="取消"
-                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
+                android:text="取消"
                 android:textColor="@color/day_colorPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <android.support.design.widget.TabLayout
@@ -46,9 +46,9 @@
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:visibility="gone"
-            app:tabSelectedTextColor="@color/day_colorPrimary"
+            app:tabIndicatorColor="@color/transparent"
             app:tabIndicatorHeight="0dp"
-            app:tabIndicatorColor="@color/transparent" />
+            app:tabSelectedTextColor="@color/day_colorPrimary" />
 
         <View
             android:layout_width="match_parent"
@@ -56,10 +56,20 @@
             android:background="#C8C7CC" />
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager"
-        android:visibility="gone"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
 </LinearLayout>
