@@ -36,10 +36,6 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Co
     private static final int TYPE_TOP = 0x0001;
     private static final int TYPE_BOTTOM = 0x0010;
 
-    public static final int INDEX_TYPE = 0x0000;
-    public static final int USER_TYPE = 0x0001;
-    public static final int SEARCH_TYPE = 0x03;
-
     private final ArrayList<ContactsCacheManager.Friend> mItems = new ArrayList<>();
     private final ContactsCacheManager.OnSelectedChangeListener listener;
     private final View mFirstView;

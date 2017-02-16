@@ -12,9 +12,8 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivityOld;
-import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
+import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapterOld;
 import net.oschina.app.improve.user.bean.UserFansOrFollows;
 import net.oschina.app.improve.user.bean.UserFriend;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -138,7 +137,7 @@ public class SyncFriendHelper {
 
                 UserFriend userFriend = new UserFriend();
                 userFriend.setShowLabel(label);
-                userFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
+                userFriend.setShowViewType(UserSelectFriendsAdapterOld.INDEX_TYPE);
 
                 cacheFriends.add(userFriend);
             }
@@ -147,7 +146,7 @@ public class SyncFriendHelper {
             userFriend.setId(fansOrFollow.getId());
             userFriend.setShowLabel(pinyin);
             userFriend.setName(fansOrFollow.getName());
-            userFriend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
+            userFriend.setShowViewType(UserSelectFriendsAdapterOld.USER_TYPE);
             userFriend.setPortrait(fansOrFollow.getPortrait());
 
             cacheFriends.add(userFriend);
