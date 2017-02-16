@@ -54,23 +54,22 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Co
     public int getItemViewType(int position) {
         if (position == 0)
             return TYPE_FIRST;
-        ContactsCacheManager.Friend item = this.mItems.get(position);
+
+        ContactsCacheManager.Friend item = mItems.get(position);
 
         int type = TYPE_NONE;
-        if (position > 1) {
-            // 有上一个
-            ContactsCacheManager.Friend preItem = this.mItems.get(position - 1);
-            if (!preItem.firstChar.equals(item.firstChar)) {
-                TLog.error("第一个：" + item.toString());
-                type = type | TYPE_TOP;
-            }
+        // 判断是否显示标题
+        if (position == 1 ||
+                ((position > 1) && (!mItems.get(position - 1).firstChar.equals(item.firstChar)))) {
+            type = type | TYPE_TOP;
         }
+
+        // 判断是否是类型结束，类型结束不显示底线
         int maxPos = getItemCount() - 1;
         if ((position == maxPos)
                 || !(mItems.get(position + 1).firstChar.equals(item.firstChar))) {
             // 如果是最后一个或者后面一个不是当前首字母的类型则当前item是当前类型最后一个
             type = type | TYPE_BOTTOM;
-            TLog.error("后一个：" + item.toString());
         }
         return type;
     }
