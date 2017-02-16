@@ -144,16 +144,17 @@ public class RecentContactsView extends LinearLayout implements View.OnClickList
 
     @Override
     public void trigger(Model model, boolean selected) {
-        model.isSelected = !model.isSelected;
+        model.isSelected = selected;
         refreshView(model);
     }
 
     @Override
     public void trigger(Author author, boolean selected) {
+        if (author == null)
+            return;
         for (Model model : models) {
             if (model.author.getId() == author.getId()) {
-                model.isSelected = selected;
-                refreshView(model);
+                trigger(model, selected);
                 return;
             }
         }

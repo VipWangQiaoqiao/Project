@@ -248,23 +248,15 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
     }
 
     // 判断是否是本地的或者已被选中的数据
-    private boolean isLocalOrSelectedData(long id) {
+    private boolean isLocalOrSelectedData(User user) {
         for (ContactsCacheManager.Friend mCacheFriend : mCacheFriends) {
             if (mCacheFriend == null || mCacheFriend.author == null)
                 continue;
-            if (mCacheFriend.author.getId() == id) {
+            if (mCacheFriend.author.getId() == user.getId()) {
                 return true;
             }
         }
-
-        if (mCacheSelect != null) {
-            for (Author author : mCacheSelect) {
-                if (author.getId() == id)
-                    return true;
-            }
-        }
-
-        return false;
+        return ContactsCacheManager.checkInContacts(mCacheSelect, user);
     }
 
     static class TitleViewHolder extends RecyclerView.ViewHolder {
@@ -405,7 +397,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
 
                                 for (User user : users) {
                                     if (user == null || user.getId() <= 0
-                                            || isLocalOrSelectedData(user.getId()))
+                                            || isLocalOrSelectedData(user))
                                         continue;
                                     authors.add(user);
                                 }

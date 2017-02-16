@@ -448,8 +448,11 @@ public class UserSelectFriendsActivity extends BaseBackActivity
      * 移除选中
      */
     private void removeSelected(Author author) {
-        mSelectedFriends.remove(author);
-        updateSelectView();
+        int index = ContactsCacheManager.indexOfContacts(mSelectedFriends, author);
+        if (index >= 0) {
+            mSelectedFriends.remove(index);
+            updateSelectView();
+        }
     }
 
     /**
@@ -457,17 +460,17 @@ public class UserSelectFriendsActivity extends BaseBackActivity
      */
     @Override
     public void tryTriggerSelected(RecentContactsView.Model model, ContactsCacheManager.SelectedTrigger<RecentContactsView.Model> trigger) {
-        if (ContactsCacheManager.checkNotInContacts(mSelectedFriends, model.author)) {
+        if (ContactsCacheManager.checkInContacts(mSelectedFriends, model.author)) {
+            removeSelected(model.author);
+            trigger.trigger(model, false);
+            // 通知适配器
+            adapterSelectedTrigger.trigger(model.author, false);
+        } else {
             if (tryInsertSelected(model.author)) {
                 trigger.trigger(model, true);
                 // 通知适配器
                 adapterSelectedTrigger.trigger(model.author, true);
             }
-        } else {
-            removeSelected(model.author);
-            trigger.trigger(model, false);
-            // 通知适配器
-            adapterSelectedTrigger.trigger(model.author, false);
         }
     }
 
@@ -476,17 +479,17 @@ public class UserSelectFriendsActivity extends BaseBackActivity
      */
     @Override
     public void tryTriggerSelected(ContactsCacheManager.Friend friend, ContactsCacheManager.SelectedTrigger<ContactsCacheManager.Friend> trigger) {
-        if (ContactsCacheManager.checkNotInContacts(mSelectedFriends, friend.author)) {
+        if (ContactsCacheManager.checkInContacts(mSelectedFriends, friend.author)) {
+            removeSelected(friend.author);
+            trigger.trigger(friend, false);
+            // 通知最近联系人
+            recentSelectedTrigger.trigger(friend.author, false);
+        } else {
             if (tryInsertSelected(friend.author)) {
                 trigger.trigger(friend, true);
                 // 通知最近联系人
                 recentSelectedTrigger.trigger(friend.author, true);
             }
-        } else {
-            removeSelected(friend.author);
-            trigger.trigger(friend, false);
-            // 通知最近联系人
-            recentSelectedTrigger.trigger(friend.author, false);
         }
     }
 }

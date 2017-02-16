@@ -63,15 +63,15 @@ public class ContactsCacheManager {
                     || TextUtils.isEmpty(author.getName())
                     || author.getId() == AccountHelper.getUserId())
                 continue;
-            if (checkNotInContacts(localCache, author))
-                localCache.addFirst(author);
-            else {
+            if (checkInContacts(localCache, author)) {
                 // 移除后添加到头部
                 int index = indexOfContacts(localCache, author);
                 if (index >= 0) {
                     localCache.remove(index);
                     localCache.addFirst(author);
                 }
+            } else {
+                localCache.addFirst(author);
             }
         }
 
@@ -91,12 +91,12 @@ public class ContactsCacheManager {
         return -1;
     }
 
-    public static boolean checkNotInContacts(List<Author> list, Author user) {
+    public static boolean checkInContacts(List<Author> list, Author user) {
         for (Author author : list) {
             if (author.getId() == user.getId())
-                return false;
+                return true;
         }
-        return true;
+        return false;
     }
 
     public static ArrayList<Author> getContacts() {
