@@ -28,6 +28,7 @@ import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.media.SelectImageActivity;
 import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.user.adapter.UserSendMessageAdapter;
+import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.PicturesCompressor;
 
 import java.io.File;
@@ -228,6 +229,13 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
         public void onFinish() {
             super.onFinish();
             mDialog.dismiss();
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            // 发送前添加到最近联系人队列
+            ContactsCacheManager.addRecentCache(mReceiver);
         }
     }
 
