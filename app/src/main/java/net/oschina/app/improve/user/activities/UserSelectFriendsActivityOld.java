@@ -166,7 +166,6 @@ public class UserSelectFriendsActivityOld extends BaseBackActivity implements In
             }
         });
 
-        mEmptyLayout.setLoadingFriend(true);
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -30,7 +30,6 @@ public class EmptyLayout extends LinearLayout implements
     private int mErrorState;
     private String strNoDataContent = "";
     private TextView tv;
-    private boolean mLoadingFriend;
     private boolean mLoadingLocalFriend;
 
     public EmptyLayout(Context context) {
@@ -123,11 +122,6 @@ public class EmptyLayout extends LinearLayout implements
     }
 
 
-    public void setLoadingFriend(boolean loadingFriend) {
-        this.mLoadingFriend = loadingFriend;
-        tv.setText(R.string.error_view_loading_friend);
-    }
-
     public void setLoadingLocalFriend(boolean loadingLocalFriend) {
         this.mLoadingLocalFriend = loadingLocalFriend;
         tv.setText(R.string.error_view_loading_local_friend);
@@ -169,21 +163,17 @@ public class EmptyLayout extends LinearLayout implements
                 mLoading.setVisibility(View.VISIBLE);
                 mLoading.start();
                 img.setVisibility(View.GONE);
-                if (mLoadingFriend) {
-                    tv.setText(R.string.error_view_loading_friend);
+                if (mLoadingLocalFriend) {
+                    tv.setText(R.string.error_view_loading_local_friend);
                 } else {
-                    if (mLoadingLocalFriend) {
-                        tv.setText(R.string.error_view_loading_local_friend);
-                    } else {
-                        tv.setText(R.string.error_view_loading);
-                    }
+                    tv.setText(R.string.error_view_loading);
                 }
                 clickEnable = false;
                 break;
             case NODATA:
                 mErrorState = NODATA;
                 // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
-                img.setBackgroundResource(R.mipmap.page_icon_empty);
+                img.setBackgroundResource(R.mipmap.ic_tip_fail);
                 img.setVisibility(View.VISIBLE);
                 mLoading.stop();
                 mLoading.setVisibility(View.GONE);

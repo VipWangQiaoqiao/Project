@@ -77,6 +77,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
 
     @Bind(R.id.recycler_friends)
     RecyclerView mRecyclerFriends;
+
     @Bind(R.id.tv_index_show)
     TextView mTvIndexShow;
 
@@ -150,12 +151,12 @@ public class UserSelectFriendsActivity extends BaseBackActivity
         mLayoutEditFrame.setLayoutParams(params);
         mSearchView.setOnQueryTextListener(this);
 
-        mEmptyLayout.setLoadingFriend(true);
+        mEmptyLayout.setNoDataContent(getText(R.string.no_friend_hint).toString());
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EmptyLayout emptyLayout = mEmptyLayout;
-                if (emptyLayout != null && emptyLayout.getErrorState() != EmptyLayout.HIDE_LAYOUT) {
+                if (emptyLayout != null && emptyLayout.getErrorState() != EmptyLayout.NETWORK_LOADING) {
                     emptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     initDataFromCacheOrNet();
                 }
@@ -186,6 +187,10 @@ public class UserSelectFriendsActivity extends BaseBackActivity
         // 初始化trigger
         recentSelectedTrigger = mRecentView;
         adapterSelectedTrigger = mLocalAdapter;
+
+        //noinspection RestrictedApi
+        mSearchView.clearFocus();
+        TDevice.hideSoftKeyboard(mSearchView);
     }
 
     @Override
@@ -216,24 +221,25 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     private void displayFirstView(List<ContactsCacheManager.Friend> friends) {
         // 没有拉取到用户，但是有最近联系人也显示界面
         if ((friends != null && friends.size() > 0) || mRecentView.hasData()) {
+            // 有数据时
             if (friends != null) {
                 mLocalFriends.addAll(friends);
                 mSearchAdapter.initBaseItems(mLocalFriends, mSelectedFriends);
             }
             mLocalFriends.trimToSize();
             mLocalAdapter.initItems(friends);
-            mTvNoFriends.setVisibility(View.GONE);
+            mRecyclerFriends.setVisibility(View.VISIBLE);
+            showError(EmptyLayout.HIDE_LAYOUT);
         } else {
-            //检查网络
-            if (!checkNetIsAvailable()) {
+            // 无数据时
+            if (checkNetIsAvailable()) {
                 showError(EmptyLayout.NODATA);
             } else {
                 showError(EmptyLayout.NETWORK_ERROR);
             }
             mIndex.setVisibility(View.GONE);
-            mTvNoFriends.setVisibility(View.VISIBLE);
+            mRecyclerFriends.setVisibility(View.GONE);
         }
-        hideLoading();
     }
 
     @Override
@@ -289,7 +295,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity
         }
 
         if (position >= 0) {
-            mRecyclerFriends.smoothScrollToPosition(position);
+            RecyclerView.LayoutManager layoutManager = mRecyclerFriends.getLayoutManager();
+            if (layoutManager instanceof LinearLayoutManager) {
+                ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(position, 0);
+            } else {
+                mRecyclerFriends.smoothScrollToPosition(position);
+            }
+
             mTvIndexShow.setText(str);
             mTvIndexShow.setVisibility(View.VISIBLE);
         }
@@ -376,16 +388,9 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     private boolean checkNetIsAvailable() {
         if (!TDevice.hasInternet()) {
             AppContext.showToastShort(getString(R.string.tip_network_error));
-            showError(EmptyLayout.NETWORK_ERROR);
             return false;
         }
         return true;
-    }
-
-    private void hideLoading() {
-        final EmptyLayout emptyLayout = mEmptyLayout;
-        if (emptyLayout != null)
-            emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
     }
 
     private void showError(int type) {
