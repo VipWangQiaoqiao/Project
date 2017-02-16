@@ -8,124 +8,100 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <android.support.v7.widget.SearchView
+        android:id="@+id/searcher_friends"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_margin="@dimen/lay_4"
+        android:background="@drawable/shape_search_user_friends"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@color/transparent"
+        app:queryHint="@string/search_man" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <HorizontalScrollView
+            android:id="@+id/recycler_friends_icon"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:scrollbarSize="0dp">
+
+            <LinearLayout
+                android:id="@+id/select_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/lay_4"
+                android:paddingRight="@dimen/lay_4" />
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/tv_label"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginLeft="@dimen/lay_48"
+            android:layout_marginRight="@dimen/lay_4"
+            android:background="@drawable/ic_bg_btn_blue"
+            android:ellipsize="none"
+            android:gravity="center"
+            android:lines="1"
+            android:minWidth="@dimen/lay_48"
+            android:padding="@dimen/lay_4"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_16"
+            android:translationX="52dp"
+            android:visibility="visible"
+            tools:ignore="RtlHardcoded"
+            tools:text="osc"
+            tools:visibility="visible" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/line"
+        style="@style/h_line" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_friends"
             android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_index_show"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:background="@drawable/index_float_text_background"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="58sp"
+            android:typeface="monospace"
+            android:visibility="gone"
+            tools:text="索引" />
+
+        <net.oschina.app.widget.IndexView
+            android:id="@+id/lay_index"
+            android:layout_width="32dp"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/lay_4">
-
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/searcher_friends"
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:background="@drawable/shape_search_user_friends"
-                    app:iconifiedByDefault="false"
-                    app:queryBackground="@color/transparent"
-                    app:queryHint="@string/search_man" />
-
-            </FrameLayout>
-
-            <HorizontalScrollView
-                android:id="@+id/recycler_friends_icon"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@color/white">
-
-                <LinearLayout
-                    android:id="@+id/select_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="@dimen/lay_4"
-                    android:paddingRight="@dimen/lay_4" />
-
-            </HorizontalScrollView>
-
-            <TextView
-                android:id="@+id/tv_label"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/lay_36"
-                android:layout_marginTop="@dimen/lay_4"
-                android:background="@color/white"
-                android:gravity="center|left"
-                android:paddingBottom="@dimen/lay_4"
-                android:paddingLeft="@dimen/lay_16"
-                android:paddingRight="@dimen/lay_16"
-                android:paddingTop="@dimen/lay_4"
-                android:textColor="@color/text_title_color"
-                android:textSize="@dimen/font_16"
-                android:visibility="gone"
-                tools:ignore="RtlHardcoded"
-                tools:text="label"
-                tools:visibility="visible" />
-
-            <View
-                android:id="@+id/line"
-                style="@style/h_line" />
-
-            <TextView
-                android:id="@+id/tv_no_friends"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:minHeight="46dp"
-                android:text="@string/no_friend_hint"
-                android:textSize="@dimen/font_16"
-                android:typeface="monospace"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_friends"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TextView
-                    android:id="@+id/tv_index_show"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/index_float_text_background"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="58sp"
-                    android:typeface="monospace"
-                    android:visibility="gone"
-                    tools:text="索引" />
-
-                <net.oschina.app.widget.IndexView
-                    android:id="@+id/lay_index"
-                    android:layout_width="32dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:paddingLeft="@dimen/lay_8"
-                    android:textSize="@dimen/font_14"
-                    tools:ignore="RtlHardcoded,RtlSymmetry" />
-
-            </FrameLayout>
-        </LinearLayout>
+            android:layout_gravity="right"
+            android:paddingLeft="@dimen/lay_8"
+            android:textSize="@dimen/font_14"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
         <net.oschina.app.ui.empty.EmptyLayout
             android:id="@+id/lay_error"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:visibility="visible" />
-
-
     </FrameLayout>
-
 </LinearLayout>
 
 

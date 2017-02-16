@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,9 +72,6 @@ public class UserSelectFriendsActivity extends BaseBackActivity
 
     @Bind(R.id.tv_label)
     TextView mTvLabel;
-
-    @Bind(R.id.tv_no_friends)
-    TextView mTvNoFriends;
 
     @Bind(R.id.recycler_friends)
     RecyclerView mRecyclerFriends;
@@ -317,24 +315,21 @@ public class UserSelectFriendsActivity extends BaseBackActivity
     @Override
     public boolean onQueryTextChange(String newText) {
         if (TextUtils.isEmpty(newText)) {
-            mTvLabel.setVisibility(View.GONE);
+            transLabelX(false);
 
             if (mLocalAdapter.getItemCount() == 0) {
                 mIndex.setVisibility(View.GONE);
-                mTvNoFriends.setVisibility(View.VISIBLE);
             } else {
                 mIndex.setVisibility(View.VISIBLE);
-                mTvNoFriends.setVisibility(View.GONE);
             }
 
             mRecyclerFriends.setAdapter(mLocalAdapter);
             TDevice.hideSoftKeyboard(mSearchView);
         } else {
-            mTvNoFriends.setVisibility(View.GONE);
             mIndex.setVisibility(View.GONE);
 
             mTvLabel.setText("@" + newText);
-            mTvLabel.setVisibility(View.VISIBLE);
+            transLabelX(true);
 
             mSearchAdapter.onSearchTextChanged(newText);
 
@@ -343,6 +338,38 @@ public class UserSelectFriendsActivity extends BaseBackActivity
             }
         }
         return true;
+    }
+
+    private float labelHideTransX = -1;
+    private float labelBeforeTransX = -1;
+
+    private void transLabelX(boolean show) {
+        if (labelHideTransX == -1)
+            labelHideTransX = TDevice.dipToPx(getResources(), 52);
+
+        if (show) {
+            if (labelBeforeTransX == 0)
+                return;
+            else
+                labelBeforeTransX = 0;
+        } else {
+            if (labelBeforeTransX == labelHideTransX)
+                return;
+            else
+                labelBeforeTransX = labelHideTransX;
+        }
+
+        if (mTvLabel.getTag() == null) {
+            mTvLabel.animate()
+                    .setInterpolator(new AnticipateOvershootInterpolator(2.5f))
+                    .setDuration(260);
+            mTvLabel.setTag(mTvLabel.animate());
+        }
+
+        mTvLabel.animate()
+                .translationXBy(mTvLabel.getTranslationX())
+                .translationX(labelBeforeTransX)
+                .start();
     }
 
     /**
@@ -406,22 +433,26 @@ public class UserSelectFriendsActivity extends BaseBackActivity
      */
     private void updateSelectView() {
         mSelectContainer.removeAllViews();
+        if (mSelectedFriends.size() == 0)
+            mHorizontalScrollView.setVisibility(View.GONE);
+        else {
+            mHorizontalScrollView.setVisibility(View.VISIBLE);
+            for (final Author author : mSelectedFriends) {
+                ImageView ivIcon = (ImageView) LayoutInflater.from(this)
+                        .inflate(R.layout.activity_main_select_friend_label_container_item, mSelectContainer, false);
 
-        for (final Author author : mSelectedFriends) {
-            ImageView ivIcon = (ImageView) LayoutInflater.from(this)
-                    .inflate(R.layout.activity_main_select_friend_label_container_item, mSelectContainer, false);
-
-            ivIcon.setTag(R.id.iv_show_icon, author);
-            ivIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Author tag = (Author) v.getTag(R.id.iv_show_icon);
-                    onSelectIconClick(tag);
-                    mSelectContainer.removeView(v);
-                }
-            });
-            mSelectContainer.addView(ivIcon);
-            Glide.with(this).load(author.getPortrait()).error(R.mipmap.widget_default_face).into(ivIcon);
+                ivIcon.setTag(R.id.iv_show_icon, author);
+                ivIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Author tag = (Author) v.getTag(R.id.iv_show_icon);
+                        onSelectIconClick(tag);
+                        mSelectContainer.removeView(v);
+                    }
+                });
+                mSelectContainer.addView(ivIcon);
+                Glide.with(this).load(author.getPortrait()).error(R.mipmap.widget_default_face).into(ivIcon);
+            }
         }
     }
 
