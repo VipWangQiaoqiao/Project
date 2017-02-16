@@ -2,6 +2,8 @@ package net.oschina.app.improve.user.bean;
 
 import android.support.annotation.NonNull;
 
+import net.oschina.app.improve.bean.simple.Author;
+
 import java.io.Serializable;
 
 /**
@@ -10,40 +12,12 @@ import java.io.Serializable;
  * desc:
  */
 
-public class UserFriend implements Serializable, Comparable<UserFriend> {
-
-    private long id;
-    private String portrait;
-    private String name;
+public class UserFriend extends Author implements Serializable, Comparable<UserFriend> {
     private int showViewType;
-    private String showLabel;
+    private String showLabel = "";
     private transient boolean isGoneLine;
     private transient boolean isSelected;
     private transient int selectPosition;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getPortrait() {
-        return portrait;
-    }
-
-    public void setPortrait(String portrait) {
-        this.portrait = portrait;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public int getShowViewType() {
         return showViewType;

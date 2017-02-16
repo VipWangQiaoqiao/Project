@@ -13,6 +13,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivityOld;
 import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
 import net.oschina.app.improve.user.bean.UserFansOrFollows;
 import net.oschina.app.improve.user.bean.UserFriend;
@@ -158,7 +159,7 @@ public class SyncFriendHelper {
         //自然排序
         Collections.sort(cacheFriends);
 
-        CacheManager.saveToJson(OSCApplication.getInstance(), UserSelectFriendsActivity.CACHE_NAME, cacheFriends);
+        CacheManager.saveToJson(OSCApplication.getInstance(), UserSelectFriendsActivityOld.CACHE_NAME, cacheFriends);
     }
 
     public static void load(Runnable callback) {
@@ -182,12 +183,12 @@ public class SyncFriendHelper {
 
     // 缓存拿
     public static ArrayList<UserFriend> getFriends() {
-        return CacheManager.readListJson(AppContext.getInstance(), UserSelectFriendsActivity.CACHE_NAME, UserFriend.class);
+        return CacheManager.readListJson(AppContext.getInstance(), UserSelectFriendsActivityOld.CACHE_NAME, UserFriend.class);
     }
 
     // 检查网络状态和缓存有效期
     private boolean checkNeedLoadFromNet() {
-        String path = AppContext.getInstance().getCacheDir() + "/" + UserSelectFriendsActivity.CACHE_NAME + ".json";
+        String path = AppContext.getInstance().getCacheDir() + "/" + UserSelectFriendsActivityOld.CACHE_NAME + ".json";
         File file = new File(path);
 
         if (file.isFile() && file.exists()) {

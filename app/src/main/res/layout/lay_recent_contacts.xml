@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_index_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ques_detail_bg_color"
+        android:paddingBottom="@dimen/lay_2"
+        android:paddingLeft="@dimen/lay_8"
+        android:paddingTop="@dimen/lay_2"
+        android:text="最近联系人"
+        android:textSize="@dimen/font_12" />
+
+
+</merge>
