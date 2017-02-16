@@ -92,6 +92,8 @@ public class ContactsCacheManager {
     }
 
     public static boolean checkInContacts(List<Author> list, Author user) {
+        if (list == null || user == null)
+            return false;
         for (Author author : list) {
             if (author.getId() == user.getId())
                 return true;

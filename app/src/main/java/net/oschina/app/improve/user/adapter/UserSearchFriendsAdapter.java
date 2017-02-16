@@ -53,9 +53,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
     private String mSearchContent;
     private Context mContext;
 
-    public UserSearchFriendsAdapter(Context context, ContactsCacheManager.OnSelectedChangeListener listener) {
+    public UserSearchFriendsAdapter(Context context, ContactsCacheManager.OnSelectedChangeListener listener, List<Author> selectPointer) {
         this.mContext = context;
         this.listener = listener;
+        this.mSelectFriendsPointer = selectPointer;
     }
 
     @Override
@@ -128,11 +129,10 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
     }
 
     private List<ContactsCacheManager.Friend> mCacheFriends = new ArrayList<>();
-    private List<Author> mCacheSelect;
+    private final List<Author> mSelectFriendsPointer;
 
-    public void initBaseItems(List<ContactsCacheManager.Friend> friends, List<Author> selectList) {
+    public void initLocalItems(List<ContactsCacheManager.Friend> friends) {
         this.mCacheFriends.addAll(friends);
-        mCacheSelect = selectList;
     }
 
     public void onSearchTextChanged(String searchContent) {
@@ -256,7 +256,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
                 return true;
             }
         }
-        return ContactsCacheManager.checkInContacts(mCacheSelect, user);
+        return ContactsCacheManager.checkInContacts(mSelectFriendsPointer, user);
     }
 
     static class TitleViewHolder extends RecyclerView.ViewHolder {

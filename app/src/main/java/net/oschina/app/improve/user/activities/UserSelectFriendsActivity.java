@@ -171,7 +171,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
         });
 
         mLocalAdapter = new UserSelectFriendsAdapter(mRecentView, this);
-        mSearchAdapter = new UserSearchFriendsAdapter(this, this);
+        mSearchAdapter = new UserSearchFriendsAdapter(this, this, mSelectedFriends);
 
         mRecyclerFriends.setAdapter(mLocalAdapter);
         mIndex.setOnIndexTouchListener(this);
@@ -222,7 +222,7 @@ public class UserSelectFriendsActivity extends BaseBackActivity
             // 有数据时
             if (friends != null) {
                 mLocalFriends.addAll(friends);
-                mSearchAdapter.initBaseItems(mLocalFriends, mSelectedFriends);
+                mSearchAdapter.initLocalItems(mLocalFriends);
             }
             mLocalFriends.trimToSize();
             mLocalAdapter.initItems(friends);
