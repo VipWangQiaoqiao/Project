@@ -23,7 +23,7 @@ import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.user.helper.SyncFriendHelper;
+import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.TDevice;
 
@@ -176,7 +176,7 @@ public class WXEntryActivity extends Activity {
                                 intent.setAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
                                 LocalBroadcastManager.getInstance(WXEntryActivity.this).sendBroadcast(intent);
 
-                                SyncFriendHelper.load(null);
+                                ContactsCacheManager.sync();
 
                             } else {
                                 AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);

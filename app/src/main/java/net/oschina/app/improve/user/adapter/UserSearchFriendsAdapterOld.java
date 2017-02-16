@@ -68,13 +68,13 @@ public class UserSearchFriendsAdapterOld extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = this.mInflater;
         switch (viewType) {
-            case UserSelectFriendsAdapter.INDEX_TYPE:
+            case UserSelectFriendsAdapterOld.INDEX_TYPE:
                 return new IndexViewHolder(inflater.inflate(R.layout.activity_item_select_friend_label, parent, false));
-            case UserSelectFriendsAdapter.SEARCH_TYPE:
+            case UserSelectFriendsAdapterOld.SEARCH_TYPE:
                 SearchViewHolder searchViewHolder = new SearchViewHolder(inflater.inflate(R.layout.activity_item_search_friend_bottom, parent, false), this);
                 searchViewHolder.setOnKeyboardListener(mOnKeyboardListener);
                 return searchViewHolder;
-            case UserSelectFriendsAdapter.USER_TYPE:
+            case UserSelectFriendsAdapterOld.USER_TYPE:
             default:
                 UserInfoViewHolder userInfoViewHolder = new UserInfoViewHolder(inflater.inflate(R.layout.activity_item_select_friend, parent, false));
                 userInfoViewHolder.itemView.setTag(userInfoViewHolder);
@@ -123,10 +123,10 @@ public class UserSearchFriendsAdapterOld extends RecyclerView.Adapter {
             case UserSelectFriendsAdapterOld.USER_TYPE:
                 ((UserInfoViewHolder) holder).onBindView(item, position);
                 break;
-            case UserSelectFriendsAdapter.INDEX_TYPE:
+            case UserSelectFriendsAdapterOld.INDEX_TYPE:
                 ((IndexViewHolder) holder).onBindView(item, position);
                 break;
-            case UserSelectFriendsAdapter.SEARCH_TYPE:
+            case UserSelectFriendsAdapterOld.SEARCH_TYPE:
                 ((SearchViewHolder) (holder)).onBindView(item, position);
                 break;
         }
@@ -137,17 +137,17 @@ public class UserSearchFriendsAdapterOld extends RecyclerView.Adapter {
         List<UserFriend> items = this.mItems;
         UserFriend item = items.get(position);
         switch (item.getShowViewType()) {
-            case UserSelectFriendsAdapter.INDEX_TYPE:
-                return UserSelectFriendsAdapter.INDEX_TYPE;
-            case UserSelectFriendsAdapter.SEARCH_TYPE:
-                return UserSelectFriendsAdapter.SEARCH_TYPE;
+            case UserSelectFriendsAdapterOld.INDEX_TYPE:
+                return UserSelectFriendsAdapterOld.INDEX_TYPE;
+            case UserSelectFriendsAdapterOld.SEARCH_TYPE:
+                return UserSelectFriendsAdapterOld.SEARCH_TYPE;
             default: {
                 int maxPos = getItemCount() - 1;
                 if ((position == maxPos)
-                        || (position < maxPos && items.get(position + 1).getShowViewType() == UserSelectFriendsAdapter.INDEX_TYPE)) {
+                        || (position < maxPos && items.get(position + 1).getShowViewType() == UserSelectFriendsAdapterOld.INDEX_TYPE)) {
                     return UserSelectFriendsAdapterOld.USER_TYPE_UN_LINE;
                 } else {
-                    return UserSelectFriendsAdapter.USER_TYPE;
+                    return UserSelectFriendsAdapterOld.USER_TYPE;
                 }
             }
         }
@@ -393,7 +393,7 @@ public class UserSearchFriendsAdapterOld extends RecyclerView.Adapter {
                             UserFriend netFriend = new UserFriend();
 
                             netFriend.setName("");
-                            netFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
+                            netFriend.setShowViewType(UserSelectFriendsAdapterOld.INDEX_TYPE);
                             netFriend.setShowLabel(v.getResources().getString(R.string.net_search_label));
 
                             searchAdapter.addItem(searchAdapter.getItemCount() - 1, netFriend);
@@ -418,7 +418,7 @@ public class UserSearchFriendsAdapterOld extends RecyclerView.Adapter {
                                 friend.setSelected(true);
                             }
                             friend.setShowLabel(AssimilateUtils.returnPinyin(user.getName(), true));
-                            friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
+                            friend.setShowViewType(UserSelectFriendsAdapterOld.USER_TYPE);
 
                             searchAdapter.addItem(searchAdapter.getItemCount() - 1, friend);
                         }

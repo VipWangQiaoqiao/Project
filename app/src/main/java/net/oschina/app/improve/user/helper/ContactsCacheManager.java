@@ -47,13 +47,21 @@ public class ContactsCacheManager {
         return linkedList;
     }
 
-    public static void addRecentCache(Context context, Author... authors) {
+    public static void addRecentCache(Author... authors) {
+        if (authors == null || authors.length == 0)
+            return;
+        ContactsCacheManager.addRecentCache(AppContext.getInstance(), authors);
+    }
+
+    private static void addRecentCache(Context context, Author... authors) {
         final LinkedList<Author> localCache = getRecentCache(context);
 
         // 避免重复添加
         for (Author author : authors) {
-            if (author == null || author.getId() <= 0 || TextUtils.isEmpty(author.getName())
-                    )
+            if (author == null
+                    || author.getId() <= 0
+                    || TextUtils.isEmpty(author.getName())
+                    || author.getId() == AccountHelper.getUserId())
                 continue;
             if (checkNotInContacts(localCache, author))
                 localCache.addFirst(author);
@@ -91,41 +99,19 @@ public class ContactsCacheManager {
         return true;
     }
 
-
     public static ArrayList<Author> getContacts() {
         return CacheManager.readListJson(AppContext.getInstance(), USER_CACHE_NAME, Author.class);
     }
 
-    public static void getContacts(Runnable runnable) {
-        SyncHelper.sync(runnable);
+    /**
+     * 同步当前用户联系人信息
+     */
+    public static void sync() {
+        SyncHelper.sync(null);
     }
 
-
-    @SuppressWarnings("WeakerAccess")
-    public static class Friend {
-        public Friend(Author author) {
-            this.author = author;
-        }
-
-        public Friend(Author author, String firstChar) {
-            this.author = author;
-            this.firstChar = firstChar;
-        }
-
-        public Author author;
-        public String pinyin = "";
-        public String firstChar = "#";
-        public boolean isSelected;
-
-        @Override
-        public String toString() {
-            return "Friend{" +
-                    "author=" + author +
-                    ", pinyin='" + pinyin + '\'' +
-                    ", firstChar='" + firstChar + '\'' +
-                    ", isSelected=" + isSelected +
-                    '}';
-        }
+    public static void sync(Runnable runnable) {
+        SyncHelper.sync(runnable);
     }
 
     public static final String SPLIT_HEAD = "";
@@ -164,6 +150,33 @@ public class ContactsCacheManager {
     }
 
 
+    @SuppressWarnings("WeakerAccess")
+    public static class Friend {
+        public Friend(Author author) {
+            this.author = author;
+        }
+
+        public Friend(Author author, String firstChar) {
+            this.author = author;
+            this.firstChar = firstChar;
+        }
+
+        public Author author;
+        public String pinyin = "";
+        public String firstChar = "#";
+        public boolean isSelected;
+
+        @Override
+        public String toString() {
+            return "Friend{" +
+                    "author=" + author +
+                    ", pinyin='" + pinyin + '\'' +
+                    ", firstChar='" + firstChar + '\'' +
+                    ", isSelected=" + isSelected +
+                    '}';
+        }
+    }
+
     public interface SelectedTrigger<T> {
         void trigger(T t, boolean selected);
 
@@ -175,7 +188,7 @@ public class ContactsCacheManager {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public final static class SyncHelper {
+    private final static class SyncHelper {
         private static SyncHelper INSTANCE = new SyncHelper();
         private boolean isSyncing = false;
         private final List<Runnable> notifies = new LinkedList<>();

@@ -44,6 +44,7 @@ import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.user.helper.SyncFriendHelper;
 import net.oschina.app.util.TDevice;
 import net.oschina.open.constants.OpenConstant;
@@ -149,7 +150,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                 sendLocalReceiver();
 
                 //后台异步同步数据
-                SyncFriendHelper.load(null);
+                ContactsCacheManager.sync();
 
             } else {
                 showToastForKeyBord(resultBean.getMessage());
@@ -631,7 +632,7 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                         sendLocalReceiver();
 
                         //后台异步同步数据
-                        SyncFriendHelper.load(null);
+                        ContactsCacheManager.sync();
                     } else {
                         int code = resultBean.getCode();
                         String message = resultBean.getMessage();

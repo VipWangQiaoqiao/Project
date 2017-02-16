@@ -213,7 +213,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     public void onClick(View v) {
         // 用来解决快速点击多个按钮弹出多个界面的情况
         long nowTime = System.currentTimeMillis();
-        if ((nowTime - mLastClickTime) < 1000)
+        if ((nowTime - mLastClickTime) < 500)
             return;
         mLastClickTime = nowTime;
 

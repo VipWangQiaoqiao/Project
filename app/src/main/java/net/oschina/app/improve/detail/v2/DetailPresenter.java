@@ -12,6 +12,7 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.UserRelation;
+import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 
 import java.lang.reflect.Type;
@@ -144,6 +145,14 @@ public class DetailPresenter implements DetailContract.Presenter {
                     mView.showCommentError("评论失败");
                     mEmptyView.showCommentError("评论失败");
                 }
+            }
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                SubBean subBean = mBean;
+                if (subBean != null)
+                    ContactsCacheManager.addRecentCache(subBean.getAuthor());
             }
         });
     }

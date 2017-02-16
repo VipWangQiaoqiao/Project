@@ -36,10 +36,6 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Co
     private static final int TYPE_TOP = 0x0001;
     private static final int TYPE_BOTTOM = 0x0010;
 
-    public static final int INDEX_TYPE = 0x0000;
-    public static final int USER_TYPE = 0x0001;
-    public static final int SEARCH_TYPE = 0x03;
-
     private final ArrayList<ContactsCacheManager.Friend> mItems = new ArrayList<>();
     private final ContactsCacheManager.OnSelectedChangeListener listener;
     private final View mFirstView;
@@ -54,23 +50,22 @@ public class UserSelectFriendsAdapter extends RecyclerView.Adapter implements Co
     public int getItemViewType(int position) {
         if (position == 0)
             return TYPE_FIRST;
-        ContactsCacheManager.Friend item = this.mItems.get(position);
+
+        ContactsCacheManager.Friend item = mItems.get(position);
 
         int type = TYPE_NONE;
-        if (position > 1) {
-            // 有上一个
-            ContactsCacheManager.Friend preItem = this.mItems.get(position - 1);
-            if (!preItem.firstChar.equals(item.firstChar)) {
-                TLog.error("第一个：" + item.toString());
-                type = type | TYPE_TOP;
-            }
+        // 判断是否显示标题
+        if (position == 1 ||
+                ((position > 1) && (!mItems.get(position - 1).firstChar.equals(item.firstChar)))) {
+            type = type | TYPE_TOP;
         }
+
+        // 判断是否是类型结束，类型结束不显示底线
         int maxPos = getItemCount() - 1;
         if ((position == maxPos)
                 || !(mItems.get(position + 1).firstChar.equals(item.firstChar))) {
             // 如果是最后一个或者后面一个不是当前首字母的类型则当前item是当前类型最后一个
             type = type | TYPE_BOTTOM;
-            TLog.error("后一个：" + item.toString());
         }
         return type;
     }

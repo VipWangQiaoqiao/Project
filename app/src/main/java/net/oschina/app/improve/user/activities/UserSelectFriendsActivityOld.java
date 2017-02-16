@@ -28,9 +28,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.ParentLinkedHolder;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
-import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
-import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapter;
 import net.oschina.app.improve.user.adapter.UserSearchFriendsAdapterOld;
 import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapter;
 import net.oschina.app.improve.user.adapter.UserSelectFriendsAdapterOld;
@@ -489,13 +487,13 @@ public class UserSelectFriendsActivityOld extends BaseBackActivity implements In
         UserFriend LocalUserFriend = new UserFriend();
         LocalUserFriend.setName(getString(R.string.local_search_label));
         LocalUserFriend.setShowLabel(getString(R.string.local_search_label));
-        LocalUserFriend.setShowViewType(UserSelectFriendsAdapter.INDEX_TYPE);
+        LocalUserFriend.setShowViewType(UserSelectFriendsAdapterOld.INDEX_TYPE);
         searchFriends.add(LocalUserFriend);
 
         UserFriend NetUserFriend = new UserFriend();
         NetUserFriend.setName(getString(R.string.net_search_label));
         NetUserFriend.setShowLabel(getString(R.string.search_net_label));
-        NetUserFriend.setShowViewType(UserSelectFriendsAdapter.SEARCH_TYPE);
+        NetUserFriend.setShowViewType(UserSelectFriendsAdapterOld.SEARCH_TYPE);
         searchFriends.add(NetUserFriend);
 
         if (!TextUtils.isEmpty(queryText)) {
@@ -521,7 +519,7 @@ public class UserSelectFriendsActivityOld extends BaseBackActivity implements In
                     //搜索列表当中没有该条数据，进行添加
                     if (isMatch) {
                         friend.setShowLabel(name);
-                        friend.setShowViewType(UserSelectFriendsAdapter.USER_TYPE);
+                        friend.setShowViewType(UserSelectFriendsAdapterOld.USER_TYPE);
                         searchFriends.add(1, friend);
                     }
                 }
@@ -559,11 +557,6 @@ public class UserSelectFriendsActivityOld extends BaseBackActivity implements In
                     editText.appendMention(names);
             }
         }
-
-
-        // 回调前进行最近联系人存储
-        RecentContactsView.add((Author[]) CollectionUtil.toArray(mCacheIconFriends, UserFriend.class));
-
 
         Intent result = new Intent();
         result.putExtra("data", names);

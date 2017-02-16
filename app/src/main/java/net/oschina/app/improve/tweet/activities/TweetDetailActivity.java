@@ -44,6 +44,7 @@ import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.tweet.fragments.TweetDetailViewPagerFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
+import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
@@ -200,6 +201,14 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 mDelegation.getBottomSheet().getEditText().setHint("添加评论");
                 mDelegation.getBottomSheet().dismiss();
             }
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                Tweet tempTweet = tweet;
+                if (tempTweet != null)
+                    ContactsCacheManager.addRecentCache(tempTweet.getAuthor());
+            }
         };
 
         OSChinaApi.getTweetDetail(tweet.getId(), new TextHttpResponseHandler() {
@@ -335,7 +344,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_share:
-                if (tweet == null || tweet.getId() <= 0 || TextUtils.isEmpty(tweet.getContent())) break;
+                if (tweet == null || tweet.getId() <= 0 || TextUtils.isEmpty(tweet.getContent()))
+                    break;
 
                 String content = tweet.getContent().trim();
                 if (content.length() > 10)
