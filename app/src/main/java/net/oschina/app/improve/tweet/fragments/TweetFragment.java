@@ -266,8 +266,10 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         }
 
         //解除注册广播
-        if (mIsRegister && mPubTweetReceiver != null)
+        if (mIsRegister && mPubTweetReceiver != null) {
             getContext().unregisterReceiver(mPubTweetReceiver);
+            mIsRegister = false;
+        }
         super.onDestroyView();
     }
 
