@@ -101,7 +101,7 @@ public abstract class HeaderView extends RelativeLayout implements ViewPager.OnP
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    ResultBean<PageBean<Banner>> result = AppOperator.createGson().fromJson(responseString,
+                    final ResultBean<PageBean<Banner>> result = AppOperator.createGson().fromJson(responseString,
                             new TypeToken<ResultBean<PageBean<Banner>>>() {
                             }.getType());
                     if (result != null && result.isSuccess()) {

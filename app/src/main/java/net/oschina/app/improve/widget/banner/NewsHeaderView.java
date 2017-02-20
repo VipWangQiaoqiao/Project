@@ -1,5 +1,6 @@
 package net.oschina.app.improve.widget.banner;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import java.util.List;
  * on 2016/10/26.
  */
 
+@SuppressLint("ViewConstructor")
 public class NewsHeaderView extends HeaderView {
     private TextView mTitleTextView;
 
@@ -53,6 +55,7 @@ public class NewsHeaderView extends HeaderView {
     @Override
     protected Object instantiateItem(ViewGroup container, int position) {
         ViewNewsBanner view = new ViewNewsBanner(getContext());
+        container.addView(view);
         if (mBanners.size() != 0) {
             int p = position % mBanners.size();
             if (p >= 0 && p < mBanners.size()) {
@@ -60,7 +63,6 @@ public class NewsHeaderView extends HeaderView {
 
             }
         }
-        container.addView(view);
         return view;
     }
 

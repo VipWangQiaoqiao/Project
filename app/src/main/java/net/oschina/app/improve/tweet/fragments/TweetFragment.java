@@ -261,16 +261,20 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
 
     @Override
     public void onDestroyView() {
-        if (mReceiver != null) {
-            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mReceiver);
-        }
-
         //解除注册广播
         if (mIsRegister && mPubTweetReceiver != null) {
             getContext().unregisterReceiver(mPubTweetReceiver);
             mIsRegister = false;
         }
         super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mReceiver != null) {
+            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mReceiver);
+        }
     }
 
     @Override
