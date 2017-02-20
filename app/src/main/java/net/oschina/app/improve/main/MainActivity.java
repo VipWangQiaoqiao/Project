@@ -155,16 +155,35 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         NoticeManager.init(this);
         // in this we can checkShare update
         checkUpdate();
+        checkLocation();
+
+
+        registerBroadcast();
+    }
+
+    private void checkLocation() {
+
+        //首先判断appCode是否存在，如果存在是否大于当前版本的appCode，或者第一次全新安装(默认0)表示没有保存appCode
+        int hasLocationAppCode = Setting.hasLocationAppCode(getApplicationContext());
+        int versionCode = TDevice.getVersionCode();
+        if ((hasLocationAppCode <= 0) || (hasLocationAppCode > versionCode)) {
+            //如果是登陆状态，直接进行位置信息定位并上传
+            if (AccountHelper.isLogin()) {
+                //当app第一次被安装时，不管是覆盖安装（不管是否有定位权限）还是全新安装都必须进行定位请求
+                Setting.updateLocationAppCode(getApplicationContext(), versionCode);
+                requestLocationPermission();
+            }
+            return;
+        }
 
         //如果有账户登陆，并且有主动上传过位置信息。那么准备请求定位
         if (AccountHelper.isLogin() && Setting.hasLocation(getApplicationContext())) {
+
             //1.有主动授权过，直接进行定位，否则不进行操作任何操作
-            if (Setting.hasLocationPermission(getApplicationContext()))
+            if (Setting.hasLocationPermission(getApplicationContext())) {
                 requestLocationPermission();
+            }
         }
-
-        registerBroadcast();
-
     }
 
     private void registerBroadcast() {
@@ -466,6 +485,7 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
                     e.printStackTrace();
                     SimplexToast.show(this, getString(R.string.upload_lbs_info_hint));
                 }
+
             }
 
             mRadarSearchManager.setUserID(userId);
