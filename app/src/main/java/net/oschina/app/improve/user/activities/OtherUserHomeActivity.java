@@ -1,5 +1,6 @@
 package net.oschina.app.improve.user.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -98,6 +99,7 @@ public class OtherUserHomeActivity extends BaseActivity
     @Bind(R.id.view_divider)
     View mDivider;
 
+    private boolean mIsLoadSuccess = false;
     private User user;
     private MenuItem mFollowMenu;
     private List<Pair<String, Fragment>> fragments;
@@ -211,17 +213,22 @@ public class OtherUserHomeActivity extends BaseActivity
             }
         });
 
-        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "动弹")));
-        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "博客")));
-        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "问答")));
-        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "讨论")));
         injectDataToView();
-        injectDataToViewPager();
+    }
+
+    private boolean isLoadSuccess() {
+        return mIsLoadSuccess && user != null && user.getId() > 0;
     }
 
     @SuppressWarnings("all")
     private void injectDataToViewPager() {
-        if (user.getId() <= 0) return;
+        if (!isLoadSuccess()) return;
+
+        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "动弹")));
+        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "博客")));
+        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "问答")));
+        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "讨论")));
+        mTabLayout.setVisibility(View.VISIBLE);
 
         int t = 0, b = 0, a = 0, d = 0;
         if (user.getStatistics() != null) {
@@ -310,6 +317,11 @@ public class OtherUserHomeActivity extends BaseActivity
     }
 
     private void injectDataToView() {
+        if (user == null
+                || user.getId() == 0
+                || user.getName() == null)
+            return;
+
         getImageLoader()
                 .load(user.getPortrait())
                 .asBitmap()
@@ -351,29 +363,56 @@ public class OtherUserHomeActivity extends BaseActivity
     @Override
     protected void initData() {
         super.initData();
+
+        final ProgressDialog dialog = DialogHelper.getProgressDialog(this, "正在获取用户数据...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                onBackPressed();
+            }
+        });
         OSChinaApi.getUserInfo(user.getId(), user.getName(), user.getSuffix(), new TextHttpResponseHandler() {
             @Override
+            public void onStart() {
+                super.onStart();
+                dialog.show();
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                dialog.dismiss();
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                if (isFinishing() || isDestroyed())
+                    return;
                 Toast.makeText(OtherUserHomeActivity.this, "获取用户信息失败", Toast.LENGTH_SHORT).show();
             }
 
             @SuppressWarnings("RestrictedApi")
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                if (isFinishing() || isDestroyed())
+                    return;
+
                 ResultBean<User> result = AppOperator.createGson().fromJson(
                         responseString, new TypeToken<ResultBean<User>>() {
                         }.getType());
                 if (result.isSuccess() && result.getResult() == null) return;
                 user = result.getResult();
-                if (user == null) {
+                if (user == null || user.getId() == 0) {
                     Toast.makeText(OtherUserHomeActivity.this, "该用户不存在", Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }
+                mIsLoadSuccess = true;
+                // 再次初始化用户信息
                 injectDataToView();
                 injectDataToViewPager();
-                // after request user successful we could get user id when the static method show passed in user name
-                // before which, we hide the menu
+                // 成功后初始化菜单
                 invalidateOptionsMenu();
             }
         });
@@ -382,7 +421,7 @@ public class OtherUserHomeActivity extends BaseActivity
     @SuppressWarnings("deprecation")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (AccountHelper.isLogin() && user.getId() > 0 && AccountHelper.getUserId() != user.getId()) {
+        if (isLoadSuccess() && AccountHelper.isLogin() && AccountHelper.getUserId() != user.getId()) {
             getMenuInflater().inflate(R.menu.menu_other_user, menu);
             mFollowMenu = menu.getItem(1);
             if (mFollowMenu == null) return false;
@@ -414,7 +453,8 @@ public class OtherUserHomeActivity extends BaseActivity
 
     @Override
     public void onClick(View v) {
-        if (user == null || user.getId() <= 0) return;
+        if (!isLoadSuccess())
+            return;
         switch (v.getId()) {
             case R.id.tv_count_follow:
                 UserFollowsActivity.show(this, user.getId());
