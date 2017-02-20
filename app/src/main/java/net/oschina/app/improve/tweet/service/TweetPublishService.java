@@ -301,7 +301,6 @@ public class TweetPublishService extends Service implements Contract.IService {
             Intent intent = new Intent(ACTION_RECEIVER_SEARCH_FAILED);
             intent.putExtra(EXTRA_IDS, CollectionUtil.toArray(ids, String.class));
             sendBroadcast(intent);
-            Log.e("TAG", "handleActionSearch: ------->");
             return true;
         }
 
