@@ -573,6 +573,8 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
             mUserLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
+            Setting.updateLocationPermission(getApplicationContext(), true);
+
             //周边雷达设置用户身份标识，id为空默认是设备标识
             String userId = null;
 

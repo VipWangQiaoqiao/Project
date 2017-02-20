@@ -18,6 +18,7 @@ public final class Setting {
     private static final String KEY_SYSTEM_CONFIG_TIMESTAMP = "systemConfigTimeStamp";
     private static final String KEY_LOCATION_INFO = "locationInfo";
     private static final String KEY_LOCATION_PERMISSION = "locationPermission";
+    private static final String KEY_LOCATION_APP_CODE = "locationAppCode";
     private static final String KEY_SOFT_KEYBOARD_HEIGHT = "softKeyboardHeight";
 
     public static SharedPreferences getSettingPreferences(Context context) {
@@ -99,6 +100,17 @@ public final class Setting {
     public static boolean hasLocationPermission(Context context) {
         SharedPreferences sp = getSettingPreferences(context);
         return sp.getBoolean(KEY_LOCATION_PERMISSION, false);
+    }
+
+    public static void updateLocationAppCode(Context context, int appCode) {
+        SharedPreferences sp = getSettingPreferences(context);
+        SharedPreferences.Editor editor = sp.edit().putInt(KEY_LOCATION_APP_CODE, appCode);
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+    }
+
+    public static int hasLocationAppCode(Context context) {
+        SharedPreferences sp = getSettingPreferences(context);
+        return sp.getInt(KEY_LOCATION_APP_CODE, 0);
     }
 
     public static int getSoftKeyboardHeight(Context context) {
