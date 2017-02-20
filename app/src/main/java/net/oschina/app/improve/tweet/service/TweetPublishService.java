@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.ArrayMap;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.util.TLog;
@@ -37,8 +36,10 @@ public class TweetPublishService extends Service implements Contract.IService {
     public static final String ACTION_DELETE = "net.oschina.app.improve.tweet.service.action.DELETE";
     public static final String ACTION_FAILED = "net.oschina.app.improve.tweet.service.action.FAILED";
     public static final String ACTION_SUCCESS = "net.oschina.app.improve.tweet.service.action.SUCCESS";
+    public static final String ACTION_PROGRESS = "net.oschina.app.improve.tweet.service.action.PROGRESS";
 
     private static final String EXTRA_CONTENT = "net.oschina.app.improve.tweet.service.extra.CONTENT";
+    public static final String EXTRA_PROGRESS = "net.oschina.app.improve.tweet.service.extra.CONTENT";
     private static final String EXTRA_IMAGES = "net.oschina.app.improve.tweet.service.extra.IMAGES";
     private static final String EXTRA_ABOUT = "net.oschina.app.improve.tweet.service.extra.ABOUT";
     private static final String EXTRA_ID = "net.oschina.app.improve.tweet.service.extra.ID";
@@ -366,7 +367,9 @@ public class TweetPublishService extends Service implements Contract.IService {
         //Notification notification = builder.build();
         //NotificationManagerCompat.from(this).notify(notifyId, notification);
 
-        AppContext.showToastShort(content);
+        Intent intent = new Intent(ACTION_PROGRESS);
+        intent.putExtra(EXTRA_PROGRESS, content);
+        sendBroadcast(intent);
 
         log(content);
     }

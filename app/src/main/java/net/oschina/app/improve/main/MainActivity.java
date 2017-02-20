@@ -173,6 +173,7 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         IntentFilter filter = new IntentFilter();
         filter.addAction(TweetPublishService.ACTION_SUCCESS);
         filter.addAction(TweetPublishService.ACTION_FAILED);
+        filter.addAction(TweetPublishService.ACTION_PROGRESS);
         registerReceiver(mPubTweetReceiver, filter);
         mIsRegister = true;
     }
@@ -242,8 +243,10 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     @Override
     protected void onDestroy() {
 
-        if (mIsRegister && mPubTweetReceiver != null)
+        if (mIsRegister && mPubTweetReceiver != null) {
             unregisterReceiver(mPubTweetReceiver);
+            mIsRegister = false;
+        }
         super.onDestroy();
         NoticeManager.stopListen(this);
         releaseLbs();
@@ -502,6 +505,11 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
                 case TweetPublishService.ACTION_FAILED:
                     //发送动弹失败
                     AppContext.showToastShort(R.string.tweet_publish_failed_hint);
+                    break;
+                case TweetPublishService.ACTION_PROGRESS:
+
+                    String progressContent = intent.getStringExtra(TweetPublishService.EXTRA_PROGRESS);
+                    AppContext.showToastShort(progressContent);
                     break;
                 default:
                     break;
