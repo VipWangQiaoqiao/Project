@@ -13,6 +13,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.activities.TweetTopicActivity;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
+import net.oschina.app.improve.tweet.service.TweetNotificationManager;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -76,6 +77,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
             mAboutShare.commitTweetId = 0;
         }
 
+        TweetNotificationManager.registerBroadcastReceiver(AppContext.context());
 
         final List<String> paths = CollectionUtil.toArrayList(mView.getImages());
 

@@ -11,6 +11,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.bean.simple.About;
@@ -114,7 +115,7 @@ public class TweetPublishService extends Service implements Contract.IService {
 
 
     /**
-     * 查询发送失败动
+     * 查询发送失败动弹
      * 如果有将通过广播{@link #ACTION_RECEIVER_SEARCH_FAILED}通知
      */
     public static void startActionSearchFailed(Context context) {
@@ -300,6 +301,7 @@ public class TweetPublishService extends Service implements Contract.IService {
             Intent intent = new Intent(ACTION_RECEIVER_SEARCH_FAILED);
             intent.putExtra(EXTRA_IDS, CollectionUtil.toArray(ids, String.class));
             sendBroadcast(intent);
+            Log.e("TAG", "handleActionSearch: ------->");
             return true;
         }
 
