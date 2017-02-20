@@ -39,6 +39,7 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
+import net.oschina.app.improve.tweet.service.TweetNotificationManager;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -59,17 +60,17 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
-import static net.oschina.app.improve.tweet.service.TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED;
-
 
 /**
  * 动弹列表
  * Created by huanghaibin_dev
  * Updated by thanatosx
  * on 2016/7/18.
+ * Updated by jzz
+ * on 2017/02/15
  */
 public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
-        implements BaseRecyclerAdapter.OnItemLongClickListener {
+        implements BaseRecyclerAdapter.OnItemLongClickListener, TweetNotificationManager.TweetPubNotify {
 
     public static final int CATALOG_NEW = 0X0001;
     public static final int CATALOG_HOT = 0X0002;
@@ -82,7 +83,6 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     public static final String CACHE_HOT_TWEET = "cache_hot_tweet";
     public static final String CACHE_USER_TWEET = "cache_user_tweet";
     public static final String CACHE_USER_FRIEND = "cache_user_friend";
-    public static final String CACHE_USER_TAG = "cache_user_tag";
 
     public static final String BUNDLE_KEY_USER_ID = "BUNDLE_KEY_USER_ID";
     public static final String BUNDLE_KEY_TAG = "BUNDLE_KEY_LOGIN_USER_TAG";
@@ -92,7 +92,6 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     public long mUserId; // login user or another user
     public String tag;
     private LoginReceiver mReceiver;
-    private PubTweetReceiver mPubTweetReceiver;
 
     @Bind(R.id.lay_notification)
     LinearLayout mLayNotification;
@@ -104,7 +103,6 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     View mBaseLine;
 
     private String[] mPubFailedCacheIds;
-    private boolean mIsRegister;
 
     public static Fragment instantiate(long uid) {
         Bundle bundle = new Bundle();
@@ -184,37 +182,6 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         }
     }
 
-    private void registerBroadcaster() {
-        if (mPubTweetReceiver == null)
-            mPubTweetReceiver = new PubTweetReceiver();
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(TweetPublishService.ACTION_PUBLISH);
-        filter.addAction(TweetPublishService.ACTION_CONTINUE);
-        filter.addAction(TweetPublishService.ACTION_DELETE);
-        filter.addAction(TweetPublishService.ACTION_SUCCESS);
-        filter.addAction(TweetPublishService.ACTION_FAILED);
-        filter.addAction(ACTION_RECEIVER_SEARCH_FAILED);
-        getContext().registerReceiver(mPubTweetReceiver, filter);
-
-        mIsRegister = true;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mReqCatalog == 1) {
-            //每次离开最新动弹界面都必须gone掉垃圾箱的view
-            showDraftsBox(View.GONE);
-        }
-
-    }
-
-    @Override
-    protected void initWidget(View root) {
-        super.initWidget(root);
-    }
-
     @Override
     public void initData() {
         switch (mReqCatalog) {
@@ -255,18 +222,15 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        registerBroadcaster();
+        if (mReqCatalog == CATALOG_NEW)
+            TweetNotificationManager.bindTweetPubNotify(getContext().getApplicationContext(), this);
     }
 
     @Override
     public void onDestroyView() {
-        //解除注册广播
-        if (mIsRegister && mPubTweetReceiver != null) {
-            getContext().unregisterReceiver(mPubTweetReceiver);
-            mIsRegister = false;
-        }
         super.onDestroyView();
+        if (mReqCatalog == CATALOG_NEW)
+            TweetNotificationManager.unBoundTweetPubNotify(this);
     }
 
     @Override
@@ -347,53 +311,6 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         }
     }
 
-    private class PubTweetReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case TweetPublishService.ACTION_PUBLISH:
-                    //开始发送动弹,监听发布进度起点
-                    break;
-                case TweetPublishService.ACTION_CONTINUE:
-                    //重新尝试发送该条动弹
-                    break;
-                case TweetPublishService.ACTION_DELETE:
-
-                    //忽略该条动弹之后，直接gone草稿箱view
-                    showDraftsBox(View.GONE);
-
-                    break;
-                case TweetPublishService.ACTION_SUCCESS:
-                    //如果再次发送动弹成功，gone草稿箱view
-                    AppContext.showToastShort(R.string.tweet_publish_success);
-                    showDraftsBox(View.GONE);
-                    break;
-                case TweetPublishService.ACTION_FAILED:
-
-                    //发送动弹失败，显示草稿箱view
-                    AppContext.showToastShort(R.string.tweet_publish_failed_hint);
-                    showDraftsBox(View.VISIBLE);
-
-                    break;
-                case TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED:
-
-                    mPubFailedCacheIds = intent.getStringArrayExtra(TweetPublishService.EXTRA_IDS);
-
-                    if (mPubFailedCacheIds != null && mPubFailedCacheIds.length > 0) {
-                        showDraftsBox(View.VISIBLE);
-                    }
-
-                    break;
-                default:
-                    break;
-            }
-
-
-        }
-    }
-
-
     @Override
     protected void requestData() {
         super.requestData();
@@ -462,18 +379,34 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_ignore:
-                //忽略该动弹
-                showDraftsBox(View.GONE);
-                AppContext.showToastShort(R.string.tweet_ignore_hint);
-                if (mPubFailedCacheIds == null) return;
-                for (String id : mPubFailedCacheIds) {
-                    if (TextUtils.isEmpty(id)) continue;
-                    TweetPublishService.startActionDelete(getContext(), id);
+                if (AccountHelper.isLogin()) {
+                    //忽略该动弹
+                    showDraftsBox(View.GONE);
+                    AppContext.showToastShort(R.string.tweet_ignore_hint);
+                    if (mPubFailedCacheIds == null) return;
+                    for (String id : mPubFailedCacheIds) {
+                        if (TextUtils.isEmpty(id)) continue;
+                        TweetPublishService.startActionDelete(getContext(), id);
+                    }
+                } else {
+                    LoginActivity.show(this, 1);
                 }
                 break;
             case R.id.bt_retry:
                 //重新发送动弹
+
+                if (!AccountHelper.isLogin()) {
+                    LoginActivity.show(this, 1);
+                    return;
+                }
+
+                if (!TDevice.hasInternet()) {
+                    AppContext.showToastShort(R.string.tip_network_error);
+                    return;
+                }
+
                 AppContext.showToastShort(R.string.tweet_retry_publishing_hint);
+
                 showDraftsBox(View.GONE);
                 if (mPubFailedCacheIds == null) return;
                 for (String id : mPubFailedCacheIds) {
@@ -566,7 +499,48 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         }
     }
 
-    class DeleteHandler extends TextHttpResponseHandler {
+    @Override
+    public void onTweetPubSuccess() {
+        //如果再次发送动弹成功，gone草稿箱view
+        AppContext.showToastShort(R.string.tweet_publish_success);
+        showDraftsBox(View.GONE);
+    }
+
+    @Override
+    public void onTweetPubFailed() {
+        //发送动弹失败，显示草稿箱view
+        AppContext.showToastShort(R.string.tweet_publish_failed_hint);
+        showDraftsBox(View.VISIBLE);
+    }
+
+    @Override
+    public void onTweetPubProgress(String progressContent) {
+
+    }
+
+    @Override
+    public void onTweetPubContinue() {
+        AppContext.showToastShort(R.string.tweet_retry_publishing_hint);
+    }
+
+    @Override
+    public void onTweetPubDelete() {
+        //忽略该条动弹之后，直接gone草稿箱view
+        showDraftsBox(View.GONE);
+    }
+
+    @Override
+    public void pnTweetReceiverSearchFailed(String[] pubFailedCacheIds) {
+
+        this.mPubFailedCacheIds = pubFailedCacheIds;
+        if (mReqCatalog == CATALOG_NEW && pubFailedCacheIds != null && pubFailedCacheIds.length > 0) {
+            showDraftsBox(View.VISIBLE);
+        } else {
+            showDraftsBox(View.GONE);
+        }
+    }
+
+    private class DeleteHandler extends TextHttpResponseHandler {
         private int position;
 
         DeleteHandler(int position) {
@@ -596,9 +570,13 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     }
 
     private void showDraftsBox(int GoneOrVisible) {
-        mLayNotification.setVisibility(GoneOrVisible);
-        mBtIgnore.setVisibility(GoneOrVisible);
-        mBtRetry.setVisibility(GoneOrVisible);
-        mBaseLine.setVisibility(GoneOrVisible);
+        if (mLayNotification != null)
+            mLayNotification.setVisibility(GoneOrVisible);
+        if (mBtIgnore != null)
+            mBtIgnore.setVisibility(GoneOrVisible);
+        if (mBtRetry != null)
+            mBtRetry.setVisibility(GoneOrVisible);
+        if (mBaseLine != null)
+            mBaseLine.setVisibility(GoneOrVisible);
     }
 }

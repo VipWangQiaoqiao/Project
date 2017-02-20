@@ -3,11 +3,8 @@ package net.oschina.app.improve.main;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -47,7 +44,7 @@ import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.main.update.DownloadService;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.search.activities.NearbyActivity;
-import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.improve.tweet.service.TweetNotificationManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.interf.OnTabReselectListener;
@@ -66,7 +63,7 @@ import static net.oschina.app.improve.search.activities.NearbyActivity.LOCATION_
 
 public class MainActivity extends BaseActivity implements NavFragment.OnNavigationReselectListener,
         EasyPermissions.PermissionCallbacks,
-        CheckUpdateManager.RequestPermissions {
+        CheckUpdateManager.RequestPermissions, TweetNotificationManager.TweetPubNotify {
 
     private static final int RC_EXTERNAL_STORAGE = 0x04;//存储权限
     public static final String ACTION_NOTICE = "ACTION_NOTICE";
@@ -83,8 +80,6 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     private LocationClient mLocationClient;
     private RadarSearchAdapter mRadarSearchAdapter;
 
-    private PubTweetReceiver mPubTweetReceiver;
-    private boolean mIsRegister;
 
     public interface TurnBackListener {
         boolean onTurnBack();
@@ -157,8 +152,7 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         checkUpdate();
         checkLocation();
 
-
-        registerBroadcast();
+        TweetNotificationManager.bindTweetPubNotify(getApplicationContext(), this);
     }
 
     private void checkLocation() {
@@ -184,17 +178,6 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
                 requestLocationPermission();
             }
         }
-    }
-
-    private void registerBroadcast() {
-        if (mPubTweetReceiver == null)
-            mPubTweetReceiver = new PubTweetReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(TweetPublishService.ACTION_SUCCESS);
-        filter.addAction(TweetPublishService.ACTION_FAILED);
-        filter.addAction(TweetPublishService.ACTION_PROGRESS);
-        registerReceiver(mPubTweetReceiver, filter);
-        mIsRegister = true;
     }
 
     @Override
@@ -261,12 +244,12 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
 
     @Override
     protected void onDestroy() {
-
-        if (mIsRegister && mPubTweetReceiver != null) {
-            unregisterReceiver(mPubTweetReceiver);
-            mIsRegister = false;
-        }
         super.onDestroy();
+
+        TweetNotificationManager.unBoundTweetPubNotify(this);
+
+        TweetNotificationManager.stopTweetPubNotify(getApplicationContext());
+
         NoticeManager.stopListen(this);
         releaseLbs();
     }
@@ -327,6 +310,39 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         } else {
             finish();
         }
+    }
+
+    @Override
+    public void onTweetPubSuccess() {
+        //动弹发送成功
+        AppContext.showToastShort(R.string.tweet_publish_success);
+    }
+
+    @Override
+    public void onTweetPubFailed() {
+        //发送动弹失败
+        AppContext.showToastShort(R.string.tweet_publish_failed_hint);
+    }
+
+    @Override
+    public void onTweetPubProgress(String progressContent) {
+        //更新动弹发送进度
+        AppContext.showToastShort(progressContent);
+    }
+
+    @Override
+    public void onTweetPubContinue() {
+
+    }
+
+    @Override
+    public void onTweetPubDelete() {
+
+    }
+
+    @Override
+    public void pnTweetReceiverSearchFailed(String[] pubFailedCacheIds) {
+
     }
 
     private void checkUpdate() {
@@ -510,32 +526,6 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
             //释放资源
             mRadarSearchManager.destroy();
             mRadarSearchManager = null;
-        }
-    }
-
-    private class PubTweetReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case TweetPublishService.ACTION_SUCCESS:
-                    //动弹发送成功
-                    AppContext.showToastShort(R.string.tweet_publish_success);
-                    break;
-                case TweetPublishService.ACTION_FAILED:
-                    //发送动弹失败
-                    AppContext.showToastShort(R.string.tweet_publish_failed_hint);
-                    break;
-                case TweetPublishService.ACTION_PROGRESS:
-
-                    String progressContent = intent.getStringExtra(TweetPublishService.EXTRA_PROGRESS);
-                    AppContext.showToastShort(progressContent);
-                    break;
-                default:
-                    break;
-            }
-
-
         }
     }
 }
