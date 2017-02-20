@@ -1,6 +1,7 @@
 package net.oschina.app.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import com.bumptech.glide.Glide;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 
@@ -46,6 +49,9 @@ public class MyInformationFragmentDetail extends BaseFragment {
     @Bind(R.id.tv_academic_focus)
     TextView mFocus;
 
+    @Bind(R.id.tv_desc)
+    TextView mDesc;
+
     @Bind(R.id.error_layout)
     EmptyLayout mErrorLayout;
 
@@ -75,6 +81,15 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     @Override
     public void initData() {
+        if (userInfo == null)
+            return;
+
+        if (userInfo.getId() != AccountHelper.getUserId()
+                && getActivity() instanceof SimpleBackActivity) {
+            String title = TextUtils.isEmpty(userInfo.getName()) ? "" : userInfo.getName();
+            ((SimpleBackActivity) getActivity()).setActionBarTitle(title);
+        }
+
         //  sendRequiredData();
         fillUI();
     }
@@ -85,11 +100,17 @@ public class MyInformationFragmentDetail extends BaseFragment {
                 .placeholder(R.mipmap.widget_default_face)
                 .error(R.mipmap.widget_default_face)
                 .into(mUserFace);
-        mName.setText(userInfo.getName());
-        mJoinTime.setText(StringUtils.formatYearMonthDayNew(userInfo.getMore().getJoinDate()));
-        mFrom.setText(userInfo.getMore().getCity());
-        mPlatFrom.setText(userInfo.getMore().getPlatform());
-        mFocus.setText(userInfo.getMore().getExpertise());
+        mName.setText(getText(userInfo.getName()));
+        mJoinTime.setText(getText(StringUtils.formatYearMonthDayNew(userInfo.getMore().getJoinDate())));
+        mFrom.setText(getText(userInfo.getMore().getCity()));
+        mPlatFrom.setText(getText(userInfo.getMore().getPlatform()));
+        mFocus.setText(getText(userInfo.getMore().getExpertise()));
+        mDesc.setText(getText(userInfo.getDesc()));
     }
 
+    private String getText(String text) {
+        if (text == null || text.equalsIgnoreCase("null"))
+            return "<无>";
+        else return text;
+    }
 }
