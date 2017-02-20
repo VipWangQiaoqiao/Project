@@ -198,7 +198,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
                     mViewSearchEditor.setSelection(query.length());
                     doSearch(query);
                 } else {
-                    DialogHelper.getConfirmDialog(SearchActivity.this, "清空搜索历史", "确认清空搜索历史记录？", "确认", "取消", true, new DialogInterface.OnClickListener() {
+                    DialogHelper.getConfirmDialog(SearchActivity.this, "提示", "确认清空搜索历史记录吗？", "确认", "取消", true, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mAdapter.clear();
