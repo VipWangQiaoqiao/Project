@@ -178,8 +178,14 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
         super.onResume();
         if (mReqCatalog == 1) {
             //每次进入或回到最新动弹界面先查询是否有本地发送失败的动弹缓存
-            TweetPublishService.startActionSearchFailed(AppContext.context());
+            if (AccountHelper.isLogin()) {
+                TweetPublishService.startActionSearchFailed(AppContext.context());
+            } else {
+                showDraftsBox(View.GONE);
+            }
         }
+
+        TweetNotificationManager.registerBroadcastReceiver(getContext().getApplicationContext());
     }
 
     @Override
@@ -222,15 +228,13 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (mReqCatalog == CATALOG_NEW)
-            TweetNotificationManager.bindTweetPubNotify(getContext().getApplicationContext(), this);
+        TweetNotificationManager.bindTweetPubNotify(getContext().getApplicationContext(), this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mReqCatalog == CATALOG_NEW)
-            TweetNotificationManager.unBoundTweetPubNotify(this);
+        TweetNotificationManager.unBoundTweetPubNotify(this);
     }
 
     @Override

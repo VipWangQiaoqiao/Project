@@ -24,7 +24,6 @@ import net.oschina.app.improve.bean.Version;
 import net.oschina.app.improve.main.FeedBackActivity;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.main.update.DownloadService;
-import net.oschina.app.improve.tweet.service.TweetNotificationManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SystemConfigView;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;
@@ -182,7 +181,6 @@ public class SettingsFragment extends BaseFragment implements EasyPermissions.Pe
                         mCancel.setVisibility(View.INVISIBLE);
                         mSettingLineTop.setVisibility(View.INVISIBLE);
                         mSettingLineBottom.setVisibility(View.INVISIBLE);
-                        TweetNotificationManager.stopTweetPubNotify(getContext().getApplicationContext());
                     }
                 });
                 break;
