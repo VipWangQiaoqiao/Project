@@ -84,10 +84,6 @@ public class TweetNotificationManager {
         if (instance().mIsRegister && pubTweetReceiver != null) {
             context.unregisterReceiver(pubTweetReceiver);
             instance().mIsRegister = false;
-            instance().mPubTweetReceiver = null;
-            instance().mNotifies.clear();
-            instance().mNotifies = null;
-            INSTANCE = null;
         }
 
     }
@@ -114,8 +110,10 @@ public class TweetNotificationManager {
                         break;
                     case TweetPublishService.ACTION_PROGRESS:
                         //更新动弹发送进度
+
+                        String progressContent = intent.getStringExtra(TweetPublishService.EXTRA_PROGRESS);
+
                         for (TweetPubNotify notify : notifies) {
-                            String progressContent = intent.getStringExtra(TweetPublishService.EXTRA_PROGRESS);
                             notify.onTweetPubProgress(progressContent);
                         }
                         break;
