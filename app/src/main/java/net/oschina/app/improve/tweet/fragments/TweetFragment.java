@@ -519,7 +519,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
 
     @Override
     public void onTweetPubProgress(String progressContent) {
-
+        AppContext.showToastShort(progressContent);
     }
 
     @Override
