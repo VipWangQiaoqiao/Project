@@ -159,18 +159,6 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (!mIsFirstLocation && isEnabledLocation()) {
-            if (mLocationClient == null) {
-                startLbs();
-            } else {
-                mLocationClient.requestLocation();
-            }
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         releaseLbs();
@@ -521,7 +509,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             case BDLocation.TypeCriteriaException://62
                 showError(EmptyLayout.NODATA);
                 SimplexToast.show(this, getString(R.string.no_location_hint));
-                mLocationClient.requestLocation();
+                mLocationClient.start();
                 mRecyclerRefresh.setOnLoading(false);
                 return;
             case BDLocation.TypeNetWorkException://63
@@ -741,7 +729,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             }
 
             if (mUserLatLng == null || (mUserLatLng.latitude == 4.9E-324 && mUserLatLng.longitude == 4.9E-324)) {
-                mLocationClient.requestLocation();
+                mLocationClient.start();
                 return;
             }
 
