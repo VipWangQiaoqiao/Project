@@ -70,7 +70,6 @@ class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements Ba
         Map<String, Object> extras = item.getExtra();
         if (extras != null) {
             vh.tv_event_pub_date.setText(StringUtils.getDateString(getExtraString(extras.get("eventStartDate"))));
-            vh.tv_event_member.setText(getExtraInt(extras.get("eventApplyCount")) + "人参与");
 
             switch (getExtraInt(extras.get("eventStatus"))) {
                 case Event.STATUS_END:
@@ -122,7 +121,7 @@ class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements Ba
     }
 
     private static class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_event_title, tv_description, tv_event_pub_date, tv_event_member, tv_event_state, tv_event_type;
+        TextView tv_event_title, tv_description, tv_event_pub_date, tv_event_state, tv_event_type;
         ImageView iv_event;
 
         EventViewHolder(View itemView) {
@@ -132,7 +131,6 @@ class UserEventAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements Ba
             tv_event_type = (TextView) itemView.findViewById(R.id.tv_event_type);
             tv_description = (TextView) itemView.findViewById(R.id.tv_description);
             tv_event_pub_date = (TextView) itemView.findViewById(R.id.tv_event_pub_date);
-            tv_event_member = (TextView) itemView.findViewById(R.id.tv_event_member);
             iv_event = (ImageView) itemView.findViewById(R.id.iv_event);
         }
     }
