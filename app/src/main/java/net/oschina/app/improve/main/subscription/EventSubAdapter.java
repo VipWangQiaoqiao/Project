@@ -25,10 +25,10 @@ import java.util.Map;
  * on 2016/10/27.
  */
 
-public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
+ class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements BaseRecyclerAdapter.OnLoadingHeaderCallBack {
     private OSCApplication.ReadState mReadState;
 
-    public EventSubAdapter(Callback callback, int mode) {
+     EventSubAdapter(Callback callback, int mode) {
         super(callback, mode);
         mReadState = OSCApplication.getReadState("sub_list");
         setOnLoadingHeaderCallBack(this);
@@ -68,7 +68,6 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
         Map<String, Object> extras = item.getExtra();
         if (extras != null) {
             vh.tv_event_pub_date.setText(StringUtils.getDateString(getExtraString(extras.get("eventStartDate"))));
-            vh.tv_event_member.setText(getExtraInt(extras.get("eventApplyCount")) + "人参与");
 
             switch (getExtraInt(extras.get("eventStatus"))) {
                 case Event.STATUS_END:
@@ -120,26 +119,25 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> impleme
     }
 
     private static class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_event_title, tv_description, tv_event_pub_date, tv_event_member, tv_event_state, tv_event_type;
+        TextView tv_event_title, tv_description, tv_event_pub_date, tv_event_state, tv_event_type;
         ImageView iv_event;
 
-        public EventViewHolder(View itemView) {
+         EventViewHolder(View itemView) {
             super(itemView);
             tv_event_title = (TextView) itemView.findViewById(R.id.tv_event_title);
             tv_event_state = (TextView) itemView.findViewById(R.id.tv_event_state);
             tv_event_type = (TextView) itemView.findViewById(R.id.tv_event_type);
             tv_description = (TextView) itemView.findViewById(R.id.tv_description);
             tv_event_pub_date = (TextView) itemView.findViewById(R.id.tv_event_pub_date);
-            tv_event_member = (TextView) itemView.findViewById(R.id.tv_event_member);
             iv_event = (ImageView) itemView.findViewById(R.id.iv_event);
         }
     }
 
-    protected String getExtraString(Object object) {
+    private String getExtraString(Object object) {
         return object == null ? "" : object.toString();
     }
 
-    protected int getExtraInt(Object object) {
+    private int getExtraInt(Object object) {
         return object == null ? 0 : Double.valueOf(object.toString()).intValue();
     }
 }

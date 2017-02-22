@@ -36,9 +36,6 @@ public class EventDetailFragment extends DetailFragment {
     @Bind(R.id.tv_event_cost_desc)
     TextView mTextCostDesc;
 
-    @Bind(R.id.tv_event_member)
-    TextView mTextMember;
-
     @Bind(R.id.tv_event_status)
     TextView mTextStatus;
 
@@ -89,7 +86,6 @@ public class EventDetailFragment extends DetailFragment {
             mTextLocation.setText(getExtraString(extra.get("eventProvince")) + " " +
                     getExtraString(extra.get("eventCity")) + " " +
                     getExtraString(extra.get("eventSpot")));
-            mTextMember.setText(String.format("%s人报名", getExtraInt(extra.get("eventApplyCount"))));
             mTextStartDate.setText(StringUtils.getDateString(getExtraString(extra.get("eventStartDate"))));
             mTextCostDesc.setText(getExtraString(extra.get("eventCostDesc")));
         }

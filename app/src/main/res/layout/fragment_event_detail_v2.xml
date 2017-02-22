@@ -87,15 +87,6 @@
                     android:textSize="16sp"
                     tools:text="faker" />
 
-                <TextView
-                    android:id="@+id/tv_event_member"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:textColor="@color/text_title_color"
-                    android:textSize="16sp"
-                    tools:text="24人参与" />
-
             </LinearLayout>
 
 
