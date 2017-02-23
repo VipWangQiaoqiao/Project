@@ -16,7 +16,8 @@
 
 | 标签名                                      | 发布版本                | 备注               |
 | ---------------------------------------- | ------------------- | ---------------- |
-| [v2.8.0](http://git.oschina.net/oschina/android-app/tree/v2.8.0/) | v2.8.0 (1701231104) | 当前最新版            |
+| [v2.8.1](http://git.oschina.net/oschina/android-app/tree/v2.8.1/) | v2.8.1 (1702221002) | 当前最新版            |
+| [v2.8.0](http://git.oschina.net/oschina/android-app/tree/v2.8.0/) | v2.8.0 (1701231104) |             |
 | [v2.7.1](http://git.oschina.net/oschina/android-app/tree/v2.7.1/) | v2.7.1 (1612211352) |             |
 | [v2.6.9](http://git.oschina.net/oschina/android-app/tree/v2.6.9/) | v2.6.9 (1611220955) |             |
 | [v2.6.6](http://git.oschina.net/oschina/android-app/tree/v2.6.6/) | v2.6.6 (1609281026) |                  |
