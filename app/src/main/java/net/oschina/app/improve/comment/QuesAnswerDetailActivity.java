@@ -293,6 +293,14 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
 
     protected void initData() {
         onSendCommentHandler = new TextHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                if (mDelegation == null) return;
+                mDelegation.getBottomSheet().getBtnCommit().setEnabled(false);
+            }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 AppContext.showToastShort("评论失败");
@@ -330,6 +338,8 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
             @Override
             public void onFinish() {
                 super.onFinish();
+                if (mDelegation == null) return;
+                mDelegation.getBottomSheet().getBtnCommit().setEnabled(true);
                 mDelegation.getBottomSheet().dismiss();
             }
         };

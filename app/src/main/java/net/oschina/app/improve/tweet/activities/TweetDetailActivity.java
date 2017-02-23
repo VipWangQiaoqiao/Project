@@ -208,6 +208,15 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 Tweet tempTweet = tweet;
                 if (tempTweet != null)
                     ContactsCacheManager.addRecentCache(tempTweet.getAuthor());
+                if (mDelegation == null) return;
+                mDelegation.getBottomSheet().getBtnCommit().setEnabled(false);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                if (mDelegation == null) return;
+                mDelegation.getBottomSheet().getBtnCommit().setEnabled(true);
             }
         };
 

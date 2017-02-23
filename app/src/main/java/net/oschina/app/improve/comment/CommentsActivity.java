@@ -77,6 +77,13 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
 
         @Override
+        public void onStart() {
+            super.onStart();
+            if (mDelegation == null) return;
+            mDelegation.getBottomSheet().getBtnCommit().setEnabled(false);
+        }
+
+        @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
             AppContext.showToastShort(getResources().getString(R.string.pub_comment_failed));
         }
@@ -107,6 +114,13 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                 e.printStackTrace();
                 onFailure(statusCode, headers, responseString, e);
             }
+        }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            if (mDelegation == null) return;
+            mDelegation.getBottomSheet().getBtnCommit().setEnabled(true);
         }
     };
 

@@ -68,6 +68,8 @@
         </item>
         <item name="quickoption_icon_note_selector">@drawable/day_quickoption_icon_note_selector
         </item>
+
+        <item name="alertDialogTheme">@style/App.Theme.Dialog.Alert</item>
     </style>
 
     <!-- 日间模式 -->

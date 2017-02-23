@@ -116,6 +116,7 @@ public class DetailPresenter implements DetailContract.Presenter {
     @Override
     public void addComment(long sourceId, int type, String content, long referId, long replyId, long reAuthorId) {
         OSChinaApi.pubComment(sourceId, type, content, referId, replyId, reAuthorId, new TextHttpResponseHandler() {
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 mView.showNetworkError(R.string.tip_network_error);

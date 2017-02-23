@@ -140,6 +140,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
                 @Override
                 public void onClick(View v) {
                     // showDialog("正在提交评论...");
+                    mDelegation.getBottomSheet().getBtnCommit().setEnabled(false);
                     mPresenter.addComment(mBean.getId(),
                             mBean.getType(),
                             mDelegation.getBottomSheet().getCommentText(),
@@ -211,6 +212,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
                     mDelegation.getBottomSheet().getCommentText(), null,
                     About.buildShare(mBean.getId(), mBean.getType()));
         }
+        mDelegation.getBottomSheet().getBtnCommit().setEnabled(true);
         AppContext.showToastShort(R.string.pub_comment_success);
         mDelegation.getCommentText().setHint(mCommentHint);
         mDelegation.getBottomSheet().getEditText().setText("");
@@ -223,6 +225,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
     public void showCommentError(String message) {
         //hideDialog();
         AppContext.showToastShort(R.string.pub_comment_failed);
+        mDelegation.getBottomSheet().getBtnCommit().setEnabled(true);
 
     }
 
