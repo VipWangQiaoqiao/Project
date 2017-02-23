@@ -80,7 +80,8 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         public void onStart() {
             super.onStart();
             if (mDelegation == null) return;
-            mDelegation.getBottomSheet().getBtnCommit().setEnabled(false);
+            mDelegation.getBottomSheet().dismiss();
+            mDelegation.setCommitButtonEnable(false);
         }
 
         @Override
@@ -120,7 +121,8 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         public void onFinish() {
             super.onFinish();
             if (mDelegation == null) return;
-            mDelegation.getBottomSheet().getBtnCommit().setEnabled(true);
+            mDelegation.getBottomSheet().dismiss();
+            mDelegation.setCommitButtonEnable(true);
         }
     };
 
