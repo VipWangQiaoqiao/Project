@@ -104,7 +104,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
             TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
             titleViewHolder.onBindView(friend);
         } else if (holder instanceof SearchViewHolder) {
-            //SearchViewHolder searchViewHolder = (SearchViewHolder) holder;
+
         } else {
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.onBindView(friend);
@@ -211,7 +211,7 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
 
     @Override
     public void trigger(Author author, boolean selected) {
-        if (author == null)
+        if (author == null || TextUtils.isEmpty(mSearchContent))
             return;
         for (ContactsCacheManager.Friend friend : mSearchFriends) {
             if (friend.author != null &&

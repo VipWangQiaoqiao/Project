@@ -20,13 +20,13 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:background="@color/white">
 
         <HorizontalScrollView
             android:id="@+id/recycler_friends_icon"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="match_parent"
             android:scrollbarSize="0dp">
 
             <LinearLayout
@@ -55,10 +55,8 @@
             android:textColor="@color/white"
             android:textSize="@dimen/font_16"
             android:translationX="52dp"
-            android:visibility="visible"
             tools:ignore="RtlHardcoded"
-            tools:text="osc"
-            tools:visibility="visible" />
+            tools:text="osc" />
     </FrameLayout>
 
     <View
