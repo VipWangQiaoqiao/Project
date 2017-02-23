@@ -325,7 +325,13 @@ public class UserSelectFriendsActivity extends BaseBackActivity
         if (TextUtils.isEmpty(newText)) {
             transLabelX(false);
             refreshLocalView();
-            mRecyclerFriends.setAdapter(mLocalAdapter);
+
+            if (mRecyclerFriends.getAdapter() != mLocalAdapter) {
+                // 设置本地Trigger
+                adapterSelectedTrigger = mLocalAdapter;
+                mRecyclerFriends.setAdapter(mLocalAdapter);
+            }
+            // 关闭键盘
             TDevice.hideSoftKeyboard(mSearchView);
         } else {
             mIndex.setVisibility(View.GONE);
@@ -336,6 +342,8 @@ public class UserSelectFriendsActivity extends BaseBackActivity
             mSearchAdapter.onSearchTextChanged(newText);
 
             if (mRecyclerFriends.getAdapter() != mSearchAdapter) {
+                // 设置本地trigger为搜索适配器
+                adapterSelectedTrigger = mSearchAdapter;
                 mRecyclerFriends.setAdapter(mSearchAdapter);
             }
 
