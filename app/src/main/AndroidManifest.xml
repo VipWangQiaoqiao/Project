@@ -4,7 +4,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="net.oschina.app">
 
-    <!--android 7.0自定义下载完成弹窗安装申请意图的action-->
+    <!--自定义android 7.0自动更新下载完成弹窗安装申请意图的action的权限，危险级别为签名级别-->
     <permission
         android:name="net.oschina.app.ACCESS_UPDATE_RESULT"
         android:protectionLevel="signature"/>
@@ -24,7 +24,7 @@
     <!-- 该权限用于访问GPS定位-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
-    <!--该权限group,用于访问网络，基于网络的lbs定位,微信,微博,QQ分享和登陆，判断网络状况-->
+    <!--该权限group,用于访问网络，基于网络的lbs定位,微信,微博,QQ分享和登陆，判断与改变网络状态-->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -56,19 +56,20 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
     <!--该权限程序通过账户验证方式访问账户管理ACCOUNT_MANAGER相关信息-->
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-    <!--该权限允许应用程序广播粘性意图-->
-    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
-    <!--该权限允许应用程序读取或写入系统设置-->
+
+    <!--该权限允许应用程序写入系统设置-->
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+
     <!--该权限允许应用程序发起电话呼叫，而无需通过拨号器用户界面让用户确认呼叫-->
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+
     <!--该权限允许应用程序管理对文档的访问，通常作为文档选择器的一部分-->
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
 
     <!--android7.0 下载更新发起弹窗意图权限-->
     <uses-permission android:name="net.oschina.app.ACCESS_UPDATE_RESULT"/>
 
-    <!--该特性组用于访问硬件相机与相机自动对焦功能-->
+    <!--该特性group用于访问系统硬件相机与相机自动对焦功能-->
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
