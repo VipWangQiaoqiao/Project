@@ -209,14 +209,17 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 if (tempTweet != null)
                     ContactsCacheManager.addRecentCache(tempTweet.getAuthor());
                 if (mDelegation == null) return;
-                mDelegation.getBottomSheet().getBtnCommit().setEnabled(false);
+                mDelegation.getBottomSheet().dismiss();
+                mDelegation.setCommitButtonEnable(false);
+
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
                 if (mDelegation == null) return;
-                mDelegation.getBottomSheet().getBtnCommit().setEnabled(true);
+                mDelegation.getBottomSheet().dismiss();
+                mDelegation.setCommitButtonEnable(true);
             }
         };
 

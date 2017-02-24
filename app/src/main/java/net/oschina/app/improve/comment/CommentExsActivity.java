@@ -200,7 +200,8 @@ public class CommentExsActivity extends BaseBackActivity {
             public void onStart() {
                 super.onStart();
                 if (mDelegation == null) return;
-                mDelegation.getBottomSheet().getBtnCommit().setEnabled(false);
+                mDelegation.getBottomSheet().dismiss();
+                mDelegation.setCommitButtonEnable(false);
             }
 
             @Override
@@ -238,7 +239,7 @@ public class CommentExsActivity extends BaseBackActivity {
                 super.onFinish();
                 if (mDelegation == null) return;
                 mDelegation.getBottomSheet().dismiss();
-                mDelegation.getBottomSheet().getBtnCommit().setEnabled(true);
+                mDelegation.setCommitButtonEnable(true);
             }
         });
 
