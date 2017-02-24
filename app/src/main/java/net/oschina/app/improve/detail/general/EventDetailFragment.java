@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.general;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,12 +11,15 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.utils.QuickOptionDialogHelper;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.CircleImageView;
 
 import java.util.HashMap;
 
 import butterknife.Bind;
+import butterknife.OnLongClick;
 
 /**
  * Created by haibin
@@ -99,5 +103,16 @@ public class EventDetailFragment extends DetailFragment {
     @Override
     protected int getCommentOrder() {
         return OSChinaApi.COMMENT_HOT_ORDER;
+    }
+
+    @OnLongClick(R.id.lay_event_location)
+    boolean onLongClickLocation() {
+        final String text = mTextLocation.getText().toString();
+        if (TextUtils.isEmpty(text))
+            return false;
+        QuickOptionDialogHelper.with(getContext())
+                .addCopy(HTMLUtil.delHTMLTag(text))
+                .show();
+        return true;
     }
 }

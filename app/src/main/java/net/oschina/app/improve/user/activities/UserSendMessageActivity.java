@@ -191,7 +191,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message>
         final Message message = mAdapter.getItem(position);
         if (message == null || TextUtils.isEmpty(message.getContent())) return;
         QuickOptionDialogHelper.with(getContext())
-                .addCopy(HTMLUtil.delHTMLTag(HTMLUtil.delHTMLTag(message.getContent())))
+                .addCopy(HTMLUtil.delHTMLTag(message.getContent()))
                 .show();
     }
 

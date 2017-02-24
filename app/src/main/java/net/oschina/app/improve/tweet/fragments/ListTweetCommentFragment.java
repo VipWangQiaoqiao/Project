@@ -117,7 +117,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
         mDeleteIndex = position;
 
         QuickOptionDialogHelper.with(getContext())
-                .addCopy(HTMLUtil.delHTMLTag(HTMLUtil.delHTMLTag(comment.getContent())))
+                .addCopy(HTMLUtil.delHTMLTag(comment.getContent()))
                 .addOther(comment.getAuthor().getId() == AccountHelper.getUserId(),
                         R.string.delete, new Runnable() {
                             @Override

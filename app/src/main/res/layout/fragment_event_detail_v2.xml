@@ -151,8 +151,10 @@
                 android:layout_marginLeft="@dimen/lay_16" />
 
             <LinearLayout
+                android:id="@+id/lay_event_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ic_material"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/lay_8"
                 android:paddingLeft="@dimen/lay_16"
