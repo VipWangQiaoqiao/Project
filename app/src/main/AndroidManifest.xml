@@ -4,7 +4,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="net.oschina.app">
 
-    <!--自定义android 7.0自动更新下载完成弹窗安装申请意图的action的权限，危险级别为签名级别-->
+    <!--自定义android 7.0自动更新下载完成弹窗安装申请意图的action的权限，危险级别为签名级别，即官方签名apk才能使用该权限-->
     <permission
         android:name="net.oschina.app.ACCESS_UPDATE_RESULT"
         android:protectionLevel="signature"/>
@@ -13,31 +13,31 @@
 
     <!--该权限允许使用ActivityManager访问当前运行的任务栈-->
     <uses-permission android:name="android.permission.GET_TASKS"/>
-    <!--该权限允许使用PowerManager WakeLocks防止处理器休眠或屏幕变暗-->
+    <!--该权限允许使用PowerManager WakeLocks防止处理器休眠或屏幕变暗，比如百度地图在定位时会用到-->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
-    <!--用于读取配置的-->
+    <!--该权限用于读取系统设置的，百度地图lbs需要读取一些系统设置信息-->
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
 
-    <!-- 该权限用于进行网络定位-->
+    <!-- 该权限用于进行网络定位，比如基于百度lbs雷达功能附近的程序员模块-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <!-- 该权限用于访问GPS定位-->
+    <!-- 该权限用于访问GPS定位，比如基于百度lbs雷达功能附近的程序员模块-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
-    <!--该权限group,用于访问网络，基于网络的lbs定位,微信,微博,QQ分享和登陆，判断与改变网络状态-->
+    <!--该权限group,用于访问网络，或者基于网络的lbs定位服务,以及微信,微博,QQ分享和登陆功能，判断或改变网络状态等功能-->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
 
-    <!--该权限用于读取手机状态,lbs定位，微博用于调用JNI-->
+    <!--该权限用于读取手机状态,比如基于百度lbs定位雷达的附近的程序员功能，微博用于调用JNI-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
-    <!--该权限group用于读写外置存储的文件-->
+    <!--该权限group用于读写外置存储的文件，比如app或第三方sdk需要读写缓存文件等-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-    <!--该权限用于挂载或者解挂载手机的文件系统，比如挂载外置sd卡-->
+    <!--该权限用于挂载或者解挂载手机的文件系统，比如挂载外置sd卡，百度地图等第三方服务需要设置缓存时-->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
     <!--百度地图lbs雷达功能请求权限完-->
@@ -45,31 +45,24 @@
     <!--该权限用于访问震动传感器，比如当发送动弹选择图片长按多图进行位置移动时震动反馈需要-->
     <uses-permission android:name="android.permission.VIBRATE"/>
 
-    <!--该权限用于获取手机相机使用权限，比如拍照-->
+    <!--该权限用于获取手机相机使用权限，比如发送图片动弹需要拍照-->
     <uses-permission android:name="android.permission.CAMERA"/>
-    <!--该权限用于获取手机相机使用闪光灯权限，比如二维码扫描需打开灯光-->
+    <!--该权限用于获取手机相机使用闪光灯权限，比如二维码扫描需打开闪光灯-->
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
 
-    <!--该权限允许程序使用并验证证书,基于AccountManager-->
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <!--该权限允许程序管理AccountManager中的账户列表-->
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <!--该权限程序通过账户验证方式访问账户管理ACCOUNT_MANAGER相关信息-->
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-
-    <!--该权限允许应用程序写入系统设置-->
+    <!--该权限允许应用程序写入系统设置,比如需要对系统设置进行授权更改等，前提而且要是签名级别的app安装包-->
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
-    <!--该权限允许应用程序发起电话呼叫，而无需通过拨号器用户界面让用户确认呼叫-->
+    <!--该权限允许应用程序发起电话呼叫，而无需通过拨号器用户界面让用户确认呼叫，比如team中直接给团队成员进行拨号-->
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
-    <!--该权限允许应用程序管理对文档的访问，通常作为文档选择器的一部分-->
+    <!--该权限允许应用程序管理对文档的访问，通常作为文档选择器的一部分,比如对文档，多媒体文件的访问和管理-->
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
 
-    <!--android7.0 下载更新发起弹窗意图权限-->
+    <!--android7.0 下载更新发起弹窗意图权限，比如app自带的自动检测更新下载apk功能，官方签名级别权限-->
     <uses-permission android:name="net.oschina.app.ACCESS_UPDATE_RESULT"/>
 
-    <!--该特性group用于访问系统硬件相机与相机自动对焦功能-->
+    <!--该特性group用于访问系统硬件相机与相机自动对焦功能，比如发布照片动弹，扫描二维码时需要-->
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
