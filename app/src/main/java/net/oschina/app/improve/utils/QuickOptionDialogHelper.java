@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
-import android.view.View;
 
 import net.oschina.app.R;
 import net.oschina.app.util.TDevice;
@@ -35,7 +34,7 @@ public class QuickOptionDialogHelper {
         addOther(R.string.copy, new Runnable() {
             @Override
             public void run() {
-                TDevice.copyTextToBoard("Fuck:" + text);
+                TDevice.copyTextToBoard(text);
             }
         });
         return this;
