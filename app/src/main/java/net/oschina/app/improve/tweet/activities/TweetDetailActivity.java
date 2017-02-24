@@ -46,8 +46,10 @@ import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.QuickOptionDialogHelper;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -58,6 +60,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -531,6 +534,14 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         share.commitTweetId = tweet.getId();
         share.fromTweetId = tweet.getId();
         TweetPublishActivity.show(this, null, content, share);
+    }
+
+    @OnLongClick({R.id.layout_container, R.id.tv_content})
+    boolean onClickContent() {
+        QuickOptionDialogHelper.with(this)
+                .addCopy(HTMLUtil.delHTMLTag(HTMLUtil.delHTMLTag(tweet.getContent())))
+                .show();
+        return true;
     }
 
     private boolean checkLogin() {
