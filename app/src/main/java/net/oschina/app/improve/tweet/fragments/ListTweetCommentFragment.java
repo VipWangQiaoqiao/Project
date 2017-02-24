@@ -116,25 +116,6 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
         if (comment == null) return;
         mDeleteIndex = position;
 
-        /*
-        int itemsLen = comment.getAuthor().getId() == AccountHelper.getUserId() ? 2 : 1;
-        String[] items = new String[itemsLen];
-        items[0] = getResources().getString(R.string.copy);
-        if (itemsLen == 2) {
-            items[1] = getResources().getString(R.string.delete);
-        }
-        DialogHelper.getSelectDialog(getActivity(), items, "取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (i == 0) {
-                    TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(comment.getContent()));
-                } else if (i == 1) {
-                    handleDeleteComment(comment);
-                }
-            }
-        }).show();
-        */
-
         QuickOptionDialogHelper.with(getContext())
                 .addCopy(HTMLUtil.delHTMLTag(HTMLUtil.delHTMLTag(comment.getContent())))
                 .addOther(comment.getAuthor().getId() == AccountHelper.getUserId(),

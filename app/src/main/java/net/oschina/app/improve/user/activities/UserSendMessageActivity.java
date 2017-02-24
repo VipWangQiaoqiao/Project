@@ -30,6 +30,8 @@ import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.user.adapter.UserSendMessageAdapter;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.PicturesCompressor;
+import net.oschina.app.improve.utils.QuickOptionDialogHelper;
+import net.oschina.app.util.HTMLUtil;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -44,7 +46,8 @@ import cz.msebera.android.httpclient.Header;
  * Created by huanghaibin_dev
  * on 2016/8/18.
  */
-public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
+public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message>
+        implements BaseRecyclerAdapter.OnItemLongClickListener {
 
     @Bind(R.id.root)
     CoordinatorLayout mCoordinatorLayout;
@@ -66,6 +69,12 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
     @Override
     protected int getContentView() {
         return R.layout.activity_user_send_message;
+    }
+
+    @Override
+    protected void initWidget() {
+        super.initWidget();
+        mAdapter.setOnItemLongClickListener(this);
     }
 
     @Override
@@ -175,6 +184,15 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
     @Override
     protected BaseRecyclerAdapter<Message> getRecyclerAdapter() {
         return new UserSendMessageAdapter(this);
+    }
+
+    @Override
+    public void onLongClick(int position, long itemId) {
+        final Message message = mAdapter.getItem(position);
+        if (message == null || TextUtils.isEmpty(message.getContent())) return;
+        QuickOptionDialogHelper.with(getContext())
+                .addCopy(HTMLUtil.delHTMLTag(HTMLUtil.delHTMLTag(message.getContent())))
+                .show();
     }
 
     private class CallBack extends TextHttpResponseHandler {

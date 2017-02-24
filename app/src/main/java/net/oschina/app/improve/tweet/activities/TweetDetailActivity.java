@@ -537,7 +537,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     }
 
     @OnLongClick({R.id.layout_container, R.id.tv_content})
-    boolean onClickContent() {
+    boolean onLongClickContent() {
         QuickOptionDialogHelper.with(this)
                 .addCopy(HTMLUtil.delHTMLTag(HTMLUtil.delHTMLTag(tweet.getContent())))
                 .show();
