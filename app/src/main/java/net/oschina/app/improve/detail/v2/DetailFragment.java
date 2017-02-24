@@ -2,6 +2,7 @@ package net.oschina.app.improve.detail.v2;
 
 import android.annotation.SuppressLint;
 import android.support.v4.widget.NestedScrollView;
+import android.text.TextUtils;
 import android.view.View;
 
 import net.oschina.app.R;
@@ -11,11 +12,13 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.comment.CommentView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
+import net.oschina.app.improve.utils.QuickOptionDialogHelper;
 import net.oschina.app.improve.utils.ReadedIndexCacheManager;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.improve.widget.ScreenView;
 import net.oschina.app.improve.widget.SimplexToast;
+import net.oschina.app.util.HTMLUtil;
 
 /**
  * Created by haibin
@@ -173,5 +176,16 @@ public abstract class DetailFragment extends BaseFragment implements
         }
         mWebView.destroy();
         super.onDestroy();
+    }
+
+    protected void showCopyTitle() {
+        if (mBean == null)
+            return;
+        final String text = mBean.getTitle();
+        if (TextUtils.isEmpty(text))
+            return;
+        QuickOptionDialogHelper.with(getContext())
+                .addCopy(HTMLUtil.delHTMLTag(text))
+                .show();
     }
 }

@@ -18,6 +18,7 @@ import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
+import butterknife.OnLongClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -132,5 +133,11 @@ public class BlogDetailFragment extends DetailFragment {
     @Override
     protected int getCommentOrder() {
         return OSChinaApi.COMMENT_NEW_ORDER;
+    }
+
+    @OnLongClick(R.id.tv_title)
+    boolean onLongClickTitle() {
+        showCopyTitle();
+        return true;
     }
 }
