@@ -12,6 +12,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.common.widget.FlowLayout;
 
 import butterknife.Bind;
+import butterknife.OnLongClick;
 
 /**
  * Created by haibin
@@ -71,5 +72,11 @@ public class QuestionDetailFragment extends DetailFragment {
     @Override
     protected int getCommentOrder() {
         return OSChinaApi.COMMENT_NEW_ORDER;
+    }
+
+    @OnLongClick(R.id.tv_title)
+    boolean onLongClickTitle() {
+        showCopyTitle();
+        return true;
     }
 }

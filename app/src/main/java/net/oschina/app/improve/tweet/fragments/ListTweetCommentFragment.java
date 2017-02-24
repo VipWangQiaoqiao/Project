@@ -1,7 +1,6 @@
 package net.oschina.app.improve.tweet.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -20,9 +19,8 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
-import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.utils.QuickOptionDialogHelper;
 import net.oschina.app.util.HTMLUtil;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
@@ -116,23 +114,18 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
     public void onLongClick(int position, long itemId) {
         final TweetComment comment = mAdapter.getItem(position);
         if (comment == null) return;
-        int itemsLen = comment.getAuthor().getId() == AccountHelper.getUserId() ? 2 : 1;
-        String[] items = new String[itemsLen];
-        items[0] = getResources().getString(R.string.copy);
-        if (itemsLen == 2) {
-            items[1] = getResources().getString(R.string.delete);
-        }
         mDeleteIndex = position;
-        DialogHelper.getSelectDialog(getActivity(), items, "取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (i == 0) {
-                    TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(comment.getContent()));
-                } else if (i == 1) {
-                    handleDeleteComment(comment);
-                }
-            }
-        }).show();
+
+        QuickOptionDialogHelper.with(getContext())
+                .addCopy(HTMLUtil.delHTMLTag(comment.getContent()))
+                .addOther(comment.getAuthor().getId() == AccountHelper.getUserId(),
+                        R.string.delete, new Runnable() {
+                            @Override
+                            public void run() {
+                                handleDeleteComment(comment);
+                            }
+                        }).show();
+
     }
 
     private void handleDeleteComment(TweetComment comment) {

@@ -133,16 +133,19 @@
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingBottom="8dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="8dp">
+                android:paddingTop="@dimen/lay_4">
 
                 <TextView
                     android:id="@+id/tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/ic_material"
+                    android:clickable="true"
                     android:lineSpacingExtra="4dp"
+                    android:paddingBottom="@dimen/lay_8"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="@dimen/lay_8"
                     android:textColor="#111111"
                     android:textSize="18sp"
                     tools:text="Webpack从零开始" />
@@ -152,14 +155,16 @@
                     android:id="@+id/lay_blog_detail_abstract"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <View
                         android:id="@+id/line1"
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_marginBottom="16dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="@dimen/lay_8"
                         android:background="@color/list_divider_color" />
 
                     <TextView

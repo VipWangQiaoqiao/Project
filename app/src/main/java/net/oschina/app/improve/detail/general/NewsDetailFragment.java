@@ -15,6 +15,7 @@ import net.oschina.app.improve.utils.ReadedIndexCacheManager;
 import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
+import butterknife.OnLongClick;
 
 /**
  * Created by haibin
@@ -89,5 +90,11 @@ public class NewsDetailFragment extends DetailFragment {
                     mViewScroller.getScrollY());
         }
         super.onDestroy();
+    }
+
+    @OnLongClick(R.id.tv_title)
+    boolean onLongClickTitle() {
+        showCopyTitle();
+        return true;
     }
 }
