@@ -1,5 +1,6 @@
 package net.oschina.app.improve.tweet.fragments;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -546,10 +547,13 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
 
     private class DeleteHandler extends TextHttpResponseHandler {
         private int position;
+        private ProgressDialog dialog;
 
         DeleteHandler(int position) {
             this.position = position;
+            this.dialog = DialogHelper.getProgressDialog(getContext(), "正在删除……", false);
         }
+
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -570,6 +574,18 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                 e.printStackTrace();
                 onFailure(statusCode, headers, responseString, e);
             }
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            dialog.show();
+        }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            dialog.dismiss();
         }
     }
 
