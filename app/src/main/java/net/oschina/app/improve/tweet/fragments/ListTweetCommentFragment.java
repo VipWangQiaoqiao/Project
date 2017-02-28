@@ -1,5 +1,6 @@
 package net.oschina.app.improve.tweet.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,6 +20,7 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.utils.QuickOptionDialogHelper;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.UIHelper;
@@ -134,6 +136,20 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
             return;
         }
         OSChinaApi.deleteTweetComment(mOperator.getTweetDetail().getId(), comment.getId(), new TextHttpResponseHandler() {
+            private ProgressDialog dialog = DialogHelper.getProgressDialog(getContext(), "正在删除……", false);
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                dialog.show();
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                dialog.dismiss();
+            }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 AppContext.showToastShort("删除失败");
