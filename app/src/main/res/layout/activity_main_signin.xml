@@ -203,7 +203,7 @@
             android:enabled="false"
             android:outlineProvider="none"
             android:text="@string/signin_bt_hint"
-            android:textColor="@color/signin_text_color"
+            android:textColor="@color/white"
             android:textSize="@dimen/font_18"
             tools:targetApi="lollipop"/>
 
@@ -213,6 +213,6 @@
         android:id="@+id/lay_error"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </FrameLayout>
