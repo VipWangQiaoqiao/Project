@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -208,7 +209,6 @@ public class UserEventSigninActivity extends BaseBackActivity {
     }
 
     private void submitToSignIn() {
-        if (!checkNetIsAvailable()) return;
         String phone = mEtSignin.getText().toString().trim();
         OSChinaApi.eventSignin(mId, phone, new TextHttpResponseHandler() {
             @Override
@@ -231,6 +231,7 @@ public class UserEventSigninActivity extends BaseBackActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 //签到成功更新数据
+                Log.e("res",responseString);
                 ResultBean<EventSignin> signinResultBean = AppOperator.createGson().fromJson(responseString,
                         new TypeToken<ResultBean<EventSignin>>() {
                         }.getType());
@@ -427,6 +428,13 @@ public class UserEventSigninActivity extends BaseBackActivity {
         int optStatus = eventSignin.getOptStatus();
         switch (optStatus) {
             case 0x01://签到成功
+                mBtSubmit.setEnabled(false);
+                mCkLabel.setVisibility(View.GONE);
+                mLayInputBg.setVisibility(View.GONE);
+                mLayUserInfo.setVisibility(View.GONE);
+                mTvNotice.setVisibility(View.VISIBLE);
+                mTvNotice.setText(eventSignin.getMessage());
+                break;
             case 0x03://活动已结束／活动报名已截止
             case 0x04://您已签到
                 mCkLabel.setVisibility(View.GONE);
@@ -434,6 +442,7 @@ public class UserEventSigninActivity extends BaseBackActivity {
                 mTvNotice.setVisibility(View.VISIBLE);
                 mTvNotice.setText(eventSignin.getMessage());
                 mLayUserInfo.setVisibility(View.GONE);
+                mBtSubmit.setEnabled(false);
                 break;
             case 0x02://活动进行中未报名
                 AppContext.showToastShort(eventSignin.getMessage());

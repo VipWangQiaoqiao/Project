@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/bg_login_submit" android:state_enabled="true" />
-    <item android:drawable="@drawable/bg_login_submit_lock" android:state_enabled="false" />
+
+    <item android:state_pressed="true">
+        <shape>
+            <corners android:radius="26dp"/>
+            <solid android:color="#ff43815c"/>
+        </shape>
+    </item>
+    <item android:state_enabled="false">
+        <shape>
+            <corners android:radius="26dp"/>
+            <solid android:color="@color/gray"/>
+        </shape>
+    </item>
+    <item android:state_enabled="true">
+        <shape>
+            <corners android:radius="26dp"/>
+            <solid android:color="#14b94d"/>
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <corners android:radius="26dp"/>
+            <solid android:color="#14b94d"/>
+        </shape>
+    </item>
 </selector>
