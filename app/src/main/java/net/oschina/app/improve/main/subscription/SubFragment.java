@@ -15,9 +15,9 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.widget.banner.EventHeaderView;
-import net.oschina.app.improve.widget.banner.HeaderView;
-import net.oschina.app.improve.widget.banner.NewsHeaderView;
+import net.oschina.app.improve.main.banner.EventHeaderView;
+import net.oschina.app.improve.main.banner.HeaderView;
+import net.oschina.app.improve.main.banner.NewsHeaderView;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;

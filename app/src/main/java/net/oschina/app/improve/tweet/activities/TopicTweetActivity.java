@@ -156,7 +156,7 @@ public class TopicTweetActivity extends BaseActivity {
         });
 
 
-        /*mDelegation = KeyboardInputDelegation.delegation(this, mLayoutCoordinator, mViewPager);
+        /*mDelegation = KeyboardInputDelegation.delegation(this, mLayoutCoordinator, mBannerView);
         mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
         mDelegation.showEmoji(getSupportFragmentManager());
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {

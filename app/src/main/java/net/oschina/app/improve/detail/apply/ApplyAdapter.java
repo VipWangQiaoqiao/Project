@@ -42,11 +42,9 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
                 .into(h.mImageAuthor);
         ApplyUser.EventInfo info = item.getEventInfo();
         if (info != null) {
-            h.mTextName.setText(info.getName());
             h.mTextCompany.setText(info.getCompany());
             h.mTextJob.setText(info.getJob());
         } else {
-            h.mTextName.setText("");
             h.mTextCompany.setText("");
             h.mTextJob.setText("");
         }
@@ -60,7 +58,7 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
     }
 
     private static class ApplyViewHolder extends RecyclerView.ViewHolder {
-        TextView mTextAuthor, mTextName, mTextCompany, mTextJob;
+        TextView mTextAuthor, mTextCompany, mTextJob;
         CircleImageView mImageAuthor;
         ImageView mImageGender;
         Button mBtnRelate;
@@ -68,7 +66,6 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
         ApplyViewHolder(View itemView) {
             super(itemView);
             mTextAuthor = (TextView) itemView.findViewById(R.id.tv_author);
-            mTextName = (TextView) itemView.findViewById(R.id.tv_name);
             mTextCompany = (TextView) itemView.findViewById(R.id.tv_company);
             mTextJob = (TextView) itemView.findViewById(R.id.tv_job);
             mImageAuthor = (CircleImageView) itemView.findViewById(R.id.civ_author);
