@@ -58,8 +58,8 @@ pre {
 	padding: 8px 6px 6px 6px;
 	line-height: 140%;
 	overflow: auto;
-    word-wrap: break-word; 
-    word-break:break-all;
+    word-wrap: normal;
+    white-space: pre;
 }
 
 a {
