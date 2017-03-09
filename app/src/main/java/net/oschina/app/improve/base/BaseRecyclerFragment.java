@@ -70,6 +70,7 @@ public abstract class BaseRecyclerFragment<Presenter extends BaseListPresenter, 
 
     @Override
     public void onRefreshing() {
+        mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, true);
         mPresenter.onRefreshing();
     }
 
