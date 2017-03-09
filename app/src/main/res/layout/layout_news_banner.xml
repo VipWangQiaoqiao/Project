@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="136dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:minHeight="136dp">
+
+    <net.oschina.app.improve.main.banner.BannerView
+        android:id="@+id/bannerView"
+        app:scroll_duration="800"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/banner_linear_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_title"
+                tools:text="周五乱弹 — 饿的时候只有一个饼！还是画的"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textColor="@color/white" />
+
+            <net.oschina.app.improve.main.banner.CircleBannerIndicator
+                android:id="@+id/indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                app:circle_banner_indicator_centerHorizontal="true"
+                app:circle_banner_indicator_color="@color/white"
+                app:circle_banner_indicator_fill_color="@color/main_green"
+                app:circle_banner_indicator_indicator_radius="3dp"
+                app:circle_banner_indicator_radius="2dp" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
