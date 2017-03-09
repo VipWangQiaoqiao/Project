@@ -1,5 +1,6 @@
 package net.oschina.app.improve.tweet.service;
 
+import android.app.Application;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,10 +12,10 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 
-import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.OSCApplication;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.utils.ListenAccountChangeReceiver;
 import net.oschina.app.util.TLog;
 import net.oschina.common.utils.CollectionUtil;
 
@@ -52,6 +53,7 @@ public class TweetPublishService extends Service implements Contract.IService {
 
     private int mTaskCount;
     private volatile boolean mDoAddTask = false;
+    private ListenAccountChangeReceiver mReceiver;
 
     private final class ServiceHandler extends Handler {
         ServiceHandler(Looper looper) {
@@ -150,14 +152,18 @@ public class TweetPublishService extends Service implements Contract.IService {
         super.onCreate();
         log("onCreate");
 
-        // init sync client
-        ApiHttpClient.init(getApplication());
+        // First init the Client
+        Application application = getApplication();
+        if (application instanceof OSCApplication) {
+            OSCApplication.reInit();
+        }
 
         HandlerThread thread = new HandlerThread(TweetPublishService.class.getSimpleName());
         thread.start();
 
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
+        mReceiver = ListenAccountChangeReceiver.start(this);
     }
 
     /**
@@ -181,9 +187,10 @@ public class TweetPublishService extends Service implements Contract.IService {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mServiceLooper.quit();
+        mReceiver.destroy();
         log("onDestroy");
+        super.onDestroy();
     }
 
     @Nullable

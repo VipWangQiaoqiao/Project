@@ -2,6 +2,7 @@ package net.oschina.app.improve.notice;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.Application;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -18,11 +19,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import net.oschina.app.OSCApplication;
 import net.oschina.app.R;
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
+import net.oschina.app.improve.utils.ListenAccountChangeReceiver;
 import net.oschina.app.util.TLog;
 
 import java.lang.reflect.Type;
@@ -49,6 +51,7 @@ public class NoticeServer extends Service {
     static final String EXTRA_BEAN = "bean";
 
     private AlarmManager mAlarmMgr;
+    private ListenAccountChangeReceiver mListenAccountChangeReceiver;
 
     static void startAction(Context context) {
         Intent intent = new Intent(context, NoticeServer.class);
@@ -115,22 +118,28 @@ public class NoticeServer extends Service {
         super.onCreate();
         log("onCreate");
         // First init the Client
-        ApiHttpClient.init(getApplication());
+        Application application = getApplication();
+        if (application instanceof OSCApplication) {
+            OSCApplication.reInit();
+        }
+
         mAlarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
+        mListenAccountChangeReceiver = ListenAccountChangeReceiver.start(this);
     }
 
     @Override
     public void onDestroy() {
+        mListenAccountChangeReceiver.destroy();
         log("onDestroy");
         super.onDestroy();
     }
 
-    private final static int ALARM_INTERVAL_SECOND = 60;
+    private final static int ALARM_INTERVAL_SECOND = 60000;
 
     private void registerNextAlarm() {
         cancelRequestAlarm();
         mAlarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + ALARM_INTERVAL_SECOND, 60000, getOperationIntent());
+                SystemClock.elapsedRealtime() + ALARM_INTERVAL_SECOND, ALARM_INTERVAL_SECOND, getOperationIntent());
         log("registerAlarmByInterval interval:" + ALARM_INTERVAL_SECOND);
     }
 
