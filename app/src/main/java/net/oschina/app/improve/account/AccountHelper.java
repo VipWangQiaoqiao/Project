@@ -1,11 +1,8 @@
 package net.oschina.app.improve.account;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -35,7 +32,12 @@ public final class AccountHelper {
     }
 
     public static void init(Application application) {
-        instances = new AccountHelper(application);
+        if (instances == null)
+            instances = new AccountHelper(application);
+        else {
+            // reload from source
+            instances.user = SharedPreferencesHelper.loadFormSource(instances.application, User.class);
+        }
     }
 
     public static boolean isLogin() {
@@ -133,12 +135,9 @@ public final class AccountHelper {
         // 清理动弹对应数据
         CacheManager.deleteObject(application, TweetFragment.CACHE_USER_TWEET);
 
-        ActivityManager activityManager = (ActivityManager) application.getSystemService(Context.ACTIVITY_SERVICE);
-        activityManager.killBackgroundProcesses("net.oschina.app.tweet.TweetPublishService");
-        activityManager.killBackgroundProcesses("net.oschina.app.notice.NoticeServer");
-
         // Logout 广播
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
-        LocalBroadcastManager.getInstance(application).sendBroadcast(intent);
+        application.sendBroadcast(intent);
+
     }
 }
