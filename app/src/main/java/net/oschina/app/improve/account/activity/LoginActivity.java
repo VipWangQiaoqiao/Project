@@ -45,7 +45,6 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
-import net.oschina.app.improve.user.helper.SyncFriendHelper;
 import net.oschina.app.util.TDevice;
 import net.oschina.open.constants.OpenConstant;
 import net.oschina.open.factory.OpenBuilder;
