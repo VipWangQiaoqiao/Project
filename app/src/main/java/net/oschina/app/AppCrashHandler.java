@@ -25,7 +25,11 @@ public class AppCrashHandler implements Thread.UncaughtExceptionHandler {
 
     public void init(Context context) {
         mContext = context;
-        mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+
+        Thread.UncaughtExceptionHandler exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+        if (exceptionHandler == this)
+            return;
+        mDefaultHandler = exceptionHandler;
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
 

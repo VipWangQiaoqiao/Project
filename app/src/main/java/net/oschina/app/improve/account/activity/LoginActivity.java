@@ -127,6 +127,12 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
         }
 
         @Override
+        public void onFinish() {
+            super.onFinish();
+            hideWaitDialog();
+        }
+
+        @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
             requestFailureHint(throwable);
         }
@@ -142,33 +148,30 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
             ResultBean<User> resultBean = gsonBuilder.create().fromJson(responseString, type);
             if (resultBean.isSuccess()) {
                 User user = resultBean.getResult();
-                AccountHelper.login(user, headers);
-                hideKeyBoard(getCurrentFocus().getWindowToken());
-                AppContext.showToast(R.string.login_success_hint);
-                setResult(RESULT_OK);
-                sendLocalReceiver();
-
-                //后台异步同步数据
-                ContactsCacheManager.sync();
-
+                if (AccountHelper.login(user, headers)) {
+                    logSucceed();
+                } else {
+                    showToastForKeyBord("登录异常");
+                }
             } else {
                 showToastForKeyBord(resultBean.getMessage());
             }
-
-        }
-
-        @Override
-        public void onFinish() {
-            super.onFinish();
-            hideWaitDialog();
-        }
-
-        @Override
-        public void onCancel() {
-            super.onCancel();
-            hideWaitDialog();
         }
     };
+
+    private void logSucceed() {
+        View view;
+        if ((view = getCurrentFocus()) != null) {
+            hideKeyBoard(view.getWindowToken());
+        }
+        AppContext.showToast(R.string.login_success_hint);
+        setResult(RESULT_OK);
+        sendLocalReceiver();
+        //后台异步同步数据
+        ContactsCacheManager.sync();
+        holdAccount();
+    }
+
     private int mLogoHeight;
     private int mLogoWidth;
 
@@ -177,13 +180,12 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
      */
     private void holdAccount() {
         String username = mEtLoginUsername.getText().toString().trim();
-
-        SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
         if (!TextUtils.isEmpty(username)) {
+            SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
             editor.putString(HOLD_USERNAME_KEY, username);
+            SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
         }
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
     }
 
     /**
@@ -623,15 +625,11 @@ public class LoginActivity extends AccountBaseActivity implements View.OnClickLi
                     ResultBean<User> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
                         User user = resultBean.getResult();
-                        AccountHelper.login(user, headers);
-                        holdAccount();
-                        hideKeyBoard(getCurrentFocus().getWindowToken());
-                        AppContext.showToast(R.string.login_success_hint);
-                        setResult(RESULT_OK);
-                        sendLocalReceiver();
-
-                        //后台异步同步数据
-                        ContactsCacheManager.sync();
+                        if (AccountHelper.login(user, headers)) {
+                            logSucceed();
+                        } else {
+                            showToastForKeyBord("登录异常");
+                        }
                     } else {
                         int code = resultBean.getCode();
                         String message = resultBean.getMessage();
