@@ -3,6 +3,7 @@ package net.oschina.app.improve.account;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -22,6 +23,7 @@ import cz.msebera.android.httpclient.Header;
  * 用于更新用户信息和保存当前账户等操作
  */
 public final class AccountHelper {
+    private static final String TAG = AccountHelper.class.getSimpleName();
     private User user;
     private Application application;
     @SuppressLint("StaticFieldLeak")
@@ -37,6 +39,7 @@ public final class AccountHelper {
         else {
             // reload from source
             instances.user = SharedPreferencesHelper.loadFormSource(instances.application, User.class);
+            TLog.d(TAG, "init reload:" + instances.user);
         }
     }
 
@@ -65,14 +68,14 @@ public final class AccountHelper {
         return instances.user;
     }
 
-    public static void updateUserCache(User user) {
+    public static boolean updateUserCache(User user) {
         if (user == null)
-            return;
+            return false;
         // 保留Cookie信息
         if (TextUtils.isEmpty(user.getCookie()) && instances.user != user)
             user.setCookie(instances.user.getCookie());
         instances.user = user;
-        SharedPreferencesHelper.save(instances.application, user);
+        return SharedPreferencesHelper.save(instances.application, user);
     }
 
     private static void clearUserCache() {
@@ -80,16 +83,30 @@ public final class AccountHelper {
         SharedPreferencesHelper.remove(instances.application, User.class);
     }
 
-    public static void login(User user, Header[] headers) {
+    public static boolean login(final User user, Header[] headers) {
         // 更新Cookie
         String cookie = ApiHttpClient.getCookie(headers);
-        user.setCookie(cookie);
-        ApiHttpClient.setCookieHeader(cookie);
+        if (TextUtils.isEmpty(cookie) || cookie.length() < 6) {
+            return false;
+        }
 
+        TLog.d(TAG, "login:" + user + " cookie：" + cookie);
+
+        user.setCookie(cookie);
+
+        int count = 10;
+        boolean saveOk;
         // 保存缓存
-        updateUserCache(user);
-        // 登陆成功,重新启动消息服务
-        NoticeManager.init(instances.application);
+        while (!(saveOk = updateUserCache(user)) && count-- > 0) {
+            SystemClock.sleep(100);
+        }
+
+        if (saveOk) {
+            ApiHttpClient.setCookieHeader(getCookie());
+            // 登陆成功,重新启动消息服务
+            NoticeManager.init(instances.application);
+        }
+        return saveOk;
     }
 
     /**

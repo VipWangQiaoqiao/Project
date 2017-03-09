@@ -55,7 +55,6 @@ public class ApiHttpClient {
      */
     public static void init(Application context) {
         API_URL = Setting.getServerUrl(context) + "%s";
-        CLIENT = null;
         AsyncHttpClient client = new AsyncHttpClient();
         //client.setCookieStore(new PersistentCookieStore(context));
         // Set
