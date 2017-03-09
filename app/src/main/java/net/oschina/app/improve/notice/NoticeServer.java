@@ -134,7 +134,7 @@ public class NoticeServer extends Service {
         super.onDestroy();
     }
 
-    private final static int ALARM_INTERVAL_SECOND = 60000;
+    private final static int ALARM_INTERVAL_SECOND = 100000;
 
     private void registerNextAlarm() {
         cancelRequestAlarm();
