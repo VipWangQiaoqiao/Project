@@ -92,18 +92,19 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-
             Type type = new TypeToken<ResultBean<User>>() {
             }.getType();
             ResultBean<User> resultBean = AppOperator.createGson().fromJson(responseString, type);
 
             if (resultBean.isSuccess()) {
                 User user = resultBean.getResult();
-                AccountHelper.login(user, headers);
-                AppContext.showToast(getResources().getString(R.string.register_success_hint), Toast.LENGTH_SHORT);
-                sendLocalReceiver();
-                finish();
+                if (AccountHelper.login(user, headers)) {
+                    AppContext.showToast(getResources().getString(R.string.register_success_hint), Toast.LENGTH_SHORT);
+                    sendLocalReceiver();
+                    finish();
+                } else {
+                    showToastForKeyBord("注册异常");
+                }
             } else {
                 int code = resultBean.getCode();
                 switch (code) {

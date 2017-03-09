@@ -169,15 +169,16 @@ public class WXEntryActivity extends Activity {
                             ResultBean<User> resultBean = AppOperator.createGson().fromJson(responseString, type);
                             if (resultBean.isSuccess()) {
                                 User user = resultBean.getResult();
-                                AccountHelper.login(user, headers);
-                                setResult(RESULT_OK);
-                                finish();
-                                Intent intent = new Intent();
-                                intent.setAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
-                                LocalBroadcastManager.getInstance(WXEntryActivity.this).sendBroadcast(intent);
-
-                                ContactsCacheManager.sync();
-
+                                if (AccountHelper.login(user, headers)) {
+                                    setResult(RESULT_OK);
+                                    finish();
+                                    Intent intent = new Intent();
+                                    intent.setAction(AccountBaseActivity.ACTION_ACCOUNT_FINISH_ALL);
+                                    LocalBroadcastManager.getInstance(WXEntryActivity.this).sendBroadcast(intent);
+                                    ContactsCacheManager.sync();
+                                } else {
+                                    AppContext.showToast("登录异常");
+                                }
                             } else {
                                 AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                             }
