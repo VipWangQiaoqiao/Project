@@ -1,6 +1,7 @@
 package net.oschina.app.improve.git.feature;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,7 +19,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 class ProjectAdapter extends BaseGeneralRecyclerAdapter<Project> {
     ProjectAdapter(Callback callback) {
-        super(callback, NEITHER);
+        super(callback, ONLY_FOOTER);
     }
 
     @Override
@@ -37,7 +38,8 @@ class ProjectAdapter extends BaseGeneralRecyclerAdapter<Project> {
         h.mTextName.setText(item.getName());
         h.mTextDescription.setText(item.getDescription());
         h.mTextLanguage.setText(item.getLanguage());
-        h.mTextViewCount.setText(String.valueOf(item.getForksCount()));
+        h.mTextLanguage.setVisibility(TextUtils.isEmpty(item.getLanguage()) ? View.GONE : View.VISIBLE);
+        h.mTextViewCount.setText(String.valueOf(item.getWatchesCount()));
         h.mTextFavCount.setText(String.valueOf(item.getStarsCount()));
         h.mTextForkCount.setText(String.valueOf(item.getForksCount()));
     }

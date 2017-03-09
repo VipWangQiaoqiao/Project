@@ -1,5 +1,6 @@
 package net.oschina.app.improve.git.api;
 
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -11,6 +12,7 @@ import net.oschina.app.api.ApiHttpClient;
  */
 
 public final class API {
+    private static AsyncHttpClient mClient = new AsyncHttpClient();
     /**
      * 获取码云推荐列表
      *
@@ -20,7 +22,7 @@ public final class API {
     public static void getFeatureProjects(int page, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("page", page);
-        ApiHttpClient.getHttpClient().get("http://git.oschina.net/api/v3/projects/featured/osc", params, handler);
+        mClient.get("http://git.oschina.net/api/v3/projects/featured/osc", params, handler);
     }
 
     /**
@@ -30,6 +32,6 @@ public final class API {
      * @param handler 回调
      */
     public static void getProjectDetail(int id, TextHttpResponseHandler handler) {
-        ApiHttpClient.getHttpClient().get(String.format("http://git.oschina.net/api/v3/projects/%d/osc", id), handler);
+        mClient.get(String.format("http://git.oschina.net/api/v3/projects/%d/osc", id), handler);
     }
 }
