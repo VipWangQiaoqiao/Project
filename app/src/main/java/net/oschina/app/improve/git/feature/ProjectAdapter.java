@@ -20,6 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 class ProjectAdapter extends BaseGeneralRecyclerAdapter<Project> {
     ProjectAdapter(Callback callback) {
         super(callback, ONLY_FOOTER);
+        setState(STATE_HIDE, false);
     }
 
     @Override

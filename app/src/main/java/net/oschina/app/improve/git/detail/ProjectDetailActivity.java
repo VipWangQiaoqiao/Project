@@ -3,6 +3,7 @@ package net.oschina.app.improve.git.detail;
 import android.content.Context;
 import android.content.Intent;
 
+import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.git.bean.Project;
 
@@ -21,6 +22,16 @@ public class ProjectDetailActivity extends BaseBackActivity {
 
     @Override
     protected int getContentView() {
-        return 0;
+        return R.layout.activity_project_detail;
+    }
+
+    @Override
+    protected void initWidget() {
+        super.initWidget();
+        ProjectDetailFragment fragment = ProjectDetailFragment.newInstance((Project) getIntent()
+                .getExtras()
+                .getSerializable("project"));
+        new ProjectDetailPresenter(fragment);
+        addFragment(R.id.fl_content, fragment);
     }
 }

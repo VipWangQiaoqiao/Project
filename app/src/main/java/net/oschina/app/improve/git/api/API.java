@@ -31,7 +31,7 @@ public final class API {
      * @param id      项目id
      * @param handler 回调
      */
-    public static void getProjectDetail(int id, TextHttpResponseHandler handler) {
+    public static void getProjectDetail(long id, TextHttpResponseHandler handler) {
         mClient.get(String.format("http://git.oschina.net/api/v3/projects/%d/osc", id), handler);
     }
 }
