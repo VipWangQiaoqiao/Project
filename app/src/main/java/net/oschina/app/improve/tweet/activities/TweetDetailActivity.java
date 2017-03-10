@@ -112,7 +112,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     LinearLayout mLayoutRef;
 
     private Tweet tweet;
-    private List<TweetComment> replies = new ArrayList<>();
+    private final List<TweetComment> replies = new ArrayList<>();
     private RecordButtonUtil mRecordUtil;
     private TextHttpResponseHandler publishAdmireHandler;
     private TextHttpResponseHandler publishCommentHandler;
@@ -306,7 +306,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     UIHelper.showLoginActivity(TweetDetailActivity.this);
                     return;
                 }
-                if (replies != null && replies.size() > 0)
+                if (replies.size() > 0)
                     content = mDelegation.getBottomSheet().getEditText().getHint() + ": " + content;
                 OSChinaApi.pubTweetComment(tweet.getId(), content, 0, publishCommentHandler);
             }
@@ -516,6 +516,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     @OnClick(R.id.iv_comment)
     void onClickComment() {
         if (checkLogin()) return;
+        replies.clear();
         mDelegation.getBottomSheet().show("发表评论");
     }
 
