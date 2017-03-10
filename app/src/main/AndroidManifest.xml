@@ -483,6 +483,16 @@
             android:theme="@style/App.Theme.Light" />
 
         <activity
+            android:name=".improve.git.feature.FeatureActivity"
+            android:label="码云推荐"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".improve.git.detail.ProjectDetailActivity"
+            android:label="项目详情"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".improve.main.BrowserActivity"
             android:screenOrientation="portrait" />
 

@@ -110,7 +110,7 @@
                         android:layout_width="12dp"
                         android:layout_height="12dp"
                         android:layout_marginTop="@dimen/lay_2"
-                        android:src="@mipmap/ic_comment_40" />
+                        android:src="@mipmap/ic_fork" />
 
                     <TextView
                         android:id="@+id/tv_fork_count"

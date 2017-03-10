@@ -100,6 +100,7 @@
     <string name="tip_content_empty">内容不能为空</string>
     <string name="tip_content_too_long">内容太长</string>
 
+    <string name="git">码云推荐</string>
     <string name="actionbar_title_software_list">开源软件</string>
     <string name="actionbar_title_user_blog">用户博客列表</string>
     <string name="actionbar_title_my_information">我的资料</string>
@@ -378,4 +379,5 @@
     <string name="notification_retry_hint">重试</string>
     <string name="content_upload_error_hint">部分内容没有上传成功</string>
 
+    <string name="get_project_detail_success">获取成功</string>
 </resources>
