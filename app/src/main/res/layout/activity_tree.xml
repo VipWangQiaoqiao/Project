@@ -2,6 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/ll_branch"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="#f1efef"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/lay_16"
+        android:paddingRight="@dimen/lay_16">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/ic_branch" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/lay_12"
+            android:paddingRight="@dimen/lay_12"
+            android:text="分支:"
+            android:textSize="@dimen/font_16" />
+
+        <TextView
+            android:id="@+id/tv_branch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="branch"
+            android:textSize="@dimen/font_16" />
+
+        <ImageView
+            android:id="@+id/ic_arrow"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/ic_arrow_bottom"
+            android:tint="@color/gray" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white" />
 </LinearLayout>

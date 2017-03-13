@@ -493,6 +493,16 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".improve.git.tree.TreeActivity"
+            android:label="代码"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".improve.git.code.CodeDetailActivity"
+            android:label="代码详情"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".improve.main.BrowserActivity"
             android:screenOrientation="portrait" />
 

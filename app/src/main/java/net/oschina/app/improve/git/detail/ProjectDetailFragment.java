@@ -9,10 +9,12 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.git.bean.Project;
 import net.oschina.app.improve.git.bean.User;
+import net.oschina.app.improve.git.tree.TreeActivity;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -20,7 +22,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * on 2017/3/10.
  */
 @SuppressWarnings("unused")
-public class ProjectDetailFragment extends BaseFragment implements ProjectDetailContract.View {
+public class ProjectDetailFragment extends BaseFragment implements ProjectDetailContract.View,
+        View.OnClickListener {
     @Bind(R.id.webView)
     OWebView mWebView;
     @Bind(R.id.tv_name)
@@ -75,6 +78,15 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
         mPresenter.getProjectDetail(mProject.getId());
     }
 
+    @OnClick({R.id.ll_code})
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_code:
+                TreeActivity.show(mContext, mProject);
+                break;
+        }
+    }
 
     @Override
     public void showNetworkError(int strId) {

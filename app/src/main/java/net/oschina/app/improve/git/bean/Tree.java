@@ -10,8 +10,8 @@ import java.io.Serializable;
 @SuppressWarnings("unused")
 public class Tree implements Serializable {
 
-    public static final String CODE_TYPE_FOLDER = "tree";//文件夹
-    public static final String CODE_TYPE_FILE = "blob";//文件
+    private static final String CODE_TYPE_FOLDER = "tree";//文件夹
+    private static final String CODE_TYPE_FILE = "blob";//文件
 
     private String name;
     private String type;
@@ -48,5 +48,9 @@ public class Tree implements Serializable {
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public boolean isFile() {
+        return CODE_TYPE_FILE.equals(type);
     }
 }
