@@ -105,7 +105,7 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
 
     private void initProject(Project project) {
         User user = project.getOwner();
-        if(user != null){
+        if (user != null) {
             mTextName.setText(user.getName());
             getImgLoader()
                     .load(user.getNewPortrait())
@@ -118,7 +118,8 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
         mTextWatchCount.setText(String.valueOf(project.getWatchesCount()));
         mTextForkCount.setText(String.valueOf(project.getForksCount()));
         mTextUpdateDate.setText("上次更新于" + StringUtils.formatSomeAgo(project.getLastPushTime()));
-        //mTexPrCount.setText(String.valueOf(project.getc));
+        mTextIssuesCount.setText(String.valueOf(project.getIssueCount()));
+        mTexPrCount.setText(String.valueOf(project.getPullRequestCount()));
         mTextDescription.setText(project.getDescription());
         mTextLanguage.setVisibility(TextUtils.isEmpty(project.getLanguage()) ? View.GONE : View.VISIBLE);
     }
