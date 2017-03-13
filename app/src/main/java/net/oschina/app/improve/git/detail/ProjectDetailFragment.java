@@ -13,6 +13,8 @@ import net.oschina.app.improve.git.tree.TreeActivity;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.util.StringUtils;
 
+import java.text.SimpleDateFormat;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,8 +48,6 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
     TextView mTexPrCount;
     @Bind(R.id.tv_comment_count)
     TextView mTextCommentCount;
-    @Bind(R.id.civ_owner)
-    CircleImageView mImageOwner;
 
     private ProjectDetailContract.Presenter mPresenter;
     private Project mProject;
@@ -118,18 +118,14 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
     private void initProject(Project project) {
         User user = project.getOwner();
         if (user != null) {
-            mTextName.setText(user.getName());
-            getImgLoader()
-                    .load(user.getNewPortrait())
-                    .asBitmap()
-                    .placeholder(R.mipmap.widget_default_face)
-                    .into(mImageOwner);
+            mTextName.setText(user.getName() + "/" + project.getName());
         }
         mTextLanguage.setText(project.getLanguage());
         mTextStarCount.setText(String.valueOf(project.getStarsCount()));
         mTextWatchCount.setText(String.valueOf(project.getWatchesCount()));
         mTextForkCount.setText(String.valueOf(project.getForksCount()));
-        mTextUpdateDate.setText("上次更新于" + StringUtils.formatSomeAgo(project.getLastPushTime()));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        mTextUpdateDate.setText("上次更新于" + StringUtils.formatSomeAgo(dateFormat.format(project.getLastPushTime())));
         mTextIssuesCount.setText(String.valueOf(project.getIssueCount()));
         mTexPrCount.setText(String.valueOf(project.getPullRequestCount()));
         mTextDescription.setText(project.getDescription());
