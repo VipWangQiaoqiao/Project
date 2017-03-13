@@ -1,0 +1,70 @@
+html,body {
+	font-family: -apple-system, "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN", "Source Han Sans SC", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+	padding: 0px;
+	margin: 0px;
+	overflow-x: hidden;
+}
+
+body {
+	word-wrap: break-word;
+	font-size: 16px;
+	line-height: 140%;
+	color: #111111;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	line-height: 1.2em;
+	margin: 0;
+	margin-bottom:  0.8em;
+}
+
+p{
+	margin: 0;
+	margin-bottom: 0.8em;
+}
+
+ul {
+	padding-left: 20px;
+}
+
+ol {
+	padding-left: 25px;
+}
+
+table {
+	overflow: hidden;
+	max-width: 100%;
+	border: 1px solid #CFCDD3;
+	border-collapse: none;
+	background: #f8f8f8;
+	font-size: 0.8em;
+	margin-right: 1px;
+}
+
+img {
+	max-width: 100%;
+	margin: 4px 0;
+	background: #fefefe;
+	border: none;
+	box-shadow: none;
+}
+
+pre {
+	margin-top: 1px;
+	margin-bottom: 1px;
+	font-size: 0.8em;
+	font-family: monaco, Consolas, 'Liberation Mono', Courier, monospace;
+	border: none;
+	border-left: 2px solid #CFCDD3;
+	background: #f8f8f8;
+	padding: 8px 6px 6px 6px;
+	line-height: 140%;
+	overflow: auto;
+	word-wrap: normal;
+	white-space: pre;
+}
+
+a {
+	text-decoration: none;
+	color: #24cf5f
+}

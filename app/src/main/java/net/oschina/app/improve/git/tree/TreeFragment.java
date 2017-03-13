@@ -24,6 +24,8 @@ public class TreeFragment extends BaseRecyclerFragment<TreeContract.Presenter, T
                     mPresenter.getProject(),
                     tree.getName(),
                     mPresenter.getBranch());
+        } else {
+            mPresenter.nextLoad(tree.getName());
         }
     }
 

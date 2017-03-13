@@ -86,4 +86,14 @@ public class TreeActivity extends BaseBackActivity implements View.OnClickListen
     public void onShow() {
         mImageArrow.setImageResource(R.mipmap.ic_arrow_top);
     }
+
+    @Override
+    public void onBackPressed() {
+        TreePresenter presenter = (TreePresenter) mPresenter;
+        if (presenter.isCanBack()) {
+            super.onBackPressed();
+        } else {
+            presenter.preLoad();
+        }
+    }
 }
