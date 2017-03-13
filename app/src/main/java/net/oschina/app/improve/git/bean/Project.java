@@ -74,6 +74,11 @@ public class Project implements Serializable {
     @SerializedName("svn_url_to_repo")
     private String svnUrl;
 
+    @SerializedName("issue_count")
+    private int issueCount;
+    @SerializedName("pull_request_count")
+    private int pullRequestCount;
+
     private String readme;
 
     public long getId() {
@@ -282,5 +287,21 @@ public class Project implements Serializable {
 
     public void setReadme(String readme) {
         this.readme = readme;
+    }
+
+    public int getIssueCount() {
+        return issueCount;
+    }
+
+    public void setIssueCount(int issueCount) {
+        this.issueCount = issueCount;
+    }
+
+    public int getPullRequestCount() {
+        return pullRequestCount;
+    }
+
+    public void setPullRequestCount(int pullRequestCount) {
+        this.pullRequestCount = pullRequestCount;
     }
 }

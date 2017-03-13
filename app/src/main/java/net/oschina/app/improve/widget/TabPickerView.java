@@ -720,7 +720,7 @@ public class TabPickerView extends FrameLayout {
         public static boolean isUpdate() {
             int mVersionCode = TDevice.getVersionCode();
             int mask = AppContext.get("TabsMask", -1);
-            TLog.i("oschina", "Current Version Code: " + mVersionCode + ", Mask Version Code: " + mask);
+            TLog.i("oschina", "Current Version Tree: " + mVersionCode + ", Mask Version Tree: " + mask);
             if (BuildConfig.DEBUG) return true;
             return mVersionCode != mask;
         }

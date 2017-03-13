@@ -172,7 +172,7 @@ public class ScrollLayout extends ViewGroup {
                 }
                 mLastMotionX = x;
 
-                //---------------New Code----------------------
+                //---------------New Tree----------------------
                 mLastMotionY = y;
                 //---------------------------------------------
 
@@ -180,7 +180,7 @@ public class ScrollLayout extends ViewGroup {
             case MotionEvent.ACTION_MOVE:
                 int deltaX = (int) (mLastMotionX - x);
 
-                //---------------New Code----------------------
+                //---------------New Tree----------------------
                 int deltaY = (int) (mLastMotionY - y);
                 if (Math.abs(deltaX) < 200 && Math.abs(deltaY) > 10)
                     break;
