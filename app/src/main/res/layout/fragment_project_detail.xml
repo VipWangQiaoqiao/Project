@@ -180,7 +180,7 @@
                 android:paddingRight="16dp"
                 android:paddingTop="@dimen/lay_8"
                 android:textColor="#111111"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="HttpNet网络请求框架基于HttpUrlConnectio
             n，采用Client + Request + Call的请求模型，支持HTTPS，支持同步和异步方法，支持Rxjava，支持上传和下载监听。" />
 

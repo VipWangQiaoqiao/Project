@@ -21,5 +21,11 @@ interface TreeContract {
         void setBranch(String branch);
 
         String getBranch();
+
+        void preLoad(int position);
+
+        void preLoad();
+
+        void nextLoad(String path);
     }
 }
