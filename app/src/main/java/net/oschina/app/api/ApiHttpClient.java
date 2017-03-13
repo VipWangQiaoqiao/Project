@@ -3,6 +3,7 @@ package net.oschina.app.api;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.os.SystemClock;
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -14,6 +15,7 @@ import com.loopj.android.http.ResponseHandlerInterface;
 import net.oschina.app.AppContext;
 import net.oschina.app.Setting;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
 import net.oschina.common.verify.Verifier;
 
@@ -27,7 +29,6 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Locale;
-import java.util.UUID;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -58,9 +59,28 @@ public class ApiHttpClient {
     }
 
     static class CheckNetAsyncHttpRequest extends AsyncHttpRequest {
-
         public CheckNetAsyncHttpRequest(AbstractHttpClient client, HttpContext context, HttpUriRequest request, ResponseHandlerInterface responseHandler) {
             super(client, context, request, responseHandler);
+        }
+
+        @Override
+        public void run() {
+            // 如果网络本身有问题则直接取消
+            if (!TDevice.hasInternet()) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        // 延迟一秒
+                        try {
+                            SystemClock.sleep(1000);
+                            cancel(true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
+            }
+            super.run();
         }
     }
 
@@ -77,8 +97,8 @@ public class ApiHttpClient {
     public static void init(Application context) {
         API_URL = Setting.getServerUrl(context) + "%s";
         AsyncHttpClient client = new ApiAsyncHttpClient();
-        client.setConnectTimeout(4 * 1000);
-        client.setResponseTimeout(6 * 1000);
+        client.setConnectTimeout(5 * 1000);
+        client.setResponseTimeout(7 * 1000);
         //client.setCookieStore(new PersistentCookieStore(context));
         // Set
         ApiHttpClient.setHttpClient(client, context);
