@@ -38,7 +38,7 @@
             android:textSize="@dimen/font_16" />
 
         <ImageView
-            android:id="@+id/ic_arrow"
+            android:id="@+id/iv_arrow"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:contentDescription="@string/app_name"

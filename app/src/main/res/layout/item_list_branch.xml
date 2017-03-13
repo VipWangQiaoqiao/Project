@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="46dp"
+    android:background="@drawable/ic_material"
+    android:minHeight="46dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_branch"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/lay_16"
+        android:paddingRight="@dimen/lay_16"
+        android:text="branch"
+        android:textSize="@dimen/font_16" />
+
+    <View
+        style="@style/h_line"
+        android:layout_marginLeft="@dimen/lay_16" />
+</LinearLayout>
