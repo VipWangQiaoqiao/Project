@@ -3,8 +3,6 @@ package net.oschina.app.improve.search.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -45,6 +43,7 @@ import butterknife.OnClick;
  * Created by thanatos on 16/9/7.
  */
 
+@SuppressWarnings("RestrictedApi")
 public class SearchActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     @Bind(R.id.view_root)
@@ -83,7 +82,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
             mAdapter.addItem(0, item);
             mRecyclerView.scrollToPosition(0);
             SearchHistoryAdapter.SearchItem last = mAdapter.getItem(mAdapter.getItems().size() - 1);
-            if (last.getType() == 0) {
+            if (last != null && last.getType() == 0) {
                 mAdapter.addItem(new SearchHistoryAdapter.SearchItem("清空搜索历史", 1));
             }
         }
@@ -105,13 +104,12 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
                 Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
                 extraFlagField.invoke(getWindow(), darkMode ? darkModeFlag : 0, darkModeFlag);
             } catch (Exception e) {
-                // 这个API, MDZZ
                 e.printStackTrace();
             }
         }
     }
 
-    /**
+    /*
      * 静态域，获取系统版本是否基于MIUI
      */
     static {
@@ -148,11 +146,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected int getContentView() {
         return R.layout.activity_v2_search;
     }
@@ -170,9 +163,9 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
         mViewSearch.clearFocus();
+        super.onPause();
     }
 
     @Override
@@ -182,7 +175,8 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         mAdapter = new SearchHistoryAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.addAll((List<SearchHistoryAdapter.SearchItem>) CacheManager.readListJson(this, CACHE_NAME, SearchHistoryAdapter.SearchItem.class));
+        List<SearchHistoryAdapter.SearchItem> items = CacheManager.readListJson(this, CACHE_NAME, SearchHistoryAdapter.SearchItem.class);
+        mAdapter.addAll(items);
         if (mAdapter.getItems().size() != 0) {
             mAdapter.addItem(new SearchHistoryAdapter.SearchItem("清空搜索历史", 1));
         }
@@ -191,7 +185,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
             @Override
             public void onItemClick(int position, long itemId) {
                 SearchHistoryAdapter.SearchItem item = mAdapter.getItem(position);
-                if (item.getType() == 0) {
+                if (item != null && item.getType() == 0) {
                     mViewSearch.clearFocus();
                     String query = item.getSearchText();
                     mViewSearchEditor.setText(query);
