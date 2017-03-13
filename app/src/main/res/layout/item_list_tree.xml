@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="46dp"
         android:layout_weight="1"
         android:background="@drawable/ic_material"
         android:orientation="horizontal"
@@ -24,33 +24,14 @@
             android:contentDescription="@string/app_name"
             android:src="@mipmap/ic_folder" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/lay_12"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_title_color"
-                android:textSize="16sp"
-                tools:text="Large Text" />
-
-            <TextView
-                android:id="@+id/tv_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"
-                android:ellipsize="end"
-                android:lineSpacingExtra="4dp"
-                android:maxLines="2"
-                android:textColor="@color/text_desc_color"
-                android:textSize="13sp"
-                tools:text="New Text" />
-        </LinearLayout>
+            android:layout_marginLeft="12dp"
+            android:textColor="@color/text_title_color"
+            android:textSize="16sp"
+            tools:text="Large Text" />
     </LinearLayout>
 
     <View

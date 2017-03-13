@@ -31,7 +31,7 @@ class FeaturePresenter implements FeatureContract.Presenter {
 
     @Override
     public void onRefreshing() {
-        API.getFeatureProjects(mPage, new TextHttpResponseHandler() {
+        API.getFeatureProjects(1, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 mView.showNetworkError(R.string.state_network_error);
@@ -50,7 +50,7 @@ class FeaturePresenter implements FeatureContract.Presenter {
                         if (list.size() != 0 && list.size() < 20) {
                             mView.showMoreMore();
                         }
-                        mPage = 1;
+                        mPage = 2;
                     } else {
                         mView.showNetworkError(R.string.state_network_error);
                     }
