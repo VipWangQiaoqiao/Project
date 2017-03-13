@@ -50,7 +50,7 @@
                         android:id="@+id/tv_language"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/lay_8"
+                        android:layout_marginRight="@dimen/lay_8"
                         android:background="@drawable/bg_type"
                         android:paddingBottom="@dimen/lay_2"
                         android:paddingLeft="@dimen/lay_4"
