@@ -44,7 +44,7 @@ public class Project implements Serializable {
     private NameSpace namespace;
 
     @SerializedName("last_push_at")
-    private String lastPushTime;
+    private Date lastPushTime;
 
     private String language;
 
@@ -177,11 +177,11 @@ public class Project implements Serializable {
         this.namespace = namespace;
     }
 
-    public String getLastPushTime() {
+    public Date getLastPushTime() {
         return lastPushTime;
     }
 
-    public void setLastPushTime(String lastPushTime) {
+    public void setLastPushTime(Date lastPushTime) {
         this.lastPushTime = lastPushTime;
     }
 

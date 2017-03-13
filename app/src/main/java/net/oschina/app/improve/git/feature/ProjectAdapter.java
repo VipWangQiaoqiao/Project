@@ -36,7 +36,7 @@ class ProjectAdapter extends BaseGeneralRecyclerAdapter<Project> {
                 .asBitmap()
                 .placeholder(R.mipmap.widget_default_face)
                 .into(h.mImageOwner);
-        h.mTextName.setText(item.getName());
+        h.mTextName.setText(item.getOwner().getName() + "/" + item.getName());
         h.mTextDescription.setText(item.getDescription());
         h.mTextLanguage.setText(item.getLanguage());
         h.mTextLanguage.setVisibility(TextUtils.isEmpty(item.getLanguage()) ? View.GONE : View.VISIBLE);
