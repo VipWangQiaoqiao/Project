@@ -2,11 +2,14 @@ package net.oschina.app.api;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpRequest;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.ResponseHandlerInterface;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.Setting;
@@ -24,6 +27,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -31,10 +35,13 @@ import javax.net.ssl.X509TrustManager;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.client.CookieStore;
+import cz.msebera.android.httpclient.client.methods.HttpUriRequest;
 import cz.msebera.android.httpclient.client.params.ClientPNames;
 import cz.msebera.android.httpclient.client.protocol.HttpClientContext;
 import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 import cz.msebera.android.httpclient.cookie.Cookie;
+import cz.msebera.android.httpclient.impl.client.AbstractHttpClient;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.protocol.HttpContext;
 
 @SuppressWarnings("WeakerAccess")
@@ -42,6 +49,20 @@ public class ApiHttpClient {
     public final static String HOST = "www.oschina.net";
     //public final static String HOST = "www.oschina.tk";
     public static String API_URL = "https://www.oschina.net/%s";
+
+    static class ApiAsyncHttpClient extends AsyncHttpClient {
+        @Override
+        protected AsyncHttpRequest newAsyncHttpRequest(DefaultHttpClient client, HttpContext httpContext, HttpUriRequest uriRequest, String contentType, ResponseHandlerInterface responseHandler, Context context) {
+            return new CheckNetAsyncHttpRequest(client, httpContext, uriRequest, responseHandler);
+        }
+    }
+
+    static class CheckNetAsyncHttpRequest extends AsyncHttpRequest {
+
+        public CheckNetAsyncHttpRequest(AbstractHttpClient client, HttpContext context, HttpUriRequest request, ResponseHandlerInterface responseHandler) {
+            super(client, context, request, responseHandler);
+        }
+    }
 
     private static AsyncHttpClient CLIENT;
 
@@ -55,7 +76,9 @@ public class ApiHttpClient {
      */
     public static void init(Application context) {
         API_URL = Setting.getServerUrl(context) + "%s";
-        AsyncHttpClient client = new AsyncHttpClient();
+        AsyncHttpClient client = new ApiAsyncHttpClient();
+        client.setConnectTimeout(4 * 1000);
+        client.setResponseTimeout(6 * 1000);
         //client.setCookieStore(new PersistentCookieStore(context));
         // Set
         ApiHttpClient.setHttpClient(client, context);
