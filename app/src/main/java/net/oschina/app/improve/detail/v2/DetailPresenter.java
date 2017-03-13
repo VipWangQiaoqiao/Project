@@ -78,6 +78,14 @@ public class DetailPresenter implements DetailContract.Presenter {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onCancel() {
+                super.onCancel();
+                if (mCacheBean != null)
+                    return;
+                mEmptyView.showErrorLayout(EmptyLayout.NETWORK_ERROR);
+            }
         });
     }
 
