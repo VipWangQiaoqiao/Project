@@ -31,7 +31,7 @@ class TreePresenter implements TreeContract.Presenter {
     TreePresenter(TreeContract.View mView, Project project) {
         this.mView = mView;
         this.mProject = project;
-        mBranch = "master";
+        mBranch = project.getDefaultBranch();
         mPaths = new ArrayList<>();
         this.mView.setPresenter(this);
     }
@@ -71,11 +71,6 @@ class TreePresenter implements TreeContract.Presenter {
         // TODO: 2017/3/13
     }
 
-    @Override
-    public void getBranch() {
-        // TODO: 2017/3/13
-    }
-
     public String getPath() {
         StringBuilder sb = new StringBuilder();
         for (String s : mPaths) {
@@ -91,5 +86,15 @@ class TreePresenter implements TreeContract.Presenter {
     @Override
     public Project getProject() {
         return mProject;
+    }
+
+    @Override
+    public void setBranch(String branch) {
+        this.mBranch = branch;
+    }
+
+    @Override
+    public String getBranch() {
+        return mBranch;
     }
 }

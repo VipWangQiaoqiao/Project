@@ -1,4 +1,4 @@
-package net.oschina.app.improve.git.detail;
+package net.oschina.app.improve.git.branch;
 
 import android.util.Log;
 
@@ -7,9 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.git.api.API;
-import net.oschina.app.improve.git.bean.Project;
+import net.oschina.app.improve.git.bean.Branch;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -18,36 +17,36 @@ import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by haibin
- * on 2017/3/9.
+ * on 2017/3/13.
  */
 
-class ProjectDetailPresenter implements ProjectDetailContract.Presenter {
-    private final ProjectDetailContract.View mView;
+class BranchPresenter implements BranchContract.Presenter {
+    private final BranchContract.View mView;
 
-    ProjectDetailPresenter(ProjectDetailContract.View mView) {
+    BranchPresenter(BranchContract.View mView) {
         this.mView = mView;
         this.mView.setPresenter(this);
     }
 
     @Override
-    public void getProjectDetail(long id) {
-        API.getProjectDetail(id, new TextHttpResponseHandler() {
+    public void getBranches(long id) {
+        API.getProjectBranchs(id, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                mView.showNetworkError(R.string.state_network_error);
+                mView.showGetBranchFailure(R.string.state_network_error);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.e("detail", responseString);
+                Log.e("responseString", responseString);
                 try {
-                    Type type = new TypeToken<ResultBean<Project>>() {
+                    Type type = new TypeToken<List<Branch>>() {
                     }.getType();
-                    ResultBean<Project> bean = new Gson().fromJson(responseString, type);
-                    if (bean != null && bean.isSuccess()) {
-                       mView.showGetDetailSuccess(bean.getResult(),R.string.get_project_detail_success);
+                    List<Branch> bean = new Gson().fromJson(responseString, type);
+                    if (bean != null && bean.size() != 0) {
+                        mView.showGetBranchSuccess(bean);
                     } else {
-                        mView.showNetworkError(R.string.state_network_error);
+                        mView.showGetBranchFailure(R.string.state_network_error);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

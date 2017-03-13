@@ -65,4 +65,14 @@ public final class API {
         params.put("ref", ref);
         mClient.get(String.format("http://git.oschina.net/api/v3/projects/%d/repository/files", id), params, handler);
     }
+
+    /**
+     * 获取项目分支
+     *
+     * @param id      项目id
+     * @param handler 回调
+     */
+    public static void getProjectBranchs(long id, TextHttpResponseHandler handler) {
+        mClient.get(String.format("http://git.oschina.net/api/v3/projects/%d/repository/branches", id), handler);
+    }
 }
