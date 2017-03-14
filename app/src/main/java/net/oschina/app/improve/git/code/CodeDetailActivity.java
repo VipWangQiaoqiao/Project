@@ -22,6 +22,7 @@ import net.oschina.app.util.StringUtils;
 public class CodeDetailActivity extends BaseBackActivity {
     private ShareDialog mAlertDialog;
     private Project mProject;
+    private CodeDetailPresenter mPresenter;
 
     public static void show(Context context, Project project, String path, String branch) {
         Intent intent = new Intent(context, CodeDetailActivity.class);
@@ -44,7 +45,7 @@ public class CodeDetailActivity extends BaseBackActivity {
         CodeDetailFragment fragment = CodeDetailFragment.newInstance(intent.getStringExtra("path"));
         addFragment(R.id.fl_content, fragment);
         mProject = (Project) intent.getSerializableExtra("project");
-        new CodeDetailPresenter(fragment, mProject,
+        mPresenter = new CodeDetailPresenter(fragment, mProject,
                 intent.getStringExtra("path"),
                 intent.getStringExtra("branch"));
     }
@@ -59,15 +60,22 @@ public class CodeDetailActivity extends BaseBackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_share:
-                //toShare(mBean.getTitle(), mBean.getBody(), mBean.getHref());
+                toShare();
                 break;
         }
         return true;
     }
 
-    private boolean toShare(String title, String content, String url) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAlertDialog != null) {
+            mAlertDialog.dismiss();
+        }
+    }
 
-        content = content.trim();
+    private boolean toShare() {
+        String content = mProject.getDescription().trim();
         if (content.length() > 55) {
             content = HTMLUtil.delHTMLTag(content);
             if (content.length() > 55)
@@ -82,10 +90,11 @@ public class CodeDetailActivity extends BaseBackActivity {
         if (mAlertDialog == null) {
             mAlertDialog = new
                     ShareDialog(this, mProject.getId())
-                    .type(mProject.getParentId())
-                    .title(title)
+                    .title(mProject.getOwner().getName() + "/" + mProject.getName())
                     .content(content)
-                    .url(url).with();
+                    .url(mPresenter.getShareUrl())
+                    .bitmapResID(R.mipmap.ic_git)
+                    .with();
         }
         mAlertDialog.show();
 

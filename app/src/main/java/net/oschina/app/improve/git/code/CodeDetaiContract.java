@@ -19,5 +19,7 @@ import net.oschina.app.improve.git.bean.CodeDetail;
 
     interface Presenter extends BasePresenter {
         void getCodeDetail();
+
+        String getShareUrl();
     }
 }

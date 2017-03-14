@@ -10,6 +10,12 @@ import net.oschina.app.improve.git.bean.Project;
  */
 interface ProjectDetailContract {
 
+    interface EmptyView {
+        void showGetDetailSuccess(int strId);
+
+        void showGetDetailFailure(int strId);
+    }
+
     interface View extends BaseView<Presenter> {
         void showGetDetailSuccess(Project project, int strId);
 
@@ -19,6 +25,8 @@ interface ProjectDetailContract {
     interface Presenter extends BasePresenter {
         void getProjectDetail(long id);
 
-        void getProjectDetail(String name,String pathWithNamespace);
+        void getProjectDetail(String name, String pathWithNamespace);
+
+        String getShareUrl();
     }
 }
