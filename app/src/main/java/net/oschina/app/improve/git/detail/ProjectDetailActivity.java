@@ -20,6 +20,15 @@ public class ProjectDetailActivity extends BaseBackActivity {
         context.startActivity(intent);
     }
 
+    public static void show(Context context, String pathWithNamespace, String name) {
+        Intent intent = new Intent(context, ProjectDetailActivity.class);
+        Project project = new Project();
+        project.setName(name);
+        project.setPathWithNamespace(pathWithNamespace);
+        intent.putExtra("project", project);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int getContentView() {
         return R.layout.activity_project_detail;

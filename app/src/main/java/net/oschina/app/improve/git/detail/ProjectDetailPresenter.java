@@ -12,7 +12,6 @@ import net.oschina.app.improve.git.api.API;
 import net.oschina.app.improve.git.bean.Project;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -23,18 +22,21 @@ import cz.msebera.android.httpclient.Header;
 
 class ProjectDetailPresenter implements ProjectDetailContract.Presenter {
     private final ProjectDetailContract.View mView;
+    private TextHttpResponseHandler mHandler;
 
     ProjectDetailPresenter(ProjectDetailContract.View mView) {
         this.mView = mView;
+        initHandler();
         this.mView.setPresenter(this);
     }
 
-    @Override
-    public void getProjectDetail(long id) {
-        API.getProjectDetail(id, new TextHttpResponseHandler() {
+    private void initHandler() {
+        mHandler = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 mView.showNetworkError(R.string.state_network_error);
+                throwable.printStackTrace();
+                Log.e("re","   --    " + responseString + " --  " + statusCode + "  ");
             }
 
             @Override
@@ -45,7 +47,7 @@ class ProjectDetailPresenter implements ProjectDetailContract.Presenter {
                     }.getType();
                     ResultBean<Project> bean = new Gson().fromJson(responseString, type);
                     if (bean != null && bean.isSuccess()) {
-                       mView.showGetDetailSuccess(bean.getResult(),R.string.get_project_detail_success);
+                        mView.showGetDetailSuccess(bean.getResult(), R.string.get_project_detail_success);
                     } else {
                         mView.showNetworkError(R.string.state_network_error);
                     }
@@ -54,6 +56,16 @@ class ProjectDetailPresenter implements ProjectDetailContract.Presenter {
                     mView.showNetworkError(R.string.state_network_error);
                 }
             }
-        });
+        };
+    }
+
+    @Override
+    public void getProjectDetail(long id) {
+        API.getProjectDetail(id, mHandler);
+    }
+
+    @Override
+    public void getProjectDetail(String name, String pathWithNamespace) {
+        API.getProjectDetail(pathWithNamespace + "%2F" + name, mHandler);
     }
 }
