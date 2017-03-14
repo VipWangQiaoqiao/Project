@@ -29,5 +29,7 @@ interface TreeContract {
         void preLoad();
 
         void nextLoad(String path);
+
+        String getImageUrl(String fileName);
     }
 }

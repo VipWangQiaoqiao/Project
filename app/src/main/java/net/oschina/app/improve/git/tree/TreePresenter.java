@@ -12,6 +12,7 @@ import net.oschina.app.improve.git.bean.Project;
 import net.oschina.app.improve.git.bean.Tree;
 
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -172,6 +173,13 @@ class TreePresenter implements TreeContract.Presenter {
     @Override
     public Project getProject() {
         return mProject;
+    }
+
+    @Override
+    public String getImageUrl(String fileName) {
+        String url = "https://git.oschina.net/" + mProject.getPathWithNamespace() + "/" + "raw" + "/" + mBranch + "/" + URLEncoder.encode
+                (getPath() + fileName);
+        return url;
     }
 
     /**

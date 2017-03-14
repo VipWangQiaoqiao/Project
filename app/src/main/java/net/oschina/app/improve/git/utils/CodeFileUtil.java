@@ -6,6 +6,9 @@ package net.oschina.app.improve.git.utils;
  */
 
 public final class CodeFileUtil {
+    /**
+     * 判断是否是代码文件
+     */
     public static boolean isCodeTextFile(String fileName) {
         boolean res = false;
         // 文件的后缀
@@ -126,6 +129,29 @@ public final class CodeFileUtil {
             }
         }
 
+        return res;
+    }
+
+
+    /**
+     * 判断是否是图片
+     */
+    public static boolean isImage(String fileName) {
+        boolean res = false;
+        // 图片后缀
+        int index = fileName.lastIndexOf(".");
+        if (index > 0) {
+            fileName = fileName.substring(index);
+        }
+        String imageSuffix[] = new String[]
+                {
+                        ".png", ".jpg", ".jpeg", ".jpe", ".bmp", ".exif", ".dxf", ".wbmp", ".ico", ".jpe", ".gif", ".pcx", ".fpx", ".ufo", ".tiff", ".svg", ".eps", ".ai", ".tga", ".pcd", ".hdri"
+                };
+        for (String string : imageSuffix) {
+            if (fileName.equalsIgnoreCase(string)) {
+                res = true;
+            }
+        }
         return res;
     }
 
