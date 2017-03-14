@@ -8,10 +8,12 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.git.bean.Project;
 import net.oschina.app.improve.git.bean.User;
 import net.oschina.app.improve.git.tree.TreeActivity;
 import net.oschina.app.improve.widget.OWebView;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -51,6 +53,7 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
 
     private ProjectDetailContract.Presenter mPresenter;
     private Project mProject;
+    private ShareDialog mAlertDialog;
 
     public static ProjectDetailFragment newInstance(Project project) {
         ProjectDetailFragment fragment = new ProjectDetailFragment();
@@ -82,12 +85,15 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
         }
     }
 
-    @OnClick({R.id.ll_code})
+    @OnClick({R.id.ll_code, R.id.ll_share})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_code:
                 TreeActivity.show(mContext, mProject);
+                break;
+            case R.id.ll_share:
+                toShare();
                 break;
         }
     }
@@ -136,5 +142,40 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
         mTexPrCount.setText(String.valueOf(project.getPullRequestCount()));
         mTextDescription.setText(project.getDescription());
         mTextLanguage.setVisibility(TextUtils.isEmpty(project.getLanguage()) ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAlertDialog != null) {
+            mAlertDialog.dismiss();
+        }
+    }
+
+    private boolean toShare() {
+        String content = mProject.getDescription().trim();
+        if (content.length() > 55) {
+            content = HTMLUtil.delHTMLTag(content);
+            if (content.length() > 55)
+                content = StringUtils.getSubString(0, 55, content);
+        } else {
+            content = HTMLUtil.delHTMLTag(content);
+        }
+        if (TextUtils.isEmpty(content))
+            content = "";
+
+        // 分享
+        if (mAlertDialog == null) {
+            mAlertDialog = new
+                    ShareDialog(getActivity(), mProject.getId())
+                    .title(mProject.getOwner().getName() + "/" + mProject.getName())
+                    .content(content)
+                    .url(mPresenter.getShareUrl())
+                    .bitmapResID(R.mipmap.ic_git)
+                    .with();
+        }
+        mAlertDialog.show();
+
+        return true;
     }
 }

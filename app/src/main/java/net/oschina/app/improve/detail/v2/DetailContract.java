@@ -10,7 +10,7 @@ import net.oschina.app.improve.bean.comment.Comment;
  * on 2016/11/30.
  */
 
-public interface DetailContract {
+ interface DetailContract {
 
     interface EmptyView {
         void hideEmptyLayout();

@@ -47,7 +47,6 @@ class CodeDetailPresenter implements CodeDetaiContract.Presenter {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.e("responseString", responseString);
                 try {
                     Type type = new TypeToken<CodeDetail>() {
                     }.getType();
@@ -63,5 +62,13 @@ class CodeDetailPresenter implements CodeDetaiContract.Presenter {
                 }
             }
         });
+    }
+
+    @Override
+    public String getShareUrl() {
+        return String.format("https://git.oschina.net/%s/blob/%s/%s",
+                mProject.getOwner().getUsername() + "/" + mProject.getName(),
+                mBranch,
+                mFileName);
     }
 }

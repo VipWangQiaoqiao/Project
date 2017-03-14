@@ -9,7 +9,7 @@ import net.oschina.app.improve.bean.ApplyUser;
  * on 2016/12/27.
  */
 
-public interface ApplyContract {
+ interface ApplyContract {
 
     interface EmptyView {
         void showGetApplyUserSuccess();
