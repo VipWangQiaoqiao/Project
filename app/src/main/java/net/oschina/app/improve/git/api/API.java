@@ -14,6 +14,10 @@ import com.loopj.android.http.TextHttpResponseHandler;
 public final class API {
     private static AsyncHttpClient mClient = new AsyncHttpClient();
 
+    static {
+        mClient.setURLEncodingEnabled(false);
+    }
+
     /**
      * 获取码云推荐列表
      *
@@ -34,6 +38,16 @@ public final class API {
      */
     public static void getProjectDetail(long id, TextHttpResponseHandler handler) {
         mClient.get(String.format("http://git.oschina.net/api/v3/projects/%d/osc", id), handler);
+    }
+
+    /**
+     * 获取项目详情
+     *
+     * @param pathWithNamespace 项目id
+     * @param handler           回调
+     */
+    public static void getProjectDetail(String pathWithNamespace, TextHttpResponseHandler handler) {
+        mClient.get(String.format("http://git.oschina.net/api/v3/projects/%s/osc", pathWithNamespace), handler);
     }
 
     /**

@@ -18,5 +18,7 @@ interface ProjectDetailContract {
 
     interface Presenter extends BasePresenter {
         void getProjectDetail(long id);
+
+        void getProjectDetail(String name,String pathWithNamespace);
     }
 }

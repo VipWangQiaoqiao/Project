@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.detail.general.SoftwareDetailActivity;
+import net.oschina.app.improve.git.detail.ProjectDetailActivity;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
@@ -80,6 +81,10 @@ public class URLUtils {
 
     public static final Pattern PATTERN_IMAGE = Pattern.compile(
             ".*?(gif|jpeg|png|jpg|bmp)"
+    );
+
+    private static final Pattern PATTERN_GIT = Pattern.compile(
+            ".*git\\.oschina\\.net/(.*)/(.*)"
     );
 
     private static final String PREFIX_IMAGE = "ima-api:action=showImage&data=";
@@ -179,7 +184,11 @@ public class URLUtils {
                 break;
             case "git.oschina.net":
                 // TODO 如果用户安装了git@osc application, 使用git@osc打开
-                UIHelper.openInternalBrowser(context, url);
+                Matcher matcherGit = PATTERN_GIT.matcher(uri);
+                if (matcherGit.find() && matcherGit.groupCount() >= 2) {
+                    ProjectDetailActivity.show(context, matcherGit.group(1), matcherGit.group(2));
+                }
+                //UIHelper.openInternalBrowser(context, url);
                 break;
             case "my.oschina.net":
                 matcher = PATTERN_PATH_USER_BLOG.matcher(path);

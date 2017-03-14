@@ -1,5 +1,6 @@
 package net.oschina.app.improve.git.detail;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -17,7 +18,6 @@ import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by haibin
@@ -75,7 +75,11 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
     protected void initData() {
         super.initData();
         initProject(mProject);
-        mPresenter.getProjectDetail(mProject.getId());
+        if (mProject.getId() == 0) {
+            mPresenter.getProjectDetail(mProject.getName(), mProject.getPathWithNamespace());
+        } else {
+            mPresenter.getProjectDetail(mProject.getId());
+        }
     }
 
     @OnClick({R.id.ll_code})
@@ -115,7 +119,9 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
         this.mPresenter = presenter;
     }
 
+    @SuppressLint({"SimpleDateFormat", "SetTextI18n"})
     private void initProject(Project project) {
+        if (project.getId() == 0) return;
         User user = project.getOwner();
         if (user != null) {
             mTextName.setText(user.getName() + "/" + project.getName());
