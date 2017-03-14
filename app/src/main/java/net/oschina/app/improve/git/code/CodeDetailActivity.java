@@ -61,9 +61,9 @@ public class CodeDetailActivity extends BaseBackActivity {
         switch (item.getItemId()) {
             case R.id.menu_share:
                 toShare();
-                break;
+                return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

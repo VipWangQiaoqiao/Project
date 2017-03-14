@@ -78,6 +78,6 @@ class ProjectDetailPresenter implements ProjectDetailContract.Presenter {
     @Override
     public String getShareUrl() {
         return String.format("https://git.oschina.net/%s/",
-                mProject.getOwner().getUsername() + "/" + mProject.getName());
+                mProject.getPathWithNamespace());
     }
 }

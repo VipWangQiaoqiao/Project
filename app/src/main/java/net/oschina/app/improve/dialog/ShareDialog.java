@@ -150,7 +150,8 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
 
     public ShareDialog with() {
         mShare.setAppShareIcon(R.mipmap.ic_share);
-        mShare.setBitmapResID(R.mipmap.ic_share);
+        if (mShare.getBitmapResID() == 0)
+            mShare.setBitmapResID(R.mipmap.ic_share);
         return this;
     }
 
@@ -400,8 +401,8 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
         }
     }
 
-    public void hideProgressDialog(){
-        if(mDialog == null)
+    public void hideProgressDialog() {
+        if (mDialog == null)
             return;
         mDialog.dismiss();
     }

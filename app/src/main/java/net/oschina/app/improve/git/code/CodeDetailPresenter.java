@@ -1,7 +1,5 @@
 package net.oschina.app.improve.git.code;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -67,7 +65,7 @@ class CodeDetailPresenter implements CodeDetaiContract.Presenter {
     @Override
     public String getShareUrl() {
         return String.format("https://git.oschina.net/%s/blob/%s/%s",
-                mProject.getOwner().getUsername() + "/" + mProject.getName(),
+                mProject.getPathWithNamespace(),
                 mBranch,
                 mFileName);
     }

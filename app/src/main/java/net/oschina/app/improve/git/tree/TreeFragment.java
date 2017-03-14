@@ -7,9 +7,8 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.git.bean.Tree;
 import net.oschina.app.improve.git.code.CodeDetailActivity;
 import net.oschina.app.improve.git.utils.CodeFileUtil;
+import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.utils.DialogHelper;
-
-import java.util.List;
 
 /**
  * Created by haibin
@@ -37,6 +36,8 @@ public class TreeFragment extends BaseRecyclerFragment<TreeContract.Presenter, T
                         mPresenter.getProject(),
                         mPresenter.getPath() + tree.getName(),
                         mPresenter.getBranch());
+            } else if (CodeFileUtil.isImage(tree.getName())) {
+                ImageGalleryActivity.show(mContext, mPresenter.getImageUrl(tree.getName()));
             } else {
                 DialogHelper.getMessageDialog(mContext, "温馨提醒", "该文件不支持在线预览", "取消").show();
             }
