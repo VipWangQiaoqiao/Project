@@ -200,7 +200,7 @@
     <string name="osc_site">官网</string>
     <string name="know_more">了解更多</string>
     <string name="git_app">Git客户端</string>
-    <string name="copyright">Copyright © 2016 OSChina.net All rights reserved.</string>
+    <string name="copyright">© 2017 OSChina.net All rights reserved.</string>
 
     <string name="tip_save_image_suc">图片已保存(手机相册-> osc_img)</string>
 
