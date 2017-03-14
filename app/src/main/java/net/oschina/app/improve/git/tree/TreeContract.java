@@ -22,6 +22,8 @@ interface TreeContract {
 
         String getBranch();
 
+        String getPath();
+
         void preLoad(int position);
 
         void preLoad();
