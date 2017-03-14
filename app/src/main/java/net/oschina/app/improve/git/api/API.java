@@ -6,6 +6,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import net.oschina.app.api.ApiHttpClient;
+
 /**
  * Created by haibin
  * on 2017/3/9.
@@ -43,7 +45,7 @@ public final class API {
     /**
      * 获取项目详情
      *
-     * @param pathWithNamespace 项目id
+     * @param pathWithNamespace 项目pathWithNamespace
      * @param handler           回调
      */
     public static void getProjectDetail(String pathWithNamespace, TextHttpResponseHandler handler) {
@@ -86,7 +88,20 @@ public final class API {
      * @param id      项目id
      * @param handler 回调
      */
-    public static void getProjectBranchs(long id, TextHttpResponseHandler handler) {
+    public static void getProjectBranches(long id, TextHttpResponseHandler handler) {
         mClient.get(String.format("http://git.oschina.net/api/v3/projects/%d/repository/branches", id), handler);
+    }
+
+    /**
+     * 获取项目评论
+     *
+     * @param id      项目id
+     * @param handler 回调
+     */
+    public static void getProjectComments(long id, String token, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("projectId", id);
+        params.put("pageToken", token);
+        ApiHttpClient.get("action/apiv2/git_comments_list", params, handler);
     }
 }
