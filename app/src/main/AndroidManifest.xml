@@ -503,6 +503,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".improve.git.comment.CommentActivity"
+            android:label="项目评论"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".improve.main.BrowserActivity"
             android:screenOrientation="portrait" />
 

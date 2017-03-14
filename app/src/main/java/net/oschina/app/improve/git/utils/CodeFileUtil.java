@@ -145,7 +145,13 @@ public final class CodeFileUtil {
         }
         String imageSuffix[] = new String[]
                 {
-                        ".png", ".jpg", ".jpeg", ".jpe", ".bmp", ".exif", ".dxf", ".wbmp", ".ico", ".jpe", ".gif", ".pcx", ".fpx", ".ufo", ".tiff", ".svg", ".eps", ".ai", ".tga", ".pcd", ".hdri"
+                        ".png", ".jpg", ".jpeg",
+                        ".jpe", ".bmp", ".exif",
+                        ".dxf", ".wbmp", ".ico",
+                        ".gif", ".pcx", ".hdri",
+                        ".fpx", ".ufo", ".tiff",
+                        ".svg", ".eps", ".ai",
+                        ".tga", ".pcd",
                 };
         for (String string : imageSuffix) {
             if (fileName.equalsIgnoreCase(string)) {

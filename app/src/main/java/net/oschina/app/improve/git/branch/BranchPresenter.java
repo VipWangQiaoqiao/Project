@@ -30,7 +30,7 @@ class BranchPresenter implements BranchContract.Presenter {
 
     @Override
     public void getBranches(long id) {
-        API.getProjectBranchs(id, new TextHttpResponseHandler() {
+        API.getProjectBranches(id, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 mView.showGetBranchFailure(R.string.state_network_error);
