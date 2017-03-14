@@ -1,9 +1,15 @@
 package net.oschina.app.improve.git.tree;
 
+import android.view.View;
+
 import net.oschina.app.improve.base.BaseRecyclerFragment;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.git.bean.Tree;
 import net.oschina.app.improve.git.code.CodeDetailActivity;
+import net.oschina.app.improve.git.utils.CodeFileUtil;
+import net.oschina.app.improve.utils.DialogHelper;
+
+import java.util.List;
 
 /**
  * Created by haibin
@@ -18,12 +24,22 @@ public class TreeFragment extends BaseRecyclerFragment<TreeContract.Presenter, T
     }
 
     @Override
+    protected void initWidget(View root) {
+        super.initWidget(root);
+        mRefreshLayout.setEnabled(false);
+    }
+
+    @Override
     protected void onItemClick(Tree tree, int position) {
         if (tree.isFile()) {
-            CodeDetailActivity.show(mContext,
-                    mPresenter.getProject(),
-                    tree.getName(),
-                    mPresenter.getBranch());
+            if (CodeFileUtil.isCodeTextFile(tree.getName())) {
+                CodeDetailActivity.show(mContext,
+                        mPresenter.getProject(),
+                        mPresenter.getPath() + tree.getName(),
+                        mPresenter.getBranch());
+            } else {
+                DialogHelper.getMessageDialog(mContext, "温馨提醒", "该文件不支持在线预览", "取消").show();
+            }
         } else {
             mPresenter.nextLoad(tree.getName());
         }

@@ -64,9 +64,7 @@ class TreePresenter implements TreeContract.Presenter {
                     List<Tree> bean = new Gson().fromJson(responseString, type);
                     if (bean != null && bean.size() != 0) {
                         mTreeMap.put(mBranch, bean);
-                        if (mPaths.size() == 0) {
-                            mCodeMap.put(0, bean);
-                        }
+                        mCodeMap.put(0, bean);
                         mView.onRefreshSuccess(bean);
                         isLoading = false;
                     } else {
@@ -101,13 +99,12 @@ class TreePresenter implements TreeContract.Presenter {
 
     @Override
     public void preLoad(int position) {
-        isLoading = true;
         if (mPaths.size() < position)
             return;
+        isLoading = true;
         List<Tree> codes = mCodeMap.get(position);
         mView.onRefreshSuccess(codes);
         remove(position);
-        isLoading = false;
     }
 
     @Override
@@ -159,6 +156,7 @@ class TreePresenter implements TreeContract.Presenter {
                 });
     }
 
+    @Override
     public String getPath() {
         StringBuilder sb = new StringBuilder();
         for (String s : mPaths) {
@@ -176,9 +174,15 @@ class TreePresenter implements TreeContract.Presenter {
         return mProject;
     }
 
+    /**
+     * 切换分支清空缓存代码仓库
+     */
     @Override
     public void setBranch(String branch) {
         this.mBranch = branch;
+        mPaths.clear();
+        mTreeMap.clear();
+        mCodeMap.clear();
     }
 
     @Override
