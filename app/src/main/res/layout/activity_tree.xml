@@ -9,7 +9,7 @@
         android:id="@+id/ll_branch"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:background="#f1efef"
+        android:background="#f9f9f9"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/lay_16"
@@ -45,6 +45,11 @@
             android:src="@mipmap/ic_arrow_bottom"
             android:tint="@color/gray" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
 
     <FrameLayout
         android:id="@+id/fl_content"

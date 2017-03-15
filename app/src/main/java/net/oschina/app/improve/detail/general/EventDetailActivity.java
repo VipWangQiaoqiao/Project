@@ -197,7 +197,9 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
             mTextApplyStatus.setText(getResources().getString(applyStr));
 
             mTextApplyStatus.setText(getString(getApplyStatusStrId(eventApplyStatus)));
-            if (eventApplyStatus != EventDetail.APPLY_STATUS_UN_SIGN && eventApplyStatus != EventDetail.APPLY_STATUS_PRESENTED) {
+            if (eventApplyStatus != EventDetail.APPLY_STATUS_UN_SIGN &&
+                    eventApplyStatus != EventDetail.APPLY_STATUS_PRESENTED
+                    && eventApplyStatus != EventDetail.APPLY_STATUS_REFUSED) {
                 //如果已经报名了,而且未出席
                 setSignUnEnable();
                 return;
