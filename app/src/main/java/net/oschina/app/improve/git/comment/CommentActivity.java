@@ -6,10 +6,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.git.bean.Comment;
 import net.oschina.app.improve.git.bean.Project;
+import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 
 /**
  * Created by haibin
@@ -45,6 +48,16 @@ public class CommentActivity extends BaseBackActivity implements CommentContract
         mDelegation.hideFav();
         mDelegation.hideShare();
         mDelegation.getBottomSheet().hideSyncAction();
+        mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ((AccountHelper.isLogin())) {
+                    UserSelectFriendsActivity.show(CommentActivity.this, mDelegation.getBottomSheet().getEditText());
+                } else {
+                    LoginActivity.show(CommentActivity.this, 1);
+                }
+            }
+        });
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
