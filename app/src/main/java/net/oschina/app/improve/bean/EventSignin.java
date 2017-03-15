@@ -14,6 +14,7 @@ public class EventSignin implements Serializable {
     private String message; //1.您是开源软件作者，本次活动免费～ 2.需缴纳50元！（金额由活动决定）3.未报名，不可签到 4.活动已结束／活动报名已经截止 5已签到
     private int cost; //缴纳金额（单位分）
     private String href; //分享推广的链接
+    private String costMessage;
 
     public int getOptStatus() {
         return optStatus;
@@ -45,6 +46,14 @@ public class EventSignin implements Serializable {
 
     public void setHref(String href) {
         this.href = href;
+    }
+
+    public String getCostMessage() {
+        return costMessage;
+    }
+
+    public void setCostMessage(String costMessage) {
+        this.costMessage = costMessage;
     }
 
     @Override
