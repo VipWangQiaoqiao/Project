@@ -1,7 +1,5 @@
 package net.oschina.app.improve.git.branch;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -38,7 +36,6 @@ class BranchPresenter implements BranchContract.Presenter {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.e("responseString", responseString);
                 try {
                     Type type = new TypeToken<List<Branch>>() {
                     }.getType();

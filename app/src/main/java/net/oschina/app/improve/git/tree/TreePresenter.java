@@ -1,7 +1,5 @@
 package net.oschina.app.improve.git.tree;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -128,7 +126,6 @@ class TreePresenter implements TreeContract.Presenter {
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        Log.e("responseString", responseString);
                         try {
                             Type type = new TypeToken<List<Tree>>() {
                             }.getType();
@@ -175,11 +172,11 @@ class TreePresenter implements TreeContract.Presenter {
         return mProject;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public String getImageUrl(String fileName) {
-        String url = "https://git.oschina.net/" + mProject.getPathWithNamespace() + "/" + "raw" + "/" + mBranch + "/" + URLEncoder.encode
+        return "https://git.oschina.net/" + mProject.getPathWithNamespace() + "/" + "raw" + "/" + mBranch + "/" + URLEncoder.encode
                 (getPath() + fileName);
-        return url;
     }
 
     /**

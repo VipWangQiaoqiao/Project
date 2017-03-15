@@ -7,6 +7,7 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.improve.git.bean.Project;
 
 /**
  * Created by haibin
@@ -103,5 +104,14 @@ public final class API {
         params.put("projectId", id);
         params.put("pageToken", token);
         ApiHttpClient.get("action/apiv2/git_comments_list", params, handler);
+    }
+
+    public static void addProjectComment(Project project, String comment, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("projectId", project.getId());
+        params.put("name", project.getName());
+        params.put("pathWithNamespace", project.getPathWithNamespace());
+        params.put("content", comment);
+        ApiHttpClient.post("action/apiv2/pub_git_comment", params, handler);
     }
 }

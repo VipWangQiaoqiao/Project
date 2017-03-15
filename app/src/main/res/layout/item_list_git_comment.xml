@@ -18,7 +18,7 @@
         tools:ignore="RtlSymmetry">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_avatar"
+            android:id="@+id/civ_owner"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center_vertical"
