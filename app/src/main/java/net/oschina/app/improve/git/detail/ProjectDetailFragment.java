@@ -167,7 +167,7 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
         // 分享
         if (mAlertDialog == null) {
             mAlertDialog = new
-                    ShareDialog(getActivity(), mProject.getId())
+                    ShareDialog(getActivity())
                     .title(mProject.getOwner().getName() + "/" + mProject.getName())
                     .content(content)
                     .url(mPresenter.getShareUrl())
