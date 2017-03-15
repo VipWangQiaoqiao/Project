@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -30,7 +31,6 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.account.base.AccountBaseActivity;
-import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralRecyclerFragment;
@@ -456,35 +456,33 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @SuppressWarnings("unchecked")
     @Override
     protected void setListData(ResultBean<PageBean<Tweet>> resultBean) {
-        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
+        final PageBean<Tweet> pageBean = resultBean.getResult();
+        final List<Tweet> items = pageBean.getItems();
+        final boolean isEmpty = items == null || items.size() == 0;
+        if (!isEmpty)
+            mBean.setNextPageToken(pageBean.getNextPageToken());
+
         if (isRefreshing) {
-            //cache the time
-            mBean.setItems(resultBean.getResult().getItems());
+            AppConfig.getAppConfig(getActivity()).set("system_time", resultBean.getTime());
             mAdapter.clear();
-            // 主要是为了清理重复数据， stupid
             ((BaseGeneralRecyclerAdapter) mAdapter).clearPreItems();
             ((BaseGeneralRecyclerAdapter) mAdapter).addItems(mBean.getItems());
 
-            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
+            mBean.setItems(items);
+            mBean.setPrevPageToken(pageBean.getPrevPageToken());
             mRefreshLayout.setCanLoadMore(true);
             if (isNeedCache()) {
-                AppOperator.runOnThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        CacheManager.saveToJson(getActivity(), CACHE_NAME, mBean.getItems());
-                    }
-                });
+                CacheManager.saveToJson(getActivity(), CACHE_NAME, items);
             }
         } else {
             ((BaseGeneralRecyclerAdapter) mAdapter).addItems(resultBean.getResult().getItems());
         }
 
-        if (resultBean.getResult().getItems() == null || resultBean.getResult().getItems().size() < 20)
+        if (isEmpty) {
             mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
-//        mAdapter.setState(resultBean.getResult().getItems() == null
-//                || resultBean.getResult().getItems().size() < 20
-//                ? BaseRecyclerAdapter.STATE_NO_MORE
-//                : BaseRecyclerAdapter.STATE_LOADING, true);
+            mRefreshLayout.setCanLoadMore(false);
+        }
+
         if (mAdapter.getItems().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
