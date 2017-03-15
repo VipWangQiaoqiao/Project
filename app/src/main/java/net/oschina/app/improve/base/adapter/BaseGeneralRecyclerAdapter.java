@@ -31,9 +31,9 @@ public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<
     }
 
     protected void parseAtUserContent(TweetTextView textView, String text) {
-        String content ;
+        String content;
         if (TextUtils.isEmpty(text)) return;
-        content = text.replaceAll("[\n\\s]+", " ").replaceAll("&nbsp;"," ");
+        content = text.replaceAll("[\n\\s]+", " ").replaceAll("&nbsp;", " ");
         Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mCallBack.getContext(), content);
         spannable = AssimilateUtils.assimilateOnlyTag(mCallBack.getContext(), spannable);
         spannable = AssimilateUtils.assimilateOnlyLink(mCallBack.getContext(), spannable);
@@ -46,13 +46,17 @@ public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<
         textView.setLongClickable(false);
     }
 
-    public void addItems(List<T> items) {
-        if (items != null) {
+    @SuppressWarnings("UnusedReturnValue")
+    public int addItems(List<T> items) {
+        int filterOut = 0;
+        if (items != null && !items.isEmpty()) {
             List<T> date = new ArrayList<>();
             if (mPreItems != null) {
                 for (T d : items) {
                     if (!mPreItems.contains(d)) {
                         date.add(d);
+                    } else {
+                        filterOut++;
                     }
                 }
             } else {
@@ -61,6 +65,7 @@ public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<
             mPreItems = items;
             addAll(date);
         }
+        return filterOut;
     }
 
     public void clearPreItems() {
