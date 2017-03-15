@@ -85,6 +85,9 @@ public class UserEventSigninActivity extends BaseBackActivity {
     @Bind(R.id.tv_signin_notice)
     TextView mTvNotice;
 
+    @Bind(R.id.tv_cost_notice)
+    TextView mTvCost;
+
     @Bind(R.id.bt_signin_submit)
     Button mBtSubmit;
 
@@ -434,6 +437,10 @@ public class UserEventSigninActivity extends BaseBackActivity {
                 mLayUserInfo.setVisibility(View.GONE);
                 mTvNotice.setVisibility(View.VISIBLE);
                 mTvNotice.setText(eventSignin.getMessage());
+                if(!TextUtils.isEmpty(eventSignin.getCostMessage())){
+                    mTvCost.setVisibility(View.VISIBLE);
+                    mTvCost.setText(eventSignin.getCostMessage());
+                }
                 break;
             case 0x03://活动已结束／活动报名已截止
             case 0x04://您已签到
