@@ -44,6 +44,7 @@ public class CommentActivity extends BaseBackActivity implements CommentContract
         mDelegation = CommentBar.delegation(this, layComment);
         mDelegation.hideFav();
         mDelegation.hideShare();
+        mDelegation.getBottomSheet().hideAtAction();
         mDelegation.getBottomSheet().hideSyncAction();
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override

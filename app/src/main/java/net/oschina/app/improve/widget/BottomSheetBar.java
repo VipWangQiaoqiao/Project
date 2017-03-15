@@ -102,6 +102,10 @@ public class BottomSheetBar {
         mSyncToTweetView.setText(null);
     }
 
+    public void hideAtAction() {
+        mAtView.setVisibility(View.INVISIBLE);
+    }
+
     /**
      * 默认显示的
      */
