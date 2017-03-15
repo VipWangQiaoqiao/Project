@@ -64,8 +64,6 @@ public class UserEventSigninActivity extends BaseBackActivity {
     TextView mTvAuthor;
     @Bind(R.id.tv_event_type)
     TextView mTvType;
-    @Bind(R.id.tv_event_counts)
-    TextView mTvCounts;
 
     @Bind(R.id.ck_check)
     CheckBox mCkLabel;
@@ -389,7 +387,6 @@ public class UserEventSigninActivity extends BaseBackActivity {
         }
 
         mTvType.setText(String.format("%s：%s", getString(R.string.signin_event_type_hint), getString(typeStr)));
-        mTvCounts.setText(String.format("%d%s", eventDetail.getViewCount(), getString(R.string.signin_event_counts_hint)));
 
         if (!AccountHelper.isLogin()) {
             setTelVisible(View.VISIBLE);
