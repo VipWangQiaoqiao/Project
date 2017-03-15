@@ -89,7 +89,7 @@ public class CodeDetailActivity extends BaseBackActivity {
         // 分享
         if (mAlertDialog == null) {
             mAlertDialog = new
-                    ShareDialog(this, mProject.getId())
+                    ShareDialog(this)
                     .title(mProject.getOwner().getName() + "/" + mProject.getName())
                     .content(content)
                     .url(mPresenter.getShareUrl())

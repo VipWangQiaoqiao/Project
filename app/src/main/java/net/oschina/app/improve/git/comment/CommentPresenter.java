@@ -12,10 +12,11 @@ import cz.msebera.android.httpclient.Header;
  * on 2017/3/14.
  */
 
-public class CommentPresenter implements CommentContract.Presenter{
+public class CommentPresenter implements CommentContract.Presenter {
     private final CommentContract.View mView;
     private final Project mProject;
-    public CommentPresenter(CommentContract.View mView,Project mProject) {
+
+    public CommentPresenter(CommentContract.View mView, Project mProject) {
         this.mView = mView;
         this.mProject = mProject;
         this.mView.setPresenter(this);
@@ -23,7 +24,7 @@ public class CommentPresenter implements CommentContract.Presenter{
 
     @Override
     public void onRefreshing() {
-        API.getProjectComments(mProject.getId(), new TextHttpResponseHandler() {
+        API.getProjectComments(mProject.getId(), "null", new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 
