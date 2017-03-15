@@ -15,6 +15,8 @@ import android.view.View;
 
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.improve.git.bean.Project;
+import net.oschina.app.improve.git.detail.ProjectDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.UIHelper;
@@ -61,6 +63,10 @@ public class AssimilateUtils {
                     "|<a href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a>"
     );
 
+    private static final Pattern PatternGit = Pattern.compile(
+            "<a\\s+href=\'http[s]?://git\\.net/[^>]*\'[^>]*data-project=\'([0-9]*)\'[^>]*>([^<>]*)</a>"
+    );
+
     // links
     public static final Pattern PatternLinks = Pattern.compile(
             "<a\\s+href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a>"
@@ -92,6 +98,7 @@ public class AssimilateUtils {
         content = HTMLUtil.rollbackReplaceTag(content);
         Spannable spannable = assimilateOnlyAtUser(context, content);
         spannable = assimilateOnlyTag(context, spannable);
+        spannable = assimilateOnlyGit(context, spannable);
         spannable = assimilateOnlyLink(context, spannable);
         spannable = InputHelper.displayEmoji(context.getResources(), spannable);
         return spannable;
@@ -182,6 +189,35 @@ public class AssimilateUtils {
                 UIHelper.showUrlRedirect(context, str);
             }
         });
+    }
+
+    /**
+     * 格式化git标签
+     */
+    public static Spannable assimilateOnlyGit(final Context context, CharSequence content) {
+        SpannableStringBuilder builder = new SpannableStringBuilder(content);
+        Matcher matcher;
+        while (true) {
+            matcher = PatternGit.matcher(builder.toString());
+            if (matcher.find()) {
+                final String group0 = matcher.group(1);
+                final String group1 = matcher.group(2);
+                builder.replace(matcher.start(), matcher.end(), group1);
+                ClickableSpan span = new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        Project project = new Project();
+                        project.setId(Integer.parseInt(group0));
+                        ProjectDetailActivity.show(context, project);
+                    }
+                };
+                builder.setSpan(span, matcher.start(), matcher.start() + group1.length(),
+                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                continue;
+            }
+            break;
+        }
+        return builder;
     }
 
     /**

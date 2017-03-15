@@ -11,6 +11,7 @@ import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.git.bean.Project;
 import net.oschina.app.improve.git.bean.User;
+import net.oschina.app.improve.git.comment.CommentActivity;
 import net.oschina.app.improve.git.tree.TreeActivity;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.util.HTMLUtil;
@@ -85,7 +86,7 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
         }
     }
 
-    @OnClick({R.id.ll_code, R.id.ll_share})
+    @OnClick({R.id.ll_code, R.id.ll_share, R.id.ll_comment})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -94,6 +95,9 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
                 break;
             case R.id.ll_share:
                 toShare();
+                break;
+            case R.id.ll_comment:
+                CommentActivity.show(mContext, mProject);
                 break;
         }
     }
@@ -104,7 +108,13 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
     }
 
     @Override
+    public void showGetCommentCountSuccess(int count) {
+        mTextCommentCount.setText(String.format("评论（%s）",count));
+    }
+
+    @Override
     public void showGetDetailSuccess(Project project, int strId) {
+        mPresenter.getCommentCount(project.getId());
         mProject = project;
         initProject(project);
         mWebView.loadDetailDataAsync(project.getReadme(), new Runnable() {
@@ -127,7 +137,7 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
 
     @SuppressLint({"SimpleDateFormat", "SetTextI18n"})
     private void initProject(Project project) {
-        if (project.getId() == 0) return;
+        if (project.getId() == 0 || project.getOwner() == null) return;
         User user = project.getOwner();
         if (user != null) {
             mTextName.setText(user.getName() + "/" + project.getName());

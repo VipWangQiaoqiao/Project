@@ -125,7 +125,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile 'net.oschina.common:common:0.1.7'
+    compile 'net.oschina.common:common:0.1.6'
     compile 'com.belerweb:pinyin4j:2.5.1'
     testCompile 'junit:junit:4.12'
 }

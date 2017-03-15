@@ -21,14 +21,16 @@ import cz.msebera.android.httpclient.Header;
  * on 2017/3/14.
  */
 
-public class CommentPresenter implements CommentContract.Presenter {
+class CommentPresenter implements CommentContract.Presenter {
     private final CommentContract.View mView;
+    private final CommentContract.Action mAction;
     private final Project mProject;
     private String mToken;
 
-    public CommentPresenter(CommentContract.View mView, Project mProject) {
+    CommentPresenter(CommentContract.View mView, CommentContract.Action mAction, Project mProject) {
         this.mView = mView;
         this.mProject = mProject;
+        this.mAction = mAction;
         this.mView.setPresenter(this);
     }
 
@@ -99,6 +101,35 @@ public class CommentPresenter implements CommentContract.Presenter {
                     e.printStackTrace();
                     mView.showNetworkError(R.string.state_network_error);
                     mView.onComplete();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void addComment(String content) {
+        API.addProjectComment(mProject, content, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                mView.showAddCommentFailure(R.string.pub_comment_failed);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<Comment>>() {
+                    }.getType();
+                    ResultBean<Comment> bean = new Gson().fromJson(responseString, type);
+                    if (bean != null && bean.isSuccess()) {
+                        mAction.showAddCommentSuccess(bean.getResult(), R.string.pub_comment_success);
+                        mView.showAddCommentSuccess(bean.getResult(), R.string.pub_comment_success);
+                    } else {
+                        mAction.showAddCommentFailure(R.string.pub_comment_failed);
+                        mView.showAddCommentFailure(R.string.pub_comment_failed);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mView.showAddCommentFailure(R.string.pub_comment_failed);
                 }
             }
         });

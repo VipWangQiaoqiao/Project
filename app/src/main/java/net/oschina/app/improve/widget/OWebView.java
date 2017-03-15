@@ -87,6 +87,28 @@ public class OWebView extends WebView {
         }
     }
 
+    public void loadDetailDataAsync(final String content) {
+        Context context = getContext();
+        if (context != null && context instanceof Activity) {
+            final Activity activity = (Activity) context;
+            AppOperator.runOnThread(new Runnable() {
+                @Override
+                public void run() {
+                    final String body = setupWebContent(content, true, true, "");
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //loadData(body, "text/html; charset=UTF-8", null);
+                            loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
+                        }
+                    });
+                }
+            });
+        } else {
+            TLog.e(OWebView.class.getName(), "loadDetailDataAsync error, the Context isn't ok");
+        }
+    }
+
     public void loadDetailDataAsync(final String content, Runnable finishCallback) {
         this.setWebViewClient(new OWebClient(finishCallback));
         Context context = getContext();
@@ -190,7 +212,7 @@ public class OWebView extends WebView {
         // 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
         if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true)
                 || TDevice.isWifiOpen()) {
-            content = content.replaceAll("<([u|o])l.*>","<$1l style=\"padding-left:20px\">");
+            content = content.replaceAll("<([u|o])l.*>", "<$1l style=\"padding-left:20px\">");
             // 过滤掉 img标签的width,height属性
             content = content.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
             content = content.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
