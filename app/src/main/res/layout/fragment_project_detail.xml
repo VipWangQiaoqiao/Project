@@ -23,7 +23,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#fcfcfc"
+                android:background="#f9f9f9"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
                 android:paddingBottom="12dp"
@@ -75,7 +75,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#fcfcfc"
+                android:background="#f9f9f9"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -213,7 +213,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="-2dp"
@@ -222,7 +221,8 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/lay_8"
-                    android:paddingTop="@dimen/lay_8">
+                    android:paddingTop="@dimen/lay_8"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -245,7 +245,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="-2dp"
@@ -254,7 +253,8 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/lay_8"
-                    android:paddingTop="@dimen/lay_8">
+                    android:paddingTop="@dimen/lay_8"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -296,6 +296,11 @@
                 android:textColor="#9d9d9d"
                 android:textSize="12sp" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
+
             <FrameLayout
                 android:id="@+id/lay_webview"
                 android:layout_width="match_parent"
@@ -327,6 +332,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/selector_event_fav"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -349,6 +355,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/selector_event_fav"
             android:gravity="center"
             android:orientation="horizontal">
 
