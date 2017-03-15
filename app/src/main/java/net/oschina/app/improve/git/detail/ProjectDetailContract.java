@@ -20,6 +20,8 @@ interface ProjectDetailContract {
         void showGetDetailSuccess(Project project, int strId);
 
         void showGetDetailFailure(int strId);
+
+        void showGetCommentCountSuccess(int count);
     }
 
     interface Presenter extends BasePresenter {
@@ -28,5 +30,7 @@ interface ProjectDetailContract {
         void getProjectDetail(String name, String pathWithNamespace);
 
         String getShareUrl();
+
+        void getCommentCount(long id);
     }
 }

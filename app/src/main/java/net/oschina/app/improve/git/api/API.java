@@ -106,6 +106,13 @@ public final class API {
         ApiHttpClient.get("action/apiv2/git_comments_list", params, handler);
     }
 
+    /**
+     * 添加git项目评论
+     *
+     * @param project 项目
+     * @param comment 内容
+     * @param handler 回调
+     */
     public static void addProjectComment(Project project, String comment, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("projectId", project.getId());
@@ -113,5 +120,17 @@ public final class API {
         params.put("pathWithNamespace", project.getPathWithNamespace());
         params.put("content", comment);
         ApiHttpClient.post("action/apiv2/pub_git_comment", params, handler);
+    }
+
+    /**
+     * 获取项目评论数
+     *
+     * @param id      项目id
+     * @param handler 回调
+     */
+    public static void getProjectCommentCount(long id, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("projectId", id);
+        ApiHttpClient.get("action/apiv2/git_comment_count", params, handler);
     }
 }

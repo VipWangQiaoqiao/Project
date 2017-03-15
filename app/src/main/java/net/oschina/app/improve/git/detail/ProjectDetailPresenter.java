@@ -71,6 +71,28 @@ class ProjectDetailPresenter implements ProjectDetailContract.Presenter {
     }
 
     @Override
+    public void getCommentCount(long id) {
+        API.getProjectCommentCount(id, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                // TODO: 2017/3/15
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<CommentCount>>() {
+                    }.getType();
+                    ResultBean<CommentCount> bean = new Gson().fromJson(responseString, type);
+                    mView.showGetCommentCountSuccess(bean.getResult().commentCount);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
     public void getProjectDetail(String name, String pathWithNamespace) {
         API.getProjectDetail(pathWithNamespace + "%2F" + name, mHandler);
     }
@@ -79,5 +101,17 @@ class ProjectDetailPresenter implements ProjectDetailContract.Presenter {
     public String getShareUrl() {
         return String.format("https://git.oschina.net/%s/",
                 mProject.getPathWithNamespace());
+    }
+
+    private class CommentCount {
+        private int commentCount;
+
+        public int getCommentCount() {
+            return commentCount;
+        }
+
+        public void setCommentCount(int commentCount) {
+            this.commentCount = commentCount;
+        }
     }
 }

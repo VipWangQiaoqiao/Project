@@ -108,7 +108,13 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
     }
 
     @Override
+    public void showGetCommentCountSuccess(int count) {
+        mTextCommentCount.setText(String.format("评论（%s）",count));
+    }
+
+    @Override
     public void showGetDetailSuccess(Project project, int strId) {
+        mPresenter.getCommentCount(project.getId());
         mProject = project;
         initProject(project);
         mWebView.loadDetailDataAsync(project.getReadme(), new Runnable() {
@@ -131,7 +137,7 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
 
     @SuppressLint({"SimpleDateFormat", "SetTextI18n"})
     private void initProject(Project project) {
-        if (project.getId() == 0) return;
+        if (project.getId() == 0 || project.getOwner() == null) return;
         User user = project.getOwner();
         if (user != null) {
             mTextName.setText(user.getName() + "/" + project.getName());
