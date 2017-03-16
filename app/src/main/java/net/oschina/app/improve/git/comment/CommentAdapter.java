@@ -56,7 +56,7 @@ class CommentAdapter extends BaseGeneralRecyclerAdapter<Comment> {
         });
         h.mTextName.setText(author.getName());
         h.mTextComment.setText(item.getContent());
-        h.mTextPubDate.setText(String.format("%s楼 ", (position + 1)) + StringUtils.formatSomeAgo(item.getPubDate()));
+        h.mTextPubDate.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         h.mImageComment.setTag(item);
         h.mImageComment.setOnClickListener(mCommentListener);
     }
