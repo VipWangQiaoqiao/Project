@@ -97,8 +97,8 @@ public class AssimilateUtils {
         if (TextUtils.isEmpty(content)) return null;
         content = HTMLUtil.rollbackReplaceTag(content);
         Spannable spannable = assimilateOnlyAtUser(context, content);
-        spannable = assimilateOnlyTag(context, spannable);
         spannable = assimilateOnlyGit(context, spannable);
+        spannable = assimilateOnlyTag(context, spannable);
         spannable = assimilateOnlyLink(context, spannable);
         spannable = InputHelper.displayEmoji(context.getResources(), spannable);
         return spannable;
