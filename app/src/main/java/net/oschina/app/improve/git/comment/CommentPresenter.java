@@ -1,7 +1,5 @@
 package net.oschina.app.improve.git.comment;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -47,7 +45,6 @@ class CommentPresenter implements CommentContract.Presenter {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.e("res",responseString);
                 try {
                     Type type = new TypeToken<ResultBean<PageBean<Comment>>>() {
                     }.getType();
@@ -55,9 +52,9 @@ class CommentPresenter implements CommentContract.Presenter {
                     if (bean != null && bean.isSuccess()) {
                         mToken = bean.getResult().getNextPageToken();
                         List<Comment> list = bean.getResult().getItems();
-                        if (list != null ) {
+                        if (list != null) {
                             mView.onRefreshSuccess(list);
-                            if(list.size()<=20){
+                            if (list.size() <= 20) {
                                 mView.showMoreMore();
                             }
                         } else {
