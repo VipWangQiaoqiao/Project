@@ -52,6 +52,7 @@ public class CommentActivity extends BaseBackActivity implements CommentContract
         mDelegation.hideFav();
         mDelegation.hideShare();
         mDelegation.getBottomSheet().hideSyncAction();
+        mDelegation.getBottomSheet().hideMentionAction();
         mDelegation.getBottomSheet().setMentionListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
