@@ -17,6 +17,7 @@ import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
@@ -109,7 +110,7 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
 
     @Override
     public void showGetCommentCountSuccess(int count) {
-        mTextCommentCount.setText(String.format("评论（%s）",count));
+        mTextCommentCount.setText(String.format("评论（%s）", count));
     }
 
     @Override
@@ -143,9 +144,9 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
             mTextName.setText(user.getName() + "/" + project.getName());
         }
         mTextLanguage.setText(project.getLanguage());
-        mTextStarCount.setText(String.valueOf(project.getStarsCount()));
-        mTextWatchCount.setText(String.valueOf(project.getWatchesCount()));
-        mTextForkCount.setText(String.valueOf(project.getForksCount()));
+        mTextStarCount.setText(getCount(project.getStarsCount()));
+        mTextWatchCount.setText(getCount(project.getWatchesCount()));
+        mTextForkCount.setText(getCount(project.getForksCount()));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mTextUpdateDate.setText("上次更新于" + StringUtils.formatSomeAgo(dateFormat.format(project.getLastPushTime())));
         mTextIssuesCount.setText(String.valueOf(project.getIssueCount()));
@@ -160,6 +161,11 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
         if (mAlertDialog != null) {
             mAlertDialog.dismiss();
         }
+    }
+
+    private String getCount(int count) {
+        DecimalFormat decimalFormat=new DecimalFormat(".0");
+        return count >= 1000 ? String.format("%sk", decimalFormat.format((float)count / 1000)) : String.valueOf(count);
     }
 
     private boolean toShare() {

@@ -1,5 +1,7 @@
 package net.oschina.app.improve.git.comment;
 
+import android.view.View;
+
 import net.oschina.app.improve.base.BaseRecyclerFragment;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.git.bean.Comment;
@@ -11,10 +13,16 @@ import net.oschina.app.improve.widget.SimplexToast;
  */
 
 public class CommentFragment extends BaseRecyclerFragment<CommentContract.Presenter, Comment>
-        implements CommentContract.View{
+        implements CommentContract.View {
 
     static CommentFragment newInstance() {
         return new CommentFragment();
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        ((CommentAdapter) mAdapter).setCommentListener((View.OnClickListener) getContext());
     }
 
     @Override
@@ -29,7 +37,7 @@ public class CommentFragment extends BaseRecyclerFragment<CommentContract.Presen
 
     @Override
     public void showAddCommentFailure(int strId) {
-        SimplexToast.show(mContext,strId);
+        SimplexToast.show(mContext, strId);
     }
 
     @Override

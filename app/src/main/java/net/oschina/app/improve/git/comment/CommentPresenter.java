@@ -52,13 +52,16 @@ class CommentPresenter implements CommentContract.Presenter {
                     if (bean != null && bean.isSuccess()) {
                         mToken = bean.getResult().getNextPageToken();
                         List<Comment> list = bean.getResult().getItems();
-                        if (list != null && list.size() != 0) {
+                        if (list != null) {
                             mView.onRefreshSuccess(list);
+                            if (list.size() <= 20) {
+                                mView.showMoreMore();
+                            }
                         } else {
                             mView.showMoreMore();
                         }
                     } else {
-                        mView.showNetworkError(R.string.state_network_error);
+                        mView.showMoreMore();
                     }
                     mView.onComplete();
                 } catch (Exception e) {

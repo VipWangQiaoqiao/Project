@@ -64,7 +64,7 @@ public class AssimilateUtils {
     );
 
     private static final Pattern PatternGit = Pattern.compile(
-            "<a\\s+href=\'http[s]?://git\\.net/[^>]*\'[^>]*data-project=\'([0-9]*)\'[^>]*>([^<>]*)</a>"
+            "<a\\s+href=\'http[s]?://git\\.oschina\\.net/[^>]*\'[^>]*data-project=\'([0-9]*)\'[^>]*>([^<>]*)</a>"
     );
 
     // links

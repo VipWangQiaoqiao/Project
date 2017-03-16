@@ -131,6 +131,6 @@ public final class API {
     public static void getProjectCommentCount(long id, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("projectId", id);
-        ApiHttpClient.get("action/apiv2/git_comment_count", params, handler);
+        ApiHttpClient.get("action/apiv2/git_comments_count", params, handler);
     }
 }
