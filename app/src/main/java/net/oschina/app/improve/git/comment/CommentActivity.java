@@ -2,6 +2,8 @@ package net.oschina.app.improve.git.comment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -19,9 +21,11 @@ import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
  * on 2017/3/14.
  */
 
-public class CommentActivity extends BaseBackActivity implements CommentContract.Action {
+public class CommentActivity extends BaseBackActivity implements CommentContract.Action, View.OnClickListener {
     private CommentPresenter mPresenter;
     protected CommentBar mDelegation;
+    private String mMentionStr = "";
+    protected boolean mInputDoubleEmpty = false;
 
     public static void show(Context context, Project project) {
         Intent intent = new Intent(context, CommentActivity.class);
@@ -58,22 +62,56 @@ public class CommentActivity extends BaseBackActivity implements CommentContract
                 }
             }
         });
+        mDelegation.getBottomSheet().getEditText().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                    handleKeyDel();
+                }
+                return false;
+            }
+        });
         mDelegation.getBottomSheet().setCommitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.addComment(mDelegation.getBottomSheet().getCommentText());
+                mPresenter.addComment(mMentionStr + mDelegation.getBottomSheet().getCommentText());
             }
         });
     }
 
     @Override
+    public void onClick(View v) {
+        Comment comment = (Comment) v.getTag();
+        mMentionStr = "回复 @" + comment.getAuthor().getName() + ":";
+        mDelegation.getBottomSheet().show(mMentionStr);
+    }
+
+    @Override
     public void showAddCommentSuccess(Comment comment, int strId) {
         mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+        mMentionStr = "";
         mDelegation.getBottomSheet().dismiss();
     }
 
     @Override
     public void showAddCommentFailure(int strId) {
 
+    }
+
+    protected void handleKeyDel() {
+        if (!TextUtils.isEmpty(mMentionStr)) {
+            if (TextUtils.isEmpty(mDelegation.getBottomSheet().getCommentText())) {
+                if (mInputDoubleEmpty) {
+                    mMentionStr = "";
+                    mDelegation.setCommentHint("发表评论");
+                    mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+                } else {
+                    mInputDoubleEmpty = true;
+                }
+            } else {
+                mInputDoubleEmpty = false;
+            }
+        }
     }
 }

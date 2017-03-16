@@ -10,6 +10,8 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.git.bean.Project;
 
+import java.text.DecimalFormat;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -18,6 +20,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 class ProjectAdapter extends BaseGeneralRecyclerAdapter<Project> {
+    private DecimalFormat decimalFormat = new DecimalFormat(".0");
+
     ProjectAdapter(Callback callback) {
         super(callback, ONLY_FOOTER);
         setState(STATE_HIDE, false);
@@ -40,9 +44,9 @@ class ProjectAdapter extends BaseGeneralRecyclerAdapter<Project> {
         h.mTextDescription.setText(item.getDescription());
         h.mTextLanguage.setText(item.getLanguage());
         h.mTextLanguage.setVisibility(TextUtils.isEmpty(item.getLanguage()) ? View.GONE : View.VISIBLE);
-        h.mTextViewCount.setText(String.valueOf(item.getWatchesCount()));
-        h.mTextFavCount.setText(String.valueOf(item.getStarsCount()));
-        h.mTextForkCount.setText(String.valueOf(item.getForksCount()));
+        h.mTextViewCount.setText(getCount(item.getWatchesCount()));
+        h.mTextFavCount.setText(getCount(item.getStarsCount()));
+        h.mTextForkCount.setText(getCount(item.getForksCount()));
     }
 
     private static class ProjectViewHolder extends RecyclerView.ViewHolder {
@@ -60,5 +64,9 @@ class ProjectAdapter extends BaseGeneralRecyclerAdapter<Project> {
             mTextForkCount = (TextView) itemView.findViewById(R.id.tv_fork_count);
             mTextLanguage = (TextView) itemView.findViewById(R.id.tv_language);
         }
+    }
+
+    private String getCount(int count) {
+        return count >= 1000 ? String.format("%sk", decimalFormat.format((float) count / 1000)) : String.valueOf(count);
     }
 }
