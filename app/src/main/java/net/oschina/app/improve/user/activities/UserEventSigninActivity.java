@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -232,7 +231,6 @@ public class UserEventSigninActivity extends BaseBackActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 //签到成功更新数据
-                Log.e("res",responseString);
                 ResultBean<EventSignin> signinResultBean = AppOperator.createGson().fromJson(responseString,
                         new TypeToken<ResultBean<EventSignin>>() {
                         }.getType());
@@ -434,7 +432,7 @@ public class UserEventSigninActivity extends BaseBackActivity {
                 mLayUserInfo.setVisibility(View.GONE);
                 mTvNotice.setVisibility(View.VISIBLE);
                 mTvNotice.setText(eventSignin.getMessage());
-                if(!TextUtils.isEmpty(eventSignin.getCostMessage())){
+                if (!TextUtils.isEmpty(eventSignin.getCostMessage())) {
                     mTvCost.setVisibility(View.VISIBLE);
                     mTvCost.setText(eventSignin.getCostMessage());
                 }
@@ -447,6 +445,10 @@ public class UserEventSigninActivity extends BaseBackActivity {
                 mTvNotice.setText(eventSignin.getMessage());
                 mLayUserInfo.setVisibility(View.GONE);
                 mBtSubmit.setEnabled(false);
+                if (!TextUtils.isEmpty(eventSignin.getCostMessage())) {
+                    mTvCost.setVisibility(View.VISIBLE);
+                    mTvCost.setText(eventSignin.getCostMessage());
+                }
                 break;
             case 0x02://活动进行中未报名
                 AppContext.showToastShort(eventSignin.getMessage());
