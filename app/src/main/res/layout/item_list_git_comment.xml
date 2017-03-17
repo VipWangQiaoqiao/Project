@@ -17,7 +17,7 @@
         android:paddingRight="8dp"
         tools:ignore="RtlSymmetry">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <net.oschina.app.improve.widget.PortraitView
             android:id="@+id/civ_owner"
             android:layout_width="36dp"
             android:layout_height="36dp"
