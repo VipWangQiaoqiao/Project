@@ -165,12 +165,14 @@ public class PortraitView extends CircleImageView {
         canvas.drawColor(getBackgroundColor(firstChar));
         canvas.drawText(firstChar, centerX, centerY + fontHalfH, paint);
 
+        /*
         paint.setStrokeWidth(6);
         paint.setColor(Color.BLACK);
         canvas.drawPoint(centerX, centerY, paint);
 
         paint.setColor(Color.BLACK);
         canvas.drawPoint(centerX, centerY + fontHalfH, paint);
+        */
 
         return bitmap;
     }
@@ -193,7 +195,7 @@ public class PortraitView extends CircleImageView {
     }
 
     private static void log(String args) {
-        TLog.e(TAG, args);
+        TLog.i(TAG, args);
     }
 
     static class Color {
