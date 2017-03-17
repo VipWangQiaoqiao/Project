@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:background="#FFF"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#FFF"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:background="@drawable/ic_material"
-        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_material"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <net.oschina.app.improve.widget.PortraitView
             android:id="@+id/iv_portrait"
-            android:src="@mipmap/widget_default_face"
             android:layout_width="45dp"
-            android:layout_height="45dp" />
+            android:layout_height="45dp"
+            android:src="@mipmap/widget_default_face" />
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginLeft="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical">
 
             <!--person nick-->
             <TextView
                 android:id="@+id/tv_nick"
-                tools:text="thanatosx"
-                android:textSize="16sp"
-                android:textColor="#111"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#111"
+                android:textSize="16sp"
+                tools:text="thanatosx" />
 
             <TextView
                 android:id="@+id/tv_position"
-                tools:text="开源中国  前端工程师  广东 深圳"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
                 android:lines="1"
                 android:textColor="#6A6A6A"
-                android:ellipsize="end"
-                android:layout_marginTop="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                tools:text="开源中国  前端工程师  广东 深圳" />
 
             <TextView
                 android:id="@+id/tv_integral"
-                tools:text="积分 24106  |  关注 53  |  粉丝 14536"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
                 android:lines="1"
                 android:textColor="#9D9D9D"
-                android:ellipsize="end"
-                android:layout_marginTop="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                tools:text="积分 24106  |  关注 53  |  粉丝 14536" />
 
         </LinearLayout>
 
@@ -61,6 +61,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="?attr/dividerHorizontal"/>
+        android:background="?attr/dividerHorizontal" />
 
 </LinearLayout>
