@@ -95,9 +95,11 @@ public class PortraitView extends CircleImageView {
 
         if (path == null) {
             path = "";
-        } else if ("http://www.oschina.net/img/portrait.gif".equalsIgnoreCase(path)) {
+        } else if (path.toLowerCase().contains("www.oschina.net/img/portrait.gif".toLowerCase())) {
             path = "";
         }
+
+        log("load path:" + path);
 
         Glide.with(context)
                 .load(path)

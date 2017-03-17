@@ -45,6 +45,7 @@ import net.oschina.app.improve.user.fragments.UserActiveFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
@@ -55,7 +56,6 @@ import java.util.Random;
 
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 别的用户的主页
@@ -71,7 +71,7 @@ public class OtherUserHomeActivity extends BaseActivity
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.iv_portrait)
-    CircleImageView mPortrait;
+    PortraitView mPortrait;
     @Bind(R.id.tv_nick)
     TextView mNick;
     @Bind(R.id.tv_summary)
@@ -87,7 +87,7 @@ public class OtherUserHomeActivity extends BaseActivity
     @Bind(R.id.layout_appbar)
     AppBarLayout mLayoutAppBar;
     @Bind(R.id.iv_logo_portrait)
-    CircleImageView mLogoPortrait;
+    PortraitView mLogoPortrait;
     @Bind(R.id.tv_logo_nick)
     TextView mLogoNick;
     @Bind(R.id.iv_gender)
@@ -322,18 +322,9 @@ public class OtherUserHomeActivity extends BaseActivity
                 || user.getName() == null)
             return;
 
-        getImageLoader()
-                .load(user.getPortrait())
-                .asBitmap()
-                .placeholder(R.mipmap.widget_default_face)
-                .error(R.mipmap.widget_default_face)
-                .into(mPortrait);
-        getImageLoader()
-                .load(user.getPortrait())
-                .asBitmap()
-                .placeholder(R.mipmap.widget_default_face)
-                .error(R.mipmap.widget_default_face)
-                .into(mLogoPortrait);
+        mPortrait.setup(user);
+        mLogoPortrait.setup(user);
+
         mLogoNick.setText(user.getName());
         mNick.setText(user.getName());
         String desc = user.getDesc();
