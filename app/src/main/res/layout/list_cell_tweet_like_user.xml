@@ -10,12 +10,12 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ic_material"
         android:orientation="horizontal"
+        android:paddingBottom="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingBottom="16dp"
         android:paddingTop="16dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <net.oschina.app.improve.widget.PortraitView
             android:id="@+id/iv_avatar"
             style="@style/user_face_image" />
 

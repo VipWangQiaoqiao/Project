@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <net.oschina.app.improve.widget.PortraitView
                 android:id="@+id/iv_question"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
