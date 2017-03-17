@@ -323,6 +323,7 @@ public class OtherUserHomeActivity extends BaseActivity
             return;
 
         mPortrait.setup(user);
+        mPortrait.setOnClickListener(this);
         mLogoPortrait.setup(user);
 
         mLogoNick.setText(user.getName());
