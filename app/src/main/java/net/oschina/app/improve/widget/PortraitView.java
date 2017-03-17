@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +19,7 @@ import com.bumptech.glide.request.target.Target;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.simple.Author;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.util.TLog;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -28,17 +30,32 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class PortraitView extends CircleImageView {
     private static final String TAG = PortraitView.class.getSimpleName();
+    private Author author;
 
     public PortraitView(Context context) {
         super(context);
+        init();
     }
 
     public PortraitView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public PortraitView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
+    }
+
+    private void init() {
+        setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (author == null || (author.getId() == 0 && TextUtils.isEmpty(author.getName())))
+                    return;
+                OtherUserHomeActivity.show(getContext(), author);
+            }
+        });
     }
 
     public static void setup(ImageView imageView, Author author) {
@@ -53,15 +70,32 @@ public class PortraitView extends CircleImageView {
     public void setup(Author author) {
         if (author == null)
             return;
-        setup(author.getName(), author.getPortrait());
+
+        this.author = author;
+        load(author.getName(), author.getPortrait());
     }
 
-    public void setup(final String name, String path) {
+    public void setup(final long id, final String name, String path) {
+        if (id == 0 && TextUtils.isEmpty(name) && TextUtils.isEmpty(path)) {
+            return;
+        }
+
+        Author author = new Author();
+        author.setId(id);
+        author.setName(name);
+        author.setPortrait(path);
+        setup(author);
+    }
+
+
+    private void load(final String name, String path) {
         final Context context = getContext();
         if (context == null)
             return;
 
-        if ("http://www.oschina.net/img/portrait.gif".equalsIgnoreCase(path)) {
+        if (path == null) {
+            path = "";
+        } else if ("http://www.oschina.net/img/portrait.gif".equalsIgnoreCase(path)) {
             path = "";
         }
 
