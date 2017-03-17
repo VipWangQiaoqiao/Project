@@ -12,9 +12,9 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.QuickOptionDialogHelper;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.widget.CircleImageView;
 
 import java.util.HashMap;
 
@@ -50,7 +50,7 @@ public class EventDetailFragment extends DetailFragment {
     TextView mTextLocation;
 
     @Bind(R.id.civ_author)
-    CircleImageView mImageAuthor;
+    PortraitView mImageAuthor;
 
     public static EventDetailFragment newInstance() {
         return new EventDetailFragment();
@@ -74,10 +74,7 @@ public class EventDetailFragment extends DetailFragment {
         final Author author = bean.getAuthor();
         if (author != null) {
             mTextAuthor.setText(author.getName());
-            getImgLoader()
-                    .load(author.getPortrait())
-                    .asBitmap()
-                    .into(mImageAuthor);
+            mImageAuthor.setup(author);
             mImageAuthor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -97,7 +94,6 @@ public class EventDetailFragment extends DetailFragment {
 
     @Override
     public void onPageFinished() {
-        // TODO: 2017/1/13
     }
 
     @Override
