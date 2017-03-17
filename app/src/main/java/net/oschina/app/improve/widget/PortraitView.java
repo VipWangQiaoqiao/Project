@@ -53,7 +53,7 @@ public class PortraitView extends CircleImageView {
     public void setup(Author author) {
         if (author == null)
             return;
-        setup("A", author.getPortrait());
+        setup(author.getName(), author.getPortrait());
     }
 
     public void setup(final String name, final String path) {
@@ -71,7 +71,7 @@ public class PortraitView extends CircleImageView {
                             @Override
                             public void onSizeReady(int width, int height) {
                                 final String firstChar = (TextUtils.isEmpty(name) ? "*" : name.substring(0, 1)).toUpperCase();
-                                Bitmap bitmap = buildSrcFromName("君", width, height);
+                                Bitmap bitmap = buildSrcFromName(firstChar, width, height);
                                 setScaleType(ScaleType.CENTER_CROP);
                                 setImageBitmap(bitmap);
                             }
