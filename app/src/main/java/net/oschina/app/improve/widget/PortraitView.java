@@ -3,30 +3,15 @@ package net.oschina.app.improve.widget;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v7.widget.RecyclerView;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.GenericRequestBuilder;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.ResourceDecoder;
-import com.bumptech.glide.load.data.DataFetcher;
-import com.bumptech.glide.load.engine.Resource;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.model.ModelLoader;
-import com.bumptech.glide.load.resource.bitmap.BitmapEncoder;
-import com.bumptech.glide.load.resource.bitmap.BitmapResource;
-import com.bumptech.glide.load.resource.bitmap.StreamBitmapDecoder;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
-import com.bumptech.glide.load.resource.transcode.BitmapToGlideDrawableTranscoder;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
@@ -35,20 +20,15 @@ import net.oschina.app.R;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.util.TLog;
 
-import java.io.IOException;
-import java.util.Locale;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.util.TypedValue.COMPLEX_UNIT_SP;
-import static android.util.TypedValue.applyDimension;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 /**
  * @author qiujuer Email:qiujuer@live.cn
  * @version 1.0.0
  */
 public class PortraitView extends CircleImageView {
+    private static final String TAG = PortraitView.class.getSimpleName();
+
     public PortraitView(Context context) {
         super(context);
     }
@@ -73,7 +53,7 @@ public class PortraitView extends CircleImageView {
     public void setup(Author author) {
         if (author == null)
             return;
-        setup(author.getName(), author.getPortrait());
+        setup("A", author.getPortrait());
     }
 
     public void setup(final String name, final String path) {
@@ -90,7 +70,9 @@ public class PortraitView extends CircleImageView {
                         target.getSize(new SizeReadyCallback() {
                             @Override
                             public void onSizeReady(int width, int height) {
-                                Bitmap bitmap = buildSrcFromName(name, width, height);
+                                final String firstChar = (TextUtils.isEmpty(name) ? "*" : name.substring(0, 1)).toUpperCase();
+                                Bitmap bitmap = buildSrcFromName("君", width, height);
+                                setScaleType(ScaleType.CENTER_CROP);
                                 setImageBitmap(bitmap);
                             }
                         });
@@ -105,32 +87,97 @@ public class PortraitView extends CircleImageView {
                 .into(this);
     }
 
-    private Bitmap buildSrcFromName(final String name, int w, int h) {
+    @SuppressWarnings("ResourceAsColor")
+    private Bitmap buildSrcFromName(final String firstChar, int w, int h) {
         if (w == Target.SIZE_ORIGINAL || w <= 0)
             w = 100;
         if (h == Target.SIZE_ORIGINAL || h <= 0)
             h = 100;
 
-        final String firstChar = (TextUtils.isEmpty(name) ? "*" : name.substring(0, 1)).toUpperCase();
+        final int size = Math.max(Math.min(Math.min(w, h), 320), 160);
+        final float fontSize = size * 0.5f;
+        log("size:" + size + " fontSize:" + fontSize);
 
-        BitmapPool pool = Glide.get(getContext()).getBitmapPool();
-        Bitmap bitmap = pool.getDirty(w, h, Bitmap.Config.ARGB_8888);
-        if (bitmap == null) {
-            bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        }
+        Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565);
 
-        Paint paint = new Paint();
+        TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        paint.setAntiAlias(true);
+        paint.setDither(true);
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(applyDimension(COMPLEX_UNIT_SP, 40, getResources().getDisplayMetrics()));
+        paint.setTextSize(fontSize);
         paint.setTypeface(Typeface.SANS_SERIF);
+        Typeface typeface = getFont(getContext(), "Numans-Regular.otf");
+        if (typeface != null)
+            paint.setTypeface(typeface);
 
+        Rect rect = new Rect();
+        paint.getTextBounds(firstChar, 0, 1, rect);
+        int fontHeight = rect.height();
+        log(rect.toString());
+
+        int fontHalfH = fontHeight >> 1;
+        int centerX = bitmap.getWidth() >> 1;
+        int centerY = bitmap.getHeight() >> 1;
 
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawColor(Color.BLUE);
-        canvas.drawText(firstChar, canvas.getWidth() / 2.0f, canvas.getHeight() / 2.0f + (paint.getTextSize() / 2.0f), paint);
+        canvas.drawColor(getBackgroundColor(firstChar));
+        canvas.drawText(firstChar, centerX, centerY + fontHalfH, paint);
+
+        paint.setStrokeWidth(6);
+        paint.setColor(Color.BLACK);
+        canvas.drawPoint(centerX, centerY, paint);
+
+        paint.setColor(Color.BLACK);
+        canvas.drawPoint(centerX, centerY + fontHalfH, paint);
+
         return bitmap;
     }
 
+    private static int getBackgroundColor(String firstChar) {
+        int hashCode = firstChar.hashCode();
+        int len = Color.COLORS.length;
+        return Color.COLORS[hashCode % (len - 1)];
+    }
+
+    public static Typeface getFont(Context context, String fontFile) {
+        String fontPath = "fonts/" + fontFile;
+
+        try {
+            return Typeface.createFromAsset(context.getAssets(), fontPath);
+        } catch (Exception var4) {
+            log("Font file at " + fontPath + " cannot be found or the file is not a valid font file.");
+            return null;
+        }
+    }
+
+    private static void log(String args) {
+        TLog.e(TAG, args);
+    }
+
+    static class Color {
+        static final int WHITE = -1;
+        static final int BLACK = -16777216;
+        static final int RED = -1762269;
+        static final int PINK = -1499549;
+        static final int PURPLE = -6543440;
+        static final int DEEP_PURPLE = -10011977;
+        static final int INDIGO = -12627531;
+        static final int BLUE = -11110404;
+        static final int LIGHT_PINK = -16537100;
+        static final int CYAN = -16728876;
+        static final int TEAL = -16738680;
+        static final int GREEN = -14312668;
+        static final int LIGHT_GREEN = -7617718;
+        static final int LIME = -3285959;
+        static final int YELLOW = -5317;
+        static final int AMBER = -16121;
+        static final int ORANGE = -26624;
+        static final int DEEP_ORANGE = -43230;
+        static final int BROWN = -8825528;
+        static final int GREY = -6381922;
+        static final int BLUE_GREY = -10453621;
+        static final int[] COLORS = new int[]{-1762269, -1499549, -6543440, -10011977, -12627531, -11110404, -16537100, -16728876, -16738680, -14312668, -7617718, -3285959, -5317, -16121, -26624, -43230, -8825528, -6381922, -10453621};
+    }
 
 }
