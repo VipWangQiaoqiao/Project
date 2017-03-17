@@ -56,12 +56,17 @@ public class PortraitView extends CircleImageView {
         setup(author.getName(), author.getPortrait());
     }
 
-    public void setup(final String name, final String path) {
+    public void setup(final String name, String path) {
         final Context context = getContext();
         if (context == null)
             return;
+
+        if ("http://www.oschina.net/img/portrait.gif".equalsIgnoreCase(path)) {
+            path = "";
+        }
+
         Glide.with(context)
-                .load("")
+                .load(path)
                 .asBitmap()
                 .error(R.mipmap.widget_default_face)
                 .listener(new RequestListener<String, Bitmap>() {
@@ -177,7 +182,9 @@ public class PortraitView extends CircleImageView {
         static final int BROWN = -8825528;
         static final int GREY = -6381922;
         static final int BLUE_GREY = -10453621;
-        static final int[] COLORS = new int[]{-1762269, -1499549, -6543440, -10011977, -12627531, -11110404, -16537100, -16728876, -16738680, -14312668, -7617718, -3285959, -5317, -16121, -26624, -43230, -8825528, -6381922, -10453621};
+        static final int[] COLORS = new int[]{RED, PINK, PURPLE, DEEP_PURPLE, INDIGO,
+                BLUE, LIGHT_PINK, CYAN, TEAL, GREEN, LIGHT_GREEN, LIME, YELLOW, AMBER,
+                ORANGE, DEEP_ORANGE, BROWN, GREY, BLUE_GREY};
     }
 
 }
