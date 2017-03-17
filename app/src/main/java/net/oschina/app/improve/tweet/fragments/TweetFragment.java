@@ -456,31 +456,35 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @SuppressWarnings("unchecked")
     @Override
     protected void setListData(ResultBean<PageBean<Tweet>> resultBean) {
-        final PageBean<Tweet> pageBean = resultBean.getResult();
-        final List<Tweet> items = pageBean.getItems();
-        final boolean isEmpty = items == null || items.size() == 0;
-        if (!isEmpty)
-            mBean.setNextPageToken(pageBean.getNextPageToken());
+        if (resultBean != null) {
+            final PageBean<Tweet> pageBean = resultBean.getResult();
+            if (pageBean != null) {
+                final List<Tweet> items = pageBean.getItems();
+                final boolean isEmpty = items == null || items.size() == 0;
+                if (!isEmpty)
+                    mBean.setNextPageToken(pageBean.getNextPageToken());
 
-        if (isRefreshing) {
-            AppConfig.getAppConfig(getActivity()).set("system_time", resultBean.getTime());
-            mAdapter.clear();
-            ((BaseGeneralRecyclerAdapter) mAdapter).clearPreItems();
-            ((BaseGeneralRecyclerAdapter) mAdapter).addItems(mBean.getItems());
+                if (isRefreshing) {
+                    AppConfig.getAppConfig(getActivity()).set("system_time", resultBean.getTime());
+                    mAdapter.clear();
+                    ((BaseGeneralRecyclerAdapter) mAdapter).clearPreItems();
+                    ((BaseGeneralRecyclerAdapter) mAdapter).addItems(items);
 
-            mBean.setItems(items);
-            mBean.setPrevPageToken(pageBean.getPrevPageToken());
-            mRefreshLayout.setCanLoadMore(true);
-            if (isNeedCache()) {
-                CacheManager.saveToJson(getActivity(), CACHE_NAME, items);
+                    mBean.setItems(items);
+                    mBean.setPrevPageToken(pageBean.getPrevPageToken());
+                    mRefreshLayout.setCanLoadMore(true);
+                    if (isNeedCache()) {
+                        CacheManager.saveToJson(getActivity(), CACHE_NAME, items);
+                    }
+                } else {
+                    ((BaseGeneralRecyclerAdapter) mAdapter).addItems(items);
+                }
+
+                if (isEmpty) {
+                    mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
+                    mRefreshLayout.setCanLoadMore(false);
+                }
             }
-        } else {
-            ((BaseGeneralRecyclerAdapter) mAdapter).addItems(resultBean.getResult().getItems());
-        }
-
-        if (isEmpty) {
-            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
-            mRefreshLayout.setCanLoadMore(false);
         }
 
         if (mAdapter.getItems().size() > 0) {
