@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="false"
-    android:padding="5dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <net.oschina.app.widget.AvatarView
         android:id="@+id/item_team_member_head"
@@ -31,9 +31,9 @@
         android:layout_below="@+id/item_team_member_head"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
-        android:textColor="?attr/infoTextColor"
         android:layout_marginTop="7dp"
         android:clickable="false"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="?attr/infoTextColor" />
 
 </RelativeLayout>
