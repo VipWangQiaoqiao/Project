@@ -8,17 +8,17 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:background="@drawable/ic_material"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/ic_material"
+        android:orientation="horizontal"
         android:paddingBottom="@dimen/lay_12"
         android:paddingLeft="@dimen/lay_16"
         android:paddingRight="@dimen/lay_16"
-        android:paddingTop="@dimen/lay_16"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:paddingTop="@dimen/lay_16">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <net.oschina.app.improve.widget.PortraitView
             android:id="@+id/iv_user_avatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
