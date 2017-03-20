@@ -2,23 +2,19 @@ package net.oschina.app.improve.tweet.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.simple.TweetLike;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by
@@ -27,13 +23,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * fei on 17/01/11.
  */
 public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<TweetLike> {
-
-    private RequestManager reqManager;
     private View.OnClickListener onPortraitClickListener;
 
     public TweetLikeUsersAdapter(Context context) {
         super(context, ONLY_FOOTER);
-        reqManager = Glide.with(context);
     }
 
     @Override
@@ -44,17 +37,8 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<TweetLike> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, TweetLike item, int position) {
         LikeUsersHolderView h = (LikeUsersHolderView) holder;
-        h.ivPortrait.setTag(null);
-        if (TextUtils.isEmpty(item.getAuthor().getPortrait())) {
-            h.ivPortrait.setImageResource(R.mipmap.widget_default_face);
-        } else {
-            reqManager.load(item.getAuthor().getPortrait())
-                    .asBitmap()
-                    .placeholder(mContext.getResources().getDrawable(R.mipmap.widget_default_face))
-                    .error(mContext.getResources().getDrawable(R.mipmap.widget_default_face))
-                    .into(h.ivPortrait);
-        }
-        h.ivPortrait.setTag(item);
+        h.ivPortrait.setup(item.getAuthor());
+        h.ivPortrait.setTag(R.id.iv_tag, item);
         h.ivPortrait.setOnClickListener(getOnPortraitClickListener());
         h.tvName.setText(item.getAuthor().getName());
     }
@@ -64,8 +48,11 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<TweetLike> {
             onPortraitClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TweetLike liker = (TweetLike) v.getTag();
-                    UIHelper.showUserCenter(mContext, liker.getAuthor().getId(), liker.getAuthor().getName());
+                    Object object = v.getTag(R.id.iv_tag);
+                    if (object != null && object instanceof TweetLike) {
+                        TweetLike liker = (TweetLike) object;
+                        UIHelper.showUserCenter(mContext, liker.getAuthor().getId(), liker.getAuthor().getName());
+                    }
                 }
             };
         }
@@ -74,7 +61,7 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<TweetLike> {
 
     public static final class LikeUsersHolderView extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_avatar)
-        CircleImageView ivPortrait;
+        PortraitView ivPortrait;
         @Bind(R.id.tv_name)
         TextView tvName;
 

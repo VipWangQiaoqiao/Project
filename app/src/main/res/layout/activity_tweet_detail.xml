@@ -45,7 +45,7 @@
                     android:layout_marginRight="16dp"
                     android:orientation="horizontal">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
+                    <net.oschina.app.improve.widget.PortraitView
                         android:id="@+id/iv_portrait"
                         android:layout_width="@dimen/size_48"
                         android:layout_height="@dimen/size_48"

@@ -12,10 +12,9 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.git.bean.Comment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by haibin
@@ -43,11 +42,7 @@ class CommentAdapter extends BaseGeneralRecyclerAdapter<Comment> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
         CommentViewHolder h = (CommentViewHolder) holder;
         final Author author = item.getAuthor();
-        mCallBack.getImgLoader()
-                .load(author.getPortrait())
-                .asBitmap()
-                .placeholder(R.mipmap.widget_default_face)
-                .into(h.mImageOwner);
+        h.mImageOwner.setup(author);
         h.mImageOwner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,14 +57,14 @@ class CommentAdapter extends BaseGeneralRecyclerAdapter<Comment> {
     }
 
     private static class CommentViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView mImageOwner;
+        PortraitView mImageOwner;
         TextView mTextName, mTextPubDate;
         TweetTextView mTextComment;
         ImageView mImageComment;
 
         CommentViewHolder(View itemView) {
             super(itemView);
-            mImageOwner = (CircleImageView) itemView.findViewById(R.id.civ_owner);
+            mImageOwner = (PortraitView) itemView.findViewById(R.id.civ_owner);
             mTextName = (TextView) itemView.findViewById(R.id.tv_name);
             mTextPubDate = (TextView) itemView.findViewById(R.id.tv_pub_date);
             mTextComment = (TweetTextView) itemView.findViewById(R.id.tv_comment);

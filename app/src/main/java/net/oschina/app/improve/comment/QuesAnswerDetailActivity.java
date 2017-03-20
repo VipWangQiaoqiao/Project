@@ -41,6 +41,7 @@ import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.OWebView;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -54,7 +55,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by thanatos
@@ -70,7 +70,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
     public static final String BUNDLE_TYPE = "bundle_comment_type";
 
     @Bind(R.id.iv_portrait)
-    CircleImageView ivPortrait;
+    PortraitView ivPortrait;
     @Bind(R.id.tv_nick)
     TextView tvNick;
     @Bind(R.id.tv_time)
@@ -143,17 +143,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
     @SuppressWarnings("deprecation")
     protected void initWidget() {
         // portrait
-        if (TextUtils.isEmpty(comment.getAuthor().getPortrait())) {
-            ivPortrait.setImageResource(R.mipmap.widget_default_face);
-        } else {
-            getImageLoader()
-                    .load(comment.getAuthor().getPortrait())
-                    .asBitmap()
-                    .placeholder(getResources().getDrawable(R.mipmap.widget_default_face))
-                    .error(getResources().getDrawable(R.mipmap.widget_default_face))
-                    .into(ivPortrait);
-        }
-
+        ivPortrait.setup(comment.getAuthor());
         // nick
         tvNick.setText(comment.getAuthor().getName());
 
@@ -258,16 +248,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
         View view = LayoutInflater.from(this).inflate(R.layout.list_item_tweet_comment, mLayoutContainer, false);
         TweetCommentAdapter.TweetCommentHolderView holder = new TweetCommentAdapter.TweetCommentHolderView(view);
         holder.tvName.setText(reply.getAuthor().getName());
-        if (TextUtils.isEmpty(reply.getAuthor().getPortrait())) {
-            holder.ivPortrait.setImageResource(R.mipmap.widget_default_face);
-        } else {
-            getImageLoader()
-                    .load(reply.getAuthor().getPortrait())
-                    .asBitmap()
-                    .placeholder(getResources().getDrawable(R.mipmap.widget_default_face))
-                    .error(getResources().getDrawable(R.mipmap.widget_default_face))
-                    .into(holder.ivPortrait);
-        }
+        holder.ivPortrait.setup(reply.getAuthor());
         holder.tvTime.setText(String.format("%s楼  %s", i + 1, StringUtils.formatSomeAgo(reply.getPubDate())));
         CommentsUtil.formatHtml(getResources(), holder.tvContent, reply.getContent());
         holder.btnReply.setTag(reply);

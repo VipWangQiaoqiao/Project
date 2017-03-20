@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,12 +18,12 @@
         android:paddingLeft="@dimen/lay_16"
         android:paddingTop="@dimen/lay_16">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <net.oschina.app.improve.widget.PortraitView
             android:id="@+id/iv_tweet_face"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:clickable="true"
-            android:src="@mipmap/widget_default_face"/>
+            android:src="@mipmap/widget_default_face" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +41,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/text_title_color"
                 android:textSize="16sp"
-                tools:text="Large Text"/>
+                tools:text="Large Text" />
 
             <net.oschina.app.widget.TweetTextView
                 android:id="@+id/tweet_item"
@@ -57,7 +56,7 @@
                 android:lineSpacingExtra="@dimen/font_4"
                 android:textColor="?attr/textColor"
                 android:textSize="14sp"
-                tools:text="最近研究了这个项目，学习rx系列,修复了楼主的bug 主要原因在mainActivity里面资讯fragment的构建"/>
+                tools:text="最近研究了这个项目，学习rx系列,修复了楼主的bug 主要原因在mainActivity里面资讯fragment的构建" />
 
             <!--about reference-->
             <LinearLayout
@@ -82,7 +81,7 @@
                     android:lineSpacingMultiplier="1.1"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="14sp"
-                    tools:text="Python爬虫使用Selenium+PhantomJS抓取Ajax和动态HTML内容"/>
+                    tools:text="Python爬虫使用Selenium+PhantomJS抓取Ajax和动态HTML内容" />
 
                 <TextView
                     android:id="@+id/tv_ref_content"
@@ -91,7 +90,7 @@
                     android:layout_marginTop="4dp"
                     android:lineSpacingMultiplier="1.2"
                     android:textSize="13sp"
-                    tools:text="生产环境MySQL快速备份工具XtraBackup使用案例MySQL 的备份有很多种方式，最常用的应该是MySQLdump了，将数据库导出一个 sql文件，还原的时候source db.sql 就欢快的执行了。小伙伴愉快的布上一个shell脚本，配上…"/>
+                    tools:text="生产环境MySQL快速备份工具XtraBackup使用案例MySQL 的备份有很多种方式，最常用的应该是MySQLdump了，将数据库导出一个 sql文件，还原的时候source db.sql 就欢快的执行了。小伙伴愉快的布上一个shell脚本，配上…" />
 
                 <net.oschina.app.improve.widget.TweetPicturesLayout
                     android:id="@+id/layout_ref_images"
@@ -100,7 +99,7 @@
                     android:layout_marginTop="8dp"
                     android:visibility="gone"
                     app:horizontalSpace="4dp"
-                    app:verticalSpace="4dp"/>
+                    app:verticalSpace="4dp" />
             </LinearLayout>
 
             <net.oschina.app.improve.widget.TweetPicturesLayout
@@ -112,7 +111,7 @@
                 android:layout_marginTop="@dimen/lay_8"
                 android:visibility="gone"
                 app:horizontalSpace="4dp"
-                app:verticalSpace="4dp"/>
+                app:verticalSpace="4dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -139,7 +138,7 @@
                         android:singleLine="true"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_12"
-                        tools:text="6分钟"/>
+                        tools:text="6分钟" />
 
                     <TextView
                         android:id="@+id/tv_tweet_platform"
@@ -152,7 +151,7 @@
                         android:singleLine="true"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_12"
-                        tools:text="iPhone"/>
+                        tools:text="iPhone" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -171,7 +170,7 @@
                         android:contentDescription="@string/app_name"
                         android:padding="@dimen/space_4"
                         android:src="@mipmap/ic_thumb_normal"
-                        tools:ignore="RtlHardcoded"/>
+                        tools:ignore="RtlHardcoded" />
 
                     <TextView
                         android:id="@+id/tv_tweet_like_count"
@@ -180,7 +179,7 @@
                         android:gravity="center_vertical"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_10"
-                        tools:text="12"/>
+                        tools:text="12" />
 
                     <ImageView
                         android:id="@+id/iv_comment"
@@ -189,7 +188,7 @@
                         android:layout_marginLeft="@dimen/space_8"
                         android:contentDescription="@string/app_name"
                         android:padding="@dimen/space_4"
-                        android:src="@mipmap/ic_comment_30"/>
+                        android:src="@mipmap/ic_comment_30" />
 
                     <TextView
                         android:id="@+id/tv_tweet_comment_count"
@@ -198,7 +197,7 @@
                         android:gravity="center_vertical"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_10"
-                        tools:text="12"/>
+                        tools:text="12" />
 
                     <ImageView
                         android:id="@+id/iv_dispatch"
@@ -208,7 +207,7 @@
                         android:contentDescription="@string/app_name"
                         android:padding="@dimen/space_4"
                         android:scaleType="fitCenter"
-                        android:src="@mipmap/ic_forward"/>
+                        android:src="@mipmap/ic_forward" />
 
                     <TextView
                         android:id="@+id/tv_dispatch_count"
@@ -217,7 +216,7 @@
                         android:gravity="center_vertical"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_10"
-                        tools:text="12"/>
+                        tools:text="12" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -227,5 +226,5 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginStart="16dp"
-        android:background="?attr/dividerHorizontal"/>
+        android:background="?attr/dividerHorizontal" />
 </LinearLayout>

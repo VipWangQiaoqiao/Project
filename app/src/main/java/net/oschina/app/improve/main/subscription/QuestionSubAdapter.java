@@ -13,10 +13,9 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 新版栏目问答
@@ -53,11 +52,11 @@ class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements 
         QuestionViewHolder vh = (QuestionViewHolder) holder;
 
         Author author = item.getAuthor();
-
-        mCallBack.getImgLoader()
-                .load(author != null ? author.getPortrait() : "")
-                .asBitmap().placeholder(R.mipmap.widget_default_face)
-                .into(vh.iv_question);
+        if (author == null) {
+            vh.iv_question.setup(0, "匿名用户", "");
+        } else {
+            vh.iv_question.setup(author);
+        }
 
         vh.tv_question_title.setText(item.getTitle());
         vh.tv_question_content.setText(item.getBody());
@@ -87,7 +86,7 @@ class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements 
 
     private static class QuestionViewHolder extends RecyclerView.ViewHolder {
         TextView tv_question_title, tv_question_content, tv_time, tv_comment_count, tv_view;
-        CircleImageView iv_question;
+        PortraitView iv_question;
 
         QuestionViewHolder(View itemView) {
             super(itemView);
@@ -96,7 +95,7 @@ class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements 
             tv_time = (TextView) itemView.findViewById(R.id.tv_time);
             tv_comment_count = (TextView) itemView.findViewById(R.id.tv_info_comment);
             tv_view = (TextView) itemView.findViewById(R.id.tv_info_view);
-            iv_question = (CircleImageView) itemView.findViewById(R.id.iv_question);
+            iv_question = (PortraitView) itemView.findViewById(R.id.iv_question);
         }
     }
 }

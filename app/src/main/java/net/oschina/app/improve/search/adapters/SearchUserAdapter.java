@@ -7,15 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.widget.PortraitView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by thanatos on 16/10/24.
@@ -40,12 +38,7 @@ public class SearchUserAdapter extends BaseRecyclerAdapter<User> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder h, User item, int position) {
         ViewHolder holder = (ViewHolder) h;
-        Glide.with(mContext)
-                .load(item.getPortrait())
-                .asBitmap()
-                .placeholder(R.mipmap.widget_default_face)
-                .error(R.mipmap.widget_default_face)
-                .into(holder.mViewPortrait);
+        holder.mViewPortrait.setup(item);
         holder.mViewNick.setText(item.getName());
         holder.mViewPosition.setText(String.format("%s  %s  %s",
                 item.getMore().getCompany(), item.getMore().getPosition(), item.getMore().getCity())
@@ -59,7 +52,7 @@ public class SearchUserAdapter extends BaseRecyclerAdapter<User> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.iv_portrait)
-        CircleImageView mViewPortrait;
+        PortraitView mViewPortrait;
         @Bind(R.id.tv_nick)
         TextView mViewNick;
         @Bind(R.id.tv_position)

@@ -21,10 +21,11 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.TweetLikeReverse;
 import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
-import net.oschina.app.util.ImageLoader;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -36,7 +37,6 @@ import java.lang.reflect.Type;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by fei
@@ -62,11 +62,17 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Tweet item, int position) {
         SoftwareTweetViewHolder vh = (SoftwareTweetViewHolder) holder;
 
-        CircleImageView icon = vh.icon;
-        icon.setTag(R.id.iv_tweet_face, position);
-        ImageLoader.loadImage(requestManager, vh.icon, item.getAuthor().getPortrait(), R.mipmap.widget_default_face);
-        vh.icon.setOnClickListener(this);
-        vh.name.setText(item.getAuthor().getName());
+        vh.icon.setTag(R.id.iv_tweet_face, position);
+        final Author author = item.getAuthor();
+        if (author == null) {
+            vh.icon.setup(0, "匿名用户", "");
+            vh.name.setText("匿名用户");
+        } else {
+            vh.icon.setup(author);
+            vh.icon.setOnClickListener(this);
+            vh.name.setText(author.getName());
+        }
+
         CommentsUtil.formatHtml(mContext.getResources(), vh.content, item.getContent());
         vh.pubTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         PlatfromUtil.setPlatFromString(vh.deviceType, item.getAppClient());
@@ -78,8 +84,8 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
         }
         vh.likeStatus.setTag(position);
         vh.likeStatus.setOnClickListener(this);
-        vh.likeCount.setText(item.getLikeCount() + "");
-        vh.commentCount.setText(item.getCommentCount() + "");
+        vh.likeCount.setText(String.format("%s", item.getLikeCount()));
+        vh.commentCount.setText(String.format("%s", item.getCommentCount()));
 
     }
 
@@ -156,7 +162,7 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
     static class SoftwareTweetViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.iv_tweet_face)
-        CircleImageView icon;
+        PortraitView icon;
         @Bind(R.id.tv_tweet_name)
         TextView name;
         @Bind(R.id.tweet_item)
