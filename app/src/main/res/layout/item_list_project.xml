@@ -16,7 +16,7 @@
         android:paddingRight="@dimen/lay_16"
         android:paddingTop="@dimen/lay_12">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <net.oschina.app.improve.widget.PortraitView
             android:id="@+id/civ_owner"
             android:layout_width="46dp"
             android:layout_height="46dp"
