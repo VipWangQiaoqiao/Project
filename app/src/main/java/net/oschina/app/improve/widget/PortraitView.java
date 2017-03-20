@@ -95,8 +95,12 @@ public class PortraitView extends CircleImageView {
 
         if (path == null) {
             path = "";
-        } else if (path.toLowerCase().contains("www.oschina.net/img/portrait.gif".toLowerCase())) {
-            path = "";
+        } else {
+            String pathTmp = path.toLowerCase();
+            if (pathTmp.contains("www.oschina.net/img/portrait.gif".toLowerCase())
+                    || pathTmp.contains("secure.gravatar.com/avatar".toLowerCase())) {
+                path = "";
+            }
         }
 
         log("load path:" + path);
@@ -111,7 +115,7 @@ public class PortraitView extends CircleImageView {
                         target.getSize(new SizeReadyCallback() {
                             @Override
                             public void onSizeReady(int width, int height) {
-                                final String firstChar = (TextUtils.isEmpty(name) ? "*" : name.substring(0, 1)).toUpperCase();
+                                final String firstChar = (TextUtils.isEmpty(name) ? "-" : name.trim().substring(0, 1)).toUpperCase();
                                 Bitmap bitmap = buildSrcFromName(firstChar, width, height);
                                 setScaleType(ScaleType.CENTER_CROP);
                                 setImageBitmap(bitmap);
@@ -131,13 +135,13 @@ public class PortraitView extends CircleImageView {
     @SuppressWarnings("ResourceAsColor")
     private Bitmap buildSrcFromName(final String firstChar, int w, int h) {
         if (w == Target.SIZE_ORIGINAL || w <= 0)
-            w = 100;
+            w = 80;
         if (h == Target.SIZE_ORIGINAL || h <= 0)
-            h = 100;
+            h = 80;
 
-        final int size = Math.max(Math.min(Math.min(w, h), 320), 160);
-        final float fontSize = size * 0.5f;
-        log("size:" + size + " fontSize:" + fontSize);
+        final int size = Math.max(Math.min(Math.min(w, h), 220), 64);
+        final float fontSize = size * 0.8f;
+        log("firstChar:" + firstChar + " size:" + size + " fontSize:" + fontSize);
 
         Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565);
 
@@ -148,9 +152,14 @@ public class PortraitView extends CircleImageView {
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(fontSize);
         paint.setTypeface(Typeface.SANS_SERIF);
-        Typeface typeface = getFont(getContext(), "Numans-Regular.otf");
-        if (typeface != null)
-            paint.setTypeface(typeface);
+
+        // check ASCII
+        final int charNum = Character.getNumericValue(firstChar.charAt(0));
+        if (charNum > 0 && charNum < 177) {
+            Typeface typeface = getFont(getContext(), "Numans-Regular.otf");
+            if (typeface != null)
+                paint.setTypeface(typeface);
+        }
 
         Rect rect = new Rect();
         paint.getTextBounds(firstChar, 0, 1, rect);
