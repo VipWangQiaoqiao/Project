@@ -97,8 +97,9 @@ public class PortraitView extends CircleImageView {
             path = "";
         } else {
             String pathTmp = path.toLowerCase();
-            if (pathTmp.contains("www.oschina.net/img/portrait.gif".toLowerCase())
+            if (pathTmp.contains("www.oschina.net/img/portrait".toLowerCase())
                     || pathTmp.contains("secure.gravatar.com/avatar".toLowerCase())) {
+                log("replace path:" + path);
                 path = "";
             }
         }
