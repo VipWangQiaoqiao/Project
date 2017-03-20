@@ -7,7 +7,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.User;
-import net.oschina.app.widget.AvatarView;
+import net.oschina.app.improve.widget.PortraitView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,7 +33,7 @@ public class TweetLikeUsersAdapter extends ListBaseAdapter<User> {
             vh = (ViewHolder) convertView.getTag();
         }
         User item = mDatas.get(position);
-        vh.avatar.setAvatarUrl(item.getPortrait());
+        vh.avatar.setup(item.getId(), item.getName(), item.getPortrait());
         vh.name.setText(item.getName());
         return convertView;
     }
@@ -41,7 +41,7 @@ public class TweetLikeUsersAdapter extends ListBaseAdapter<User> {
     static class ViewHolder {
 
         @Bind(R.id.iv_avatar)
-        AvatarView avatar;
+        PortraitView avatar;
         @Bind(R.id.tv_name)
         TextView name;
 

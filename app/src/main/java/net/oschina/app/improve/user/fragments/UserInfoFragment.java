@@ -39,6 +39,7 @@ import net.oschina.app.improve.user.collection.UserCollectionActivity;
 import net.oschina.app.improve.user.event.UserEventActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.utils.UiUtil;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQRCodeDialog;
@@ -75,7 +76,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
 
 
     @Bind(R.id.iv_portrait)
-    CircleImageView mCirclePortrait;
+    PortraitView mPortrait;
     @Bind(R.id.iv_gender)
     ImageView mIvGander;
     @Bind(R.id.user_info_icon_container)
@@ -256,9 +257,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * @param userInfo userInfo
      */
     private void updateView(User userInfo) {
-
-        setImageFromNet(mCirclePortrait, userInfo.getPortrait(), R.mipmap.widget_default_face);
-        mCirclePortrait.setVisibility(View.VISIBLE);
+        mPortrait.setup(userInfo);
+        mPortrait.setVisibility(View.VISIBLE);
 
         mTvName.setText(userInfo.getName());
         mTvName.setVisibility(View.VISIBLE);
@@ -346,9 +346,9 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     int height = mFlUserInfoIconContainer.getHeight();
                     float y1 = mFlUserInfoIconContainer.getY();
 
-                    float x = mCirclePortrait.getX();
-                    float y = mCirclePortrait.getY();
-                    int portraitWidth = mCirclePortrait.getWidth();
+                    float x = mPortrait.getX();
+                    float y = mPortrait.getY();
+                    int portraitWidth = mPortrait.getWidth();
 
                     mPx = x + +rlShowInfoX + (width >> 1);
                     mPy = y1 + y + (height - y) / 2;
@@ -390,7 +390,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      *
      */
     private void hideView() {
-        mCirclePortrait.setImageResource(R.mipmap.widget_default_face);
+        mPortrait.setImageResource(R.mipmap.widget_default_face);
         mTvName.setText(R.string.user_hint_login);
         mTvName.setTextSize(16.0f);
         mIvGander.setVisibility(View.INVISIBLE);

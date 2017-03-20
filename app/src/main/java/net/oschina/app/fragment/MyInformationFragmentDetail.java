@@ -5,15 +5,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
@@ -32,7 +30,7 @@ import butterknife.ButterKnife;
 public class MyInformationFragmentDetail extends BaseFragment {
 
     @Bind(R.id.iv_avatar)
-    ImageView mUserFace;
+    PortraitView mUserFace;
 
     @Bind(R.id.tv_name)
     TextView mName;
@@ -96,10 +94,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     @SuppressWarnings("deprecation")
     public void fillUI() {
-        Glide.with(this).load(userInfo.getPortrait()).asBitmap()
-                .placeholder(R.mipmap.widget_default_face)
-                .error(R.mipmap.widget_default_face)
-                .into(mUserFace);
+        mUserFace.setup(userInfo);
         mName.setText(getText(userInfo.getName()));
         mJoinTime.setText(getText(StringUtils.formatYearMonthDayNew(userInfo.getMore().getJoinDate())));
         mFrom.setText(getText(userInfo.getMore().getCity()));

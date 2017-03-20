@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -33,6 +32,7 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.TweetLikeReverse;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.util.ImageUtils;
@@ -47,7 +47,6 @@ import java.lang.reflect.Type;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by
@@ -95,16 +94,10 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
 
         final Author author = item.getAuthor();
         if (author == null) {
-            holder.mViewPortrait.setImageResource(R.mipmap.widget_default_face);
-            holder.mViewPortrait.setOnClickListener(null);
+            holder.mViewPortrait.setup(0, "匿名用户", "");
             holder.mViewName.setText("匿名用户");
         } else {
-            Glide.with(mContext)
-                    .load(author.getPortrait())
-                    .asBitmap()
-                    .placeholder(R.mipmap.widget_default_face)
-                    .error(R.mipmap.widget_default_face)
-                    .into(holder.mViewPortrait);
+            holder.mViewPortrait.setup(author);
             holder.mViewPortrait.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -237,7 +230,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_tweet_face)
-        CircleImageView mViewPortrait;
+        PortraitView mViewPortrait;
         @Bind(R.id.tv_tweet_name)
         TextView mViewName;
         @Bind(R.id.tv_tweet_time)

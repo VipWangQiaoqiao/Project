@@ -14,12 +14,12 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
 import butterknife.OnLongClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by haibin
@@ -42,7 +42,7 @@ public class BlogDetailFragment extends DetailFragment {
     ImageView mImageReprint;
 
     @Bind(R.id.iv_avatar)
-    CircleImageView mImageAvatar;
+    PortraitView mImageAvatar;
 
     @Bind(R.id.tv_name)
     TextView mTextName;
@@ -106,7 +106,7 @@ public class BlogDetailFragment extends DetailFragment {
         Author author = bean.getAuthor();
         if (author != null) {
             mTextName.setText(author.getName());
-            getImgLoader().load(author.getPortrait()).asBitmap().into(mImageAvatar);
+            mImageAvatar.setup(author);
         }
         mTextPubDate.setText(StringUtils.formatYearMonthDay(bean.getPubDate()));
         mTextTitle.setText(bean.getTitle());

@@ -67,7 +67,7 @@
                 android:paddingRight="@dimen/lay_16"
                 android:paddingTop="@dimen/lay_8">
 
-                <net.oschina.app.widget.CircleImageView
+                <net.oschina.app.improve.widget.PortraitView
                     android:id="@+id/civ_author"
                     android:layout_width="25dp"
                     android:layout_height="25dp"

@@ -25,13 +25,13 @@
                 android:orientation="vertical"
                 android:padding="@dimen/space_16">
 
-                <net.oschina.app.widget.CircleImageView
+                <net.oschina.app.improve.widget.PortraitView
                     android:id="@+id/iv_avatar"
                     style="@style/UserFaceImageStyle"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:border_color="@color/white"
-                    app:border_width="2dip" />
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="2dp" />
 
                 <TextView
                     android:id="@+id/tv_name"

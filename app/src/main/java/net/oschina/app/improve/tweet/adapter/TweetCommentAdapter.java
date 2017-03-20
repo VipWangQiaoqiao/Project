@@ -2,7 +2,6 @@ package net.oschina.app.improve.tweet.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +15,13 @@ import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.simple.TweetComment;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by thanatos
@@ -46,24 +45,13 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, TweetComment item, int position) {
         TweetCommentHolderView h = (TweetCommentHolderView) holder;
-        h.ivPortrait.setTag(null);
-        if (TextUtils.isEmpty(item.getAuthor().getPortrait())) {
-            h.ivPortrait.setImageResource(R.mipmap.widget_default_face);
-        } else {
-            reqManager
-                    .load(item.getAuthor().getPortrait())
-                    .asBitmap()
-                    .placeholder(mContext.getResources().getDrawable(R.mipmap.widget_default_face))
-                    .error(mContext.getResources().getDrawable(R.mipmap.widget_default_face))
-                    .into(h.ivPortrait);
-        }
-        h.ivPortrait.setTag(item);
+        h.ivPortrait.setup(item.getAuthor());
+        h.ivPortrait.setTag(R.id.iv_tag, item);
         h.ivPortrait.setOnClickListener(getOnPortraitClickListener());
 
         h.tvName.setText(item.getAuthor().getName());
         h.tvContent.setText(InputHelper.displayEmoji(mContext.getResources(), item.getContent()));
         h.tvTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
-
     }
 
     private View.OnClickListener getOnPortraitClickListener() {
@@ -71,8 +59,11 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
             onPortraitClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TweetComment comment = (TweetComment) v.getTag();
-                    UIHelper.showUserCenter(mContext, comment.getAuthor().getId(), comment.getAuthor().getName());
+                    Object obj = v.getTag(R.id.iv_tag);
+                    if (obj != null && obj instanceof TweetComment) {
+                        TweetComment comment = (TweetComment) obj;
+                        UIHelper.showUserCenter(mContext, comment.getAuthor().getId(), comment.getAuthor().getName());
+                    }
                 }
             };
         }
@@ -81,7 +72,7 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
 
     public static final class TweetCommentHolderView extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_avatar)
-        public CircleImageView ivPortrait;
+        public PortraitView ivPortrait;
         @Bind(R.id.tv_name)
         public TextView tvName;
         @Bind(R.id.tv_pub_date)

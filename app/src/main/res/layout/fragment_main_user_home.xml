@@ -67,13 +67,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <net.oschina.app.improve.widget.PortraitView
                     android:id="@+id/iv_portrait"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:src="@mipmap/widget_default_face"
                     app:civ_border_color="@color/white"
-                    app:civ_border_width="2dip" />
+                    app:civ_border_width="2dip"
+                    tools:src="@mipmap/widget_default_face" />
 
                 <ImageView
                     android:id="@+id/iv_gender"

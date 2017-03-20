@@ -44,10 +44,10 @@
                 android:layout_margin="@dimen/lay_4"
                 android:layout_weight="1"
                 android:gravity="center"
-                tools:text="@string/comment_title_hint"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
-                tools:ignore="RtlHardcoded" />
+                tools:ignore="RtlHardcoded"
+                tools:text="@string/comment_title_hint" />
 
             <Space
                 android:layout_width="56dp"

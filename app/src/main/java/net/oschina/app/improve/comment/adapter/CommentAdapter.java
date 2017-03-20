@@ -33,6 +33,7 @@ import net.oschina.app.improve.comment.CommentReferView;
 import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.TweetTextView;
@@ -42,7 +43,6 @@ import java.lang.reflect.Type;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -108,7 +108,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         private ProgressDialog mDialog;
 
         @Bind(R.id.iv_avatar)
-        CircleImageView mIvAvatar;
+        PortraitView mIvAvatar;
 
         @Bind(R.id.tv_name)
         TextView mName;
@@ -145,7 +145,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         @SuppressLint("DefaultLocale")
         void addComment(final long sourceId, final int commentType, final Comment comment, RequestManager requestManager) {
 
-            requestManager.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_default_face).into(mIvAvatar);
+            mIvAvatar.setup(comment.getAuthor());
             mIvAvatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

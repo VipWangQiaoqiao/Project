@@ -36,6 +36,7 @@ import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.bean.simple.TweetLike;
 import net.oschina.app.improve.behavior.CommentBar;
@@ -47,6 +48,7 @@ import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.QuickOptionDialogHelper;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.HTMLUtil;
@@ -62,7 +64,6 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import cz.msebera.android.httpclient.Header;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 动弹详情
@@ -75,7 +76,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     public static final String BUNDLE_KEY_TWEET = "BUNDLE_KEY_TWEET";
 
     @Bind(R.id.iv_portrait)
-    CircleImageView ivPortrait;
+    PortraitView ivPortrait;
     @Bind(R.id.tv_nick)
     TextView tvNick;
     @Bind(R.id.tv_time)
@@ -392,19 +393,15 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         // 有可能传入的tweet只有id这一个值
         if (tweet == null || isDestroy())
             return;
-        if (tweet.getAuthor() != null) {
-            if (TextUtils.isEmpty(tweet.getAuthor().getPortrait())) {
-                ivPortrait.setImageResource(R.mipmap.widget_default_face);
-            } else {
-                getImageLoader()
-                        .load(tweet.getAuthor().getPortrait())
-                        .asBitmap()
-                        .placeholder(getResources().getDrawable(R.mipmap.widget_default_face))
-                        .error(getResources().getDrawable(R.mipmap.widget_default_face))
-                        .into(ivPortrait);
-            }
+
+        Author author = tweet.getAuthor();
+        if (author != null) {
+            ivPortrait.setup(author);
             ivPortrait.setOnClickListener(getOnPortraitClickListener());
-            tvNick.setText(tweet.getAuthor().getName());
+            tvNick.setText(author.getName());
+        } else {
+            ivPortrait.setup(0, "匿名用户", "");
+            tvNick.setText("匿名用户");
         }
         if (!TextUtils.isEmpty(tweet.getPubDate()))
             tvTime.setText(StringUtils.formatSomeAgo(tweet.getPubDate()));

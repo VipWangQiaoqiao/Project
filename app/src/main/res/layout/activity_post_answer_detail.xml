@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:id="@+id/layout_coordinator"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -23,11 +23,11 @@
             android:paddingTop="12dp"
             tools:ignore="RtlSymmetry">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <net.oschina.app.improve.widget.PortraitView
                 android:id="@+id/iv_portrait"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                tools:src="@mipmap/widget_default_face"/>
+                tools:src="@mipmap/widget_default_face" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -45,7 +45,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textColor="#111"
                     android:textSize="16sp"
-                    tools:text="thanatosx"/>
+                    tools:text="thanatosx" />
 
                 <TextView
                     android:id="@+id/tv_time"
@@ -55,14 +55,14 @@
                     android:layout_marginTop="4dp"
                     android:textColor="#6A6A6A"
                     android:textSize="14sp"
-                    tools:text="1天前 (2016-06-16 00:00:00)"/>
+                    tools:text="1天前 (2016-06-16 00:00:00)" />
             </LinearLayout>
 
             <View
                 android:layout_width="1px"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
-                android:background="#D2D2D2"/>
+                android:background="#D2D2D2" />
 
             <LinearLayout
                 android:id="@+id/layout_vote"
@@ -86,7 +86,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:contentDescription="@null"
-                        android:src="@drawable/selector_vote_up"/>
+                        android:src="@drawable/selector_vote_up" />
 
                     <ImageView
                         android:id="@+id/iv_vote_down"
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/selector_vote_down"/>
+                        android:src="@drawable/selector_vote_down" />
                 </LinearLayout>
 
                 <TextView
@@ -102,14 +102,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    tools:text="36"/>
+                    tools:text="36" />
             </LinearLayout>
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/list_divider_color"/>
+            android:background="@color/list_divider_color" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -129,12 +129,12 @@
                 android:id="@+id/webview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/lay_16"/>
+                android:layout_margin="@dimen/lay_16" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/list_divider_color"/>
+                android:background="@color/list_divider_color" />
 
             <TextView
                 android:id="@+id/tv_comment_count"
@@ -147,19 +147,19 @@
                 android:paddingTop="8dp"
                 android:textColor="#6A6A6A"
                 android:textSize="12sp"
-                tools:text="评论(98)"/>
+                tools:text="评论(98)" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/list_divider_color"/>
+                android:background="@color/list_divider_color" />
 
             <LinearLayout
                 android:id="@+id/layout_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/lay_36"
-                android:orientation="vertical"/>
+                android:orientation="vertical" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
