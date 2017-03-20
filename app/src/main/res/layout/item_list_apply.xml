@@ -21,7 +21,7 @@
             android:layout_width="46dp"
             android:layout_height="46dp">
 
-            <net.oschina.app.widget.CircleImageView
+            <net.oschina.app.improve.widget.PortraitView
                 android:id="@+id/civ_author"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
