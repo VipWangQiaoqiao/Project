@@ -109,6 +109,7 @@ public class PortraitView extends CircleImageView {
         Glide.with(context)
                 .load(path)
                 .asBitmap()
+                .placeholder(R.color.black_alpha_48)
                 .error(R.mipmap.widget_default_face)
                 .listener(new RequestListener<String, Bitmap>() {
                     @Override
@@ -141,7 +142,7 @@ public class PortraitView extends CircleImageView {
             h = 80;
 
         final int size = Math.max(Math.min(Math.min(w, h), 220), 64);
-        final float fontSize = size * 0.8f;
+        final float fontSize = size * 0.4f;
         log("firstChar:" + firstChar + " size:" + size + " fontSize:" + fontSize);
 
         Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565);
