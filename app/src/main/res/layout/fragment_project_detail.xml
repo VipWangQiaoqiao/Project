@@ -292,7 +292,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
-                android:text="README.md"
+                android:text="README"
                 android:textColor="#9d9d9d"
                 android:textSize="12sp" />
 
