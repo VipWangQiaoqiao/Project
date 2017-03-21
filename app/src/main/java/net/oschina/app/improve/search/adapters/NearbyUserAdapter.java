@@ -8,17 +8,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.NearbyResult;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by thanatos
@@ -44,12 +42,7 @@ public class NearbyUserAdapter extends BaseRecyclerAdapter<NearbyResult> {
         if (h instanceof ViewHolder) {
             ViewHolder holder = (ViewHolder) h;
             if (item.getUser() != null) {
-                Glide.with(mContext)
-                        .load(item.getUser().getPortrait())
-                        .asBitmap()
-                        .placeholder(R.mipmap.widget_default_face)
-                        .error(R.mipmap.widget_default_face)
-                        .into(holder.mViewPortrait);
+                holder.mViewPortrait.setup(item.getUser());
                 holder.mViewNick.setText(item.getUser().getName());
                 holder.mViewGender.setVisibility(View.VISIBLE);
                 switch (item.getUser().getGender()) {
@@ -69,7 +62,7 @@ public class NearbyUserAdapter extends BaseRecyclerAdapter<NearbyResult> {
                     holder.mViewPosition.setText("??? ???");
                 }
             } else {
-                holder.mViewPortrait.setImageResource(R.mipmap.widget_default_face);
+                holder.mViewPortrait.setup(0, "?", "");
                 holder.mViewNick.setText("???");
                 holder.mViewGender.setVisibility(View.GONE);
                 holder.mViewPosition.setText("??? ???");
@@ -87,7 +80,7 @@ public class NearbyUserAdapter extends BaseRecyclerAdapter<NearbyResult> {
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.iv_portrait)
-        CircleImageView mViewPortrait;
+        PortraitView mViewPortrait;
         @Bind(R.id.tv_nick)
         TextView mViewNick;
         @Bind(R.id.tv_position)

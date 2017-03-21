@@ -12,9 +12,8 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by huanghaibin_dev
@@ -52,8 +51,11 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
         MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
         User author = item.getSender();
         if (author != null) {
-            mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().placeholder(R.mipmap.widget_default_face).into(messageViewHolder.iv_user_avatar);
+            messageViewHolder.iv_user_avatar.setup(author);
             messageViewHolder.tv_user_name.setText(author.getName());
+        } else {
+            messageViewHolder.iv_user_avatar.setup(0, "匿名用户", "");
+            messageViewHolder.tv_user_name.setText("匿名用户");
         }
         messageViewHolder.iv_user_avatar.setOnClickListener(mListener);
         parseAtUserContent(messageViewHolder.tv_content, item.getContent());
@@ -72,13 +74,13 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
     }
 
     private static class MessageViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView iv_user_avatar;
+        PortraitView iv_user_avatar;
         TextView tv_user_name, tv_time;
         TextView tv_content;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
-            iv_user_avatar = (CircleImageView) itemView.findViewById(R.id.iv_user_avatar);
+            iv_user_avatar = (PortraitView) itemView.findViewById(R.id.iv_user_avatar);
             tv_user_name = (TextView) itemView.findViewById(R.id.tv_user_name);
             tv_time = (TextView) itemView.findViewById(R.id.tv_time);
             tv_content = (TextView) itemView.findViewById(R.id.tv_content);

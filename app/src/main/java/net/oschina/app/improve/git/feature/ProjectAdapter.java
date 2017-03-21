@@ -9,10 +9,9 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.git.bean.Project;
+import net.oschina.app.improve.widget.PortraitView;
 
 import java.text.DecimalFormat;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by haibin
@@ -35,11 +34,8 @@ class ProjectAdapter extends BaseGeneralRecyclerAdapter<Project> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Project item, int position) {
         ProjectViewHolder h = (ProjectViewHolder) holder;
-        mCallBack.getImgLoader()
-                .load(item.getOwner().getNewPortrait())
-                .asBitmap()
-                .placeholder(R.mipmap.widget_default_face)
-                .into(h.mImageOwner);
+        h.mImageOwner.setup(0, item.getOwner().getName(), item.getOwner().getNewPortrait());
+        h.mImageOwner.setOnClickListener(null);
         h.mTextName.setText(item.getOwner().getName() + "/" + item.getName());
         h.mTextDescription.setText(item.getDescription());
         h.mTextLanguage.setText(item.getLanguage());
@@ -50,13 +46,13 @@ class ProjectAdapter extends BaseGeneralRecyclerAdapter<Project> {
     }
 
     private static class ProjectViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView mImageOwner;
+        PortraitView mImageOwner;
         TextView mTextName, mTextDescription, mTextViewCount,
                 mTextFavCount, mTextForkCount, mTextLanguage;
 
         ProjectViewHolder(View itemView) {
             super(itemView);
-            mImageOwner = (CircleImageView) itemView.findViewById(R.id.civ_owner);
+            mImageOwner = (PortraitView) itemView.findViewById(R.id.civ_owner);
             mTextName = (TextView) itemView.findViewById(R.id.tv_name);
             mTextDescription = (TextView) itemView.findViewById(R.id.tv_description);
             mTextViewCount = (TextView) itemView.findViewById(R.id.tv_view_count);

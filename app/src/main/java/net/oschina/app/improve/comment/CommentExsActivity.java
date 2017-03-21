@@ -33,6 +33,7 @@ import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.TDevice;
@@ -310,7 +311,7 @@ public class CommentExsActivity extends BaseBackActivity {
     }
 
     private static class CommentHolder extends RecyclerView.ViewHolder {
-        private ImageView mAvatar;
+        private PortraitView mAvatar;
         private TextView mName;
         private TextView mDate;
         private TweetTextView mContent;
@@ -320,7 +321,7 @@ public class CommentExsActivity extends BaseBackActivity {
         CommentHolder(View itemView) {
             super(itemView);
 
-            mAvatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
+            mAvatar = (PortraitView) itemView.findViewById(R.id.iv_avatar);
             mName = (TextView) itemView.findViewById(R.id.tv_name);
             mDate = (TextView) itemView.findViewById(R.id.tv_pub_date);
             btn_comment = (ImageView) itemView.findViewById(R.id.btn_comment);
@@ -330,11 +331,11 @@ public class CommentExsActivity extends BaseBackActivity {
         }
 
         void setData(Comment comment, RequestManager imageLoader, View.OnClickListener l) {
-            if (comment.getAuthor().getPortrait() != null)
-                imageLoader.load(comment.getAuthor().getPortrait()).error(R.mipmap.widget_default_face)
-                        .into((mAvatar));
-            else
-                mAvatar.setImageResource(R.mipmap.widget_default_face);
+            if (comment.getAuthor() != null) {
+                mAvatar.setup(comment.getAuthor());
+            } else {
+                mAvatar.setup(0, "匿名用户", "");
+            }
 
             mName.setText(comment.getAuthor().getName());
             mDate.setText(comment.getPubDate());

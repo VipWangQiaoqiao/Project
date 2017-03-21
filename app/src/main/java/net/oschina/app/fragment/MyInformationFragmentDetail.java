@@ -95,6 +95,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
     @SuppressWarnings("deprecation")
     public void fillUI() {
         mUserFace.setup(userInfo);
+        mUserFace.setOnClickListener(null);
         mName.setText(getText(userInfo.getName()));
         mJoinTime.setText(getText(StringUtils.formatYearMonthDayNew(userInfo.getMore().getJoinDate())));
         mFrom.setText(getText(userInfo.getMore().getCity()));
