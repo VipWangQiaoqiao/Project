@@ -12,7 +12,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.ApplyUser;
 import net.oschina.app.improve.bean.simple.UserRelation;
-import net.oschina.app.widget.CircleImageView;
+import net.oschina.app.improve.widget.PortraitView;
 
 /**
  * Created by haibin
@@ -36,10 +36,12 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, final ApplyUser item, int position) {
         ApplyViewHolder h = (ApplyViewHolder) holder;
-        h.mTextAuthor.setText(item.getId() <= 0 ? "匿名" : item.getName());
-        mCallBack.getImgLoader().load(item.getPortrait())
-                .asBitmap()
-                .into(h.mImageAuthor);
+
+        if (item.getId() <= 0)
+            item.setName("匿名用户");
+        h.mTextAuthor.setText(item.getName());
+        h.mImageAuthor.setup(item);
+
         ApplyUser.EventInfo info = item.getEventInfo();
         if (info != null) {
             h.mTextCompany.setText(info.getCompany());
@@ -59,7 +61,7 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
 
     private static class ApplyViewHolder extends RecyclerView.ViewHolder {
         TextView mTextAuthor, mTextCompany, mTextJob;
-        CircleImageView mImageAuthor;
+        PortraitView mImageAuthor;
         ImageView mImageGender;
         Button mBtnRelate;
 
@@ -68,7 +70,7 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
             mTextAuthor = (TextView) itemView.findViewById(R.id.tv_author);
             mTextCompany = (TextView) itemView.findViewById(R.id.tv_company);
             mTextJob = (TextView) itemView.findViewById(R.id.tv_job);
-            mImageAuthor = (CircleImageView) itemView.findViewById(R.id.civ_author);
+            mImageAuthor = (PortraitView) itemView.findViewById(R.id.civ_author);
             mBtnRelate = (Button) itemView.findViewById(R.id.btn_relation);
             mImageGender = (ImageView) itemView.findViewById(R.id.iv_gender);
         }

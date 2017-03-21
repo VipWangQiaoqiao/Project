@@ -12,11 +12,10 @@ import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.Origin;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by huanghaibin_dev
@@ -54,8 +53,11 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
         MentionViewHolder viewHolder = (MentionViewHolder) holder;
         Author author = item.getAuthor();
         if (author != null) {
-            mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().placeholder(R.mipmap.widget_default_face).into(viewHolder.iv_user_avatar);
+            viewHolder.iv_user_avatar.setup(author);
             viewHolder.tv_user_name.setText(author.getName());
+        } else {
+            viewHolder.iv_user_avatar.setup(0, "匿名用户", "");
+            viewHolder.tv_user_name.setText("匿名用户");
         }
         viewHolder.iv_user_avatar.setOnClickListener(mListener);
         PlatfromUtil.setPlatFromString(viewHolder.tv_platform, item.getAppClient());
@@ -73,13 +75,13 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
     }
 
     private static class MentionViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView iv_user_avatar;
+        PortraitView iv_user_avatar;
         TextView tv_user_name, tv_time, tv_platform, tv_comment_count;
         TweetTextView tv_content, tv_origin;
 
         public MentionViewHolder(View itemView) {
             super(itemView);
-            iv_user_avatar = (CircleImageView) itemView.findViewById(R.id.iv_user_avatar);
+            iv_user_avatar = (PortraitView) itemView.findViewById(R.id.iv_user_avatar);
             tv_user_name = (TextView) itemView.findViewById(R.id.tv_user_name);
             tv_time = (TextView) itemView.findViewById(R.id.tv_time);
             tv_content = (TweetTextView) itemView.findViewById(R.id.tv_content);
