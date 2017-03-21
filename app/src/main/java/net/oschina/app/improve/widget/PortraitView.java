@@ -141,7 +141,7 @@ public class PortraitView extends CircleImageView {
             h = 80;
 
         final int size = Math.max(Math.min(Math.min(w, h), 220), 64);
-        final float fontSize = size * 0.8f;
+        final float fontSize = size * 0.4f;
         log("firstChar:" + firstChar + " size:" + size + " fontSize:" + fontSize);
 
         Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565);
