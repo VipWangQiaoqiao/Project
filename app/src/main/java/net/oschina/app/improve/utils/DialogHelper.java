@@ -43,14 +43,14 @@ public final class DialogHelper {
             Context context,
             String title,
             String message) {
-        return getMessageDialog(context, title, message, false);
+        return getMessageDialog(context, title, message, true);
     }
 
     /**
      * 获取一个普通的消息对话框，没有取消按钮
      */
     public static AlertDialog.Builder getMessageDialog(Context context, String message) {
-        return getMessageDialog(context, "", message, false);
+        return getMessageDialog(context, "", message, true);
     }
 
     /**
@@ -62,7 +62,7 @@ public final class DialogHelper {
             String message,
             String positiveText) {
         return getDialog(context)
-                .setCancelable(false)
+                .setCancelable(true)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(positiveText, null);
@@ -155,7 +155,7 @@ public final class DialogHelper {
             String negativeText,
             DialogInterface.OnClickListener positiveListener) {
         return getConfirmDialog(
-                context, title, message, positiveText, negativeText, false, positiveListener, null);
+                context, title, message, positiveText, negativeText, true, positiveListener, null);
     }
 
 
