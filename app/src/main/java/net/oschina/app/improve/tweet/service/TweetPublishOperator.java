@@ -2,6 +2,8 @@ package net.oschina.app.improve.tweet.service;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.SystemClock;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -299,26 +301,34 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
         List<String> ret = new ArrayList<>();
         byte[] buffer = new byte[BitmapUtil.DEFAULT_BUFFER_SIZE];
         BitmapFactory.Options options = BitmapUtil.createOptions();
-        for (String path : paths) {
-            File sourcePath = new File(path);
-            if (!sourcePath.exists())
-                continue;
+        for (final String path : paths) {
+            String ext = null;
             try {
-                String name = sourcePath.getName();
-                String ext = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
-                String tempFile = String.format("%s/IMG_%s.%s", cacheDir, System.currentTimeMillis(), ext);
+                int lastDotIndex = path.lastIndexOf(".");
+                if (lastDotIndex != -1)
+                    ext = path.substring(lastDotIndex + 1).toLowerCase();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (TextUtils.isEmpty(ext)) {
+                ext = "jpg";
+            }
+
+            try {
+                String tempFile = String.format("%s/IMG_%s.%s", cacheDir, SystemClock.currentThreadTimeMillis(), ext);
                 if (PicturesCompressor.compressImage(path, tempFile, MAX_UPLOAD_LENGTH,
                         80, 1280, 1280 * 6, buffer, options, true)) {
-                    TweetPublishService.log("OPERATOR doImage " + tempFile + " " + new File(tempFile).length());
-
+                    TweetPublishService.log("OPERATOR doImage:" + tempFile + " " + new File(tempFile).length());
                     // verify the picture ext.
                     tempFile = PicturesCompressor.verifyPictureExt(tempFile);
-
                     ret.add(tempFile);
+                    continue;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            TweetPublishService.log("OPERATOR compressImage error:" + path);
         }
         if (ret.size() > 0) {
             String[] images = new String[ret.size()];

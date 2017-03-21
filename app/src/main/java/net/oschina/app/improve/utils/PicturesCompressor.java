@@ -30,6 +30,22 @@ public final class PicturesCompressor {
         return compressImage(srcPath, savePath, targetSize, 75, 1280, 1280 * 6, null, null, true);
     }
 
+    public static File loadWithGlideCache(String path) {
+        File tmp;
+        try {
+            tmp = Glide.with(AppContext.getInstance())
+                    .load(path)
+                    .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .get();
+            String absPath = tmp.getAbsolutePath();
+            TLog.d("PicturesCompressor", "loadWithGlideCache:" + absPath);
+            return tmp;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     /**
      * 压缩图片
      *
@@ -54,10 +70,19 @@ public final class PicturesCompressor {
                                         byte[] byteStorage,
                                         BitmapFactory.Options options,
                                         boolean exactDecode) {
+        boolean loadWithGlide = false;
         // build source file
-        final File sourceFile = new File(srcPath);
-        if (!sourceFile.exists())
-            return false;
+        File inTmp = new File(srcPath);
+        final File sourceFile;
+        if (inTmp.exists()) {
+            sourceFile = inTmp;
+        } else {
+            File tmp = loadWithGlideCache(srcPath);
+            if (tmp == null)
+                return false;
+            sourceFile = tmp;
+            loadWithGlide = true;
+        }
 
         // build save file
         final File saveFile = new File(savePath);
@@ -74,58 +99,61 @@ public final class PicturesCompressor {
         }
 
         // if the in file size <= maxSize, we can copy to savePath
-        if (sourceFile.length() <= maxSize && confirmImage(srcPath, options)) {
+        if (sourceFile.length() <= maxSize && confirmImage(sourceFile, options)) {
             return copyFile(sourceFile, saveFile);
         }
 
-
-        File tmp;
-        try {
-            tmp = Glide.with(AppContext.getInstance())
-                    .load(sourceFile)
-                    .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                    .get();
-            TLog.d("PicturesCompressor", "compressImage file path:" + tmp.getAbsolutePath());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        File realCacheFile;
+        if (loadWithGlide) {
+            realCacheFile = sourceFile;
+        } else {
+            realCacheFile = loadWithGlideCache(sourceFile.getAbsolutePath());
+            if (realCacheFile == null)
+                return false;
         }
 
         // Doing
-        File tempFile = BitmapUtil.Compressor.compressImage(tmp, maxSize, minQuality, maxWidth,
+        File tempFile = BitmapUtil.Compressor.compressImage(realCacheFile, maxSize, minQuality, maxWidth,
                 maxHeight, byteStorage, options, exactDecode);
 
         // Rename to out file
         return tempFile != null && copyFile(tempFile, saveFile) && tempFile.delete();
     }
 
-    public static boolean confirmImage(String filePath, BitmapFactory.Options opts) {
+    public static boolean confirmImage(File file, BitmapFactory.Options opts) {
         if (opts == null) opts = BitmapUtil.createOptions();
         opts.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, opts);
+        BitmapFactory.decodeFile(file.getAbsolutePath(), opts);
         String mimeType = opts.outMimeType.toLowerCase();
         return mimeType.contains("jpeg") || mimeType.contains("png") || mimeType.contains("gif");
     }
 
     public static String verifyPictureExt(String filePath) {
+        int lastDotIndex = filePath.lastIndexOf(".");
+        String ext = "jpg";
+        String filePathWithoutDot = filePath;
+        if (lastDotIndex != -1) {
+            try {
+                ext = filePath.substring(lastDotIndex + 1).toLowerCase();
+                filePathWithoutDot = filePath.substring(lastDotIndex).toLowerCase();
+            } catch (Exception e) {
+                ext = "jpg";
+                filePathWithoutDot = filePath;
+            }
+        }
+
         BitmapFactory.Options option = BitmapUtil.createOptions();
         option.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, option);
         String mimeType = option.outMimeType.toLowerCase();
-        int doIndex = filePath.lastIndexOf(".") + 1;
-        String ext = filePath.substring(doIndex).toLowerCase();
-        if (mimeType.contains("x-ico")) {
-            //TODO
-        } else if (mimeType.contains("jpeg")) {
+        // "x-ico" "webp" "vnd.wap.wbmp"
+        if (mimeType.contains("jpeg")) {
             ext = "jpg";
         } else if (mimeType.contains("png")) {
             ext = "png";
-        } else if (mimeType.contains("webp")) {
-            //TODO
-        } else if (mimeType.contains("vnd.wap.wbmp")) {
-            //TODO
         }
-        String newFilePath = filePath.substring(0, doIndex) + ext;
+
+        String newFilePath = String.format("%s.%s", filePathWithoutDot, ext);
 
         if (!filePath.equals(newFilePath)) {
             if (new File(filePath).renameTo(new File(newFilePath)))
