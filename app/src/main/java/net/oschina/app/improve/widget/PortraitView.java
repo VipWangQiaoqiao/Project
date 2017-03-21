@@ -109,6 +109,7 @@ public class PortraitView extends CircleImageView {
         Glide.with(context)
                 .load(path)
                 .asBitmap()
+                .placeholder(R.color.black_alpha_48)
                 .error(R.mipmap.widget_default_face)
                 .listener(new RequestListener<String, Bitmap>() {
                     @Override
