@@ -12,9 +12,11 @@ public class Author implements Serializable {
     protected String portrait;
     protected int relation;
     protected int gender;
+    private Identity identity;
 
     public Author() {
         relation = 4;
+        identity = new Identity();
     }
 
     public long getId() {
@@ -57,6 +59,14 @@ public class Author implements Serializable {
         this.gender = gender;
     }
 
+    public Identity getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(Identity identity) {
+        this.identity = identity;
+    }
+
     @Override
     public String toString() {
         return "Author{" +
@@ -65,6 +75,12 @@ public class Author implements Serializable {
                 ", portrait='" + portrait + '\'' +
                 ", relation=" + relation +
                 ", gender=" + gender +
+                ", identity=" + identity +
                 '}';
+    }
+
+    public static class Identity {
+        public boolean officialMember;
+        public boolean softwareAuthor;
     }
 }
