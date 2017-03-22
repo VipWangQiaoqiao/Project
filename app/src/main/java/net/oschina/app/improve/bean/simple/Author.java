@@ -79,7 +79,7 @@ public class Author implements Serializable {
                 '}';
     }
 
-    public static class Identity {
+    public static class Identity implements Serializable {
         public boolean officialMember;
         public boolean softwareAuthor;
     }
