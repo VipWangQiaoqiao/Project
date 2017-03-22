@@ -148,7 +148,7 @@
                 style="@style/option_item_text_parent"
                 android:text="@string/setting_cancel"
                 android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16"/>
+                android:textSize="@dimen/text_size_16" />
         </FrameLayout>
 
         <View
