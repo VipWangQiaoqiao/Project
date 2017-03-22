@@ -21,7 +21,7 @@ public class DataCleanManager {
      */
     public static void cleanInternalCache(Context context) {
         deleteFilesByDirectory(context.getCacheDir());
-        deleteFilesByDirectory(context.getFilesDir());
+        //deleteFilesByDirectory(context.getFilesDir());
     }
 
     /**
