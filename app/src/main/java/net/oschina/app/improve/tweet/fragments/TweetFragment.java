@@ -509,25 +509,22 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @Override
     public void onTweetPubSuccess() {
         //如果再次发送动弹成功，gone草稿箱view
-        AppContext.showToastShort(R.string.tweet_publish_success);
         showDraftsBox(View.GONE);
     }
 
     @Override
     public void onTweetPubFailed() {
         //发送动弹失败，显示草稿箱view
-        AppContext.showToastShort(R.string.tweet_publish_failed_hint);
         showDraftsBox(View.VISIBLE);
     }
 
     @Override
     public void onTweetPubProgress(String progressContent) {
-        AppContext.showToastShort(progressContent);
     }
 
     @Override
     public void onTweetPubContinue() {
-        AppContext.showToastShort(R.string.tweet_retry_publishing_hint);
+
     }
 
     @Override
@@ -538,7 +535,6 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
 
     @Override
     public void pnTweetReceiverSearchFailed(String[] pubFailedCacheIds) {
-
         this.mPubFailedCacheIds = pubFailedCacheIds;
         if (mReqCatalog == CATALOG_NEW && pubFailedCacheIds != null && pubFailedCacheIds.length > 0) {
             showDraftsBox(View.VISIBLE);

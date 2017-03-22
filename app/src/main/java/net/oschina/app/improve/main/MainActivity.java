@@ -327,12 +327,12 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     @Override
     public void onTweetPubProgress(String progressContent) {
         //更新动弹发送进度
-        AppContext.showToastShort(progressContent);
+        AppContext.showToast(progressContent);
     }
 
     @Override
     public void onTweetPubContinue() {
-
+        AppContext.showToastShort(R.string.tweet_retry_publishing_hint);
     }
 
     @Override
