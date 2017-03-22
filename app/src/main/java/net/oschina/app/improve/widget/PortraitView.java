@@ -3,6 +3,7 @@ package net.oschina.app.improve.widget;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -189,9 +190,10 @@ public class PortraitView extends CircleImageView {
     }
 
     private static int getBackgroundColor(String firstChar) {
-        int hashCode = firstChar.hashCode();
-        int len = Color.COLORS.length;
-        return Color.COLORS[hashCode % (len - 1)];
+        int len = COLORS.length;
+        int index = firstChar.charAt(0) - 64;
+        int colorIndex = index % len;
+        return COLORS[colorIndex];
     }
 
     public static Typeface getFont(Context context, String fontFile) {
@@ -209,31 +211,8 @@ public class PortraitView extends CircleImageView {
         TLog.i(TAG, args);
     }
 
-    static class Color {
-        static final int WHITE = -1;
-        static final int BLACK = -16777216;
-        static final int RED = -1762269;
-        static final int PINK = -1499549;
-        static final int PURPLE = -6543440;
-        static final int DEEP_PURPLE = -10011977;
-        static final int INDIGO = -12627531;
-        static final int BLUE = -11110404;
-        static final int LIGHT_PINK = -16537100;
-        static final int CYAN = -16728876;
-        static final int TEAL = -16738680;
-        static final int GREEN = -14312668;
-        static final int LIGHT_GREEN = -7617718;
-        static final int LIME = -3285959;
-        static final int YELLOW = -5317;
-        static final int AMBER = -16121;
-        static final int ORANGE = -26624;
-        static final int DEEP_ORANGE = -43230;
-        static final int BROWN = -8825528;
-        static final int GREY = -6381922;
-        static final int BLUE_GREY = -10453621;
-        static final int[] COLORS = new int[]{RED, PINK, PURPLE, DEEP_PURPLE, INDIGO,
-                BLUE, LIGHT_PINK, CYAN, TEAL, GREEN, LIGHT_GREEN, LIME, YELLOW, AMBER,
-                ORANGE, DEEP_ORANGE, BROWN, GREY, BLUE_GREY};
-    }
-
+    static final int[] COLORS = new int[]{
+            0xFF1abc9c, 0xFF2ecc71, 0xFF3498db, 0xFF9b59b6, 0xFF34495e, 0xFF16a085, 0xFF27ae60, 0xFF2980b9, 0xFF8e44ad, 0xFF2c3e50,
+            0xFFf1c40f, 0xFFe67e22, 0xFFe74c3c, 0xFFeca0f1, 0xFF95a5a6, 0xFFf39c12, 0xFFd35400, 0xFFc0392b, 0xFFbdc3c7, 0xFF7f8c8d
+    };
 }
