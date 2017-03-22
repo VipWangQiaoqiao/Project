@@ -10,7 +10,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
@@ -140,7 +139,6 @@ public class AssimilateUtils {
      * @return
      */
     public static Spannable assimilateOnlyAtUser(final Context context, CharSequence content) {
-        Log.e("assimilateOnlyAtUser",content.toString());
         SpannableStringBuilder builder = new SpannableStringBuilder(content);
         Matcher matcher;
         while (true) {
