@@ -40,6 +40,7 @@ import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
@@ -71,6 +72,8 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
 
     @Bind(R.id.iv_portrait)
     PortraitView ivPortrait;
+    @Bind(R.id.identityView)
+    IdentityView identityView;
     @Bind(R.id.tv_nick)
     TextView tvNick;
     @Bind(R.id.tv_time)
@@ -144,6 +147,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
     protected void initWidget() {
         // portrait
         ivPortrait.setup(comment.getAuthor());
+        identityView.setup(comment.getAuthor().getIdentity());
         // nick
         tvNick.setText(comment.getAuthor().getName());
 
