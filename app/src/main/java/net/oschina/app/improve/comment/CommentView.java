@@ -31,6 +31,7 @@ import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.bean.comment.Vote;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -210,7 +211,9 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
 
+        IdentityView identityView = (IdentityView) lay.findViewById(R.id.identityView);
         PortraitView ivAvatar = (PortraitView) lay.findViewById(R.id.iv_avatar);
+        identityView.setup(comment.getAuthor().getIdentity());
         ivAvatar.setup(comment.getAuthor());
         ivAvatar.setOnClickListener(new OnClickListener() {
             @Override
