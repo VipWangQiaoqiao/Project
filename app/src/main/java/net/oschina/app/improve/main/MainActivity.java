@@ -62,8 +62,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static net.oschina.app.improve.search.activities.NearbyActivity.LOCATION_PERMISSION;
 
 public class MainActivity extends BaseActivity implements NavFragment.OnNavigationReselectListener,
-        EasyPermissions.PermissionCallbacks,
-        CheckUpdateManager.RequestPermissions, TweetNotificationManager.TweetPubNotify {
+        EasyPermissions.PermissionCallbacks, CheckUpdateManager.RequestPermissions {
 
     private static final int RC_EXTERNAL_STORAGE = 0x04;//存储权限
     public static final String ACTION_NOTICE = "ACTION_NOTICE";
@@ -151,8 +150,7 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         // in this we can checkShare update
         checkUpdate();
         checkLocation();
-
-        TweetNotificationManager.bindTweetPubNotify(getApplicationContext(), this);
+        TweetNotificationManager.setup(this);
     }
 
     private void checkLocation() {
@@ -245,11 +243,6 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        TweetNotificationManager.unBoundTweetPubNotify(this);
-
-        TweetNotificationManager.stopTweetPubNotify(getApplicationContext());
-
         NoticeManager.stopListen(this);
         releaseLbs();
     }
@@ -310,39 +303,6 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         } else {
             finish();
         }
-    }
-
-    @Override
-    public void onTweetPubSuccess() {
-        //动弹发送成功
-        AppContext.showToastShort(R.string.tweet_publish_success);
-    }
-
-    @Override
-    public void onTweetPubFailed() {
-        //发送动弹失败
-        AppContext.showToastShort(R.string.tweet_publish_failed_hint);
-    }
-
-    @Override
-    public void onTweetPubProgress(String progressContent) {
-        //更新动弹发送进度
-        AppContext.showToast(progressContent);
-    }
-
-    @Override
-    public void onTweetPubContinue() {
-        AppContext.showToastShort(R.string.tweet_retry_publishing_hint);
-    }
-
-    @Override
-    public void onTweetPubDelete() {
-
-    }
-
-    @Override
-    public void pnTweetReceiverSearchFailed(String[] pubFailedCacheIds) {
-
     }
 
     private void checkUpdate() {

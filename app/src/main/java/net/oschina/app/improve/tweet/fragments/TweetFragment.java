@@ -185,8 +185,12 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                 showDraftsBox(View.GONE);
             }
         }
+    }
 
-        TweetNotificationManager.registerBroadcastReceiver(getContext().getApplicationContext());
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        TweetNotificationManager.setup(getContext());
     }
 
     @Override
@@ -229,13 +233,13 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TweetNotificationManager.bindTweetPubNotify(getContext().getApplicationContext(), this);
+        TweetNotificationManager.bindNotify(getContext().getApplicationContext(), this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        TweetNotificationManager.unBoundTweetPubNotify(this);
+        TweetNotificationManager.unBoundNotify(this);
     }
 
     @Override
