@@ -45,6 +45,7 @@ import net.oschina.app.improve.user.fragments.UserActiveFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.util.UIHelper;
@@ -98,6 +99,8 @@ public class OtherUserHomeActivity extends BaseActivity
     ViewPager mViewPager;
     @Bind(R.id.view_divider)
     View mDivider;
+    @Bind(R.id.identityView)
+    IdentityView mIdentityView;
 
     private boolean mIsLoadSuccess = false;
     private User user;
@@ -325,6 +328,7 @@ public class OtherUserHomeActivity extends BaseActivity
         mPortrait.setup(user);
         mPortrait.setOnClickListener(this);
         mLogoPortrait.setup(user);
+        mIdentityView.setup(user.getIdentity(), 0xffffffff);
 
         mLogoNick.setText(user.getName());
         mNick.setText(user.getName());
