@@ -177,22 +177,13 @@ public class PortraitView extends CircleImageView {
         canvas.drawColor(getBackgroundColor(firstChar));
         canvas.drawText(firstChar, centerX, centerY + fontHalfH, paint);
 
-        /*
-        paint.setStrokeWidth(6);
-        paint.setColor(Color.BLACK);
-        canvas.drawPoint(centerX, centerY, paint);
-
-        paint.setColor(Color.BLACK);
-        canvas.drawPoint(centerX, centerY + fontHalfH, paint);
-        */
-
         return bitmap;
     }
 
     private static int getBackgroundColor(String firstChar) {
         int len = COLORS.length;
         int index = firstChar.charAt(0) - 64;
-        int colorIndex = index % len;
+        int colorIndex = Math.abs(index) % len;
         return COLORS[colorIndex];
     }
 
