@@ -41,6 +41,12 @@ public class IdentityView extends AppCompatTextView {
         setTextSize(11);
         setGravity(Gravity.CENTER);
         setText("开源中国官方人员");
+
+        if (isInEditMode()) {
+            Author.Identity identity = new Author.Identity();
+            identity.officialMember = true;
+            setup(identity);
+        }
     }
 
     public void setup(Author.Identity identity) {
@@ -53,7 +59,7 @@ public class IdentityView extends AppCompatTextView {
             return;
         }
 
-        //identity.officialMember = true;
+        identity.officialMember = true;
 
         this.mIdentity = identity;
         setVisibility(identity.officialMember ? VISIBLE : GONE);
