@@ -12,6 +12,7 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 
@@ -51,9 +52,11 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
         MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
         User author = item.getSender();
         if (author != null) {
+            messageViewHolder.iv_user_identify.setup(author.getIdentity());
             messageViewHolder.iv_user_avatar.setup(author);
             messageViewHolder.tv_user_name.setText(author.getName());
         } else {
+            messageViewHolder.iv_user_identify.setup(null);
             messageViewHolder.iv_user_avatar.setup(0, "匿名用户", "");
             messageViewHolder.tv_user_name.setText("匿名用户");
         }
@@ -75,12 +78,14 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
 
     private static class MessageViewHolder extends RecyclerView.ViewHolder {
         PortraitView iv_user_avatar;
+        IdentityView iv_user_identify;
         TextView tv_user_name, tv_time;
         TextView tv_content;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
             iv_user_avatar = (PortraitView) itemView.findViewById(R.id.iv_user_avatar);
+            iv_user_identify = (IdentityView) itemView.findViewById(R.id.identityView);
             tv_user_name = (TextView) itemView.findViewById(R.id.tv_user_name);
             tv_time = (TextView) itemView.findViewById(R.id.tv_time);
             tv_content = (TextView) itemView.findViewById(R.id.tv_content);
