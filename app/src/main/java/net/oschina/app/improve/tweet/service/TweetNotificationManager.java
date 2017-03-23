@@ -5,7 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,10 @@ import java.util.List;
  * on 2017/2/20.
  * desc:
  */
-
 public class TweetNotificationManager {
-
     private static TweetNotificationManager INSTANCE;
     private PubTweetReceiver mPubTweetReceiver;
     private List<TweetPubNotify> mNotifies = new ArrayList<>();
-    private boolean mIsRegister;
 
     private TweetNotificationManager() {
     }
@@ -37,26 +35,15 @@ public class TweetNotificationManager {
         return INSTANCE;
     }
 
-    public static void bindTweetPubNotify(Context context, TweetPubNotify tweetPubNotify) {
-        registerBroadcastReceiver(context);
-
-        //检查是否已经存在
-        boolean contains = instance().mNotifies.contains(tweetPubNotify);
-        if (!contains)
-            instance().mNotifies.add(tweetPubNotify);
-    }
-
-
-    public static void registerBroadcastReceiver(Context context) {
-
-        // 未登陆时不进行注册
-        if (!AccountHelper.isLogin()) {
+    public static synchronized void setup(Context context) {
+        if (context == null)
             return;
-        }
-
-        //register broadcastReceiver
-        if (!instance().mIsRegister && instance().mPubTweetReceiver == null) {
-
+        Context appContext = context.getApplicationContext();
+        if (appContext == null)
+            return;
+        TweetNotificationManager manager = instance();
+        if (manager.mPubTweetReceiver == null) {
+            // 注册广播
             PubTweetReceiver pubTweetReceiver = new PubTweetReceiver();
             IntentFilter filter = new IntentFilter();
             filter.addAction(TweetPublishService.ACTION_SUCCESS);
@@ -66,31 +53,42 @@ public class TweetNotificationManager {
             filter.addAction(TweetPublishService.ACTION_CONTINUE);
             filter.addAction(TweetPublishService.ACTION_DELETE);
             filter.addAction(TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED);
-            context.registerReceiver(pubTweetReceiver, filter);
-
-            instance().mPubTweetReceiver = pubTweetReceiver;
-
-            instance().mIsRegister = true;
+            appContext.registerReceiver(pubTweetReceiver, filter);
+            manager.mPubTweetReceiver = pubTweetReceiver;
+            // 添加全局通知Toast
+            manager.mNotifies.add(new ToastNotify());
         }
     }
 
-    public static void unBoundTweetPubNotify(TweetPubNotify tweetPubNotify) {
+    public static synchronized void destroy(Context context) {
+        if (context == null)
+            return;
+        Context appContext = context.getApplicationContext();
+        if (appContext == null)
+            return;
+        PubTweetReceiver pubTweetReceiver = instance().mPubTweetReceiver;
+        if (pubTweetReceiver != null) {
+            appContext.unregisterReceiver(pubTweetReceiver);
+            instance().mPubTweetReceiver = null;
+        }
+    }
+
+    public static void bindNotify(Context context, TweetPubNotify tweetPubNotify) {
+        // 绑定前进行初始化操作
+        setup(context);
+
+        //检查是否已经存在
+        TweetNotificationManager manager = instance();
+        boolean contains = manager.mNotifies.contains(tweetPubNotify);
+        if (!contains)
+            manager.mNotifies.add(tweetPubNotify);
+    }
+
+    public static void unBoundNotify(TweetPubNotify tweetPubNotify) {
         instance().mNotifies.remove(tweetPubNotify);
     }
 
-    public static void stopTweetPubNotify(Context context) {
-
-        PubTweetReceiver pubTweetReceiver = instance().mPubTweetReceiver;
-        if (instance().mIsRegister && pubTweetReceiver != null) {
-            context.unregisterReceiver(pubTweetReceiver);
-            instance().mIsRegister = false;
-        }
-
-    }
-
-
     private static class PubTweetReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null) {
@@ -147,6 +145,38 @@ public class TweetNotificationManager {
         }
     }
 
+    private static class ToastNotify implements TweetPubNotify {
+
+        @Override
+        public void onTweetPubSuccess() {
+            AppContext.showToastShort(R.string.tweet_publish_success);
+        }
+
+        @Override
+        public void onTweetPubFailed() {
+            AppContext.showToastShort(R.string.tweet_publish_failed_hint);
+        }
+
+        @Override
+        public void onTweetPubProgress(String progressContent) {
+            AppContext.showToast(progressContent);
+        }
+
+        @Override
+        public void onTweetPubContinue() {
+            AppContext.showToastShort(R.string.tweet_retry_publishing_hint);
+        }
+
+        @Override
+        public void onTweetPubDelete() {
+
+        }
+
+        @Override
+        public void pnTweetReceiverSearchFailed(String[] pubFailedCacheIds) {
+
+        }
+    }
 
     public interface TweetPubNotify {
 

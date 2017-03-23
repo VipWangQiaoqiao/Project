@@ -51,6 +51,8 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     @Override
     public void publish() {
         final Context context = mView.getContext();
+        if (context == null)
+            return;
 
         if (!TDevice.hasInternet()) {
             AppContext.showToastShort(R.string.tip_network_error);
@@ -77,7 +79,7 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
             mAboutShare.commitTweetId = 0;
         }
 
-        TweetNotificationManager.registerBroadcastReceiver(AppContext.context());
+        TweetNotificationManager.setup(context);
 
         final List<String> paths = CollectionUtil.toArrayList(mView.getImages());
 

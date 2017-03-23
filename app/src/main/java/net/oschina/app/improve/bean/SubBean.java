@@ -14,6 +14,7 @@ import java.util.List;
  */
 
 public class SubBean implements Serializable {
+    private static final long serialVersionUID = -5343222344464021662L;
     private String cacheKey;
 
     private long id;
