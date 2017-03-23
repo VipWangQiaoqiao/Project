@@ -40,6 +40,8 @@ public class IdentityView extends AppCompatTextView {
         setPadding(padding, padding, padding, padding);
         setTextSize(11);
         setGravity(Gravity.CENTER);
+        setSingleLine(true);
+        setLines(1);
         setText("开源中国官方人员");
 
         if (isInEditMode()) {
