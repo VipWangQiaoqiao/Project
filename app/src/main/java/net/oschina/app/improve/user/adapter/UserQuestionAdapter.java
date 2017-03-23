@@ -10,6 +10,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Question;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 
@@ -47,6 +48,8 @@ public class UserQuestionAdapter extends BaseRecyclerAdapter<Question> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_ques_item_icon)
         PortraitView mViewPortrait;
+        @Bind(R.id.identityView)
+        IdentityView mViewIdentity;
         @Bind(R.id.tv_ques_item_title)
         TextView mViewTitle;
         @Bind(R.id.tv_ques_item_content)
