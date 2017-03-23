@@ -113,6 +113,8 @@ public class BaseApplication extends Application {
     }
 
     public static void showToast(String message, int duration, int icon, int gravity) {
-        SimplexToast.show(_context, message, gravity, duration);
+        Context context = _context;
+        if (context != null)
+            SimplexToast.show(context, message, gravity, duration);
     }
 }
