@@ -10,6 +10,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.simple.TweetLike;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.UIHelper;
 
@@ -37,6 +38,7 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<TweetLike> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, TweetLike item, int position) {
         LikeUsersHolderView h = (LikeUsersHolderView) holder;
+        h.identityView.setup(item.getAuthor());
         h.ivPortrait.setup(item.getAuthor());
         h.ivPortrait.setTag(R.id.iv_tag, item);
         h.ivPortrait.setOnClickListener(getOnPortraitClickListener());
@@ -60,6 +62,8 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<TweetLike> {
     }
 
     public static final class LikeUsersHolderView extends RecyclerView.ViewHolder {
+        @Bind(R.id.identityView)
+        IdentityView identityView;
         @Bind(R.id.iv_avatar)
         PortraitView ivPortrait;
         @Bind(R.id.tv_name)
