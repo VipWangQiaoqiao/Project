@@ -260,7 +260,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * @param userInfo userInfo
      */
     private void updateView(User userInfo) {
-        mIdentityView.setup(userInfo);
+        mIdentityView.setup(userInfo, 0xffffffff);
         mPortrait.setup(userInfo);
         mPortrait.setVisibility(View.VISIBLE);
 

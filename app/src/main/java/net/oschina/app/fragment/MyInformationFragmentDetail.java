@@ -98,7 +98,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     @SuppressWarnings("deprecation")
     public void fillUI() {
-        identityView.setup(userInfo);
+        identityView.setup(userInfo, 0xffffffff);
         mUserFace.setup(userInfo);
         mUserFace.setOnClickListener(null);
         mName.setText(getText(userInfo.getName()));
