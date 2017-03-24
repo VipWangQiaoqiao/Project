@@ -58,6 +58,12 @@ public class IdentityView extends AppCompatTextView {
             setup(author.getIdentity());
     }
 
+    public void setup(Author author, int color) {
+        if (author == null)
+            setup((Author.Identity) null, color);
+        else
+            setup(author.getIdentity(), color);
+    }
 
     public void setup(Author.Identity identity) {
         setup(identity, 0xff24CF5F);
