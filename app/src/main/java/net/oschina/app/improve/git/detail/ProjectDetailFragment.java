@@ -147,12 +147,14 @@ public class ProjectDetailFragment extends BaseFragment implements ProjectDetail
         mTextStarCount.setText(getCount(project.getStarsCount()));
         mTextWatchCount.setText(getCount(project.getWatchesCount()));
         mTextForkCount.setText(getCount(project.getForksCount()));
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        mTextUpdateDate.setText("上次更新于" + StringUtils.formatSomeAgo(dateFormat.format(project.getLastPushTime())));
         mTextIssuesCount.setText(String.valueOf(project.getIssueCount()));
         mTexPrCount.setText(String.valueOf(project.getPullRequestCount()));
         mTextDescription.setText(project.getDescription());
         mTextLanguage.setVisibility(TextUtils.isEmpty(project.getLanguage()) ? View.GONE : View.VISIBLE);
+        if(project.getLastPushTime() != null){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            mTextUpdateDate.setText("上次更新于" + StringUtils.formatSomeAgo(dateFormat.format(project.getLastPushTime())));
+        }
     }
 
     @Override
