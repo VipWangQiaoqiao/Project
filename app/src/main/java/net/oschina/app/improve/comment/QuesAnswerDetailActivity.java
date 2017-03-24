@@ -253,6 +253,7 @@ public class QuesAnswerDetailActivity extends BaseBackActivity {
         TweetCommentAdapter.TweetCommentHolderView holder = new TweetCommentAdapter.TweetCommentHolderView(view);
         holder.tvName.setText(reply.getAuthor().getName());
         holder.ivPortrait.setup(reply.getAuthor());
+        holder.identityView.setup(reply.getAuthor());
         holder.tvTime.setText(String.format("%s楼  %s", i + 1, StringUtils.formatSomeAgo(reply.getPubDate())));
         CommentsUtil.formatHtml(getResources(), holder.tvContent, reply.getContent());
         holder.btnReply.setTag(reply);

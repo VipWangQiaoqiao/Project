@@ -15,6 +15,7 @@ import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.simple.TweetComment;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -45,6 +46,8 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, TweetComment item, int position) {
         TweetCommentHolderView h = (TweetCommentHolderView) holder;
+
+        h.identityView.setup(item.getAuthor());
         h.ivPortrait.setup(item.getAuthor());
         h.ivPortrait.setTag(R.id.iv_tag, item);
         h.ivPortrait.setOnClickListener(getOnPortraitClickListener());
@@ -71,6 +74,8 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
     }
 
     public static final class TweetCommentHolderView extends RecyclerView.ViewHolder {
+        @Bind(R.id.identityView)
+        public IdentityView identityView;
         @Bind(R.id.iv_avatar)
         public PortraitView ivPortrait;
         @Bind(R.id.tv_name)
