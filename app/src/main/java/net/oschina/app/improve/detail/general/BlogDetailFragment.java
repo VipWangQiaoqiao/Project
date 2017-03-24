@@ -14,6 +14,7 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.StringUtils;
@@ -43,6 +44,9 @@ public class BlogDetailFragment extends DetailFragment {
 
     @Bind(R.id.iv_avatar)
     PortraitView mImageAvatar;
+
+    @Bind(R.id.identityView)
+    IdentityView mIdentityView;
 
     @Bind(R.id.tv_name)
     TextView mTextName;
@@ -104,6 +108,7 @@ public class BlogDetailFragment extends DetailFragment {
         super.showGetDetailSuccess(bean);
         if (mContext == null) return;
         Author author = bean.getAuthor();
+        mIdentityView.setup(author);
         if (author != null) {
             mTextName.setText(author.getName());
             mImageAvatar.setup(author);
