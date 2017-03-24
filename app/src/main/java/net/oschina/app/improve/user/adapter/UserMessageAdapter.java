@@ -51,12 +51,11 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Message item, int position) {
         MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
         User author = item.getSender();
+        messageViewHolder.iv_user_identify.setup(author);
         if (author != null) {
-            messageViewHolder.iv_user_identify.setup(author.getIdentity());
             messageViewHolder.iv_user_avatar.setup(author);
             messageViewHolder.tv_user_name.setText(author.getName());
         } else {
-            messageViewHolder.iv_user_identify.setup(null);
             messageViewHolder.iv_user_avatar.setup(0, "匿名用户", "");
             messageViewHolder.tv_user_name.setText("匿名用户");
         }

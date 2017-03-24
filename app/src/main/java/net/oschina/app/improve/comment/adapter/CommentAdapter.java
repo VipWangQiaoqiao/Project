@@ -33,6 +33,7 @@ import net.oschina.app.improve.comment.CommentReferView;
 import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -110,6 +111,9 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         @Bind(R.id.iv_avatar)
         PortraitView mIvAvatar;
 
+        @Bind(R.id.identityView)
+        IdentityView mIdentityView;
+
         @Bind(R.id.tv_name)
         TextView mName;
         @Bind(R.id.tv_pub_date)
@@ -144,7 +148,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
          */
         @SuppressLint("DefaultLocale")
         void addComment(final long sourceId, final int commentType, final Comment comment, RequestManager requestManager) {
-
+            mIdentityView.setup(comment.getAuthor());
             mIvAvatar.setup(comment.getAuthor());
             mIvAvatar.setOnClickListener(new View.OnClickListener() {
                 @Override

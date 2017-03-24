@@ -213,7 +213,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
 
         IdentityView identityView = (IdentityView) lay.findViewById(R.id.identityView);
         PortraitView ivAvatar = (PortraitView) lay.findViewById(R.id.iv_avatar);
-        identityView.setup(comment.getAuthor().getIdentity());
+        identityView.setup(comment.getAuthor());
         ivAvatar.setup(comment.getAuthor());
         ivAvatar.setOnClickListener(new OnClickListener() {
             @Override
