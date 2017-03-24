@@ -12,6 +12,7 @@ import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.Origin;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -52,6 +53,7 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Mention item, int position) {
         MentionViewHolder viewHolder = (MentionViewHolder) holder;
         Author author = item.getAuthor();
+        viewHolder.identityView.setup(author);
         if (author != null) {
             viewHolder.iv_user_avatar.setup(author);
             viewHolder.tv_user_name.setText(author.getName());
@@ -75,12 +77,14 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
     }
 
     private static class MentionViewHolder extends RecyclerView.ViewHolder {
+        IdentityView identityView;
         PortraitView iv_user_avatar;
         TextView tv_user_name, tv_time, tv_platform, tv_comment_count;
         TweetTextView tv_content, tv_origin;
 
         public MentionViewHolder(View itemView) {
             super(itemView);
+            identityView = (IdentityView) itemView.findViewById(R.id.identityView);
             iv_user_avatar = (PortraitView) itemView.findViewById(R.id.iv_user_avatar);
             tv_user_name = (TextView) itemView.findViewById(R.id.tv_user_name);
             tv_time = (TextView) itemView.findViewById(R.id.tv_time);
