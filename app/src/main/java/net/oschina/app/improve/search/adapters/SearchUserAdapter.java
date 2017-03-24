@@ -10,6 +10,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 
 import butterknife.Bind;
@@ -38,6 +39,7 @@ public class SearchUserAdapter extends BaseRecyclerAdapter<User> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder h, User item, int position) {
         ViewHolder holder = (ViewHolder) h;
+        holder.mIdentityView.setup(item);
         holder.mViewPortrait.setup(item);
         holder.mViewNick.setText(item.getName());
         holder.mViewPosition.setText(String.format("%s  %s  %s",
@@ -50,7 +52,8 @@ public class SearchUserAdapter extends BaseRecyclerAdapter<User> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
+        @Bind(R.id.identityView)
+        IdentityView mIdentityView;
         @Bind(R.id.iv_portrait)
         PortraitView mViewPortrait;
         @Bind(R.id.tv_nick)
