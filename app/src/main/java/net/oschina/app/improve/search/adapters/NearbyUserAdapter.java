@@ -12,6 +12,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.NearbyResult;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 
@@ -41,6 +42,7 @@ public class NearbyUserAdapter extends BaseRecyclerAdapter<NearbyResult> {
 
         if (h instanceof ViewHolder) {
             ViewHolder holder = (ViewHolder) h;
+            holder.mIdentityView.setup(item.getUser());
             if (item.getUser() != null) {
                 holder.mViewPortrait.setup(item.getUser());
                 holder.mViewNick.setText(item.getUser().getName());
@@ -78,7 +80,8 @@ public class NearbyUserAdapter extends BaseRecyclerAdapter<NearbyResult> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-
+        @Bind(R.id.identityView)
+        IdentityView mIdentityView;
         @Bind(R.id.iv_portrait)
         PortraitView mViewPortrait;
         @Bind(R.id.tv_nick)
