@@ -595,7 +595,8 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                     comments = URLEncoder.encode(comments, CHARSET);
                     */
                     SampleAuthor author = new SampleAuthor(user);
-                    info.comments = URLEncoder.encode(AppOperator.getGson().toJson(author), CHARSET);
+                    String authorJson = AppOperator.getGson().toJson(author);
+                    info.comments = URLEncoder.encode(authorJson, CHARSET);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                     SimplexToast.show(this, getString(R.string.upload_lbs_info_hint));
