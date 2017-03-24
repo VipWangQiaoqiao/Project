@@ -38,7 +38,7 @@ public class IdentityView extends AppCompatTextView {
         setVisibility(GONE);
         final int padding = (int) TDevice.dipToPx(getResources(), 2);
         setPadding(padding, padding, padding, padding);
-        setTextSize(11);
+        setTextSize(10);
         setGravity(Gravity.CENTER);
         setSingleLine(true);
         setLines(1);
