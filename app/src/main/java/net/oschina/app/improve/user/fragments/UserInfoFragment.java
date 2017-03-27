@@ -27,7 +27,6 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.media.SelectImageActivity;
 import net.oschina.app.improve.media.config.SelectOptions;
 import net.oschina.app.improve.notice.NoticeBean;
@@ -40,7 +39,6 @@ import net.oschina.app.improve.user.collection.UserCollectionActivity;
 import net.oschina.app.improve.user.event.UserEventActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.utils.UiUtil;
-import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.interf.OnTabReselectListener;
@@ -75,9 +73,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     @Bind(R.id.user_info_head_container)
     FrameLayout mFlUserInfoHeadContainer;
 
-
-    @Bind(R.id.identityView)
-    IdentityView mIdentityView;
     @Bind(R.id.iv_portrait)
     PortraitView mPortrait;
     @Bind(R.id.iv_gender)
@@ -260,7 +255,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      * @param userInfo userInfo
      */
     private void updateView(User userInfo) {
-        mIdentityView.setup(userInfo, 0xffffffff);
         mPortrait.setup(userInfo);
         mPortrait.setVisibility(View.VISIBLE);
 
@@ -394,7 +388,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
      *
      */
     private void hideView() {
-        mIdentityView.setup((Author.Identity) null);
         mPortrait.setImageResource(R.mipmap.widget_default_face);
         mTvName.setText(R.string.user_hint_login);
         mTvName.setTextSize(16.0f);

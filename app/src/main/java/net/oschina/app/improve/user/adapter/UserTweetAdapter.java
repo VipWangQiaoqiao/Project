@@ -53,13 +53,20 @@ import cz.msebera.android.httpclient.Header;
  * Created by
  * thanatos on 16/8/17.
  */
+@SuppressWarnings("all")
 public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implements View.OnClickListener {
     private Bitmap mRecordBitmap;
     private View.OnClickListener mOnLikeClickListener;
+    private boolean isShowIdentityView;
 
     public UserTweetAdapter(Callback callback) {
         super(callback, ONLY_FOOTER);
+        isShowIdentityView = true;
         initListener();
+    }
+
+    public void setShowIdentityView(boolean showIdentityView) {
+        isShowIdentityView = showIdentityView;
     }
 
     private void initListener() {
@@ -109,6 +116,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
 
             holder.mViewName.setText(author.getName());
         }
+        holder.mIdentityView.setVisibility(isShowIdentityView ? View.VISIBLE : View.GONE);
 
         holder.mViewTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         PlatfromUtil.setPlatFromString(holder.mViewPlatform, item.getAppClient());
