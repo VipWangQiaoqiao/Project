@@ -149,7 +149,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
-        isShowIdentityView = bundle.getBoolean("isShowIdentityView");
+        isShowIdentityView = bundle.getBoolean("isShowIdentityView",true);
         mReqCatalog = bundle.getInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_NEW);
         switch (mReqCatalog) {
             case CATALOG_FRIENDS:
