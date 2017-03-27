@@ -12,6 +12,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.ApplyUser;
 import net.oschina.app.improve.bean.simple.UserRelation;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 
 /**
@@ -41,6 +42,7 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
             item.setName("匿名用户");
         h.mTextAuthor.setText(item.getName());
         h.mImageAuthor.setup(item);
+        h.mIdentityView.setup(item);
 
         ApplyUser.EventInfo info = item.getEventInfo();
         if (info != null) {
@@ -62,6 +64,7 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
     private static class ApplyViewHolder extends RecyclerView.ViewHolder {
         TextView mTextAuthor, mTextCompany, mTextJob;
         PortraitView mImageAuthor;
+        IdentityView mIdentityView;
         ImageView mImageGender;
         Button mBtnRelate;
 
@@ -71,6 +74,7 @@ class ApplyAdapter extends BaseGeneralRecyclerAdapter<ApplyUser> {
             mTextCompany = (TextView) itemView.findViewById(R.id.tv_company);
             mTextJob = (TextView) itemView.findViewById(R.id.tv_job);
             mImageAuthor = (PortraitView) itemView.findViewById(R.id.civ_author);
+            mIdentityView = (IdentityView) itemView.findViewById(R.id.identityView);
             mBtnRelate = (Button) itemView.findViewById(R.id.btn_relation);
             mImageGender = (ImageView) itemView.findViewById(R.id.iv_gender);
         }

@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
@@ -20,11 +18,12 @@ import net.oschina.app.improve.bean.Active;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.Origin;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.widget.IdentityView;
+import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by thanatos on 16/7/14.
@@ -48,15 +47,12 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
         ViewHolder holder = (ViewHolder) vh;
 
         Author author = item.getAuthor();
+        holder.mIdentityView.setup(author);
         if (author == null) {
             holder.mViewNick.setText("匿名用户");
-            holder.mViewPortrait.setImageResource(R.mipmap.widget_default_face);
+            holder.mViewPortrait.setup(0, "匿名用户", "");
         } else {
-            Glide.with(mContext).load(item.getAuthor().getPortrait())
-                    .asBitmap()
-                    .placeholder(R.mipmap.widget_default_face)
-                    .error(R.mipmap.widget_default_face)
-                    .into(holder.mViewPortrait);
+            holder.mViewPortrait.setup(author);
             holder.mViewNick.setText(item.getAuthor().getName());
         }
 
@@ -136,7 +132,9 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
         @Bind(R.id.tv_content)
         TextView mViewContent;
         @Bind(R.id.iv_portrait)
-        CircleImageView mViewPortrait;
+        PortraitView mViewPortrait;
+        @Bind(R.id.identityView)
+        IdentityView mIdentityView;
 
         public ViewHolder(View view) {
             super(view);
