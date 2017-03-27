@@ -46,7 +46,7 @@ public class UserTweetActivity extends BaseBackActivity {
     protected void initWidget() {
         super.initWidget();
         if (userTweetFragment == null)
-            userTweetFragment = TweetFragment.instantiate(uid, 0);
+            userTweetFragment = TweetFragment.instantiate(uid, 0,false);
         getSupportFragmentManager().beginTransaction().add(R.id.user_tweet_container, userTweetFragment).commit();
     }
 

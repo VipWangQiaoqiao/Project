@@ -104,7 +104,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     View mBaseLine;
 
     private String[] mPubFailedCacheIds;
-
+    private boolean isShowIdentityView;
     public static Fragment instantiate(long uid) {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_KEY_USER_ID, uid);
@@ -119,9 +119,10 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
      * @param code 只是为了让方法指纹不一样而已，哈哈
      * @return {@link Fragment}
      */
-    public static Fragment instantiate(long uid, int code) {
+    public static Fragment instantiate(long uid, int code,boolean isShowIdentityView) {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_KEY_USER_ID, uid);
+        bundle.putBoolean("isShowIdentityView",isShowIdentityView);
         bundle.putInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_SOMEONE);
         Fragment fragment = new TweetFragment();
         fragment.setArguments(bundle);
@@ -148,6 +149,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
+        isShowIdentityView = bundle.getBoolean("isShowIdentityView",true);
         mReqCatalog = bundle.getInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_NEW);
         switch (mReqCatalog) {
             case CATALOG_FRIENDS:
@@ -436,7 +438,9 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
 
     @Override
     protected BaseRecyclerAdapter<Tweet> getRecyclerAdapter() {
-        return new UserTweetAdapter(this);
+        UserTweetAdapter adapter = new UserTweetAdapter(this);
+        adapter.setShowIdentityView(isShowIdentityView);
+        return adapter;
     }
 
     @Override

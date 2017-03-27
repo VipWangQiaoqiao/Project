@@ -245,7 +245,7 @@ public class OtherUserHomeActivity extends BaseActivity
             fragments = new ArrayList<>();
             fragments.add(new Pair<>(
                     String.format("%s\n动弹", 0),
-                    TweetFragment.instantiate(user.getId(), 0)));
+                    TweetFragment.instantiate(user.getId(), 0,true)));
             fragments.add(new Pair<>(
                     String.format("%s\n博客", 0),
                     UserBlogFragment.instantiate(user.getId())));

@@ -13,7 +13,6 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.simple.Author;
-import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -74,11 +73,9 @@ class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements 
 
         String authorName;
         if (author != null && !TextUtils.isEmpty(authorName = author.getName())) {
-            vh.identityView.setup(author);
             vh.tv_name.setText(String.format("@%s", authorName.length() > 9 ? authorName.substring(0, 9) : authorName));
             vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         } else {
-            vh.identityView.setup((Author.Identity) null);
             vh.tv_name.setText("");
             vh.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         }
@@ -90,7 +87,6 @@ class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements 
     private static class QuestionViewHolder extends RecyclerView.ViewHolder {
         TextView tv_question_title, tv_question_content, tv_name, tv_time, tv_comment_count, tv_view;
         PortraitView iv_question;
-        IdentityView identityView;
 
         QuestionViewHolder(View itemView) {
             super(itemView);
@@ -101,7 +97,6 @@ class QuestionSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> implements 
             tv_comment_count = (TextView) itemView.findViewById(R.id.tv_info_comment);
             tv_view = (TextView) itemView.findViewById(R.id.tv_info_view);
             iv_question = (PortraitView) itemView.findViewById(R.id.iv_question);
-            identityView = (IdentityView) itemView.findViewById(R.id.identityView);
         }
     }
 }
