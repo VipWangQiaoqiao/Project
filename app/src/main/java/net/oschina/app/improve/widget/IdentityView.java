@@ -72,9 +72,6 @@ public class IdentityView extends AppCompatTextView {
             setVisibility(GONE);
             return;
         }
-
-        identity.officialMember = true;
-
         this.mIdentity = identity;
         setVisibility(identity.officialMember ? VISIBLE : GONE);
         initView(color);
