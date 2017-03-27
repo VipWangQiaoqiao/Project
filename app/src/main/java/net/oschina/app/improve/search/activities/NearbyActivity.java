@@ -44,6 +44,7 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.NearbyResult;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.search.adapters.NearbyUserAdapter;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.DialogHelper;
@@ -574,6 +575,7 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
 
                 User user = AccountHelper.getUser();
                 try {
+                    /*
                     String company = "";
                     if (user.getMore() != null) {
                         company = user.getMore().getCompany();
@@ -591,7 +593,10 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
                             , user.getId(), user.getName(), user.getPortrait(), user.getGender(), company);
                     comments = comments.replaceAll("[\\s\n]+", "");
                     comments = URLEncoder.encode(comments, CHARSET);
-                    info.comments = comments;
+                    */
+                    SampleAuthor author = new SampleAuthor(user);
+                    String authorJson = AppOperator.getGson().toJson(author);
+                    info.comments = URLEncoder.encode(authorJson, CHARSET);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                     SimplexToast.show(this, getString(R.string.upload_lbs_info_hint));
@@ -605,6 +610,35 @@ public class NearbyActivity extends BaseBackActivity implements RadarSearchListe
             if (!TDevice.hasInternet() && mNextPageIndex == 0 && mAdapter.getCount() <= 0) {
                 showError(EmptyLayout.NETWORK_ERROR);
             }
+        }
+    }
+
+    private static class SampleAuthor {
+        public long id;
+        public String name;
+        public String portrait;
+        public int gender;
+        public Author.Identity identity;
+        public SampleAuthorMore more;
+
+        private SampleAuthor(User user) {
+            this.id = user.getId();
+            this.name = user.getName();
+            this.portrait = user.getPortrait();
+            this.gender = user.getGender();
+            this.identity = user.getIdentity();
+            this.more = new SampleAuthorMore(user.getMore() != null ? user.getMore().getCompany() : "");
+            if (this.identity == null)
+                this.identity = new Author.Identity();
+        }
+    }
+
+    private static class SampleAuthorMore {
+        public String company;
+
+        private SampleAuthorMore(String company) {
+            company = company == null ? "" : company;
+            this.company = company;
         }
     }
 

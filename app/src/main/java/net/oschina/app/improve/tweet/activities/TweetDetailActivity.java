@@ -48,6 +48,7 @@ import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.QuickOptionDialogHelper;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
@@ -75,6 +76,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     public static final String BUNDLE_KEY_TWEET = "BUNDLE_KEY_TWEET";
 
+    @Bind(R.id.identityView)
+    IdentityView mIdentityView;
     @Bind(R.id.iv_portrait)
     PortraitView ivPortrait;
     @Bind(R.id.tv_nick)
@@ -395,6 +398,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             return;
 
         Author author = tweet.getAuthor();
+        mIdentityView.setup(author);
         if (author != null) {
             ivPortrait.setup(author);
             ivPortrait.setOnClickListener(getOnPortraitClickListener());

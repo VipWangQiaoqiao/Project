@@ -25,6 +25,7 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.TweetLikeReverse;
 import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -64,6 +65,7 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
 
         vh.icon.setTag(R.id.iv_tweet_face, position);
         final Author author = item.getAuthor();
+        vh.mIdentityView.setup(author);
         if (author == null) {
             vh.icon.setup(0, "匿名用户", "");
             vh.name.setText("匿名用户");
@@ -160,7 +162,8 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
     }
 
     static class SoftwareTweetViewHolder extends RecyclerView.ViewHolder {
-
+        @Bind(R.id.identityView)
+        IdentityView mIdentityView;
         @Bind(R.id.iv_tweet_face)
         PortraitView icon;
         @Bind(R.id.tv_tweet_name)

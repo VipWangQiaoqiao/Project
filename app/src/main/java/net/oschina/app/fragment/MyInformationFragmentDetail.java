@@ -11,6 +11,7 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -31,6 +32,9 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     @Bind(R.id.iv_avatar)
     PortraitView mUserFace;
+
+    @Bind(R.id.identityView)
+    IdentityView identityView;
 
     @Bind(R.id.tv_name)
     TextView mName;
@@ -94,6 +98,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     @SuppressWarnings("deprecation")
     public void fillUI() {
+        identityView.setup(userInfo, 0xffffffff);
         mUserFace.setup(userInfo);
         mUserFace.setOnClickListener(null);
         mName.setText(getText(userInfo.getName()));

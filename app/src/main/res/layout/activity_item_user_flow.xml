@@ -53,6 +53,11 @@
                     android:layout_marginLeft="2dp"
                     app:srcCompat="@mipmap/userinfo_icon_male" />
 
+                <net.oschina.app.improve.widget.IdentityView
+                    android:id="@+id/identityView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/lay_4" />
             </LinearLayout>
 
             <TextView

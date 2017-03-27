@@ -33,6 +33,7 @@ import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
@@ -312,6 +313,7 @@ public class CommentExsActivity extends BaseBackActivity {
 
     private static class CommentHolder extends RecyclerView.ViewHolder {
         private PortraitView mAvatar;
+        private IdentityView mIdentityView;
         private TextView mName;
         private TextView mDate;
         private TweetTextView mContent;
@@ -336,6 +338,7 @@ public class CommentExsActivity extends BaseBackActivity {
             } else {
                 mAvatar.setup(0, "匿名用户", "");
             }
+            mIdentityView.setup(comment.getAuthor());
 
             mName.setText(comment.getAuthor().getName());
             mDate.setText(comment.getPubDate());

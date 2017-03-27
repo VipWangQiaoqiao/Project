@@ -37,10 +37,16 @@
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_10"
+                    android:layout_marginTop="@dimen/lay_4"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_16"
                     tools:text="uni7corn" />
+
+                <net.oschina.app.improve.widget.IdentityView
+                    android:id="@+id/identityView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/lay_4" />
             </LinearLayout>
 
             <LinearLayout

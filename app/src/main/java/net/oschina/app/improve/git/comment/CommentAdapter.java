@@ -12,6 +12,7 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.git.bean.Comment;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
@@ -42,6 +43,7 @@ class CommentAdapter extends BaseGeneralRecyclerAdapter<Comment> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
         CommentViewHolder h = (CommentViewHolder) holder;
         final Author author = item.getAuthor();
+        h.mIdentityView.setup(author);
         h.mImageOwner.setup(author);
         h.mImageOwner.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +60,7 @@ class CommentAdapter extends BaseGeneralRecyclerAdapter<Comment> {
 
     private static class CommentViewHolder extends RecyclerView.ViewHolder {
         PortraitView mImageOwner;
+        IdentityView mIdentityView;
         TextView mTextName, mTextPubDate;
         TweetTextView mTextComment;
         ImageView mImageComment;
@@ -65,6 +68,7 @@ class CommentAdapter extends BaseGeneralRecyclerAdapter<Comment> {
         CommentViewHolder(View itemView) {
             super(itemView);
             mImageOwner = (PortraitView) itemView.findViewById(R.id.civ_owner);
+            mIdentityView = (IdentityView) itemView.findViewById(R.id.identityView);
             mTextName = (TextView) itemView.findViewById(R.id.tv_name);
             mTextPubDate = (TextView) itemView.findViewById(R.id.tv_pub_date);
             mTextComment = (TweetTextView) itemView.findViewById(R.id.tv_comment);

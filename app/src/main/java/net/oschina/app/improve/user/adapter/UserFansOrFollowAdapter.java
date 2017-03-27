@@ -10,6 +10,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.user.bean.UserFansOrFollows;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 
 import butterknife.Bind;
@@ -34,6 +35,7 @@ public class UserFansOrFollowAdapter extends BaseRecyclerAdapter<UserFansOrFollo
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, UserFansOrFollows item, int position) {
         if (item == null) return;
         final UserFansViewHolder vh = (UserFansViewHolder) holder;
+        vh.identityView.setup(item);
         vh.mCiIcon.setup(item);
         vh.mTvName.setText(item.getName());
         switch (item.getGender()) {
@@ -69,6 +71,8 @@ public class UserFansOrFollowAdapter extends BaseRecyclerAdapter<UserFansOrFollo
      */
     class UserFansViewHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.identityView)
+        IdentityView identityView;
         @Bind(R.id.iv_user_flow_icon)
         PortraitView mCiIcon;
         @Bind(R.id.tv_user_flow_name)

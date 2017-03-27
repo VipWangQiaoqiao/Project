@@ -32,6 +32,7 @@ import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.TweetLikeReverse;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
@@ -93,6 +94,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         ViewHolder holder = (ViewHolder) h;
 
         final Author author = item.getAuthor();
+        holder.mIdentityView.setup(author);
         if (author == null) {
             holder.mViewPortrait.setup(0, "匿名用户", "");
             holder.mViewName.setText("匿名用户");
@@ -231,6 +233,8 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_tweet_face)
         PortraitView mViewPortrait;
+        @Bind(R.id.identityView)
+        IdentityView mIdentityView;
         @Bind(R.id.tv_tweet_name)
         TextView mViewName;
         @Bind(R.id.tv_tweet_time)

@@ -96,6 +96,12 @@
                 android:textSize="20sp"
                 tools:text="thanatosx" />
 
+            <net.oschina.app.improve.widget.IdentityView
+                android:id="@+id/identityView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/lay_4" />
+
             <TextView
                 android:id="@+id/tv_score"
                 android:layout_width="wrap_content"
