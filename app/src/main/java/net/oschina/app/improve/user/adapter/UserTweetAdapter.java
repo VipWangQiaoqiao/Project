@@ -101,7 +101,7 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
         ViewHolder holder = (ViewHolder) h;
 
         final Author author = item.getAuthor();
-        holder.mIdentityView.setup(author);
+
         if (author == null) {
             holder.mViewPortrait.setup(0, "匿名用户", "");
             holder.mViewName.setText("匿名用户");
@@ -116,7 +116,13 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
 
             holder.mViewName.setText(author.getName());
         }
-        holder.mIdentityView.setVisibility(isShowIdentityView ? View.VISIBLE : View.GONE);
+        if (isShowIdentityView) {
+            holder.mIdentityView.setVisibility(View.VISIBLE);
+            holder.mIdentityView.setup(author);
+        } else {
+            holder.mIdentityView.setVisibility(View.GONE);
+        }
+
 
         holder.mViewTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         PlatfromUtil.setPlatFromString(holder.mViewPlatform, item.getAppClient());

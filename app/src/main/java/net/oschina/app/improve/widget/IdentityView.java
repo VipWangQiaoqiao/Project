@@ -42,7 +42,7 @@ public class IdentityView extends AppCompatTextView {
         setGravity(Gravity.CENTER);
         setSingleLine(true);
         setLines(1);
-        setText("开源中国官方人员");
+        setText("官方人员");
 
         if (isInEditMode()) {
             Author.Identity identity = new Author.Identity();
