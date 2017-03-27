@@ -16,7 +16,6 @@ public class Author implements Serializable {
 
     public Author() {
         relation = 4;
-        identity = new Identity();
     }
 
     public long getId() {
