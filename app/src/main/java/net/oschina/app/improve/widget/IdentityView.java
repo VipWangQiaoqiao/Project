@@ -1,9 +1,7 @@
 package net.oschina.app.improve.widget;
 
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -17,7 +15,7 @@ import net.oschina.app.util.TDevice;
  */
 public class IdentityView extends AppCompatTextView {
     private Author.Identity mIdentity;
-    private ShapeDrawable mShapeDrawable;
+    private GradientDrawable mDrawable;
 
     public IdentityView(Context context) {
         super(context);
@@ -37,7 +35,7 @@ public class IdentityView extends AppCompatTextView {
     private void init() {
         setVisibility(GONE);
         final int padding = (int) TDevice.dipToPx(getResources(), 2);
-        setPadding(padding, padding, padding, padding);
+        setPadding(padding + padding, padding, padding + padding, padding);
         setTextSize(10);
         setGravity(Gravity.CENTER);
         setSingleLine(true);
@@ -74,9 +72,6 @@ public class IdentityView extends AppCompatTextView {
             setVisibility(GONE);
             return;
         }
-
-        identity.officialMember = true;
-
         this.mIdentity = identity;
         setVisibility(identity.officialMember ? VISIBLE : GONE);
         initView(color);
@@ -86,23 +81,31 @@ public class IdentityView extends AppCompatTextView {
         if (!mIdentity.officialMember)
             return;
 
-        if (mShapeDrawable == null) {
-            final float border = TDevice.dipToPx(getResources(), 2);
-            final float[] innerRadii = new float[]{border, border, border, border, border, border, border, border};
-            RoundRectShape shape = new RoundRectShape(innerRadii, null, null);
-            ShapeDrawable drawable = new ShapeDrawable(shape);
-            final Paint paint = drawable.getPaint();
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(2);
-            paint.setColor(color);
-            paint.setDither(true);
-            paint.setAntiAlias(true);
-            mShapeDrawable = drawable;
+        if (mDrawable == null) {
+            float border = getHeight() / 2f;
+            if (border <= 0)
+                border = TDevice.dipToPx(getResources(), 4);
+
+            GradientDrawable gradientDrawable = new GradientDrawable();
+            gradientDrawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+            gradientDrawable.setShape(GradientDrawable.RECTANGLE);
+            gradientDrawable.setDither(true);
+            gradientDrawable.setStroke(2, color);
+            gradientDrawable.setCornerRadius(border);
+
+            mDrawable = gradientDrawable;
         } else {
-            mShapeDrawable.getPaint().setColor(color);
+            mDrawable.setStroke(2, color);
         }
 
-        setBackground(mShapeDrawable);
+        setBackground(mDrawable);
         setTextColor(color);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (mDrawable != null)
+            mDrawable.setCornerRadius(h / 2f);
     }
 }
