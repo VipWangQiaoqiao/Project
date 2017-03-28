@@ -105,7 +105,8 @@ public class IdentityView extends AppCompatTextView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (mDrawable != null)
-            mDrawable.setCornerRadius(h / 2f);
+        if (mDrawable != null) {
+            mDrawable.setCornerRadius(4);
+        }
     }
 }
