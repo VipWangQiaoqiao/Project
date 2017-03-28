@@ -124,6 +124,7 @@ public class IdentityView extends AppCompatTextView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+
         final GradientDrawable drawable = mDrawable;
         if (drawable != null) {
             drawable.setCornerRadius(h / 2f);
