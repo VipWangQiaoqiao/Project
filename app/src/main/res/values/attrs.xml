@@ -67,9 +67,14 @@
         <attr name="circle_banner_indicator_indicator_radius" format="dimension" />
     </declare-styleable>
     <declare-styleable name="BannerView">
-        <attr name="horizontal_offset" format="dimension"/>
-        <attr name="vertical_offset" format="dimension"/>
-        <attr name="scroll_duration" format="integer"/>
+        <attr name="horizontal_offset" format="dimension" />
+        <attr name="vertical_offset" format="dimension" />
+        <attr name="scroll_duration" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="IdentityView">
+        <attr name="oscColor" format="color" />
+        <attr name="oscWipeOffBorder" format="boolean" />
     </declare-styleable>
 
 </resources>

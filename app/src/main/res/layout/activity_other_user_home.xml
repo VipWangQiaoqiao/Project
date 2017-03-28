@@ -79,7 +79,8 @@
                     android:id="@+id/identityView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/lay_4" />
+                    android:layout_marginTop="@dimen/lay_4"
+                    app:oscColor="@color/white" />
 
                 <TextView
                     android:id="@+id/tv_summary"

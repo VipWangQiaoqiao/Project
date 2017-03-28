@@ -382,4 +382,6 @@
     <!--git版本-->
     <string name="get_project_detail_success">获取成功</string>
     <string name="get_code_failure">获取代码失败</string>
+
+    <string name="identity_officialMember">官方人员</string>
 </resources>
