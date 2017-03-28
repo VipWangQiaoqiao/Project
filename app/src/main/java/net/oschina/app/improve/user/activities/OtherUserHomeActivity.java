@@ -245,7 +245,7 @@ public class OtherUserHomeActivity extends BaseActivity
             fragments = new ArrayList<>();
             fragments.add(new Pair<>(
                     String.format("%s\n动弹", 0),
-                    TweetFragment.instantiate(user.getId(), 0,true)));
+                    TweetFragment.instantiate(user.getId(), 0, true)));
             fragments.add(new Pair<>(
                     String.format("%s\n博客", 0),
                     UserBlogFragment.instantiate(user.getId())));
@@ -328,7 +328,7 @@ public class OtherUserHomeActivity extends BaseActivity
         mPortrait.setup(user);
         mPortrait.setOnClickListener(this);
         mLogoPortrait.setup(user);
-        mIdentityView.setup(user.getIdentity(), 0xffffffff);
+        mIdentityView.setup(user);
 
         mLogoNick.setText(user.getName());
         mNick.setText(user.getName());
