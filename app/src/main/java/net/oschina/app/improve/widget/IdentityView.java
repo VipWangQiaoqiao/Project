@@ -41,7 +41,7 @@ public class IdentityView extends AppCompatTextView {
         Context context = getContext();
 
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyleAttr, 0);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.IdentityView, defStyleAttr, 0);
             mColor = a.getColor(R.styleable.IdentityView_oscColor, mColor);
             mWipeOffBorder = a.getBoolean(R.styleable.IdentityView_oscWipeOffBorder, mWipeOffBorder);
             a.recycle();
@@ -52,19 +52,17 @@ public class IdentityView extends AppCompatTextView {
         setGravity(Gravity.CENTER);
         setSingleLine(true);
         setLines(1);
+        setColor(mColor);
         setText(R.string.identity_officialMember);
 
         final int padding = (int) TDevice.dipToPx(getResources(), 2);
         setPadding(padding + padding, padding, padding + padding, padding);
 
         if (isInEditMode()) {
-            mWipeOffBorder = false;
             Author.Identity identity = new Author.Identity();
             identity.officialMember = true;
             setup(identity);
         }
-
-        setColor(mColor);
     }
 
     public void setColor(int color) {
@@ -85,17 +83,19 @@ public class IdentityView extends AppCompatTextView {
     }
 
     public void setup(Author.Identity identity) {
+        this.mIdentity = identity;
+
         if (identity == null) {
             setVisibility(GONE);
             return;
         }
-        this.mIdentity = identity;
+
         setVisibility(identity.officialMember ? VISIBLE : GONE);
         initBorder();
     }
 
     private void initBorder() {
-        if (mWipeOffBorder || !mIdentity.officialMember) {
+        if (mWipeOffBorder || mIdentity == null || !mIdentity.officialMember) {
             mDrawable = null;
             setBackground(null);
             return;
