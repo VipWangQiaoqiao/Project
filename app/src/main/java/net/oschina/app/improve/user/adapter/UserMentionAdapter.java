@@ -12,6 +12,7 @@ import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.Origin;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.improve.utils.parser.MentionParser;
 import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.PlatfromUtil;
@@ -33,6 +34,7 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
 
     private void initListener() {
         mListener = new UserMentionAdapter.OnUserFaceClickListener() {
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void onClick(View v, int position) {
                 Author author = getItem(position).getAuthor();
@@ -65,11 +67,11 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
         PlatfromUtil.setPlatFromString(viewHolder.tv_platform, item.getAppClient());
         viewHolder.tv_comment_count.setText(String.valueOf(item.getCommentCount()));
         viewHolder.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
-        parseAtUserContent(viewHolder.tv_content, item.getContent());
+        viewHolder.tv_content.setText(MentionParser.getInstance().parse(mContext, item.getContent()));
         Origin origin = item.getOrigin();
         if (origin != null && !TextUtils.isEmpty(origin.getDesc())) {
             viewHolder.tv_origin.setVisibility(View.VISIBLE);
-            parseAtUserContent(viewHolder.tv_origin, item.getOrigin().getDesc());
+            viewHolder.tv_origin.setText(MentionParser.getInstance().parse(mContext, origin.getDesc()));
         } else {
             viewHolder.tv_origin.setVisibility(View.GONE);
         }
@@ -82,7 +84,7 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
         TextView tv_user_name, tv_time, tv_platform, tv_comment_count;
         TweetTextView tv_content, tv_origin;
 
-        public MentionViewHolder(View itemView) {
+        MentionViewHolder(View itemView) {
             super(itemView);
             identityView = (IdentityView) itemView.findViewById(R.id.identityView);
             iv_user_avatar = (PortraitView) itemView.findViewById(R.id.iv_user_avatar);

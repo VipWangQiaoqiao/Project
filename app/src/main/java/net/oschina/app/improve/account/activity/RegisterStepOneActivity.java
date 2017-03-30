@@ -29,7 +29,7 @@ import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.parser.RichTextParser;
 import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
@@ -234,7 +234,7 @@ public class RegisterStepOneActivity extends AccountBaseActivity implements View
                     public void afterTextChanged(Editable s) {
                         int length = s.length();
                         String input = s.toString();
-                        mMachPhoneNum = AssimilateUtils.machPhoneNum(input);
+                        mMachPhoneNum = RichTextParser.machPhoneNum(input);
 
                         if (mMachPhoneNum) {
                             String smsCode = mEtRegisterAuthCode.getText().toString().trim();

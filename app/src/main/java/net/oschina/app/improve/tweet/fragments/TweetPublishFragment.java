@@ -30,7 +30,7 @@ import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
-import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.parser.TweetParser;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.UIHelper;
 import net.oschina.common.adapter.TextWatcherAdapter;
@@ -378,7 +378,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         // Set title and content
         ((TextView) findView(R.id.txt_about_title)).setText(share.type == OSChinaApi.COMMENT_TWEET ?
                 "@" + share.title : share.title);
-        ((TextView) findView(R.id.txt_about_content)).setText(AssimilateUtils.clearHtmlTag(share.content));
+        ((TextView) findView(R.id.txt_about_content)).setText(TweetParser.getInstance().clearHtmlTag(share.content));
         findView(R.id.iv_picture).setEnabled(false);
 
         if (needCommit)

@@ -46,8 +46,8 @@ import net.oschina.app.improve.tweet.fragments.TweetDetailViewPagerFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
-import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.QuickOptionDialogHelper;
+import net.oschina.app.improve.utils.parser.TweetParser;
 import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
@@ -417,7 +417,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         }
         if (!TextUtils.isEmpty(tweet.getContent())) {
             String content = tweet.getContent().replaceAll("[\n\\s]+", " ");
-            mContent.setText(AssimilateUtils.assimilate(this, content));
+            mContent.setText(TweetParser.getInstance().parse(this, content));
             mContent.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
@@ -438,7 +438,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     mViewRefTitle.setVisibility(View.GONE);
                     String aName = "@" + about.getTitle();
                     String cnt = about.getContent();
-                    Spannable spannable = AssimilateUtils.assimilate(this, cnt);
+                    Spannable spannable = TweetParser.getInstance().parse(this, cnt);
                     SpannableStringBuilder builder = new SpannableStringBuilder();
                     builder.append(aName).append(": ");
                     builder.append(spannable);
@@ -534,7 +534,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         } else {
             share = About.buildShare(tweet.getAbout());
             content = "//@" + tweet.getAuthor().getName() + " :" + tweet.getContent();
-            content = AssimilateUtils.clearHtmlTag(content).toString();
+            content = TweetParser.getInstance().clearHtmlTag(content).toString();
         }
         share.commitTweetId = tweet.getId();
         share.fromTweetId = tweet.getId();

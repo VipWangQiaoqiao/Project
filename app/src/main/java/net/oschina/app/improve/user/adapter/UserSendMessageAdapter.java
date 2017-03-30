@@ -1,7 +1,9 @@
 package net.oschina.app.improve.user.adapter;
 
+import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +21,7 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
+import net.oschina.app.improve.utils.parser.TweetParser;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
 import net.oschina.common.widget.Loading;
@@ -32,6 +35,7 @@ import java.util.Locale;
  * Created by huanghaibin_dev
  * on 2016/8/18.
  */
+@SuppressLint("SimpleDateFormat")
 public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
     private static final int SENDER = 1;
     private static final int SENDER_PICTURE = 2;
@@ -44,6 +48,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         authorId = AccountHelper.getUserId();
     }
 
+    @SuppressWarnings("all")
     @Override
     public int getItemViewType(int position) {
         Message item = getItem(position);
@@ -56,17 +61,6 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 return RECEIVER_PICTURE;
             return RECEIVER;
         }
-    }
-
-    public ImageView getTargetImageView(int position, RecyclerView recyclerView) {
-        RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
-        if (holder != null) {
-            if (holder instanceof SenderPictureViewHolder)
-                return ((SenderPictureViewHolder) holder).iv_sender_picture;
-            if (holder instanceof ReceiverPictureViewHolder)
-                return ((ReceiverPictureViewHolder) holder).iv_receiver_picture;
-        }
-        return null;
     }
 
     @Override
@@ -87,7 +81,8 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         switch (getItemViewType(position)) {
             case SENDER:
                 SenderViewHolder senderViewHolder = (SenderViewHolder) holder;
-                parseAtUserContent(senderViewHolder.tv_sender, item.getContent());
+                //parseAtUserContent(senderViewHolder.tv_sender, item.getContent());
+                senderViewHolder.tv_sender.setText(TweetParser.getInstance().parse(mContext, item.getContent()));
                 formatTime(preMessage, item, senderViewHolder.tv_send_time);
                 break;
             case SENDER_PICTURE:
@@ -141,7 +136,8 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 break;
             case RECEIVER:
                 ReceiverViewHolder receiverViewHolder = (ReceiverViewHolder) holder;
-                parseAtUserContent(receiverViewHolder.tv_receiver, item.getContent());
+                //parseAtUserContent(receiverViewHolder.tv_receiver, item.getContent());
+                receiverViewHolder.tv_receiver.setText(TweetParser.getInstance().parse(mContext, item.getContent()));
                 formatTime(preMessage, item, receiverViewHolder.tv_send_time);
                 break;
             case RECEIVER_PICTURE:
@@ -234,10 +230,14 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         TweetTextView tv_sender;
         TextView tv_send_time;
 
-        public SenderViewHolder(View itemView) {
+        SenderViewHolder(View itemView) {
             super(itemView);
             tv_sender = (TweetTextView) itemView.findViewById(R.id.tv_sender);
             tv_send_time = (TextView) itemView.findViewById(R.id.tv_send_time);
+            tv_sender.setMovementMethod(LinkMovementMethod.getInstance());
+            tv_sender.setFocusable(false);
+            tv_sender.setDispatchToParent(true);
+            tv_sender.setLongClickable(false);
         }
     }
 
@@ -246,7 +246,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         TextView tv_send_time;
         Loading loading;
 
-        public SenderPictureViewHolder(View itemView) {
+        SenderPictureViewHolder(View itemView) {
             super(itemView);
             iv_sender_picture = (ImageView) itemView.findViewById(R.id.iv_sender_picture);
             iv_resend = (ImageView) itemView.findViewById(R.id.iv_resend);
@@ -259,11 +259,14 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         TweetTextView tv_receiver;
         TextView tv_send_time;
 
-        public ReceiverViewHolder(View itemView) {
+        ReceiverViewHolder(View itemView) {
             super(itemView);
             tv_receiver = (TweetTextView) itemView.findViewById(R.id.tv_receiver);
             tv_send_time = (TextView) itemView.findViewById(R.id.tv_send_time);
-
+            tv_receiver.setMovementMethod(LinkMovementMethod.getInstance());
+            tv_receiver.setFocusable(false);
+            tv_receiver.setDispatchToParent(true);
+            tv_receiver.setLongClickable(false);
         }
     }
 
@@ -272,7 +275,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         TextView tv_send_time;
         Loading loading;
 
-        public ReceiverPictureViewHolder(View itemView) {
+        ReceiverPictureViewHolder(View itemView) {
             super(itemView);
             iv_receiver_picture = (ImageView) itemView.findViewById(R.id.iv_receiver_picture);
             tv_send_time = (TextView) itemView.findViewById(R.id.tv_send_time);

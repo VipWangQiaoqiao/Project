@@ -15,8 +15,8 @@ import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
-import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.CacheManager;
+import net.oschina.app.improve.utils.parser.RichTextParser;
 import net.oschina.app.util.TDevice;
 
 import java.io.File;
@@ -130,7 +130,7 @@ public class ContactsCacheManager {
             String name = author.getName().trim();
             if (TextUtils.isEmpty(name)) continue;
 
-            String pinyin = AssimilateUtils.convertToPinyin(name, SPLIT_HEAD).trim();
+            String pinyin = RichTextParser.convertToPinyin(name, SPLIT_HEAD).trim();
             String firstChar = pinyin.substring(0, 1).toUpperCase();
             firstChar = firstChar.matches("[A-Z]") ? firstChar : DEFAULT_CHAR;
 
