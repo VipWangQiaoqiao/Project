@@ -31,7 +31,7 @@ import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.parser.RichTextParser;
 import net.oschina.app.util.TDevice;
 
 import java.lang.reflect.Type;
@@ -232,7 +232,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
             public void afterTextChanged(Editable s) {
                 int length = s.length();
                 String input = s.toString();
-                mMachPhoneNum = AssimilateUtils.machPhoneNum(input);
+                mMachPhoneNum = RichTextParser.machPhoneNum(input);
 
                 //对提交控件的状态判定
                 if (mMachPhoneNum) {

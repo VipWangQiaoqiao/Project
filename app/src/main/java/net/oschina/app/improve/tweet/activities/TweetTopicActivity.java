@@ -23,9 +23,9 @@ import net.oschina.app.R;
 import net.oschina.app.improve.app.ParentLinkedHolder;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
-import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.utils.parser.RichTextParser;
 import net.oschina.common.adapter.TextWatcherAdapter;
 import net.oschina.common.utils.CollectionUtil;
 import net.oschina.common.widget.RichEditText;
@@ -265,7 +265,7 @@ public class TweetTopicActivity extends BaseBackActivity {
             return;
 
         boolean isEmpty = TextUtils.isEmpty(text);
-        final String py = isEmpty ? "!#" : AssimilateUtils.convertToPinyin(text, SPLIT_HEAD);
+        final String py = isEmpty ? "!#" : RichTextParser.convertToPinyin(text, SPLIT_HEAD);
         Pattern pattern = Pattern.compile(py);
 
         for (TopicBean bean : mLocalList) {
@@ -444,7 +444,7 @@ public class TweetTopicActivity extends BaseBackActivity {
 
         TopicBean(String text) {
             this.text = text;
-            this.py = AssimilateUtils.convertToPinyin(text, SPLIT_HEAD);
+            this.py = RichTextParser.convertToPinyin(text, SPLIT_HEAD);
         }
 
         TopicBean(String text, boolean isLocal) {

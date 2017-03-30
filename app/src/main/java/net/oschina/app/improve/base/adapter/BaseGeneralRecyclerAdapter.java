@@ -1,15 +1,8 @@
 package net.oschina.app.improve.base.adapter;
 
 import android.content.Context;
-import android.text.Spannable;
-import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 
 import com.bumptech.glide.RequestManager;
-
-import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.utils.AssimilateUtils;
-import net.oschina.app.widget.TweetTextView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,21 +23,6 @@ public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<
         setState(STATE_LOADING, true);
     }
 
-    protected void parseAtUserContent(TweetTextView textView, String text) {
-        String content;
-        if (TextUtils.isEmpty(text)) return;
-        content = text.replaceAll("[\n\\s]+", " ").replaceAll("&nbsp;", " ");
-        Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mCallBack.getContext(), content);
-        spannable = AssimilateUtils.assimilateOnlyTag(mCallBack.getContext(), spannable);
-        spannable = AssimilateUtils.assimilateOnlyLink(mCallBack.getContext(), spannable);
-        spannable = AssimilateUtils.assimilateOnlyTeamTask(mCallBack.getContext(), spannable);
-        spannable = InputHelper.displayEmoji(mCallBack.getContext().getResources(), spannable);
-        textView.setText(spannable);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setFocusable(false);
-        textView.setDispatchToParent(true);
-        textView.setLongClickable(false);
-    }
 
     @SuppressWarnings("UnusedReturnValue")
     public int addItems(List<T> items) {
@@ -72,6 +50,7 @@ public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<
         mPreItems = null;
     }
 
+    @SuppressWarnings("unused")
     public interface Callback {
         RequestManager getImgLoader();
 

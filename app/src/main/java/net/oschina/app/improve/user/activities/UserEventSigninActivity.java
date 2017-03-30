@@ -31,8 +31,8 @@ import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.EventSignin;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.utils.parser.RichTextParser;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
 import net.oschina.common.adapter.TextWatcherAdapter;
@@ -129,7 +129,7 @@ public class UserEventSigninActivity extends BaseBackActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String input = s.toString().trim();
-                boolean machPhoneNum = AssimilateUtils.machPhoneNum(input);
+                boolean machPhoneNum = RichTextParser.machPhoneNum(input);
                 mLayInputBg.setActivated(true);
                 if (machPhoneNum) {
                     mBtSubmit.setEnabled(true);

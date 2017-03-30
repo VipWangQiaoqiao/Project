@@ -25,7 +25,7 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
-import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.parser.RichTextParser;
 import net.oschina.app.util.ImageLoader;
 import net.oschina.app.util.TDevice;
 
@@ -169,14 +169,14 @@ public class UserSearchFriendsAdapter extends RecyclerView.Adapter
             String name = author.getName();
             if (TextUtils.isEmpty(name)) continue;
 
-            boolean isZH = AssimilateUtils.checkIsZH(queryText);
+            boolean isZH = RichTextParser.checkIsZH(queryText);
 
             boolean isMatch;
             if (isZH) {
                 isMatch = name.contains(queryText);
             } else {
                 String pg = mCacheFriend.pinyin;
-                String pinyin = AssimilateUtils.convertToPinyin(queryText, ContactsCacheManager.SPLIT_HEAD);
+                String pinyin = RichTextParser.convertToPinyin(queryText, ContactsCacheManager.SPLIT_HEAD);
                 isMatch = pg.startsWith(pinyin) || pg.contains(pinyin);
             }
 

@@ -43,9 +43,9 @@ import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.improve.tweet.service.TweetNotificationManager;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.adapter.UserTweetAdapter;
-import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.utils.CacheManager;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.utils.parser.TweetParser;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -105,6 +105,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
 
     private String[] mPubFailedCacheIds;
     private boolean isShowIdentityView;
+
     public static Fragment instantiate(long uid) {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_KEY_USER_ID, uid);
@@ -119,10 +120,11 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
      * @param code 只是为了让方法指纹不一样而已，哈哈
      * @return {@link Fragment}
      */
-    public static Fragment instantiate(long uid, int code,boolean isShowIdentityView) {
+    @SuppressWarnings("unused")
+    public static Fragment instantiate(long uid, int code, boolean isShowIdentityView) {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_KEY_USER_ID, uid);
-        bundle.putBoolean("isShowIdentityView",isShowIdentityView);
+        bundle.putBoolean("isShowIdentityView", isShowIdentityView);
         bundle.putInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_SOMEONE);
         Fragment fragment = new TweetFragment();
         fragment.setArguments(bundle);
@@ -149,7 +151,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
-        isShowIdentityView = bundle.getBoolean("isShowIdentityView",true);
+        isShowIdentityView = bundle.getBoolean("isShowIdentityView", true);
         mReqCatalog = bundle.getInt(BUNDLE_KEY_REQUEST_CATALOG, CATALOG_NEW);
         switch (mReqCatalog) {
             case CATALOG_FRIENDS:
@@ -296,7 +298,7 @@ public class TweetFragment extends BaseGeneralRecyclerFragment<Tweet>
                                 } else {
                                     share = About.buildShare(tweet.getAbout());
                                     content = "//@" + tweet.getAuthor().getName() + " :" + tweet.getContent();
-                                    content = AssimilateUtils.clearHtmlTag(content).toString();
+                                    content = TweetParser.getInstance().clearHtmlTag(content).toString();
                                 }
                                 share.commitTweetId = tweet.getId();
                                 share.fromTweetId = tweet.getId();

@@ -12,12 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.oschina.app.R;
-import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Active;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.Origin;
-import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.parser.TweetParser;
 import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.util.StringUtils;
@@ -26,7 +25,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by thanatos on 16/7/14.
+ * Created by thanatos
+ * on 16/7/14.
  */
 public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
 
@@ -58,10 +58,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
 
         holder.mViewTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
 
-        Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mContext, item.getContent());
-        spannable = AssimilateUtils.assimilateOnlyTag(mContext, spannable);
-        spannable = AssimilateUtils.assimilateOnlyLink(mContext, spannable);
-        spannable = InputHelper.displayEmoji(mContext.getResources(), spannable);
+        Spannable spannable = TweetParser.getInstance().parse(mContext, item.getContent());
         holder.mViewContent.setText(spannable);
 
         holder.mViewTitle.setText(getWhichTitle(item.getOrigin()));

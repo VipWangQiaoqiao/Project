@@ -1,5 +1,6 @@
 package net.oschina.app.improve.tweet.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -13,9 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
-import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.tweet.service.TweetPublishModel;
-import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.parser.TweetParser;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
@@ -34,6 +34,7 @@ import java.util.List;
 public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Holder> {
     private final List<TweetPublishModel> mModels = new ArrayList<>();
     private Callback mCallback;
+    @SuppressLint("SimpleDateFormat")
     private static DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public TweetQueueAdapter(Callback callback) {
@@ -143,15 +144,13 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
             });
         }
 
+        @SuppressWarnings("unused")
         public void bind(int position, TweetPublishModel model, RequestManager loader) {
             itemView.setTag(model);
 
             Context context = itemView.getContext();
 
-            Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(context, model.getContent());
-            spannable = AssimilateUtils.assimilateOnlyTag(context, spannable);
-            spannable = AssimilateUtils.assimilateOnlyLink(context, spannable);
-            spannable = InputHelper.displayEmoji(context.getResources(), spannable);
+            Spannable spannable = TweetParser.getInstance().parse(context, model.getContent());
             mTitle.setText(spannable);
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());
             mTitle.setFocusable(false);

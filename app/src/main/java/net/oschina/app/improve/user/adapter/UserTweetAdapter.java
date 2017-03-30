@@ -31,7 +31,7 @@ import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.TweetLikeReverse;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
-import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.utils.parser.TweetParser;
 import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
 import net.oschina.app.improve.widget.SimplexToast;
@@ -129,7 +129,8 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
 
         if (!TextUtils.isEmpty(item.getContent())) {
             String content = item.getContent().replaceAll("[\n\\s]+", " ");
-            holder.mViewContent.setText(AssimilateUtils.assimilate(mContext, content));
+            //holder.mViewContent.setText(AssimilateUtils.assimilate(mContext, content));
+            holder.mViewContent.setText(TweetParser.getInstance().parse(mContext, content));
             holder.mViewContent.setMovementMethod(LinkMovementMethod.getInstance());
             holder.mViewContent.setFocusable(false);
             holder.mViewContent.setDispatchToParent(true);
@@ -204,7 +205,8 @@ public class UserTweetAdapter extends BaseGeneralRecyclerAdapter<Tweet> implemen
                     holder.mViewRefTitle.setVisibility(View.GONE);
                     String aname = "@" + about.getTitle();
                     String cnt = about.getContent();
-                    Spannable spannable = AssimilateUtils.assimilate(mContext, cnt);
+                    //Spannable spannable = AssimilateUtils.assimilate(mContext, cnt);
+                    Spannable spannable = TweetParser.getInstance().parse(mContext, cnt);
                     SpannableStringBuilder builder = new SpannableStringBuilder();
                     builder.append(aname + ": ");
                     builder.append(spannable);
