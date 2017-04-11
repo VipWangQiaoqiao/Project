@@ -198,6 +198,16 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".improve.user.activities.InvitationActivity"
+            android:label="活动报名"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".improve.user.sign.SignInfoActivity"
+            android:label="我的报名信息"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".improve.detail.general.SoftwareDetailActivity"
             android:label="软件详情"
             android:screenOrientation="portrait"

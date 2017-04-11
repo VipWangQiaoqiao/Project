@@ -19,6 +19,7 @@
 
     <string name="event_apply_status_un_sign">我要报名</string>
     <string name="event_apply_status_audit">审核中</string>
+    <string name="event_sign_info">我的报名信息</string>
     <string name="event_apply_status_confirmed">已确认</string>
     <string name="event_apply_status_presented">查看活动出席人</string>
     <string name="event_apply_status_canceled">已取消</string>

@@ -17,6 +17,7 @@ import com.sina.weibo.sdk.utils.Utility;
 import com.tencent.connect.share.QQShare;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXImageObject;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -201,6 +202,10 @@ public class OpenBuilder {
         }
 
         private void share(Share share, int scene, Callback callback) {
+            if (share.getThumbBitmap() != null) {
+                share(share.getThumbBitmap(), scene);
+                return;
+            }
             IWXAPI iwxapi = init();
             if (iwxapi == null) {
                 if (callback != null)
@@ -243,6 +248,21 @@ public class OpenBuilder {
                     callback.onSuccess();
                 bitmap.recycle();
             }
+        }
+
+        /**
+         * 单纯分享图片
+         */
+        private void share(Bitmap bitmap, int scene) {
+            IWXAPI api = init();
+            WXImageObject imageObject = new WXImageObject(bitmap);
+            WXMediaMessage msg = new WXMediaMessage();
+            msg.mediaObject = imageObject;
+            SendMessageToWX.Req req = new SendMessageToWX.Req();
+            req.transaction = OpenUtils.buildTransaction("img");
+            req.message = msg;
+            req.scene = scene;
+            api.sendReq(req);
         }
     }
 
