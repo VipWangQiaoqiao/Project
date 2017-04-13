@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_title"
+        tools:text="恭喜，您已报名成功并收到邀请函！"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/lay_20"
+        android:layout_marginBottom="@dimen/lay_20"
+        android:textSize="@dimen/font_16"
+        android:textColor="#111111"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/iv_invitation"
+        android:layout_weight="1"
+        android:contentDescription="@string/signin_event_counts_hint"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/lay_40"
+        android:layout_marginRight="@dimen/lay_40"
+        android:layout_marginBottom="@dimen/lay_52"
+        android:layout_height="0dp" />
+    <Button
+        android:id="@+id/btn_share"
+        android:text="分享邀请函"
+        android:textColor="@color/white"
+        android:layout_margin="@dimen/lay_16"
+        android:background="@drawable/selector_event_sign"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

@@ -29,7 +29,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
-import net.oschina.app.improve.bean.EventSignin;
+import net.oschina.app.improve.bean.EventSignIn;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.utils.parser.RichTextParser;
@@ -231,11 +231,11 @@ public class UserEventSigninActivity extends BaseBackActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 //签到成功更新数据
-                ResultBean<EventSignin> signinResultBean = AppOperator.createGson().fromJson(responseString,
-                        new TypeToken<ResultBean<EventSignin>>() {
+                ResultBean<EventSignIn> signinResultBean = AppOperator.createGson().fromJson(responseString,
+                        new TypeToken<ResultBean<EventSignIn>>() {
                         }.getType());
                 if (signinResultBean.isSuccess()) {
-                    EventSignin eventSignin = signinResultBean.getResult();
+                    EventSignIn eventSignin = signinResultBean.getResult();
                     updateSigninView(eventSignin);
                 }
             }
@@ -422,7 +422,7 @@ public class UserEventSigninActivity extends BaseBackActivity {
      *
      * @param eventSignin eventSignin
      */
-    private void updateSigninView(EventSignin eventSignin) {
+    private void updateSigninView(EventSignIn eventSignin) {
         int optStatus = eventSignin.getOptStatus();
         switch (optStatus) {
             case 0x01://签到成功

@@ -24,6 +24,7 @@ import net.oschina.app.improve.detail.apply.ApplyActivity;
 import net.oschina.app.improve.detail.sign.SignUpActivity;
 import net.oschina.app.improve.detail.v2.DetailActivity;
 import net.oschina.app.improve.detail.v2.DetailFragment;
+import net.oschina.app.improve.user.activities.InvitationActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -131,10 +132,18 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                 HashMap<String, Object> extra = mBean.getExtra();
                 if (extra != null) {
                     int eventApplyStatus = getExtraInt(extra.get("eventApplyStatus"));
-                    if (eventApplyStatus == EventDetail.APPLY_STATUS_PRESENTED)
-                        ApplyActivity.show(this, mBean.getId());
-                    else
-                        SignUpActivity.show(this, mBean.getId());
+                    switch (eventApplyStatus) {
+                        case EventDetail.APPLY_STATUS_AUDIT://已报名
+                        case EventDetail.APPLY_STATUS_CONFIRMED://已报名
+                            InvitationActivity.show(this);
+                            break;
+                        case EventDetail.APPLY_STATUS_PRESENTED://已出席
+                            ApplyActivity.show(this, mBean.getId());
+                            break;
+                        default://报名
+                            SignUpActivity.show(this, mBean.getId());
+                            break;
+                    }
                 } else {
                     SignUpActivity.show(this, mBean.getId());
                 }
@@ -168,9 +177,6 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
         HashMap<String, Object> extra = mBean.getExtra();
         if (extra != null) {
 
-            /**
-             * 出席状态判断
-             */
             int eventApplyStatus = getExtraInt(extra.get("eventApplyStatus"));
 
             int applyStr = 0;
@@ -179,10 +185,10 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                     applyStr = R.string.event_apply_status_un_sign;
                     break;
                 case EventDetail.APPLY_STATUS_AUDIT:
-                    applyStr = R.string.event_apply_status_audit;
+                    applyStr = R.string.event_sign_info;
                     break;
                 case EventDetail.APPLY_STATUS_CONFIRMED:
-                    applyStr = R.string.event_apply_status_confirmed;
+                    applyStr = R.string.event_sign_info;
                     break;
                 case EventDetail.APPLY_STATUS_PRESENTED:
                     applyStr = R.string.event_apply_status_presented;
@@ -201,7 +207,7 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                     eventApplyStatus != EventDetail.APPLY_STATUS_PRESENTED
                     && eventApplyStatus != EventDetail.APPLY_STATUS_REFUSED) {
                 //如果已经报名了,而且未出席
-                setSignUnEnable();
+                //setSignUnEnable();
                 return;
             }
 
@@ -209,13 +215,8 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
             if (eventApplyStatus == EventDetail.APPLY_STATUS_PRESENTED)
                 return;
 
-            /**
-             * 活动状态判断
-             */
+            //活动状态判断
             int eventStatus = getExtraInt(extra.get("eventStatus"));
-            if (eventStatus != EventDetail.STATUS_ING && eventApplyStatus != EventDetail.APPLY_STATUS_PRESENTED) {
-                setSignUnEnable();
-            }
             switch (eventStatus) {
                 case Event.STATUS_END:
                     mTextApplyStatus.setText(getResources().getString(R.string.event_status_end));
@@ -267,7 +268,6 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
             switch (requestCode) {
                 case 0x01:
                     mTextApplyStatus.setText(getResources().getString(getApplyStatusStrId(EventDetail.APPLY_STATUS_AUDIT)));
-                    setSignUnEnable();
                     break;
             }
         }
@@ -280,10 +280,10 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                 strId = R.string.event_apply_status_un_sign;
                 break;
             case EventDetail.APPLY_STATUS_AUDIT:
-                strId = R.string.event_apply_status_audit;
+                strId = R.string.event_sign_info;
                 break;
             case EventDetail.APPLY_STATUS_CONFIRMED:
-                strId = R.string.event_apply_status_confirmed;
+                strId = R.string.event_sign_info;
                 break;
             case EventDetail.APPLY_STATUS_PRESENTED:
                 strId = R.string.event_apply_status_presented;
@@ -296,11 +296,5 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                 break;
         }
         return strId;
-    }
-
-    private void setSignUnEnable() {
-        mTextApplyStatus.setEnabled(false);
-        mLinearSign.setEnabled(false);
-        mImageSign.setEnabled(false);
     }
 }

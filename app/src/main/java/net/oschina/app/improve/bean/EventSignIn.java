@@ -8,7 +8,7 @@ import java.io.Serializable;
  * desc: 活动签到bean
  */
 
-public class EventSignin implements Serializable {
+public class EventSignIn implements Serializable {
 
     private int optStatus;  //1: 成功 2: 活动进行中未报名 3: 活动已结束／活动报名已截止 4: 已签到
     private String message; //1.您是开源软件作者，本次活动免费～ 2.需缴纳50元！（金额由活动决定）3.未报名，不可签到 4.活动已结束／活动报名已经截止 5已签到
@@ -58,7 +58,7 @@ public class EventSignin implements Serializable {
 
     @Override
     public String toString() {
-        return "EventSignin{" +
+        return "EventSignIn{" +
                 "optStatus=" + optStatus +
                 ", message='" + message + '\'' +
                 ", cost=" + cost +
