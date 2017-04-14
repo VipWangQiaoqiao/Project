@@ -6,7 +6,6 @@ import android.view.View;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BackActivity;
-import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.ui.empty.EmptyLayout;
 
 import butterknife.Bind;
@@ -24,7 +23,7 @@ public class SignUpInfoActivity extends BackActivity implements SignUpContract.E
     public static void show(Context context, long id, int type) {
         Intent intent = new Intent(context, SignUpInfoActivity.class);
         intent.putExtra("id", id);
-        intent.putExtra("type",type);
+        intent.putExtra("type", type);
         context.startActivity(intent);
     }
 

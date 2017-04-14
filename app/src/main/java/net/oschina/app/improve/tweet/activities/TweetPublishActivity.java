@@ -58,12 +58,17 @@ public class TweetPublishActivity extends BaseBackActivity {
             size[1] = view.getHeight();
         }
 
-        show(context, location, size, defaultContent, share);
+        show(context, location, size, defaultContent, share, null);
+    }
+
+    @SuppressWarnings("unused")
+    public static void show(Context context, boolean isLocalShare, String localImageUrl) {
+        show(context, null, null, null, null, localImageUrl);
     }
 
 
     public static void show(Context context, @Size(2) int[] viewLocationOnScreen,
-                            @Size(2) int[] viewSize, String defaultContent, About.Share share) {
+                            @Size(2) int[] viewSize, String defaultContent, About.Share share, String localImageUrl) {
         // Check login before show
         if (!AccountHelper.isLogin()) {
             UIHelper.showLoginActivity(context);
@@ -84,7 +89,9 @@ public class TweetPublishActivity extends BaseBackActivity {
         if (share != null) {
             intent.putExtra("aboutShare", share);
         }
-
+        if (!TextUtils.isEmpty(localImageUrl)) {
+            intent.putExtra("imageUrl", localImageUrl);
+        }
         context.startActivity(intent);
     }
 

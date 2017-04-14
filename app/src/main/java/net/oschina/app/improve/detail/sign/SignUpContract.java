@@ -2,6 +2,7 @@ package net.oschina.app.improve.detail.sign;
 
 import net.oschina.app.improve.base.BasePresenter;
 import net.oschina.app.improve.base.BaseView;
+import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.SignUpEventOptions;
 
 import java.util.List;
@@ -21,7 +22,7 @@ interface SignUpContract {
     interface View extends BaseView<Presenter> {
         void showGetSignUpOptionsSuccess(List<SignUpEventOptions> options);
 
-        void showSignUpSuccess();
+        void showSignUpSuccess(EventDetail detail);
 
         void showSignUpError(String message);
 

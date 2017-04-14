@@ -57,8 +57,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
+                style="@style/h_line"
                 android:layout_marginLeft="@dimen/lay_16" />
 
             <LinearLayout
@@ -89,8 +88,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
+                style="@style/h_line"
                 android:layout_marginLeft="@dimen/lay_16" />
 
             <LinearLayout
@@ -121,8 +119,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
+                style="@style/h_line"
                 android:layout_marginLeft="@dimen/lay_16" />
 
             <LinearLayout
@@ -153,8 +150,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
+                style="@style/h_line"
                 android:layout_marginLeft="@dimen/lay_16" />
 
             <LinearLayout
@@ -185,8 +181,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
+                style="@style/h_line"
                 android:layout_marginLeft="@dimen/lay_16" />
 
             <LinearLayout
@@ -217,8 +212,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
+                style="@style/h_line"
                 android:layout_marginLeft="@dimen/lay_16" />
 
             <LinearLayout
@@ -249,8 +243,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
+                style="@style/h_line"
                 android:layout_marginLeft="@dimen/lay_16" />
 
             <LinearLayout
@@ -281,12 +274,12 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
+                style="@style/h_line"
                 android:layout_marginLeft="@dimen/lay_16" />
 
             <LinearLayout
                 android:id="@+id/ll_remark"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -299,6 +292,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/lay_24"
+                    android:layout_marginTop="@dimen/lay_8"
                     android:text="备注"
                     android:textColor="#111111"
                     android:textSize="16sp" />
@@ -308,8 +302,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/lay_8"
+                    android:background="#f6f6f6"
+                    android:padding="@dimen/lay_8"
                     android:text="已确认"
-                    android:textColor="#111111"
+                    android:textColor="@color/text_desc_color"
                     android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>

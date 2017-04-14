@@ -24,7 +24,6 @@ import net.oschina.app.improve.detail.apply.ApplyActivity;
 import net.oschina.app.improve.detail.sign.SignUpActivity;
 import net.oschina.app.improve.detail.v2.DetailActivity;
 import net.oschina.app.improve.detail.v2.DetailFragment;
-import net.oschina.app.improve.user.activities.InvitationActivity;
 import net.oschina.app.improve.user.sign.up.SignUpInfoActivity;
 
 import java.util.HashMap;

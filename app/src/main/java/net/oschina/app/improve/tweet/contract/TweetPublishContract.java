@@ -12,7 +12,7 @@ import net.oschina.app.improve.bean.simple.About;
 
 public interface TweetPublishContract {
     interface Operator {
-        void setDataView(View view, String defaultContent, String[] defaultImages, About.Share about);
+        void setDataView(View view, String defaultContent, String[] defaultImages, About.Share about,String localImg);
 
         void publish();
 

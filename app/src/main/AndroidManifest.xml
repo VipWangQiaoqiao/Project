@@ -198,7 +198,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".improve.user.activities.InvitationActivity"
+            android:name=".improve.user.sign.InvitationActivity"
             android:label="活动报名"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />

@@ -24,6 +24,7 @@ public class EventDetail extends Event {
     private boolean favorite;
     private EventRemark remark;
     private int applyStatus;
+    private String invitationImg;
 
     public String getAuthor() {
         return author;
@@ -121,7 +122,15 @@ public class EventDetail extends Event {
         this.applyStatus = applyStatus;
     }
 
-    public static class EventRemark {
+    public String getInvitationImg() {
+        return invitationImg;
+    }
+
+    public void setInvitationImg(String invitationImg) {
+        this.invitationImg = invitationImg;
+    }
+
+   public static class EventRemark {
         private String tip;
         private String select;
 

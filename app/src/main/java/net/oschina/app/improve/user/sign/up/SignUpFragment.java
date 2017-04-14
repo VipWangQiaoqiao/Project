@@ -1,6 +1,7 @@
 package net.oschina.app.improve.user.sign.up;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -9,7 +10,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.EventSignIn;
-import net.oschina.app.improve.user.activities.InvitationActivity;
+import net.oschina.app.improve.user.sign.InvitationActivity;
 import net.oschina.app.improve.user.sign.in.SignInInfoActivity;
 import net.oschina.app.improve.widget.SimplexToast;
 
@@ -115,8 +116,14 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
         mTextPhone.setText(getExtraString("手机号码", map));
         mTextCompany.setText(getExtraString("公司", map));
         mTextStatus.setText(getExtraString("状态", map));
-        mTextRemark.setText(getExtraString("备注", map));
         mInvitationImg = getExtraString("invitationImg", map);
+        String remark = getExtraString("备注", map);
+        if(TextUtils.isEmpty(remark)){
+            setGone(R.id.ll_remark);
+            return;
+        }
+        mTextRemark.setText(remark);
+
     }
 
     @Override

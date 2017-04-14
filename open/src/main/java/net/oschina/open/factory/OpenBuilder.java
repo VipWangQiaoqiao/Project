@@ -3,8 +3,10 @@ package net.oschina.open.factory;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 
+import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.WebpageObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI;
@@ -27,6 +29,11 @@ import com.tencent.tauth.Tencent;
 
 import net.oschina.open.bean.Share;
 import net.oschina.open.utils.OpenUtils;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by qiujuer
@@ -68,6 +75,10 @@ public class OpenBuilder {
         }
 
         public void share(Share share, IUiListener listener, Callback callback) {
+            if (share.getThumbBitmap() != null) {
+                shareLocalImage(share, listener, callback);
+                return;
+            }
             Bundle params = new Bundle();
             params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
             params.putString(QQShare.SHARE_TO_QQ_TITLE, share.getTitle());
@@ -93,6 +104,54 @@ public class OpenBuilder {
                 }
             }
         }
+
+        private void shareLocalImage(Share share, IUiListener listener, Callback callback) {
+            FileOutputStream os = null;
+            String url = null;
+            try {
+                Bitmap bitmap = share.getThumbBitmap();
+                url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                        .getAbsolutePath() + File.separator + "开源中国/share.jpg";
+                os = new FileOutputStream(url);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                os.flush();
+                os.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                close(os);
+            }
+            if (TextUtils.isEmpty(url)) return;
+            Bundle params = new Bundle();
+            params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, url);
+            params.putString(QQShare.SHARE_TO_QQ_APP_NAME, share.getAppName());
+            params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
+            //params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHATOQQF);
+            if (tencent != null) {
+                try {
+                    tencent.shareToQQ(activity, params, listener);
+                    callback.onSuccess();
+                } catch (Exception e) {
+                    callback.onFailed();
+                }
+            } else {
+                callback.onFailed();
+            }
+        }
+    }
+
+     static void close(Closeable... closeables) {
+        if (closeables == null || closeables.length == 0)
+            return;
+        for (Closeable closeable : closeables) {
+            if (closeable != null) {
+                try {
+                    closeable.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public class WeiboOperator {
@@ -111,6 +170,10 @@ public class OpenBuilder {
 
         public void share(Share share, Callback callback) {
             IWeiboShareAPI weiBoShareSDK = WeiboShareSDK.createWeiboAPI(activity, appKey, false);
+            if(share.getThumbBitmap()!= null){
+                shareLocalImage(weiBoShareSDK,share,callback);
+                return;
+            }
             if (!(weiBoShareSDK.isWeiboAppInstalled()
                     && weiBoShareSDK.isWeiboAppSupportAPI()
                     && weiBoShareSDK.registerApp())) {
@@ -154,6 +217,22 @@ public class OpenBuilder {
                 if (callback != null)
                     callback.onSuccess();
                 bitmap.recycle();
+            }
+        }
+
+        private void shareLocalImage(IWeiboShareAPI api,Share share, Callback callback) {
+            WeiboMultiMessage msg = new WeiboMultiMessage();
+            ImageObject img = new ImageObject();
+            img.setImageObject(share.getThumbBitmap());
+            msg.imageObject = img;
+            SendMultiMessageToWeiboRequest multRequest = new SendMultiMessageToWeiboRequest();
+            multRequest.multiMessage = msg;
+            //以当前时间戳为唯一识别符
+            multRequest.transaction = String.valueOf(System.currentTimeMillis());
+            if(api.sendRequest(activity,multRequest)){
+                callback.onSuccess();
+            }else {
+                callback.onFailed();
             }
         }
     }
