@@ -25,6 +25,7 @@ import net.oschina.app.improve.detail.sign.SignUpActivity;
 import net.oschina.app.improve.detail.v2.DetailActivity;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 import net.oschina.app.improve.user.activities.InvitationActivity;
+import net.oschina.app.improve.user.sign.up.SignUpInfoActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -135,7 +136,7 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                     switch (eventApplyStatus) {
                         case EventDetail.APPLY_STATUS_AUDIT://已报名
                         case EventDetail.APPLY_STATUS_CONFIRMED://已报名
-                            InvitationActivity.show(this);
+                            SignUpInfoActivity.show(this, mBean.getId(),1);
                             break;
                         case EventDetail.APPLY_STATUS_PRESENTED://已出席
                             ApplyActivity.show(this, mBean.getId());
@@ -267,6 +268,7 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
         if (resultCode == Activity.RESULT_OK && data != null) {
             switch (requestCode) {
                 case 0x01:
+                    mBean.getExtra().put("eventApplyStatus",1);
                     mTextApplyStatus.setText(getResources().getString(getApplyStatusStrId(EventDetail.APPLY_STATUS_AUDIT)));
                     break;
             }

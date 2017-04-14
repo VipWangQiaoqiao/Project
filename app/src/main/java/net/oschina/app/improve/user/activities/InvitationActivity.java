@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BackActivity;
 import net.oschina.app.improve.dialog.ShareDialog;
+import net.oschina.app.improve.media.ImageGalleryActivity;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -20,9 +21,12 @@ public class InvitationActivity extends BackActivity implements View.OnClickList
     private ShareDialog mShareDialog;
     @Bind(R.id.iv_invitation)
     ImageView mImageInvitation;
+    private String mUrl;
 
-    public static void show(Context context) {
-        context.startActivity(new Intent(context, InvitationActivity.class));
+    public static void show(Context context, String url) {
+        Intent intent = new Intent(context, InvitationActivity.class);
+        intent.putExtra("url", url);
+        context.startActivity(intent);
     }
 
     @Override
@@ -34,13 +38,14 @@ public class InvitationActivity extends BackActivity implements View.OnClickList
     protected void initWidget() {
         super.initWidget();
         mShareDialog = new ShareDialog(this);
-        mShareDialog.imageUrl("http://sjbz.fd.zol-img.com.cn/t_s320x510c/g5/M00/04/04/ChMkJ1jctw-IGJY8AAMI_lmg3L0AAbNOwPrPvsAAwkW968.jpg");
+        mUrl = getIntent().getStringExtra("url");
+        mShareDialog.imageUrl(mUrl);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        getImageLoader().load("http://sjbz.fd.zol-img.com.cn/t_s320x510c/g5/M00/04/04/ChMkJ1jctw-IGJY8AAMI_lmg3L0AAbNOwPrPvsAAwkW968.jpg")
+        getImageLoader().load(mUrl)
                 .asBitmap()
                 .into(mImageInvitation);
     }
@@ -53,6 +58,7 @@ public class InvitationActivity extends BackActivity implements View.OnClickList
                 mShareDialog.show();
                 break;
             case R.id.iv_invitation:
+                ImageGalleryActivity.show(this, mUrl);
                 break;
         }
     }

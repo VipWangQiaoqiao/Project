@@ -1,16 +1,18 @@
-package net.oschina.app.improve.user.sign.in;
+package net.oschina.app.improve.user.sign.up;
 
 import net.oschina.app.improve.base.BasePresenter;
 import net.oschina.app.improve.base.BaseView;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.EventSignIn;
 
+import java.util.Map;
+
 /**
  * 活动报名签到，包括报名信息
  * Created by haibin on 2017/4/12.
  */
 
-interface SignInContract {
+interface SignUpContract {
     interface EmptyView {
         void hideEmptyLayout();
 
@@ -20,9 +22,7 @@ interface SignInContract {
     interface View extends BaseView<Presenter> {
         void showGetDetailSuccess(EventDetail detail);
 
-        void showGetApplyInfoSuccess(EventDetail detail);
-
-        void showGetApplyInfoFailure(int strId);
+        void showGetApplyInfoSuccess(Map<String, String> map);
 
         void showSignInSuccess(EventSignIn sign);
 
@@ -36,8 +36,9 @@ interface SignInContract {
 
         /**
          * 签到
+         *
          * @param id 活动id
          */
-        void signIn(long id);
+        void signUp(long id);
     }
 }
