@@ -35,17 +35,20 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     private final static String SHARE_VALUES_IMAGES = "images";
     private final static String SHARE_VALUES_ABOUT = "about";
     private final static String DEFAULT_PRE = "default";
+    private final static String SHARE_LOCAL_IMAGE = "share_image";
     private TweetPublishContract.View mView;
     private String mDefaultContent;
     private String[] mDefaultImages;
     private About.Share mAboutShare;
+    private String mLocalImg;
 
     @Override
-    public void setDataView(TweetPublishContract.View view, String defaultContent, String[] defaultImages, About.Share share) {
+    public void setDataView(TweetPublishContract.View view, String defaultContent, String[] defaultImages, About.Share share, String localImg) {
         mView = view;
         mDefaultContent = defaultContent;
         mDefaultImages = defaultImages;
         mAboutShare = share;
+        mLocalImg = localImg;
     }
 
     @Override
@@ -127,6 +130,10 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
                 mView.setImages(CollectionUtil.toArray(set, String.class));
             }
         } else {
+            if (!TextUtils.isEmpty(mLocalImg)) {
+                mView.setImages(new String[]{mLocalImg});
+                return;
+            }
             if (mDefaultImages != null && mDefaultImages.length > 0)
                 mView.setImages(mDefaultImages);
 
@@ -209,6 +216,8 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     }
 
     private boolean isUseXmlCache() {
+        if (!TextUtils.isEmpty(mLocalImg))
+            return false;
         return TextUtils.isEmpty(mDefaultContent)
                 && (mDefaultImages == null || mDefaultImages.length == 0)
                 && (!About.check(mAboutShare));

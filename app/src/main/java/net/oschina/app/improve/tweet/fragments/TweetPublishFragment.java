@@ -80,12 +80,14 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         String[] paths = null;
         About.Share share = null;
         Bundle bundle = getArguments();
+        String localImg = null;
         if (bundle != null) {
             defaultContent = bundle.getString("defaultContent");
             paths = bundle.getStringArray("defaultImages");
             share = (About.Share) bundle.getSerializable("aboutShare");
+            localImg = bundle.getString("imageUrl");
         }
-        this.mOperator.setDataView(this, defaultContent, paths, share);
+        this.mOperator.setDataView(this, defaultContent, paths, share,localImg);
 
         super.onAttach(context);
     }

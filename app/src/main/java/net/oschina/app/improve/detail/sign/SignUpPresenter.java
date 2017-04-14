@@ -82,7 +82,7 @@ class SignUpPresenter implements SignUpContract.Presenter {
                     }.getType();
                     ResultBean<EventDetail> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
-                        mView.showSignUpSuccess();
+                        mView.showSignUpSuccess(resultBean.getResult());
                     } else {
                         mView.showSignUpError(resultBean.getMessage());
                     }

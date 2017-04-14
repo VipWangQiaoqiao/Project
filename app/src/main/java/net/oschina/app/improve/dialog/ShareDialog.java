@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -37,12 +38,16 @@ import net.oschina.open.bean.Share;
 import net.oschina.open.constants.OpenConstant;
 import net.oschina.open.factory.OpenBuilder;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static net.oschina.common.utils.StreamUtil.close;
 
 /**
  * Created by haibin
@@ -55,6 +60,7 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
     private ProgressDialog mDialog;
     private About.Share mAboutShare;
     private Share mShare;
+    private boolean isOnlyBitmap;
 
     public ShareDialog(@NonNull Activity activity) {
         super(activity, true);
@@ -85,6 +91,8 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
         this.mActivity = activity;
         mAboutShare = new About.Share();
         mAboutShare.id = id;
+        if (id < 0)
+            isOnlyBitmap = true;
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View contentView = inflater.inflate(R.layout.dialog_share_main, null, false);
         RecyclerView shareRecycle = (RecyclerView) contentView.findViewById(R.id.share_recycler);
@@ -105,6 +113,7 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
         mShare = new Share();
         mShare.setAppName("开源中国");
     }
+
 
     @Override
     public void onCancel(DialogInterface dialog) {
@@ -131,6 +140,10 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
         //3.QQ
         shareActions.add(new ShareItem(R.mipmap.ic_login_3party_qq, R.string.platform_qq));
 
+        if (isOnlyBitmap) {
+            shareActions.add(new ShareItem(R.mipmap.ic_action_tweet, R.string.platform_tweet));
+            return shareActions;
+        }
         //4.动弹
         if (About.check(mAboutShare)) {
             shareActions.add(new ShareItem(R.mipmap.ic_action_tweet, R.string.platform_tweet));
@@ -189,6 +202,11 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
 
     public ShareDialog bitmapResID(int bitmapResID) {
         mShare.setBitmapResID(bitmapResID);
+        return this;
+    }
+
+    public ShareDialog bitmap(Bitmap bitmap) {
+        mShare.setThumbBitmap(bitmap);
         return this;
     }
 
@@ -294,6 +312,25 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
             case R.mipmap.ic_action_tweet:
                 if (About.check(mAboutShare))
                     TweetPublishActivity.show(getContext(), null, null, mAboutShare);
+                if (isOnlyBitmap && mShare.getThumbBitmap() != null) {
+                    FileOutputStream os = null;
+                    String url = null;
+                    try {
+                        Bitmap bitmap = share.getThumbBitmap();
+                        url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                                .getAbsolutePath() + File.separator + "开源中国/share.jpg";
+                        os = new FileOutputStream(url);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                        os.flush();
+                        os.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        close(os);
+                    }
+                    if (TextUtils.isEmpty(url)) return;
+                    TweetPublishActivity.show(getContext(), false, url);
+                }
                 cancelLoading();
                 break;
             //在浏览器中打开

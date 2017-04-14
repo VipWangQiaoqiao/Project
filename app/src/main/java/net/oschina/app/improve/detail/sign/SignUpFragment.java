@@ -9,7 +9,9 @@ import android.widget.LinearLayout;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.SignUpEventOptions;
+import net.oschina.app.improve.user.sign.InvitationActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SimplexToast;
 
@@ -73,7 +75,8 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
     }
 
     @Override
-    public void showSignUpSuccess() {
+    public void showSignUpSuccess(EventDetail detail) {
+        InvitationActivity.show(mContext, detail.getInvitationImg());
         SimplexToast.show(mContext, "报名成功");
         Intent intent = new Intent();
         getActivity().setResult(Activity.RESULT_OK, intent);

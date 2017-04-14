@@ -26,12 +26,11 @@ public class StringParams extends RequestParams {
 
     @Override
     public HttpEntity getEntity(ResponseHandlerInterface progressHandler) throws IOException {
-        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(getParamsList(), contentEncoding);
-        return entity;
+        return new UrlEncodedFormEntity(getParamsList(), contentEncoding);
     }
 
     protected List<BasicNameValuePair> getParamsList() {
-        List<BasicNameValuePair> lparams = new LinkedList<BasicNameValuePair>();
+        List<BasicNameValuePair> lparams = new LinkedList<>();
 
         for (IdentityHashMap.Entry<Param, String> entry : mParams.entrySet()) {
             lparams.add(new BasicNameValuePair(entry.getKey().name, entry.getValue()));
@@ -47,7 +46,7 @@ public class StringParams extends RequestParams {
     private static class Param {
         private String name;
 
-        public Param(String name) {
+        Param(String name) {
             this.name = name;
         }
 

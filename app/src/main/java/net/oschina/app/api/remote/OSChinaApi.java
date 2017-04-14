@@ -1618,7 +1618,7 @@ public class OSChinaApi {
         for (SignUpEventOptions option : options) {
             params.putForm(option.getKey(), option.getValue());
         }
-        ApiHttpClient.get("action/apiv2/event_apply", params, handler);
+        ApiHttpClient.post("action/apiv2/event_apply", params, handler);
     }
 
     /**
