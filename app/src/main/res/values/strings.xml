@@ -379,6 +379,8 @@
     <string name="notification_ignore_hint">忽略</string>
     <string name="notification_retry_hint">重试</string>
     <string name="content_upload_error_hint">部分内容没有上传成功</string>
+    <string name="event_sign_in_error">签到失败</string>
+    <string name="event_sign_in_success">签到成功</string>
 
     <!--git版本-->
     <string name="get_project_detail_success">获取成功</string>

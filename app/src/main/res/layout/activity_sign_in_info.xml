@@ -16,53 +16,79 @@
         android:textSize="18sp"
         tools:text="[长沙] OSC源创会第61期：SDN/NFV在阿里云的技术实践" />
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/lay_56"
-        android:layout_marginRight="@dimen/lay_56"
+        android:gravity="center_horizontal"
         android:layout_marginTop="@dimen/lay_32"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/event_sign_info"
-            android:src="@mipmap/welcome" />
+        <FrameLayout
+            android:layout_width="250dp"
+            android:layout_height="170dp"
+            android:background="@color/white">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/event_sign_info"
+                android:scaleType="fitXY"
+                android:src="@mipmap/bg_ticket_event_top" />
 
-            <TextView
-                android:id="@+id/tv_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/lay_20"
-                android:layout_marginTop="@dimen/lay_20"
-                android:textColor="@color/white"
-                android:textSize="@dimen/font_16"
-                tools:text="您是开源软件作者，本次活动免费" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_cost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textSize="50sp"
-                tools:text="￥20" />
+                <TextView
+                    android:id="@+id/tv_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/lay_20"
+                    android:layout_marginTop="@dimen/lay_32"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_16"
+                    tools:text="您是开源软件作者，本次活动免费" />
+
+                <TextView
+                    android:id="@+id/tv_cost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="50sp"
+                    tools:text="￥20" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:background="#f6f6f6"
+            android:paddingBottom="@dimen/lay_8"
+            android:paddingLeft="@dimen/lay_16"
+            android:paddingRight="@dimen/lay_16"
+            android:paddingTop="@dimen/lay_8">
 
             <TextView
                 android:id="@+id/tv_cost_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/lay_20"
                 android:textColor="#111111"
                 android:textSize="@dimen/font_16"
-                tools:text="• 	活动标准费用为50元/人\n• 	现场缴费，女士、开源软件作者、积分50以上者均免费，邀请满三个好友报名者免费，学生凭学生证20元/人" />
-        </LinearLayout>
-    </FrameLayout>
+                tools:text="" />
+        </FrameLayout>
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="18dp"
+            android:scaleType="fitXY"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/event_sign_info"
+            android:src="@mipmap/bg_ticket_event_bottom" />
+    </LinearLayout>
+
 </LinearLayout>
