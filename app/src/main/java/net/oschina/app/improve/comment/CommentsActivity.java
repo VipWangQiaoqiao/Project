@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,9 +33,11 @@ import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.adapter.CommentAdapter;
+import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.CommentShareView;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.util.HTMLUtil;
@@ -69,6 +72,8 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     TextView mBack_label;
     @Bind(R.id.tv_title)
     TextView mTitle;
+    @Bind(R.id.shareView)
+    CommentShareView mShareView;
     private CommentAdapter mCommentAdapter;
 
     private CommentBar mDelegation;
@@ -243,10 +248,27 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
             public void onItemClick(int position, long itemId) {
 
                 Comment comment = mCommentAdapter.getItem(position);
-
+                mShareView.init("科技公司现中年危机，裁下来的人该何去何从",comment);
+                Bitmap bitmap = mShareView.getBitmap();
+                ShareDialog dialog = new ShareDialog(CommentsActivity.this).bitmap(bitmap);
+                dialog.show();
                 if (mType == OSChinaApi.COMMENT_QUESTION) {
                     QuesAnswerDetailActivity.show(CommentsActivity.this, comment, mId, mType);
                 }
+            }
+        });
+        mCommentAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
+            @Override
+            public void onLongClick(int position, long itemId) {
+                Comment comment = mCommentAdapter.getItem(position);
+                mShareView.init("科技公司现中年危机，裁下来的人该何去何从",comment);
+                mShareView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ShareDialog dialog = new ShareDialog(CommentsActivity.this).bitmap(mShareView.getBitmap());
+                        dialog.show();
+                    }
+                },3000);
             }
         });
         mLayComments.setAdapter(mCommentAdapter);
