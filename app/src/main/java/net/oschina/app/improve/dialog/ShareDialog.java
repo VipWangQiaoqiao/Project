@@ -318,7 +318,8 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
                     try {
                         Bitmap bitmap = share.getThumbBitmap();
                         url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                                .getAbsolutePath() + File.separator + "开源中国/share.jpg";
+                                .getAbsolutePath() + File.separator + "开源中国/share" +
+                                System.currentTimeMillis() + ".jpg";
                         os = new FileOutputStream(url);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
                         os.flush();
