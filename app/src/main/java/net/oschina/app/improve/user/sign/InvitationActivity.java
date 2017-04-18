@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -34,6 +35,7 @@ public class InvitationActivity extends BackActivity implements View.OnClickList
     public static void show(Context context, String url) {
         Intent intent = new Intent(context, InvitationActivity.class);
         intent.putExtra("url", url);
+        Log.e("url",url);
         context.startActivity(intent);
     }
 

@@ -54,7 +54,7 @@ public class SignInInfoActivity extends BackActivity {
         assert detail != null;
         mTextEventName.setText(detail.getTitle());
         assert info != null;
-        mTextCost.setText(String.valueOf(info.getCost()));
+        mTextCost.setText("￥" + info.getCost());
         mTextCostMsg.setText(info.getCostMessage());
         mTextMsg.setText(info.getMessage());
     }

@@ -47,8 +47,10 @@
                     android:id="@+id/tv_msg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/lay_20"
+                    android:layout_marginBottom="@dimen/lay_16"
                     android:layout_marginTop="@dimen/lay_32"
+                    android:layout_marginLeft="@dimen/lay_16"
+                    android:layout_marginRight="@dimen/lay_16"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_16"
                     tools:text="您是开源软件作者，本次活动免费" />
