@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +32,8 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
 import net.oschina.common.utils.BitmapUtil;
 
+import java.io.File;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -55,7 +58,7 @@ public class CommentShareView extends NestedScrollView {
         mRecyclerComment.setLayoutManager(new LinearLayoutManager(context));
         mAdapter = new CommentShareAdapter(context);
         mRecyclerComment.setAdapter(mAdapter);
-        mShareDialog = new ShareDialog((Activity) context,-1);
+        mShareDialog = new ShareDialog((Activity) context, -1);
     }
 
     public void init(String title, Comment comment) {
@@ -96,6 +99,20 @@ public class CommentShareView extends NestedScrollView {
         super.onDetachedFromWindow();
         if (mBitmap != null && !mBitmap.isRecycled()) {
             mBitmap.recycle();
+        }
+        clearShareImage();
+    }
+
+    public static void clearShareImage() {
+        try {
+            String url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .getAbsolutePath() + File.separator + "开源中国/share/";
+            File file = new File(url);
+            for(File f : file.listFiles()){
+                f.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
