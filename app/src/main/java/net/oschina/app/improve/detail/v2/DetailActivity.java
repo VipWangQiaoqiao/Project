@@ -26,6 +26,7 @@ import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
+import net.oschina.app.improve.widget.CommentShareView;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -70,6 +71,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
     @Override
     protected void initWidget() {
         super.initWidget();
+        CommentShareView.clearShareImage();
         if (!TDevice.hasWebView(this)) {
             finish();
             return;

@@ -1,10 +1,12 @@
 package net.oschina.app.improve.widget;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,10 +26,13 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.comment.CommentReferView;
 import net.oschina.app.improve.comment.CommentsUtil;
+import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
 import net.oschina.common.utils.BitmapUtil;
+
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,6 +44,8 @@ import butterknife.ButterKnife;
 @SuppressWarnings("unused")
 public class CommentShareView extends NestedScrollView {
     private CommentShareAdapter mAdapter;
+    private ShareDialog mShareDialog;
+    private Bitmap mBitmap;
 
     public CommentShareView(Context context) {
         this(context, null);
@@ -51,6 +58,7 @@ public class CommentShareView extends NestedScrollView {
         mRecyclerComment.setLayoutManager(new LinearLayoutManager(context));
         mAdapter = new CommentShareAdapter(context);
         mRecyclerComment.setAdapter(mAdapter);
+        mShareDialog = new ShareDialog((Activity) context, -1);
     }
 
     public void init(String title, Comment comment) {
@@ -64,12 +72,48 @@ public class CommentShareView extends NestedScrollView {
         mAdapter.addItem(comment);
     }
 
+    public void share() {
+        if (mBitmap != null && !mBitmap.isRecycled()) {
+            mBitmap.recycle();
+        }
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBitmap = getBitmap();
+                mShareDialog.bitmap(mBitmap);
+                mShareDialog.show();
+            }
+        }, 1000);
+    }
+
     private void setText(int viewId, String text) {
         ((TextView) findViewById(viewId)).setText(text);
     }
 
-    public Bitmap getBitmap() {
+    private Bitmap getBitmap() {
         return create(getChildAt(0));
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mBitmap != null && !mBitmap.isRecycled()) {
+            mBitmap.recycle();
+        }
+        clearShareImage();
+    }
+
+    public static void clearShareImage() {
+        try {
+            String url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .getAbsolutePath() + File.separator + "开源中国/share/";
+            File file = new File(url);
+            for(File f : file.listFiles()){
+                f.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static Bitmap create(View v) {

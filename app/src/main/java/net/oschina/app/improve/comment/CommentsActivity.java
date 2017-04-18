@@ -248,10 +248,8 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
             public void onItemClick(int position, long itemId) {
 
                 Comment comment = mCommentAdapter.getItem(position);
-                mShareView.init("科技公司现中年危机，裁下来的人该何去何从",comment);
-                Bitmap bitmap = mShareView.getBitmap();
-                ShareDialog dialog = new ShareDialog(CommentsActivity.this).bitmap(bitmap);
-                dialog.show();
+                mShareView.init("科技公司现中年危机，裁下来的人该何去何从", comment);
+                mShareView.share();
                 if (mType == OSChinaApi.COMMENT_QUESTION) {
                     QuesAnswerDetailActivity.show(CommentsActivity.this, comment, mId, mType);
                 }
@@ -261,14 +259,8 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
             @Override
             public void onLongClick(int position, long itemId) {
                 Comment comment = mCommentAdapter.getItem(position);
-                mShareView.init("科技公司现中年危机，裁下来的人该何去何从",comment);
-                mShareView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ShareDialog dialog = new ShareDialog(CommentsActivity.this).bitmap(mShareView.getBitmap());
-                        dialog.show();
-                    }
-                },3000);
+                mShareView.init("科技公司现中年危机，裁下来的人该何去何从", comment);
+                mShareView.share();
             }
         });
         mLayComments.setAdapter(mCommentAdapter);
