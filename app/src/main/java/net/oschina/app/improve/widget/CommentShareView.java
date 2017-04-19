@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
  * 评论分享的View
  * Created by haibin on 2017/4/17.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})
 public class CommentShareView extends NestedScrollView {
     private CommentShareAdapter mAdapter;
     private ShareDialog mShareDialog;
