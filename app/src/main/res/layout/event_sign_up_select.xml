@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="@dimen/font_14"
-            android:hint="请选择会场" />
+            android:hint="请选择" />
 
         <ImageView
             android:layout_width="16dp"
