@@ -31,12 +31,8 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     TextView mTextName;
     @Bind(R.id.tv_work)
     TextView mTextWork;
-    @Bind(R.id.tv_gender)
-    TextView mTextGender;
     @Bind(R.id.tv_date)
     TextView mTextDate;
-    @Bind(R.id.tv_email)
-    TextView mTextEmail;
     @Bind(R.id.tv_phone)
     TextView mTextPhone;
     @Bind(R.id.tv_company)
@@ -110,9 +106,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     public void showGetApplyInfoSuccess(Map<String, String> map) {
         mTextName.setText(getExtraString("姓名", map));
         mTextWork.setText(getExtraString("职位", map));
-        mTextGender.setText(getExtraString("性别", map));
         mTextDate.setText(getExtraString("报名时间", map));
-        mTextEmail.setText(getExtraString("邮箱", map));
         mTextPhone.setText(getExtraString("手机号码", map));
         mTextCompany.setText(getExtraString("公司", map));
         mTextStatus.setText(getExtraString("状态", map));
