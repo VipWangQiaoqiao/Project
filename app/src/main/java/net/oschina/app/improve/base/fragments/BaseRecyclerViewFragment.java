@@ -126,6 +126,12 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
                 onRequestFinish();
                 log("HttpResponseHandler:onFinish");
             }
+
+            @Override
+            public void onCancel() {
+                super.onCancel();
+                onRequestFinish();
+            }
         };
 
         boolean isNeedEmptyView = isNeedEmptyView();
@@ -205,6 +211,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
     }
 
     protected void onRequestError() {
+        onComplete();
         if (mAdapter.getItems().size() == 0) {
             if (isNeedEmptyView()) mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
