@@ -1,15 +1,13 @@
 package net.oschina.app.improve.user.sign.up;
 
-import android.util.Log;
-
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.app.AppOperator;
-import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.EventSignIn;
+import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.ui.empty.EmptyLayout;
 
@@ -34,7 +32,7 @@ class SignUpPresenter implements SignUpContract.Presenter {
 
     @Override
     public void getEventDetail(final long id) {
-        OSChinaApi.getEventDetail(id, new TextHttpResponseHandler() {
+        OSChinaApi.getDetail(5, "", id, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 
@@ -42,10 +40,9 @@ class SignUpPresenter implements SignUpContract.Presenter {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.e("onSuccess",responseString);
                 try {
-                    ResultBean<EventDetail> resultBean = AppOperator.createGson().fromJson(responseString,
-                            new TypeToken<ResultBean<EventDetail>>() {
+                    ResultBean<SubBean> resultBean = AppOperator.createGson().fromJson(responseString,
+                            new TypeToken<ResultBean<SubBean>>() {
                             }.getType());
 
                     if (resultBean.isSuccess()) {
@@ -73,7 +70,6 @@ class SignUpPresenter implements SignUpContract.Presenter {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.e("onSuccess",responseString);
                 try {
                     ResultBean<Map<String, String>> mapResultBean = AppOperator.createGson().fromJson(responseString,
                             new TypeToken<ResultBean<Map<String, String>>>() {
@@ -103,7 +99,6 @@ class SignUpPresenter implements SignUpContract.Presenter {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.e("onSuccess",responseString);
                 try {
                     ResultBean<EventSignIn> result = AppOperator.createGson().fromJson(responseString,
                             new TypeToken<ResultBean<EventSignIn>>() {
@@ -117,6 +112,33 @@ class SignUpPresenter implements SignUpContract.Presenter {
                 } catch (Exception e) {
                     e.printStackTrace();
                     mView.showSignInFailure(R.string.event_sign_in_error);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void cancelApply(long id) {
+        OSChinaApi.cancelApply(id, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                mView.showNetworkError(R.string.state_network_error);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    ResultBean<EventSignIn> result = AppOperator.createGson().fromJson(responseString,
+                            new TypeToken<ResultBean<EventSignIn>>() {
+                            }.getType());
+                    if (result.getCode() == 1) {
+                        mView.showCancelApplySuccess(result.getMessage());
+                    } else {
+                        mView.showCancelApplyFailure(result.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.getMessage();
+                    mView.showCancelApplyFailure("取消报名失败");
                 }
             }
         });

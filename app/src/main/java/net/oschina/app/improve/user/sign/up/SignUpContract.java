@@ -4,6 +4,7 @@ import net.oschina.app.improve.base.BasePresenter;
 import net.oschina.app.improve.base.BaseView;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.EventSignIn;
+import net.oschina.app.improve.bean.SubBean;
 
 import java.util.Map;
 
@@ -20,13 +21,17 @@ interface SignUpContract {
     }
 
     interface View extends BaseView<Presenter> {
-        void showGetDetailSuccess(EventDetail detail);
+        void showGetDetailSuccess(SubBean detail);
 
         void showGetApplyInfoSuccess(Map<String, String> map);
 
         void showSignInSuccess(EventSignIn sign);
 
         void showSignInFailure(int strId);
+
+        void showCancelApplySuccess(String message);
+
+        void showCancelApplyFailure(String message);
     }
 
     interface Presenter extends BasePresenter {
@@ -34,6 +39,7 @@ interface SignUpContract {
 
         void getApplyInfo(long id);
 
+        void cancelApply(long id);
         /**
          * 签到
          *

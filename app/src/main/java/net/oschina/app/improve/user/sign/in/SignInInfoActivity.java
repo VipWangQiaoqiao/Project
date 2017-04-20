@@ -7,8 +7,8 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BackActivity;
-import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.EventSignIn;
+import net.oschina.app.improve.bean.SubBean;
 
 import butterknife.Bind;
 
@@ -27,7 +27,7 @@ public class SignInInfoActivity extends BackActivity {
     @Bind(R.id.tv_msg)
     TextView mTextMsg;
 
-    public static void show(Context context, EventDetail detail, EventSignIn info) {
+    public static void show(Context context, SubBean detail, EventSignIn info) {
         Intent intent = new Intent(context, SignInInfoActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("detail", detail);
@@ -49,12 +49,12 @@ public class SignInInfoActivity extends BackActivity {
             finish();
             return;
         }
-        EventDetail detail = (EventDetail) bundle.getSerializable("detail");
+        SubBean detail = (SubBean) bundle.getSerializable("detail");
         EventSignIn info = (EventSignIn) bundle.getSerializable("sign_in");
         assert detail != null;
         mTextEventName.setText(detail.getTitle());
         assert info != null;
-        mTextCost.setText("￥" + info.getCost());
+        mTextCost.setText("￥" + info.getCost() / 100);
         mTextCostMsg.setText(info.getCostMessage());
         mTextMsg.setText(info.getMessage());
     }

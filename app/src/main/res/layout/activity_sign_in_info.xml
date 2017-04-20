@@ -40,20 +40,18 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_msg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/lay_16"
-                    android:layout_marginTop="@dimen/lay_32"
                     android:layout_marginLeft="@dimen/lay_16"
                     android:layout_marginRight="@dimen/lay_16"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_16"
-                    tools:text="您是开源软件作者，本次活动免费" />
+                    tools:text="您是开源软件作者，f" />
 
                 <TextView
                     android:id="@+id/tv_cost"
