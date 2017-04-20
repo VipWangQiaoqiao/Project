@@ -177,6 +177,25 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
         HashMap<String, Object> extra = mBean.getExtra();
         if (extra != null) {
 
+            //活动状态判断
+            int eventStatus = getExtraInt(extra.get("eventStatus"));
+            switch (eventStatus) {
+                case Event.STATUS_END:
+                    mTextApplyStatus.setText(getResources().getString(R.string.event_status_end));
+                    mLinearSign.setEnabled(false);
+                    break;
+                case Event.STATUS_ING:
+                    mTextApplyStatus.setText(getResources().getString(R.string.event_apply_status_un_sign));
+                    break;
+                case Event.STATUS_SING_UP:
+                    mTextApplyStatus.setText(getResources().getString(R.string.event_status_sing_up));
+                    mLinearSign.setEnabled(false);
+                    break;
+            }
+            if(eventStatus == Event.STATUS_END || eventStatus == Event.STATUS_SING_UP){
+                return;
+            }
+
             int eventApplyStatus = getExtraInt(extra.get("eventApplyStatus"));
 
             int applyStr = 0;
@@ -194,41 +213,14 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                     applyStr = R.string.event_apply_status_presented;
                     break;
                 case EventDetail.APPLY_STATUS_CANCELED:
-                    applyStr = R.string.event_apply_status_canceled;
+                    applyStr = R.string.event_apply_status_un_sign;
                     break;
                 case EventDetail.APPLY_STATUS_REFUSED:
-                    applyStr = R.string.event_apply_status_refused;
+                    applyStr = R.string.event_apply_status_un_sign;
                     break;
             }
             mTextApplyStatus.setText(getResources().getString(applyStr));
-
             mTextApplyStatus.setText(getString(getApplyStatusStrId(eventApplyStatus)));
-            if (eventApplyStatus != EventDetail.APPLY_STATUS_UN_SIGN &&
-                    eventApplyStatus != EventDetail.APPLY_STATUS_PRESENTED
-                    && eventApplyStatus != EventDetail.APPLY_STATUS_REFUSED) {
-                //如果已经报名了,而且未出席
-                //setSignUnEnable();
-                return;
-            }
-
-
-            if (eventApplyStatus == EventDetail.APPLY_STATUS_PRESENTED)
-                return;
-
-            //活动状态判断
-            int eventStatus = getExtraInt(extra.get("eventStatus"));
-            switch (eventStatus) {
-                case Event.STATUS_END:
-                    mTextApplyStatus.setText(getResources().getString(R.string.event_status_end));
-                    break;
-                case Event.STATUS_ING:
-                    mTextApplyStatus.setText(getResources().getString(R.string.event_apply_status_un_sign));
-                    break;
-                case Event.STATUS_SING_UP:
-                    mTextApplyStatus.setText(getResources().getString(R.string.event_status_sing_up));
-                    break;
-            }
-
         }
     }
 
@@ -294,10 +286,10 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                 strId = R.string.event_apply_status_presented;
                 break;
             case EventDetail.APPLY_STATUS_CANCELED:
-                strId = R.string.event_apply_status_canceled;
+                strId = R.string.event_apply_status_un_sign;
                 break;
             case EventDetail.APPLY_STATUS_REFUSED:
-                strId = R.string.event_apply_status_refused;
+                strId = R.string.event_apply_status_un_sign;
                 break;
         }
         return strId;

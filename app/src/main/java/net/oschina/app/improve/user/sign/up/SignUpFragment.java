@@ -2,6 +2,7 @@ package net.oschina.app.improve.user.sign.up;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -75,15 +76,22 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
         mType = bundle.getInt("type", 1);
     }
 
-    @OnClick({R.id.btn_sign_up})
+    @OnClick({R.id.btn_sign_up,R.id.btn_cancel})
     @Override
     public void onClick(View v) {
-        switch (mType) {
-            case 1:
-                InvitationActivity.show(mContext, mInvitationImg);
+        switch (v.getId()){
+            case R.id.btn_sign_up:
+                switch (mType) {
+                    case 1:
+                        InvitationActivity.show(mContext, mInvitationImg);
+                        break;
+                    case 2:
+                        mPresenter.signUp(mDetail.getId());
+                        break;
+                }
                 break;
-            case 2:
-                mPresenter.signUp(mDetail.getId());
+            case R.id.btn_cancel:
+                mPresenter.cancelApply(mDetail.getId());
                 break;
         }
     }
@@ -108,7 +116,13 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
         mTextEventName.setText(detail.getTitle());
         HashMap<String, Object> extra = mDetail.getExtra();
         if (extra != null) {
-            mBtnSignUp.setVisibility(getExtraInt(extra.get("eventType")) == 1 ? View.VISIBLE : View.GONE);
+            int eventType =getExtraInt(extra.get("eventType"));
+            mBtnSignUp.setVisibility(eventType == 1 ? View.VISIBLE : View.GONE);
+            if(eventType != 1){
+                mBtnCalcen.setVisibility(View.VISIBLE);
+                mBtnCalcen.setBackgroundResource(R.drawable.selector_event_sign);
+                mBtnCalcen.setTextColor(Color.WHITE);
+            }
         }
     }
 
