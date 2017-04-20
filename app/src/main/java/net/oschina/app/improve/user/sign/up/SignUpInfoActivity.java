@@ -1,6 +1,6 @@
 package net.oschina.app.improve.user.sign.up;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
@@ -20,11 +20,11 @@ public class SignUpInfoActivity extends BackActivity implements SignUpContract.E
     @Bind(R.id.emptyLayout)
     EmptyLayout mEmptyLayout;
 
-    public static void show(Context context, long id, int type) {
-        Intent intent = new Intent(context, SignUpInfoActivity.class);
+    public static void show(Activity activity, long id, int type) {
+        Intent intent = new Intent(activity, SignUpInfoActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("type", type);
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, 0x02);
     }
 
     @Override

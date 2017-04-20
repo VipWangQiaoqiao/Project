@@ -270,6 +270,10 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                     mBean.getExtra().put("eventApplyStatus",1);
                     mTextApplyStatus.setText(getResources().getString(getApplyStatusStrId(EventDetail.APPLY_STATUS_AUDIT)));
                     break;
+                case 0x02:
+                    mBean.getExtra().put("eventApplyStatus",-1);
+                    mTextApplyStatus.setText(getResources().getString(getApplyStatusStrId(EventDetail.APPLY_STATUS_UN_SIGN)));
+                    break;
             }
         }
     }

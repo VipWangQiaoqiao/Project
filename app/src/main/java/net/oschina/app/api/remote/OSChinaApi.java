@@ -1601,6 +1601,18 @@ public class OSChinaApi {
     }
 
     /**
+     * 取消报名
+     *
+     * @param id      eventId
+     * @param handler handler
+     */
+    public static void cancelApply(long id, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", id);
+        ApiHttpClient.post("action/apiv2/event_apply_cancel", params, handler);
+    }
+
+    /**
      * 新版获得活动报名参数
      */
     public static void getSignUpOptions(long sourceId, TextHttpResponseHandler handler) {

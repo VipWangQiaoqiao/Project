@@ -220,9 +220,9 @@
 
             <LinearLayout
                 android:id="@+id/ll_remark"
-                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
@@ -252,11 +252,27 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/btn_sign_up"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_event_sign_up"
-        android:text="立即签到"
-        android:textColor="@color/white" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_event_fav"
+            android:text="取消报名"
+            android:textColor="@color/text_dark" />
+
+        <Button
+            android:id="@+id/btn_sign_up"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_event_sign_up"
+            android:text="立即签到"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </LinearLayout>
