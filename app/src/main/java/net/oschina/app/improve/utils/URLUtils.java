@@ -186,9 +186,16 @@ public class URLUtils {
                 // TODO 如果用户安装了git@osc application, 使用git@osc打开
                 Matcher matcherGit = PATTERN_GIT.matcher(uri);
                 if (matcherGit.find() && matcherGit.groupCount() >= 2) {
-                    ProjectDetailActivity.show(context, matcherGit.group(1), matcherGit.group(2));
+                    String group1 =  matcherGit.group(1);
+                    String group2 =  matcherGit.group(2);
+                    if("explore".equals(group1) || "gists".equals(group1) || "enterprises".equals(group1)){
+                        UIHelper.openInternalBrowser(context, url);
+                    }else {
+                        ProjectDetailActivity.show(context,group1, group2);
+                    }
+                }else {
+                    UIHelper.openInternalBrowser(context, url);
                 }
-                //UIHelper.openInternalBrowser(context, url);
                 break;
             case "my.oschina.net":
                 matcher = PATTERN_PATH_USER_BLOG.matcher(path);
