@@ -6,7 +6,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 
 import net.oschina.app.improve.git.bean.Project;
@@ -236,7 +235,6 @@ public abstract class RichTextParser {
         while (true) {
             matcher = PatternGit.matcher(builder.toString());
             if (matcher.find()) {
-                Log.e("CharSequence","" + content);
                 final String group0 = matcher.group(1);
                 final String group1 = matcher.group(2);
                 builder.replace(matcher.start(), matcher.end(), group1);

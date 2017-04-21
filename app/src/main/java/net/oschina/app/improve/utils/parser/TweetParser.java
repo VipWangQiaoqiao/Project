@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.util.Log;
 
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.util.HTMLUtil;
@@ -28,7 +27,6 @@ public class TweetParser extends RichTextParser {
     public Spannable parse(Context context, String content) {
         if (TextUtils.isEmpty(content))
             return null;
-        Log.e("content",content);
         content = HTMLUtil.rollbackReplaceTag(content);
         Spannable spannable = parseOnlyAtUser(context, content);
         spannable = parseOnlyGit(context, spannable);
