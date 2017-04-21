@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.sign;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,7 +12,6 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.SignUpEventOptions;
-import net.oschina.app.improve.user.sign.InvitationActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SimplexToast;
 
@@ -62,7 +62,7 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
             if (view != null)
                 mLayoutRoot.addView(view);
         }
-        View view = mInflater.inflate(R.layout.event_sign_up_button, null);
+        @SuppressLint("InflateParams") View view = mInflater.inflate(R.layout.event_sign_up_button, null);
         view.findViewById(R.id.btn_sign_up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +76,6 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
 
     @Override
     public void showSignUpSuccess(EventDetail detail) {
-        InvitationActivity.show(mContext, detail.getInvitationImg());
         SimplexToast.show(mContext, "报名成功");
         Intent intent = new Intent();
         getActivity().setResult(Activity.RESULT_OK, intent);
