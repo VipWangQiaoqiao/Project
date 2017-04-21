@@ -205,7 +205,7 @@ public class CommentShareView extends NestedScrollView implements Runnable {
                 if (TextUtils.isEmpty(name))
                     name = mName.getResources().getString(R.string.martian_hint);
                 mName.setText(name);
-                mPubDate.setText(String.format("%s", StringUtils.formatSomeAgo(comment.getPubDate())));
+                mPubDate.setText(StringUtils.formatDayTime(comment.getPubDate()));
 
                 mCommentReferView.addComment(comment);
                 if (comment.getRefer() == null || comment.getRefer().length == 0) {
