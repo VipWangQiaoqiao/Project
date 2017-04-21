@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#6a6a6a"
                 android:textSize="12sp"
-                tools:text="12楼  6分钟前" />
+                tools:text="6分钟前" />
         </LinearLayout>
 
     </LinearLayout>

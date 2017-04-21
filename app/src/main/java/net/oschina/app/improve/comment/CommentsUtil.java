@@ -4,9 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,6 +96,43 @@ public final class CommentsUtil {
         Spanned span = Html.fromHtml(str);
         span = InputHelper.displayEmoji(resources, span.toString());
         textView.setText(span);
+        MyURLSpan.parseLinkText(textView, span);
+    }
+
+    @SuppressWarnings({"unused", "deprecation"})
+    public static void formatHtml(Resources resources, TextView textView, String str, boolean isShare) {
+        str = str.trim();
+
+        textView.setMovementMethod(MyLinkMovementMethod.a());
+        textView.setFocusable(false);
+        textView.setLongClickable(false);
+
+        if (textView instanceof TweetTextView) {
+            ((TweetTextView) textView).setDispatchToParent(true);
+        }
+
+        str = TweetTextView.modifyPath(str);
+        Spanned span = Html.fromHtml(str);
+        //str = "[icon] " + str + " [icon]";
+        Drawable drawableLeft = resources.getDrawable(R.mipmap.ic_quote_left);
+        drawableLeft.setBounds(0, 0, drawableLeft.getIntrinsicWidth(), drawableLeft.getIntrinsicHeight());
+        ImageSpan imageSpanLeft = new ImageSpan(drawableLeft, ImageSpan.ALIGN_BASELINE);
+
+        Drawable drawableRight = resources.getDrawable(R.mipmap.ic_quote_right);
+        drawableRight.setBounds(0, 0, drawableRight.getIntrinsicWidth(), drawableRight.getIntrinsicHeight());
+        ImageSpan imageSpanRight = new ImageSpan(drawableRight, ImageSpan.ALIGN_BASELINE);
+
+        span = InputHelper.displayEmoji(resources, span.toString());
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+        sb.append("[icon] ");
+        sb.append(span);
+        sb.append(" [icon]");
+        sb.setSpan(imageSpanLeft, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        sb.setSpan(imageSpanRight, sb.length() - 6, sb.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+        //
+        textView.setText(sb);
+        textView.setTextSize(26.0f);
         MyURLSpan.parseLinkText(textView, span);
     }
 }

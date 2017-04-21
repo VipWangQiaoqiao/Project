@@ -2,7 +2,9 @@ package net.oschina.app.improve.widget;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,7 +29,7 @@ import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.comment.CommentReferView;
 import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.dialog.ShareDialog;
-import net.oschina.app.util.PlatfromUtil;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
 import net.oschina.common.utils.BitmapUtil;
@@ -42,10 +44,12 @@ import butterknife.ButterKnife;
  * Created by haibin on 2017/4/17.
  */
 @SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})
-public class CommentShareView extends NestedScrollView {
+public class CommentShareView extends NestedScrollView implements Runnable {
     private CommentShareAdapter mAdapter;
     private ShareDialog mShareDialog;
+    private ProgressDialog mDialog;
     private Bitmap mBitmap;
+    private boolean isShare;
 
     public CommentShareView(Context context) {
         this(context, null);
@@ -59,31 +63,54 @@ public class CommentShareView extends NestedScrollView {
         mAdapter = new CommentShareAdapter(context);
         mRecyclerComment.setAdapter(mAdapter);
         mShareDialog = new ShareDialog((Activity) context, -1);
+        mDialog = DialogHelper.getProgressDialog(context);
+        mDialog.setMessage("正在创建分享...");
+        mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (isShare)
+                    return;
+                if (mBitmap != null && !mBitmap.isRecycled()) {
+                    mBitmap.recycle();
+                }
+                removeCallbacks(CommentShareView.this);
+            }
+        });
     }
 
     public void init(String title, Comment comment) {
         if (comment == null)
             return;
         setText(R.id.tv_title, title);
-        setText(R.id.tv_author, "——" + comment.getAuthor().getName());
-        setText(R.id.tv_pub_date, StringUtils.formatSomeAgo(comment.getPubDate()));
-        PlatfromUtil.setPlatFromString((TextView) findViewById(R.id.tv_platform), comment.getAppClient());
         mAdapter.clear();
         mAdapter.addItem(comment);
     }
 
+    public void dismiss() {
+        isShare = false;
+        if (mDialog != null)
+            mDialog.dismiss();
+        if (mShareDialog != null)
+            mShareDialog.dismiss();
+    }
+
+    @Override
+    public void run() {
+        isShare = true;
+        if (mDialog == null)
+            return;
+        mDialog.dismiss();
+        mBitmap = getBitmap();
+        mShareDialog.bitmap(mBitmap);
+        mShareDialog.show();
+    }
+
     public void share() {
+        mDialog.show();
         if (mBitmap != null && !mBitmap.isRecycled()) {
             mBitmap.recycle();
         }
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mBitmap = getBitmap();
-                mShareDialog.bitmap(mBitmap);
-                mShareDialog.show();
-            }
-        }, 1000);
+        postDelayed(this, 2000);
     }
 
     private void setText(int viewId, String text) {
@@ -108,7 +135,7 @@ public class CommentShareView extends NestedScrollView {
             String url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                     .getAbsolutePath() + File.separator + "开源中国/share/";
             File file = new File(url);
-            for(File f : file.listFiles()){
+            for (File f : file.listFiles()) {
                 f.delete();
             }
         } catch (Exception e) {
@@ -178,11 +205,16 @@ public class CommentShareView extends NestedScrollView {
                 if (TextUtils.isEmpty(name))
                     name = mName.getResources().getString(R.string.martian_hint);
                 mName.setText(name);
-                mPubDate.setText(String.format("%s", StringUtils.formatSomeAgo(comment.getPubDate())));
+                mPubDate.setText(StringUtils.formatDayTime(comment.getPubDate()));
 
                 mCommentReferView.addComment(comment);
+                if (comment.getRefer() == null || comment.getRefer().length == 0) {
+                    CommentsUtil.formatHtml(mTweetTextView.getResources(), mTweetTextView, comment.getContent(), true);
+                } else {
+                    mTweetTextView.setTextSize(14.0f);
+                    CommentsUtil.formatHtml(mTweetTextView.getResources(), mTweetTextView, comment.getContent());
+                }
 
-                CommentsUtil.formatHtml(mTweetTextView.getResources(), mTweetTextView, comment.getContent());
             }
         }
     }

@@ -278,6 +278,18 @@ public class StringUtils {
         return (i < 10 ? "0" : "") + i;
     }
 
+    public static String formatDayTime(String time){
+        if(TextUtils.isEmpty(time))
+            return "";
+        try {
+            SimpleDateFormat format = YYYYMMDD.get();
+            Calendar calendar = parseCalendar(time);
+            return format.format(calendar.getTime());
+        }catch (Exception e){
+            e.printStackTrace();
+            return "";
+        }
+    }
 
     /**
      * 智能格式化

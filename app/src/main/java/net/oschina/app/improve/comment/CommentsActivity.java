@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,7 +32,6 @@ import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.adapter.CommentAdapter;
-import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.utils.DialogHelper;
@@ -455,5 +453,12 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
             }
         }).show();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mShareView != null)
+            mShareView.dismiss();
     }
 }
