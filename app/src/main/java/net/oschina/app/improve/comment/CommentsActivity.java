@@ -1,11 +1,13 @@
 package net.oschina.app.improve.comment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -136,6 +138,8 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     private int mType;
 
     private PageBean<Comment> mPageBean;
+    private AlertDialog mShareCommentDialog;
+    private Comment mComment;
 
     public static void show(Context context, long id, int type, int order) {
         Intent intent = new Intent(context, CommentsActivity.class);
@@ -161,7 +165,31 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     @Override
     protected void initWidget() {
         super.initWidget();
+        mShareCommentDialog = DialogHelper.getRecyclerViewDialog(this, new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, long itemId) {
+                switch (position) {
+                    case 0:
+                        TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(mComment.getContent()));
+                        break;
+                    case 1:
+                        if (!AccountHelper.isLogin()) {
+                            LoginActivity.show((Activity) CommentsActivity.this, 1);
+                            return;
+                        }
+                        mDelegation.getBottomSheet().getBtnCommit().setTag(mComment);
 
+                        mDelegation.getBottomSheet().show(String.format("%s %s",
+                                getString(R.string.reply_hint), mComment.getAuthor().getName()));
+                        break;
+                    case 2:
+                        mShareView.init("科技公司现中年危机，裁下来的人该何去何从", mComment);
+                        mShareView.share();
+                        break;
+                }
+                mShareCommentDialog.dismiss();
+            }
+        }).create();
         mBack_label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -240,16 +268,15 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         mCommentAdapter.setSourceId(mId);
         mCommentAdapter.setCommentType(mType);
         mCommentAdapter.setDelegation(mDelegation);
-        mCommentAdapter.setOnItemLongClickListener(this);
+        //mCommentAdapter.setOnItemLongClickListener(this);
         mCommentAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, long itemId) {
-
-                Comment comment = mCommentAdapter.getItem(position);
-                mShareView.init("科技公司现中年危机，裁下来的人该何去何从", comment);
-                mShareView.share();
+                mComment = mCommentAdapter.getItem(position);
                 if (mType == OSChinaApi.COMMENT_QUESTION) {
-                    QuesAnswerDetailActivity.show(CommentsActivity.this, comment, mId, mType);
+                    QuesAnswerDetailActivity.show(CommentsActivity.this, mComment, mId, mType);
+                } else {
+                    mShareCommentDialog.show();
                 }
             }
         });
