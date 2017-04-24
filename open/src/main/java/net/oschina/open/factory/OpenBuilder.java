@@ -1,7 +1,9 @@
 package net.oschina.open.factory;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -19,7 +21,6 @@ import com.sina.weibo.sdk.utils.Utility;
 import com.tencent.connect.share.QQShare;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.sdk.modelmsg.WXImageObject;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -41,6 +42,31 @@ import java.io.IOException;
  */
 public class OpenBuilder {
     private Activity activity;
+
+    public static String saveShare(Bitmap bitmap) {
+        FileOutputStream os = null;
+        String url = null;
+        try {
+            File file = new File(url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .getAbsolutePath() + File.separator + "开源中国/share/");
+            if (!file.exists())
+                file.mkdirs();
+            url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .getAbsolutePath() + File.separator + "开源中国/share/" +
+                    System.currentTimeMillis() + ".jpg";
+            os = new FileOutputStream(url);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bitmap != null && !bitmap.isRecycled())
+                bitmap.recycle();
+            close(os);
+        }
+        return url;
+    }
 
     public static OpenBuilder with(Activity activity) {
         OpenBuilder builder = new OpenBuilder();
@@ -140,7 +166,7 @@ public class OpenBuilder {
         }
     }
 
-     static void close(Closeable... closeables) {
+    static void close(Closeable... closeables) {
         if (closeables == null || closeables.length == 0)
             return;
         for (Closeable closeable : closeables) {
@@ -170,8 +196,8 @@ public class OpenBuilder {
 
         public void share(Share share, Callback callback) {
             IWeiboShareAPI weiBoShareSDK = WeiboShareSDK.createWeiboAPI(activity, appKey, false);
-            if(share.getThumbBitmap()!= null){
-                shareLocalImage(weiBoShareSDK,share,callback);
+            if (share.getThumbBitmap() != null) {
+                shareLocalImage(weiBoShareSDK, share, callback);
                 return;
             }
             if (!(weiBoShareSDK.isWeiboAppInstalled()
@@ -220,7 +246,7 @@ public class OpenBuilder {
             }
         }
 
-        private void shareLocalImage(IWeiboShareAPI api,Share share, Callback callback) {
+        private void shareLocalImage(IWeiboShareAPI api, Share share, Callback callback) {
             WeiboMultiMessage msg = new WeiboMultiMessage();
             ImageObject img = new ImageObject();
             img.setImageObject(share.getThumbBitmap());
@@ -229,9 +255,9 @@ public class OpenBuilder {
             multRequest.multiMessage = msg;
             //以当前时间戳为唯一识别符
             multRequest.transaction = String.valueOf(System.currentTimeMillis());
-            if(api.sendRequest(activity,multRequest)){
+            if (api.sendRequest(activity, multRequest)) {
                 callback.onSuccess();
-            }else {
+            } else {
                 callback.onFailed();
             }
         }
@@ -333,15 +359,16 @@ public class OpenBuilder {
          * 单纯分享图片
          */
         private void share(Bitmap bitmap, int scene) {
-            IWXAPI api = init();
-            WXImageObject imageObject = new WXImageObject(bitmap);
-            WXMediaMessage msg = new WXMediaMessage();
-            msg.mediaObject = imageObject;
-            SendMessageToWX.Req req = new SendMessageToWX.Req();
-            req.transaction = OpenUtils.buildTransaction("img");
-            req.message = msg;
-            req.scene = scene;
-            api.sendReq(req);
+            String url = saveShare(bitmap);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            Uri uri = Uri.fromFile(new File(url));
+            intent.putExtra(Intent.EXTRA_STREAM, uri);//uri为你要分享的图片的uri
+            intent.setType("image/*");
+            intent.setClassName("com.tencent.mm", scene == SendMessageToWX.Req.WXSceneTimeline ?
+                    "com.tencent.mm.ui.tools.ShareToTimeLineUI"
+            :"com.tencent.mm.ui.tools.ShareImgUI");
+            activity.startActivityForResult(intent, 1);
         }
     }
 

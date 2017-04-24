@@ -313,26 +313,7 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
                 if (About.check(mAboutShare))
                     TweetPublishActivity.show(getContext(), null, null, mAboutShare);
                 if (isOnlyBitmap && mShare.getThumbBitmap() != null) {
-                    FileOutputStream os = null;
-                    String url = null;
-                    try {
-                        Bitmap bitmap = share.getThumbBitmap();
-                        File file = new File(url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                                .getAbsolutePath() + File.separator + "开源中国/share/");
-                        if (!file.exists())
-                            file.mkdirs();
-                        url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                                .getAbsolutePath() + File.separator + "开源中国/share/" +
-                                System.currentTimeMillis() + ".jpg";
-                        os = new FileOutputStream(url);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-                        os.flush();
-                        os.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        close(os);
-                    }
+                    String url = OpenBuilder.saveShare(share.getThumbBitmap());
                     if (TextUtils.isEmpty(url)) return;
                     TweetPublishActivity.show(getContext(), false, url);
                 }
@@ -359,7 +340,6 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
                 cancelLoading();
                 break;
         }
-
     }
 
     private void hideWaitDialog() {

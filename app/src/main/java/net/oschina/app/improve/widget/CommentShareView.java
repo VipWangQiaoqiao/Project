@@ -32,7 +32,6 @@ import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
-import net.oschina.common.utils.BitmapUtil;
 
 import java.io.File;
 
@@ -144,14 +143,19 @@ public class CommentShareView extends NestedScrollView implements Runnable {
     }
 
     private static Bitmap create(View v) {
-        int w = v.getWidth();
-        int h = v.getHeight();
-        Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_4444);
-        Canvas c = new Canvas(bmp);
-        c.drawColor(Color.WHITE);
-        v.layout(0, 0, w, h);
-        v.draw(c);
-        return BitmapUtil.scaleBitmap(bmp, 1440, 2560, true);
+        try {
+            int w = v.getWidth();
+            int h = v.getHeight();
+            Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
+            Canvas c = new Canvas(bmp);
+            c.drawColor(Color.WHITE);
+            v.layout(0, 0, w, h);
+            v.draw(c);
+            return bmp;
+        } catch (OutOfMemoryError error) {
+            error.printStackTrace();
+            return null;
+        }
     }
 
     static class CommentShareAdapter extends BaseRecyclerAdapter<Comment> {
