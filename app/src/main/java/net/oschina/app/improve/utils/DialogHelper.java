@@ -5,10 +5,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.comment.adapter.CommentItemAdapter;
+import net.oschina.app.improve.media.Util;
+
+import static android.view.View.OVER_SCROLL_NEVER;
 
 /**
  * 通用的对话框
@@ -383,5 +391,22 @@ public final class DialogHelper {
         return getDialog(context)
                 .setView(view)
                 .setPositiveButton(positiveText, null);
+    }
+
+    public static AlertDialog.Builder getRecyclerViewDialog(Context context, BaseRecyclerAdapter.OnItemClickListener listener) {
+        RecyclerView recyclerView = new RecyclerView(context);
+        RecyclerView.LayoutParams params =
+                new GridLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        recyclerView.setPadding(Util.dipTopx(context, 16), Util.dipTopx(context, 24),
+                Util.dipTopx(context, 16), Util.dipTopx(context, 24));
+        recyclerView.setLayoutParams(params);
+        recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+        CommentItemAdapter adapter = new CommentItemAdapter(context);
+        adapter.setOnItemClickListener(listener);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setOverScrollMode(OVER_SCROLL_NEVER);
+        return getDialog(context)
+                .setView(recyclerView)
+                .setPositiveButton(null, null);
     }
 }

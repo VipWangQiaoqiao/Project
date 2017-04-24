@@ -220,7 +220,7 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                     break;
             }
             mTextApplyStatus.setText(getResources().getString(applyStr));
-            mTextApplyStatus.setText(getString(getApplyStatusStrId(eventApplyStatus)));
+           // mTextApplyStatus.setText(getString(getApplyStatusStrId(eventApplyStatus)));
         }
     }
 

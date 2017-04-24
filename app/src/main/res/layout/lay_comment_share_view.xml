@@ -73,8 +73,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:contentDescription="@string/app_name"
-                android:src="@mipmap/btn_qrcode"
-                android:tint="#111111" />
+                android:src="@mipmap/qrcode_oschina" />
         </LinearLayout>
 
         <TextView
