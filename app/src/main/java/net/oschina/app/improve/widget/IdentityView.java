@@ -95,16 +95,14 @@ public class IdentityView extends AppCompatTextView {
     }
 
     private void initBorder() {
-        if (mWipeOffBorder || mIdentity == null || !mIdentity.officialMember) {
-            mDrawable = null;
-            setBackground(null);
-            return;
-        }
+//        if (mWipeOffBorder || mIdentity == null || !mIdentity.officialMember) {
+//            mDrawable = null;
+//            setBackground(null);
+//            return;
+//        }
 
         if (mDrawable == null) {
-            float radius = getHeight() / 2f;
-            if (radius <= 0)
-                radius = TDevice.dipToPx(getResources(), 4);
+            float radius = 4f;
 
             GradientDrawable gradientDrawable = new GradientDrawable();
             gradientDrawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
@@ -127,7 +125,7 @@ public class IdentityView extends AppCompatTextView {
 
         final GradientDrawable drawable = mDrawable;
         if (drawable != null) {
-            drawable.setCornerRadius(h / 2f);
+            drawable.setCornerRadius(4);
         }
     }
 }

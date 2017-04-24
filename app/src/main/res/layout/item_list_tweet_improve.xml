@@ -54,7 +54,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/lay_4"
                     android:layout_marginRight="16dp"
-                    app:oscColor="#9d9d9d"
                     app:oscWipeOffBorder="true" />
 
             </LinearLayout>
