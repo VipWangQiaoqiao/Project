@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -55,7 +56,7 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
     }
 
     @Override
-    public void showGetSignUpOptionsSuccess(List<SignUpEventOptions> options) {
+    public void showGetSignUpOptionsSuccess(final List<SignUpEventOptions> options) {
         mLayoutRoot.removeAllViews();
         for (SignUpEventOptions option : options) {
             View view = ViewFactory.createView(getActivity(), mInflater, option);
@@ -66,6 +67,12 @@ public class SignUpFragment extends BaseFragment implements SignUpContract.View 
         view.findViewById(R.id.btn_sign_up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                for (SignUpEventOptions option : options) {
+                   if(TextUtils.isEmpty(option.getValue()) && option.isRequired()){
+                       SimplexToast.show(mContext,"请完善报名信息");
+                       return;
+                   }
+                }
                 mPresenter.signUpEvent(mSourceId);
                 mDialog.setMessage("正在提交报名...");
                 mDialog.show();
