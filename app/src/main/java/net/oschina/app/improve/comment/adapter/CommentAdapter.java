@@ -1,7 +1,6 @@
 package net.oschina.app.improve.comment.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.StringRes;
@@ -122,8 +121,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
         TextView mVoteCount;
         @Bind(R.id.btn_vote)
         ImageView mVote;
-        @Bind(R.id.btn_comment)
-        ImageView mComment;
 
         @Bind(R.id.lay_refer)
         CommentReferView mCommentReferView;
@@ -162,20 +159,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
             mName.setText(name);
             mPubDate.setText(String.format("%s", StringUtils.formatSomeAgo(comment.getPubDate())));
 
-            mComment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if (!AccountHelper.isLogin()) {
-                        LoginActivity.show((Activity) mComment.getContext(), 1);
-                        return;
-                    }
-                    commentBar.getBottomSheet().getBtnCommit().setTag(comment);
-
-                    commentBar.getBottomSheet().show(String.format("%s %s",
-                            mComment.getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-                }
-            });
 
             if (commentType == OSChinaApi.COMMENT_QUESTION || commentType == OSChinaApi.COMMENT_EVENT
                     || commentType == OSChinaApi.COMMENT_BLOG || commentType == OSChinaApi.COMMENT_TRANSLATION
@@ -183,22 +166,10 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                 mVoteCount.setVisibility(View.GONE);
                 mVote.setVisibility(View.GONE);
 
-                if (commentType == OSChinaApi.COMMENT_SOFT) {
-                    mComment.setVisibility(View.GONE);
-                } else {
-                    if (comment.isBest()) {
-                        mComment.setImageResource(R.mipmap.label_best_answer);
-                        mComment.setEnabled(false);
-                    } else {
-                        mComment.setEnabled(true);
-                        mComment.setImageResource(R.mipmap.ic_comment_30);
-                    }
-                }
             } else {
                 mVoteCount.setText(String.valueOf(comment.getVote()));
                 mVoteCount.setVisibility(View.VISIBLE);
                 mVote.setVisibility(View.VISIBLE);
-                mComment.setEnabled(true);
                 if (comment.getVoteState() == 1) {
                     mVote.setImageResource(R.mipmap.ic_thumbup_actived);
                     mVote.setTag(true);
