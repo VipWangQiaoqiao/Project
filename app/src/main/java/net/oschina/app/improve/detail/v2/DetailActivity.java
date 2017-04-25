@@ -171,7 +171,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
             mCommentCountView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CommentsActivity.show(DetailActivity.this, mBean.getId(), mBean.getType(), OSChinaApi.COMMENT_NEW_ORDER);
+                    CommentsActivity.show(DetailActivity.this, mBean.getId(), mBean.getType(), OSChinaApi.COMMENT_NEW_ORDER,mBean.getTitle());
                 }
             });
         }

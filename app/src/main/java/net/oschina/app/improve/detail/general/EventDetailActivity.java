@@ -122,7 +122,7 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.lay_comment:
-                CommentsActivity.show(this, mBean.getId(), mBean.getType(), 2);
+                CommentsActivity.show(this, mBean.getId(), mBean.getType(), 2,mBean.getTitle());
                 break;
             case R.id.ll_sign:
                 if (!AccountHelper.isLogin()) {

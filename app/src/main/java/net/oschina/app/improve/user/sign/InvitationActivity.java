@@ -11,7 +11,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.base.activities.BackActivity;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.utils.DialogHelper;
@@ -23,7 +23,7 @@ import butterknife.OnClick;
  * 邀请函
  * Created by haibin on 2017/4/11.
  */
-public class InvitationActivity extends BackActivity implements View.OnClickListener {
+public class InvitationActivity extends BaseBackActivity implements View.OnClickListener {
     private ShareDialog mShareDialog;
     @Bind(R.id.iv_invitation)
     ImageView mImageInvitation;
@@ -116,13 +116,5 @@ public class InvitationActivity extends BackActivity implements View.OnClickList
         if (mShareDialog != null) {
             mShareDialog.dismiss();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        if(mBitmap!= null){
-//            mBitmap.recycle();
-//        }
     }
 }

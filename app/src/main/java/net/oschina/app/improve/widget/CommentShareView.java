@@ -63,7 +63,7 @@ public class CommentShareView extends NestedScrollView implements Runnable {
         mRecyclerComment.setAdapter(mAdapter);
         mShareDialog = new ShareDialog((Activity) context, -1);
         mDialog = DialogHelper.getProgressDialog(context);
-        mDialog.setMessage("正在创建分享...");
+        mDialog.setMessage("请稍后...");
         mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {

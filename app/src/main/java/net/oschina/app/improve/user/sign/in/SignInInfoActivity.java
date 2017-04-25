@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.base.activities.BackActivity;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.EventSignIn;
 import net.oschina.app.improve.bean.SubBean;
 
@@ -17,7 +17,7 @@ import butterknife.Bind;
  * Created by haibin on 2017/4/12.
  */
 
-public class SignInInfoActivity extends BackActivity {
+public class SignInInfoActivity extends BaseBackActivity {
     @Bind(R.id.tv_event_name)
     TextView mTextEventName;
     @Bind(R.id.tv_cost)

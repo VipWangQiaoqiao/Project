@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.view.View;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.base.activities.BackActivity;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 
 import butterknife.Bind;
@@ -15,7 +15,7 @@ import butterknife.Bind;
  * Created by haibin on 2017/4/11.
  */
 
-public class SignUpInfoActivity extends BackActivity implements SignUpContract.EmptyView {
+public class SignUpInfoActivity extends BaseBackActivity implements SignUpContract.EmptyView {
     private SignUpContract.Presenter mPresenter;
     @Bind(R.id.emptyLayout)
     EmptyLayout mEmptyLayout;

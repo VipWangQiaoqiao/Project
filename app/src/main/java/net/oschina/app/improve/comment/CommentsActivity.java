@@ -140,12 +140,14 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
     private PageBean<Comment> mPageBean;
     private AlertDialog mShareCommentDialog;
     private Comment mComment;
+    private String mShareTitle;
 
-    public static void show(Context context, long id, int type, int order) {
+    public static void show(Context context, long id, int type, int order, String title) {
         Intent intent = new Intent(context, CommentsActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("type", type);
         intent.putExtra("order", order);
+        intent.putExtra("title", title);
         context.startActivity(intent);
     }
 
@@ -159,6 +161,7 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
         mId = bundle.getLong("id");
         mType = bundle.getInt("type");
         mOrder = bundle.getInt("order");
+        mShareTitle = bundle.getString("title");
         return super.initBundle(bundle);
     }
 
@@ -174,7 +177,7 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                         break;
                     case 1:
                         if (!AccountHelper.isLogin()) {
-                            LoginActivity.show((Activity) CommentsActivity.this, 1);
+                            LoginActivity.show(CommentsActivity.this, 1);
                             return;
                         }
                         mDelegation.getBottomSheet().getBtnCommit().setTag(mComment);
@@ -183,7 +186,7 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                                 getString(R.string.reply_hint), mComment.getAuthor().getName()));
                         break;
                     case 2:
-                        mShareView.init("科技公司现中年危机，裁下来的人该何去何从", mComment);
+                        mShareView.init(mShareTitle, mComment);
                         mShareView.share();
                         break;
                 }
@@ -278,14 +281,6 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                 } else {
                     mShareCommentDialog.show();
                 }
-            }
-        });
-        mCommentAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
-            @Override
-            public void onLongClick(int position, long itemId) {
-                Comment comment = mCommentAdapter.getItem(position);
-                mShareView.init("科技公司现中年危机，裁下来的人该何去何从", comment);
-                mShareView.share();
             }
         });
         mLayComments.setAdapter(mCommentAdapter);
