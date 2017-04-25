@@ -68,18 +68,6 @@
                 tools:text="12楼  6分钟前" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/btn_vote"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/app_name"
-            android:paddingBottom="18dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/ic_thumb_normal"
-            tools:ignore="RtlHardcoded" />
-
         <TextView
             android:id="@+id/tv_vote_count"
             android:layout_width="wrap_content"
@@ -92,16 +80,15 @@
             tools:text="12" />
 
         <ImageView
-            android:id="@+id/btn_comment"
+            android:id="@+id/btn_vote"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="2dp"
             android:contentDescription="@string/app_name"
             android:paddingBottom="18dp"
-            android:paddingLeft="12dp"
+            android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_comment_30"
+            android:src="@mipmap/ic_thumb_normal"
             tools:ignore="RtlHardcoded" />
 
     </LinearLayout>
