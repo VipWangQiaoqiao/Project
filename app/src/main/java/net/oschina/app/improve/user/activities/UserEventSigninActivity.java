@@ -30,7 +30,9 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.EventSignIn;
+import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.user.sign.in.SignInInfoActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.utils.parser.RichTextParser;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -426,29 +428,39 @@ public class UserEventSigninActivity extends BaseBackActivity {
         int optStatus = eventSignin.getOptStatus();
         switch (optStatus) {
             case 0x01://签到成功
-                mBtSubmit.setEnabled(false);
-                mCkLabel.setVisibility(View.GONE);
-                mLayInputBg.setVisibility(View.GONE);
-                mLayUserInfo.setVisibility(View.GONE);
-                mTvNotice.setVisibility(View.VISIBLE);
-                mTvNotice.setText(eventSignin.getMessage());
-                if (!TextUtils.isEmpty(eventSignin.getCostMessage())) {
-                    mTvCost.setVisibility(View.VISIBLE);
-                    mTvCost.setText(eventSignin.getCostMessage());
-                }
+                SubBean bean = new SubBean();
+                bean.setTitle(mEventDetail.getTitle());
+                SignInInfoActivity.show(this,bean,eventSignin);
+                finish();
+//                return;
+//                mBtSubmit.setEnabled(false);
+//                mCkLabel.setVisibility(View.GONE);
+//                mLayInputBg.setVisibility(View.GONE);
+//                mLayUserInfo.setVisibility(View.GONE);
+//                mTvNotice.setVisibility(View.VISIBLE);
+//                mTvNotice.setText(eventSignin.getMessage());
+//                if (!TextUtils.isEmpty(eventSignin.getCostMessage())) {
+//                    mTvCost.setVisibility(View.VISIBLE);
+//                    mTvCost.setText(eventSignin.getCostMessage());
+//                }
                 break;
             case 0x03://活动已结束／活动报名已截止
             case 0x04://您已签到
-                mCkLabel.setVisibility(View.GONE);
-                mLayInputBg.setVisibility(View.GONE);
-                mTvNotice.setVisibility(View.VISIBLE);
-                mTvNotice.setText(eventSignin.getMessage());
-                mLayUserInfo.setVisibility(View.GONE);
-                mBtSubmit.setEnabled(false);
-                if (!TextUtils.isEmpty(eventSignin.getCostMessage())) {
-                    mTvCost.setVisibility(View.VISIBLE);
-                    mTvCost.setText(eventSignin.getCostMessage());
-                }
+                SubBean bean1 = new SubBean();
+                bean1.setTitle(mEventDetail.getTitle());
+                SignInInfoActivity.show(this,bean1,eventSignin);
+                finish();
+
+//                mCkLabel.setVisibility(View.GONE);
+//                mLayInputBg.setVisibility(View.GONE);
+//                mTvNotice.setVisibility(View.VISIBLE);
+//                mTvNotice.setText(eventSignin.getMessage());
+//                mLayUserInfo.setVisibility(View.GONE);
+//                mBtSubmit.setEnabled(false);
+//                if (!TextUtils.isEmpty(eventSignin.getCostMessage())) {
+//                    mTvCost.setVisibility(View.VISIBLE);
+//                    mTvCost.setText(eventSignin.getCostMessage());
+//                }
                 break;
             case 0x02://活动进行中未报名
                 AppContext.showToastShort(eventSignin.getMessage());
