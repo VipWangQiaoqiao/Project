@@ -19,6 +19,7 @@ import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.bean.comment.Refer;
 import net.oschina.app.improve.bean.comment.Reply;
+import net.oschina.app.improve.utils.parser.StringParser;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
@@ -111,28 +112,35 @@ public final class CommentsUtil {
             ((TweetTextView) textView).setDispatchToParent(true);
         }
 
-        str = TweetTextView.modifyPath(str);
-        Spanned span = Html.fromHtml(str);
-        //str = "[icon] " + str + " [icon]";
-        Drawable drawableLeft = resources.getDrawable(R.mipmap.ic_quote_left);
-        drawableLeft.setBounds(0, 0, drawableLeft.getIntrinsicWidth(), drawableLeft.getIntrinsicHeight());
-        ImageSpan imageSpanLeft = new ImageSpan(drawableLeft, ImageSpan.ALIGN_BASELINE);
+        Spanned span = StringParser.getInstance().parse(textView.getContext(),str);
 
-        Drawable drawableRight = resources.getDrawable(R.mipmap.ic_quote_right);
-        drawableRight.setBounds(0, 0, drawableRight.getIntrinsicWidth(), drawableRight.getIntrinsicHeight());
-        ImageSpan imageSpanRight = new ImageSpan(drawableRight, ImageSpan.ALIGN_BASELINE);
+        if(isShare){
+            Drawable drawableLeft = resources.getDrawable(R.mipmap.ic_quote_left);
+            drawableLeft.setBounds(0, 0, drawableLeft.getIntrinsicWidth(), drawableLeft.getIntrinsicHeight());
+            ImageSpan imageSpanLeft = new ImageSpan(drawableLeft, ImageSpan.ALIGN_BASELINE);
 
-        span = InputHelper.displayEmoji(resources, span.toString());
-        SpannableStringBuilder sb = new SpannableStringBuilder();
-        sb.append("[icon] ");
-        sb.append(span);
-        sb.append(" [icon]");
-        sb.setSpan(imageSpanLeft, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        sb.setSpan(imageSpanRight, sb.length() - 6, sb.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            Drawable drawableRight = resources.getDrawable(R.mipmap.ic_quote_right);
+            drawableRight.setBounds(0, 0, drawableRight.getIntrinsicWidth(), drawableRight.getIntrinsicHeight());
+            ImageSpan imageSpanRight = new ImageSpan(drawableRight, ImageSpan.ALIGN_BASELINE);
 
-        //
-        textView.setText(sb);
-        textView.setTextSize(26.0f);
-        MyURLSpan.parseLinkText(textView, span);
+            span = InputHelper.displayEmoji(resources, span.toString());
+            SpannableStringBuilder sb = new SpannableStringBuilder();
+            sb.append("[icon]  ");
+            sb.append(span);
+            sb.append("  [icon]");
+            sb.setSpan(imageSpanLeft, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            sb.setSpan(imageSpanRight, sb.length() - 6, sb.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+            textView.setText(sb);
+            textView.setTextSize(26.0f);
+            textView.setText(sb);
+            //MyURLSpan.parseLinkText(textView, span);
+        }else {
+            span = InputHelper.displayEmoji(resources, span.toString());
+            textView.setText(span);
+            textView.setTextSize(14.0f);
+            textView.setText(span);
+            //MyURLSpan.parseLinkText(textView, span);
+        }
     }
 }

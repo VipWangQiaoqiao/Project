@@ -41,8 +41,10 @@ import com.dtr.zxing.decode.DecodeThread;
 import com.dtr.zxing.utils.BeepManager;
 import com.dtr.zxing.utils.CaptureActivityHandler;
 import com.dtr.zxing.utils.InactivityTimer;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.Result;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
@@ -53,11 +55,13 @@ import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.improve.detail.sign.SignUpActivity;
+import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.detail.general.EventDetailActivity;
 import net.oschina.app.improve.user.activities.UserEventSigninActivity;
-import net.oschina.app.improve.user.sign.in.SignInInfoActivity;
 import net.oschina.app.improve.user.sign.up.SignUpInfoActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -65,6 +69,7 @@ import net.oschina.app.util.XmlUtils;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -243,13 +248,43 @@ public final class CaptureActivity extends BaseActivity implements
         }
 
         if (url.contains("www.oschina.net/event/signin?event")) {
-            long sourceId = Long.valueOf(url.substring(url.indexOf("=") + 1));//2192570;2193441
-            if(AccountHelper.isLogin()){
-                SignUpInfoActivity.show(this,sourceId,2);
-            }else {
+            final long sourceId = Long.valueOf(url.substring(url.indexOf("=") + 1));//2192570;2193441
+            if (AccountHelper.isLogin()) {
+                OSChinaApi.getDetail(5, "", sourceId, new TextHttpResponseHandler() {
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        if (mFlash != null) {
+                            SimplexToast.show(CaptureActivity.this, "请连接网络再试");
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        try {
+                            net.oschina.app.improve.bean.base.ResultBean<SubBean> resultBean = AppOperator.createGson().fromJson(responseString,
+                                    new TypeToken<net.oschina.app.improve.bean.base.ResultBean<SubBean>>() {
+                                    }.getType());
+                            if (resultBean.isSuccess()) {
+                                Map<String, Object> extra = resultBean.getResult().getExtra();
+                                if (Double.valueOf(extra.get("eventApplyStatus").toString()).intValue() != -1)
+                                    SignUpInfoActivity.show(CaptureActivity.this, sourceId, 2);
+                                else
+                                    EventDetailActivity.show(CaptureActivity.this, sourceId);
+                            } else {
+                                EventDetailActivity.show(CaptureActivity.this, sourceId);
+                            }
+                            finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            EventDetailActivity.show(CaptureActivity.this, sourceId);
+                            finish();
+                        }
+                    }
+                });
+            } else {
                 UserEventSigninActivity.show(CaptureActivity.this, sourceId);
+                finish();
             }
-            finish();
             return;
         }
 

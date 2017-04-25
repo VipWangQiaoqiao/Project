@@ -18,9 +18,9 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 public class CommentItemAdapter extends BaseRecyclerAdapter<CommentItemAdapter.CommentItem> {
     public CommentItemAdapter(Context context) {
         super(context, NEITHER);
-        addItem(new CommentItem("复制", R.mipmap.ic_comment_copy));
-        addItem(new CommentItem("评论", R.mipmap.ic_comment_reply));
-        addItem(new CommentItem("分享", R.mipmap.ic_comment_share));
+        addItem(new CommentItem("复制", R.mipmap.ic_copy));
+        addItem(new CommentItem("评论", R.mipmap.ic_comment_40_pressed));
+        addItem(new CommentItem("分享", R.mipmap.ic_share_black_pressed));
     }
 
     @Override

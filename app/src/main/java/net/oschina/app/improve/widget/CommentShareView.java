@@ -215,8 +215,7 @@ public class CommentShareView extends NestedScrollView implements Runnable {
                 if (comment.getRefer() == null || comment.getRefer().length == 0) {
                     CommentsUtil.formatHtml(mTweetTextView.getResources(), mTweetTextView, comment.getContent(), true);
                 } else {
-                    mTweetTextView.setTextSize(14.0f);
-                    CommentsUtil.formatHtml(mTweetTextView.getResources(), mTweetTextView, comment.getContent());
+                    CommentsUtil.formatHtml(mTweetTextView.getResources(), mTweetTextView, comment.getContent(), false);
                 }
 
             }
