@@ -182,9 +182,6 @@ public class CommentShareView extends NestedScrollView implements Runnable {
             @Bind(R.id.iv_avatar)
             PortraitView mIvAvatar;
 
-            @Bind(R.id.identityView)
-            IdentityView mIdentityView;
-
             @Bind(R.id.tv_name)
             TextView mName;
             @Bind(R.id.tv_pub_date)
@@ -203,7 +200,6 @@ public class CommentShareView extends NestedScrollView implements Runnable {
 
             @SuppressLint("DefaultLocale")
             void addComment(final Comment comment) {
-                mIdentityView.setup(comment.getAuthor());
                 mIvAvatar.setup(comment.getAuthor());
                 String name = comment.getAuthor().getName();
                 if (TextUtils.isEmpty(name))

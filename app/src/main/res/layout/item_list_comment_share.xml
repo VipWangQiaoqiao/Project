@@ -49,13 +49,6 @@
                     android:textSize="14sp"
                     tools:text="年轻的小蜜蜂" />
 
-                <net.oschina.app.improve.widget.IdentityView
-                    android:id="@+id/identityView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/lay_4"
-                    android:layout_marginRight="@dimen/lay_4" />
-
             </LinearLayout>
 
             <TextView

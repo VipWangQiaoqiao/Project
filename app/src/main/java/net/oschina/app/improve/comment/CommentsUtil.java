@@ -10,6 +10,7 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,9 +113,9 @@ public final class CommentsUtil {
             ((TweetTextView) textView).setDispatchToParent(true);
         }
 
-        Spanned span = StringParser.getInstance().parse(textView.getContext(),str);
+        Spanned span = StringParser.getInstance().parse(textView.getContext(), str);
 
-        if(isShare){
+        if (isShare) {
             Drawable drawableLeft = resources.getDrawable(R.mipmap.ic_quote_left);
             drawableLeft.setBounds(0, 0, drawableLeft.getIntrinsicWidth(), drawableLeft.getIntrinsicHeight());
             ImageSpan imageSpanLeft = new ImageSpan(drawableLeft, ImageSpan.ALIGN_BASELINE);
@@ -132,10 +133,14 @@ public final class CommentsUtil {
             sb.setSpan(imageSpanRight, sb.length() - 6, sb.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
             textView.setText(sb);
-            textView.setTextSize(26.0f);
-            textView.setText(sb);
+            float size = 26.0f;
+            int count = sb.length() / 32;
+            if (count > 3) {
+                size = size / count * 3;
+            }
+            textView.setTextSize(Math.max(16.0f, size));
             //MyURLSpan.parseLinkText(textView, span);
-        }else {
+        } else {
             span = InputHelper.displayEmoji(resources, span.toString());
             textView.setText(span);
             textView.setTextSize(14.0f);
