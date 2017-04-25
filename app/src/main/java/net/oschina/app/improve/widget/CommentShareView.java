@@ -63,7 +63,7 @@ public class CommentShareView extends NestedScrollView implements Runnable {
         mRecyclerComment.setAdapter(mAdapter);
         mShareDialog = new ShareDialog((Activity) context, -1);
         mDialog = DialogHelper.getProgressDialog(context);
-        mDialog.setMessage("正在创建分享...");
+        mDialog.setMessage("请稍后...");
         mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -215,8 +215,7 @@ public class CommentShareView extends NestedScrollView implements Runnable {
                 if (comment.getRefer() == null || comment.getRefer().length == 0) {
                     CommentsUtil.formatHtml(mTweetTextView.getResources(), mTweetTextView, comment.getContent(), true);
                 } else {
-                    mTweetTextView.setTextSize(14.0f);
-                    CommentsUtil.formatHtml(mTweetTextView.getResources(), mTweetTextView, comment.getContent());
+                    CommentsUtil.formatHtml(mTweetTextView.getResources(), mTweetTextView, comment.getContent(), false);
                 }
 
             }

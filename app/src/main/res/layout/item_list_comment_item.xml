@@ -11,11 +11,12 @@
 
     <ImageView
         android:id="@+id/iv_comment"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="@dimen/lay_8"
+        android:layout_marginRight="@dimen/lay_8"
         android:contentDescription="@string/comment_hint"
-        android:src="@mipmap/ic_comment_copy" />
+        android:src="@mipmap/ic_comment_40_pressed" />
 
     <TextView
         android:id="@+id/tv_comment"

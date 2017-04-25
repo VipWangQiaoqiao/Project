@@ -350,7 +350,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (mId != 0 && mType != 0)
-            CommentsActivity.show(getContext(), mId, mType, OSChinaApi.COMMENT_NEW_ORDER);
+            CommentsActivity.show(getContext(), mId, mType, OSChinaApi.COMMENT_NEW_ORDER, mTitle.getText().toString());
     }
 
     /**

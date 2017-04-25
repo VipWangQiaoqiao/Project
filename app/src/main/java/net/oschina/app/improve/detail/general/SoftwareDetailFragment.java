@@ -73,7 +73,7 @@ public class SoftwareDetailFragment extends DetailFragment {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_comment:
-                CommentsActivity.show(mContext, mBean.getId(), mBean.getType(), OSChinaApi.COMMENT_NEW_ORDER);
+                CommentsActivity.show(mContext, mBean.getId(), mBean.getType(), OSChinaApi.COMMENT_NEW_ORDER,mBean.getTitle());
                 break;
             case R.id.ll_fav:
                 if (!AccountHelper.isLogin()) {

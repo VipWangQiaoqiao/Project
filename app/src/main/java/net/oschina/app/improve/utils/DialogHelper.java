@@ -397,8 +397,8 @@ public final class DialogHelper {
         RecyclerView recyclerView = new RecyclerView(context);
         RecyclerView.LayoutParams params =
                 new GridLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        recyclerView.setPadding(Util.dipTopx(context, 16), Util.dipTopx(context, 24),
-                Util.dipTopx(context, 16), Util.dipTopx(context, 24));
+        recyclerView.setPadding(Util.dipTopx(context, 16), Util.dipTopx(context, 16),
+                Util.dipTopx(context, 16), Util.dipTopx(context, 16));
         recyclerView.setLayoutParams(params);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
         CommentItemAdapter adapter = new CommentItemAdapter(context);

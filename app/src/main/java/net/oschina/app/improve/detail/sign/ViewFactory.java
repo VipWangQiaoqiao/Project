@@ -41,7 +41,7 @@ final class ViewFactory {
                 view = getEditTextView(activity, inflater, options, InputType.TYPE_CLASS_TEXT);
                 break;
             case SignUpEventOptions.FORM_TYPE_TEXT_AREA:
-                view = getEditTextArea(activity, inflater, options);
+                //view = getEditTextArea(activity, inflater, options);
                 break;
             case SignUpEventOptions.FORM_TYPE_SELECT:
                 view = getSelect(activity, inflater, options);
@@ -73,7 +73,7 @@ final class ViewFactory {
     }
 
     /**
-     * 当行输入
+     * 单行输入
      */
     private static View getEditTextView(Activity activity, LayoutInflater inflater, final SignUpEventOptions options, int inputType) {
         View view = inflater.inflate(R.layout.event_sign_up_edit_text, null);
