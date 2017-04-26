@@ -10,7 +10,7 @@ import net.oschina.app.improve.bean.comment.Comment;
  * on 2016/11/30.
  */
 
- interface DetailContract {
+interface DetailContract {
 
     interface EmptyView {
         void hideEmptyLayout();
@@ -40,6 +40,8 @@ import net.oschina.app.improve.bean.comment.Comment;
         void showAddRelationSuccess(boolean isRelation, int strId);
 
         void showAddRelationError();
+
+        void showScrollToTop();
     }
 
     interface Presenter extends BasePresenter {
@@ -60,5 +62,7 @@ import net.oschina.app.improve.bean.comment.Comment;
         );//添加评论
 
         void addUserRelation(long authorId);
+
+        void scrollToTop();
     }
 }

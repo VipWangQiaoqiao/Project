@@ -172,19 +172,19 @@
             android:name=".improve.detail.general.NewsDetailActivity"
             android:label="资讯详情"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
+            android:theme="@style/App.Theme.Tweet.Main"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.detail.general.BlogDetailActivity"
             android:label="博客详情"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
+            android:theme="@style/App.Theme.Tweet.Main"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.detail.general.QuestionDetailActivity"
             android:label="问答详情"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
+            android:theme="@style/App.Theme.Tweet.Main"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.detail.general.EventDetailActivity"
@@ -216,7 +216,7 @@
             android:name=".improve.detail.general.SoftwareDetailActivity"
             android:label="软件详情"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent"
+            android:theme="@style/App.Theme.Tweet.Main"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".improve.tweet.activities.TweetDetailActivity"
