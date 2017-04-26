@@ -132,21 +132,7 @@ public class OpenBuilder {
         }
 
         private void shareLocalImage(Share share, IUiListener listener, Callback callback) {
-            FileOutputStream os = null;
-            String url = null;
-            try {
-                Bitmap bitmap = share.getThumbBitmap();
-                url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        .getAbsolutePath() + File.separator + "开源中国/share.jpg";
-                os = new FileOutputStream(url);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-                os.flush();
-                os.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                close(os);
-            }
+            String url = saveShare(share.getThumbBitmap());
             if (TextUtils.isEmpty(url)) return;
             Bundle params = new Bundle();
             params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, url);
@@ -238,11 +224,13 @@ public class OpenBuilder {
             // 3. 发送请求消息到微博，唤起微博分享界面
             if ((!weiBoShareSDK.sendRequest(activity, request)) && callback != null) {
                 callback.onFailed();
-                bitmap.recycle();
+                if (!bitmap.isRecycled())
+                    bitmap.recycle();
             } else {
                 if (callback != null)
                     callback.onSuccess();
-                bitmap.recycle();
+                if (!bitmap.isRecycled())
+                    bitmap.recycle();
             }
         }
 
@@ -333,7 +321,8 @@ public class OpenBuilder {
             if (bitmap == null) {
                 bitmap = OpenUtils.getShareBitmap(activity, share.getBitmapResID());
             }
-            msg.setThumbImage(bitmap);
+            if (!bitmap.isRecycled())
+                msg.setThumbImage(bitmap);
 
             //3.构造一个Req
             SendMessageToWX.Req req = new SendMessageToWX.Req();
@@ -347,11 +336,13 @@ public class OpenBuilder {
             //发送请求失败,回调
             if (!sendReq && callback != null) {
                 callback.onFailed();
-                bitmap.recycle();
+                if (!bitmap.isRecycled())
+                    bitmap.recycle();
             } else {
                 if (callback != null)
                     callback.onSuccess();
-                bitmap.recycle();
+                if (!bitmap.isRecycled())
+                    bitmap.recycle();
             }
         }
 
@@ -367,7 +358,7 @@ public class OpenBuilder {
             intent.setType("image/*");
             intent.setClassName("com.tencent.mm", scene == SendMessageToWX.Req.WXSceneTimeline ?
                     "com.tencent.mm.ui.tools.ShareToTimeLineUI"
-            :"com.tencent.mm.ui.tools.ShareImgUI");
+                    : "com.tencent.mm.ui.tools.ShareImgUI");
             activity.startActivityForResult(intent, 1);
         }
     }

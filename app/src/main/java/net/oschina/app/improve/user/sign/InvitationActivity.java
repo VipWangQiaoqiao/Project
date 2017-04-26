@@ -7,14 +7,16 @@ import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.utils.DialogHelper;
+
+import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -58,24 +60,8 @@ public class InvitationActivity extends BaseBackActivity implements View.OnClick
     private void tryLoadBitmap(final boolean showDialog) {
         getImageLoader().load(mUrl)
                 .asBitmap()
-                .listener(new RequestListener<String, Bitmap>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
-                        hideDialog();
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        mBitmap = resource;
-                        mShareDialog.bitmap(resource);
-                        hideDialog();
-                        if (showDialog) {
-                            mShareDialog.show();
-                        }
-                        return false;
-                    }
-                }).into(mImageInvitation);
+                .fitCenter()
+                .into(mImageInvitation);
     }
 
     @OnClick({R.id.btn_share, R.id.iv_invitation})
@@ -83,12 +69,32 @@ public class InvitationActivity extends BaseBackActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_share:
-                if (mBitmap != null) {
-                    mShareDialog.show();
-                } else {
-                    showWaitDialog();
-                    tryLoadBitmap(true);
-                }
+                showWaitDialog();
+                AppOperator.runOnThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            final Bitmap thumbBitmap =
+                                    getImageLoader()
+                                            .load(mUrl)
+                                            .asBitmap()
+                                            .fitCenter()
+                                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideDialog();
+                                    mShareDialog.bitmap(thumbBitmap);
+                                    mShareDialog.show();
+                                }
+                            });
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 break;
             case R.id.iv_invitation:
                 ImageGalleryActivity.show(this, mUrl);

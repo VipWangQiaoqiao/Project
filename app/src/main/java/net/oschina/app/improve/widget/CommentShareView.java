@@ -142,7 +142,7 @@ public class CommentShareView extends NestedScrollView implements Runnable {
         }
     }
 
-    private static Bitmap create(View v) {
+    public static Bitmap create(View v) {
         try {
             int w = v.getWidth();
             int h = v.getHeight();
