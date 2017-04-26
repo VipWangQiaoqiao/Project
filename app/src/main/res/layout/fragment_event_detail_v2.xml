@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nsv"
+        android:id="@+id/lay_nsv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
