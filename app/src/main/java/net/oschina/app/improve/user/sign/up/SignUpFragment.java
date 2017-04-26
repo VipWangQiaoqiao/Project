@@ -1,6 +1,7 @@
 package net.oschina.app.improve.user.sign.up;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import net.oschina.app.improve.bean.EventSignIn;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.user.sign.InvitationActivity;
 import net.oschina.app.improve.user.sign.in.SignInInfoActivity;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SimplexToast;
 
 import java.util.HashMap;
@@ -76,10 +78,10 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
         mType = bundle.getInt("type", 1);
     }
 
-    @OnClick({R.id.btn_sign_up,R.id.btn_cancel})
+    @OnClick({R.id.btn_sign_up, R.id.btn_cancel})
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_sign_up:
                 switch (mType) {
                     case 1:
@@ -91,7 +93,12 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
                 }
                 break;
             case R.id.btn_cancel:
-                mPresenter.cancelApply(mDetail.getId());
+                DialogHelper.getConfirmDialog(mContext, "", "是否确认取消？", "确定", "否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.cancelApply(mDetail.getId());
+                    }
+                }).show();
                 break;
         }
     }
@@ -116,9 +123,9 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
         mTextEventName.setText(detail.getTitle());
         HashMap<String, Object> extra = mDetail.getExtra();
         if (extra != null) {
-            int eventType =getExtraInt(extra.get("eventType"));
+            int eventType = getExtraInt(extra.get("eventType"));
             mBtnSignUp.setVisibility(eventType == 1 ? View.VISIBLE : View.GONE);
-            if(eventType != 1){
+            if (eventType != 1) {
                 mBtnCalcen.setVisibility(View.VISIBLE);
                 mBtnCalcen.setBackgroundResource(R.drawable.selector_event_sign);
                 mBtnCalcen.setTextColor(Color.WHITE);
@@ -158,7 +165,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showCancelApplySuccess(String message) {
-        SimplexToast.show(mContext,message);
+        SimplexToast.show(mContext, message);
         Intent intent = new Intent();
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
@@ -166,7 +173,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showCancelApplyFailure(String message) {
-        SimplexToast.show(mContext,message);
+        SimplexToast.show(mContext, message);
     }
 
     private String getExtraString(String key, Map<String, String> map) {
