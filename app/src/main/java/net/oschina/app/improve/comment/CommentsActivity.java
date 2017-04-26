@@ -1,11 +1,13 @@
 package net.oschina.app.improve.comment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,6 +51,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 import static net.oschina.app.R.id.tv_back_label;
 
@@ -57,7 +61,9 @@ import static net.oschina.app.R.id.tv_back_label;
  * on  16/11/17
  * desc:详情评论列表ui
  */
-public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAdapter.OnItemLongClickListener {
+public class CommentsActivity extends BaseBackActivity implements
+        BaseRecyclerAdapter.OnItemLongClickListener,
+        EasyPermissions.PermissionCallbacks {
 
     @Bind(R.id.lay_refreshLayout)
     RecyclerRefreshLayout mRefreshLayout;
@@ -187,7 +193,8 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
                         break;
                     case 2:
                         mShareView.init(mShareTitle, mComment);
-                        mShareView.share();
+                        //mShareView.share();
+                        saveToFileByPermission();
                         break;
                 }
                 mShareCommentDialog.dismiss();
@@ -475,6 +482,46 @@ public class CommentsActivity extends BaseBackActivity implements BaseRecyclerAd
             }
         }).show();
 
+    }
+
+    private static final int PERMISSION_ID = 0x0001;
+
+    @SuppressWarnings("unused")
+    @AfterPermissionGranted(PERMISSION_ID)
+    public void saveToFileByPermission() {
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, permissions)) {
+            mShareView.share();
+        } else {
+            EasyPermissions.requestPermissions(this, "请授予保存图片权限", PERMISSION_ID, permissions);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        DialogHelper.getConfirmDialog(this, "", "没有权限, 你需要去设置中开启读取手机存储权限.", "去设置", "取消", false, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+                //finish();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //finish();
+            }
+        }).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,@NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Override
