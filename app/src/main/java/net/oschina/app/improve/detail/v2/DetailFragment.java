@@ -162,10 +162,6 @@ public abstract class DetailFragment extends BaseFragment implements
         return object == null ? "" : object.toString();
     }
 
-    protected int getExtraInt(Object object) {
-        return object == null ? 0 : Double.valueOf(object.toString()).intValue();
-    }
-
     protected abstract int getCommentOrder();
 
     @Override
@@ -187,5 +183,11 @@ public abstract class DetailFragment extends BaseFragment implements
         QuickOptionDialogHelper.with(getContext())
                 .addCopy(HTMLUtil.delHTMLTag(text))
                 .show();
+    }
+
+    @Override
+    public void showScrollToTop() {
+        if (mViewScroller != null)
+            mViewScroller.scrollTo(0, 0);
     }
 }

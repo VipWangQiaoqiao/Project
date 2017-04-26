@@ -1,11 +1,13 @@
 package net.oschina.app.improve.detail.v2;
 
 import android.annotation.SuppressLint;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,7 +17,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
-import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.base.activities.BackActivity;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
@@ -34,6 +36,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +46,7 @@ import java.util.regex.Pattern;
  * on 2016/11/30.
  */
 
-public abstract class DetailActivity extends BaseBackActivity implements
+public abstract class DetailActivity extends BackActivity implements
         DetailContract.EmptyView, Runnable,
         OnCommentClickListener {
 
@@ -162,6 +165,15 @@ public abstract class DetailActivity extends BaseBackActivity implements
                 mPresenter.getDetail();
             }
         });
+        if (mToolBar != null)
+            mToolBar.setOnTouchListener(new OnDoubleTouchListener() {
+                @Override
+                void onMultiTouch(View v, MotionEvent event, int touchCount) {
+                    if (touchCount == 2) {
+                        mPresenter.scrollToTop();
+                    }
+                }
+            });
     }
 
     @Override
@@ -171,7 +183,7 @@ public abstract class DetailActivity extends BaseBackActivity implements
             mCommentCountView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CommentsActivity.show(DetailActivity.this, mBean.getId(), mBean.getType(), OSChinaApi.COMMENT_NEW_ORDER,mBean.getTitle());
+                    CommentsActivity.show(DetailActivity.this, mBean.getId(), mBean.getType(), OSChinaApi.COMMENT_NEW_ORDER, mBean.getTitle());
                 }
             });
         }
@@ -358,5 +370,55 @@ public abstract class DetailActivity extends BaseBackActivity implements
         if (mAlertDialog == null)
             return;
         mAlertDialog.hideProgressDialog();
+    }
+
+    private abstract class OnDoubleTouchListener implements View.OnTouchListener {
+        private long lastTouchTime = 0;
+        private AtomicInteger touchCount = new AtomicInteger(0);
+        private Runnable mRun = null;
+        private Handler mHandler;
+
+        OnDoubleTouchListener() {
+            mHandler = new Handler(getMainLooper());
+        }
+
+        void removeCallback() {
+            if (mRun != null) {
+                mHandler.removeCallbacks(mRun);
+                mRun = null;
+            }
+        }
+
+        @Override
+        public boolean onTouch(final View v, final MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                final long now = System.currentTimeMillis();
+                lastTouchTime = now;
+
+                touchCount.incrementAndGet();
+                removeCallback();
+
+                mRun = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (now == lastTouchTime) {
+                            onMultiTouch(v, event, touchCount.get());
+                            touchCount.set(0);
+                        }
+                    }
+                };
+
+                mHandler.postDelayed(mRun, getMultiTouchInterval());
+            }
+            return true;
+        }
+
+
+        int getMultiTouchInterval() {
+            return 400;
+        }
+
+
+        abstract void onMultiTouch(View v, MotionEvent event, int touchCount);
     }
 }
