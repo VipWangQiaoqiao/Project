@@ -1,9 +1,13 @@
 package net.oschina.app.improve.user.sign;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -16,16 +20,19 @@ import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 
-import java.util.concurrent.ExecutionException;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * 邀请函
  * Created by haibin on 2017/4/11.
  */
-public class InvitationActivity extends BaseBackActivity implements View.OnClickListener {
+public class InvitationActivity extends BaseBackActivity implements View.OnClickListener,
+        EasyPermissions.PermissionCallbacks {
     private ShareDialog mShareDialog;
     @Bind(R.id.iv_invitation)
     ImageView mImageInvitation;
@@ -69,32 +76,7 @@ public class InvitationActivity extends BaseBackActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_share:
-                showWaitDialog();
-                AppOperator.runOnThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            final Bitmap thumbBitmap =
-                                    getImageLoader()
-                                            .load(mUrl)
-                                            .asBitmap()
-                                            .fitCenter()
-                                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    hideDialog();
-                                    mShareDialog.bitmap(thumbBitmap);
-                                    mShareDialog.show();
-                                }
-                            });
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                saveToFileByPermission();
                 break;
             case R.id.iv_invitation:
                 ImageGalleryActivity.show(this, mUrl);
@@ -122,5 +104,67 @@ public class InvitationActivity extends BaseBackActivity implements View.OnClick
         if (mShareDialog != null) {
             mShareDialog.dismiss();
         }
+    }
+
+    private static final int PERMISSION_ID = 0x0001;
+    @SuppressWarnings("unused")
+    @AfterPermissionGranted(PERMISSION_ID)
+    public void saveToFileByPermission() {
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, permissions)) {
+            showWaitDialog();
+            AppOperator.runOnThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final Bitmap thumbBitmap =
+                                getImageLoader()
+                                        .load(mUrl)
+                                        .asBitmap()
+                                        .fitCenter()
+                                        .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideDialog();
+                                mShareDialog.bitmap(thumbBitmap);
+                                mShareDialog.show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            EasyPermissions.requestPermissions(this, "请授予文件读写权限", PERMISSION_ID, permissions);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        DialogHelper.getConfirmDialog(this, "", "没有权限, 你需要去设置中开启读取手机存储权限.", "去设置", "取消", false, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+                //finish();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //finish();
+            }
+        }).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 }

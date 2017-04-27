@@ -55,6 +55,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     private long mId;
     private int mType;
     private TextView mTitle;
+    private String mShareTitle;
     private TextView mSeeMore;
     private LinearLayout mLayComments;
     private ProgressDialog mDialog;
@@ -88,6 +89,10 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         if (!TextUtils.isEmpty(title)) {
             mTitle.setText(title);
         }
+    }
+
+    public void setShareTitle(String shareTitle) {
+        this.mShareTitle = shareTitle;
     }
 
     public void setCommentBar(CommentBar commentBar) {
@@ -350,7 +355,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (mId != 0 && mType != 0)
-            CommentsActivity.show(getContext(), mId, mType, OSChinaApi.COMMENT_NEW_ORDER, mTitle.getText().toString());
+            CommentsActivity.show(getContext(), mId, mType, OSChinaApi.COMMENT_NEW_ORDER, mShareTitle);
     }
 
     /**
