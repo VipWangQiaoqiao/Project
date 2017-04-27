@@ -493,7 +493,7 @@ public class CommentsActivity extends BaseBackActivity implements
         if (EasyPermissions.hasPermissions(this, permissions)) {
             mShareView.share();
         } else {
-            EasyPermissions.requestPermissions(this, "请授予保存图片权限", PERMISSION_ID, permissions);
+            EasyPermissions.requestPermissions(this, "请授予文件读写权限", PERMISSION_ID, permissions);
         }
     }
 
