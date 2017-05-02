@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.WebpageObject;
@@ -101,7 +103,7 @@ public class OpenBuilder {
         }
 
         public void share(Share share, IUiListener listener, Callback callback) {
-            if (share.getThumbBitmap() != null) {
+            if (share.getThumbBitmap() != null && TextUtils.isEmpty(share.getUrl())) {
                 shareLocalImage(share, listener, callback);
                 return;
             }
@@ -182,7 +184,7 @@ public class OpenBuilder {
 
         public void share(Share share, Callback callback) {
             IWeiboShareAPI weiBoShareSDK = WeiboShareSDK.createWeiboAPI(activity, appKey, false);
-            if (share.getThumbBitmap() != null) {
+            if (share.getThumbBitmap() != null && TextUtils.isEmpty(share.getUrl())) {
                 shareLocalImage(weiBoShareSDK, share, callback);
                 return;
             }
@@ -295,7 +297,7 @@ public class OpenBuilder {
         }
 
         private void share(Share share, int scene, Callback callback) {
-            if (share.getThumbBitmap() != null) {
+            if (share.getThumbBitmap() != null && TextUtils.isEmpty(share.getUrl())) {
                 share(share.getThumbBitmap(), scene);
                 return;
             }
@@ -350,16 +352,21 @@ public class OpenBuilder {
          * 单纯分享图片
          */
         private void share(Bitmap bitmap, int scene) {
-            String url = saveShare(bitmap);
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_SEND);
-            Uri uri = Uri.fromFile(new File(url));
-            intent.putExtra(Intent.EXTRA_STREAM, uri);//uri为你要分享的图片的uri
-            intent.setType("image/*");
-            intent.setClassName("com.tencent.mm", scene == SendMessageToWX.Req.WXSceneTimeline ?
-                    "com.tencent.mm.ui.tools.ShareToTimeLineUI"
-                    : "com.tencent.mm.ui.tools.ShareImgUI");
-            activity.startActivityForResult(intent, 1);
+            try {
+                String url = saveShare(bitmap);
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                Uri uri = FileProvider.getUriForFile(activity,"net.oschina.app.provider",new File(url));
+                intent.putExtra(Intent.EXTRA_STREAM, uri);//uri为你要分享的图片的uri
+                intent.setType("image/*");
+                intent.setClassName("com.tencent.mm", scene == SendMessageToWX.Req.WXSceneTimeline ?
+                        "com.tencent.mm.ui.tools.ShareToTimeLineUI"
+                        : "com.tencent.mm.ui.tools.ShareImgUI");
+                activity.startActivityForResult(intent, 1);
+            }catch (Exception e){
+                e.printStackTrace();
+                Toast.makeText(activity,"请安装微信",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
