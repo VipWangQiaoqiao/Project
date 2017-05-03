@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 
 import net.oschina.app.R;
@@ -37,7 +38,6 @@ public class InvitationActivity extends BaseBackActivity implements View.OnClick
     @Bind(R.id.iv_invitation)
     ImageView mImageInvitation;
     private String mUrl;
-    private Bitmap mBitmap;
     private ProgressDialog mWaitDialog;
 
     public static void show(Context context, String url) {
@@ -61,10 +61,10 @@ public class InvitationActivity extends BaseBackActivity implements View.OnClick
     @Override
     protected void initData() {
         super.initData();
-        tryLoadBitmap(false);
+        tryLoadBitmap();
     }
 
-    private void tryLoadBitmap(final boolean showDialog) {
+    private void tryLoadBitmap() {
         getImageLoader().load(mUrl)
                 .asBitmap()
                 .fitCenter()
@@ -107,6 +107,7 @@ public class InvitationActivity extends BaseBackActivity implements View.OnClick
     }
 
     private static final int PERMISSION_ID = 0x0001;
+
     @SuppressWarnings("unused")
     @AfterPermissionGranted(PERMISSION_ID)
     public void saveToFileByPermission() {
@@ -118,11 +119,10 @@ public class InvitationActivity extends BaseBackActivity implements View.OnClick
                 public void run() {
                     try {
                         final Bitmap thumbBitmap =
-                                getImageLoader()
+                                Glide.with(InvitationActivity.this)
                                         .load(mUrl)
                                         .asBitmap()
-                                        .fitCenter()
-                                        .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
+                                        .into(720, 1280).get();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

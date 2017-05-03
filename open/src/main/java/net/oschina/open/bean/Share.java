@@ -20,6 +20,15 @@ public class Share implements Serializable {
     private int bitmapResID;
     private String imageUrl;
     private Bitmap thumbBitmap;
+    private String localPath;
+
+    public String getLocalPath() {
+        return localPath;
+    }
+
+    public void setLocalPath(String localPath) {
+        this.localPath = localPath;
+    }
 
     public String getAppName() {
         return appName;
