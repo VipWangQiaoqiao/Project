@@ -52,34 +52,6 @@
                 android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
-
-        <View style="@style/h_line" />
-
-        <View
-            style="@style/h_line"
-            android:layout_marginTop="20dip" />
-
-        <RelativeLayout
-            android:id="@+id/rl_gitapp"
-            style="@style/option_item_rl"
-            android:background="?attr/layout_item_bg"
-            android:padding="0dp">
-
-            <TextView
-                android:id="@+id/tv_gitapp"
-                style="@style/option_item_text_parent"
-                android:layout_width="match_parent"
-                android:background="@drawable/ic_material"
-                android:paddingBottom="@dimen/lay_12"
-                android:paddingLeft="@dimen/lay_16"
-                android:paddingRight="@dimen/lay_16"
-                android:paddingTop="@dimen/lay_12"
-                android:text="@string/git_app"
-                android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
-        </RelativeLayout>
-
-        <View style="@style/h_line" />
     </LinearLayout>
 
     <LinearLayout

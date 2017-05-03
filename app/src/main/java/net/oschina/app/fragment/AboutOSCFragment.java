@@ -36,7 +36,6 @@ public class AboutOSCFragment extends BaseFragment {
     @Override
     public void initView(View view) {
         view.findViewById(R.id.tv_grade).setOnClickListener(this);
-        view.findViewById(R.id.tv_gitapp).setOnClickListener(this);
         view.findViewById(R.id.tv_oscsite).setOnClickListener(this);
         view.findViewById(R.id.tv_knowmore).setOnClickListener(this);
     }
@@ -53,19 +52,6 @@ public class AboutOSCFragment extends BaseFragment {
         switch (id) {
             case R.id.tv_grade:
                 TDevice.openAppInMarket(getActivity());
-                break;
-            case R.id.tv_gitapp:
-                boolean res = TDevice.openAppActivity(getActivity(),
-                        "net.oschina.gitapp", "net.oschina.gitapp.WelcomePage");
-
-                if (!res) {
-                    if (!TDevice.isHaveMarket(getActivity())) {
-                        UIHelper.openInternalBrowser(getActivity(),
-                                "http://git.oschina.net/appclient");
-                    } else {
-                        TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");
-                    }
-                }
                 break;
             case R.id.tv_oscsite:
                 UIHelper.openInternalBrowser(getActivity(), "https://www.oschina.net");
