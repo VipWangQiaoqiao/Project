@@ -93,7 +93,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
                 }
                 break;
             case R.id.btn_cancel:
-                DialogHelper.getConfirmDialog(mContext, "", "是否确认取消？", "确定", "否", new DialogInterface.OnClickListener() {
+                DialogHelper.getConfirmDialog(mContext, "", "是否确认取消？", "是", "否", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mPresenter.cancelApply(mDetail.getId());
