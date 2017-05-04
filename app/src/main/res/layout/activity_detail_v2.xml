@@ -2,12 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/main_green"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        android:titleTextColor="@color/white"
+        app:popupTheme="@style/ToolbarPopupTheme"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize" />
 

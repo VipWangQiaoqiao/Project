@@ -31,4 +31,16 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:elevation">0dp</item>
     </style>
+
+    <style name="App.Theme.Tweet.Main" parent="Base.App.Theme.NoTitle">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/trans</item>
+        <item name="colorPrimary">@color/main_green</item>
+        <item name="android:textColorPrimary">@color/black_alpha_240</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="actionMenuTextColor">@color/black</item>
+        <item name="actionOverflowButtonStyle">@style/AppWidget.ActionButton.Overflow</item>
+    </style>
 </resources>
