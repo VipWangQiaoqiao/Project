@@ -2,7 +2,9 @@ package net.oschina.app.improve.detail.general;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -81,6 +83,8 @@ public class QuestionDetailActivity extends DetailActivity {
                 }
             }
         }
+//        MenuItem menuItem = menu.findItem(R.id.menu_report);
+//        DrawableCompat.setTint(menuItem.getIcon(),Color.WHITE);
         return true;
     }
 

@@ -73,7 +73,17 @@ public class CheckUpdateManager {
                                 AlertDialog.Builder dialog = DialogHelper.getConfirmDialog(mContext, version.getMessage(), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        mCaller.call(version);
+                                        //mCaller.call(version);
+                                        if (!TDevice.isWifiOpen()) {
+                                            DialogHelper.getConfirmDialog(mContext, "当前非wifi环境，是否升级？", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    mCaller.call(version);
+                                                }
+                                            }).show();
+                                        } else {
+                                            mCaller.call(version);
+                                        }
                                     }
                                 });
                                 dialog.setTitle("发现新版本");
