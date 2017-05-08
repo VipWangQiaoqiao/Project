@@ -472,6 +472,13 @@
             android:label="收藏"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".improve.main.ErrorActivity"
+            android:exported="false"
+            android:label="错误信息"
+            android:launchMode="singleTask"
+            android:process=":crashInfo"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".improve.user.event.UserEventActivity"
             android:label="我的活动"
             android:screenOrientation="portrait" />

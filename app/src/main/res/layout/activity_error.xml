@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/iv_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/lay_20"
+                android:layout_marginTop="@dimen/lay_20"
+                android:contentDescription="@string/state_load_error"
+                android:src="@mipmap/ic_crash_info" />
+
+            <TextView
+                android:id="@+id/tv_crash_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_16"
+                android:layout_marginRight="@dimen/lay_16"
+                android:textColor="#111111"
+                android:textSize="@dimen/font_16"
+                tools:text="socket error!
+                    java.net.SocketException: Socket closed
+                    at libcore.io.Posix.recvfromBytes(Native Method)
+                    at libcore.io.Posix.recvfrom(Posix.java:189)
+                    at libcore.io.BlockGuardOs.recvfrom(BlockGuardOs.java:250)
+                    at libcore.io.IoBridge.recvfrom(IoBridge.java:610)
+                    at java.net.PlainSocketImpl.read(PlainSocketImpl.java:488)
+                    at java.net.PlainSocketImpl.-wrap0(PlainSocketImpl.java)
+                    at java.net.PlainSocketImpl$PlainSocketInputStream.read(PlainSocketImpl.java:242)
+                    at com.tencent.mobileqq.msf.sdk.utils.MonitorSocketInputStream.read(MonitorSocketInputStream.java:55)
+                    at com.tencent.qphone.base.util.MsfSocketInputBuffer.fillBuffer(MsfSocketInputBuffer.java:135)
+                    at com.tencent.qphone.base.util.MsfSocketInputBuffer.isDataAvailable(MsfSocketInputBuffer.java:74)
+                    at com.tencent.mobileqq.msf.core.net.g$a.run(SocketEngine.java:382)" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_restart"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/lay_16"
+        android:background="@drawable/selector_event_sign"
+        android:text="重新启动"
+        android:textColor="@color/white"
+        tools:ignore="HardcodedText" />
+</LinearLayout>
