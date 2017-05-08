@@ -30,10 +30,10 @@
 
     <Button
         android:id="@+id/btn_share"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/lay_16"
-        style="?android:attr/borderlessButtonStyle"
         android:background="@drawable/selector_event_sign"
         android:text="分享邀请函"
         android:textColor="@color/white" />
