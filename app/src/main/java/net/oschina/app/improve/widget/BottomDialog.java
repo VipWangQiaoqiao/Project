@@ -24,12 +24,12 @@ public class BottomDialog extends BottomSheetDialog {
         super(context);
         this.isTranslucentStatus = isTranslucentStatus;
         Window window = getWindow();
-//        if (window != null) {
-//            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
-//                    WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-//            if (isTranslucentStatus)
-//                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        }
+        if (window != null) {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            if (isTranslucentStatus)
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
     }
 
     @Override
