@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.base.activities.BackActivity;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -16,7 +16,7 @@ import butterknife.OnClick;
  * Created by haibin on 2017/5/8.
  */
 
-public class ErrorActivity extends BackActivity implements View.OnClickListener {
+public class ErrorActivity extends BaseBackActivity implements View.OnClickListener {
     @Bind(R.id.tv_crash_info)
     TextView mTextCrashInfo;
 
