@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.text.Html;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -46,12 +47,14 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         return R.layout.activity_update;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
         super.initData();
         setTitle("");
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         mVersion = (Version) getIntent().getSerializableExtra("version");
+        mTextUpdateInfo.setText(Html.fromHtml(mVersion.getMessage()));
     }
 
     @OnClick({R.id.btn_update, R.id.btn_close, R.id.fl_root})

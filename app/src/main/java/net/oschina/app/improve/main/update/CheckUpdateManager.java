@@ -70,7 +70,7 @@ public class CheckUpdateManager {
                             final Version version = versions.get(0);
                             int curVersionCode = TDevice.getVersionCode(AppContext
                                     .getInstance().getPackageName());
-                            if (curVersionCode <= Integer.parseInt(version.getCode())) {
+                            if (curVersionCode < Integer.parseInt(version.getCode())) {
                                 UpdateActivity.show((Activity) mContext,version);
 //                                AlertDialog.Builder dialog = DialogHelper.getConfirmDialog(mContext, version.getMessage(), new DialogInterface.OnClickListener() {
 //                                    @Override
