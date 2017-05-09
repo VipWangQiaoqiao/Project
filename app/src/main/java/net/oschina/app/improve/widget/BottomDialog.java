@@ -18,11 +18,9 @@ import android.view.WindowManager;
 public class BottomDialog extends BottomSheetDialog {
 
     private BottomSheetBehavior behavior;
-    private boolean isTranslucentStatus;
 
     public BottomDialog(@NonNull Context context, boolean isTranslucentStatus) {
         super(context);
-        this.isTranslucentStatus = isTranslucentStatus;
         Window window = getWindow();
         if (window != null) {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
