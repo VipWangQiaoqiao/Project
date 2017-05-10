@@ -1,6 +1,7 @@
 package net.oschina.app.improve.git.api;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -132,5 +133,28 @@ public final class API {
         RequestParams params = new RequestParams();
         params.put("projectId", id);
         ApiHttpClient.get("action/apiv2/git_comments_count", params, handler);
+    }
+
+
+    public static void getGists(String language, String type, int page, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(language))
+            params.put("language", language);
+        if (!TextUtils.isEmpty(type))
+            params.put("type", type);
+        params.put("page", page);
+        mClient.get("https://git.oschina.net/api/v3/gists", params, handler);
+    }
+
+    /**
+     * 获取代码片段详情
+     *
+     * @param id      代码片段文件标识id
+     * @param handler 回调
+     */
+    public static void getGistDetail(String id, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        mClient.get("https://git.oschina.net/api/v3/gists", params, handler);
     }
 }
