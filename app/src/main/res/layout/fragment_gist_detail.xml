@@ -1,6 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
 
+    <LinearLayout
+        android:id="@+id/ll_branch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f9f9f9"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/lay_8"
+        android:paddingLeft="@dimen/lay_16"
+        android:paddingRight="@dimen/lay_16"
+        android:paddingTop="@dimen/lay_12">
+
+        <TextView
+            android:id="@+id/tv_file_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/lay_16"
+            android:layout_weight="1"
+            android:text="OSC / README.md"
+            android:textColor="#111111"
+            android:textSize="@dimen/font_16" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginTop="@dimen/lay_2"
+                android:contentDescription="@string/gits"
+                android:src="@mipmap/ic_fav_normal" />
+
+            <TextView
+                android:id="@+id/tv_start_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_4"
+                android:layout_marginRight="@dimen/lay_16"
+                android:textColor="#a4a4a4"
+                android:textSize="@dimen/font_12"
+                tools:text="246" />
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginTop="@dimen/lay_2"
+                android:contentDescription="@string/gits"
+                android:src="@mipmap/ic_fork" />
+
+            <TextView
+                android:id="@+id/tv_fork_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_4"
+                android:textColor="#a4a4a4"
+                android:textSize="@dimen/font_12"
+                tools:text="246" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:visibility="gone"
+        android:paddingBottom="@dimen/lay_8"
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f9f9f9"
+        android:paddingLeft="@dimen/lay_16"
+        android:paddingRight="@dimen/lay_16"
+        android:text="HttpNet使用方法"
+        android:textColor="#6a6a6a"
+        android:textSize="@dimen/font_14" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f9f9f9"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/lay_12"
+        android:paddingLeft="@dimen/lay_16"
+        android:paddingRight="@dimen/lay_16">
+
+        <TextView
+            android:id="@+id/tv_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_type"
+            android:paddingBottom="@dimen/lay_2"
+            android:paddingLeft="@dimen/lay_4"
+            android:paddingRight="@dimen/lay_4"
+            android:paddingTop="@dimen/lay_2"
+            android:textColor="#9d9d9d"
+            android:textSize="@dimen/font_12"
+            tools:text="博客" />
+
+        <TextView
+            android:id="@+id/tv_last_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="#9d9d9d"
+            android:textSize="@dimen/font_12"
+            tools:text="最后更新于1小时前" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        tools:ignore="DisableBaselineAlignment">
+
+        <LinearLayout
+            android:id="@+id/ll_comment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_event_fav"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:contentDescription="@string/gits"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@mipmap/ic_comment_40" />
+
+            <TextView
+                android:id="@+id/tv_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_12"
+                android:text="评论(0)"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_share"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_event_fav"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:contentDescription="@string/gits"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@mipmap/ic_share_black_normal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_12"
+                android:text="分享"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -143,7 +143,7 @@ public final class API {
         if (!TextUtils.isEmpty(type))
             params.put("type", type);
         params.put("page", page);
-        mClient.get("https://git.oschina.net/api/v3/gists", params, handler);
+        mClient.get("https://git.oschina.net/api/v3/gists/public", params, handler);
     }
 
     /**
@@ -153,8 +153,6 @@ public final class API {
      * @param handler 回调
      */
     public static void getGistDetail(String id, TextHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("id", id);
-        mClient.get("https://git.oschina.net/api/v3/gists", params, handler);
+        mClient.get(String.format("https://git.oschina.net/api/v3/gists/%s", id), handler);
     }
 }

@@ -18,11 +18,11 @@ public class Gist implements Serializable {
     private String language;
     private String description;
     private String content;
-    @SerializedName("comment_counts")
+    @SerializedName("comments_count")
     private int commentCounts;
-    @SerializedName("start_counts")
+    @SerializedName("stars_count")
     private int startCounts;
-    @SerializedName("fork_counts")
+    @SerializedName("forks_count")
     private int forkCounts;
     @SerializedName("created_at")
     private Date createdDate;
