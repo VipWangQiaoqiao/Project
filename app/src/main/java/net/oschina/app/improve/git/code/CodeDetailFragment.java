@@ -1,5 +1,6 @@
 package net.oschina.app.improve.git.code;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -41,6 +42,7 @@ public class CodeDetailFragment extends BaseFragment implements CodeDetaiContrac
         return R.layout.fragment_code_detail;
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void initData() {
         super.initData();

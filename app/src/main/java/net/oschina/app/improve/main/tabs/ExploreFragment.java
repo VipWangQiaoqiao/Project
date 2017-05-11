@@ -12,6 +12,7 @@ import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
 import net.oschina.app.improve.bean.SubTab;
 import net.oschina.app.improve.git.feature.FeatureActivity;
+import net.oschina.app.improve.git.gist.GistActivity;
 import net.oschina.app.improve.main.discover.ShakePresentActivity;
 import net.oschina.app.improve.search.activities.NearbyActivity;
 import net.oschina.app.improve.search.activities.SearchActivity;
@@ -68,13 +69,19 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
         hasLocation();
     }
 
-    @OnClick({R.id.rl_git, R.id.rl_soft, R.id.rl_scan, R.id.rl_shake, R.id.layout_events, R.id.layout_nearby})
+    @OnClick({R.id.rl_git, R.id.rl_gits,
+            R.id.rl_soft, R.id.rl_scan,
+            R.id.rl_shake, R.id.layout_events,
+            R.id.layout_nearby})
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
             case R.id.rl_git:
                 FeatureActivity.show(getActivity());
+                break;
+            case R.id.rl_gits:
+                GistActivity.show(mContext);
                 break;
             case R.id.rl_soft: //开源软件
                 UIHelper.showSimpleBack(getActivity(),

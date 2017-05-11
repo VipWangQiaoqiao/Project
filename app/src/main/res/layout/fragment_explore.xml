@@ -47,6 +47,38 @@
             android:layout_height="1px" />
 
         <LinearLayout
+            android:id="@+id/rl_gits"
+            style="@style/option_item_rl"
+            android:background="@drawable/ic_material">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@null"
+                android:src="@mipmap/ic_discover_git"
+                tools:ignore="RtlHardcoded" />
+
+            <TextView
+                style="@style/option_item_text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/gits" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                app:srcCompat="@mipmap/ic_arrow_right" />
+        </LinearLayout>
+
+        <View
+            style="@style/h_line"
+            android:layout_marginLeft="50dp"
+            android:layout_height="1px" />
+
+
+        <LinearLayout
             android:id="@+id/rl_soft"
             style="@style/option_item_rl"
             android:background="@drawable/ic_material">

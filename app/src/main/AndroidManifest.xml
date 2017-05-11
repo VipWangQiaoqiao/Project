@@ -515,6 +515,14 @@
             android:name=".improve.git.feature.FeatureActivity"
             android:label="码云推荐"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".improve.git.gist.GistActivity"
+            android:label="代码片段"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".improve.git.gist.detail.GistDetailActivity"
+            android:label="代码片段详情"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".improve.git.detail.ProjectDetailActivity"
