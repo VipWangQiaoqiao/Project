@@ -11,22 +11,26 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.git.bean.CodeDetail;
 import net.oschina.app.improve.git.bean.Gist;
+import net.oschina.app.improve.git.comment.CommentActivity;
 import net.oschina.app.improve.git.utils.MarkdownUtils;
 import net.oschina.app.improve.git.utils.SourceEditor;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * 代码片段详情
  * Created by haibin on 2017/5/10.
  */
 
-public class GistDetailFragment extends BaseFragment implements GistDetailContract.View {
+public class GistDetailFragment extends BaseFragment implements GistDetailContract.View, View.OnClickListener {
     private SourceEditor mEditor;
     @Bind(R.id.webView)
     WebView mWebView;
@@ -43,6 +47,7 @@ public class GistDetailFragment extends BaseFragment implements GistDetailContra
     @Bind(R.id.tv_last_update)
     TextView mTextLastUpdate;
     private Gist mGist;
+    private ShareDialog mAlertDialog;
 
     static GistDetailFragment newInstance(Gist gist) {
         GistDetailFragment fragment = new GistDetailFragment();
@@ -95,6 +100,19 @@ public class GistDetailFragment extends BaseFragment implements GistDetailContra
         init(mGist);
     }
 
+    @OnClick({R.id.ll_comment, R.id.ll_share})
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_comment:
+                CommentActivity.show(mContext, null);
+                break;
+            case R.id.ll_share:
+                toShare();
+                break;
+        }
+    }
+
     @Override
     public void setPresenter(GistDetailContract.Presenter presenter) {
 
@@ -112,5 +130,32 @@ public class GistDetailFragment extends BaseFragment implements GistDetailContra
         CodeDetail detail = new CodeDetail();
         detail.setContent(gist.getContent());
         mEditor.setSource(gist.getName(), detail);
+    }
+
+    private boolean toShare() {
+        String content = mGist.getDescription().trim();
+        if (content.length() > 55) {
+            content = HTMLUtil.delHTMLTag(content);
+            if (content.length() > 55)
+                content = StringUtils.getSubString(0, 55, content);
+        } else {
+            content = HTMLUtil.delHTMLTag(content);
+        }
+        if (TextUtils.isEmpty(content))
+            content = "";
+
+        // 分享
+        if (mAlertDialog == null) {
+            mAlertDialog = new
+                    ShareDialog(getActivity())
+                    .title(mGist.getOwner().getName() + "/" + mGist.getName())
+                    .content(content)
+                    .url(mGist.getUrl())
+                    .bitmapResID(R.mipmap.ic_git)
+                    .with();
+        }
+        mAlertDialog.show();
+
+        return true;
     }
 }

@@ -14,7 +14,7 @@
         android:background="#f9f9f9"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/lay_12"
+        android:paddingBottom="@dimen/lay_8"
         android:paddingLeft="@dimen/lay_16"
         android:paddingRight="@dimen/lay_16"
         android:paddingTop="@dimen/lay_12">
@@ -71,14 +71,14 @@
     </LinearLayout>
 
     <TextView
+        android:visibility="gone"
+        android:paddingBottom="@dimen/lay_8"
         android:id="@+id/tv_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#f9f9f9"
-        android:paddingBottom="@dimen/lay_8"
         android:paddingLeft="@dimen/lay_16"
         android:paddingRight="@dimen/lay_16"
-        android:paddingTop="@dimen/lay_4"
         android:text="HttpNet使用方法"
         android:textColor="#6a6a6a"
         android:textSize="@dimen/font_14" />

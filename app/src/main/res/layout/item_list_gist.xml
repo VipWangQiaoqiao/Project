@@ -41,8 +41,7 @@
                 android:id="@+id/tv_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"
+                android:paddingTop="4dp"
                 android:ellipsize="end"
                 android:lineSpacingExtra="4dp"
                 android:maxLines="2"
@@ -51,6 +50,7 @@
                 tools:text="New Text" />
 
             <LinearLayout
+                android:paddingTop="@dimen/lay_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
