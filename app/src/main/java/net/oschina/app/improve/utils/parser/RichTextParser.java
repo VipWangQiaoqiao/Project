@@ -8,8 +8,11 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
+import net.oschina.app.improve.git.bean.Gist;
 import net.oschina.app.improve.git.bean.Project;
+import net.oschina.app.improve.git.bean.User;
 import net.oschina.app.improve.git.detail.ProjectDetailActivity;
+import net.oschina.app.improve.git.gist.detail.GistDetailActivity;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.util.UIHelper;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -55,6 +58,11 @@ public abstract class RichTextParser {
     // git tag
     private static final Pattern PatternGit = Pattern.compile(
             "<a\\s+href=\'http[s]?://git\\.oschina\\.net/[^>]*\'[^>]*data-project=\'([0-9]*)\'[^>]*>([^<>]*)</a>"
+    );
+
+    // 代码片段
+    private static final Pattern PatternGist = Pattern.compile(
+            "<a\\s+href=['\"]http[s]?://git.oschina.net/([^\\s]+)/([^\\s]+)['\"][^>]+data-url=['\"]([^\\s]+)['\"][^>]+>([^>]+)</a>"
     );
 
     // links
@@ -218,6 +226,42 @@ public abstract class RichTextParser {
                     }
                 };
                 builder.setSpan(span, matcher.start(), matcher.start() + group2.length(),
+                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                continue;
+            }
+            break;
+        }
+        return builder;
+    }
+
+
+    /**
+     * 格式化代码片段标签
+     */
+    static Spannable parseOnlyGist(final Context context, CharSequence content) {
+        SpannableStringBuilder builder = new SpannableStringBuilder(content);
+        Matcher matcher;
+        while (true) {
+            matcher = PatternGist.matcher(builder.toString());
+            if (matcher.find()) {
+                final String group1 = matcher.group(1);
+                final String group2 = matcher.group(2);
+                final String group3 = matcher.group(3);
+                final String group4 = matcher.group(4);
+                builder.replace(matcher.start(), matcher.end(), group4);
+                ClickableSpan span = new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        Gist gist = new Gist();
+                        User user = new User();
+                        user.setName(group1);
+                        gist.setOwner(user);
+                        gist.setId(group3);
+                        gist.setName(group2);
+                        GistDetailActivity.show(context,gist);
+                    }
+                };
+                builder.setSpan(span, matcher.start(), matcher.start() + group4.length(),
                         Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 continue;
             }

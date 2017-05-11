@@ -29,6 +29,7 @@ public class TweetParser extends RichTextParser {
             return null;
         content = HTMLUtil.rollbackReplaceTag(content);
         Spannable spannable = parseOnlyAtUser(context, content);
+        spannable = parseOnlyGist(context, spannable);
         spannable = parseOnlyGit(context, spannable);
         spannable = parseOnlyTag(context, spannable);
         spannable = parseOnlyLink(context, spannable);
@@ -39,7 +40,7 @@ public class TweetParser extends RichTextParser {
     /**
      * 清空HTML标签
      */
-    public  Spannable clearHtmlTag(CharSequence content) {
+    public Spannable clearHtmlTag(CharSequence content) {
         SpannableStringBuilder builder = new SpannableStringBuilder(content);
         Matcher matcher;
         while (true) {
