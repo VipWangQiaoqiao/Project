@@ -523,7 +523,10 @@
             android:name=".improve.git.gist.detail.GistDetailActivity"
             android:label="代码片段详情"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".improve.git.gist.comment.GistCommentActivity"
+            android:label="代码片段评论"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".improve.git.detail.ProjectDetailActivity"
             android:label="项目详情"

@@ -22,10 +22,10 @@ import net.oschina.app.widget.TweetTextView;
  * on 2017/3/14.
  */
 
-class CommentAdapter extends BaseGeneralRecyclerAdapter<Comment> {
+public class CommentAdapter extends BaseGeneralRecyclerAdapter<Comment> {
     private View.OnClickListener mCommentListener;
 
-    CommentAdapter(Callback callback) {
+    public CommentAdapter(Callback callback) {
         super(callback, ONLY_FOOTER);
     }
 

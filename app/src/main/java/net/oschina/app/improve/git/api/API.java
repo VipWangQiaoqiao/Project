@@ -135,7 +135,14 @@ public final class API {
         ApiHttpClient.get("action/apiv2/git_comments_count", params, handler);
     }
 
-
+    /**
+     * 获取代码片段
+     *
+     * @param language language
+     * @param type     type
+     * @param page     page
+     * @param handler  handler
+     */
     public static void getGists(String language, String type, int page, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         if (!TextUtils.isEmpty(language))
@@ -155,4 +162,48 @@ public final class API {
     public static void getGistDetail(String id, TextHttpResponseHandler handler) {
         mClient.get(String.format("https://git.oschina.net/api/v3/gists/%s", id), handler);
     }
+
+    /**
+     * 发表代码片段评论
+     *
+     * @param id      id
+     * @param name    name
+     * @param content content
+     * @param handler 回调
+     */
+    public static void pubGistComment(String id, String name, String content, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("gistId", id);
+        params.put("name", name);
+        params.put("content", content);
+        ApiHttpClient.post("action/apiv2/pub_gist_comment", params, handler);
+    }
+
+    /**
+     * 代码片段评论列表
+     *
+     * @param id      id
+     * @param token   token
+     * @param handler handler
+     */
+    public static void getGistComments(String id, String token, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("gistId", id);
+        if (!TextUtils.isEmpty(token))
+            params.put("pageToken", token);
+        ApiHttpClient.get("action/apiv2/gist_comments_list", params, handler);
+    }
+
+    /**
+     * 获取代码片段评论数
+     *
+     * @param id      项目id
+     * @param handler 回调
+     */
+    public static void getGistCommentCount(String id, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("gistId", id);
+        ApiHttpClient.get("action/apiv2/gist_comments_count", params, handler);
+    }
+
 }
