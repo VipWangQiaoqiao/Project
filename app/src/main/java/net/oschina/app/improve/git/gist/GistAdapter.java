@@ -43,14 +43,13 @@ class GistAdapter extends BaseRecyclerAdapter<Gist> {
         h.mTextDescription.setText(item.getDescription());
         h.mTextLanguage.setText(item.getLanguage());
         h.mTextLanguage.setVisibility(TextUtils.isEmpty(item.getLanguage()) ? View.GONE : View.VISIBLE);
-        h.mTextCommentCount.setText(getCount(item.getCommentCounts()));
         h.mTextFavCount.setText(getCount(item.getStartCounts()));
         h.mTextForkCount.setText(getCount(item.getForkCounts()));
     }
 
     private static class GistViewHolder extends RecyclerView.ViewHolder {
         PortraitView mImageOwner;
-        TextView mTextName, mTextDescription, mTextCommentCount,
+        TextView mTextName, mTextDescription,
                 mTextFavCount, mTextForkCount, mTextLanguage;
 
         GistViewHolder(View itemView) {
@@ -58,7 +57,6 @@ class GistAdapter extends BaseRecyclerAdapter<Gist> {
             mImageOwner = (PortraitView) itemView.findViewById(R.id.civ_owner);
             mTextName = (TextView) itemView.findViewById(R.id.tv_name);
             mTextDescription = (TextView) itemView.findViewById(R.id.tv_description);
-            mTextCommentCount = (TextView) itemView.findViewById(R.id.tv_comment_count);
             mTextFavCount = (TextView) itemView.findViewById(R.id.tv_fav_count);
             mTextForkCount = (TextView) itemView.findViewById(R.id.tv_fork_count);
             mTextLanguage = (TextView) itemView.findViewById(R.id.tv_language);
