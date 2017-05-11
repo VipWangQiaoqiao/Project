@@ -132,6 +132,13 @@ public class GistDetailFragment extends BaseFragment implements GistDetailContra
         mEditor.setSource(gist.getName(), detail);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAlertDialog != null)
+            mAlertDialog.dismiss();
+    }
+
     private boolean toShare() {
         String content = mGist.getDescription().trim();
         if (content.length() > 55) {
