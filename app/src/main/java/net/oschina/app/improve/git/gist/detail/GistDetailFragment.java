@@ -14,7 +14,7 @@ import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.git.bean.CodeDetail;
 import net.oschina.app.improve.git.bean.Gist;
-import net.oschina.app.improve.git.comment.CommentActivity;
+import net.oschina.app.improve.git.gist.comment.GistCommentActivity;
 import net.oschina.app.improve.git.utils.MarkdownUtils;
 import net.oschina.app.improve.git.utils.SourceEditor;
 import net.oschina.app.util.HTMLUtil;
@@ -105,7 +105,7 @@ public class GistDetailFragment extends BaseFragment implements GistDetailContra
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_comment:
-                CommentActivity.show(mContext, null);
+                GistCommentActivity.show(mContext, mGist);
                 break;
             case R.id.ll_share:
                 toShare();
@@ -125,6 +125,7 @@ public class GistDetailFragment extends BaseFragment implements GistDetailContra
 
     @Override
     public void showGetDetailSuccess(Gist gist, int strId) {
+        mGist = gist;
         init(gist);
         mEditor.setMarkdown(MarkdownUtils.isMarkdown(gist.getName()));
         CodeDetail detail = new CodeDetail();
