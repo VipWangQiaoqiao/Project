@@ -16,6 +16,7 @@ interface ProjectDetailContract {
         void showGetDetailFailure(int strId);
     }
 
+    @SuppressWarnings("unused")
     interface View extends BaseView<Presenter> {
         void showGetDetailSuccess(Project project, int strId);
 

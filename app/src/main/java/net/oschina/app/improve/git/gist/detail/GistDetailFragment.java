@@ -46,6 +46,8 @@ public class GistDetailFragment extends BaseFragment implements GistDetailContra
     TextView mTextLanguage;
     @Bind(R.id.tv_last_update)
     TextView mTextLastUpdate;
+    @Bind(R.id.tv_comment_count)
+    TextView mTxetCommentCount;
     private Gist mGist;
     private ShareDialog mAlertDialog;
 
@@ -138,6 +140,11 @@ public class GistDetailFragment extends BaseFragment implements GistDetailContra
         super.onResume();
         if (mAlertDialog != null)
             mAlertDialog.dismiss();
+    }
+
+    @Override
+    public void showGetCommentCountSuccess(int count) {
+        mTxetCommentCount.setText(String.format("评论（%s）", count));
     }
 
     private boolean toShare() {

@@ -1,7 +1,5 @@
 package net.oschina.app.improve.git.gist.detail;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -60,5 +58,39 @@ class GistDetailPresenter implements GistDetailContract.Presenter {
                 }
             }
         });
+    }
+
+    @Override
+    public void getCommentCount(String id) {
+        API.getGistCommentCount(id, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                // TODO: 2017/5/11
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<GistDetailPresenter.CommentCount>>() {
+                    }.getType();
+                    ResultBean<GistDetailPresenter.CommentCount> bean = new Gson().fromJson(responseString, type);
+                    mView.showGetCommentCountSuccess(bean.getResult().commentCount);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private class CommentCount {
+        private int commentCount;
+
+        public int getCommentCount() {
+            return commentCount;
+        }
+
+        public void setCommentCount(int commentCount) {
+            this.commentCount = commentCount;
+        }
     }
 }
