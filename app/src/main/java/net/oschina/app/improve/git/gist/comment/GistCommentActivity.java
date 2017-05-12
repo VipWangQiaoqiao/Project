@@ -80,12 +80,17 @@ public class GistCommentActivity extends BaseBackActivity implements GistComment
 
     @Override
     public void onClick(View v) {
-
+        Comment comment = (Comment) v.getTag();
+        mMentionStr = "回复 @" + comment.getAuthor().getName() + ":";
+        mDelegation.getBottomSheet().show(mMentionStr);
     }
 
     @Override
     public void showAddCommentSuccess(Comment comment, int strId) {
-
+        mDelegation.getBottomSheet().getEditText().setText("");
+        mDelegation.getBottomSheet().getEditText().setHint("发表评论");
+        mMentionStr = "";
+        mDelegation.getBottomSheet().dismiss();
     }
 
     @Override

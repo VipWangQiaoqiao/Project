@@ -111,7 +111,7 @@ class GistCommentPresenter implements GistCommentContract.Presenter {
 
     @Override
     public void addComment(String content) {
-        API.pubGistComment(mGist.getId(), mGist.getName(), content, new TextHttpResponseHandler() {
+        API.pubGistComment(mGist.getId(), mGist.getName(), mGist.getUrl(), content, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 mView.showAddCommentFailure(R.string.pub_comment_failed);

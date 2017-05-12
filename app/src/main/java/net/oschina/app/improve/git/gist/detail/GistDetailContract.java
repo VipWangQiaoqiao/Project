@@ -19,9 +19,13 @@ interface GistDetailContract {
 
     interface View extends BaseView<Presenter> {
         void showGetDetailSuccess(Gist gist, int strId);
+
+        void showGetCommentCountSuccess(int count);
     }
 
     interface Presenter extends BasePresenter {
         void getGistDetail(String id);
+
+        void getCommentCount(String id);
     }
 }

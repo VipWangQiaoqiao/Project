@@ -171,10 +171,11 @@ public final class API {
      * @param content content
      * @param handler 回调
      */
-    public static void pubGistComment(String id, String name, String content, TextHttpResponseHandler handler) {
+    public static void pubGistComment(String id, String name, String url, String content, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("gistId", id);
         params.put("name", name);
+        params.put("url", url);
         params.put("content", content);
         ApiHttpClient.post("action/apiv2/pub_gist_comment", params, handler);
     }
