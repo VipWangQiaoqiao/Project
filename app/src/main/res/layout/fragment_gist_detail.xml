@@ -30,6 +30,7 @@
             android:textSize="@dimen/font_16" />
 
         <LinearLayout
+            android:layout_marginTop="@dimen/lay_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
@@ -38,7 +39,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:layout_marginTop="@dimen/lay_2"
+                android:layout_marginTop="2dp"
                 android:contentDescription="@string/gits"
                 android:src="@mipmap/ic_fav_normal" />
 
@@ -55,7 +56,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:layout_marginTop="@dimen/lay_2"
+                android:layout_marginTop="2dp"
                 android:contentDescription="@string/gits"
                 android:src="@mipmap/ic_fork" />
 
