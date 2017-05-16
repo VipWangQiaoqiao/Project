@@ -54,7 +54,7 @@ class GistCommentPresenter implements GistCommentContract.Presenter {
                         List<Comment> list = bean.getResult().getItems();
                         if (list != null) {
                             mView.onRefreshSuccess(list);
-                            if (list.size() <= 20) {
+                            if (list.size() < 20) {
                                 mView.showMoreMore();
                             }
                         } else {
@@ -92,7 +92,7 @@ class GistCommentPresenter implements GistCommentContract.Presenter {
                         mToken = bean.getResult().getNextPageToken();
                         List<Comment> list = bean.getResult().getItems();
                         if (list != null && list.size() != 0) {
-                            mView.onRefreshSuccess(list);
+                            mView.onLoadMoreSuccess(list);
                         } else {
                             mView.showMoreMore();
                         }
