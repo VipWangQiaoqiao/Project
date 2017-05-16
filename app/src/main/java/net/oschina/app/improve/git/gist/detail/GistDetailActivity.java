@@ -2,6 +2,8 @@ package net.oschina.app.improve.git.gist.detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 
 import net.oschina.app.R;
@@ -61,5 +63,21 @@ public class GistDetailActivity extends BaseBackActivity implements GistDetailCo
     @Override
     public void showGetDetailFailure(int strId) {
         mEmptyLayout.setErrorType(strId);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            ActionBar bar = getSupportActionBar();
+            if(bar != null)
+                bar.hide();
+            mPresenter.changeConfig(true);
+        } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mPresenter.changeConfig(false);
+            ActionBar bar = getSupportActionBar();
+            if(bar != null)
+                bar.show();
+        }
     }
 }
