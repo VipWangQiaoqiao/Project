@@ -97,12 +97,12 @@ class CommentPresenter implements CommentContract.Presenter {
                             mView.showMoreMore();
                         }
                     } else {
-                        mView.showNetworkError(R.string.state_network_error);
+                        mView.showMoreMore();
                     }
                     mView.onComplete();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    mView.showNetworkError(R.string.state_network_error);
+                    mView.showMoreMore();
                     mView.onComplete();
                 }
             }
