@@ -82,6 +82,14 @@ class GistDetailPresenter implements GistDetailContract.Presenter {
         });
     }
 
+    @Override
+    public void changeConfig(boolean isLandscape) {
+        if (isLandscape)
+            mView.showLandscape();
+        else
+            mView.showPortrait();
+    }
+
     private class CommentCount {
         private int commentCount;
 

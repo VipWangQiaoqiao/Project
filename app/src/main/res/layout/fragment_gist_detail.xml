@@ -8,7 +8,7 @@
     tools:ignore="HardcodedText">
 
     <LinearLayout
-        android:id="@+id/ll_branch"
+        android:id="@+id/ll_file_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#f9f9f9"
@@ -85,6 +85,7 @@
         android:textSize="@dimen/font_14" />
 
     <LinearLayout
+        android:id="@+id/ll_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#f9f9f9"
@@ -118,6 +119,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/line1"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/list_divider_color" />
@@ -129,11 +131,13 @@
         android:layout_height="0dp" />
 
     <View
+        android:id="@+id/line2"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/list_divider_color" />
 
     <LinearLayout
+        android:id="@+id/ll_tool"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:background="@color/white"

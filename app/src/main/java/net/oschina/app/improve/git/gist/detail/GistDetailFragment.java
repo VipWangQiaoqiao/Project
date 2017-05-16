@@ -7,6 +7,7 @@ import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -47,10 +48,19 @@ public class GistDetailFragment extends BaseFragment implements GistDetailContra
     @Bind(R.id.tv_last_update)
     TextView mTextLastUpdate;
     @Bind(R.id.tv_comment_count)
-    TextView mTxetCommentCount;
+    TextView mTextCommentCount;
+    @Bind(R.id.ll_file_info)
+    LinearLayout mLinearInfo;
+    @Bind(R.id.ll_category)
+    LinearLayout mLinearCategory;
+    @Bind(R.id.line1)
+    View mLine1;
+    @Bind(R.id.line2)
+    View mLine2;
+    @Bind(R.id.ll_tool)
+    LinearLayout mLinearTool;
     private Gist mGist;
     private ShareDialog mAlertDialog;
-
     static GistDetailFragment newInstance(Gist gist) {
         GistDetailFragment fragment = new GistDetailFragment();
         Bundle bundle = new Bundle();
@@ -144,7 +154,27 @@ public class GistDetailFragment extends BaseFragment implements GistDetailContra
 
     @Override
     public void showGetCommentCountSuccess(int count) {
-        mTxetCommentCount.setText(String.format("评论（%s）", count));
+        mTextCommentCount.setText(String.format("评论（%s）", count));
+    }
+
+    @Override
+    public void showLandscape() {
+        mLinearInfo.setVisibility(View.GONE);
+        mLinearCategory.setVisibility(View.GONE);
+        mLinearTool.setVisibility(View.GONE);
+        mLine1.setVisibility(View.GONE);
+        mLine2.setVisibility(View.GONE);
+        mTextDescription.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showPortrait() {
+        mLinearInfo.setVisibility(View.VISIBLE);
+        mLinearCategory.setVisibility(View.VISIBLE);
+        mLinearTool.setVisibility(View.VISIBLE);
+        mLine1.setVisibility(View.VISIBLE);
+        mLine2.setVisibility(View.VISIBLE);
+        mTextDescription.setVisibility(View.VISIBLE);
     }
 
     private boolean toShare() {

@@ -21,11 +21,27 @@ interface GistDetailContract {
         void showGetDetailSuccess(Gist gist, int strId);
 
         void showGetCommentCountSuccess(int count);
+
+        /**
+         * 显示横屏
+         */
+        void showLandscape();
+
+        /**
+         * 显示竖屏
+         */
+        void showPortrait();
     }
 
     interface Presenter extends BasePresenter {
         void getGistDetail(String id);
 
         void getCommentCount(String id);
+
+        /**
+         * 改变配置
+         * @param isLandscape 是否是横屏
+         */
+        void changeConfig(boolean isLandscape);
     }
 }
