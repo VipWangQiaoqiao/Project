@@ -29,6 +29,12 @@ public class GistCommentFragment extends BaseRecyclerFragment<GistCommentContrac
     }
 
     @Override
+    public void showMoreMore() {
+        super.showMoreMore();
+        mRefreshLayout.setCanLoadMore(false);
+    }
+
+    @Override
     public void showAddCommentFailure(int strId) {
         SimplexToast.show(mContext, strId);
     }
