@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/ll_branch"
+        android:id="@+id/ll_name"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="#f9f9f9"
@@ -34,6 +34,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/list_divider_color" />

@@ -2,6 +2,8 @@ package net.oschina.app.improve.git.code;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -99,5 +101,21 @@ public class CodeDetailActivity extends BaseBackActivity {
         mAlertDialog.show();
 
         return true;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            ActionBar bar = getSupportActionBar();
+            if(bar != null)
+                bar.hide();
+            mPresenter.changeConfig(true);
+        } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mPresenter.changeConfig(false);
+            ActionBar bar = getSupportActionBar();
+            if(bar != null)
+                bar.show();
+        }
     }
 }
