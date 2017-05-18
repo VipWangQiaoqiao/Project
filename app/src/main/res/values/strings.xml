@@ -60,6 +60,7 @@
     <string name="platform_browser">浏览器</string>
     <string name="platform_copy_link">复制链接</string>
     <string name="platform_more_option">更多</string>
+    <string name="platform_download">保存图片</string>
     <string name="share_title">开源中国分享</string>
 
     <string name="add_favorite_success">收藏成功</string>
