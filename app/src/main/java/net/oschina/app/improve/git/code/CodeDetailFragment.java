@@ -2,9 +2,11 @@ package net.oschina.app.improve.git.code;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -20,14 +22,18 @@ import butterknife.Bind;
  * on 2017/3/13.
  */
 
-public class CodeDetailFragment extends BaseFragment implements CodeDetaiContract.View {
+public class CodeDetailFragment extends BaseFragment implements CodeDetailContract.View {
 
     @Bind(R.id.tv_file_name)
     TextView mTextFileName;
     @Bind(R.id.webView)
     WebView mWebView;
+    @Bind(R.id.ll_name)
+    LinearLayout mLinearName;
+    @Bind(R.id.line)
+    View mLine;
     private SourceEditor mEditor;
-    private CodeDetaiContract.Presenter mPresenter;
+    private CodeDetailContract.Presenter mPresenter;
 
     static CodeDetailFragment newInstance(String fileName) {
         CodeDetailFragment fragment = new CodeDetailFragment();
@@ -75,7 +81,19 @@ public class CodeDetailFragment extends BaseFragment implements CodeDetaiContrac
     }
 
     @Override
-    public void setPresenter(CodeDetaiContract.Presenter presenter) {
+    public void showLandscape() {
+        mLine.setVisibility(View.GONE);
+        mLinearName.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showPortrait() {
+        mLine.setVisibility(View.VISIBLE);
+        mLinearName.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void setPresenter(CodeDetailContract.Presenter presenter) {
         this.mPresenter = presenter;
     }
 }

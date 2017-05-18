@@ -18,13 +18,13 @@ import cz.msebera.android.httpclient.Header;
  * on 2017/3/13.
  */
 
-class CodeDetailPresenter implements CodeDetaiContract.Presenter {
-    private final CodeDetaiContract.View mView;
+class CodeDetailPresenter implements CodeDetailContract.Presenter {
+    private final CodeDetailContract.View mView;
     private String mFileName;
     private Project mProject;
     private String mBranch;
 
-    CodeDetailPresenter(CodeDetaiContract.View mView,
+    CodeDetailPresenter(CodeDetailContract.View mView,
                         Project project,
                         String mFileName,
                         String mBranch) {
@@ -61,6 +61,15 @@ class CodeDetailPresenter implements CodeDetaiContract.Presenter {
             }
         });
     }
+
+    @Override
+    public void changeConfig(boolean isLandscape) {
+        if (isLandscape)
+            mView.showLandscape();
+        else
+            mView.showPortrait();
+    }
+
 
     @Override
     public String getShareUrl() {
