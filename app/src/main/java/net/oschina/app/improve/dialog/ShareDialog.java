@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +34,9 @@ import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.BottomDialog;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.util.TDevice;
+import net.oschina.common.utils.StreamUtil;
 import net.oschina.open.bean.Share;
 import net.oschina.open.constants.OpenConstant;
 import net.oschina.open.factory.OpenBuilder;
@@ -46,8 +49,6 @@ import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static net.oschina.common.utils.StreamUtil.close;
 
 /**
  * Created by haibin
@@ -142,6 +143,7 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
 
         if (isOnlyBitmap) {
             shareActions.add(new ShareItem(R.mipmap.ic_action_tweet, R.string.platform_tweet));
+            shareActions.add(new ShareItem(R.mipmap.btn_download, R.string.platform_download));
             return shareActions;
         }
         //4.动弹
@@ -334,11 +336,45 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
                 TDevice.copyTextToBoard(share.getUrl());
                 cancelLoading();
                 break;
+            //保存到本地
+            case R.mipmap.btn_download:
+                saveShare(mActivity, share.getThumbBitmap());
+                cancelLoading();
+                break;
             //更多(调用系统分享)
             default:
                 showSystemShareOption(share.getTitle(), share.getUrl());
                 cancelLoading();
                 break;
+        }
+    }
+
+    public static void saveShare(Activity activity, Bitmap bitmap) {
+        FileOutputStream os = null;
+        String url = null;
+        try {
+            File file = new File(url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .getAbsolutePath() + File.separator + "开源中国/");
+            if (!file.exists())
+                file.mkdirs();
+            url = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .getAbsolutePath() + File.separator + "开源中国/" +
+                    System.currentTimeMillis() + ".jpg";
+            os = new FileOutputStream(url);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bitmap != null && !bitmap.isRecycled())
+                bitmap.recycle();
+            StreamUtil.close(os);
+            if (!TextUtils.isEmpty(url)) {
+                Uri uri = Uri.fromFile(new File(url));
+                activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                SimplexToast.show(activity,"保存成功");
+            }
         }
     }
 
@@ -370,6 +406,15 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
             this.dismiss();
             //mAlertDialog.dismiss();
         }
+    }
+
+    private void shareSystemImage(String url) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        Uri uri = FileProvider.getUriForFile(mActivity, "net.oschina.app.provider", new File(url));
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+//        shareIntent.putExtra(Intent.EXTRA_TEXT, title);
+        mActivity.startActivity(Intent.createChooser(shareIntent, "分享图片"));
     }
 
     private void showSystemShareOption(final String title, final String url) {
