@@ -31,6 +31,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.BottomDialog;
@@ -143,7 +144,7 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
 
         if (isOnlyBitmap) {
             shareActions.add(new ShareItem(R.mipmap.ic_action_tweet, R.string.platform_tweet));
-            shareActions.add(new ShareItem(R.mipmap.btn_download, R.string.platform_download));
+            shareActions.add(new ShareItem(R.mipmap.ic_action_preview, R.string.platform_preview));
             return shareActions;
         }
         //4.动弹
@@ -337,8 +338,11 @@ public class ShareDialog extends BottomDialog implements OpenBuilder.Callback,
                 cancelLoading();
                 break;
             //保存到本地
-            case R.mipmap.btn_download:
-                saveShare(mActivity, share.getThumbBitmap());
+            case R.mipmap.ic_action_preview:
+                String url = OpenBuilder.saveShare(share.getThumbBitmap());
+                if(!TextUtils.isEmpty(url)){
+                    ImageGalleryActivity.show(mActivity,url);
+                }
                 cancelLoading();
                 break;
             //更多(调用系统分享)
