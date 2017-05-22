@@ -57,7 +57,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         mTextUpdateInfo.setText(Html.fromHtml(mVersion.getMessage()));
     }
 
-    @OnClick({R.id.btn_update, R.id.btn_close, R.id.fl_root})
+    @OnClick({R.id.btn_update, R.id.btn_close})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -76,9 +76,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
             case R.id.btn_close:
-                finish();
-                break;
-            case R.id.fl_root:
                 finish();
                 break;
         }

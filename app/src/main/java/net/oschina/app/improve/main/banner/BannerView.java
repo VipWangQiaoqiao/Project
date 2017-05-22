@@ -380,10 +380,17 @@ public class BannerView extends ViewGroup implements View.OnClickListener {
             int childH = childView.getMeasuredHeight();
             int left, right, top, bottom;
             if (i == -1) {
-                left = -childW + mTotalScrollX + 2 * (int) mHorizontalOffset;
-                right = mTotalScrollX + (int) mHorizontalOffset;
-                top = 3 * (int) mVerticalOffset / 2;
-                bottom = top + childH;
+                if (getChildCount() == 1) {
+                    left = mTotalScrollX + 2 * (int) mHorizontalOffset;
+                    right = childW + mTotalScrollX + (int) mHorizontalOffset;
+                    top = 3 * (int) mVerticalOffset / 2;
+                    bottom = top + childH;
+                } else {
+                    left = -childW + mTotalScrollX + 2 * (int) mHorizontalOffset;
+                    right = mTotalScrollX + (int) mHorizontalOffset;
+                    top = 3 * (int) mVerticalOffset / 2;
+                    bottom = top + childH;
+                }
             } else if (i == 0) {//当前居中项
                 left = mTotalScrollX + (int) mHorizontalOffset;
                 right = left + childW;

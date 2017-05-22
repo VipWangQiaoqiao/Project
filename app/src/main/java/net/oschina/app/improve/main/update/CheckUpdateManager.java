@@ -3,8 +3,6 @@ package net.oschina.app.improve.main.update;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -25,7 +23,6 @@ import cz.msebera.android.httpclient.Header;
  * Created by haibin
  * on 2016/10/19.
  */
-
 public class CheckUpdateManager {
 
 
@@ -71,7 +68,7 @@ public class CheckUpdateManager {
                             int curVersionCode = TDevice.getVersionCode(AppContext
                                     .getInstance().getPackageName());
                             if (curVersionCode < Integer.parseInt(version.getCode())) {
-                                UpdateActivity.show((Activity) mContext,version);
+                                UpdateActivity.show((Activity) mContext, version);
 //                                AlertDialog.Builder dialog = DialogHelper.getConfirmDialog(mContext, version.getMessage(), new DialogInterface.OnClickListener() {
 //                                    @Override
 //                                    public void onClick(DialogInterface dialogInterface, int i) {
