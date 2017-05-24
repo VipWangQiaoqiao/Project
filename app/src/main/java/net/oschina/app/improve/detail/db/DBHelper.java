@@ -9,6 +9,8 @@ import android.text.TextUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 详情习惯收集
@@ -302,6 +304,73 @@ final class DBHelper extends SQLiteOpenHelper {
             return "feal";
         }
         return "varchar";
+    }
+
+    <T> List<T> get(Class<T> cls) {
+        String tableName = getTableName(cls);
+        if (!isExist(tableName))
+            return null;
+        List<T> list = new ArrayList<>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = getReadableDatabase();
+            cursor = db.rawQuery(String.format("SELECT *from %s", tableName), null);
+            Field[] fields = cls.getDeclaredFields();
+            while (cursor.moveToNext()) {
+                T t = cls.newInstance();
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    if (field.isAnnotationPresent(Column.class)) {
+                        Column column = field.getAnnotation(Column.class);
+                        String name = column.column();
+                        Class<?> type = field.getType();
+                        if (type.equals(int.class)) {
+                            field.set(t, cursor.getInt(cursor.getColumnIndex(name)));
+                        } else if (type.equals(String.class)) {
+                            field.set(t, cursor.getString(cursor.getColumnIndex(name)));
+                        } else if (type.equals(long.class)) {
+                            field.set(t, cursor.getLong(cursor.getColumnIndex(name)));
+                        } else if (type.equals(float.class)) {
+                            field.set(t, cursor.getFloat(cursor.getColumnIndex(name)));
+                        } else if (type.equals(double.class)) {
+                            field.set(t, cursor.getDouble(cursor.getColumnIndex(name)));
+                        }
+                    }
+                }
+                list.add(t);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return list;
+    }
+
+    boolean delete(Class<?> cls) {
+        String tableName = getTableName(cls);
+        if (!isExist(tableName))
+            return false;
+        SQLiteDatabase db = null;
+        try {
+            db = getWritableDatabase();
+            int i = db.delete(tableName, where, args);
+            return i > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
     }
 
     @Override

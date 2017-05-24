@@ -11,6 +11,10 @@ import java.io.Serializable;
 @SuppressWarnings("all")
 @Table(tableName = "behavior")
 public class Behavior implements Serializable {
+
+    @PrimaryKey(autoincrement = true,column = "id")
+    private int id;
+
     /**
      * 设备唯一编码
      */
@@ -260,5 +264,13 @@ public class Behavior implements Serializable {
 
     public void setOperateType(int operateType) {
         this.operateType = operateType;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

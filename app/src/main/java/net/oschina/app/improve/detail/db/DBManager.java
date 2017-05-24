@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * 数据库帮助类
@@ -56,7 +57,7 @@ public final class DBManager {
         return mManager;
     }
 
-    public DBManager where(String where, String...args) {
+    public DBManager where(String where, String... args) {
         mHelper.where(where, args);
         return mManager;
     }
@@ -69,29 +70,15 @@ public final class DBManager {
         return mManager.mHelper.update(table, column, object);
     }
 
-    public DBManager insert(Object object) {
-        try {
-            Class<?> cls = object.getClass();
-            Annotation[] annotations = cls.getDeclaredAnnotations();
-            if (annotations == null || annotations.length == 0) {
-                throw new IllegalStateException("you must user Table annotation for bean");
-            }
-            String tableName = null;
-            for (Annotation annotation : annotations) {
-                if (annotation instanceof Table)
-                    tableName = ((Table) annotation).tableName();
-            }
-            if (TextUtils.isEmpty(tableName)) {
-                throw new IllegalStateException("you must user Table annotation for bean");
-            }
-            Field[] fields = cls.getDeclaredFields();
-            for (Field field : fields) {
+    public boolean insert(Object object) {
+        return mManager.mHelper.insert(object);
+    }
 
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        return mManager;
+    public <T> List<T> get(Class<T> cls) {
+        return mHelper.get(cls);
+    }
+
+    public boolean delete(Class<?> cls) {
+        return mHelper.delete(cls);
     }
 }
