@@ -19,6 +19,13 @@ def debugCompileUrl = localProperties.getProperty('DEBUG_COMPILE_URL',
 def debugCompile = localProperties.getProperty('DEBUG_COMPILE',
         rootProperties.get('DEBUG_COMPILE', null))
 
+android.buildTypes.all { buildType ->
+    localProperties.any { property ->
+        if (property.key.equals("VIOLET_PASSCODE")) {
+            buildType.buildConfigField "String", property.key, "\"${property.value}\""
+        }
+    }
+}
 ext {
     propertyHaveSigningConfigs = (storeFileStr != null && storePwdStr != null && keyAliasStr != null && keyPwdStr != null)
     propertyStoreFileStr = storeFileStr
