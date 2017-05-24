@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * 数据库帮助类
@@ -93,5 +94,13 @@ public final class DBManager {
             return null;
         }
         return mManager;
+    }
+
+    public <T> List<T> get(Class<T> cls) {
+        return mHelper.get(cls);
+    }
+
+    public boolean delete(Class<?> cls) {
+        return mHelper.delete(cls);
     }
 }
