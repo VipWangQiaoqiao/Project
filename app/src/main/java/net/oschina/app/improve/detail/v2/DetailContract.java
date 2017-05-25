@@ -4,6 +4,9 @@ import net.oschina.app.improve.base.BasePresenter;
 import net.oschina.app.improve.base.BaseView;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
+import net.oschina.app.improve.detail.db.Behavior;
+
+import java.util.List;
 
 /**
  * Created by haibin
@@ -24,6 +27,8 @@ interface DetailContract {
         void showCommentSuccess(Comment comment);
 
         void showCommentError(String message);
+
+        void showUploadBehaviorsSuccess(int index);
     }
 
     interface View extends BaseView<Presenter> {
@@ -60,6 +65,8 @@ interface DetailContract {
                 long replyId,
                 long reAuthorId
         );//添加评论
+
+        void uploadBehaviors(List<Behavior> behaviors);
 
         void addUserRelation(long authorId);
 

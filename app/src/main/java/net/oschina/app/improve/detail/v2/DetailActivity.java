@@ -1,6 +1,7 @@
 package net.oschina.app.improve.detail.v2;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -185,6 +186,15 @@ public abstract class DetailActivity extends BackActivity implements
                     }
                 }
             });
+
+        if (AccountHelper.isLogin() &&
+                DBManager.from(getApplicationContext())
+                        .getCount(Behavior.class) >= 15) {
+            mPresenter.uploadBehaviors(DBManager.from(getApplicationContext())
+                    .limit(15, 0)
+                    .get(Behavior.class)
+            );
+        }
     }
 
     private void initBehavior() {
@@ -196,6 +206,7 @@ public abstract class DetailActivity extends BackActivity implements
             mBehavior.setUrl(mBean.getHref());
             mBehavior.setOperateType(mBean.getType());
             mBehavior.setOperateTime(System.currentTimeMillis());
+            mStart = mBehavior.getOperateTime();
             mBehavior.setOperation("read");
             mBehavior.setDevice(android.os.Build.MODEL);
             mBehavior.setVersion(TDevice.getVersionName());
@@ -272,7 +283,6 @@ public abstract class DetailActivity extends BackActivity implements
     public void showGetDetailSuccess(SubBean bean) {
         this.mBean = bean;
         initBehavior();
-        mStart = System.currentTimeMillis();
         if (mDelegation != null)
             mDelegation.setFavDrawable(mBean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
         if (mCommentCountView != null && mBean.getStatistics() != null) {
@@ -331,6 +341,13 @@ public abstract class DetailActivity extends BackActivity implements
         //hideDialog();
         AppContext.showToastShort(R.string.pub_comment_failed);
         mDelegation.setCommitButtonEnable(true);
+    }
+
+    @Override
+    public void showUploadBehaviorsSuccess(int index) {
+        DBManager.from(getApplicationContext())
+                .where("id<=?", String.valueOf(index))
+                .delete(Behavior.class);
     }
 
     @SuppressLint("SetTextI18n")
@@ -470,7 +487,24 @@ public abstract class DetailActivity extends BackActivity implements
     @Override
     protected void onStop() {
         super.onStop();
-        mStay = System.currentTimeMillis() - mStay;
+        mStay += (System.currentTimeMillis() - mStart) / 1000;
+        if (mBehavior != null) {
+            mBehavior.setStay(mStay);
+            DBManager.from(getApplicationContext())
+                    .where("operate_time=?", String.valueOf(mBehavior.getOperateTime()))
+                    .update(mBehavior);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && mBehavior != null) {
+            mBehavior.setIsComment(1);
+            DBManager.from(getApplicationContext())
+                    .where("operate_time=?", String.valueOf(mBehavior.getOperateTime()))
+                    .update(mBehavior);
+        }
     }
 
     private abstract class OnDoubleTouchListener implements View.OnTouchListener {

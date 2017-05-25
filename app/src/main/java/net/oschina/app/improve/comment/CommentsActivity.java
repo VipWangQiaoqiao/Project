@@ -2,7 +2,7 @@ package net.oschina.app.improve.comment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -84,6 +84,7 @@ public class CommentsActivity extends BaseBackActivity implements
 
     private CommentBar mDelegation;
     private boolean mInputDoubleEmpty = true;
+    private boolean isAddCommented;
 
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
 
@@ -108,6 +109,7 @@ public class CommentsActivity extends BaseBackActivity implements
 
                 ResultBean<Comment> resultBean = AppOperator.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
+                    isAddCommented = true;
                     Comment respComment = resultBean.getResult();
                     if (respComment != null) {
                         handleSyncTweet();
@@ -148,13 +150,13 @@ public class CommentsActivity extends BaseBackActivity implements
     private Comment mComment;
     private String mShareTitle;
 
-    public static void show(Context context, long id, int type, int order, String title) {
-        Intent intent = new Intent(context, CommentsActivity.class);
+    public static void show(Activity activity, long id, int type, int order, String title) {
+        Intent intent = new Intent(activity, CommentsActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("type", type);
         intent.putExtra("order", order);
         intent.putExtra("title", title);
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, 1);
     }
 
     @Override
@@ -519,7 +521,7 @@ public class CommentsActivity extends BaseBackActivity implements
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,@NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
@@ -529,5 +531,13 @@ public class CommentsActivity extends BaseBackActivity implements
         super.onResume();
         if (mShareView != null)
             mShareView.dismiss();
+    }
+
+    @Override
+    public void finish() {
+        if (isAddCommented) {
+            setResult(RESULT_OK, new Intent());
+        }
+        super.finish();
     }
 }

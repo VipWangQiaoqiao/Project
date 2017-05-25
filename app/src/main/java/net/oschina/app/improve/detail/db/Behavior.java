@@ -12,7 +12,8 @@ import java.io.Serializable;
 @Table(tableName = "behavior")
 public class Behavior implements Serializable {
 
-    @PrimaryKey(autoincrement = true,column = "id")
+    @PrimaryKey(autoincrement = true, column = "id")
+    @SerializedName("index")
     private int id;
 
     /**
@@ -30,39 +31,34 @@ public class Behavior implements Serializable {
     /**
      * 用户id
      */
-    @Column(column = "user",isNotNull = true)
+    @Column(column = "user", isNotNull = true)
     private long user;
 
     /**
      * 用户名
      */
     @SerializedName("user_name")
-    @Column(column = "user_name",isNotNull = true)
+    @Column(column = "user_name", isNotNull = true)
     private String userName;
 
     /**
      *
      */
-    @Column(column = "operation",isNotNull = true)
+    @Column(column = "operation", isNotNull = true)
     private String operation;
 
     /**
      * 操作时间
      */
     @SerializedName("operate_time")
-    @Column(column = "operate_time",isNotNull = true)
+    @Column(column = "operate_time", isNotNull = true)
     private long operateTime;
 
     /**
-     * 类型版本
-     * 1   news
-     * 2   project
-     * 3   question
-     * 4   blog
-     * 5  translate
+     * 文章类型
      */
     @SerializedName("operate_type")
-    @Column(column = "operate_type",isNotNull = true)
+    @Column(column = "operate_type", isNotNull = true)
     private int operateType;
 
     /**
@@ -114,19 +110,19 @@ public class Behavior implements Serializable {
     /**
      * 设备，Android、IOS
      */
-    @Column(column = "device",isNotNull = true)
+    @Column(column = "device", isNotNull = true)
     private String device;
 
     /**
      * 操作系统版本 MEIZU PRO6s 6.0.1
      */
-    @Column(column = "os",isNotNull = true)
+    @Column(column = "os", isNotNull = true)
     private String os;
 
     /**
      * app版本号
      */
-    @Column(column = "version",isNotNull = true)
+    @Column(column = "version", isNotNull = true)
     private String version;
 
     public String getUuid() {
