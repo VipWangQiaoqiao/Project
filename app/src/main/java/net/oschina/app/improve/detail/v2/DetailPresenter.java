@@ -1,5 +1,8 @@
 package net.oschina.app.improve.detail.v2;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -12,10 +15,13 @@ import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.comment.Comment;
 import net.oschina.app.improve.bean.simple.UserRelation;
+import net.oschina.app.improve.detail.db.API;
+import net.oschina.app.improve.detail.db.Behavior;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -23,7 +29,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by haibin
  * on 2016/11/30.
  */
-
+@SuppressWarnings("all")
 public class DetailPresenter implements DetailContract.Presenter {
     private final DetailContract.View mView;
     private final DetailContract.EmptyView mEmptyView;
@@ -193,6 +199,31 @@ public class DetailPresenter implements DetailContract.Presenter {
                 } catch (Exception e) {
                     e.printStackTrace();
                     mView.showAddRelationError();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void uploadBehaviors(final List<Behavior> behaviors) {
+        API.addBehaviors(new Gson().toJson(behaviors), new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                // TODO: 2017/5/25 不需要处理失败的情况
+                Log.e("onFailure", "" + responseString);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<String>>() {
+                    }.getType();
+                    ResultBean<String> bean = new Gson().fromJson(responseString, type);
+                    if (bean.isSuccess()) {
+                        mEmptyView.showUploadBehaviorsSuccess(behaviors.get(behaviors.size() - 1).getId());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -355,7 +356,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (mId != 0 && mType != 0)
-            CommentsActivity.show(getContext(), mId, mType, OSChinaApi.COMMENT_NEW_ORDER, mShareTitle);
+            CommentsActivity.show((AppCompatActivity)getContext(), mId, mType, OSChinaApi.COMMENT_NEW_ORDER, mShareTitle);
     }
 
     /**

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
+import net.oschina.app.improve.detail.db.DBManager;
 import net.oschina.app.improve.detail.v2.DetailActivity;
 import net.oschina.app.improve.detail.v2.DetailFragment;
 
@@ -49,5 +50,16 @@ public class BlogDetailActivity extends DetailActivity {
     @Override
     protected DetailFragment getDetailFragment() {
         return BlogDetailFragment.newInstance();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && mBehavior != null) {
+            mBehavior.setIsComment(1);
+            DBManager.from(getApplicationContext())
+                    .where("operate_time=?", String.valueOf(mBehavior.getOperateTime()))
+                    .update(mBehavior);
+        }
     }
 }

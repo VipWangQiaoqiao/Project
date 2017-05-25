@@ -107,10 +107,13 @@ final class DBHelper extends SQLiteOpenHelper {
                 }
             }
             db.update(tableName, values, where, args);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             where = null;
+            limit = 0;
+            offset = 0;
             args = null;
             if (db != null && db.isOpen()) {
                 db.close();
@@ -148,13 +151,17 @@ final class DBHelper extends SQLiteOpenHelper {
                     }
                 }
             }
-            db.insert(tableName, "", values);
+            return db.insert(tableName, "", values) != 0;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (db != null && db.isOpen()) {
                 db.close();
             }
+            where = null;
+            limit = 0;
+            offset = 0;
+            args = null;
         }
         return false;
     }
@@ -328,7 +335,7 @@ final class DBHelper extends SQLiteOpenHelper {
         } else if (type.equals(String.class)) {
             return "text";
         } else if (type.equals(long.class)) {
-            return "int(16)";
+            return "long";
         } else if (type.equals(float.class)) {
             return "feal";
         } else if (type.equals(double.class)) {
@@ -359,9 +366,12 @@ final class DBHelper extends SQLiteOpenHelper {
                 T t = cls.newInstance();
                 for (Field field : fields) {
                     field.setAccessible(true);
-                    if (field.isAnnotationPresent(Column.class)) {
-                        Column column = field.getAnnotation(Column.class);
-                        String name = column.column();
+                    String name = "";
+                    if (field.isAnnotationPresent(Column.class))
+                        name = field.getAnnotation(Column.class).column();
+                    else if (field.isAnnotationPresent(PrimaryKey.class))
+                        name = field.getAnnotation(PrimaryKey.class).column();
+                    if (!TextUtils.isEmpty(name)) {
                         Class<?> type = field.getType();
                         if (type.equals(int.class)) {
                             field.set(t, cursor.getInt(cursor.getColumnIndex(name)));
