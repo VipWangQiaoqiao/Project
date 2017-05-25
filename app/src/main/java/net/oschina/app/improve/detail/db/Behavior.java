@@ -102,7 +102,7 @@ public class Behavior implements Serializable {
     /**
      * 阅读时间
      */
-    @Column(column = "stay",isNotNull = true)
+    @Column(column = "stay")
     private long stay;
 
     /**

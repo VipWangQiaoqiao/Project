@@ -1,10 +1,8 @@
 package net.oschina.app.improve.detail.db;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -63,7 +61,13 @@ public final class DBManager {
     }
 
     public boolean update(Object object) {
+        if (object == null)
+            return false;
         return mManager.mHelper.update(object);
+    }
+
+    public long getCount(Class<?> cls) {
+        return mHelper.getCount(cls);
     }
 
     public boolean update(String table, String column, Object object) {
@@ -71,7 +75,14 @@ public final class DBManager {
     }
 
     public boolean insert(Object object) {
+        if (object == null)
+            return false;
         return mManager.mHelper.insert(object);
+    }
+
+    public DBManager limit(int limit, int offset) {
+        mHelper.limit(limit, offset);
+        return mManager;
     }
 
     public <T> List<T> get(Class<T> cls) {

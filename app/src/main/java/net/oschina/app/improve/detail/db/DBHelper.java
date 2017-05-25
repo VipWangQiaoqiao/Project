@@ -22,6 +22,7 @@ final class DBHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private String where;
     private String[] args;
+    private int limit, offset;
 
     DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -93,13 +94,15 @@ final class DBHelper extends SQLiteOpenHelper {
                     Column column = field.getAnnotation(Column.class);
                     boolean isNotNull = column.isNotNull();
                     String name = column.column();
-                    values.put(name, field.get(obj).toString());
+                    Object object = field.get(obj);
+                    values.put(name, object == null ? "" : object.toString());
                 } else if (field.isAnnotationPresent(PrimaryKey.class)) {
                     PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
                     boolean isAutoincrement = primaryKey.autoincrement();
                     String name = primaryKey.column();
                     if (!isAutoincrement) {
-                        values.put(name, field.get(obj).toString());
+                        Object object = field.get(obj);
+                        values.put(name, object == null ? "" : object.toString());
                     }
                 }
             }
@@ -133,13 +136,15 @@ final class DBHelper extends SQLiteOpenHelper {
                     Column column = field.getAnnotation(Column.class);
                     boolean isNotNull = column.isNotNull();
                     String name = column.column();
-                    values.put(name, field.get(obj).toString());
+                    Object object = field.get(obj);
+                    values.put(name, object == null ? "" : object.toString());
                 } else if (field.isAnnotationPresent(PrimaryKey.class)) {
                     PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
                     boolean isAutoincrement = primaryKey.autoincrement();
                     String name = primaryKey.column();
                     if (!isAutoincrement) {
-                        values.put(name, field.get(obj).toString());
+                        Object object = field.get(obj);
+                        values.put(name, object == null ? "" : object.toString());
                     }
                 }
             }
@@ -152,6 +157,32 @@ final class DBHelper extends SQLiteOpenHelper {
             }
         }
         return false;
+    }
+
+    long getCount(Class<?> cls) {
+        String tableName = getTableName(cls);
+        if (!isExist(tableName))
+            return -1;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = getReadableDatabase();
+            cursor = db.rawQuery(String.format("select count(*) from %s", tableName), null);
+            cursor.moveToFirst();
+            long count = cursor.getLong(0);
+            cursor.close();
+            return count;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return 0;
     }
 
     DBHelper where(String cause) {
@@ -306,6 +337,12 @@ final class DBHelper extends SQLiteOpenHelper {
         return "varchar";
     }
 
+    DBHelper limit(int limit, int offset) {
+        this.limit = limit;
+        this.offset = offset;
+        return this;
+    }
+
     <T> List<T> get(Class<T> cls) {
         String tableName = getTableName(cls);
         if (!isExist(tableName))
@@ -315,7 +352,8 @@ final class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             db = getReadableDatabase();
-            cursor = db.rawQuery(String.format("SELECT *from %s", tableName), null);
+            cursor = db.rawQuery(String.format("SELECT * from %s limit %s offset %s",
+                    tableName, String.valueOf(limit), String.valueOf(offset)), null);
             Field[] fields = cls.getDeclaredFields();
             while (cursor.moveToNext()) {
                 T t = cls.newInstance();

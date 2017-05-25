@@ -1,7 +1,10 @@
 package net.oschina.app.improve.detail.v2;
 
 import android.annotation.SuppressLint;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -25,6 +28,8 @@ import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.behavior.CommentBar;
 import net.oschina.app.improve.comment.CommentsActivity;
 import net.oschina.app.improve.comment.OnCommentClickListener;
+import net.oschina.app.improve.detail.db.Behavior;
+import net.oschina.app.improve.detail.db.DBManager;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
@@ -56,6 +61,10 @@ public abstract class DetailActivity extends BackActivity implements
     protected DetailFragment mDetailFragment;
     protected ShareDialog mAlertDialog;
     protected TextView mCommentCountView;
+    protected long mStay;//该界面停留时间
+    private long mStart;
+    protected Behavior mBehavior;
+    private boolean isInsert;
 
     protected CommentBar mDelegation;
 
@@ -74,6 +83,8 @@ public abstract class DetailActivity extends BackActivity implements
     @Override
     protected void initWidget() {
         super.initWidget();
+        DBManager.from(getApplicationContext())
+                .create(Behavior.class);
         CommentShareView.clearShareImage();
         if (!TDevice.hasWebView(this)) {
             finish();
@@ -176,6 +187,69 @@ public abstract class DetailActivity extends BackActivity implements
             });
     }
 
+    private void initBehavior() {
+        if (AccountHelper.isLogin() && mBean.getType() != News.TYPE_EVENT && !isInsert) {
+            mBehavior = new Behavior();
+            mBehavior.setUser(AccountHelper.getUserId());
+            mBehavior.setUserName(AccountHelper.getUser().getName());
+            mBehavior.setNetwork(getNetwork());
+            mBehavior.setUrl(mBean.getHref());
+            mBehavior.setOperateType(mBean.getType());
+            mBehavior.setOperateTime(System.currentTimeMillis());
+            mBehavior.setOperation("read");
+            mBehavior.setDevice(android.os.Build.MODEL);
+            mBehavior.setVersion(TDevice.getVersionName());
+            mBehavior.setOs(android.os.Build.VERSION.RELEASE);
+            isInsert = DBManager.from(getApplicationContext())
+                    .insert(mBehavior);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private String getNetwork() {
+        ConnectivityManager connect = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        if (connect == null)
+            return "null";
+        NetworkInfo activeNetInfo = connect.getActiveNetworkInfo();
+        if (activeNetInfo == null || !activeNetInfo.isAvailable()) {
+            return "null";
+        }
+        NetworkInfo wifiInfo = connect.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (wifiInfo != null) {
+            NetworkInfo.State state = wifiInfo.getState();
+            if (state != null)
+                if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING) {
+                    return "WIFI";
+                }
+        }
+        NetworkInfo networkInfo = connect.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        NetworkInfo.State state = networkInfo.getState();
+        if (null != state)
+            if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING) {
+                switch (activeNetInfo.getSubtype()) {
+                    case TelephonyManager.NETWORK_TYPE_GPRS: // 联通2g
+                    case TelephonyManager.NETWORK_TYPE_CDMA: // 电信2g
+                    case TelephonyManager.NETWORK_TYPE_EDGE: // 移动2g
+                    case TelephonyManager.NETWORK_TYPE_1xRTT:
+                    case TelephonyManager.NETWORK_TYPE_IDEN:
+                        return "2G";
+                    case TelephonyManager.NETWORK_TYPE_EVDO_A: // 电信3g
+                    case TelephonyManager.NETWORK_TYPE_UMTS:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                    case TelephonyManager.NETWORK_TYPE_HSDPA:
+                    case TelephonyManager.NETWORK_TYPE_HSUPA:
+                    case TelephonyManager.NETWORK_TYPE_HSPA:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                    case TelephonyManager.NETWORK_TYPE_EHRPD:
+                    case TelephonyManager.NETWORK_TYPE_HSPAP:
+                        return "3G";
+                    case TelephonyManager.NETWORK_TYPE_LTE:
+                        return "4G";
+                }
+            }
+        return "null";
+    }
+
     @Override
     public void hideEmptyLayout() {
         mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
@@ -197,6 +271,8 @@ public abstract class DetailActivity extends BackActivity implements
     @Override
     public void showGetDetailSuccess(SubBean bean) {
         this.mBean = bean;
+        initBehavior();
+        mStart = System.currentTimeMillis();
         if (mDelegation != null)
             mDelegation.setFavDrawable(mBean.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
         if (mCommentCountView != null && mBean.getStatistics() != null) {
@@ -213,6 +289,12 @@ public abstract class DetailActivity extends BackActivity implements
 
     @Override
     public void showFavReverseSuccess(boolean isFav, int favCount, int strId) {
+        if (mBehavior != null) {
+            mBehavior.setIsCollect(isFav ? 1 : 0);
+            DBManager.from(getApplicationContext())
+                    .where("operate_time=?", String.valueOf(mBehavior.getOperateTime()))
+                    .update(mBehavior);
+        }
         if (mDelegation != null) {
             mDelegation.setFavDrawable(isFav ? R.drawable.ic_faved : R.drawable.ic_fav);
         }
@@ -221,6 +303,12 @@ public abstract class DetailActivity extends BackActivity implements
     @Override
     public void showCommentSuccess(Comment comment) {
         //hideDialog();
+        if (mBehavior != null) {
+            mBehavior.setIsComment(1);
+            DBManager.from(getApplicationContext())
+                    .where("operate_time=?", String.valueOf(mBehavior.getOperateTime()))
+                    .update(mBehavior);
+        }
         if (mDelegation == null)
             return;
         if (mDelegation.getBottomSheet().isSyncToTweet()) {
@@ -322,7 +410,12 @@ public abstract class DetailActivity extends BackActivity implements
                     .url(url).with();
         }
         mAlertDialog.show();
-
+        if (mBehavior != null) {
+            mBehavior.setIsShare(1);
+            DBManager.from(getApplicationContext())
+                    .where("operate_time=?", String.valueOf(mBehavior.getOperateTime()))
+                    .update(mBehavior);
+        }
         return true;
     }
 
@@ -367,9 +460,17 @@ public abstract class DetailActivity extends BackActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        if (mStart != 0)
+            mStart = System.currentTimeMillis();
         if (mAlertDialog == null)
             return;
         mAlertDialog.hideProgressDialog();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mStay = System.currentTimeMillis() - mStay;
     }
 
     private abstract class OnDoubleTouchListener implements View.OnTouchListener {
