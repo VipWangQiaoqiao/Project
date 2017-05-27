@@ -26,6 +26,9 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.radar.RadarSearchError;
 import com.baidu.mapapi.radar.RadarSearchManager;
 import com.baidu.mapapi.radar.RadarUploadInfo;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
@@ -36,6 +39,10 @@ import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.Version;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.detail.db.API;
+import net.oschina.app.improve.detail.db.Behavior;
+import net.oschina.app.improve.detail.db.DBManager;
 import net.oschina.app.improve.main.location.BDLocationAdapter;
 import net.oschina.app.improve.main.location.RadarSearchAdapter;
 import net.oschina.app.improve.main.nav.NavFragment;
@@ -48,14 +55,17 @@ import net.oschina.app.improve.tweet.service.TweetNotificationManager;
 import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import cz.msebera.android.httpclient.Header;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -116,11 +126,52 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     }
 
     @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        try {
+            //如果是两天前的数据，则全部上传
+            String updateTime = AppConfig.getAppConfig(this).get("upload_behavior_time");
+            if (DBManager.from(getApplicationContext()).getCount(Behavior.class) >= 15 &&
+                    !TextUtils.isEmpty(updateTime) &&
+                    (System.currentTimeMillis() - StringUtils.toDate(updateTime).getTime() >= 172800000)) {
+                final List<Behavior> behaviors = DBManager.from(getApplicationContext())
+                        .get(Behavior.class);
+                API.addBehaviors(new Gson().toJson(behaviors), new TextHttpResponseHandler() {
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        try {
+                            Type type = new TypeToken<ResultBean<String>>() {
+                            }.getType();
+                            ResultBean<String> bean = new Gson().fromJson(responseString, type);
+                            if (bean.isSuccess()) {
+                                //清楚数据，避免清空没有上传的数据
+                                DBManager.from(getApplicationContext())
+                                        .where("id<=?", String.valueOf(behaviors.get(behaviors.size() - 1).getId()))
+                                        .delete(Behavior.class);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         doNewIntent(intent, false);
     }
 
+    @SuppressWarnings("unused")
     private void doNewIntent(Intent intent, boolean isCreate) {
         if (intent == null || intent.getAction() == null)
             return;

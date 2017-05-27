@@ -28,7 +28,7 @@ interface DetailContract {
 
         void showCommentError(String message);
 
-        void showUploadBehaviorsSuccess(int index);
+        void showUploadBehaviorsSuccess(int index,String time);
     }
 
     interface View extends BaseView<Presenter> {

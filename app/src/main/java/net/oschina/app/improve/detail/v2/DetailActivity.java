@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -344,10 +345,12 @@ public abstract class DetailActivity extends BackActivity implements
     }
 
     @Override
-    public void showUploadBehaviorsSuccess(int index) {
+    public void showUploadBehaviorsSuccess(int index, String time) {
         DBManager.from(getApplicationContext())
                 .where("id<=?", String.valueOf(index))
                 .delete(Behavior.class);
+        AppConfig.getAppConfig(this)
+                .set("upload_behavior_time", time);
     }
 
     @SuppressLint("SetTextI18n")
