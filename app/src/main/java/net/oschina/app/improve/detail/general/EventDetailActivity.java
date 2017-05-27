@@ -183,6 +183,8 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                 case Event.STATUS_END:
                     mTextApplyStatus.setText(getResources().getString(R.string.event_status_end));
                     mLinearSign.setEnabled(false);
+                    mTextApplyStatus.setEnabled(false);
+                    mImageSign.setEnabled(false);
                     break;
                 case Event.STATUS_ING:
                     mTextApplyStatus.setText(getResources().getString(R.string.event_apply_status_un_sign));
@@ -190,6 +192,8 @@ public class EventDetailActivity extends DetailActivity implements View.OnClickL
                 case Event.STATUS_SING_UP:
                     mTextApplyStatus.setText(getResources().getString(R.string.event_status_sing_up));
                     mLinearSign.setEnabled(false);
+                    mTextApplyStatus.setEnabled(false);
+                    mImageSign.setEnabled(false);
                     break;
             }
             if(eventStatus == Event.STATUS_END || eventStatus == Event.STATUS_SING_UP){

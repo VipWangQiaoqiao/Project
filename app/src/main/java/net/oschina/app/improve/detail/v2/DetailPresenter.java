@@ -220,7 +220,8 @@ public class DetailPresenter implements DetailContract.Presenter {
                     }.getType();
                     ResultBean<String> bean = new Gson().fromJson(responseString, type);
                     if (bean.isSuccess()) {
-                        mEmptyView.showUploadBehaviorsSuccess(behaviors.get(behaviors.size() - 1).getId());
+                        mEmptyView.showUploadBehaviorsSuccess(behaviors.get(behaviors.size() - 1).getId()
+                                ,bean.getTime());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

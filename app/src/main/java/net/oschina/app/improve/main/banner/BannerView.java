@@ -132,7 +132,7 @@ public class BannerView extends ViewGroup implements View.OnClickListener {
     }
 
     public void scrollToNext() {
-        if (isTouch || mAdapter == null || mAdapter.getCount() == 0 || !mScroller.isFinished())
+        if (isTouch || mAdapter == null || mAdapter.getCount() <= 1 || !mScroller.isFinished())
             return;
         mXVelocity = -1311;
         scrollToItem();

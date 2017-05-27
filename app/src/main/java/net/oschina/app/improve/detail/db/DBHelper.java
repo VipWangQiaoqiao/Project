@@ -359,8 +359,10 @@ final class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             db = getReadableDatabase();
-            cursor = db.rawQuery(String.format("SELECT * from %s limit %s offset %s",
-                    tableName, String.valueOf(limit), String.valueOf(offset)), null);
+            String sql = limit != 0 ? String.format("SELECT * from %s limit %s offset %s",
+                    tableName, String.valueOf(limit), String.valueOf(offset)) :
+                    String.format("SELECT * from %s", tableName);
+            cursor = db.rawQuery(sql, null);
             Field[] fields = cls.getDeclaredFields();
             while (cursor.moveToNext()) {
                 T t = cls.newInstance();
