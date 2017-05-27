@@ -18,7 +18,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 final class DBHelper extends SQLiteOpenHelper {
-    private static final String DB_NAME = "detail";
+    private static final String DB_NAME = "detail.db";
     private static final int DB_VERSION = 1;
     private String where;
     private String[] args;
@@ -55,25 +55,24 @@ final class DBHelper extends SQLiteOpenHelper {
         String table = "";
         String primary = "";
         Field[] fields = cls.getDeclaredFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+        for (Field field : fields) {
             field.setAccessible(true);
             if (field.isAnnotationPresent(PrimaryKey.class)) {
                 PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
                 boolean isAutoincrement = primaryKey.autoincrement();
                 String name = primaryKey.column();
                 primary = String.format(name + " %s primary key " +
-                        (isAutoincrement ? "autoincrement" : "") +
-                        (i == fields.length - 1 ? "" : ","), getTypeString(field));
+                        (isAutoincrement ? "autoincrement," : ","), getTypeString(field));
             } else if (field.isAnnotationPresent(Column.class)) {
                 Column column = field.getAnnotation(Column.class);
                 boolean isNotNull = column.isNotNull();
                 String name = column.column();
-                table = table + String.format(name + " %s" +
-                        (i == fields.length - 1 ? "" : ","), getTypeString(field));
+                table = table + String.format(name + " %s,", getTypeString(field));
             }
         }
-        sql = sql + "(" + primary + table + ")";
+        if (TextUtils.isEmpty(table))
+            return;
+        sql = sql + "(" + primary + table.substring(0, table.length() - 1) + ")";
         getWritableDatabase().execSQL(sql);
     }
 
