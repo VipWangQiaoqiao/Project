@@ -6,6 +6,7 @@
     android:background="@drawable/item_blog_about_bg_selector"
     android:orientation="vertical"
     android:paddingLeft="16dp"
+    android:descendantFocusability="blocksDescendants"
     tools:ignore="RtlHardcoded,RtlSymmetry">
 
     <LinearLayout
@@ -95,6 +96,8 @@
 
     <net.oschina.app.improve.comment.CommentReferView
         android:id="@+id/lay_refer"
+        android:clickable="false"
+        android:focusable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />

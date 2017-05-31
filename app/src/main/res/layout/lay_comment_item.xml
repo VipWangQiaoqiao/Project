@@ -6,9 +6,12 @@
     android:background="@drawable/item_blog_about_bg_selector"
     android:orientation="vertical"
     android:paddingLeft="16dp"
+    android:clickable="true"
+    android:descendantFocusability="beforeDescendants"
     tools:ignore="RtlHardcoded,RtlSymmetry">
 
     <LinearLayout
+        android:clickable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -19,6 +22,8 @@
 
         <net.oschina.app.improve.widget.PortraitView
             android:id="@+id/iv_avatar"
+            android:clickable="false"
+            android:focusable="false"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center_vertical"
@@ -69,18 +74,6 @@
                 tools:text="12楼  6分钟前" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/btn_vote"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/app_name"
-            android:paddingBottom="18dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/ic_thumb_normal"
-            tools:ignore="RtlHardcoded" />
-
         <TextView
             android:id="@+id/tv_vote_count"
             android:layout_width="wrap_content"
@@ -93,17 +86,19 @@
             tools:text="12" />
 
         <ImageView
-            android:id="@+id/btn_comment"
+            android:id="@+id/btn_vote"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="2dp"
             android:contentDescription="@string/app_name"
             android:paddingBottom="18dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_comment_30"
+            android:src="@mipmap/ic_thumb_normal"
+            android:clickable="false"
+            android:focusable="false"
             tools:ignore="RtlHardcoded" />
+
 
     </LinearLayout>
 
@@ -115,6 +110,8 @@
 
     <net.oschina.app.widget.TweetTextView
         android:id="@+id/tv_content"
+        android:clickable="false"
+        android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"

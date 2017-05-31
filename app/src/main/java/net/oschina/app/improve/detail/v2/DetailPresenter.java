@@ -221,13 +221,18 @@ public class DetailPresenter implements DetailContract.Presenter {
                     ResultBean<String> bean = new Gson().fromJson(responseString, type);
                     if (bean.isSuccess()) {
                         mEmptyView.showUploadBehaviorsSuccess(behaviors.get(behaviors.size() - 1).getId()
-                                ,bean.getTime());
+                                , bean.getTime());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    @Override
+    public void shareComment(Comment comment) {
+        mEmptyView.showShareCommentView(comment);
     }
 
     boolean isHideCommentBar() {

@@ -19,6 +19,11 @@
         android:layout_height="match_parent"
         android:background="@color/main_green">
 
+        <net.oschina.app.improve.widget.CommentShareView
+            android:id="@+id/shareView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <LinearLayout
             android:id="@+id/ll_comment"
             android:layout_width="match_parent"
@@ -29,7 +34,7 @@
             <FrameLayout
                 android:id="@+id/lay_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@color/white" />
 

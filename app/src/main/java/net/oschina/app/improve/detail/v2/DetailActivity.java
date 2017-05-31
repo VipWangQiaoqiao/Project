@@ -1,10 +1,15 @@
 package net.oschina.app.improve.detail.v2;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -23,6 +28,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.base.activities.BackActivity;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubBean;
 import net.oschina.app.improve.bean.comment.Comment;
@@ -35,7 +41,9 @@ import net.oschina.app.improve.detail.db.DBManager;
 import net.oschina.app.improve.dialog.ShareDialog;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
+import net.oschina.app.improve.utils.DialogHelper;
 import net.oschina.app.improve.widget.CommentShareView;
+import net.oschina.app.improve.widget.SimplexToast;
 import net.oschina.app.improve.widget.adapter.OnKeyArrivedListenerAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -47,6 +55,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import butterknife.Bind;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
 /**
  * 新版本详情页实现
  * Created by haibin
@@ -55,7 +67,7 @@ import java.util.regex.Pattern;
 
 public abstract class DetailActivity extends BackActivity implements
         DetailContract.EmptyView, Runnable,
-        OnCommentClickListener {
+        OnCommentClickListener, EasyPermissions.PermissionCallbacks {
 
     protected String mCommentHint;
     protected DetailPresenter mPresenter;
@@ -76,6 +88,11 @@ public abstract class DetailActivity extends BackActivity implements
     protected long mCommentId;
     protected long mCommentAuthorId;
     protected boolean mInputDoubleEmpty = false;
+
+    @Bind(R.id.shareView)
+    protected CommentShareView mShareView;
+    private AlertDialog mShareCommentDialog;
+    protected Comment mComment;
 
     @Override
     protected int getContentView() {
@@ -195,6 +212,37 @@ public abstract class DetailActivity extends BackActivity implements
                     .limit(15, 0)
                     .get(Behavior.class)
             );
+        }
+        if (mShareView != null) {
+            mShareCommentDialog = DialogHelper.getRecyclerViewDialog(this, new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position, long itemId) {
+                    switch (position) {
+                        case 0:
+                            TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(mComment.getContent()));
+                            break;
+                        case 1:
+                            if (!AccountHelper.isLogin()) {
+                                LoginActivity.show(DetailActivity.this, 1);
+                                return;
+                            }
+                            if (mComment.getAuthor() == null || mComment.getAuthor().getId() ==0){
+                                SimplexToast.show(DetailActivity.this,"该用户不存在");
+                                return;
+                            }
+                            mCommentId = mComment.getId();
+                            mCommentAuthorId = mComment.getAuthor().getId();
+                            mDelegation.getCommentText().setHint(String.format("%s %s", getResources().getString(R.string.reply_hint), mComment.getAuthor().getName()));
+                            mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), mComment.getAuthor().getName()));
+                            break;
+                        case 2:
+                            mShareView.init(mBean.getTitle(), mComment);
+                            saveToFileByPermission();
+                            break;
+                    }
+                    mShareCommentDialog.dismiss();
+                }
+            }).create();
         }
     }
 
@@ -338,6 +386,13 @@ public abstract class DetailActivity extends BackActivity implements
     }
 
     @Override
+    public void showShareCommentView(Comment comment) {
+        if (mShareView == null)
+            return;
+        mShareView.init(mBean.getTitle(), comment);
+    }
+
+    @Override
     public void showCommentError(String message) {
         //hideDialog();
         AppContext.showToastShort(R.string.pub_comment_failed);
@@ -441,10 +496,10 @@ public abstract class DetailActivity extends BackActivity implements
 
     @Override
     public void onClick(View view, Comment comment) {
-        mCommentId = comment.getId();
-        mCommentAuthorId = comment.getAuthor().getId();
-        mDelegation.getCommentText().setHint(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-        mDelegation.getBottomSheet().show(String.format("%s %s", getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
+        this.mComment = comment;
+        if (mShareCommentDialog != null) {
+            mShareCommentDialog.show();
+        }
     }
 
     protected void handleKeyDel() {
@@ -480,6 +535,8 @@ public abstract class DetailActivity extends BackActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        if (mShareCommentDialog != null)
+            mShareCommentDialog.dismiss();
         if (mStart != 0)
             mStart = System.currentTimeMillis();
         if (mAlertDialog == null)
@@ -497,6 +554,46 @@ public abstract class DetailActivity extends BackActivity implements
                     .where("operate_time=?", String.valueOf(mBehavior.getOperateTime()))
                     .update(mBehavior);
         }
+    }
+
+    private static final int PERMISSION_ID = 0x0001;
+
+    @SuppressWarnings("unused")
+    @AfterPermissionGranted(PERMISSION_ID)
+    public void saveToFileByPermission() {
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, permissions)) {
+            mShareView.share();
+        } else {
+            EasyPermissions.requestPermissions(this, "请授予文件读写权限", PERMISSION_ID, permissions);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        DialogHelper.getConfirmDialog(this, "", "没有权限, 你需要去设置中开启读取手机存储权限.", "去设置", "取消", false, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+                //finish();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //finish();
+            }
+        }).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Override
