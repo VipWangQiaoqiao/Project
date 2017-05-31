@@ -88,6 +88,7 @@ public final class CommentsUtil {
 
         textView.setMovementMethod(MyLinkMovementMethod.a());
         textView.setFocusable(false);
+        textView.setClickable(false);
         textView.setLongClickable(false);
 
         if (textView instanceof TweetTextView) {

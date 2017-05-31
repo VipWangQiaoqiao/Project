@@ -6,9 +6,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="8dp"
+    android:clickable="false"
+    android:focusable="false"
+    android:descendantFocusability="blocksDescendants"
     tools:ignore="RtlHardcoded,RtlSymmetry">
 
-    <TextView
+    <net.oschina.app.widget.TweetTextView
         android:id="@+id/tv_blog_detail_comment_refer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

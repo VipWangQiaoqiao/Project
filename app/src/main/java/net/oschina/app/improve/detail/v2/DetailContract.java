@@ -28,7 +28,9 @@ interface DetailContract {
 
         void showCommentError(String message);
 
-        void showUploadBehaviorsSuccess(int index,String time);
+        void showUploadBehaviorsSuccess(int index, String time);
+
+        void showShareCommentView(Comment comment);
     }
 
     interface View extends BaseView<Presenter> {
@@ -71,5 +73,7 @@ interface DetailContract {
         void addUserRelation(long authorId);
 
         void scrollToTop();
+
+        void shareComment(Comment comment);
     }
 }

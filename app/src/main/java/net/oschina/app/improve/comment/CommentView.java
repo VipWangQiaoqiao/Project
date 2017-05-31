@@ -193,6 +193,8 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                         public void onClick(View v) {
                             if (mType == OSChinaApi.COMMENT_EVENT || mType == OSChinaApi.COMMENT_QUESTION) {
                                 QuesAnswerDetailActivity.show(lay.getContext(), comment, mId, mType);
+                            } else {
+                                onCommentClickListener.onClick(v, comment);
                             }
                         }
                     });
@@ -231,14 +233,8 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
         tvVoteCount.setText(String.valueOf(comment.getVote()));
         final ImageView ivVoteStatus = (ImageView) lay.findViewById(R.id.btn_vote);
 
-        final ImageView ivComment = (ImageView) lay.findViewById(R.id.btn_comment);
-        ivComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commentBar.getBottomSheet().show(String.format("%s %s",
-                        ivComment.getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
-            }
-        });
+//        commentBar.getBottomSheet().show(String.format("%s %s",
+//                ivComment.getResources().getString(R.string.reply_hint), comment.getAuthor().getName()));
 
         if (mType == OSChinaApi.COMMENT_QUESTION || mType == OSChinaApi.COMMENT_EVENT
                 || mType == OSChinaApi.COMMENT_TRANSLATION || mType == OSChinaApi.COMMENT_BLOG) {
@@ -246,14 +242,14 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
             tvVoteCount.setVisibility(View.GONE);
             ivVoteStatus.setVisibility(View.GONE);
             if (comment.isBest()) {
-                ivComment.setEnabled(false);
-                ivComment.setImageResource(R.mipmap.label_best_answer);
+//                ivComment.setEnabled(false);
+//                ivComment.setImageResource(R.mipmap.label_best_answer);
             } else {
-                ivComment.setEnabled(true);
-                ivComment.setImageResource(R.mipmap.ic_comment_30);
+//                ivComment.setEnabled(true);
+//                ivComment.setImageResource(R.mipmap.ic_comment_30);
             }
         } else {
-            ivComment.setEnabled(true);
+            //ivComment.setEnabled(true);
             tvVoteCount.setText(String.valueOf(comment.getVote()));
             tvVoteCount.setVisibility(View.VISIBLE);
             ivVoteStatus.setVisibility(View.VISIBLE);
@@ -339,13 +335,6 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
             lay.addView(view, lay.indexOfChild(content));
         }
 
-        lay.findViewById(R.id.btn_comment).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCommentClickListener.onClick(v, comment);
-            }
-        });
-
         if (!first) {
             addView(lay, 0);
         }
@@ -356,7 +345,7 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (mId != 0 && mType != 0)
-            CommentsActivity.show((AppCompatActivity)getContext(), mId, mType, OSChinaApi.COMMENT_NEW_ORDER, mShareTitle);
+            CommentsActivity.show((AppCompatActivity) getContext(), mId, mType, OSChinaApi.COMMENT_NEW_ORDER, mShareTitle);
     }
 
     /**
