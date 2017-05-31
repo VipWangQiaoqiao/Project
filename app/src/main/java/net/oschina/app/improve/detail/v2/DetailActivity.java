@@ -89,7 +89,6 @@ public abstract class DetailActivity extends BackActivity implements
     protected long mCommentAuthorId;
     protected boolean mInputDoubleEmpty = false;
 
-    @Bind(R.id.shareView)
     protected CommentShareView mShareView;
     private AlertDialog mShareCommentDialog;
     protected Comment mComment;
@@ -112,6 +111,7 @@ public abstract class DetailActivity extends BackActivity implements
         if (TextUtils.isEmpty(mCommentHint))
             mCommentHint = getString(R.string.pub_comment_hint);
         LinearLayout layComment = (LinearLayout) findViewById(R.id.ll_comment);
+        mShareView = (CommentShareView)findViewById(R.id.shareView);
         mEmptyLayout = (EmptyLayout) findViewById(R.id.lay_error);
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
