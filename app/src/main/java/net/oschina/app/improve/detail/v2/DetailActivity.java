@@ -55,7 +55,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import butterknife.Bind;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -111,7 +110,7 @@ public abstract class DetailActivity extends BackActivity implements
         if (TextUtils.isEmpty(mCommentHint))
             mCommentHint = getString(R.string.pub_comment_hint);
         LinearLayout layComment = (LinearLayout) findViewById(R.id.ll_comment);
-        mShareView = (CommentShareView)findViewById(R.id.shareView);
+        mShareView = (CommentShareView) findViewById(R.id.shareView);
         mEmptyLayout = (EmptyLayout) findViewById(R.id.lay_error);
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
@@ -226,8 +225,8 @@ public abstract class DetailActivity extends BackActivity implements
                                 LoginActivity.show(DetailActivity.this, 1);
                                 return;
                             }
-                            if (mComment.getAuthor() == null || mComment.getAuthor().getId() ==0){
-                                SimplexToast.show(DetailActivity.this,"该用户不存在");
+                            if (mComment.getAuthor() == null || mComment.getAuthor().getId() == 0) {
+                                SimplexToast.show(DetailActivity.this, "该用户不存在");
                                 return;
                             }
                             mCommentId = mComment.getId();

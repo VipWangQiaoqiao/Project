@@ -269,7 +269,9 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                 }
 
                 private void handVote() {
-
+                    if (ivVoteStatus.getTag() != null || comment.getVoteState() == 1) {
+                        return;
+                    }
                     if (!AccountHelper.isLogin()) {
                         LoginActivity.show(getContext());
                         return;
@@ -278,7 +280,8 @@ public class CommentView extends LinearLayout implements View.OnClickListener {
                         AppContext.showToast(getResources().getString(R.string.state_network_error), Toast.LENGTH_SHORT);
                         return;
                     }
-                    OSChinaApi.voteComment(mType, comment.getId(), comment.getAuthor().getId(), ivVoteStatus.getTag() != null ? 0 : 1, new TextHttpResponseHandler() {
+
+                    OSChinaApi.voteComment(mType, comment.getId(), comment.getAuthor().getId(), 1, new TextHttpResponseHandler() {
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
