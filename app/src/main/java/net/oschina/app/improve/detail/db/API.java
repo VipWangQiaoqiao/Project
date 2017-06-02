@@ -11,7 +11,7 @@ import net.oschina.app.BuildConfig;
  * Created by haibin on 2017/5/23.
  */
 public final class API {
-    private static final String URL = "http://192.168.1.75:8080/apiv2/user_behaviors_collect/add";
+    private static final String URL = "http://61.145.122.155:8080/apiv2/user_behaviors_collect/add";
 
     public static void addBehaviors(String json, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams("json", json);
