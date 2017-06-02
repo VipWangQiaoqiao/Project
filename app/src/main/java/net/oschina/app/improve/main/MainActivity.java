@@ -130,6 +130,8 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         super.onPostCreate(savedInstanceState);
         try {
             //如果是两天前的数据，则全部上传
+            if (!AccountHelper.isLogin())
+                return;
             String updateTime = AppConfig.getAppConfig(this).get("upload_behavior_time");
             if (DBManager.from(getApplicationContext()).getCount(Behavior.class) >= 15 &&
                     !TextUtils.isEmpty(updateTime) &&

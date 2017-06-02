@@ -90,6 +90,7 @@
             android:elevation="0dp"
             android:outlineProvider="none"
             android:text="@string/send_hint"
+            android:textColor="@color/btn_send_color"
             tools:targetApi="lollipop" />
     </LinearLayout>
 
