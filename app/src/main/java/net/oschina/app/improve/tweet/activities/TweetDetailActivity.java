@@ -47,6 +47,7 @@ import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.user.activities.UserSelectFriendsActivity;
 import net.oschina.app.improve.user.helper.ContactsCacheManager;
 import net.oschina.app.improve.utils.QuickOptionDialogHelper;
+import net.oschina.app.improve.utils.parser.StringParser;
 import net.oschina.app.improve.utils.parser.TweetParser;
 import net.oschina.app.improve.widget.IdentityView;
 import net.oschina.app.improve.widget.PortraitView;
@@ -366,14 +367,14 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 if (tweet == null || tweet.getId() <= 0 || TextUtils.isEmpty(tweet.getContent()))
                     break;
 
-                String content = tweet.getContent().trim();
-                if (content.length() > 10)
-                    content = content.substring(0, 10);
+                String content = StringParser.getInstance().parse(this,tweet.getContent()).toString();
+                if (content.length() > 30)
+                    content = content.substring(0, 30);
 
                 if (alertDialog == null)
                     alertDialog = new ShareDialog(this)
                             .title(content + " - 开源中国社区 ")
-                            .content(tweet.getContent())
+                            .content(content)
                             .url(tweet.getHref()).with();
                 alertDialog.show();
 
