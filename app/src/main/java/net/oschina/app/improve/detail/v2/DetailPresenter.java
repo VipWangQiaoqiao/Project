@@ -1,7 +1,5 @@
 package net.oschina.app.improve.detail.v2;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -210,7 +208,6 @@ public class DetailPresenter implements DetailContract.Presenter {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 // TODO: 2017/5/25 不需要处理失败的情况
-                Log.e("onFailure", "" + responseString);
             }
 
             @Override
