@@ -22,7 +22,7 @@ android {
         variant.outputs.each { output ->
             output.outputFile = new File(
                     output.outputFile.parent + "/${variant.buildType.name}",
-                    "osc-android-${variant.versionName}-${variant.productFlavors[0].name}-${variant.buildType.name}.apk".toLowerCase())
+                    "osc-android-${variant.versionName}-${variant.buildType.name}.apk".toLowerCase())
         }
     }
 
